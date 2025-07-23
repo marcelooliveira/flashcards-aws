@@ -1,0 +1,148 @@
+﻿@page "/"
+@using System.Text.RegularExpressions
+
+<PageTitle>Flashcards</PageTitle>
+
+<h2 class="mdc-typography--headline4" style="margin-bottom:1.5rem;">AWS Cloud Practicioner</h2>
+
+<div class="mdc-card" style="margin-bottom:1.5rem; padding:1rem; background:#fff; box-shadow:0 2px 8px #0001; border-radius:8px; display:grid; grid-template-columns: 1fr 1fr 1fr; gap:0; align-items:center; text-align:center;">
+    <span class="mdc-typography--subtitle1"><b>Acertos:</b> <span style="color:#388e3c">@CorrectCount</span></span>
+    <span class="mdc-typography--subtitle1"><b>Erros:</b> <span style="color:#d32f2f">@WrongCount</span></span>
+    <span class="mdc-typography--subtitle1"><b>Questão:</b> <span style="color:#1976d2">@(CurrentIndex+1)</span> / @Questions.Count</span>
+</div>
+
+@if (Questions.Count == 0)
+{
+    <p>Carregando questões...</p>
+}
+else
+{
+    var q = Questions[CurrentIndex];
+    <div class="mdc-card" style="padding:2rem; border-radius:12px; margin-bottom:1.5rem; background:#fafafa; box-shadow:0 2px 8px #0001;">
+        <div class="mdc-typography--headline6" style="margin-bottom:1.5rem;">@q.Text</div>
+        <ul style="list-style:none; padding-left:0;">
+            @for (int i = 0; i < q.Options.Count; i++)
+            {
+                var opt = q.Options[i];
+                bool isSelected = q.SelectedOption == i;
+                bool isCorrect = q.CorrectOptions.Contains(i);
+                string liStyle = isSelected ? (isCorrect ? "background:#e8f5e9; border:2px solid #388e3c;" : "background:#ffebee; border:2px solid #d32f2f;") : (q.SelectedOption != null && isCorrect ? "background:#e3fbe3; border:2px solid #388e3c;" : "background:#fff; border:2px solid #e0e0e0;");
+                <li class="mdc-list-item" style="margin-bottom:0.75rem; padding:0.75rem 1rem; border-radius:6px; cursor:pointer; display:flex; align-items:center; transition:box-shadow .2s; @liStyle"
+                    @onclick="() => SelectOption(i)">
+                    <span style="display:flex; align-items:center;">
+                        <input type="radio" class="mdc-radio" name="opt@CurrentIndex" checked=@isSelected disabled=@(q.SelectedOption != null) style="margin-right:0.75rem; accent-color:#1976d2;" />
+                        <span class="mdc-typography--body1">@opt</span>
+                    </span>
+                </li>
+            }
+        </ul>
+        @if (q.SelectedOption != null)
+        {
+            <div class="mdc-typography--subtitle2" style="margin-top:1.5rem;">
+                <b>Resposta correta:</b>
+                <span style="color:#388e3c; font-weight:bold;">@string.Join(", ", q.CorrectOptions.Select(i => (char)('A' + i)))</span>
+            </div>
+        }
+    </div>
+    <div style="display:flex; gap:1.5rem; justify-content:center;">
+        <button class="mdc-button mdc-button--outlined" style="min-width:120px;" @onclick="PrevQuestion" disabled="@(CurrentIndex==0)">
+            <span class="mdc-button__label">Anterior</span>
+        </button>
+        <button class="mdc-button mdc-button--raised" style="min-width:120px; background:#1976d2; color:#fff;" @onclick="NextQuestion" disabled="@(CurrentIndex==Questions.Count-1)">
+            <span class="mdc-button__label">Próxima</span>
+        </button>
+    </div>
+}
+
+@code {
+    class Question
+    {
+        public string Text { get; set; } = string.Empty;
+        public List<string> Options { get; set; } = new();
+        public List<int> CorrectOptions { get; set; } = new();
+        public int? SelectedOption { get; set; } = null;
+        public bool? WasCorrect { get; set; } = null;
+    }
+
+    List<Question> Questions = new();
+    int CurrentIndex = 0;
+    int CorrectCount => Questions.Count(q => q.WasCorrect == true);
+    int WrongCount => Questions.Count(q => q.WasCorrect == false);
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadQuestions();
+    }
+
+    async Task LoadQuestions()
+    {
+        try
+        {
+            var http = new HttpClient { BaseAddress = new Uri(NavigationManager.BaseUri) };
+            var md = await http.GetStringAsync("Exams/practice-exam-1.md");
+            Questions = ParseQuestions(md);
+        }
+        catch
+        {
+            Questions = new();
+        }
+        StateHasChanged();
+    }
+
+    List<Question> ParseQuestions(string md)
+    {
+        var questions = new List<Question>();
+        var lines = md.Split('\n');
+        Question? current = null;
+        for (int i = 0; i < lines.Length; i++)
+        {
+            var line = lines[i].TrimEnd();
+            if (Regex.IsMatch(line, "^\\d+\\. "))
+            {
+                if (current != null) questions.Add(current);
+                current = new Question { Text = line.Substring(line.IndexOf('.')+1).Trim() };
+            }
+            else if (line.StartsWith("    - "))
+            {
+                current?.Options.Add(line.Substring(6).Trim());
+            }
+            else if (line.Contains("Correct answer:"))
+            {
+                var match = Regex.Match(line, "Correct answer: ([A-Z, ]+)");
+                if (match.Success && current != null)
+                {
+                    var letters = match.Groups[1].Value.Split(',').Select(s => s.Trim());
+                    foreach (var l in letters)
+                    {
+                        if (l.Length == 1 && l[0] >= 'A' && l[0] <= 'Z')
+                            current.CorrectOptions.Add(l[0] - 'A');
+                    }
+                }
+            }
+        }
+        if (current != null) questions.Add(current);
+        return questions;
+    }
+
+    void SelectOption(int idx)
+    {
+        var q = Questions[CurrentIndex];
+        if (q.SelectedOption != null) return;
+        q.SelectedOption = idx;
+        q.WasCorrect = q.CorrectOptions.Contains(idx - 1);
+    }
+
+    void NextQuestion()
+    {
+        if (CurrentIndex < Questions.Count - 1)
+            CurrentIndex++;
+    }
+
+    void PrevQuestion()
+    {
+        if (CurrentIndex > 0)
+            CurrentIndex--;
+    }
+
+    [Inject] NavigationManager NavigationManager { get; set; } = default!;
+}
