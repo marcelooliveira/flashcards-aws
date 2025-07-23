@@ -1,0 +1,38 @@
+﻿<div class="mdc-card question-card mb">
+    <div class="mdc-typography--headline6 mb">@Question.Text</div>
+    <ul>
+        @for (int i = 0; i < Question.Options.Count; i++)
+        {
+            var opt = Question.Options[i];
+            bool isSelected = Question.SelectedOption == i;
+            string checkedValue = isSelected ? "checked" : "unchecked";
+            bool isCorrect = Question.CorrectOptions.Contains(i);
+            string liStyle = isSelected ? (isCorrect ? "background:#e8f5e9; border:2px solid #388e3c;" : "background:#ffebee; border:2px solid #d32f2f;") : (Question.SelectedOption != null && isCorrect ? "background:#e3fbe3; border:2px solid #388e3c;" : "background:#fff; border:2px solid #e0e0e0;");
+            <li class="mdc-list-item" style="@liStyle" @onclick="() => SelectOption(i)">
+                <span>
+                    <input type="radio" class="mdc-radio" name="opt@CurrentIndex" disabled=@(Question.SelectedOption != null) />
+                    <span class="mdc-typography--body1">@opt</span>
+                </span>
+            </li>
+        }
+    </ul>
+    @if (Question.SelectedOption != null)
+    {
+        <div class="mdc-typography--subtitle2">
+            <b>Resposta correta:</b>
+            <span class="answer-right">@string.Join(", ", Question.CorrectOptions.Select(i => (char)('A' + i)))</span>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public Question Question { get; set; }
+
+    void SelectOption(int idx)
+    {
+        if (Question.SelectedOption != null) return;
+        Question.SelectedOption = idx;
+        Question.WasCorrect = Question.CorrectOptions.Contains(idx - 1);
+    }
+}
