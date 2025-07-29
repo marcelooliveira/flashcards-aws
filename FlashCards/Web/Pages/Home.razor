@@ -21,10 +21,13 @@ else
     var question = Questions[CurrentIndex];
     <QuestionCard Question="question" OnAnswered="OnQuestionAnswered"></QuestionCard>
     <div class="navigation-panel">
-        <button class="mdc-button mdc-button--outlined" @onclick="PrevQuestion" disabled="@(CurrentIndex==0)">
+        <button class="mdc-button mdc-button--outlined" @onclick="PrevQuestion" disabled="@(!question.IsLocked || CurrentIndex==0)">
             <span class="mdc-button__label">Anterior</span>
         </button>
-        <button class="mdc-button mdc-button--raised" @onclick="NextQuestion" disabled="@(CurrentIndex==Questions.Count-1)">
+        <button class="mdc-button mdc-button--raised" @onclick="ShowAnswer" disabled="@question.IsLocked">
+            <span class="mdc-button__label">Responder</span>
+        </button>
+        <button class="mdc-button mdc-button--raised" @onclick="NextQuestion" disabled="@(!question.IsLocked || CurrentIndex==Questions.Count-1)">
             <span class="mdc-button__label">Próxima</span>
         </button>
     </div>
@@ -101,6 +104,11 @@ else
     {
         if (CurrentIndex > 0)
             CurrentIndex--;
+    }
+
+    void ShowAnswer()
+    {
+        Questions[CurrentIndex].IsLocked = true;
     }
 
     void OnQuestionAnswered(Question q)

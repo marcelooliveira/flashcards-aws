@@ -4,24 +4,13 @@
         @for (int i = 0; i < Question.QuestionOptions.Count; i++)
         {
             var opt = Question.QuestionOptions[i];
-            bool isSelected = Question.SelectedOption == i;
             bool isCorrect = Question.CorrectOptions.Contains(i);
-            @* string liStyle = isSelected ? (isCorrect ? "background:#e8f5e9; border:2px solid #388e3c;" : "background:#ffebee; border:2px solid #d32f2f;") : (Question.SelectedOption != null && isCorrect ? "background:#e3fbe3; border:2px solid #388e3c;" : "background:#fff; border:2px solid #e0e0e0;"); *@
             opt.Index = i;
             opt.IsCorrect = isCorrect;
-            opt.IsSelected = isSelected;
-            @*             
-            <li class="mdc-list-item" style="@liStyle" @onclick="() => SelectOption(currentIndex)">
-                <span>
-                    <input type="radio" class="mdc-radio" name="opt@CurrentIndex" />
-                    <span class="mdc-typography--body1">@opt</span>
-                </span>
-            </li>
-            *@
-            <QuestionOptionCard QuestionOption="@opt" OnCheckedChanged="OnOptionCheckedChanged" />
+            <QuestionOptionCard QuestionOption="@opt" IsLocked="@Question.IsLocked" OnCheckedChanged="OnOptionCheckedChanged" />
         }
     </ul>
-    @if (Question.SelectedOption != null)
+    @if (Question.IsLocked)
     {
         <div class="mdc-typography--subtitle2">
             <b>Resposta correta:</b>
@@ -39,9 +28,14 @@
 
     void OnOptionCheckedChanged(QuestionOption qo)
     {
-        if (Question.SelectedOption != null) return;
-        Question.SelectedOption = qo.Index;
-        Question.WasCorrect = Question.CorrectOptions.Contains(qo.Index);
+        Question.SelectedOptions.Remove(qo.Index);
+
+        if (qo.IsSelected)
+        {
+            Question.SelectedOptions.Add(qo.Index);
+        }
+        Question.WasCorrect = Question.CorrectOptions.Contains(qo.Index)
+                                && Question.SelectedOptions.Count() == Question.CorrectOptions.Count();
         OnAnswered.InvokeAsync(Question);
         StateHasChanged();
     }
