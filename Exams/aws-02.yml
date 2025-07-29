@@ -13,8 +13,17 @@ questions:
         is_correct: false
     explanation: AWS Organizations enables central management of billing and security policies across multiple AWS accounts.
     diagram: |
-        graph TB
-        A-->B
+      graph TD
+      subgraph Organization
+        A1[AWS Account 1]
+        A2[AWS Account 2]
+        A3[AWS Account 3]
+      end
+      O[AWS Organizations]
+      A1 -->|Managed by| O
+      A2 -->|Managed by| O
+      A3 -->|Managed by| O
+      O -- Centralizes --> B[Billing & Security Policies]
     tags: [aws, organizations, billing, security]
     difficulty: easy
     points: 5
@@ -35,7 +44,11 @@ questions:
     tags: [s3, storage, object]
     difficulty: easy
     points: 5
-
+    diagram: |
+      graph TD
+      U[User/Data Producer] -- Upload --> S3[Amazon S3]
+      S3 -- Object Storage --> O[Objects]
+      S3 -- Retrieve --> U
   - id: q3
     type: multiple_choice
     question: A company is concerned that they are spending money on underutilized compute resources in AWS. Which AWS feature will help ensure that their applications are automatically adding/removing EC2 compute capacity to closely match the required demand?
@@ -52,6 +65,11 @@ questions:
     tags: [ec2, auto-scaling, cost-optimization]
     difficulty: easy
     points: 5
+    diagram: |
+      graph TD
+      U[User Demand] -- Triggers --> AS[AWS Auto Scaling]
+      AS -- Adds/Removes --> EC2[EC2 Instances]
+      EC2 -- Serve --> App[Application]
 
   - id: q4
     type: multiple_choice
@@ -69,6 +87,12 @@ questions:
     tags: [s3, storage, intelligent-tiering]
     difficulty: easy
     points: 5
+    diagram: |
+      graph TD
+      D[Data] -- Upload --> IT[S3 Intelligent-Tiering]
+      IT -- Monitors Access --> Tier1[Frequent]
+      IT -- Moves Data --> Tier2[Infrequent]
+      IT -- Moves Data --> Tier3[Archive]
 
   - id: q5
     type: multiple_choice
@@ -86,6 +110,10 @@ questions:
     tags: [dynamodb, database, nosql]
     difficulty: easy
     points: 5
+    diagram: |
+      graph TD
+      App[Application] -- PutItem/GetItem --> DDB[Amazon DynamoDB]
+      DDB -- Stores --> KV[Key-Value Pairs]
 
   - id: q6
     type: multiple_choice
@@ -103,6 +131,11 @@ questions:
     tags: [ec2, on-demand, pricing]
     difficulty: easy
     points: 5
+    diagram: |
+      graph TD
+      U[User] -- Launch --> EC2[On-demand EC2 Instance]
+      EC2 -- Usage --> Bill[Pay-as-you-go]
+      EC2 -.->|No Start-up Fee| Bill
 
   - id: q7
     type: multiple_select
@@ -122,6 +155,12 @@ questions:
     tags: [security, trusted-advisor, inspector]
     difficulty: medium
     points: 7
+    diagram: |
+      graph TD
+      Env[AWS Environment] -- Security Checks --> TA[AWS Trusted Advisor]
+      Env -- Vulnerability Scan --> INSP[Amazon Inspector]
+      TA -- Recommendations --> User[Customer]
+      INSP -- Findings --> User
 
   - id: q8
     type: multiple_choice
@@ -139,6 +178,11 @@ questions:
     tags: [security, mfa, authentication]
     difficulty: easy
     points: 5
+    diagram: |
+      graph TD
+      U[User] -- Username/Password --> AWS[AWS Account]
+      U -- MFA Token --> AWS
+      AWS -- Access Granted --> R[Resources]
 
   - id: q9
     type: multiple_choice
@@ -156,6 +200,11 @@ questions:
     tags: [support, enterprise, scaling]
     difficulty: medium
     points: 7
+    diagram: |
+      graph TD
+      C[Customer] -- Needs Guidance --> ES[Enterprise Support]
+      ES -- Event Planning --> IEM[Infrastructure Event Management]
+      IEM -- Scaling/Architecture Advice --> C
 
   - id: q10
     type: multiple_choice
@@ -173,6 +222,12 @@ questions:
     tags: [rds, database, automation]
     difficulty: easy
     points: 5
+    diagram: |
+      graph TD
+      DBA[DBA] -- Migrate --> RDS[Amazon RDS]
+      RDS -- Automates --> T1[Backups]
+      RDS -- Automates --> T2[Patching]
+      RDS -- Automates --> T3[Failover]
 
   - id: q11
     type: multiple_choice
@@ -190,6 +245,10 @@ questions:
     tags: [best-practices, automation, architecture]
     difficulty: easy
     points: 5
+    diagram: |
+      graph TD
+      Arch[Architecture] -- Automation --> Exp[Experimentation]
+      Exp -- Rapid Change --> Arch
 
   - id: q12
     type: multiple_choice
@@ -207,6 +266,10 @@ questions:
     tags: [security, penetration-testing, policy]
     difficulty: medium
     points: 7
+    diagram: |
+      graph TD
+      Cust[Customer] -- Penetration Test --> EC2[Own EC2 Instances]
+      EC2 -- Allowed by Policy --> AWS[AWS]
 
   - id: q13
     type: multiple_choice
@@ -224,6 +287,11 @@ questions:
     tags: [sqs, messaging, reliability]
     difficulty: easy
     points: 5
+    diagram: |
+      graph TD
+      Comp1[Component 1] -- Send --> SQS[Amazon SQS]
+      SQS -- Queue --> Comp2[Component 2]
+      SQS -- Durable --> Msg[Messages]
 
   - id: q14
     type: multiple_select
@@ -243,6 +311,12 @@ questions:
     tags: [architecture, fault-tolerance, availability]
     difficulty: medium
     points: 7
+    diagram: |
+      graph TD
+      User[User] -- Request --> ELB[Elastic Load Balancer]
+      ELB -- Distribute --> AZ1[App in AZ1]
+      ELB -- Distribute --> AZ2[App in AZ2]
+      AZ1 -- Sync --> AZ2
 
   - id: q15
     type: multiple_choice
@@ -260,6 +334,10 @@ questions:
     tags: [vpc, networking, isolation]
     difficulty: easy
     points: 5
+    diagram: |
+      graph TD
+      Acc[AWS Account] -- Create --> VPC[Amazon VPC]
+      VPC -- Isolated Network --> R[Resources]
 
   - id: q16
     type: multiple_select
@@ -279,6 +357,10 @@ questions:
     tags: [shared-responsibility, security, customer]
     difficulty: medium
     points: 7
+    diagram: |
+      graph TD
+      Cust[Customer] -- Patch --> EC2[EC2 Applications]
+      Cust -- Encrypt --> Data[Data in Transit]
 
   - id: q17
     type: multiple_select
@@ -298,6 +380,10 @@ questions:
     tags: [compute, ec2, lambda]
     difficulty: easy
     points: 5
+    diagram: |
+      graph TD
+      Compute[Compute Resource] --> EC2[Amazon EC2]
+      Compute --> Lambda[AWS Lambda]
 
   - id: q18
     type: multiple_choice
@@ -315,6 +401,10 @@ questions:
     tags: [s3, storage, media]
     difficulty: easy
     points: 5
+    diagram: |
+      graph TD
+      App[App] -- Store --> S3[Amazon S3]
+      S3 -- Retrieve --> App
 
   - id: q19
     type: multiple_choice
@@ -332,6 +422,10 @@ questions:
     tags: [iam, access-keys, authentication]
     difficulty: easy
     points: 5
+    diagram: |
+      graph TD
+      App[App] -- Access Keys --> API[AWS API]
+      API -- Authenticates --> AWS[AWS Services]
 
   - id: q20
     type: multiple_choice
@@ -349,6 +443,11 @@ questions:
     tags: [elasticache, caching, performance]
     difficulty: easy
     points: 5
+    diagram: |
+      graph TD
+      App[App] -- Query --> EC[ElastiCache]
+      EC -- In-memory Cache --> Data[Data]
+      EC -- Fast Response --> App
 
   - id: q21
     type: multiple_choice
@@ -366,6 +465,11 @@ questions:
     tags: [organizations, account-management]
     difficulty: easy
     points: 5
+    diagram: |
+      graph TD
+      Master[Master Account] -- Manages --> Orgs[AWS Organizations]
+      Orgs -- Controls --> Sub1[Account 1]
+      Orgs -- Controls --> Sub2[Account 2]
 
   - id: q22
     type: multiple_choice
@@ -383,6 +487,10 @@ questions:
     tags: [ec2, byol, licensing]
     difficulty: medium
     points: 7
+    diagram: |
+      graph TD
+      Lic[BYOL Scenario] -- Supported by --> DH[Dedicated Hosts]
+      DH -- Host Licenses --> EC2[EC2 Instances]
 
   - id: q23
     type: multiple_choice
@@ -400,6 +508,10 @@ questions:
     tags: [cloud, capex, benefits]
     difficulty: easy
     points: 5
+    diagram: |
+      graph TD
+      DC[On-premises] -- CapEx --> AWS[AWS Cloud]
+      AWS -- OpEx --> Cust[Customer]
 
   - id: q24
     type: multiple_select
@@ -419,6 +531,10 @@ questions:
     tags: [design, automation, reliability]
     difficulty: medium
     points: 7
+    diagram: |
+      graph TD
+      Sys[System] -- Automation --> Res[Resilience]
+      Sys -- Remove SPOF --> Rel[Reliability]
 
   - id: q25
     type: multiple_choice
@@ -436,6 +552,10 @@ questions:
     tags: [networking, direct-connect, hybrid]
     difficulty: easy
     points: 5
+    diagram: |
+      graph TD
+      DC[Datacenter] -- Dedicated Link --> DCX[AWS Direct Connect]
+      DCX -- Private Network --> AWS[AWS Cloud]
 
   - id: q26
     type: multiple_choice
@@ -453,6 +573,10 @@ questions:
     tags: [vpc, networking, isolation]
     difficulty: easy
     points: 5
+    diagram: |
+      graph TD
+      P1[Project 1] -- Isolated --> VPC1[VPC 1]
+      P2[Project 2] -- Isolated --> VPC2[VPC 2]
 
   - id: q27
     type: multiple_choice
@@ -470,6 +594,10 @@ questions:
     tags: [waf, security, web]
     difficulty: medium
     points: 7
+    diagram: |
+      graph TD
+      Web[Web App] -- Inspects Traffic --> WAF[AWS WAF]
+      WAF -- Blocks Attacks --> Web
 
   - id: q28
     type: multiple_choice
@@ -487,6 +615,10 @@ questions:
     tags: [emr, big-data, analytics]
     difficulty: medium
     points: 7
+    diagram: |
+      graph TD
+      Data[Big Data Sets] -- Process --> EMR[Amazon EMR]
+      EMR -- Output --> Result[Analytics]
 
   - id: q29
     type: multiple_select
@@ -506,6 +638,10 @@ questions:
     tags: [shared-responsibility, aws, infrastructure]
     difficulty: medium
     points: 7
+    diagram: |
+      graph TD
+      AWS[AWS] -- Maintains --> HW[Hardware]
+      AWS -- Creates --> Hyp[Hypervisors]
 
   - id: q30
     type: multiple_choice
@@ -523,6 +659,10 @@ questions:
     tags: [ec2, control, infrastructure]
     difficulty: easy
     points: 5
+    diagram: |
+      graph TD
+      User[User] -- Root/Admin --> EC2[Amazon EC2]
+      EC2 -- OS/Network/Storage --> User
 
   - id: q31
     type: multiple_choice
@@ -540,6 +680,10 @@ questions:
     tags: [iam, credentials, console]
     difficulty: easy
     points: 5
+    diagram: |
+      graph TD
+      IAMU[IAM User] -- Username/Password --> Console[AWS Console]
+      Console -- Access --> AWS[AWS Services]
 
   - id: q32
     type: multiple_choice
@@ -557,6 +701,10 @@ questions:
     tags: [ami, ec2, templates]
     difficulty: easy
     points: 5
+    diagram: |
+      graph TD
+      AMI[AMI Template] -- Launch --> EC2[EC2 Instances]
+      EC2 -- Multiple Servers --> App[Applications]
 
   - id: q33
     type: multiple_select
@@ -576,6 +724,10 @@ questions:
     tags: [cloud, advantages, reliability]
     difficulty: medium
     points: 7
+    diagram: |
+      graph TD
+      Cloud[Cloud Infra] -- Distributed --> NoSPOF[No Single Point of Failure]
+      Cloud -- Redundancy --> Avail[High Availability]
 
   - id: q34
     type: multiple_select
@@ -595,6 +747,10 @@ questions:
     tags: [security, aws, infrastructure]
     difficulty: medium
     points: 7
+    diagram: |
+      graph TD
+      AWS[AWS] -- Patches --> HW[Hardware]
+      AWS -- Secures --> Infra[Physical Infrastructure]
 
   - id: q35
     type: multiple_choice
@@ -612,6 +768,10 @@ questions:
     tags: [well-architected, operational-excellence]
     difficulty: medium
     points: 7
+    diagram: |
+      graph TD
+      Sys[System] -- Monitor --> Proc[Processes]
+      Proc -- Improve --> Sys
 
   - id: q36
     type: multiple_choice
@@ -629,6 +789,10 @@ questions:
     tags: [cloudfront, edge, latency]
     difficulty: easy
     points: 5
+    diagram: |
+      graph TD
+      CF[CloudFront] -- Cache --> Edge[Edge Location]
+      Edge -- Serve --> User[User]
 
   - id: q37
     type: multiple_select
@@ -648,6 +812,12 @@ questions:
     tags: [cloudtrail, config, auditing]
     difficulty: medium
     points: 7
+    diagram: |
+      graph TD
+      Change[Resource Change] -- Log --> CT[CloudTrail]
+      Change -- Track --> CFG[AWS Config]
+      CT -- Audit --> User[Customer]
+      CFG -- Compliance --> User
 
   - id: q38
     type: multiple_choice
@@ -665,6 +835,10 @@ questions:
     tags: [ecs, containers, ec2]
     difficulty: medium
     points: 7
+    diagram: |
+      graph TD
+      EC2[EC2 Cluster] -- Run --> ECS[Amazon ECS]
+      ECS -- Orchestrates --> Cont[Containers]
 
   - id: q39
     type: multiple_choice
@@ -682,6 +856,10 @@ questions:
     tags: [cloudtrail, compliance, auditing]
     difficulty: medium
     points: 7
+    diagram: |
+      graph TD
+      API[API Activity] -- Log --> CT[CloudTrail]
+      CT -- Compliance --> User[Customer]
 
   - id: q40
     type: multiple_choice
@@ -699,6 +877,10 @@ questions:
     tags: [s3, cost-optimization, storage-classes]
     difficulty: easy
     points: 5
+    diagram: |
+      graph TD
+      Data[Data] -- Analyze Use Case --> S3C[S3 Storage Class]
+      S3C -- Cost Optimized --> Data
 
   - id: q41
     type: multiple_select
@@ -718,6 +900,11 @@ questions:
     tags: [auto-scaling, elb, availability]
     difficulty: medium
     points: 7
+    diagram: |
+      graph TD
+      App[App] -- Traffic --> ELB[Elastic Load Balancer]
+      ELB -- Distribute --> AS[Auto Scaling Group]
+      AS -- Launch/Terminate --> EC2[EC2 Instances]
 
   - id: q42
     type: multiple_choice
@@ -735,6 +922,10 @@ questions:
     tags: [auto-scaling, cost-optimization]
     difficulty: easy
     points: 5
+    diagram: |
+      graph TD
+      WL[Workload] -- Demand --> AS[Auto Scaling]
+      AS -- Adjusts --> EC2[EC2 Capacity]
 
   - id: q43
     type: multiple_choice
@@ -752,6 +943,10 @@ questions:
     tags: [s3, transfer-acceleration, cloudfront]
     difficulty: medium
     points: 7
+    diagram: |
+      graph TD
+      User[User] -- Upload --> Edge[Edge Location]
+      Edge -- Accelerate --> S3[Amazon S3]
 
   - id: q44
     type: multiple_choice
@@ -769,6 +964,10 @@ questions:
     tags: [ec2, security-groups, security]
     difficulty: easy
     points: 5
+    diagram: |
+      graph TD
+      Traffic[Traffic] -- Inbound --> SG[Security Group]
+      SG -- Allow/Block --> EC2[EC2 Instance]
 
   - id: q45
     type: multiple_select
@@ -788,6 +987,12 @@ questions:
     tags: [cloudfront, global-accelerator, performance]
     difficulty: medium
     points: 7
+    diagram: |
+      graph TD
+      User[User] -- Request --> CF[CloudFront]
+      User -- Request --> GA[Global Accelerator]
+      CF -- Low Latency --> User
+      GA -- Low Latency --> User
 
   - id: q46
     type: multiple_select
@@ -807,6 +1012,10 @@ questions:
     tags: [rds, shared-responsibility, database]
     difficulty: medium
     points: 7
+    diagram: |
+      graph TD
+      Cust[Customer] -- Design --> Schema[DB Schema]
+      Cust -- Manage --> Settings[DB Settings]
 
   - id: q47
     type: multiple_choice
@@ -824,6 +1033,10 @@ questions:
     tags: [rds, migration, database]
     difficulty: easy
     points: 5
+    diagram: |
+      graph TD
+      DC[On-premises Data] -- Migrate --> RDS[Amazon RDS]
+      RDS -- Structured Storage --> App[Application]
 
   - id: q48
     type: multiple_choice
@@ -841,6 +1054,10 @@ questions:
     tags: [apn, partners, architecture]
     difficulty: medium
     points: 7
+    diagram: |
+      graph TD
+      Cust[Customer] -- Support --> APN[APN Consulting Partner]
+      APN -- AWS Expertise --> Cust
 
   - id: q49
     type: multiple_choice
@@ -858,6 +1075,10 @@ questions:
     tags: [lambda, serverless, compute]
     difficulty: easy
     points: 5
+    diagram: |
+      graph TD
+      Code[App Code] -- Run --> Lambda[AWS Lambda]
+      Lambda -- Output --> User[User]
 
   - id: q50
     type: multiple_choice
@@ -875,5 +1096,14 @@ questions:
     tags: [fault-tolerance, ec2, architecture]
     difficulty: medium
     points: 7
+    diagram: |
+      graph TD
+      EC2A[EC2 Instance 1] -- Serve --> Cust[Customer]
+      EC2B[EC2 Instance 2] -- Serve --> Cust
+      EC2C[EC2 Instance 3] -- Serve --> Cust
+      EC2D[EC2 Instance 4] -- Down --> X[No Impact]
+      EC2E[EC2 Instance 5] -- Down --> X
+      EC2F[EC2 Instance 6] -- Down --> X
+      Cust -- No Outage --> App[Application]
 
 # ...remaining questions omitted for brevity, but would continue in the same structure for all 50 questions...
