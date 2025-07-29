@@ -6,17 +6,17 @@
 
 <PageTitle>Flashcards - 23:46</PageTitle>
 
-<h2 class="mdc-typography--headline4 mb">AWS Cloud Practicioner</h2>
+<div class="mdc-typography--headline6 mb">AWS Cloud Practicioner</div>
 
 <div class="mdc-card summary mb">
-    <span class="mdc-typography--subtitle1 questions-right"><b>Acertos:</b> <span>@CorrectCount</span></span>
-    <span class="mdc-typography--subtitle1 questions-wrong"><b>Erros:</b> <span>@WrongCount</span></span>
-    <span class="mdc-typography--subtitle1 questions-count"><b>Questão:</b> <span>@(CurrentIndex + 1)</span> / @Questions.Count</span>
+    <span class="mdc-typography--subtitle1 questions-right"><b>Correct:</b> <span>@CorrectCount</span></span>
+    <span class="mdc-typography--subtitle1 questions-wrong"><b>Incorrect:</b> <span>@WrongCount</span></span>
+    <span class="mdc-typography--subtitle1 questions-count"><b>Question:</b> <span>@(CurrentIndex + 1)</span> / @Questions.Count</span>
 </div>
 
 @if (Questions.Count == 0)
 {
-    <p>Carregando questões...</p>
+    <p>Loading questions...</p>
 }
 else
 {
@@ -24,13 +24,13 @@ else
     <QuestionCard Question="question" OnAnswered="OnQuestionAnswered"></QuestionCard>
     <div class="navigation-panel">
         <button class="mdc-button mdc-button--outlined" @onclick="PrevQuestion" disabled="@(!question.IsLocked || CurrentIndex==0)">
-            <span class="mdc-button__label">Anterior</span>
+            <span class="mdc-button__label">Previous</span>
         </button>
         <button class="mdc-button mdc-button--raised" @onclick="ShowAnswer" disabled="@question.IsLocked">
-            <span class="mdc-button__label">Responder</span>
+            <span class="mdc-button__label">Answer</span>
         </button>
         <button class="mdc-button mdc-button--raised" @onclick="NextQuestion" disabled="@(!question.IsLocked || CurrentIndex==Questions.Count-1)">
-            <span class="mdc-button__label">Próxima</span>
+            <span class="mdc-button__label">Next</span>
         </button>
     </div>
 }
@@ -52,7 +52,7 @@ else
         {
             var http = new HttpClient { BaseAddress = new Uri(NavigationManager.BaseUri) };
             // var md = await http.GetStringAsync("Exams/practice-exam-1.md");
-            var yamlContent = await http.GetStringAsync("Exams/aws-01.yml");
+            var yamlContent = await http.GetStringAsync("Exams/aws-02.yml");
             // Questions = ParseQuestions(md);
             Questions = ParseQuestionsFromYaml(yamlContent);
         }

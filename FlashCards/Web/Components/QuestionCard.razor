@@ -13,7 +13,7 @@
     @if (Question.IsLocked)
     {
         <div class="mdc-typography--subtitle2">
-            <b>Resposta correta:</b>
+            <b>Correct answer:</b>
             <span class="answer-right">@string.Join(", ", Question.CorrectOptions.Select(i => (char)('A' + i)))</span>
         </div>
         <div class="mdc-typography--subtitle2">

@@ -1,22 +1,24 @@
 ﻿@{
-    string liStyle = IsLocked && QuestionOption.IsSelected
-        ? (QuestionOption.IsCorrect 
-            ? "background:#e8f5e9; border:2px solid #388e3c;"
-            : "background:#ffebee; border:2px solid #d32f2f;")
-        : "background:#fff; border:2px solid #e0e0e0;";
+    string liStyle = GetLiStyle(QuestionOption);
     string disabled = IsLocked ? "disabled" : "";
 }
 
 <li class="mdc-list-item" style="@liStyle" @onclick="() => SelectOption()">
     <span>
         <input type="checkbox" class="mdc-radio" name="question-option" checked="@QuestionOption.IsSelected" disabled="@IsLocked" />
-        <span class="mdc-typography--body1">@QuestionOption.Text</span>
+        <span class="mdc-typography--body1">
+            @QuestionOption.Text
+        </span>
     </span>
 </li>
 
 @code {
     [Parameter]
     public QuestionOption QuestionOption { get; set; }
+
+    private const string GreenLiStyle = "background:#e8f5e9; border:2px solid #388e3c;";
+    private const string RedLiStyle = "background:#ffebee; border:2px solid #d32f2f;";
+    private const string DefaultLiStyle = "background:#fff; border:2px solid #e0e0e0;";
 
     [Parameter]
     public bool IsLocked { get; set; }
@@ -34,5 +36,24 @@
         QuestionOption.IsSelected = !QuestionOption.IsSelected;
         OnCheckedChanged.InvokeAsync(QuestionOption);
         StateHasChanged();
+    }
+
+    string GetLiStyle(QuestionOption qo)
+    {
+        string liStyle = DefaultLiStyle;
+
+        if (IsLocked)
+        {
+            if (qo.IsCorrect)
+            {
+                liStyle = GreenLiStyle;
+            }
+            else if (qo.IsSelected)
+            {
+                liStyle = RedLiStyle;
+            }
+        }
+
+        return liStyle;
     }
 }
