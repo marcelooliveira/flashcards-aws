@@ -1,4 +1,7 @@
-﻿<div class="mdc-card question-card mb">
+﻿@using MermaidJS.Blazor
+@inject IJSRuntime JS
+
+<div class="mdc-card question-card mb">
     <div class="mdc-typography--headline6 mb">@Question.Text</div>
     <ul>
         @for (int i = 0; i < Question.QuestionOptions.Count; i++)
@@ -19,7 +22,8 @@
         <div class="mdc-typography--subtitle2">
             <b>Explanation:</b>
             <span class="mdc-typography--body1">@Question.Explanation</span>
-        </div>        
+        </div>
+        <MermaidDiagram Definition="@Question.Diagram"/>
     }
 </div>
 
@@ -30,7 +34,7 @@
     [Parameter]
     public EventCallback<Question> OnAnswered { get; set; }
 
-    void OnOptionCheckedChanged(QuestionOption qo)
+    async Task OnOptionCheckedChanged(QuestionOption qo)
     {
         Question.SelectedOptions.Remove(qo.Index);
 
@@ -40,7 +44,21 @@
         }
         Question.WasCorrect = Question.CorrectOptions.Contains(qo.Index)
                                 && Question.SelectedOptions.Count() == Question.CorrectOptions.Count();
-        OnAnswered.InvokeAsync(Question);
+        await OnAnswered.InvokeAsync(Question);
+        await RenderMermaid();
         StateHasChanged();
+    }
+
+    async Task RenderMermaid()
+    {
+        await JS.InvokeVoidAsync("initializeMermaid");
+        string mermaidDefinition = @"
+            graph TD;
+                A-->B;
+                A-->C;
+                B-->D;
+                C-->D;
+        ";
+        await JS.InvokeVoidAsync("renderMermaid", "mermaidChart", mermaidDefinition);
     }
 }

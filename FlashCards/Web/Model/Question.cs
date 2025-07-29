@@ -6,6 +6,7 @@
         public string Text { get; set; } = string.Empty;
         public string Type { get; set; }
         public string Explanation { get; set; }
+        public string Diagram { get; set; }
         public string Difficulty { get; set; }
         public int Points { get; set; }
         public List<string> Tags { get; set; }
