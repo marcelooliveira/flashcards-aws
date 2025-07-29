@@ -12,6 +12,9 @@ questions:
       - text: AWS Config.
         is_correct: false
     explanation: AWS Organizations enables central management of billing and security policies across multiple AWS accounts.
+    diagram: |
+        graph TB
+        A-->B
     tags: [aws, organizations, billing, security]
     difficulty: easy
     points: 5
