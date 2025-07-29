@@ -19,7 +19,7 @@
 else
 {
     var question = Questions[CurrentIndex];
-    <QuestionCard Question="question"></QuestionCard>
+    <QuestionCard Question="question" OnAnswered="OnQuestionAnswered"></QuestionCard>
     <div class="navigation-panel">
         <button class="mdc-button mdc-button--outlined" @onclick="PrevQuestion" disabled="@(CurrentIndex==0)">
             <span class="mdc-button__label">Anterior</span>
@@ -71,7 +71,7 @@ else
             }
             else if (line.StartsWith("    - "))
             {
-                current?.Options.Add(line.Substring(6).Trim());
+                current?.QuestionOptions.Add(new QuestionOption(line.Substring(6).Trim()));
             }
             else if (line.Contains("Correct answer:"))
             {
@@ -101,6 +101,11 @@ else
     {
         if (CurrentIndex > 0)
             CurrentIndex--;
+    }
+
+    void OnQuestionAnswered(Question q)
+    {
+        StateHasChanged();
     }
 
     [Inject] NavigationManager NavigationManager { get; set; } = default!;

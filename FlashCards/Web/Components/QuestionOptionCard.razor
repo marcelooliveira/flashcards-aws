@@ -1,0 +1,28 @@
+﻿@{
+    string liStyle = QuestionOption.IsSelected 
+        ? (QuestionOption.IsCorrect 
+            ? "background:#e8f5e9; border:2px solid #388e3c;"
+            : "background:#ffebee; border:2px solid #d32f2f;")
+        : (QuestionOption.Checked && QuestionOption.IsCorrect ? "background:#e3fbe3; border:2px solid #388e3c;"
+        : "background:#fff; border:2px solid #e0e0e0;");
+}
+
+<li class="mdc-list-item" style="@liStyle" @onclick="() => SelectOption()">
+    <span>
+        <input type="checkbox" class="mdc-radio" name="question-option" checked=@QuestionOption.IsSelected />
+        <span class="mdc-typography--body1">@QuestionOption.Text</span>
+    </span>
+</li>
+
+@code {
+    [Parameter]
+    public QuestionOption QuestionOption { get; set; }
+
+    [Parameter]
+    public EventCallback<QuestionOption> OnCheckedChanged { get; set; }
+
+    void SelectOption()
+    {
+        OnCheckedChanged.InvokeAsync(QuestionOption);
+    }
+}
