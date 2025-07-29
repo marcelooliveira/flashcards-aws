@@ -1,0 +1,876 @@
+questions:
+  - id: q1
+    type: multiple_choice
+    question: AWS allows users to manage their resources using a web based user interface. What is the name of this interface?
+    options:
+      - text: AWS CLI.
+        is_correct: false
+      - text: AWS API.
+        is_correct: false
+      - text: AWS SDK.
+        is_correct: false
+      - text: AWS Management Console.
+        is_correct: true
+    explanation: The AWS Management Console is the web-based user interface for managing AWS resources.
+    tags: [aws, management, console, ui]
+    difficulty: easy
+    points: 5
+
+  - id: q2
+    type: multiple_choice
+    question: Which of the following is an example of horizontal scaling in the AWS Cloud?
+    options:
+      - text: Replacing an existing EC2 instance with a larger, more powerful one.
+        is_correct: false
+      - text: Increasing the compute capacity of a single EC2 instance to address the growing demands of an application.
+        is_correct: false
+      - text: Adding more RAM capacity to an EC2 instance.
+        is_correct: false
+      - text: Adding more EC2 instances of the same size to handle an increase in traffic.
+        is_correct: true
+    explanation: Horizontal scaling means adding more instances of the same type to distribute load.
+    tags: [scaling, ec2, architecture]
+    difficulty: easy
+    points: 5
+
+  - id: q3
+    type: multiple_choice
+    question: You have noticed that several critical Amazon EC2 instances have been terminated. Which of the following AWS services would help you determine who took this action?
+    options:
+      - text: Amazon Inspector.
+        is_correct: false
+      - text: AWS CloudTrail.
+        is_correct: true
+      - text: AWS Trusted Advisor.
+        is_correct: false
+      - text: EC2 Instance Usage Report.
+        is_correct: false
+    explanation: AWS CloudTrail records API calls and actions, helping you audit who did what in your AWS account.
+    tags: [cloudtrail, auditing, security, ec2]
+    difficulty: medium
+    points: 7
+
+  - id: q11
+    type: multiple_choice
+    question: An organization has a large number of technical employees who operate their AWS Cloud infrastructure. What does AWS provide to help organize them into teams and then assign the appropriate permissions for each team?
+    options:
+      - text: IAM roles.
+        is_correct: false
+      - text: IAM users.
+        is_correct: false
+      - text: IAM user groups.
+        is_correct: true
+      - text: AWS Organizations.
+        is_correct: false
+    explanation: IAM user groups allow you to organize users and assign permissions to groups for easier management.
+    tags: [iam, permissions, user-management]
+    difficulty: easy
+    points: 5
+
+  - id: q12
+    type: multiple_choice
+    question: A company has decided to migrate its Oracle database to AWS. Which AWS service can help achieve this without negatively impacting the functionality of the source database?
+    options:
+      - text: AWS OpsWorks.
+        is_correct: false
+      - text: AWS Database Migration Service.
+        is_correct: true
+      - text: AWS Server Migration Service.
+        is_correct: false
+      - text: AWS Application Discovery Service.
+        is_correct: false
+    explanation: AWS Database Migration Service (DMS) helps migrate databases to AWS with minimal downtime.
+    tags: [database, migration, dms, aws]
+    difficulty: medium
+    points: 7
+
+  - id: q13
+    type: multiple_choice
+    question: Adjusting compute capacity dynamically to reduce cost is an implementation of which AWS cloud best practice?
+    options:
+      - text: Build security in every layer.
+        is_correct: false
+      - text: Parallelize tasks.
+        is_correct: false
+      - text: Implement elasticity.
+        is_correct: true
+      - text: Adopt monolithic architecture.
+        is_correct: false
+    explanation: Implementing elasticity allows resources to scale up or down as needed, optimizing cost.
+    tags: [elasticity, best-practices, cost-optimization]
+    difficulty: easy
+    points: 5
+
+  - id: q14
+    type: multiple_select
+    question: What are the benefits of having infrastructure hosted in AWS? (Choose TWO)
+    options:
+      - text: Increasing speed and agility.
+        is_correct: true
+      - text: There is no need to worry about security.
+        is_correct: false
+      - text: Gaining complete control over the physical infrastructure.
+        is_correct: false
+      - text: Operating applications on behalf of customers.
+        is_correct: false
+      - text: All of the physical security and most of the data/network security are taken care of for you.
+        is_correct: true
+    explanation: AWS provides agility and manages much of the security, reducing customer burden.
+    tags: [benefits, infrastructure, security, agility]
+    difficulty: easy
+    points: 5
+
+  - id: q15
+    type: multiple_choice
+    question: What is the advantage of the AWS-recommended practice of "decoupling" applications?
+    options:
+      - text: Allows treating an application as a single, cohesive unit.
+        is_correct: false
+      - text: Reduces inter-dependencies so that failures do not impact other components of the application.
+        is_correct: true
+      - text: Allows updates of any monolithic application quickly and easily.
+        is_correct: false
+      - text: Allows tracking of any API call made to any AWS service.
+        is_correct: false
+    explanation: Decoupling reduces dependencies, improving fault tolerance and maintainability.
+    tags: [architecture, decoupling, best-practices]
+    difficulty: medium
+    points: 7
+
+  - id: q16
+    type: multiple_choice
+    question: Which of the following helps a customer view the Amazon EC2 billing activity for the past month?
+    options:
+      - text: AWS Budgets.
+        is_correct: false
+      - text: AWS Pricing Calculator.
+        is_correct: false
+      - text: AWS Systems Manager.
+        is_correct: false
+      - text: AWS Cost & Usage Reports.
+        is_correct: true
+    explanation: AWS Cost & Usage Reports provide detailed billing information for EC2 and other services.
+    tags: [billing, cost-management, ec2]
+    difficulty: easy
+    points: 5
+
+  - id: q17
+    type: multiple_choice
+    question: What do you gain from setting up consolidated billing for five different AWS accounts under another master account?
+    options:
+      - text: AWS services’ costs will be reduced to half the original price.
+        is_correct: false
+      - text: The consolidated billing feature is just for organizational purpose.
+        is_correct: false
+      - text: Each AWS account gets volume discounts.
+        is_correct: true
+      - text: Each AWS account gets five times the free-tier services capacity.
+        is_correct: false
+    explanation: Consolidated billing allows all accounts to benefit from volume discounts.
+    tags: [billing, consolidated, discounts]
+    difficulty: easy
+    points: 5
+
+  - id: q18
+    type: multiple_select
+    question: What should you do in order to keep the data on EBS volumes safe? (Choose TWO)
+    options:
+      - text: Regularly update firmware on EBS devices.
+        is_correct: false
+      - text: Create EBS snapshots.
+        is_correct: true
+      - text: Ensure that EBS data is encrypted at rest.
+        is_correct: true
+      - text: Store a backup daily in an external drive.
+        is_correct: false
+      - text: Prevent any unauthorized access to AWS data centers.
+        is_correct: false
+    explanation: Creating snapshots and encrypting data at rest are best practices for EBS data safety.
+    tags: [ebs, backup, encryption, data-safety]
+    difficulty: medium
+    points: 7
+
+  - id: q19
+    type: multiple_choice
+    question: One of the most important AWS best-practices to follow is the cloud architecture principle of elasticity. How does this principle improve your architecture’s design?
+    options:
+      - text: By automatically scaling your on-premises resources based on changes in demand.
+        is_correct: false
+      - text: By automatically scaling your AWS resources using an Elastic Load Balancer.
+        is_correct: false
+      - text: By reducing interdependencies between application components wherever possible.
+        is_correct: false
+      - text: By automatically provisioning the required AWS resources based on changes in demand.
+        is_correct: true
+    explanation: Elasticity allows AWS to automatically provision resources as needed, improving efficiency.
+    tags: [elasticity, scaling, architecture]
+    difficulty: medium
+    points: 7
+
+  - id: q20
+    type: multiple_select
+    question: A startup company is operating on limited funds and is extremely concerned about cost overruns. Which of the below options can be used to notify the company when their monthly AWS bill exceeds $2000? (Choose TWO)
+    options:
+      - text: Setup a CloudWatch billing alarm that triggers an SNS notification when the threshold is exceeded.
+        is_correct: true
+      - text: Configure the Amazon Simple Email Service to send billing alerts to their email address on a daily basis.
+        is_correct: false
+      - text: Configure the AWS Budgets Service to alert the company when the threshold is exceeded.
+        is_correct: true
+      - text: Configure AWS CloudTrail to automatically delete all AWS resources when the threshold is exceeded.
+        is_correct: false
+      - text: Configure the Amazon Connect Service to alert the company when the threshold is exceeded.
+        is_correct: false
+    explanation: CloudWatch billing alarms and AWS Budgets can notify users when spending exceeds thresholds.
+    tags: [billing, budgets, cloudwatch, alarms]
+    difficulty: medium
+    points: 7
+
+  - id: q21
+    type: multiple_choice
+    question: What does Amazon CloudFront use to distribute content to global users with low latency?
+    options:
+      - text: AWS Global Accelerator.
+        is_correct: false
+      - text: AWS Regions.
+        is_correct: false
+      - text: AWS Edge Locations.
+        is_correct: true
+      - text: AWS Availability Zones.
+        is_correct: false
+    explanation: CloudFront uses edge locations to cache and deliver content closer to users.
+    tags: [cloudfront, edge, latency, cdn]
+    difficulty: easy
+    points: 5
+
+  - id: q22
+    type: multiple_choice
+    question: What does the "Principle of Least Privilege" refer to?
+    options:
+      - text: You should grant your users only the permissions they need when they need them and nothing more.
+        is_correct: true
+      - text: All IAM users should have at least the necessary permissions to access the core AWS services.
+        is_correct: false
+      - text: All trusted IAM users should have access to any AWS service in the respective AWS account.
+        is_correct: false
+      - text: IAM users should not be granted any permissions; to keep your account safe.
+        is_correct: false
+    explanation: The principle of least privilege means granting only the permissions required for a task.
+    tags: [security, iam, least-privilege]
+    difficulty: easy
+    points: 5
+
+  - id: q23
+    type: multiple_choice
+    question: Which of the following does NOT belong to the AWS Cloud Computing models?
+    options:
+      - text: Platform as a Service (PaaS).
+        is_correct: false
+      - text: Infrastructure as a Service (IaaS).
+        is_correct: false
+      - text: Software as a Service (SaaS).
+        is_correct: false
+      - text: Networking as a Service (NaaS).
+        is_correct: true
+    explanation: AWS does not offer Networking as a Service (NaaS) as a primary cloud model.
+    tags: [cloud, models, iaas, paas, saas]
+    difficulty: easy
+    points: 5
+
+  - id: q24
+    type: multiple_choice
+    question: The identification process of an online financial services company requires that new users must complete an online interview with their security team. The completed recorded interviews are only required in the event of a legal issue or a regulatory compliance breach. What is the most cost-effective service to store the recorded videos?
+    options:
+      - text: S3 Intelligent-Tiering.
+        is_correct: false
+      - text: AWS Marketplace.
+        is_correct: false
+      - text: Amazon S3 Glacier Deep Archive.
+        is_correct: true
+      - text: Amazon EBS.
+        is_correct: false
+    explanation: S3 Glacier Deep Archive is the most cost-effective storage for infrequently accessed data.
+    tags: [storage, glacier, compliance, cost]
+    difficulty: medium
+    points: 7
+
+  - id: q25
+    type: multiple_choice
+    question: Which service provides DNS in the AWS cloud?
+    options:
+      - text: Route 53.
+        is_correct: true
+      - text: AWS Config.
+        is_correct: false
+      - text: Amazon CloudFront.
+        is_correct: false
+      - text: Amazon EMR.
+        is_correct: false
+    explanation: Amazon Route 53 is AWS's scalable Domain Name System (DNS) service.
+    tags: [dns, route53, networking]
+    difficulty: easy
+    points: 5
+
+  - id: q26
+    type: multiple_select
+    question: Hundreds of thousands of DDoS attacks are recorded every month worldwide. What service does AWS provide to help protect AWS Customers from these attacks? (Choose TWO)
+    options:
+      - text: AWS Shield.
+        is_correct: true
+      - text: AWS Config.
+        is_correct: false
+      - text: Amazon Cognito.
+        is_correct: false
+      - text: AWS WAF.
+        is_correct: true
+      - text: AWS KMS.
+        is_correct: false
+    explanation: AWS Shield and AWS WAF help protect against DDoS and web attacks.
+    tags: [security, ddos, shield, waf]
+    difficulty: medium
+    points: 7
+
+  - id: q27
+    type: multiple_choice
+    question: A company is deploying a new two-tier web application in AWS. Where should the most frequently accessed data be stored so that the application’s response time is optimal?
+    options:
+      - text: AWS OpsWorks.
+        is_correct: false
+      - text: AWS Storage Gateway.
+        is_correct: false
+      - text: Amazon EBS volume.
+        is_correct: false
+      - text: Amazon ElastiCache.
+        is_correct: true
+    explanation: Amazon ElastiCache provides in-memory caching for fast data access.
+    tags: [elasticache, caching, performance]
+    difficulty: medium
+    points: 7
+
+  - id: q28
+    type: multiple_choice
+    question: You want to run a questionnaire application for only one day (without interruption), which Amazon EC2 purchase option should you use?
+    options:
+      - text: Reserved instances.
+        is_correct: false
+      - text: Spot instances.
+        is_correct: false
+      - text: Dedicated instances.
+        is_correct: false
+      - text: On-demand instances.
+        is_correct: true
+    explanation: On-demand instances are best for short-term, uninterrupted workloads.
+    tags: [ec2, on-demand, pricing]
+    difficulty: easy
+    points: 5
+
+  - id: q29
+    type: multiple_choice
+    question: You are working on a project that involves creating thumbnails of millions of images. Consistent uptime is not an issue, and continuous processing is not required. Which EC2 buying option would be the most cost-effective?
+    options:
+      - text: Reserved Instances.
+        is_correct: false
+      - text: On-demand Instances.
+        is_correct: false
+      - text: Dedicated Instances.
+        is_correct: false
+      - text: Spot Instances.
+        is_correct: true
+    explanation: Spot Instances are the most cost-effective for workloads that can tolerate interruptions.
+    tags: [ec2, spot, cost-optimization]
+    difficulty: medium
+    points: 7
+
+  - id: q30
+    type: multiple_choice
+    question: Which of the following can be described as a global content delivery network (CDN) service?
+    options:
+      - text: AWS VPN.
+        is_correct: false
+      - text: AWS Direct Connect.
+        is_correct: false
+      - text: AWS Regions.
+        is_correct: false
+      - text: Amazon CloudFront.
+        is_correct: true
+    explanation: Amazon CloudFront is AWS's global CDN service.
+    tags: [cdn, cloudfront, global]
+    difficulty: easy
+    points: 5
+
+  - id: q31
+    type: multiple_choice
+    question: Which of the following services allows customers to manage their agreements with AWS?
+    options:
+      - text: AWS Artifact.
+        is_correct: true
+      - text: AWS Certificate Manager.
+        is_correct: false
+      - text: AWS Systems Manager.
+        is_correct: false
+      - text: AWS Organizations.
+        is_correct: false
+    explanation: AWS Artifact provides access to compliance reports and agreements.
+    tags: [artifact, compliance, agreements]
+    difficulty: medium
+    points: 7
+
+  - id: q32
+    type: multiple_select
+    question: Which of the following are examples of AWS-Managed Services, where AWS is responsible for the operational and maintenance burdens of running the service? (Choose TWO)
+    options:
+      - text: Amazon VPC.
+        is_correct: false
+      - text: Amazon DynamoDB.
+        is_correct: true
+      - text: Amazon Elastic MapReduce.
+        is_correct: true
+      - text: AWS IAM.
+        is_correct: false
+      - text: Amazon Elastic Compute Cloud.
+        is_correct: false
+    explanation: DynamoDB and EMR are AWS-managed services, reducing operational overhead for customers.
+    tags: [managed-services, dynamodb, emr]
+    difficulty: medium
+    points: 7
+
+  - id: q33
+    type: multiple_choice
+    question: Your company has a data store application that requires access to a NoSQL database. Which AWS database offering would meet this requirement?
+    options:
+      - text: Amazon Aurora.
+        is_correct: false
+      - text: Amazon DynamoDB.
+        is_correct: true
+      - text: Amazon Elastic Block Store.
+        is_correct: false
+      - text: Amazon Redshift.
+        is_correct: false
+    explanation: Amazon DynamoDB is AWS's NoSQL database service.
+    tags: [dynamodb, nosql, database]
+    difficulty: easy
+    points: 5
+
+  - id: q34
+    type: multiple_choice
+    question: As part of the Enterprise support plan, who is the primary point of contact for ongoing support needs?
+    options:
+      - text: AWS Identity and Access Management (IAM) user.
+        is_correct: false
+      - text: Infrastructure Event Management (IEM) engineer.
+        is_correct: false
+      - text: AWS Consulting Partners.
+        is_correct: false
+      - text: Technical Account Manager (TAM).
+        is_correct: true
+    explanation: A Technical Account Manager (TAM) is the main contact for Enterprise support customers.
+    tags: [support, enterprise, tam]
+    difficulty: medium
+    points: 7
+
+  - id: q35
+    type: multiple_choice
+    question: How can you view the distribution of AWS spending in one of your AWS accounts?
+    options:
+      - text: By using Amazon VPC console.
+        is_correct: false
+      - text: By contacting the AWS Support team.
+        is_correct: false
+      - text: By using AWS Cost Explorer.
+        is_correct: true
+      - text: By contacting the AWS Finance team.
+        is_correct: false
+    explanation: AWS Cost Explorer provides visualizations of spending across services and time.
+    tags: [cost, explorer, billing]
+    difficulty: easy
+    points: 5
+
+  - id: q36
+    type: multiple_choice
+    question: Which of the following must an IAM user provide to interact with AWS services using the AWS Command Line Interface (AWS CLI)?
+    options:
+      - text: Access keys.
+        is_correct: true
+      - text: Secret token.
+        is_correct: false
+      - text: UserID.
+        is_correct: false
+      - text: User name and password.
+        is_correct: false
+    explanation: Access keys are required for programmatic access via the AWS CLI.
+    tags: [iam, cli, access-keys]
+    difficulty: easy
+    points: 5
+
+  - id: q37
+    type: multiple_choice
+    question: You have AWS Basic support, and you have discovered that some AWS resources are being used maliciously, and those resources could potentially compromise your data. What should you do?
+    options:
+      - text: Contact the AWS Customer Service team.
+        is_correct: false
+      - text: Contact the AWS Abuse team.
+        is_correct: true
+      - text: Contact the AWS Concierge team.
+        is_correct: false
+      - text: Contact the AWS Security team.
+        is_correct: false
+    explanation: The AWS Abuse team handles reports of malicious or abusive use of AWS resources.
+    tags: [security, abuse, support]
+    difficulty: medium
+    points: 7
+
+  - id: q38
+    type: multiple_select
+    question: Select TWO examples of the AWS shared controls.
+    options:
+      - text: Patch Management.
+        is_correct: true
+      - text: IAM Management.
+        is_correct: false
+      - text: VPC Management.
+        is_correct: false
+      - text: Configuration Management.
+        is_correct: true
+      - text: Data Center operations.
+        is_correct: false
+    explanation: Patch management and configuration management are shared controls between AWS and the customer.
+    tags: [shared-responsibility, controls, management]
+    difficulty: medium
+    points: 7
+
+  - id: q39
+    type: multiple_select
+    question: In order to implement best practices when dealing with a “Single Point of Failure,” you should attempt to build as much automation as possible in both detecting and reacting to failure. Which of the following AWS services would help? (Choose TWO)
+    options:
+      - text: ELB.
+        is_correct: true
+      - text: Auto Scaling.
+        is_correct: true
+      - text: Amazon Athen.
+        is_correct: false
+      - text: ECR.
+        is_correct: false
+      - text: Amazon EC2.
+        is_correct: false
+    explanation: ELB and Auto Scaling automate detection and response to failures, improving resilience.
+    tags: [automation, failure, elb, autoscaling]
+    difficulty: medium
+    points: 7
+
+  - id: q40
+    type: multiple_choice
+    question: A company is planning to host an educational website on AWS. Their video courses will be streamed all around the world. Which of the following AWS services will help achieve high transfer speeds?
+    options:
+      - text: Amazon SNS.
+        is_correct: false
+      - text: Amazon Kinesis Video Streams.
+        is_correct: false
+      - text: AWS CloudFormation.
+        is_correct: false
+      - text: Amazon CloudFront.
+        is_correct: true
+    explanation: Amazon CloudFront is a CDN that delivers content globally with low latency.
+    tags: [cloudfront, streaming, performance]
+    difficulty: easy
+    points: 5
+
+  - id: q41
+    type: multiple_choice
+    question: A developer is planning to build a two-tier web application that has a MySQL database layer. Which of the following AWS database services would provide automated backups for the application?
+    options:
+      - text: A MySQL database installed on an EC2 instance.
+        is_correct: false
+      - text: Amazon Aurora.
+        is_correct: true
+      - text: Amazon DynamoDB.
+        is_correct: false
+      - text: Amazon Neptune.
+        is_correct: false
+    explanation: Amazon Aurora provides automated backups for MySQL-compatible databases.
+    tags: [aurora, database, backups]
+    difficulty: medium
+    points: 7
+
+  - id: q42
+    type: multiple_choice
+    question: What is the AWS service that enables AWS architects to manage infrastructure as code?
+    options:
+      - text: AWS CloudFormation.
+        is_correct: true
+      - text: AWS Config.
+        is_correct: false
+      - text: Amazon SES.
+        is_correct: false
+      - text: Amazon EMR.
+        is_correct: false
+    explanation: AWS CloudFormation allows you to manage infrastructure as code.
+    tags: [cloudformation, infrastructure, code]
+    difficulty: easy
+    points: 5
+
+  - id: q43
+    type: multiple_choice
+    question: Under the shared responsibility model, which of the following is the responsibility of AWS?
+    options:
+      - text: Client-side encryption.
+        is_correct: false
+      - text: Configuring infrastructure devices.
+        is_correct: true
+      - text: Server-side encryption.
+        is_correct: false
+      - text: Filtering traffic with Security Groups.
+        is_correct: false
+    explanation: AWS is responsible for configuring and managing the infrastructure devices.
+    tags: [shared-responsibility, aws, infrastructure]
+    difficulty: medium
+    points: 7
+
+  - id: q44
+    type: multiple_select
+    question: What does the AWS Health Dashboard provide? (Choose TWO)
+    options:
+      - text: Detailed troubleshooting guidance to address AWS events impacting your resources.
+        is_correct: true
+      - text: Health checks for Auto Scaling instances.
+        is_correct: false
+      - text: Recommendations for Cost Optimization.
+        is_correct: false
+      - text: A dashboard detailing vulnerabilities in your applications.
+        is_correct: false
+      - text: Personalized view of AWS service health.
+        is_correct: true
+    explanation: The AWS Health Dashboard provides personalized health information and troubleshooting guidance.
+    tags: [health, dashboard, aws, status]
+    difficulty: medium
+    points: 7
+
+  - id: q45
+    type: multiple_choice
+    question: You have deployed your application on multiple Amazon EC2 instances. Your customers complain that sometimes they can’t reach your application. Which AWS service allows you to monitor the performance of your EC2 instances to assist in troubleshooting these issues?
+    options:
+      - text: AWS Lambda.
+        is_correct: false
+      - text: AWS Config.
+        is_correct: false
+      - text: Amazon CloudWatch.
+        is_correct: true
+      - text: AWS CloudTrail.
+        is_correct: false
+    explanation: Amazon CloudWatch monitors EC2 performance and helps troubleshoot issues.
+    tags: [cloudwatch, monitoring, ec2]
+    difficulty: easy
+    points: 5
+
+  - id: q46
+    type: multiple_choice
+    question: Your company is developing a critical web application in AWS, and the security of the application is a top priority. Which of the following AWS services will provide infrastructure security optimization recommendations?
+    options:
+      - text: AWS Shield.
+        is_correct: false
+      - text: AWS Management Console.
+        is_correct: false
+      - text: AWS Secrets Manager.
+        is_correct: false
+      - text: AWS Trusted Advisor.
+        is_correct: true
+    explanation: AWS Trusted Advisor provides security optimization recommendations for your AWS environment.
+    tags: [trusted-advisor, security, optimization]
+    difficulty: medium
+    points: 7
+
+  - id: q47
+    type: multiple_select
+    question: Which of the following is not a benefit of Amazon S3? (Choose TWO)
+    options:
+      - text: Amazon S3 provides unlimited storage for any type of data.
+        is_correct: false
+      - text: Amazon S3 can run any type of application or backend system.
+        is_correct: true
+      - text: Amazon S3 stores any number of objects, but with object size limits.
+        is_correct: false
+      - text: Amazon S3 can be scaled manually to store and retrieve any amount of data from anywhere.
+        is_correct: true
+      - text: Amazon S3 provides 99.999999999% (11 9’s) of data durability.
+        is_correct: false
+    explanation: S3 cannot run applications and does not require manual scaling for storage.
+    tags: [s3, storage, benefits, limitations]
+    difficulty: medium
+    points: 7
+
+  - id: q48
+    type: multiple_select
+    question: In the AWS Shared responsibility Model, which of the following are the responsibility of the customer? (Choose TWO)
+    options:
+      - text: Disk disposal.
+        is_correct: false
+      - text: Controlling physical access to compute resources.
+        is_correct: false
+      - text: Patching the Network infrastructure.
+        is_correct: false
+      - text: Setting password complexity rules.
+        is_correct: true
+      - text: Configuring network access rules.
+        is_correct: true
+    explanation: Customers are responsible for password policies and network access configuration.
+    tags: [shared-responsibility, customer, security]
+    difficulty: medium
+    points: 7
+
+  - id: q49
+    type: multiple_choice
+    question: What does AWS provide to deploy popular technologies such as IBM MQ on AWS with the least amount of effort and time?
+    options:
+      - text: Amazon Aurora.
+        is_correct: false
+      - text: Amazon CloudWatch.
+        is_correct: false
+      - text: AWS Quick Start reference deployments.
+        is_correct: true
+      - text: AWS OpsWorks.
+        is_correct: false
+    explanation: AWS Quick Start provides automated reference deployments for popular technologies.
+    tags: [quick-start, deployment, automation]
+    difficulty: medium
+    points: 7
+
+  - id: q50
+    type: multiple_choice
+    question: An organization has decided to purchase an Amazon EC2 Reserved Instance (RI) for three years in order to reduce costs. It is possible that the application workloads could change during the reservation period. What is the EC2 Reserved Instance (RI) type that will allow the company to exchange the purchased reserved instance for another reserved instance with higher computing power if they need to?
+    options:
+      - text: Elastic RI.
+        is_correct: false
+      - text: Premium RI.
+        is_correct: false
+      - text: Standard RI.
+        is_correct: false
+      - text: Convertible RI.
+        is_correct: true
+    explanation: Convertible RIs allow you to exchange for different instance types during the term.
+    tags: [ec2, reserved-instances, convertible]
+    difficulty: medium
+    points: 7
+
+  - id: q4
+    type: multiple_select
+    question: Which of the below options are related to the reliability of AWS? (Choose TWO)
+    options:
+      - text: Applying the principle of least privilege to all AWS resources.
+        is_correct: false
+      - text: Automatically provisioning new resources to meet demand.
+        is_correct: true
+      - text: All AWS services are considered Global Services, and this design helps customers serve their international users.
+        is_correct: false
+      - text: Providing compensation to customers if issues occur.
+        is_correct: false
+      - text: Ability to recover quickly from failures.
+        is_correct: true
+    explanation: Reliability in AWS involves automatic provisioning and quick recovery from failures.
+    tags: [reliability, aws, best-practices]
+    difficulty: medium
+    points: 7
+
+  - id: q5
+    type: multiple_choice
+    question: Which statement is true regarding the AWS Shared Responsibility Model?
+    options:
+      - text: Responsibilities vary depending on the services used.
+        is_correct: true
+      - text: Security of the IaaS services is the responsibility of AWS.
+        is_correct: false
+      - text: Patching the guest OS is always the responsibility of AWS.
+        is_correct: false
+      - text: Security of the managed services is the responsibility of the customer.
+        is_correct: false
+    explanation: The shared responsibility model varies based on the AWS service being used.
+    tags: [security, shared-responsibility, aws]
+    difficulty: medium
+    points: 7
+
+  - id: q6
+    type: multiple_choice
+    question: You have set up consolidated billing for several AWS accounts. One of the accounts has purchased a number of reserved instances for 3 years. Which of the following is true regarding this scenario?
+    options:
+      - text: The Reserved Instance discounts can only be shared with the master account.
+        is_correct: false
+      - text: All accounts can receive the hourly cost benefit of the Reserved Instances.
+        is_correct: true
+      - text: The purchased instances will have better performance than On-demand instances.
+        is_correct: false
+      - text: There are no cost benefits from using consolidated billing; It is for informational purposes only.
+        is_correct: false
+    explanation: With consolidated billing, all accounts can benefit from reserved instance discounts.
+    tags: [billing, reserved-instances, aws]
+    difficulty: medium
+    points: 7
+
+  - id: q7
+    type: multiple_choice
+    question: A company has developed an eCommerce web application in AWS. What should they do to ensure that the application has the highest level of availability?
+    options:
+      - text: Deploy the application across multiple Availability Zones and Edge locations.
+        is_correct: false
+      - text: Deploy the application across multiple Availability Zones and subnets.
+        is_correct: false
+      - text: Deploy the application across multiple Regions and Availability Zones.
+        is_correct: true
+      - text: Deploy the application across multiple VPC’s and subnets.
+        is_correct: false
+    explanation: Deploying across multiple regions and AZs provides the highest availability.
+    tags: [availability, regions, architecture]
+    difficulty: medium
+    points: 7
+
+  - id: q8
+    type: multiple_select
+    question: What does AWS Snowball provide? (Choose TWO)
+    options:
+      - text: Built-in computing capabilities that allow customers to process data locally.
+        is_correct: true
+      - text: A catalog of third-party software solutions that customers need to build solutions and run their businesses.
+        is_correct: false
+      - text: A hybrid cloud storage between on-premises environments and the AWS Cloud.
+        is_correct: false
+      - text: An Exabyte-scale data transfer service that allows you to move extremely large amounts of data to AWS.
+        is_correct: false
+      - text: Secure transfer of large amounts of data into and out of the AWS.
+        is_correct: true
+    explanation: AWS Snowball provides local compute and secure data transfer to AWS.
+    tags: [snowball, data-transfer, edge, aws]
+    difficulty: medium
+    points: 7
+
+  - id: q9
+    type: multiple_choice
+    question: A company has an AWS Enterprise Support plan. They want quick and efficient guidance with their billing and account inquiries. Which of the following should the company use?
+    options:
+      - text: AWS Health Dashboard.
+        is_correct: false
+      - text: AWS Support Concierge.
+        is_correct: true
+      - text: AWS Customer Service.
+        is_correct: false
+      - text: AWS Operations Support.
+        is_correct: false
+    explanation: The AWS Support Concierge provides account and billing support for Enterprise customers.
+    tags: [support, billing, enterprise, aws]
+    difficulty: easy
+    points: 5
+
+  - id: q10
+    type: multiple_choice
+    question: A Japanese company hosts their applications on Amazon EC2 instances in the Tokyo Region. The company has opened new branches in the United States, and the US users are complaining of high latency. What can the company do to reduce latency for the users in the US while minimizing costs?
+    options:
+      - text: Applying the Amazon Connect latency-based routing policy.
+        is_correct: false
+      - text: Registering a new US domain name to serve the users in the US.
+        is_correct: false
+      - text: Building a new data center in the US and implementing a hybrid model.
+        is_correct: false
+      - text: Deploying new Amazon EC2 instances in a Region located in the US.
+        is_correct: true
+    explanation: Deploying EC2 instances in a US region reduces latency for US users.
+    tags: [latency, ec2, regions, performance]
+    difficulty: medium
+    points: 7
+
+  

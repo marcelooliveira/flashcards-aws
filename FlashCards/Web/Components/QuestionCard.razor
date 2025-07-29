@@ -16,6 +16,10 @@
             <b>Resposta correta:</b>
             <span class="answer-right">@string.Join(", ", Question.CorrectOptions.Select(i => (char)('A' + i)))</span>
         </div>
+        <div class="mdc-typography--subtitle2">
+            <b>Explanation:</b>
+            <span class="mdc-typography--body1">@Question.Explanation</span>
+        </div>        
     }
 </div>
 

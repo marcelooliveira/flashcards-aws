@@ -1,6 +1,8 @@
 ﻿@page "/"
 @using System.Text.RegularExpressions
 @using Web.Model
+@using YamlDotNet.Core
+@using YamlDotNet.RepresentationModel;
 
 <PageTitle>Flashcards - 23:46</PageTitle>
 
@@ -49,10 +51,12 @@ else
         try
         {
             var http = new HttpClient { BaseAddress = new Uri(NavigationManager.BaseUri) };
-            var md = await http.GetStringAsync("Exams/practice-exam-1.md");
-            Questions = ParseQuestions(md);
+            // var md = await http.GetStringAsync("Exams/practice-exam-1.md");
+            var yamlContent = await http.GetStringAsync("Exams/aws-01.yml");
+            // Questions = ParseQuestions(md);
+            Questions = ParseQuestionsFromYaml(yamlContent);
         }
-        catch
+        catch (Exception ex)
         {
             Questions = new();
         }
@@ -91,6 +95,141 @@ else
             }
         }
         if (current != null) questions.Add(current);
+        return questions;
+    }
+
+    public List<Question> ParseQuestionsFromYaml(string yamlContent)
+    {
+        var questions = new List<Question>();
+        var input = new StringReader(yamlContent);
+        var yamlStream = new YamlStream();
+        yamlStream.Load(input);
+
+        // Ensure the root node is a mapping (e.g., 'questions: [...]')
+        var root = yamlStream.Documents[0].RootNode as YamlMappingNode;
+        if (root == null)
+        {
+            throw new YamlException("Root of the YAML document is not a mapping node.");
+        }
+
+        // Try to get the 'questions' key
+        if (!root.Children.TryGetValue(new YamlScalarNode("questions"), out var questionsNode))
+        {
+            throw new YamlException("YAML document does not contain a 'questions' key at the root.");
+        }
+
+        var questionsSequence = questionsNode as YamlSequenceNode;
+        if (questionsSequence == null)
+        {
+            throw new YamlException("'questions' node is not a sequence.");
+        }
+
+        foreach (var qNodeBase in questionsSequence.Children)
+        {
+            var qNode = qNodeBase as YamlMappingNode;
+            if (qNode == null)
+            {
+                Console.WriteLine($"Warning: Skipping non-mapping node in 'questions' sequence: {qNodeBase.NodeType}");
+                continue; // Skip if it's not a mapping node (e.g., an empty line or malformed entry)
+            }
+
+            var question = new Question();
+
+            // Helper to safely get scalar value
+            string GetScalarValue(YamlMappingNode node, string key)
+            {
+                if (node.Children.TryGetValue(new YamlScalarNode(key), out var valueNode) && valueNode is YamlScalarNode scalar)
+                {
+                    return scalar.Value;
+                }
+                return null;
+            }
+
+            // Populate basic properties
+            question.Id = GetScalarValue(qNode, "id");
+            question.Text = GetScalarValue(qNode, "question"); // Use QuestionText
+            question.Type = GetScalarValue(qNode, "type");
+            question.Explanation = GetScalarValue(qNode, "explanation");
+            question.Difficulty = GetScalarValue(qNode, "difficulty");
+
+            // Parse Points (int)
+            if (qNode.Children.TryGetValue(new YamlScalarNode("points"), out var pointsNode) && pointsNode is YamlScalarNode pointsScalar && int.TryParse(pointsScalar.Value, out int parsedPoints))
+            {
+                question.Points = parsedPoints;
+            }
+
+            // Parse Tags (list of strings)
+            if (qNode.Children.TryGetValue(new YamlScalarNode("tags"), out var tagsNode) && tagsNode is YamlSequenceNode tagsSequence)
+            {
+                question.Tags = tagsSequence.Children
+                                            .OfType<YamlScalarNode>()
+                                            .Select(t => t.Value)
+                                            .Where(v => v != null) // Ensure no null values from empty tags
+                                            .ToList();
+            }
+
+            // Parse Options (list of QuestionOption)
+            if (qNode.Children.TryGetValue(new YamlScalarNode("options"), out var optionsNode) && optionsNode is YamlSequenceNode optionsSeq)
+            {
+                int idx = 0;
+                foreach (var optNodeBase in optionsSeq.Children)
+                {
+                    var opt = optNodeBase as YamlMappingNode;
+                    if (opt == null)
+                    {
+                        Console.WriteLine($"Warning: Skipping non-mapping node in 'options' sequence: {optNodeBase.NodeType}");
+                        continue;
+                    }
+
+                    var optText = GetScalarValue(opt, "text");
+                    bool isCorrect = false;
+                    if (opt.Children.TryGetValue(new YamlScalarNode("is_correct"), out var isCorrectNode) && isCorrectNode is YamlScalarNode isCorrectScalar)
+                    {
+                        bool.TryParse(isCorrectScalar.Value, out isCorrect);
+                    }
+
+                    // Populate the 'Options' list directly, as per the C# class structure
+                    var newOption = new QuestionOption(optText);
+
+                    // Your original code's specific lists (QuestionOptions and CorrectOptions)
+                    // If you *must* maintain these for legacy reasons, populate them here:
+                    question.QuestionOptions.Add(newOption); // Adds with text only
+                    if (isCorrect)
+                    {
+                        question.CorrectOptions.Add(idx);
+                    }
+                    idx++;
+                }
+            }
+
+            // Handle specific properties for short_answer
+            if (question.Type == "short_answer")
+            {
+                // question.CorrectAnswer = GetScalarValue(qNode, "correct_answer");
+                if (qNode.Children.TryGetValue(new YamlScalarNode("allow_case_sensitive"), out var acsNode) && acsNode is YamlScalarNode acsScalar)
+                {
+                    bool.TryParse(acsScalar.Value, out bool allowCaseSensitive);
+                    // question.AllowCaseSensitive = allowCaseSensitive;
+                }
+            }
+
+            // // Handle specific properties for essay
+            // if (question.Type == "essay")
+            // {
+            //     if (qNode.Children.TryGetValue(new YamlScalarNode("grading_guidelines"), out var ggNode) && ggNode is YamlSequenceNode ggSequence)
+            //     {
+            //         question.GradingGuidelines = ggSequence.Children
+            //                                                 .OfType<YamlScalarNode>()
+            //                                                 .Select(t => t.Value)
+            //                                                 .Where(v => v != null)
+            //                                                 .ToList();
+            //     }
+            //     question.ExampleAnswer = GetScalarValue(qNode, "example_answer");
+            // }
+
+            questions.Add(question);
+        }
+
         return questions;
     }
 
