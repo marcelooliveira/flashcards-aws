@@ -1,4 +1,6 @@
 ﻿@page "/"
+@page "/{examId:int}"
+
 @using System.Text.RegularExpressions
 @using Web.Model
 @using YamlDotNet.Core
@@ -40,6 +42,9 @@ else
     int CurrentIndex = 0;
     int CorrectCount => Questions.Count(q => q.WasCorrect == true);
     int WrongCount => Questions.Count(q => q.WasCorrect == false);
+    
+    [Parameter]
+    public int? examId { get; set; } = 1;
 
     protected override async Task OnInitializedAsync()
     {
@@ -51,8 +56,7 @@ else
         try
         {
             var http = new HttpClient { BaseAddress = new Uri(NavigationManager.BaseUri) };
-            // var md = await http.GetStringAsync("Exams/practice-exam-1.md");
-            var yamlContent = await http.GetStringAsync("Exams/aws-02.yml");
+            var yamlContent = await http.GetStringAsync($"Exams/aws-{(examId ?? 1):00}.yml");
             // Questions = ParseQuestions(md);
             Questions = ParseQuestionsFromYaml(yamlContent);
         }
