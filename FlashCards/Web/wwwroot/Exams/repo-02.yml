@@ -1,0 +1,667 @@
+questions:
+  - id: q1
+    type: multiple_choice
+    question: O que caracteriza uma operação compromissada no mercado financeiro brasileiro?
+    options:
+      - text: Compra e venda simultânea de títulos com compromisso de recompra ou revenda.
+        is_correct: true
+      - text: Compra de ações para longo prazo.
+        is_correct: false
+      - text: Empréstimo de recursos sem garantia.
+        is_correct: false
+      - text: Venda de derivativos sem cobertura.
+        is_correct: false
+    explanation: Operações compromissadas envolvem compra e venda simultânea de títulos com compromisso de recompra ou revenda em data futura.
+    tags: [compromissada, mercado, títulos]
+    difficulty: fácil
+    points: 5
+    diagram: |
+      graph TD
+      A[Investidor] -- Compra --> B[Título]
+      B -- Venda --> C[Instituição Financeira]
+      C -- Compromisso de recompra --> A
+      A -- Recebe recursos --> C
+
+  - id: q2
+    type: multiple_choice
+    question: Qual é o principal objetivo de uma operação compromissada para o investidor?
+    options:
+      - text: Obter rentabilidade com baixo risco e alta liquidez.
+        is_correct: true
+      - text: Especular com derivativos.
+        is_correct: false
+      - text: Comprar ações de empresas em recuperação judicial.
+        is_correct: false
+      - text: Financiar projetos de infraestrutura.
+        is_correct: false
+    explanation: O investidor busca rentabilidade com baixo risco e liquidez, pois a operação é garantida por títulos públicos ou privados.
+    tags: [compromissada, objetivo, investidor]
+    difficulty: fácil
+    points: 5
+    diagram: |
+      graph TD
+      A[Investidor] -- Aplica recursos --> B[Compromissada]
+      B -- Baixo risco --> C[Garantia em Título]
+      B -- Alta liquidez --> D[Resgate rápido]
+      C -- Segurança --> A
+      D -- Disponibilidade --> A
+
+  - id: q3
+    type: multiple_choice
+    question: O que é considerado o "lastro" de uma operação compromissada?
+    options:
+      - text: O título utilizado como garantia da operação.
+        is_correct: true
+      - text: O valor do empréstimo bancário.
+        is_correct: false
+      - text: O saldo da conta corrente do investidor.
+        is_correct: false
+      - text: O patrimônio líquido do banco.
+        is_correct: false
+    explanation: O lastro é o título que serve de garantia para a operação compromissada.
+    tags: [lastro, garantia, compromissada]
+    difficulty: fácil
+    points: 5
+    diagram: |
+      graph TD
+      A[Compromissada] -- Garantia --> B[Título (Lastro)]
+      B -- Custódia --> C[Instituição Financeira]
+      C -- Confiança --> A
+
+  - id: q4
+    type: multiple_choice
+    question: Qual título é mais comumente utilizado como lastro em operações compromissadas no Brasil?
+    options:
+      - text: Títulos públicos federais, (ex LTN, LFT, NTN).
+        is_correct: true
+      - text: Ações de empresas listadas na B3.
+        is_correct: false
+      - text: Debêntures de empresas privadas.
+        is_correct: false
+      - text: Cotas de fundos imobiliários.
+        is_correct: false
+    explanation: Títulos públicos federais são os mais utilizados como lastro devido à sua segurança e liquidez.
+    tags: [lastro, títulos públicos, compromissada]
+    difficulty: fácil
+    points: 5
+    diagram: |
+      graph TD
+      A[Compromissada] -- Lastro --> B[Título Público Federal]
+      B -- Exemplo --> C[LTN]
+      B -- Exemplo --> D[LFT]
+      B -- Exemplo --> E[NTN]
+
+  - id: q5
+    type: multiple_choice
+    question: Quem pode atuar como contraparte em uma operação compromissada?
+    options:
+      - text: Instituições financeiras autorizadas pelo Banco Central.
+        is_correct: true
+      - text: Qualquer pessoa física.
+        is_correct: false
+      - text: Apenas fundos de pensão.
+        is_correct: false
+      - text: Apenas empresas de capital aberto.
+        is_correct: false
+    explanation: Apenas instituições financeiras autorizadas podem atuar como contraparte nessas operações.
+    tags: [contraparte, banco central, compromissada]
+    difficulty: fácil
+    points: 5
+    diagram: |
+      graph TD
+      A[Investidor] -- Opera com --> B[Instituição Financeira]
+      B -- Autorização --> C[Banco Central]
+      C -- Regula --> B
+
+  - id: q6
+    type: multiple_choice
+    question: Qual é o principal risco para o investidor em uma operação compromissada?
+    options:
+      - text: Risco de crédito da contraparte.
+        is_correct: true
+      - text: Risco de mercado do título lastro.
+        is_correct: false
+      - text: Risco cambial.
+        is_correct: false
+      - text: Risco de inflação.
+        is_correct: false
+    explanation: O principal risco é a contraparte não honrar o compromisso de recompra.
+    tags: [risco, crédito, compromissada]
+    difficulty: médio
+    points: 7
+    diagram: |
+      graph TD
+      A[Investidor] -- Compromisso de recompra --> B[Contraparte]
+      B -- Risco de não honrar --> C[Quebra de contrato]
+      C -- Prejuízo --> A
+
+  - id: q7
+    type: multiple_choice
+    question: O que ocorre se a instituição financeira não recompra o título na data acordada?
+    options:
+      - text: O investidor permanece com o título lastro.
+        is_correct: true
+      - text: O investidor perde todo o valor investido.
+        is_correct: false
+      - text: O Banco Central cobre automaticamente a operação.
+        is_correct: false
+      - text: O investidor recebe ações da instituição.
+        is_correct: false
+    explanation: O investidor fica com o título lastro, podendo vendê-lo no mercado.
+    tags: [inadimplência, lastro, compromissada]
+    difficulty: médio
+    points: 7
+    diagram: |
+      graph TD
+      A[Investidor] -- Fica com --> B[Título Lastro]
+      B -- Pode vender --> C[Mercado Secundário]
+      C -- Liquidez --> A
+
+  - id: q8
+    type: multiple_choice
+    question: Qual é a principal diferença entre uma operação compromissada e um CDB tradicional?
+    options:
+      - text: A compromissada é garantida por títulos, o CDB é um empréstimo direto ao banco.
+        is_correct: true
+      - text: O CDB tem liquidez diária, a compromissada não.
+        is_correct: false
+      - text: A compromissada não tem rentabilidade.
+        is_correct: false
+      - text: O CDB é isento de imposto de renda.
+        is_correct: false
+    explanation: Na compromissada há garantia de títulos, enquanto o CDB é um empréstimo ao banco sem lastro específico.
+    tags: [compromissada, cdb, diferença]
+    difficulty: médio
+    points: 7
+    diagram: |
+      graph TD
+      A[Compromissada] -- Garantia --> B[Título]
+      C[CDB] -- Empréstimo --> D[Banco]
+      B -- Segurança --> A
+      D -- Risco de crédito --> C
+
+  - id: q9
+    type: multiple_choice
+    question: O que significa "compra com compromisso de revenda"?
+    options:
+      - text: O investidor compra o título e se compromete a revendê-lo na data futura.
+        is_correct: true
+      - text: O investidor compra ações para revender no mesmo dia.
+        is_correct: false
+      - text: O banco compra o título e não há compromisso de revenda.
+        is_correct: false
+      - text: O investidor compra derivativos para revenda.
+        is_correct: false
+    explanation: O investidor compra o título e assume o compromisso de revender na data acordada.
+    tags: [compra, revenda, compromissada]
+    difficulty: fácil
+    points: 5
+    diagram: |
+      graph TD
+      A[Investidor] -- Compra --> B[Título]
+      B -- Compromisso de revenda --> C[Instituição]
+      C -- Recebe título de volta --> B
+
+  - id: q10
+    type: multiple_choice
+    question: Qual órgão regula as operações compromissadas no Brasil?
+    options:
+      - text: Banco Central do Brasil (BCB).
+        is_correct: true
+      - text: Comissão de Valores Mobiliários (CVM).
+        is_correct: false
+      - text: Receita Federal.
+        is_correct: false
+      - text: Banco Mundial.
+        is_correct: false
+    explanation: O Banco Central regula e supervisiona as operações compromissadas no país.
+    tags: [regulação, banco central, compromissada]
+    difficulty: fácil
+    points: 5
+    diagram: |
+      graph TD
+      A[Operação Compromissada] -- Regulação --> B[Banco Central]
+      B -- Supervisão --> C[Mercado Financeiro]
+
+  - id: q11
+    type: multiple_choice
+    question: Qual é a principal finalidade das operações compromissadas para os bancos?
+    options:
+      - text: Captação de recursos de curto prazo.
+        is_correct: true
+      - text: Financiamento de imóveis.
+        is_correct: false
+      - text: Compra de ações.
+        is_correct: false
+      - text: Emissão de moeda.
+        is_correct: false
+    explanation: Os bancos usam compromissadas para captar recursos de curto prazo junto ao mercado.
+    tags: [bancos, captação, compromissada]
+    difficulty: fácil
+    points: 5
+    diagram: |
+      graph TD
+      A[Banco] -- Captação --> B[Compromissada]
+      B -- Recursos --> C[Caixa do Banco]
+      C -- Liquidez --> A
+
+  - id: q12
+    type: multiple_choice
+    question: O que é "taxa de recompra" em uma operação compromissada?
+    options:
+      - text: A taxa de remuneração acordada para o período da operação.
+        is_correct: true
+      - text: A taxa de administração do fundo.
+        is_correct: false
+      - text: A taxa de câmbio utilizada na liquidação.
+        is_correct: false
+      - text: A taxa de juros do cartão de crédito.
+        is_correct: false
+    explanation: É a taxa de remuneração paga ao investidor pelo período da operação.
+    tags: [taxa, recompra, compromissada]
+    difficulty: fácil
+    points: 5
+    diagram: |
+      graph TD
+      A[Compromissada] -- Taxa de recompra --> B[Investidor]
+      B -- Recebe juros --> C[Período da operação]
+
+  - id: q13
+    type: multiple_choice
+    question: Qual é o prazo mais comum das operações compromissadas?
+    options:
+      - text: Curto prazo, geralmente de 1 a 30 dias.
+        is_correct: true
+      - text: Longo prazo, acima de 5 anos.
+        is_correct: false
+      - text: Prazo indeterminado.
+        is_correct: false
+      - text: Apenas operações overnight.
+        is_correct: false
+    explanation: A maioria das operações compromissadas tem prazo curto, de 1 a 30 dias.
+    tags: [prazo, compromissada, mercado]
+    difficulty: fácil
+    points: 5
+    diagram: |
+      graph TD
+      A[Compromissada] -- Prazo --> B[1 a 30 dias]
+      B -- Liquidez --> C[Investidor]
+
+  - id: q14
+    type: multiple_choice
+    question: O que é uma "compromissada reversa"?
+    options:
+      - text: O banco compra o título com compromisso de revenda ao investidor.
+        is_correct: true
+      - text: O investidor compra o título e não há recompra.
+        is_correct: false
+      - text: O banco vende ações ao investidor.
+        is_correct: false
+      - text: O investidor vende títulos para o banco sem compromisso de recompra.
+        is_correct: false
+    explanation: Na compromissada reversa, o banco compra o título e se compromete a revender ao investidor.
+    tags: [compromissada reversa, banco, revenda]
+    difficulty: médio
+    points: 7
+    diagram: |
+      graph TD
+      A[Banco] -- Compra --> B[Título]
+      B -- Compromisso de revenda --> C[Investidor]
+      C -- Recebe título --> B
+
+  - id: q15
+    type: multiple_choice
+    question: Qual é a principal vantagem do lastro em títulos públicos para o investidor?
+    options:
+      - text: Maior segurança e liquidez.
+        is_correct: true
+      - text: Rentabilidade garantida acima do CDI.
+        is_correct: false
+      - text: Isenção de imposto de renda.
+        is_correct: false
+      - text: Proteção cambial.
+        is_correct: false
+    explanation: Títulos públicos oferecem maior segurança e liquidez ao investidor.
+    tags: [lastro, títulos públicos, vantagem]
+    difficulty: fácil
+    points: 5
+    diagram: |
+      graph TD
+      A[Investidor] -- Segurança --> B[Título Público]
+      B -- Liquidez --> C[Mercado]
+      C -- Facilidade de venda --> A
+
+  - id: q16
+    type: multiple_choice
+    question: O que ocorre com o lastro durante o prazo da operação compromissada?
+    options:
+      - text: Fica custodiado em nome do investidor ou do banco, conforme a operação.
+        is_correct: true
+      - text: É vendido no mercado secundário.
+        is_correct: false
+      - text: É transferido para o Banco Central.
+        is_correct: false
+      - text: É destruído.
+        is_correct: false
+    explanation: O lastro permanece custodiado até a liquidação da operação.
+    tags: [lastro, custódia, compromissada]
+    difficulty: médio
+    points: 7
+    diagram: |
+      graph TD
+      A[Título Lastro] -- Custódia --> B[Instituição Financeira]
+      B -- Em nome de --> C[Investidor/Banco]
+      C -- Liquidação --> A
+
+  - id: q17
+    type: multiple_choice
+    question: Qual é a incidência de imposto de renda sobre operações compromissadas para pessoas físicas?
+    options:
+      - text: Segue a tabela regressiva de renda fixa.
+        is_correct: true
+      - text: Isento de imposto de renda.
+        is_correct: false
+      - text: Alíquota fixa de 15%.
+        is_correct: false
+      - text: Apenas IOF.
+        is_correct: false
+    explanation: O IR segue a tabela regressiva, como outros investimentos de renda fixa.
+    tags: [imposto, renda fixa, compromissada]
+    difficulty: médio
+    points: 7
+    diagram: |
+      graph TD
+      A[Compromissada] -- IR --> B[Tabela Regressiva]
+      B -- Alíquotas --> C[Prazo de aplicação]
+      C -- Menor prazo --> D[Maior IR]
+      C -- Maior prazo --> E[Menor IR]
+
+  - id: q18
+    type: multiple_choice
+    question: O que é "over" no contexto de operações compromissadas?
+    options:
+      - text: Operação de um dia útil (overnight).
+        is_correct: true
+      - text: Operação acima de 1 milhão de reais.
+        is_correct: false
+      - text: Operação internacional.
+        is_correct: false
+      - text: Operação sem lastro.
+        is_correct: false
+    explanation: \"Over\" refere se a operações compromissadas de um dia útil.
+    tags: [over, overnight, compromissada]
+    difficulty: fácil
+    points: 5
+    diagram: |
+      graph TD
+      A[Compromissada] -- Prazo --> B[Overnight]
+      B -- 1 dia útil --> C[Liquidação]
+      C -- Retorno rápido --> A
+
+  - id: q19
+    type: multiple_choice
+    question: Qual é o papel do SELIC nas operações compromissadas?
+    options:
+      - text: Serve como referência para a remuneração das operações.
+        is_correct: true
+      - text: Define o prazo máximo das operações.
+        is_correct: false
+      - text: Garante o lastro das operações.
+        is_correct: false
+      - text: Isenta de imposto de renda.
+        is_correct: false
+    explanation: A taxa SELIC é referência para a remuneração das compromissadas com títulos públicos.
+    tags: [selic, remuneração, compromissada]
+    difficulty: médio
+    points: 7
+    diagram: |
+      graph TD
+      A[Compromissada] -- Remuneração --> B[Taxa SELIC]
+      B -- Referência --> C[Títulos Públicos]
+      C -- Base para cálculo --> A
+
+  - id: q20
+    type: multiple_choice
+    question: O que diferencia uma compromissada "simples" de uma "dupla"?
+    options:
+      - text: A simples envolve uma única operação, a dupla envolve duas operações simultâneas.
+        is_correct: true
+      - text: A dupla é feita apenas por bancos públicos.
+        is_correct: false
+      - text: A simples não tem lastro.
+        is_correct: false
+      - text: A dupla é isenta de imposto.
+        is_correct: false
+    explanation: A compromissada dupla envolve duas operações simultâneas, geralmente com diferentes prazos ou taxas.
+    tags: [compromissada, simples, dupla]
+    difficulty: médio
+    points: 7
+    diagram: |
+      graph TD
+      A[Compromissada Simples] -- 1 operação --> B[Prazo/Taxa]
+      C[Compromissada Dupla] -- 2 operações --> D[Prazo 1]
+      C -- 2 operações --> E[Prazo 2]
+      D -- Liquidação --> C
+      E -- Liquidação --> C
+
+  - id: q21
+    type: multiple_choice
+    question: Qual é a principal função das operações compromissadas para o Banco Central?
+    options:
+      - text: Instrumento de política monetária.
+        is_correct: true
+      - text: Captação de recursos para o Tesouro Nacional.
+        is_correct: false
+      - text: Financiamento de obras públicas.
+        is_correct: false
+      - text: Controle de inflação via IOF.
+        is_correct: false
+    explanation: O Banco Central utiliza compromissadas para regular a liquidez do sistema financeiro.
+    tags: [banco central, política monetária, compromissada]
+    difficulty: médio
+    points: 7
+    diagram: |
+      graph TD
+      A[Banco Central] -- Política Monetária --> B[Compromissada]
+      B -- Regula --> C[Liquidez]
+      C -- Impacta --> D[Sistema Financeiro]
+
+  - id: q22
+    type: multiple_choice
+    question: O que é "liquidação financeira" em uma operação compromissada?
+    options:
+      - text: Transferência dos recursos e dos títulos entre as partes na data acordada.
+        is_correct: true
+      - text: Pagamento de dividendos ao investidor.
+        is_correct: false
+      - text: Encerramento da conta corrente.
+        is_correct: false
+      - text: Conversão do título em ações.
+        is_correct: false
+    explanation: A liquidação financeira ocorre quando há transferência dos recursos e dos títulos entre as partes.
+    tags: [liquidação, compromissada, títulos]
+    difficulty: fácil
+    points: 5
+    diagram: |
+      graph TD
+      A[Investidor] -- Envia recursos --> B[Instituição]
+      B -- Entrega títulos --> A
+      A -- Liquidação --> B
+
+  - id: q23
+    type: multiple_choice
+    question: Qual é o impacto de uma operação compromissada no balanço do banco vendedor?
+    options:
+      - text: Redução de ativos e aumento de caixa temporário.
+        is_correct: true
+      - text: Aumento de passivos de longo prazo.
+        is_correct: false
+      - text: Redução do patrimônio líquido.
+        is_correct: false
+      - text: Aumento de despesas operacionais.
+        is_correct: false
+    explanation: O banco vende o título, reduz ativos e aumenta o caixa temporariamente.
+    tags: [banco, balanço, compromissada]
+    difficulty: médio
+    points: 7
+    diagram: |
+      graph TD
+      A[Banco] -- Vende título --> B[Investidor]
+      A -- Caixa temporário --> C[Ativo Reduzido]
+      C -- Balanço --> A
+
+  - id: q24
+    type: multiple_choice
+    question: O que é "garantia real" em uma operação compromissada?
+    options:
+      - text: O título lastro serve como garantia real da operação.
+        is_correct: true
+      - text: Garantia de imóvel.
+        is_correct: false
+      - text: Seguro de vida do investidor.
+        is_correct: false
+      - text: Fiança bancária.
+        is_correct: false
+    explanation: O título utilizado como lastro é a garantia real da operação.
+    tags: [garantia, lastro, compromissada]
+    difficulty: fácil
+    points: 5
+    diagram: |
+      graph TD
+      A[Compromissada] -- Garantia Real --> B[Título Lastro]
+      B -- Custódia --> C[Instituição Financeira]
+      C -- Segurança --> A
+
+  - id: q25
+    type: multiple_choice
+    question: Qual é a diferença entre compromissada com lastro em título público e privado?
+    options:
+      - text: O risco de crédito é maior nos títulos privados.
+        is_correct: true
+      - text: O título público não pode ser usado como lastro.
+        is_correct: false
+      - text: O título privado é isento de imposto.
+        is_correct: false
+      - text: Não há diferença de risco.
+        is_correct: false
+    explanation: Títulos privados apresentam maior risco de crédito em relação aos públicos.
+    tags: [lastro, público, privado, risco]
+    difficulty: médio
+    points: 7
+    diagram: |
+      graph TD
+      A[Título Privado] -- Maior risco de crédito --> B[Compromissada]
+      C[Título Público] -- Menor risco --> B
+      B -- Escolha do lastro --> D[Investidor]
+
+  - id: q26
+    type: multiple_choice
+    question: O que é "registro" de uma operação compromissada?
+    options:
+      - text: Lançamento da operação em sistema autorizado pelo Banco Central.
+        is_correct: true
+      - text: Registro em cartório de imóveis.
+        is_correct: false
+      - text: Registro na CVM.
+        is_correct: false
+      - text: Registro em bolsa de valores.
+        is_correct: false
+    explanation: O registro é feito em sistema autorizado pelo Banco Central para garantir transparência e segurança.
+    tags: [registro, banco central, compromissada]
+    difficulty: médio
+    points: 7
+    diagram: |
+      graph TD
+      A[Compromissada] -- Registro --> B[Sistema Autorizado BC]
+      B -- Transparência --> C[Mercado]
+      C -- Segurança --> A
+
+  - id: q27
+    type: multiple_choice
+    question: Qual é o papel da CETIP (atual B3) nas operações compromissadas?
+    options:
+      - text: Sistema de registro, custódia e liquidação das operações.
+        is_correct: true
+      - text: Definir a taxa de juros das operações.
+        is_correct: false
+      - text: Garantir o pagamento do imposto de renda.
+        is_correct: false
+      - text: Emitir títulos públicos.
+        is_correct: false
+    explanation: A CETIP/B3 atua como sistema de registro, custódia e liquidação das compromissadas.
+    tags: [cetip, b3, compromissada]
+    difficulty: médio
+    points: 7
+    diagram: |
+      graph TD
+      A[Compromissada] -- Registro --> B[CETIP/B3]
+      B -- Custódia --> C[Títulos]
+      B -- Liquidação --> D[Recursos]
+
+  - id: q28
+    type: multiple_choice
+    question: O que é "margem de garantia" em uma operação compromissada?
+    options:
+      - text: Valor adicional exigido para cobrir oscilações de mercado.
+        is_correct: true
+      - text: Margem de lucro do banco.
+        is_correct: false
+      - text: Valor do imposto devido.
+        is_correct: false
+      - text: Valor do IOF.
+        is_correct: false
+    explanation: A margem de garantia cobre possíveis oscilações de mercado no valor do lastro.
+    tags: [margem, garantia, compromissada]
+    difficulty: médio
+    points: 7
+    diagram: |
+      graph TD
+      A[Compromissada] -- Margem de garantia --> B[Oscilações de mercado]
+      B -- Proteção --> C[Investidor]
+      C -- Segurança --> A
+
+  - id: q29
+    type: multiple_choice
+    question: Qual é o efeito de uma operação compromissada sobre a liquidez do sistema financeiro?
+    options:
+      - text: Aumenta ou reduz a liquidez, conforme a direção da operação.
+        is_correct: true
+      - text: Não afeta a liquidez.
+        is_correct: false
+      - text: Reduz o risco sistêmico.
+        is_correct: false
+      - text: Aumenta o spread bancário.
+        is_correct: false
+    explanation: Compromissadas são usadas pelo Banco Central para regular a liquidez do sistema.
+    tags: [liquidez, sistema financeiro, compromissada]
+    difficulty: médio
+    points: 7
+    diagram: |
+      graph TD
+      A[Compromissada] -- Aumenta/Reduz --> B[Liquidez do Sistema]
+      B -- Impacta --> C[Mercado Financeiro]
+      C -- Regulação --> D[Banco Central]
+
+  - id: q30
+    type: multiple_choice
+    question: Qual é a principal vantagem das operações compromissadas para o investidor pessoa física?
+    options:
+      - text: Segurança, liquidez e rentabilidade compatível com o mercado de renda fixa.
+        is_correct: true
+      - text: Isenção de imposto de renda.
+        is_correct: false
+      - text: Rentabilidade variável.
+        is_correct: false
+      - text: Proteção cambial.
+        is_correct: false
+    explanation: Compromissadas oferecem segurança, liquidez e rentabilidade de renda fixa ao investidor.
+    tags: [investidor, pessoa física, compromissada]
+    difficulty: fácil
+    points: 5
+    diagram: |
+      graph TD
+      A[Investidor PF] -- Segurança --> B[Compromissada]
+      B -- Liquidez --> C[Mercado]
+      B -- Rentabilidade --> D[Renda Fixa]
+      C -- Facilidade de venda --> A
+      D -- Juros --> A

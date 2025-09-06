@@ -8,28 +8,46 @@
 
 <div class="mdc-typography--headline6 mb">AWS Cloud Practicioner</div>
 
+<div class="mb">
+    <label for="examSelect"><b>Selecione o exame:</b></label>
+    <select id="examSelect" @bind="examName">
+        <option value="">-- Escolha --</option>
+        @foreach (var exam in examOptions)
+        {
+            <option value="@exam">@exam</option>
+        }
+    </select>
+    <button class="mdc-button mdc-button--raised" @onclick="OnExamSelected" disabled="@string.IsNullOrEmpty(examName)">
+        Carregar
+    </button>
+</div>
+
 <div class="mdc-card summary mb">
     <span class="mdc-typography--subtitle1 questions-right"><b>Correct:</b> <span>@CorrectCount</span></span>
     <span class="mdc-typography--subtitle1 questions-wrong"><b>Incorrect:</b> <span>@WrongCount</span></span>
     <span class="mdc-typography--subtitle1 questions-count"><b>Question:</b> <span>@(CurrentIndex + 1)</span> / @Questions.Count</span>
 </div>
 
-@if (Questions.Count == 0)
+@if (Questions.Count == 0 && examLoaded)
 {
-    <p>Loading questions...</p>
+    <p>Não há questões para este exame ou houve erro ao carregar.</p>
+}
+else if (Questions.Count == 0)
+{
+    <p>Selecione um exame e clique em Carregar.</p>
 }
 else
 {
     var question = Questions[CurrentIndex];
     <QuestionCard Question="question" OnAnswered="OnQuestionAnswered"></QuestionCard>
     <div class="navigation-panel">
-        <button class="mdc-button mdc-button--outlined" @onclick="PrevQuestion" disabled="@(!question.IsLocked || CurrentIndex==0)">
+        <button class="mdc-button mdc-button--outlined" @onclick="PrevQuestion" disabled="@(!question.IsLocked || CurrentIndex == 0)">
             <span class="mdc-button__label">Previous</span>
         </button>
         <button class="mdc-button mdc-button--raised" @onclick="ShowAnswer" disabled="@question.IsLocked">
             <span class="mdc-button__label">Answer</span>
         </button>
-        <button class="mdc-button mdc-button--raised" @onclick="NextQuestion" disabled="@(!question.IsLocked || CurrentIndex==Questions.Count-1)">
+        <button class="mdc-button mdc-button--raised" @onclick="NextQuestion" disabled="@(!question.IsLocked || CurrentIndex == Questions.Count - 1)">
             <span class="mdc-button__label">Next</span>
         </button>
     </div>
@@ -37,13 +55,25 @@ else
 
 @code {
     List<Question> Questions = new();
+    string examName { get; set; }
+    bool examLoaded = false;
     int CurrentIndex = 0;
     int CorrectCount => Questions.Count(q => q.WasCorrect == true);
     int WrongCount => Questions.Count(q => q.WasCorrect == false);
 
-    protected override async Task OnInitializedAsync()
+    // Adicione aqui as opções disponíveis
+    List<string> examOptions = new() { "aws-01", "aws-02", "repo-01", "repo-02" };
+
+    // Remova o OnInitializedAsync
+
+    async Task OnExamSelected()
     {
+        CurrentIndex = 0;
+        examLoaded = false;
+        Questions.Clear();
         await LoadQuestions();
+        examLoaded = true;
+        StateHasChanged();
     }
 
     async Task LoadQuestions()
@@ -51,16 +81,13 @@ else
         try
         {
             var http = new HttpClient { BaseAddress = new Uri(NavigationManager.BaseUri) };
-            // var md = await http.GetStringAsync("Exams/practice-exam-1.md");
-            var yamlContent = await http.GetStringAsync("Exams/aws-02.yml");
-            // Questions = ParseQuestions(md);
+            var yamlContent = await http.GetStringAsync($"Exams/{examName}.yml");
             Questions = ParseQuestionsFromYaml(yamlContent);
         }
-        catch (Exception ex)
+        catch
         {
             Questions = new();
         }
-        StateHasChanged();
     }
 
     List<Question> ParseQuestions(string md)
@@ -74,7 +101,7 @@ else
             if (Regex.IsMatch(line, "^\\d+\\. "))
             {
                 if (current != null) questions.Add(current);
-                current = new Question { Text = line.Substring(line.IndexOf('.')+1).Trim() };
+                current = new Question { Text = line.Substring(line.IndexOf('.') + 1).Trim() };
             }
             else if (line.StartsWith("    - "))
             {
