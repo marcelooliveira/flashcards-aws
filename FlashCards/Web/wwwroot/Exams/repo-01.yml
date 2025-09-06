@@ -3,13 +3,13 @@ questions:
     type: multiple_choice
     question: Qual é a diferença fundamental entre uma operação compromissada e um empréstimo bancário tradicional?
     options:
-      - text: A compromissada envolve títulos como garantia, o empréstimo não.
+      - text: Uma operação compromissada envolve a utilização de títulos como garantia (lastro), enquanto o empréstimo bancário tradicional não exige um lastro específico para a concessão do crédito.
         is_correct: true
-      - text: O empréstimo é sempre de curto prazo.
+      - text: O empréstimo bancário tradicional é sempre realizado para prazos curtos, sem possibilidade de prazos longos.
         is_correct: false
-      - text: A compromissada não possui risco de crédito.
+      - text: A operação compromissada não apresenta nenhum tipo de risco de crédito para as partes envolvidas.
         is_correct: false
-      - text: O empréstimo não pode ser feito por bancos.
+      - text: O empréstimo bancário tradicional não pode ser concedido por instituições financeiras, apenas por pessoas físicas.
         is_correct: false
     explanation: Na compromissada, há títulos como garantia (lastro), enquanto no empréstimo tradicional não há lastro específico.
     tags: [compromissada, empréstimo, lastro]
@@ -25,13 +25,13 @@ questions:
     type: multiple_choice
     question: Em uma operação compromissada, quem normalmente detém a custódia do título durante o prazo da operação?
     options:
-      - text: Uma instituição custodiante autorizada.
+      - text: Uma instituição custodiante devidamente autorizada pelo Banco Central, responsável por garantir a segurança e a integridade dos títulos durante toda a vigência da operação.
         is_correct: true
-      - text: O investidor pessoa física.
+      - text: O investidor pessoa física, que mantém o título sob sua posse direta durante o período da operação.
         is_correct: false
-      - text: O Banco Central.
+      - text: O Banco Central, que assume a custódia de todos os títulos negociados no mercado financeiro.
         is_correct: false
-      - text: A Receita Federal.
+      - text: A Receita Federal, que armazena os títulos como parte do controle fiscal das operações.
         is_correct: false
     explanation: A custódia dos títulos é feita por instituições autorizadas, garantindo segurança para ambas as partes.
     tags: [custódia, compromissada, lastro]
@@ -47,13 +47,13 @@ questions:
     type: multiple_choice
     question: Qual é o impacto de uma operação compromissada na liquidez do mercado financeiro?
     options:
-      - text: Aumenta a liquidez ao disponibilizar recursos temporários.
+      - text: A operação compromissada contribui para aumentar a liquidez do mercado ao disponibilizar recursos de forma temporária entre as instituições participantes.
         is_correct: true
-      - text: Reduz a liquidez permanentemente.
+      - text: A operação compromissada reduz a liquidez do mercado de forma permanente, dificultando o acesso a recursos.
         is_correct: false
-      - text: Não afeta a liquidez.
+      - text: A operação compromissada não exerce qualquer influência sobre a liquidez do mercado financeiro.
         is_correct: false
-      - text: Elimina o risco de crédito do sistema.
+      - text: A operação compromissada elimina completamente o risco de crédito do sistema financeiro.
         is_correct: false
     explanation: Compromissadas aumentam a liquidez ao permitir que recursos circulem temporariamente entre as partes.
     tags: [liquidez, mercado, compromissada]
@@ -69,13 +69,13 @@ questions:
     type: multiple_choice
     question: O que ocorre se o valor de mercado do título lastro cair durante a vigência da operação compromissada?
     options:
-      - text: Pode ser exigida margem de garantia adicional.
+      - text: Caso o valor de mercado do título lastro diminua, pode ser exigida uma margem de garantia adicional do investidor para cobrir o risco da operação.
         is_correct: true
-      - text: O investidor perde automaticamente o valor investido.
+      - text: O investidor perde automaticamente todo o valor investido, sem possibilidade de recuperação.
         is_correct: false
-      - text: O banco é obrigado a recomprar imediatamente.
+      - text: O banco é obrigado a recomprar imediatamente o título, independentemente do contrato firmado.
         is_correct: false
-      - text: O título é substituído por outro.
+      - text: O título utilizado como lastro é substituído por outro ativo de valor equivalente.
         is_correct: false
     explanation: Se o valor do lastro cair, pode ser exigida margem adicional para cobrir o risco.
     tags: [lastro, margem, risco]
@@ -91,13 +91,13 @@ questions:
     type: multiple_choice
     question: Qual é a principal finalidade das operações compromissadas para o investidor institucional?
     options:
-      - text: Aplicar recursos de curto prazo com segurança.
+      - text: Aplicar recursos de curto prazo com segurança, aproveitando a garantia dos títulos e a liquidez proporcionada pela operação compromissada.
         is_correct: true
-      - text: Especular com derivativos.
+      - text: Especular com derivativos financeiros de alto risco, buscando ganhos expressivos em curto prazo.
         is_correct: false
-      - text: Financiar projetos de longo prazo.
+      - text: Financiar projetos de longo prazo, como obras de infraestrutura e expansão empresarial.
         is_correct: false
-      - text: Comprar ações de empresas.
+      - text: Comprar ações de empresas listadas na bolsa de valores para diversificação de portfólio.
         is_correct: false
     explanation: Investidores institucionais usam compromissadas para aplicar recursos de curto prazo com baixo risco.
     tags: [institucional, curto prazo, compromissada]
@@ -113,13 +113,13 @@ questions:
     type: multiple_choice
     question: O que diferencia uma compromissada reversa de uma compromissada tradicional?
     options:
-      - text: Na reversa, o banco compra o título e se compromete a revender.
+      - text: Na operação compromissada reversa, o banco realiza a compra do título e assume o compromisso de revender esse título ao investidor em uma data futura previamente acordada.
         is_correct: true
-      - text: Na tradicional, o investidor nunca recebe o título.
+      - text: Na operação compromissada tradicional, o investidor nunca recebe a posse do título negociado durante a vigência do contrato.
         is_correct: false
-      - text: Na reversa, não há lastro.
+      - text: Na compromissada reversa, não existe a exigência de lastro para garantir a operação entre as partes.
         is_correct: false
-      - text: Na tradicional, o banco não participa.
+      - text: Na operação compromissada tradicional, o banco não participa do processo de negociação dos títulos.
         is_correct: false
     explanation: Na compromissada reversa, o banco compra o título e se compromete a revender ao investidor.
     tags: [reversa, tradicional, compromissada]
@@ -135,13 +135,13 @@ questions:
     type: multiple_choice
     question: Qual é o papel do Banco Central nas operações compromissadas realizadas no mercado aberto?
     options:
-      - text: Regular a liquidez do sistema financeiro.
+      - text: O Banco Central atua para regular a liquidez do sistema financeiro, utilizando operações compromissadas como instrumento de política monetária no mercado aberto.
         is_correct: true
-      - text: Financiar empresas privadas.
+      - text: O Banco Central tem como objetivo principal financiar empresas privadas por meio de operações compromissadas.
         is_correct: false
-      - text: Garantir rentabilidade fixa ao investidor.
+      - text: O Banco Central garante uma rentabilidade fixa ao investidor em todas as operações compromissadas.
         is_correct: false
-      - text: Emitir debêntures.
+      - text: O Banco Central é responsável por emitir debêntures para lastrear operações compromissadas.
         is_correct: false
     explanation: O Banco Central usa compromissadas para regular a liquidez do sistema financeiro.
     tags: [banco central, mercado aberto, liquidez]
@@ -157,13 +157,13 @@ questions:
     type: multiple_choice
     question: Em que situação uma operação compromissada pode ser considerada de maior risco para o investidor?
     options:
-      - text: Quando o lastro é um título privado de baixa qualidade.
+      - text: Quando o lastro da operação é composto por um título privado de baixa qualidade de crédito, aumentando o risco de inadimplência.
         is_correct: true
-      - text: Quando o lastro é um título público federal.
+      - text: Quando o lastro da operação é um título público federal, reconhecido por sua alta segurança e liquidez.
         is_correct: false
-      - text: Quando a operação é overnight.
+      - text: Quando a operação compromissada é realizada no formato overnight, com prazo de apenas um dia útil.
         is_correct: false
-      - text: Quando a taxa SELIC está baixa.
+      - text: Quando a taxa SELIC vigente no mercado está em patamares historicamente baixos.
         is_correct: false
     explanation: Títulos privados de baixa qualidade aumentam o risco de crédito da operação.
     tags: [risco, lastro, privado]
@@ -179,13 +179,13 @@ questions:
     type: multiple_choice
     question: O que é uma operação compromissada “overnight”?
     options:
-      - text: Operação com prazo de um dia útil.
+      - text: Trata-se de uma operação compromissada com prazo de apenas um dia útil, sendo liquidada no próximo dia após sua contratação.
         is_correct: true
-      - text: Operação com prazo superior a um ano.
+      - text: Trata-se de uma operação compromissada com prazo superior a um ano, voltada para investimentos de longo prazo.
         is_correct: false
-      - text: Operação sem garantia de lastro.
+      - text: Trata-se de uma operação compromissada realizada sem qualquer garantia de lastro para as partes envolvidas.
         is_correct: false
-      - text: Operação em moeda estrangeira.
+      - text: Trata-se de uma operação compromissada realizada em moeda estrangeira, sujeita à variação cambial.
         is_correct: false
     explanation: Compromissada overnight é aquela com prazo de apenas um dia útil.
     tags: [overnight, prazo, compromissada]
@@ -201,13 +201,13 @@ questions:
     type: multiple_choice
     question: Qual é a principal vantagem para o banco ao realizar operações compromissadas?
     options:
-      - text: Obter recursos de curto prazo sem vender definitivamente seus títulos.
+      - text: Obter recursos de curto prazo sem a necessidade de vender definitivamente seus títulos, mantendo a possibilidade de recompra futura.
         is_correct: true
-      - text: Reduzir o risco de crédito do investidor.
+      - text: Reduzir o risco de crédito do investidor, transferindo toda a responsabilidade para o mercado.
         is_correct: false
-      - text: Garantir rentabilidade fixa ao investidor.
+      - text: Garantir uma rentabilidade fixa ao investidor, independentemente das condições de mercado.
         is_correct: false
-      - text: Financiar projetos de longo prazo.
+      - text: Financiar projetos de longo prazo, como obras públicas e infraestrutura.
         is_correct: false
     explanation: O banco obtém recursos temporários sem perder a posse definitiva dos títulos.
     tags: [banco, recursos, compromissada]
@@ -223,13 +223,13 @@ questions:
     type: multiple_choice
     question: O que é “taxa de recompra” em uma operação compromissada?
     options:
-      - text: Taxa de remuneração acordada para o período da operação.
+      - text: É a taxa de remuneração acordada entre as partes para o período da operação compromissada, representando o rendimento do investidor.
         is_correct: true
-      - text: Taxa de administração do fundo.
+      - text: É a taxa de administração cobrada pelo fundo de investimento que intermedia a operação.
         is_correct: false
-      - text: Taxa de câmbio utilizada na liquidação.
+      - text: É a taxa de câmbio utilizada para conversão de moedas na liquidação da operação.
         is_correct: false
-      - text: Taxa de juros do cartão de crédito.
+      - text: É a taxa de juros aplicada ao saldo do cartão de crédito do investidor.
         is_correct: false
     explanation: É a taxa de remuneração paga ao investidor pelo período da operação.
     tags: [taxa, recompra, compromissada]
@@ -244,13 +244,13 @@ questions:
     type: multiple_choice
     question: Qual é o efeito de uma operação compromissada sobre o balanço do banco vendedor?
     options:
-      - text: Redução de ativos e aumento de caixa temporário.
+      - text: A operação compromissada resulta na redução dos ativos do banco e no aumento temporário do caixa, melhorando a liquidez da instituição.
         is_correct: true
-      - text: Aumento de passivos de longo prazo.
+      - text: A operação compromissada provoca o aumento dos passivos de longo prazo do banco, elevando o endividamento.
         is_correct: false
-      - text: Redução do patrimônio líquido.
+      - text: A operação compromissada reduz o patrimônio líquido do banco de forma permanente.
         is_correct: false
-      - text: Aumento de despesas operacionais.
+      - text: A operação compromissada aumenta as despesas operacionais do banco sem trazer benefícios financeiros.
         is_correct: false
     explanation: O banco vende o título, reduz ativos e aumenta o caixa temporariamente.
     tags: [banco, balanço, compromissada]
@@ -266,13 +266,13 @@ questions:
     type: multiple_choice
     question: O que é “garantia real” em uma operação compromissada?
     options:
-      - text: O título lastro serve como garantia real da operação.
+      - text: O título utilizado como lastro na operação compromissada serve como garantia real, protegendo o investidor contra inadimplência da contraparte.
         is_correct: true
-      - text: Garantia de imóvel.
+      - text: A garantia real é composta por imóveis registrados em nome do investidor ou da instituição financeira.
         is_correct: false
-      - text: Seguro de vida do investidor.
+      - text: A garantia real é um seguro de vida contratado pelo investidor para cobrir eventuais perdas.
         is_correct: false
-      - text: Fiança bancária.
+      - text: A garantia real é uma fiança bancária emitida por terceiros para assegurar a operação.
         is_correct: false
     explanation: O título utilizado como lastro é a garantia real da operação.
     tags: [garantia, lastro, compromissada]
@@ -288,13 +288,13 @@ questions:
     type: multiple_choice
     question: Qual é a diferença entre compromissada com lastro em título público e privado?
     options:
-      - text: O risco de crédito é maior nos títulos privados.
+      - text: O risco de crédito é significativamente maior quando o lastro da operação é um título privado, em comparação aos títulos públicos federais.
         is_correct: true
-      - text: O título público não pode ser usado como lastro.
+      - text: O título público não pode ser utilizado como lastro em operações compromissadas, sendo restrito apenas a títulos privados.
         is_correct: false
-      - text: O título privado é isento de imposto.
+      - text: O título privado é isento de imposto de renda, ao contrário dos títulos públicos.
         is_correct: false
-      - text: Não há diferença de risco.
+      - text: Não existe diferença de risco entre títulos públicos e privados utilizados como lastro.
         is_correct: false
     explanation: Títulos privados apresentam maior risco de crédito em relação aos públicos.
     tags: [lastro, público, privado, risco]
@@ -310,13 +310,13 @@ questions:
     type: multiple_choice
     question: O que é “registro” de uma operação compromissada?
     options:
-      - text: Lançamento da operação em sistema autorizado pelo Banco Central.
+      - text: O registro consiste no lançamento da operação compromissada em um sistema autorizado pelo Banco Central, garantindo transparência e segurança jurídica.
         is_correct: true
-      - text: Registro em cartório de imóveis.
+      - text: O registro é feito em cartório de imóveis, conferindo validade à operação compromissada.
         is_correct: false
-      - text: Registro na CVM.
+      - text: O registro é realizado na Comissão de Valores Mobiliários (CVM), órgão responsável pela fiscalização do mercado de capitais.
         is_correct: false
-      - text: Registro em bolsa de valores.
+      - text: O registro é feito em bolsa de valores, tornando a operação pública e acessível a todos os investidores.
         is_correct: false
     explanation: O registro é feito em sistema autorizado pelo Banco Central para garantir transparência e segurança.
     tags: [registro, banco central, compromissada]
@@ -332,13 +332,13 @@ questions:
     type: multiple_choice
     question: Qual é o papel da CETIP (atual B3) nas operações compromissadas?
     options:
-      - text: Sistema de registro, custódia e liquidação das operações.
+      - text: A CETIP (atual B3) atua como sistema de registro, custódia e liquidação das operações compromissadas, garantindo a segurança e a rastreabilidade das transações.
         is_correct: true
-      - text: Definir a taxa de juros das operações.
+      - text: A CETIP é responsável por definir a taxa de juros das operações compromissadas no mercado financeiro.
         is_correct: false
-      - text: Garantir o pagamento do imposto de renda.
+      - text: A CETIP garante o pagamento do imposto de renda devido nas operações compromissadas.
         is_correct: false
-      - text: Emitir títulos públicos.
+      - text: A CETIP é responsável pela emissão de títulos públicos federais utilizados como lastro.
         is_correct: false
     explanation: A CETIP/B3 atua como sistema de registro, custódia e liquidação das compromissadas.
     tags: [cetip, b3, compromissada]
@@ -354,13 +354,13 @@ questions:
     type: multiple_choice
     question: O que é “margem de garantia” em uma operação compromissada?
     options:
-      - text: Valor adicional exigido para cobrir oscilações de mercado.
+      - text: É o valor adicional exigido do investidor para cobrir possíveis oscilações de mercado no valor do lastro, protegendo ambas as partes contra perdas inesperadas.
         is_correct: true
-      - text: Margem de lucro do banco.
+      - text: É a margem de lucro obtida pelo banco na realização da operação compromissada.
         is_correct: false
-      - text: Valor do imposto devido.
+      - text: É o valor do imposto devido sobre os rendimentos da operação compromissada.
         is_correct: false
-      - text: Valor do IOF.
+      - text: É o valor do IOF cobrado sobre a movimentação financeira da operação.
         is_correct: false
     explanation: A margem de garantia cobre possíveis oscilações de mercado no valor do lastro.
     tags: [margem, garantia, compromissada]
@@ -376,13 +376,13 @@ questions:
     type: multiple_choice
     question: Qual é o efeito de uma operação compromissada sobre a liquidez do sistema financeiro?
     options:
-      - text: Aumenta ou reduz a liquidez, conforme a direção da operação.
+      - text: A operação compromissada pode aumentar ou reduzir a liquidez do sistema financeiro, dependendo da direção da operação realizada pelo Banco Central.
         is_correct: true
-      - text: Não afeta a liquidez.
+      - text: A operação compromissada não afeta a liquidez do sistema financeiro em nenhuma circunstância.
         is_correct: false
-      - text: Reduz o risco sistêmico.
+      - text: A operação compromissada reduz o risco sistêmico do mercado de forma automática.
         is_correct: false
-      - text: Aumenta o spread bancário.
+      - text: A operação compromissada aumenta o spread bancário, elevando os custos para o investidor.
         is_correct: false
     explanation: Compromissadas são usadas pelo Banco Central para regular a liquidez do sistema.
     tags: [liquidez, sistema financeiro, compromissada]
@@ -398,13 +398,13 @@ questions:
     type: multiple_choice
     question: Qual é a principal vantagem das operações compromissadas para o investidor pessoa física?
     options:
-      - text: Segurança, liquidez e rentabilidade compatível com o mercado de renda fixa.
+      - text: Proporcionar segurança, liquidez e rentabilidade compatível com o mercado de renda fixa, tornando-se uma opção atrativa para o investidor pessoa física.
         is_correct: true
-      - text: Isenção de imposto de renda.
+      - text: Garantir isenção total de imposto de renda sobre os rendimentos obtidos na operação compromissada.
         is_correct: false
-      - text: Rentabilidade variável.
+      - text: Oferecer rentabilidade variável, sujeita às oscilações do mercado de ações.
         is_correct: false
-      - text: Proteção cambial.
+      - text: Proteger o investidor contra variações cambiais e riscos internacionais.
         is_correct: false
     explanation: Compromissadas oferecem segurança, liquidez e rentabilidade de renda fixa ao investidor.
     tags: [investidor, pessoa física, compromissada]
@@ -422,13 +422,13 @@ questions:
     type: multiple_choice
     question: O que é “liquidação financeira” em uma operação compromissada?
     options:
-      - text: Transferência dos recursos e dos títulos entre as partes na data acordada.
+      - text: É a transferência efetiva dos recursos financeiros e dos títulos entre as partes envolvidas na data acordada para a liquidação da operação.
         is_correct: true
-      - text: Pagamento de dividendos ao investidor.
+      - text: É o pagamento de dividendos ao investidor, independentemente do resultado da operação compromissada.
         is_correct: false
-      - text: Encerramento da conta corrente.
+      - text: É o encerramento da conta corrente do investidor junto à instituição financeira.
         is_correct: false
-      - text: Conversão do título em ações.
+      - text: É a conversão do título lastro em ações negociadas na bolsa de valores.
         is_correct: false
     explanation: A liquidação financeira ocorre quando há transferência dos recursos e dos títulos entre as partes.
     tags: [liquidação, compromissada, títulos]
@@ -444,13 +444,13 @@ questions:
     type: multiple_choice
     question: Qual é o principal objetivo do lastro em uma operação compromissada?
     options:
-      - text: Garantir a segurança da operação para ambas as partes.
+      - text: Garantir a segurança da operação para ambas as partes, protegendo o investidor e a instituição financeira contra inadimplência.
         is_correct: true
-      - text: Aumentar o risco de crédito.
+      - text: Aumentar o risco de crédito da operação, tornando-a menos atrativa para o investidor.
         is_correct: false
-      - text: Reduzir a liquidez do mercado.
+      - text: Reduzir a liquidez do mercado financeiro, dificultando a negociação de títulos.
         is_correct: false
-      - text: Eliminar a necessidade de registro.
+      - text: Eliminar a necessidade de registro da operação em sistemas autorizados.
         is_correct: false
     explanation: O lastro serve para garantir a segurança da operação, protegendo investidor e instituição.
     tags: [lastro, segurança, compromissada]
@@ -466,13 +466,13 @@ questions:
     type: multiple_choice
     question: O que pode acontecer se a instituição financeira entrar em falência durante a vigência da operação compromissada?
     options:
-      - text: O investidor pode ficar com o título lastro.
+      - text: O investidor pode ficar com o título lastro como garantia, podendo vendê-lo no mercado para recuperar parte do valor investido.
         is_correct: true
-      - text: O investidor perde automaticamente todo o valor.
+      - text: O investidor perde automaticamente todo o valor investido, sem direito a qualquer ressarcimento.
         is_correct: false
-      - text: O Banco Central cobre o prejuízo.
+      - text: O Banco Central cobre integralmente o prejuízo do investidor, independentemente do valor envolvido.
         is_correct: false
-      - text: O título é transferido para outro banco.
+      - text: O título lastro é transferido automaticamente para outro banco participante do mercado.
         is_correct: false
     explanation: Em caso de falência, o investidor pode ficar com o título lastro como garantia.
     tags: [falência, lastro, compromissada]
@@ -488,13 +488,13 @@ questions:
     type: multiple_choice
     question: Qual é o papel do registro eletrônico nas operações compromissadas?
     options:
-      - text: Garantir transparência e rastreabilidade da operação.
+      - text: Garantir transparência e rastreabilidade da operação compromissada, permitindo o acompanhamento por órgãos reguladores e participantes do mercado.
         is_correct: true
-      - text: Eliminar a necessidade de lastro.
+      - text: Eliminar a necessidade de lastro para a realização da operação compromissada.
         is_correct: false
-      - text: Reduzir o risco de mercado.
+      - text: Reduzir o risco de mercado das operações compromissadas de forma automática.
         is_correct: false
-      - text: Substituir a custódia dos títulos.
+      - text: Substituir a custódia dos títulos por um registro digital simples.
         is_correct: false
     explanation: O registro eletrônico garante transparência e rastreabilidade das operações compromissadas.
     tags: [registro, eletrônico, compromissada]
@@ -510,13 +510,13 @@ questions:
     type: multiple_choice
     question: O que é “prazo de recompra” em uma operação compromissada?
     options:
-      - text: O período entre a venda e a recompra do título.
+      - text: É o período compreendido entre a venda do título e a data acordada para sua recompra, determinando a duração da operação compromissada.
         is_correct: true
-      - text: O prazo de vencimento do título lastro.
+      - text: É o prazo de vencimento do título lastro, independentemente da operação compromissada.
         is_correct: false
-      - text: O prazo de carência para resgate.
+      - text: É o prazo de carência exigido para o resgate dos recursos investidos na operação.
         is_correct: false
-      - text: O prazo de registro da operação.
+      - text: É o prazo necessário para o registro da operação compromissada em sistema autorizado.
         is_correct: false
     explanation: O prazo de recompra é o período entre a venda e a recompra do título na compromissada.
     tags: [prazo, recompra, compromissada]
@@ -532,13 +532,13 @@ questions:
     type: multiple_choice
     question: Qual é o impacto de uma operação compromissada sobre o risco sistêmico do mercado?
     options:
-      - text: Pode reduzir o risco sistêmico ao aumentar a liquidez.
+      - text: A operação compromissada pode contribuir para a redução do risco sistêmico ao aumentar a liquidez e a estabilidade do sistema financeiro.
         is_correct: true
-      - text: Sempre aumenta o risco sistêmico.
+      - text: A operação compromissada sempre aumenta o risco sistêmico do mercado, independentemente das condições.
         is_correct: false
-      - text: Não tem impacto sobre o risco sistêmico.
+      - text: A operação compromissada não tem qualquer impacto sobre o risco sistêmico do mercado financeiro.
         is_correct: false
-      - text: Elimina o risco de crédito.
+      - text: A operação compromissada elimina totalmente o risco de crédito das instituições participantes.
         is_correct: false
     explanation: Compromissadas podem reduzir o risco sistêmico ao aumentar a liquidez do sistema financeiro.
     tags: [risco sistêmico, liquidez, compromissada]
@@ -554,13 +554,13 @@ questions:
     type: multiple_choice
     question: O que é “taxa SELIC” e sua relação com operações compromissadas?
     options:
-      - text: É a taxa de referência para remuneração das compromissadas com títulos públicos.
+      - text: A taxa SELIC é a taxa de referência utilizada para a remuneração das operações compromissadas lastreadas em títulos públicos federais.
         is_correct: true
-      - text: É a taxa de câmbio utilizada na liquidação.
+      - text: A taxa SELIC é a taxa de câmbio utilizada para liquidação de operações compromissadas internacionais.
         is_correct: false
-      - text: É a taxa de administração do fundo.
+      - text: A taxa SELIC é a taxa de administração cobrada pelos fundos de investimento em compromissadas.
         is_correct: false
-      - text: É a taxa de juros do cartão de crédito.
+      - text: A taxa SELIC é a taxa de juros aplicada ao saldo do cartão de crédito do investidor.
         is_correct: false
     explanation: A taxa SELIC é referência para remuneração das compromissadas com títulos públicos federais.
     tags: [selic, remuneração, compromissada]
@@ -576,13 +576,13 @@ questions:
     type: multiple_choice
     question: Qual é o papel do investidor institucional no mercado de compromissadas?
     options:
-      - text: Fornecer liquidez e estabilidade ao sistema financeiro.
+      - text: Fornecer liquidez e estabilidade ao sistema financeiro, atuando como importante agente nas operações compromissadas.
         is_correct: true
-      - text: Aumentar o risco de crédito.
+      - text: Aumentar o risco de crédito das operações compromissadas, tornando o mercado mais volátil.
         is_correct: false
-      - text: Reduzir a liquidez do mercado.
+      - text: Reduzir a liquidez do mercado financeiro, dificultando a negociação de títulos.
         is_correct: false
-      - text: Eliminar a necessidade de lastro.
+      - text: Eliminar a necessidade de lastro nas operações compromissadas.
         is_correct: false
     explanation: Investidores institucionais fornecem liquidez e estabilidade ao mercado de compromissadas.
     tags: [institucional, liquidez, compromissada]
@@ -598,13 +598,13 @@ questions:
     type: multiple_choice
     question: O que é “prazo de liquidação” em uma operação compromissada?
     options:
-      - text: O tempo entre a contratação e a efetiva troca de recursos e títulos.
+      - text: É o tempo decorrido entre a contratação da operação compromissada e a efetiva troca de recursos e títulos entre as partes envolvidas.
         is_correct: true
-      - text: O prazo de vencimento do título lastro.
+      - text: É o prazo de vencimento do título lastro, independentemente da operação compromissada.
         is_correct: false
-      - text: O prazo de recompra do título.
+      - text: É o prazo de recompra do título negociado na operação compromissada.
         is_correct: false
-      - text: O prazo de registro da operação.
+      - text: É o prazo necessário para o registro da operação compromissada em sistema autorizado.
         is_correct: false
     explanation: Prazo de liquidação é o tempo entre a contratação e a efetiva troca de recursos e títulos.
     tags: [liquidação, prazo, compromissada]
@@ -620,13 +620,13 @@ questions:
     type: multiple_choice
     question: Qual é a relação entre compromissadas e política monetária?
     options:
-      - text: São instrumentos usados pelo Banco Central para controlar a liquidez.
+      - text: As operações compromissadas são instrumentos utilizados pelo Banco Central para controlar a liquidez do sistema financeiro e implementar a política monetária.
         is_correct: true
-      - text: São operações de crédito de longo prazo.
+      - text: As operações compromissadas são operações de crédito de longo prazo, sem relação com a política monetária.
         is_correct: false
-      - text: Não têm relação com política monetária.
+      - text: As operações compromissadas não têm qualquer relação com a política monetária do país.
         is_correct: false
-      - text: São operações realizadas apenas por pessoas físicas.
+      - text: As operações compromissadas são realizadas exclusivamente por pessoas físicas, sem participação de instituições financeiras.
         is_correct: false
     explanation: O Banco Central usa compromissadas para controlar a liquidez e implementar a política monetária.
     tags: [política monetária, liquidez, compromissada]
@@ -642,13 +642,13 @@ questions:
     type: multiple_choice
     question: O que pode acontecer se o investidor não receber a recompra do título na data acordada?
     options:
-      - text: Ele permanece com o título lastro e pode vendê-lo no mercado.
+      - text: O investidor permanece com o título lastro e pode vendê-lo no mercado, buscando recuperar parte do valor investido.
         is_correct: true
-      - text: Perde automaticamente todo o valor investido.
+      - text: O investidor perde automaticamente todo o valor investido, sem direito a qualquer ressarcimento.
         is_correct: false
-      - text: O Banco Central cobre o prejuízo.
+      - text: O Banco Central cobre integralmente o prejuízo do investidor, independentemente do valor envolvido.
         is_correct: false
-      - text: O título é transferido para outro banco.
+      - text: O título lastro é transferido automaticamente para outro banco participante do mercado.
         is_correct: false
     explanation: Se não houver recompra, o investidor fica com o título lastro e pode vendê-lo no mercado.
     tags: [recompra, lastro, compromissada]

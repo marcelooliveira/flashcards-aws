@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using System.Text.RegularExpressions
+@using System.Security.Cryptography
 @using Web.Model
 @using YamlDotNet.Core
 @using YamlDotNet.RepresentationModel;
@@ -200,6 +201,7 @@ else
             if (qNode.Children.TryGetValue(new YamlScalarNode("options"), out var optionsNode) && optionsNode is YamlSequenceNode optionsSeq)
             {
                 int idx = 0;
+                var optionsList = new List<(QuestionOption option, bool isCorrect)>();
                 foreach (var optNodeBase in optionsSeq.Children)
                 {
                     var opt = optNodeBase as YamlMappingNode;
@@ -216,17 +218,24 @@ else
                         bool.TryParse(isCorrectScalar.Value, out isCorrect);
                     }
 
-                    // Populate the 'Options' list directly, as per the C# class structure
                     var newOption = new QuestionOption(optText);
+                    optionsList.Add((newOption, isCorrect));
 
-                    // Your original code's specific lists (QuestionOptions and CorrectOptions)
-                    // If you *must* maintain these for legacy reasons, populate them here:
-                    question.QuestionOptions.Add(newOption); // Adds with text only
-                    if (isCorrect)
-                    {
-                        question.CorrectOptions.Add(idx);
-                    }
                     idx++;
+                }
+
+                // Embaralhar as opções
+                var rng = RandomNumberGenerator.Create();
+                optionsList = optionsList.OrderBy(x => RandomNumber(rng)).ToList();
+
+                // Atualizar as listas de opções e índices corretos
+                question.QuestionOptions.Clear();
+                question.CorrectOptions.Clear();
+                for (int i = 0; i < optionsList.Count; i++)
+                {
+                    question.QuestionOptions.Add(optionsList[i].option);
+                    if (optionsList[i].isCorrect)
+                        question.CorrectOptions.Add(i);
                 }
             }
 
@@ -240,20 +249,6 @@ else
                     // question.AllowCaseSensitive = allowCaseSensitive;
                 }
             }
-
-            // // Handle specific properties for essay
-            // if (question.Type == "essay")
-            // {
-            //     if (qNode.Children.TryGetValue(new YamlScalarNode("grading_guidelines"), out var ggNode) && ggNode is YamlSequenceNode ggSequence)
-            //     {
-            //         question.GradingGuidelines = ggSequence.Children
-            //                                                 .OfType<YamlScalarNode>()
-            //                                                 .Select(t => t.Value)
-            //                                                 .Where(v => v != null)
-            //                                                 .ToList();
-            //     }
-            //     question.ExampleAnswer = GetScalarValue(qNode, "example_answer");
-            // }
 
             questions.Add(question);
         }
@@ -284,4 +279,11 @@ else
     }
 
     [Inject] NavigationManager NavigationManager { get; set; } = default!;
+
+    private static int RandomNumber(RandomNumberGenerator rng)
+    {
+        var bytes = new byte[4];
+        rng.GetBytes(bytes);
+        return BitConverter.ToInt32(bytes, 0);
+    }
 }
