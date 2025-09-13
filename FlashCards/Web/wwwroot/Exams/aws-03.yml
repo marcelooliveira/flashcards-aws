@@ -1,0 +1,862 @@
+questions:
+  - id: q1
+    type: multiple_select
+    question: Where can you store files in AWS? (Choose TWO)
+    options:
+      - text: Amazon EFS.
+        is_correct: true
+      - text: Amazon SNS.
+        is_correct: false
+      - text: Amazon EBS.
+        is_correct: true
+      - text: Amazon ECS.
+        is_correct: false
+      - text: Amazon EMR.
+        is_correct: false
+    explanation: Amazon EFS and Amazon EBS are both AWS storage services for files and block storage, respectively.
+    diagram: |
+      graph TD
+      User[User] -- Store Files --> EFS[Amazon EFS]
+      User -- Store Files --> EBS[Amazon EBS]
+  - id: q2
+    type: multiple_choice
+    question: Which AWS service can be used to store and reliably deliver messages across distributed systems?
+    options:
+      - text: Amazon Simple Queue Service.
+        is_correct: true
+      - text: AWS Storage Gateway.
+        is_correct: false
+      - text: Amazon Simple Email Service.
+        is_correct: false
+      - text: Amazon Simple Storage Service.
+        is_correct: false
+    explanation: Amazon SQS is a managed message queuing service for reliable delivery between distributed systems.
+    diagram: |
+      graph TD
+      App1[App 1] -- Send Msg --> SQS[Amazon SQS]
+      SQS -- Deliver Msg --> App2[App 2]
+  - id: q3
+    type: multiple_choice
+    question: Which of the following describes the payment model that AWS makes available for customers that can commit to using Amazon EC2 over a one or 3-year term to reduce their total computing costs?
+    options:
+      - text: Pay less as AWS grows.
+        is_correct: false
+      - text: Pay as you go.
+        is_correct: false
+      - text: Pay less by using more.
+        is_correct: false
+      - text: Save when you reserve.
+        is_correct: true
+    explanation: Reserved Instances allow you to save when you commit to a 1 or 3-year term for EC2 usage.
+    diagram: |
+      graph TD
+      User[Customer] -- Commit 1/3 Years --> EC2[Amazon EC2]
+      EC2 -- Discount --> Bill[Lower Cost]
+  - id: q4
+    type: multiple_choice
+    question: A company is migrating its on-premises database to Amazon RDS. What should the company do to ensure Amazon RDS costs are kept to a minimum?
+    options:
+      - text: Right-size before and after migration.
+        is_correct: true
+      - text: Use a Multi-Region Active-Passive architecture.
+        is_correct: false
+      - text: Combine On-demand Capacity Reservations with Saving Plans.
+        is_correct: false
+      - text: Use a Multi-Region Active-Active architecture.
+        is_correct: false
+    explanation: Right-sizing resources before and after migration ensures you only pay for what you need.
+    diagram: |
+      graph TD
+      DB[On-prem DB] -- Migrate --> RDS[Amazon RDS]
+      RDS -- Right-size --> Cost[Lower Cost]
+  - id: q5
+    type: multiple_choice
+    question: What is the primary storage service used by Amazon RDS database instances?
+    options:
+      - text: Amazon Glacier.
+        is_correct: false
+      - text: Amazon EBS.
+        is_correct: true
+      - text: Amazon EFS.
+        is_correct: false
+      - text: Amazon S3.
+        is_correct: false
+    explanation: Amazon RDS uses Amazon EBS as its primary storage service for database instances.
+    diagram: |
+      graph TD
+      RDS[Amazon RDS] -- Uses --> EBS[Amazon EBS]
+  - id: q6
+    type: multiple_choice
+    question: A company is developing a new application using a microservices framework. The new application is having performance and latency issues. Which AWS Service should be used to troubleshoot these issues?
+    options:
+      - text: AWS CodePipeline.
+        is_correct: false
+      - text: AWS X-Ray.
+        is_correct: true
+      - text: Amazon Inspector.
+        is_correct: false
+      - text: AWS CloudTrail.
+        is_correct: false
+    explanation: AWS X-Ray helps analyze and debug distributed applications, identifying performance bottlenecks.
+    diagram: |
+      graph TD
+      App[Microservices App] -- Trace --> XRAY[AWS X-Ray]
+      XRAY -- Insights --> Dev[Developer]
+  - id: q7
+    type: multiple_select
+    question: Which of the following AWS services is designed with native Multi-AZ fault tolerance in mind? (Choose TWO)
+    options:
+      - text: Amazon Redshift.
+        is_correct: false
+      - text: AWS Snowball.
+        is_correct: false
+      - text: Amazon Simple Storage Service.
+        is_correct: true
+      - text: Amazon EBS.
+        is_correct: false
+      - text: Amazon DynamoDB.
+        is_correct: true
+    explanation: Amazon S3 and DynamoDB are designed for high availability and fault tolerance across multiple AZs.
+    diagram: |
+      graph TD
+      S3[Amazon S3] -- Multi-AZ --> User[User]
+      DDB[Amazon DynamoDB] -- Multi-AZ --> User
+  - id: q8
+    type: multiple_select
+    question: What are the Amazon RDS features that can be used to improve the availability of your database? (Choose TWO)
+    options:
+      - text: AWS Regions.
+        is_correct: false
+      - text: Multi-AZ Deployment.
+        is_correct: true
+      - text: Automatic patching.
+        is_correct: false
+      - text: Read Replicas.
+        is_correct: true
+      - text: Edge Locations.
+        is_correct: false
+    explanation: Multi-AZ deployments and Read Replicas improve RDS availability and durability.
+    diagram: |
+      graph TD
+      RDS[Amazon RDS] -- Multi-AZ --> AZ1[AZ1]
+      RDS -- Read Replica --> RR[Read Replica]
+  - id: q9
+    type: multiple_choice
+    question: Sarah has deployed an application in the Northern California (us-west-1) region. After examining the application’s traffic, she notices that about 30% of the traffic is coming from Asia. What can she do to reduce latency for the users in Asia?
+    options:
+      - text: Replicate the current resources across multiple Availability Zones within the same region.
+        is_correct: false
+      - text: Migrate the application to a hosting provider in Asia.
+        is_correct: false
+      - text: Recreate the website content.
+        is_correct: false
+      - text: Create a CDN using CloudFront, so that content is cached at Edge Locations close to and in Asia.
+        is_correct: true
+    explanation: Using CloudFront caches content at edge locations near users, reducing latency.
+    diagram: |
+      graph TD
+      App[App in us-west-1] -- Content --> CF[CloudFront]
+      CF -- Cache --> Asia[Asia Users]
+  - id: q10
+    type: multiple_choice
+    question: An organization runs many systems and uses many AWS products. Which of the following services enables them to control how each developer interacts with these products?
+    options:
+      - text: AWS Identity and Access Management.
+        is_correct: true
+      - text: Amazon RDS.
+        is_correct: false
+      - text: Network Access Control Lists.
+        is_correct: false
+      - text: Amazon EMR.
+        is_correct: false
+    explanation: AWS IAM manages user access and permissions for AWS services.
+    diagram: |
+      graph TD
+      Dev[Developer] -- Access --> IAM[AWS IAM]
+      IAM -- Controls --> AWS[AWS Services]
+  - id: q11
+    type: multiple_choice
+    question: Using Amazon EC2 falls under which of the following cloud computing models?
+    options:
+      - text: Iaas & SaaS.
+        is_correct: false
+      - text: IaaS.
+        is_correct: true
+      - text: SaaS.
+        is_correct: false
+      - text: PaaS.
+        is_correct: false
+    explanation: Amazon EC2 is an Infrastructure as a Service (IaaS) offering.
+    diagram: |
+      graph TD
+      User[User] -- Launch --> EC2[Amazon EC2]
+      EC2 -- IaaS --> Cloud[AWS Cloud]
+  - id: q12
+    type: multiple_choice
+    question: Which of the below is a best-practice when building applications on AWS?
+    options:
+      - text: Strengthen physical security by applying the principle of least privilege.
+        is_correct: false
+      - text: Ensure that the application runs on hardware from trusted vendors.
+        is_correct: false
+      - text: Use IAM policies to maintain performance.
+        is_correct: false
+      - text: Decouple the components of the application so that they run independently.
+        is_correct: true
+    explanation: Decoupling application components increases reliability and scalability.
+    diagram: |
+      graph TD
+      Comp1[Component 1] -- Decoupled --> Comp2[Component 2]
+      Comp2 -- Decoupled --> Comp3[Component 3]
+  - id: q13
+    type: multiple_choice
+    question: Your company is designing a new application that will store and retrieve photos and videos. Which of the following services should you recommend as the underlying storage mechanism?
+    options:
+      - text: Amazon EBS.
+        is_correct: false
+      - text: Amazon SQS.
+        is_correct: false
+      - text: Amazon Instance store.
+        is_correct: false
+      - text: Amazon S3.
+        is_correct: true
+    explanation: Amazon S3 is ideal for storing and retrieving large objects like photos and videos.
+    diagram: |
+      graph TD
+      App[App] -- Store --> S3[Amazon S3]
+      S3 -- Retrieve --> App
+  - id: q14
+    type: multiple_select
+    question: Amazon Glacier is an Amazon S3 storage class that is suitable for storing [...] & [...]. (Choose TWO)
+    options:
+      - text: Active archives.
+        is_correct: true
+      - text: Dynamic websites’ assets.
+        is_correct: false
+      - text: Long-term analytic data.
+        is_correct: true
+      - text: Active databases.
+        is_correct: false
+      - text: Cached data.
+        is_correct: false
+    explanation: Amazon Glacier is best for active archives and long-term analytic data.
+    diagram: |
+      graph TD
+      Data[Data] -- Archive --> Glacier[Amazon Glacier]
+      Glacier -- Long-term --> Storage[Storage]
+  - id: q15
+    type: multiple_choice
+    question: What does Amazon Elastic Beanstalk provide?
+    options:
+      - text: A PaaS solution to automate application deployment.
+        is_correct: true
+      - text: A compute engine for Amazon ECS.
+        is_correct: false
+      - text: A scalable file storage solution for use with AWS and on-premises servers.
+        is_correct: false
+      - text: A NoSQL database service.
+        is_correct: false
+    explanation: Elastic Beanstalk is a PaaS for automated application deployment.
+    diagram: |
+      graph TD
+      Dev[Developer] -- Deploy --> EB[Elastic Beanstalk]
+      EB -- Manages --> App[Application]
+  - id: q16
+    type: multiple_choice
+    question: What is the AWS service that performs automated network assessments of Amazon EC2 instances to check for vulnerabilities?
+    options:
+      - text: Amazon Kinesis.
+        is_correct: false
+      - text: Security groups.
+        is_correct: false
+      - text: Amazon Inspector.
+        is_correct: true
+      - text: AWS Network Access Control Lists.
+        is_correct: false
+    explanation: Amazon Inspector automatically assesses EC2 instances for vulnerabilities.
+    diagram: |
+      graph TD
+      EC2[EC2 Instance] -- Scan --> Inspector[Amazon Inspector]
+      Inspector -- Report --> User[User]
+  - id: q17
+    type: multiple_select
+    question: Under the Shared Responsibility Model, which of the following controls do customers fully inherit from AWS? (Choose TWO)
+    options:
+      - text: Patch management controls.
+        is_correct: false
+      - text: Database controls.
+        is_correct: false
+      - text: Awareness & Training.
+        is_correct: false
+      - text: Environmental controls.
+        is_correct: true
+      - text: Physical controls.
+        is_correct: true
+    explanation: Customers inherit environmental and physical controls from AWS under the shared responsibility model.
+    diagram: |
+      graph TD
+      AWS[AWS] -- Provides --> Env[Environmental Controls]
+      AWS -- Provides --> Phys[Physical Controls]
+  - id: q18
+    type: multiple_choice
+    question: A company needs to host a database in Amazon RDS for at least three years. Which of the following options would be the most cost-effective solution?
+    options:
+      - text: Reserved instances     - No Upfront.
+        is_correct: false
+      - text: Reserved instances     - Partial Upfront.
+        is_correct: true
+      - text: On-Demand instances.
+        is_correct: false
+      - text: Spot Instances.
+        is_correct: false
+    explanation: Reserved Instances with partial upfront payment are most cost-effective for long-term workloads.
+    diagram: |
+      graph TD
+      RDS[Amazon RDS] -- 3 Years --> RI[Reserved Instance]
+      RI -- Partial Upfront --> Cost[Lower Cost]
+  - id: q19
+    type: multiple_choice
+    question: Your application has recently experienced significant global growth, and international users are complaining of high latency. What is the AWS characteristic that can help improve your international users’ experience?
+    options:
+      - text: Elasticity.
+        is_correct: false
+      - text: Global reach.
+        is_correct: true
+      - text: Data durability.
+        is_correct: false
+      - text: High availability.
+        is_correct: false
+    explanation: AWS's global reach allows you to deploy resources closer to users worldwide, reducing latency.
+    diagram: |
+      graph TD
+      App[App] -- Deploy --> Region1[Region 1]
+      App -- Deploy --> Region2[Region 2]
+      User1[User 1] -- Connect --> Region1
+      User2[User 2] -- Connect --> Region2
+  - id: q20
+    type: multiple_select
+    question: Savings Plans are available for which of the following AWS compute services? (Choose TWO)
+    options:
+      - text: AWS Batch.
+        is_correct: false
+      - text: AWS Outposts.
+        is_correct: false
+      - text: Amazon Lightsail.
+        is_correct: false
+      - text: Amazon EC2.
+        is_correct: true
+      - text: AWS Lambda.
+        is_correct: true
+    explanation: Savings Plans are available for Amazon EC2 and AWS Lambda compute services.
+    diagram: |
+      graph TD
+      User[User] -- Savings Plan --> EC2[Amazon EC2]
+      User -- Savings Plan --> Lambda[AWS Lambda]
+  - id: q21
+    type: multiple_choice
+    question: Which AWS service provides a SQL interface to query data in S3 using standard SQL syntax?
+    options:
+      - text: Amazon EMR.
+        is_correct: false
+      - text: Amazon Redshift.
+        is_correct: false
+      - text: Amazon Athena.
+        is_correct: true
+      - text: Amazon RDS.
+        is_correct: false
+    explanation: Amazon Athena is an interactive query service that makes it easy to analyze data in S3 using standard SQL.
+    diagram: |
+      graph TD
+      User[User] -- Query --> Athena[Amazon Athena]
+      Athena -- Analyzes Data --> S3[Amazon S3]
+  - id: q22
+    type: multiple_select
+    question: Which of the following are benefits of using AWS Lambda? (Choose TWO)
+    options:
+      - text: Automatically scales applications by running code in response to events.
+        is_correct: true
+      - text: Manages the infrastructure and servers needed to run your code.
+        is_correct: true
+      - text: Requires you to provision and manage servers.
+        is_correct: false
+      - text: Limits the ability to execute code based on schedules or recurring events.
+        is_correct: false
+    explanation: AWS Lambda automatically scales and manages the infrastructure required to run your code.
+    diagram: |
+      graph TD
+      User[User] -- Upload Code --> Lambda[AWS Lambda]
+      Lambda -- Runs Code --> Events[Events]
+  - id: q23
+    type: multiple_choice
+    question: What is the maximum duration for an AWS Lambda function to run?
+    options:
+      - text: 15 seconds.
+        is_correct: false
+      - text: 5 minutes.
+        is_correct: false
+      - text: 15 minutes.
+        is_correct: true
+      - text: 60 minutes.
+        is_correct: false
+    explanation: AWS Lambda functions can run for a maximum of 15 minutes per request.
+    diagram: |
+      graph TD
+      User[User] -- Invoke --> Lambda[AWS Lambda]
+      Lambda -- Max Duration (15 Min) --> Code[Code Execution]
+  - id: q24
+    type: multiple_select
+    question: Which of the following AWS services can be used to deploy a serverless application? (Choose TWO)
+    options:
+      - text: Amazon EC2.
+        is_correct: false
+      - text: AWS Lambda.
+        is_correct: true
+      - text: Amazon Lightsail.
+        is_correct: false
+      - text: AWS Fargate.
+        is_correct: true
+    explanation: AWS Lambda and AWS Fargate can be used to deploy serverless applications, with Lambda for code and Fargate for containers.
+    diagram: |
+      graph TD
+      User[User] -- Deploy App --> Lambda[AWS Lambda]
+      User -- Deploy Container --> Fargate[AWS Fargate]
+  - id: q25
+    type: multiple_choice
+    question: What feature of Amazon S3 facilitates the organization and management of objects?
+    options:
+      - text: Buckets.
+        is_correct: true
+      - text: Folders.
+        is_correct: false
+      - text: Files.
+        is_correct: false
+      - text: Objects.
+        is_correct: false
+    explanation: Amazon S3 uses buckets to organize and manage the objects stored in the service.
+    diagram: |
+      graph TD
+      User[User] -- Uploads --> Bucket[Amazon S3 Bucket]
+      Bucket -- Contains --> Object[Object]
+  - id: q26
+    type: multiple_choice
+    question: What is the maximum size of an object that can be stored in Amazon S3?
+    options:
+      - text: 5 GB.
+        is_correct: false
+      - text: 50 GB.
+        is_correct: false
+      - text: 500 GB.
+        is_correct: false
+      - text: 5 TB.
+        is_correct: true
+    explanation: The maximum size of an object that can be stored in Amazon S3 is 5 terabytes.
+    diagram: |
+      graph TD
+      User[User] -- Upload Object (5TB max) --> S3[Amazon S3]
+  - id: q27
+    type: multiple_choice
+    question: Which of the following are advantages of using Amazon RDS over managing a database on an EC2 instance? (Choose TWO)
+    options:
+      - text: Automated backups, patch management, and replication are handled by AWS.
+        is_correct: true
+      - text: Full control over the database and the underlying operating system.
+        is_correct: false
+      - text: Ability to use any database engine of your choice.
+        is_correct: false
+      - text: Read replicas and Multi-AZ deployments for scalability and availability.
+        is_correct: true
+    explanation: Amazon RDS provides automated management tasks and features like read replicas and Multi-AZ deployments for scalability and availability.
+    diagram: |
+      graph TD
+      User[User] -- Manage DB --> RDS[Amazon RDS]
+      RDS -- Automated Tasks --> DB[Database]
+  - id: q28
+    type: multiple_choice
+    question: A company wants to allow its employees to access the AWS Management Console and AWS resources. What is the recommended way to grant this access?
+    options:
+      - text: Create an IAM role with permissions and assign it to each employee.
+        is_correct: false
+      - text: Create an IAM user for each employee and provide them with security credentials.
+        is_correct: true
+      - text: Use the root account to grant access to all employees.
+        is_correct: false
+      - text: Create an LDAP group and link it to AWS for access control.
+        is_correct: false
+    explanation: The best practice is to create an IAM user for each employee to provide them with individual security credentials for accessing AWS resources.
+    diagram: |
+      graph TD
+      Admin[Administrator] -- Create IAM Users --> IAM[IAM Service]
+      IAM -- Provides Access --> User[Employee]
+  - id: q29
+    type: multiple_choice
+    question: What is Amazon RDS Proxy used for?
+    options:
+      - text: To proxy requests between Amazon RDS and AWS Lambda functions.
+        is_correct: true
+      - text: To act as a VPN between on-premises networks and Amazon RDS.
+        is_correct: false
+      - text: To cache frequently queried data from Amazon RDS.
+        is_correct: false
+      - text: To manage database schema changes for Amazon RDS.
+        is_correct: false
+    explanation: Amazon RDS Proxy is a managed database proxy that makes applications more scalable, resilient, and secure by managing database connections.
+    diagram: |
+      graph TD
+      App[App] -- Requests --> Proxy[Amazon RDS Proxy]
+      Proxy -- Forwards Requests --> RDS[Amazon RDS]
+  - id: q30
+    type: multiple_choice
+    question: Which of the following is a benefit of using Amazon DynamoDB over Amazon RDS?
+    options:
+      - text: Supports complex queries and joins.
+        is_correct: false
+      - text: Offers built-in encryption at rest and in transit.
+        is_correct: true
+      - text: Provides a SQL interface for querying data.
+        is_correct: false
+      - text: Allows manual scaling of read and write throughput.
+        is_correct: false
+    explanation: Amazon DynamoDB provides built-in encryption at rest and in transit, offering a higher level of security for your data.
+    diagram: |
+      graph TD
+      User[User] -- Encrypt Data --> DDB[Amazon DynamoDB]
+      DDB -- Encrypts --> Data[Data]
+  - id: q31
+    type: multiple_choice
+    question: What should a company do to prepare for a well-architected AWS Cloud environment?
+    options:
+      - text: Train their technical staff on AWS services and best practices.
+        is_correct: true
+      - text: Limit access to the AWS environment to a few selected administrators.
+        is_correct: false
+      - text: Migrate all on-premises workloads to AWS as quickly as possible.
+        is_correct: false
+      - text: Use AWS Trusted Advisor to optimize their AWS architecture.
+        is_correct: true
+    explanation: Training technical staff and using AWS Trusted Advisor are essential steps in preparing for a well-architected AWS Cloud environment.
+    diagram: |
+      graph TD
+      Staff[Technical Staff] -- Train on AWS --> AWS[AWS Cloud]
+      AWS -- Use Trusted Advisor --> Optimized[Well-Architected Environment]
+  - id: q32
+    type: multiple_select
+    question: Which of the following are pillars of the AWS Well-Architected Framework? (Choose TWO)
+    options:
+      - text: Operational Excellence.
+        is_correct: true
+      - text: Security.
+        is_correct: true
+      - text: Cost Optimization.
+        is_correct: false
+      - text: Performance Efficiency.
+        is_correct: false
+    explanation: The AWS Well-Architected Framework is built on the pillars of Operational Excellence, Security, Reliability, Performance Efficiency, and Cost Optimization.
+    diagram: |
+      graph TD
+      Pillars[AWS Well-Architected Framework Pillars] -- Includes --> OpEx[Operational Excellence]
+      Pillars -- Includes --> Security[Security]
+  - id: q33
+    type: multiple_choice
+    question: Which AWS service provides a managed Kubernetes container orchestration service?
+    options:
+      - text: Amazon EKS.
+        is_correct: true
+      - text: Amazon ECS.
+        is_correct: false
+      - text: AWS Fargate.
+        is_correct: false
+      - text: Amazon EC2.
+        is_correct: false
+    explanation: Amazon EKS (Elastic Kubernetes Service) provides a managed Kubernetes service to run Kubernetes on AWS without needing to install and operate your own Kubernetes control plane.
+    diagram: |
+      graph TD
+      User[User] -- Manage Kubernetes --> EKS[Amazon EKS]
+      EKS -- Orchestrates --> Containers[Containers]
+  - id: q34
+    type: multiple_choice
+    question: A developer needs to store and query key-value pairs and performs document queries. Which AWS service should be used?
+    options:
+      - text: Amazon RDS.
+        is_correct: false
+      - text: Amazon DynamoDB.
+        is_correct: true
+      - text: Amazon ElastiCache.
+        is_correct: false
+      - text: Amazon Aurora.
+        is_correct: false
+    explanation: Amazon DynamoDB is a key-value and document database that delivers single-digit millisecond performance at any scale.
+    diagram: |
+      graph TD
+      User[User] -- Stores Key-Value Pairs --> DynamoDB[Amazon DynamoDB]
+      DynamoDB -- Delivers Performance --> User
+  - id: q35
+    type: multiple_choice
+    question: Which AWS service would you use to automate the deployment of applications to a fleet of EC2 instances?
+    options:
+      - text: AWS CloudFormation.
+        is_correct: true
+      - text: AWS CodeDeploy.
+        is_correct: false
+      - text: AWS OpsWorks.
+        is_correct: false
+      - text: Amazon Inspector.
+        is_correct: false
+    explanation: AWS CloudFormation is used to model and set up your Amazon Web Services resources so that you can spend less time managing those resources and more time focusing on your applications.
+    diagram: |
+      graph TD
+      User[User] -- Automate Deployment --> CloudFormation[AWS CloudFormation]
+      CloudFormation -- Sets Up --> Resources[AWS Resources]
+  - id: q36
+    type: multiple_choice
+    question: What does Amazon CloudWatch provide for AWS resources?
+    options:
+      - text: DNS management and web traffic routing.
+        is_correct: false
+      - text: Monitoring and observability of AWS resources and applications.
+        is_correct: true
+      - text: Security assessment and compliance checks.
+        is_correct: false
+      - text: Database migration and schema evolution.
+        is_correct: false
+    explanation: Amazon CloudWatch provides monitoring and observability of AWS resources and applications, allowing you to collect and track metrics, collect and monitor log files, and set alarms.
+    diagram: |
+      graph TD
+      User[User] -- Monitors Resources --> CloudWatch[Amazon CloudWatch]
+      CloudWatch -- Provides Metrics --> User
+  - id: q37
+    type: multiple_choice
+    question: Which AWS service enables you to visualize and manage your cloud infrastructure as code?
+    options:
+      - text: AWS CloudFormation.
+        is_correct: true
+      - text: AWS Config.
+        is_correct: false
+      - text: Amazon CloudWatch.
+        is_correct: false
+      - text: AWS Trusted Advisor.
+        is_correct: false
+    explanation: AWS CloudFormation provides a common language for describing and provisioning all infrastructure resources in your cloud environment.
+    diagram: |
+      graph TD
+      User[User] -- Visualizes Infrastructure --> CloudFormation[AWS CloudFormation]
+      CloudFormation -- Manages As Code --> Infrastructure[Infrastructure]
+  - id: q38
+    type: multiple_choice
+    question: What AWS service allows you to run code without provisioning or managing servers?
+    options:
+      - text: AWS Lambda.
+        is_correct: true
+      - text: Amazon EC2.
+        is_correct: false
+      - text: AWS Elastic Beanstalk.
+        is_correct: false
+      - text: Amazon ECS.
+        is_correct: false
+    explanation: AWS Lambda lets you run code without provisioning or managing servers, you pay only for the compute time you consume.
+    diagram: |
+      graph TD
+      User[User] -- Runs Code --> Lambda[AWS Lambda]
+      Lambda -- No Server Management --> User
+  - id: q39
+    type: multiple_choice
+    question: What is the primary purpose of AWS Direct Connect?
+    options:
+      - text: To provide a dedicated network connection from your on-premises data center to AWS.
+        is_correct: true
+      - text: To enable VPN connections between your on-premises network and AWS.
+        is_correct: false
+      - text: To manage user access to AWS resources.
+        is_correct: false
+      - text: To monitor AWS resource usage and set alarms.
+        is_correct: false
+    explanation: AWS Direct Connect provides a dedicated network connection from your premises to AWS, allowing for a more consistent network experience than internet-based connections.
+    diagram: |
+      graph TD
+      DataCenter[On-Premises Data Center] -- Direct Connect --> AWS[AWS Cloud]
+  - id: q40
+    type: multiple_choice
+    question: Which AWS service provides network firewalls as a service?
+    options:
+      - text: AWS Firewall Manager.
+        is_correct: true
+      - text: AWS Shield.
+        is_correct: false
+      - text: Amazon GuardDuty.
+        is_correct: false
+      - text: AWS WAF.
+        is_correct: false
+    explanation: AWS Firewall Manager is a security management service which allows you to centrally configure and manage firewall rules across your accounts and applications.
+    diagram: |
+      graph TD
+      User[User] -- Configures --> FirewallManager[AWS Firewall Manager]
+      FirewallManager -- Manages --> Firewall[Network Firewall]
+  - id: q41
+    type: multiple_choice
+    question: What is Amazon Route 53 used for?
+    options:
+      - text: To monitor AWS resources and applications.
+        is_correct: false
+      - text: To provide DNS and manage domain registration.
+        is_correct: true
+      - text: To deploy and manage AWS resources using infrastructure as code.
+        is_correct: false
+      - text: To secure AWS resources and manage user access.
+        is_correct: false
+    explanation: Amazon Route 53 is a highly available and scalable cloud Domain Name System (DNS) web service that provides DNS and manages domain registration.
+    diagram: |
+      graph TD
+      User[User] -- Manages Domains --> Route53[Amazon Route 53]
+      Route53 -- Provides DNS Service --> User
+  - id: q42
+    type: multiple_choice
+    question: Which AWS service would you use to distribute incoming application traffic across multiple targets, such as EC2 instances, in multiple Availability Zones?
+    options:
+      - text: Amazon Route 53.
+        is_correct: false
+      - text: AWS Shield.
+        is_correct: false
+      - text: Elastic Load Balancing.
+        is_correct: true
+      - text: Amazon CloudFront.
+        is_correct: false
+    explanation: Elastic Load Balancing automatically distributes incoming application traffic across multiple targets, such as EC2 instances, containers, and IP addresses, in multiple Availability Zones.
+    diagram: |
+      graph TD
+      User[User] -- Incoming Traffic --> ELB[Elastic Load Balancing]
+      ELB -- Distributes Traffic --> Targets[EC2 Instances, Containers]
+  - id: q43
+    type: multiple_choice
+    question: What does AWS IAM provide for managing access to AWS resources?
+    options:
+      - text: Firewall rules and network access control.
+        is_correct: false
+      - text: Security groups and NACLs.
+        is_correct: false
+      - text: Roles, policies, and user permissions.
+        is_correct: true
+      - text: Data encryption and decryption.
+        is_correct: false
+    explanation: AWS Identity and Access Management (IAM) is a web service that helps you securely control access to AWS services and resources for your users.
+    diagram: |
+      graph TD
+      User[User] -- Manage Access --> IAM[AWS IAM]
+      IAM -- Roles & Policies --> User
+  - id: q44
+    type: multiple_choice
+    question: Which AWS service is used for monitoring and troubleshooting network performance?
+    options:
+      - text: Amazon CloudWatch.
+        is_correct: true
+      - text: AWS CloudTrail.
+        is_correct: false
+      - text: AWS Config.
+        is_correct: false
+      - text: AWS Trusted Advisor.
+        is_correct: false
+    explanation: Amazon CloudWatch is a monitoring and observability service that provides data and insights to monitor application performance, respond to system-wide performance changes, and optimize resource utilization.
+    diagram: |
+      graph TD
+      User[User] -- Monitors Network Performance --> CloudWatch[Amazon CloudWatch]
+      CloudWatch -- Provides Insights --> User
+  - id: q45
+    type: multiple_choice
+    question: What is the purpose of AWS CloudTrail?
+    options:
+      - text: To automate the creation of AWS resources using infrastructure as code.
+        is_correct: false
+      - text: To log and monitor account activity across your AWS infrastructure.
+        is_correct: true
+      - text: To provide a content delivery network for distributing content globally.
+        is_correct: false
+      - text: To manage user access and permissions to AWS resources.
+        is_correct: false
+    explanation: AWS CloudTrail is a service that enables governance, compliance, and operational and risk auditing of your AWS account by logging AWS API calls and resource changes.
+    diagram: |
+      graph TD
+      User[User] -- Logs & Monitors --> CloudTrail[AWS CloudTrail]
+      CloudTrail -- AWS Account Activity --> User
+  - id: q46
+    type: multiple_choice
+    question: Which AWS service provides automated backup and recovery for RDS databases?
+    options:
+      - text: AWS Backup.
+        is_correct: true
+      - text: Amazon RDS Automated Backups.
+        is_correct: false
+      - text: Amazon S3 Versioning.
+        is_correct: false
+      - text: AWS Snapshots.
+        is_correct: false
+    explanation: AWS Backup is a fully managed backup service that makes it easy to centralize and automate the backup of data across AWS services.
+    diagram: |
+      graph TD
+      User[User] -- Configures Backup --> Backup[AWS Backup]
+      Backup -- Manages --> RDS[Amazon RDS]
+  - id: q47
+    type: multiple_choice
+    question: What must be enabled to use AWS Systems Manager to manage an EC2 instance?
+    options:
+      - text: EC2 Instance Connect.
+        is_correct: false
+      - text: AWS Inspector.
+        is_correct: false
+      - text: Systems Manager Agent.
+        is_correct: true
+      - text: EC2 Serial Console.
+        is_correct: false
+    explanation: The Systems Manager agent (SSM Agent) must be installed and running on your EC2 instance to use AWS Systems Manager.
+    diagram: |
+      graph TD
+      User[User] -- Manages EC2 Instance --> SSM[Systems Manager]
+      SSM -- Requires --> Agent[SSM Agent]
+  - id: q48
+    type: multiple_choice
+    question: How can you secure data at rest in Amazon RDS?
+    options:
+      - text: By using AWS IAM roles and policies.
+        is_correct: false
+      - text: By enabling Amazon RDS encryption.
+        is_correct: true
+      - text: By using Virtual Private Cloud (VPC) security groups.
+        is_correct: false
+      - text: By enabling Multi-AZ deployment.
+        is_correct: false
+    explanation: Amazon RDS provides encryption at rest using AWS Key Management Service (KMS) keys to encrypt your database storage and backups.
+    diagram: |
+      graph TD
+      User[User] -- Secures Data at Rest --> RDS[Amazon RDS]
+      RDS -- Encrypts --> Data[Data]
+  - id: q49
+    type: multiple_choice
+    question: What feature of AWS Elastic Beanstalk simplifies the process of deploying and managing applications?
+    options:
+      - text: It automatically scales the application based on demand.
+        is_correct: true
+      - text: It provides a managed database service.
+        is_correct: false
+      - text: It enables serverless computing.
+        is_correct: false
+      - text: It offers built-in CI/CD capabilities.
+        is_correct: false
+    explanation: AWS Elastic Beanstalk provides an environment to easily deploy and run applications in the cloud without worrying about the infrastructure.
+    diagram: |
+      graph TD
+      User[User] -- Deploys App --> EB[Elastic Beanstalk]
+      EB -- Manages --> App[Application]
+  - id: q50
+    type: multiple_choice
+    question: Which AWS service allows you to run and manage Docker containers?
+    options:
+      - text: AWS Lambda.
+        is_correct: false
+      - text: Amazon EC2.
+        is_correct: false
+      - text: Amazon ECS.
+        is_correct: true
+      - text: Amazon EKS.
+        is_correct: true
+    explanation: Amazon ECS (Elastic Container Service) and Amazon EKS (Elastic Kubernetes Service) are used to run and manage Docker containers on AWS.
+    diagram: |
+      graph TD
+      User[User] -- Runs Docker Containers --> ECS[Amazon ECS]
+      User -- Runs Docker Containers --> EKS[Amazon EKS]

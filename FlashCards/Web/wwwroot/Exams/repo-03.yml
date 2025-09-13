@@ -1,0 +1,493 @@
+questions:
+  - id: q1
+    type: multiple_choice
+    question: O que significa a sigla "repo" em finanças?
+    options:
+      - text: Repurchase agreement
+        is_correct: true
+      - text: Reporting option
+        is_correct: false
+      - text: Regional portfolio
+        is_correct: false
+      - text: Regulatory operation
+        is_correct: false
+    explanation: Repo é a abreviação de Repurchase Agreement, ou operação compromissada.
+    tags: [repo, definição]
+    difficulty: fácil
+    points: 5
+    diagram: |
+      graph TD
+      A[Repo] --> B[Repurchase Agreement]
+
+  - id: q2
+    type: multiple_choice
+    question: Qual é a essência econômica de uma operação compromissada (repo)?
+    options:
+      - text: Um empréstimo garantido por títulos
+        is_correct: true
+      - text: Uma venda definitiva de títulos
+        is_correct: false
+      - text: Uma troca de moedas estrangeiras
+        is_correct: false
+      - text: Uma operação de derivativos
+        is_correct: false
+    explanation: O repo é, na prática, um empréstimo colateralizado, mesmo que juridicamente seja estruturado como venda e recompra.
+    tags: [repo, empréstimo, colateral]
+    difficulty: médio
+    points: 7
+    diagram: |
+      graph TD
+      A[Vendedor] -- Entrega título --> B[Comprador]
+      B -- Entrega dinheiro --> A
+
+  - id: q3
+    type: multiple_choice
+    question: Quantas etapas principais existem em um repo?
+    options:
+      - text: Duas etapas — venda inicial e recompra futura
+        is_correct: true
+      - text: Uma única etapa — a venda
+        is_correct: false
+      - text: Três etapas — venda, recompra e liquidação
+        is_correct: false
+      - text: Quatro etapas — venda, custódia, recompra e liquidação
+        is_correct: false
+    explanation: O repo tem dois momentos - a venda inicial e o compromisso de recompra.
+    tags: [repo, etapas]
+    difficulty: fácil
+    points: 5
+    diagram: |
+      sequenceDiagram
+      Vendedor->>Comprador: Vende título
+      Comprador->>Vendedor: Devolve título após prazo
+
+  - id: q4
+    type: multiple_choice
+    question: Quem é o tomador de recursos em uma operação compromissada?
+    options:
+      - text: O vendedor do título
+        is_correct: true
+      - text: O comprador do título
+        is_correct: false
+      - text: O custodiante
+        is_correct: false
+      - text: O Banco Central
+        is_correct: false
+    explanation: O vendedor obtém recursos imediatos e, portanto, é o tomador.
+    tags: [repo, tomador]
+    difficulty: médio
+    points: 7
+    diagram: |
+      graph TD
+      A[Vendedor] -- Pega dinheiro --> B[Comprador]
+      B -- Recebe título --> A
+
+  - id: q5
+    type: multiple_choice
+    question: O que representa o preço de recompra em um repo?
+    options:
+      - text: O valor devolvido pelo tomador, incluindo juros
+        is_correct: true
+      - text: O valor original do título sem acréscimos
+        is_correct: false
+      - text: Apenas a taxa de juros acumulada
+        is_correct: false
+      - text: O preço de mercado atual do título
+        is_correct: false
+    explanation: O preço de recompra inclui o valor do empréstimo mais os juros calculados pela taxa do repo.
+    tags: [repo, recompra, juros]
+    difficulty: médio
+    points: 7
+    diagram: |
+      graph TD
+      A[Preço inicial] + B[Juros] --> C[Preço de recompra]
+
+  - id: q6
+    type: multiple_choice
+    question: Qual é o prazo mais comum de um repo?
+    options:
+      - text: Overnight (um dia)
+        is_correct: true
+      - text: Um mês
+        is_correct: false
+      - text: Um ano
+        is_correct: false
+      - text: Cinco anos
+        is_correct: false
+    explanation: A maioria dos repos é de curtíssimo prazo, geralmente overnight.
+    tags: [repo, prazo]
+    difficulty: fácil
+    points: 5
+    diagram: |
+      graph TD
+      A[Início hoje] --> B[Recompra amanhã]
+
+  - id: q7
+    type: multiple_choice
+    question: Qual risco o credor assume se o valor do colateral cair?
+    options:
+      - text: Risco de shortfall (insuficiência)
+        is_correct: true
+      - text: Risco cambial
+        is_correct: false
+      - text: Risco de liquidez
+        is_correct: false
+      - text: Risco inflacionário
+        is_correct: false
+    explanation: Se o colateral cair de valor, pode não cobrir o empréstimo, gerando shortfall risk.
+    tags: [repo, risco]
+    difficulty: médio
+    points: 7
+    diagram: |
+      graph TD
+      A[Valor colateral ↓] --> B[Risco para credor]
+
+  - id: q8
+    type: multiple_choice
+    question: O que é "haircut" em um repo?
+    options:
+      - text: A diferença entre o valor de mercado do título e o valor emprestado
+        is_correct: true
+      - text: O juro cobrado pela operação
+        is_correct: false
+      - text: O custo de registro
+        is_correct: false
+      - text: O valor de recompra
+        is_correct: false
+    explanation: Haircut é a diferença entre valor do colateral e o valor do empréstimo.
+    tags: [repo, haircut]
+    difficulty: médio
+    points: 7
+    diagram: |
+      graph TD
+      A[Valor título] -.-> B[Valor empréstimo]
+      B --> C[Haircut]
+
+  - id: q9
+    type: multiple_choice
+    question: Qual é a fórmula do haircut?
+    options:
+      - text: (Preço do título - Preço de compra) / Preço do título
+        is_correct: true
+      - text: Preço do título / Preço de compra
+        is_correct: false
+      - text: (Preço recompra - Preço de compra) / Preço recompra
+        is_correct: false
+      - text: Juros / Preço do título
+        is_correct: false
+    explanation: Haircut = (Valor colateral - Valor emprestado) / Valor colateral.
+    tags: [repo, haircut, fórmula]
+    difficulty: médio
+    points: 7
+    diagram: |
+      graph TD
+      A[Título] -->|Preço| B
+      B -.-> C[Compra]
+      A --> D[Haircut = Diferença]
+
+  - id: q10
+    type: multiple_choice
+    question: O que significa "initial margin" em um repo?
+    options:
+      - text: Relação entre valor do título e valor emprestado
+        is_correct: true
+      - text: O custo inicial da transação
+        is_correct: false
+      - text: O spread entre juros do repo e taxa básica
+        is_correct: false
+      - text: O valor do haircut multiplicado pela taxa
+        is_correct: false
+    explanation: Initial margin = valor colateral / valor emprestado.
+    tags: [repo, initial margin]
+    difficulty: médio
+    points: 7
+    diagram: |
+      graph TD
+      A[Título] --> B[Valor de mercado]
+      B --> C[Initial Margin]
+
+  - id: q11
+    type: multiple_choice
+    question: Qual prática protege o credor contra quedas futuras do colateral?
+    options:
+      - text: Margem de variação (variation margin)
+        is_correct: true
+      - text: Taxa overnight
+        is_correct: false
+      - text: Spread de liquidez
+        is_correct: false
+      - text: Taxa de desconto
+        is_correct: false
+    explanation: Variation margin ajusta colateral ao longo do prazo do repo.
+    tags: [repo, risco, margem]
+    difficulty: médio
+    points: 7
+    diagram: |
+      graph TD
+      A[Queda colateral] --> B[Credor exige mais garantia]
+
+  - id: q12
+    type: multiple_choice
+    question: Qual tipo de repo dura apenas um dia?
+    options:
+      - text: Overnight repo
+        is_correct: true
+      - text: Term repo
+        is_correct: false
+      - text: Rolling repo
+        is_correct: false
+      - text: Swap repo
+        is_correct: false
+    explanation: Overnight repo dura um único dia.
+    tags: [repo, overnight]
+    difficulty: fácil
+    points: 5
+    diagram: |
+      graph TD
+      A[Hoje] --> B[Amanhã]
+
+  - id: q13
+    type: multiple_choice
+    question: Um repo de vários dias é chamado de?
+    options:
+      - text: Term repo
+        is_correct: true
+      - text: Overnight repo
+        is_correct: false
+      - text: Swap repo
+        is_correct: false
+      - text: Callable repo
+        is_correct: false
+    explanation: Quando o prazo é maior que um dia, chama-se term repo.
+    tags: [repo, prazo]
+    difficulty: fácil
+    points: 5
+    diagram: |
+      graph TD
+      A[Vários dias] --> B[Term repo]
+
+  - id: q14
+    type: multiple_choice
+    question: O que define a taxa do repo?
+    options:
+      - text: O juro anualizado aplicado ao empréstimo
+        is_correct: true
+      - text: A diferença de preço do título
+        is_correct: false
+      - text: A variação cambial
+        is_correct: false
+      - text: O preço do haircut
+        is_correct: false
+    explanation: Repo rate é o juro anualizado usado para calcular o preço de recompra.
+    tags: [repo, taxa]
+    difficulty: fácil
+    points: 5
+    diagram: |
+      graph TD
+      A[Repo Rate] --> B[Juros] --> C[Preço recompra]
+
+  - id: q15
+    type: multiple_choice
+    question: Qual convenção de dias geralmente é usada para calcular juros de repo?
+    options:
+      - text: Ano de 360 dias
+        is_correct: true
+      - text: Ano de 365 dias
+        is_correct: false
+      - text: Ano de 250 dias úteis
+        is_correct: false
+      - text: Sem convenção específica
+        is_correct: false
+    explanation: Muitas operações de repo usam base de 360 dias para cálculo.
+    tags: [repo, cálculo, dia]
+    difficulty: fácil
+    points: 5
+    diagram: |
+      graph TD
+      A[360 dias] --> B[Cálculo juros repo]
+
+  - id: q16
+    type: multiple_choice
+    question: Qual é o principal benefício do haircut para o credor?
+    options:
+      - text: Reduz o risco de inadimplência por queda do colateral
+        is_correct: true
+      - text: Aumenta a rentabilidade da operação
+        is_correct: false
+      - text: Elimina completamente o risco de crédito
+        is_correct: false
+      - text: Substitui a necessidade de colateral
+        is_correct: false
+    explanation: O haircut protege o credor de perdas por desvalorização do colateral.
+    tags: [repo, haircut, risco]
+    difficulty: médio
+    points: 7
+    diagram: |
+      graph TD
+      A[Haircut] --> B[Proteção Credor]
+
+  - id: q17
+    type: multiple_choice
+    question: Em um repo, quem recebe juros implícitos da operação?
+    options:
+      - text: O comprador do título (credor)
+        is_correct: true
+      - text: O vendedor do título (tomador)
+        is_correct: false
+      - text: O custodiante
+        is_correct: false
+      - text: O mercado secundário
+        is_correct: false
+    explanation: O credor empresta dinheiro e recebe juros via preço de recompra.
+    tags: [repo, juros]
+    difficulty: fácil
+    points: 5
+    diagram: |
+      graph TD
+      A[Comprador] --> B[Recebe juros via recompra]
+
+  - id: q18
+    type: multiple_choice
+    question: Qual fator pode influenciar o tamanho do haircut?
+    options:
+      - text: Qualidade do colateral
+        is_correct: true
+      - text: Cor da nota promissória
+        is_correct: false
+      - text: Tamanho da letra do contrato
+        is_correct: false
+      - text: Número de funcionários da empresa
+        is_correct: false
+    explanation: Haircut maior é aplicado quando o colateral é de menor qualidade ou mais volátil.
+    tags: [repo, haircut, colateral]
+    difficulty: médio
+    points: 7
+    diagram: |
+      graph TD
+      A[Colateral fraco] --> B[Haircut maior]
+
+  - id: q19
+    type: multiple_choice
+    question: Se o valor do colateral aumentar, o que pode acontecer?
+    options:
+      - text: O credor pode devolver excesso (negative variation margin)
+        is_correct: true
+      - text: O credor exige mais colateral
+        is_correct: false
+      - text: O tomador paga mais juros
+        is_correct: false
+      - text: O haircut aumenta automaticamente
+        is_correct: false
+    explanation: Com aumento do colateral, pode haver devolução de parte da garantia.
+    tags: [repo, margem, colateral]
+    difficulty: médio
+    points: 7
+    diagram: |
+      graph TD
+      A[Colateral ↑] --> B[Devolução excesso]
+
+  - id: q20
+    type: multiple_choice
+    question: Em termos contábeis, como os repos geralmente são tratados?
+    options:
+      - text: Como empréstimos colateralizados
+        is_correct: true
+      - text: Como vendas definitivas
+        is_correct: false
+      - text: Como operações de derivativos
+        is_correct: false
+      - text: Como operações cambiais
+        is_correct: false
+    explanation: Apesar da estrutura jurídica, contabilidade considera repo como empréstimo.
+    tags: [repo, contabilidade]
+    difficulty: médio
+    points: 7
+    diagram: |
+      graph TD
+      A[Repo] --> B[Empréstimo c/ colateral]
+
+  - id: q21
+    type: multiple_choice
+    question: Qual instrumento é mais usado como colateral em repos?
+    options:
+      - text: Títulos de dívida (bonds)
+        is_correct: true
+      - text: Ações de empresas de tecnologia
+        is_correct: false
+      - text: Ouro físico
+        is_correct: false
+      - text: Criptomoedas
+        is_correct: false
+    explanation: Bonds e títulos públicos são colaterais comuns em repos.
+    tags: [repo, colateral, bonds]
+    difficulty: fácil
+    points: 5
+    diagram: |
+      graph TD
+      A[Colateral] --> B[Títulos de dívida]
+
+  - id: q22
+    type: multiple_choice
+    question: Qual parte de um repo fornece dinheiro?
+    options:
+      - text: O comprador do título
+        is_correct: true
+      - text: O vendedor do título
+        is_correct: false
+      - text: O custodiante
+        is_correct: false
+      - text: O auditor
+        is_correct: false
+    explanation: O comprador entrega dinheiro em troca do título.
+    tags: [repo, comprador]
+    difficulty: fácil
+    points: 5
+    diagram: |
+      graph TD
+      A[Comprador] --> B[Dinheiro]
+
+  - id: q23
+    type: multiple_choice
+    question: Qual é o objetivo principal do tomador em um repo?
+    options:
+      - text: Obter liquidez imediata
+        is_correct: true
+      - text: Ganhar com a valorização do título
+        is_correct: false
+      - text: Reduzir haircut
+        is_correct: false
+      - text: Evitar pagamento de impostos
+        is_correct: false
+    explanation: O vendedor/tomador busca liquidez rápida.
+    tags: [repo, liquidez]
+    difficulty: fácil
+    points: 5
+    diagram: |
+      graph TD
+      A[Tomador] --> B[Liquidez]
+
+  - id: q24
+    type: multiple_choice
+    question: Se não houver haircut, qual é o risco?
+    options:
+      - text: Credor pode sofrer perda se colateral cair
+        is_correct: true
+      - text: Tomador perde liquidez
+        is_correct: false
+      - text: Custodiante assume perdas
+        is_correct: false
+      - text: Juros desaparecem
+        is_correct: false
+    explanation: Sem haircut, credor fica exposto à queda do colateral.
+    tags: [repo, haircut, risco]
+    difficulty: médio
+    points: 7
+    diagram: |
+      graph TD
+      A[Sem haircut] --> B[Maior risco credor]
+
+  - id: q25
+    type: multiple_choice
+    question: O repo é considerado um tipo de?
+    options:
+      - text: Em
