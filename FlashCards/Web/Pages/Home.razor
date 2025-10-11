@@ -9,15 +9,18 @@
 
 <div class="mdc-typography--headline6 mb">AWS Cloud Practicioner</div>
 
-<div class="mb">
-    <label for="examSelect"><b>Selecione o exame:</b></label>
-    <select id="examSelect" @bind="examName">
+<div class="mb md-navigation-panel">
+    <label for="examSelect" class="md-label"><b>Selecione o exame:</b></label>
+    <div class="md-select-wrapper">
+        <select id="examSelect" @bind="examName" class="md-select">
         <option value="">-- Escolha --</option>
         @foreach (var exam in examOptions)
         {
             <option value="@exam">@exam</option>
         }
-    </select>
+        </select>
+        <span class="md-highlight"></span>
+    </div>
     <button class="mdc-button mdc-button--raised" @onclick="OnExamSelected" disabled="@string.IsNullOrEmpty(examName)">
         Carregar
     </button>
@@ -51,6 +54,21 @@ else
         <button class="mdc-button mdc-button--raised" @onclick="NextQuestion" disabled="@(!question.IsLocked || CurrentIndex == Questions.Count - 1)">
             <span class="mdc-button__label">Next</span>
         </button>
+    </div>
+    <br />
+    <div class="md-navigation-panel">
+        <label for="examSelect" class="md-label">Pular para a questão:</label>
+
+        <div class="md-select-wrapper">
+            <select id="examSelect" class="md-select" @bind="CurrentIndex">
+                <option value="">-- Escolha --</option>
+                @for (var i = 0; i < Questions.Count; i++)
+                {
+                    <option value="@i">@(i + 1)</option>
+                }
+            </select>
+            <span class="md-highlight"></span>
+        </div>
     </div>
 }
 
