@@ -182,3 +182,52 @@ code {
     flex-direction: column;
     align-items: center;
 }
+
+.md-navigation-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 16px 0;
+    font-family: "Roboto", sans-serif;
+}
+
+.md-label {
+    font-weight: 600;
+    color: #333;
+}
+
+.md-select-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 220px;
+}
+
+.md-select {
+    width: 100%;
+    padding: 10px 12px;
+    border: none;
+    border-bottom: 2px solid #ccc;
+    background-color: transparent;
+    font-size: 16px;
+    color: #333;
+    transition: border-color 0.2s;
+}
+
+    .md-select:focus {
+        outline: none;
+        border-bottom: 2px solid #3f51b5; /* Azul Material */
+    }
+
+.md-highlight {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 2px;
+    width: 0;
+    background: #3f51b5;
+    transition: width 0.3s;
+}
+
+.md-select:focus + .md-highlight {
+    width: 100%;
+}
