@@ -294,6 +294,9 @@ else
 
         ResetCounts();
 
+        int firstWrongIndex = -1;
+        int firstUnansweredIndex = -1;
+
         for (int i = 0; i < Questions.Count; i++)
         {
             var key = GetStorageKey(i);
@@ -302,6 +305,11 @@ else
                 var json = await JS.InvokeAsync<string>("localStorage.getItem", key);
                 if (string.IsNullOrEmpty(json))
                 {
+                    if (firstUnansweredIndex == -1)
+                    {
+                        firstUnansweredIndex = i;
+                    }
+
                     continue;                    
                 }
 
@@ -333,15 +341,25 @@ else
 
                 if (!(q.WasCorrect?? false))
                 {
-                    CurrentIndex = i;
+                    if (firstWrongIndex == -1)
+                    {
+                        firstWrongIndex = i;
+                    }
                 }
-                else if (i < Questions.Count - 1)
-                    CurrentIndex = i + 1;
             }
             catch
             {
                 // ignore errors reading localStorage
             }
+        }
+
+        if (firstWrongIndex != -1)
+        {
+            CurrentIndex = firstWrongIndex;
+        }
+        else if (firstUnansweredIndex != -1)
+        {
+            CurrentIndex = firstUnansweredIndex;
         }
     }
 
