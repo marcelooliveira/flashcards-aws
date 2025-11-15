@@ -8,7 +8,6 @@
         {
             var opt = Question.QuestionOptions[i];
             bool isCorrect = Question.CorrectOptions.Contains(i);
-            opt.Index = i;
             opt.IsCorrect = isCorrect;
             <QuestionOptionCard QuestionOption="@opt" IsLocked="@Question.IsLocked" OnCheckedChanged="OnOptionCheckedChanged" />
         }

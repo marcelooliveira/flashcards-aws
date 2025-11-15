@@ -261,7 +261,9 @@ else
                 {
                     question.QuestionOptions.Add(optionsList[i].option);
                     if (optionsList[i].isCorrect)
+                    {
                         question.CorrectOptions.Add(i);
+                    }
                 }
             }
 
@@ -312,8 +314,10 @@ else
                         QuestionOption qo = q.QuestionOptions[j];
 
                         qo.IsSelected = q.SelectedOptions.Contains(qo.Index);
-                        q.WasCorrect = q.CorrectOptions.Contains(qo.Index)
-                        && q.SelectedOptions.Count() == q.CorrectOptions.Count();
+                        qo.IsCorrect = q.CorrectOptions.Contains(qo.Index);
+                        q.WasCorrect = qo.IsCorrect
+                            && q.SelectedOptions.Count() == q.CorrectOptions.Count();
+                        q.IsLocked = true;
                     }
                 }
             }
