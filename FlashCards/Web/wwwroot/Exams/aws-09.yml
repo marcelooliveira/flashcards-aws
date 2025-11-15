@@ -1,0 +1,877 @@
+questions:
+  - id: q1
+    type: multiple_choice
+    question: An administrator needs to rapidly deploy a popular IT solution and start using it immediately. Where can the administrator find assistance?
+    options:
+      - text: AWS Well-Architected Framework documentation.
+        is_correct: false
+      - text: Amazon CloudFront.
+        is_correct: false
+      - text: AWS CodeCommit.
+        is_correct: false
+      - text: AWS Quick Start reference deployments.
+        is_correct: true
+    explanation: AWS Quick Start provides pre-built reference deployments for rapid deployment of popular IT solutions.
+    diagram: |
+      graph TD
+      Rapid[Rapid Deployment] -- Solution --> QS[AWS Quick Start]
+      QS -- Pre-built --> Deployment[Reference Deployments]
+  - id: q2
+    type: multiple_choice
+    question: What is one of the advantages of the Amazon Relational Database Service (Amazon RDS)?
+    options:
+      - text: It simplifies relational database administration tasks.
+        is_correct: true
+      - text: It provides 99.99999999999% reliability and durability.
+        is_correct: false
+      - text: It automatically scales databases for loads.
+        is_correct: false
+      - text: It enables users to dynamically adjust CPU and RAM resources.
+        is_correct: false
+    explanation: Amazon RDS simplifies database administration by managing backups, patching, and maintenance.
+    diagram: |
+      graph TD
+      RDS[Amazon RDS] -- Simplified --> Admin[Database Administration]
+      Admin -- Includes --> Backups[Backups & Patching]
+  - id: q3
+    type: multiple_choice
+    question: Which of the following AWS Cloud services can be used to run a customer-managed relational database?
+    options:
+      - text: Amazon EC2.
+        is_correct: true
+      - text: Amazon Route 53.
+        is_correct: false
+      - text: Amazon ElastiCache.
+        is_correct: false
+      - text: Amazon DynamoDB.
+        is_correct: false
+    explanation: Amazon EC2 allows running customer-managed relational databases with full control.
+    diagram: |
+      graph TD
+      CustomDB[Customer-managed DB] -- Run on --> EC2[Amazon EC2]
+      EC2 -- Full Control --> Database[Database Software]
+  - id: q4
+    type: multiple_choice
+    question: A user is planning to launch two additional Amazon EC2 instances to increase availability. Which action should the user take?
+    options:
+      - text: Launch the instances across multiple Availability Zones in a single AWS Region.
+        is_correct: true
+      - text: Launch the instances as EC2 Reserved Instances in the same AWS Region and the same Availability Zone.
+        is_correct: false
+      - text: Launch the instances in multiple AWS Regions but in the same Availability Zone.
+        is_correct: false
+      - text: Launch the instances as EC2 Spot Instances in the same AWS Region but in different Availability Zones.
+        is_correct: false
+    explanation: Multi-AZ deployment within a region provides high availability and fault tolerance.
+    diagram: |
+      graph TD
+      Availability[Increase Availability] -- Best Practice --> MultiAZ[Multiple Availability Zones]
+      MultiAZ -- Region --> Region[Single Region]
+  - id: q5
+    type: multiple_choice
+    question: Which of the following can limit Amazon Simple Storage Service (Amazon S3) bucket access to specific users?
+    options:
+      - text: A public and private key-pair.
+        is_correct: false
+      - text: Amazon Inspector.
+        is_correct: false
+      - text: AWS Identity and Access Management (IAM) policies.
+        is_correct: true
+      - text: Security Groups.
+        is_correct: false
+    explanation: IAM policies control access to S3 buckets by specifying which users can perform actions.
+    diagram: |
+      graph TD
+      S3[S3 Bucket] -- Access Control --> IAM[IAM Policies]
+      IAM -- Restrict to --> Users[Specific Users]
+  - id: q6
+    type: multiple_select
+    question: "Which AWS service allows companies to connect an Amazon VPC to an on-premises data center? (Select TWO)"
+    options:
+      - text: AWS VPN.
+        is_correct: true
+      - text: Amazon Redshift.
+        is_correct: false
+      - text: API Gateway.
+        is_correct: false
+      - text: Amazon Direct Connect.
+        is_correct: true
+    explanation: AWS VPN and Amazon Direct Connect both enable connectivity between VPC and on-premises infrastructure.
+    diagram: |
+      graph TD
+      Connect[VPC to On-Premises] -- Method 1 --> VPN[AWS VPN]
+      Connect -- Method 2 --> DC[Amazon Direct Connect]
+  - id: q7
+    type: multiple_choice
+    question: Which AWS service or feature can be used to monitor CPU usage?
+    options:
+      - text: AWS CloudTrail.
+        is_correct: false
+      - text: VPC Flow Logs.
+        is_correct: false
+      - text: Amazon CloudWatch.
+        is_correct: true
+      - text: AWS Config.
+        is_correct: false
+    explanation: Amazon CloudWatch monitors CPU usage and other metrics from AWS resources.
+    diagram: |
+      graph TD
+      CPU[CPU Usage Monitor] -- Service --> CW[Amazon CloudWatch]
+      CW -- Metric --> Monitoring[Continuous Monitoring]
+  - id: q8
+    type: multiple_choice
+    question: Which task is AWS responsible for in the shared responsibility model for security and compliance?
+    options:
+      - text: Granting access to individuals and services.
+        is_correct: false
+      - text: Encrypting data in transit.
+        is_correct: false
+      - text: Updating Amazon EC2 host firmware.
+        is_correct: true
+      - text: Updating operating systems.
+        is_correct: false
+    explanation: AWS is responsible for updating EC2 host firmware as part of infrastructure management.
+    diagram: |
+      graph TD
+      AWS[AWS Responsibility] -- Infrastructure --> Firmware[EC2 Host Firmware]
+  - id: q9
+    type: multiple_choice
+    question: Which of the following security-related actions are available at no cost?
+    options:
+      - text: Calling AWS Support.
+        is_correct: false
+      - text: Contacting AWS Professional Services to request a workshop.
+        is_correct: false
+      - text: Accessing forums, blogs, and whitepapers.
+        is_correct: true
+      - text: Attending AWS classes at a local university.
+        is_correct: false
+    explanation: AWS provides free access to forums, blogs, and whitepapers for security guidance.
+    diagram: |
+      graph TD
+      Free[Free Resources] -- Type 1 --> Forums[Forums]
+      Free -- Type 2 --> Blogs[Blogs]
+      Free -- Type 3 --> Whitepapers[Whitepapers]
+  - id: q10
+    type: multiple_choice
+    question: Which storage service can be used as a low-cost option for hosting static websites?
+    options:
+      - text: Amazon Glacier.
+        is_correct: false
+      - text: Amazon DynamoDB.
+        is_correct: false
+      - text: Amazon Elastic File System (Amazon EFS).
+        is_correct: false
+      - text: Amazon Simple Storage Service (Amazon S3).
+        is_correct: true
+    explanation: Amazon S3 is ideal for hosting static websites at low cost with high availability.
+    diagram: |
+      graph TD
+      Static[Static Website] -- Low-cost hosting --> S3[Amazon S3]
+      S3 -- Provides --> Availability[High Availability]
+  - id: q11
+    type: multiple_choice
+    question: According to the AWS shared responsibility model what is the sole responsibility of AWS?
+    options:
+      - text: Application security.
+        is_correct: false
+      - text: Edge location management.
+        is_correct: true
+      - text: Patch management.
+        is_correct: false
+      - text: Client-side data.
+        is_correct: false
+    explanation: AWS solely manages edge locations as part of its global infrastructure responsibility.
+    diagram: |
+      graph TD
+      AWS[AWS Sole Responsibility] -- Infrastructure --> EdgeLoc[Edge Location Management]
+  - id: q12
+    type: multiple_select
+    question: "Which of the following are pillars of the AWS Well-Architected Framework? (Select TWO)"
+    options:
+      - text: Multiple Availability Zones.
+        is_correct: false
+      - text: Performance efficiency.
+        is_correct: true
+      - text: Security.
+        is_correct: true
+      - text: Encryption usage.
+        is_correct: false
+      - text: High availability.
+        is_correct: false
+    explanation: Performance Efficiency and Security are core pillars of the AWS Well-Architected Framework.
+    diagram: |
+      graph TD
+      WAF[Well-Architected Framework] -- Pillar 1 --> PE[Performance Efficiency]
+      WAF -- Pillar 2 --> Sec[Security]
+  - id: q13
+    type: multiple_choice
+    question: Which AWS service identifies security groups that allow unrestricted access to a user's AWS resources?
+    options:
+      - text: AWS Trusted Advisor.
+        is_correct: true
+      - text: Amazon Inspector.
+        is_correct: false
+      - text: Amazon CloudWatch.
+        is_correct: false
+      - text: AWS CloudTrail.
+        is_correct: false
+    explanation: AWS Trusted Advisor identifies security groups with unrestricted access and other security issues.
+    diagram: |
+      graph TD
+      SG[Security Groups] -- Audit --> TA[AWS Trusted Advisor]
+      TA -- Identifies --> Unrestricted[Unrestricted Access]
+  - id: q14
+    type: multiple_select
+    question: "Which design principles for cloud architecture are recommended when re-architecting a large monolithic application? (Select TWO)"
+    options:
+      - text: Use manual monitoring.
+        is_correct: false
+      - text: Use fixed servers.
+        is_correct: false
+      - text: Implement loose coupling.
+        is_correct: true
+      - text: Rely on individual components.
+        is_correct: false
+      - text: Design for scalability.
+        is_correct: true
+    explanation: Loose coupling and scalability are key principles for re-architecting monolithic applications.
+    diagram: |
+      graph TD
+      Rearch[Re-architecting] -- Principle 1 --> Loose[Loose Coupling]
+      Rearch -- Principle 2 --> Scale[Design for Scalability]
+  - id: q15
+    type: multiple_choice
+    question: When architecting cloud applications, which of the following are a key design principle?
+    options:
+      - text: Use the largest instance possible.
+        is_correct: false
+      - text: Provision capacity for peak load.
+        is_correct: false
+      - text: Use the Scrum development process.
+        is_correct: false
+      - text: Implement elasticity.
+        is_correct: true
+    explanation: Elasticity allows applications to dynamically scale resources based on demand.
+    diagram: |
+      graph TD
+      Design[Cloud Architecture] -- Principle --> Elasticity[Implement Elasticity]
+      Elasticity -- Enable --> DynamicScale[Dynamic Scaling]
+  - id: q16
+    type: multiple_choice
+    question: A company has deployed several relational databases on Amazon EC2 instances. Every month the database software vendor releases new security patches that need to be applied to the databases. What is the MOST efficient way to apply the security patches?
+    options:
+      - text: Connect to each database instance on a monthly basis and download and apply the necessary security patches from the vendor.
+        is_correct: false
+      - text: Enable automate patching for the instances using the Amazon RDS console.
+        is_correct: false
+      - text: In AWS Config configure a rule for the instances and the required patch level.
+        is_correct: false
+      - text: Use AWS Systems Manager to automate database patching according to a schedule.
+        is_correct: true
+    explanation: AWS Systems Manager automates patching across EC2 instances according to a defined schedule.
+    diagram: |
+      graph TD
+      Patches[Database Patches] -- Automate --> SSM[AWS Systems Manager]
+      SSM -- Schedule-based --> Patching[Automated Patching]
+  - id: q17
+    type: multiple_choice
+    question: Which mechanism allows developers to access AWS services from application code?
+    options:
+      - text: AWS Software Development Kit.
+        is_correct: true
+      - text: AWS Management Console.
+        is_correct: false
+      - text: AWS CodePipeline.
+        is_correct: false
+      - text: AWS Config.
+        is_correct: false
+    explanation: AWS SDK enables developers to programmatically access AWS services from their application code.
+    diagram: |
+      graph TD
+      Code[Application Code] -- Access --> SDK[AWS SDK]
+      SDK -- Call --> Services[AWS Services]
+  - id: q18
+    type: multiple_choice
+    question: Which AWS feature will reduce the customer's total cost of ownership (TCO)?
+    options:
+      - text: Shared responsibility security model.
+        is_correct: false
+      - text: Single tenancy.
+        is_correct: false
+      - text: Elastic computing.
+        is_correct: true
+      - text: Encryption.
+        is_correct: false
+    explanation: Elastic computing reduces TCO by allowing customers to pay only for resources they use.
+    diagram: |
+      graph TD
+      TCO[Reduce TCO] -- Method --> Elastic[Elastic Computing]
+      Elastic -- Pay for --> Used[Resources Used]
+  - id: q19
+    type: multiple_choice
+    question: Which of the following is a benefit of using the AWS Cloud?
+    options:
+      - text: Permissive security removes the administrative burden.
+        is_correct: false
+      - text: Ability to focus on revenue-generating activities.
+        is_correct: true
+      - text: Control over cloud network hardware.
+        is_correct: false
+      - text: Choice of specific cloud hardware vendors.
+        is_correct: false
+    explanation: AWS manages infrastructure, allowing customers to focus on their core business and revenue-generating activities.
+    diagram: |
+      graph TD
+      Cloud[AWS Cloud] -- Benefit --> Focus[Focus on Business]
+      Focus -- Increase --> Revenue[Revenue-generating Activities]
+  - id: q20
+    type: multiple_select
+    question: "Which of the following are categories of AWS Trusted Advisor? (Select TWO)"
+    options:
+      - text: Fault Tolerance.
+        is_correct: true
+      - text: Instance Usage.
+        is_correct: false
+      - text: Infrastructure.
+        is_correct: false
+      - text: Performance.
+        is_correct: true
+      - text: Storage Capacity.
+        is_correct: false
+    explanation: Fault Tolerance and Performance are key Trusted Advisor check categories.
+    diagram: |
+      graph TD
+      TA[AWS Trusted Advisor] -- Category 1 --> FT[Fault Tolerance]
+      TA -- Category 2 --> Perf[Performance]
+  - id: q21
+    type: multiple_choice
+    question: What is Amazon CloudWatch?
+    options:
+      - text: A code repository with customizable build and team commit features.
+        is_correct: false
+      - text: A metrics repository with customizable notification thresholds and channels.
+        is_correct: true
+      - text: A security configuration repository with threat analytics.
+        is_correct: false
+      - text: A rule repository of a web application firewall with automated vulnerability prevention features.
+        is_correct: false
+    explanation: Amazon CloudWatch is a monitoring service that collects metrics and provides customizable alarms.
+    diagram: |
+      graph TD
+      CW[Amazon CloudWatch] -- Repository --> Metrics[Metrics]
+      Metrics -- Customizable --> Alarms[Notification Thresholds]
+  - id: q22
+    type: multiple_select
+    question: "Under the AWS shared responsibility model, which of the following activities are the customer's responsibility? (Select TWO)"
+    options:
+      - text: Patching operating system components for Amazon Relational Database Server (Amazon RDS).
+        is_correct: false
+      - text: Encrypting data on the client-side.
+        is_correct: true
+      - text: Training the data center staff.
+        is_correct: false
+      - text: Configuring Network Access Control Lists (ACL).
+        is_correct: true
+      - text: Maintaining environmental controls within a data center.
+        is_correct: false
+    explanation: Customers are responsible for client-side encryption and configuring Network ACLs.
+    diagram: |
+      graph TD
+      Customer[Customer Responsibility] -- Activity 1 --> ClientEnc[Client-side Encryption]
+      Customer -- Activity 2 --> NetworkACL[Configure Network ACLs]
+  - id: q23
+    type: multiple_choice
+    question: "Under the shared responsibility model, which of the following is a shared control between a customer and AWS?"
+    options:
+      - text: Physical controls.
+        is_correct: false
+      - text: Patch management.
+        is_correct: true
+      - text: Zone security.
+        is_correct: false
+      - text: Data center auditing.
+        is_correct: false
+    explanation: Patch management is shared - AWS patches infrastructure while customers patch their applications.
+    diagram: |
+      graph TD
+      Shared[Shared Control] -- Activity --> Patch[Patch Management]
+      Patch -- AWS --> Infrastructure[Infrastructure]
+      Patch -- Customer --> Application[Application]
+  - id: q24
+    type: multiple_choice
+    question: Which AWS service is used to pay AWS bills, and monitor usage and budget costs?
+    options:
+      - text: AWS Billing and Cost Management.
+        is_correct: true
+      - text: Consolidated billing.
+        is_correct: false
+      - text: Amazon CloudWatch.
+        is_correct: false
+      - text: Amazon QuickSight.
+        is_correct: false
+    explanation: AWS Billing and Cost Management provides billing, usage monitoring, and budget management.
+    diagram: |
+      graph TD
+      Service[AWS Billing and Cost Management] -- Function 1 --> Billing[Pay Bills]
+      Service -- Function 2 --> Monitor[Monitor Usage]
+      Service -- Function 3 --> Budget[Budget Costs]
+  - id: q25
+    type: multiple_choice
+    question: How do customers benefit from Amazon's massive economies of scale?
+    options:
+      - text: Periodic price reductions as the result of Amazon's operational efficiencies.
+        is_correct: true
+      - text: New Amazon EC2 instance types providing the latest hardware.
+        is_correct: false
+      - text: The ability to scale up and down when needed.
+        is_correct: false
+      - text: Increased reliability in the underlying hardware of Amazon EC2 instances.
+        is_correct: false
+    explanation: Customers benefit from periodic AWS price reductions due to Amazon's operational efficiencies.
+    diagram: |
+      graph TD
+      Scale[Economies of Scale] -- Result --> Efficiency[Operational Efficiencies]
+      Efficiency -- Benefit --> Price[Periodic Price Reductions]
+  - id: q26
+    type: multiple_choice
+    question: Which AWS feature allows a company to take advantage of usage tiers for services across multiple member accounts?
+    options:
+      - text: Service control policies (SCPs).
+        is_correct: false
+      - text: Consolidated billing.
+        is_correct: true
+      - text: All Upfront Reserved Instances.
+        is_correct: false
+      - text: AWS Cost Explorer.
+        is_correct: false
+    explanation: Consolidated billing aggregates usage across member accounts to achieve volume discounts.
+    diagram: |
+      graph TD
+      Multi[Multiple Accounts] -- Consolidate --> CB[Consolidated Billing]
+      CB -- Achieve --> Tiers[Usage Tier Discounts]
+  - id: q27
+    type: multiple_select
+    question: "Which AWS services provide a way to extend an on-premises architecture to the AWS cloud? (Select TWO)"
+    options:
+      - text: Amazon EBS.
+        is_correct: false
+      - text: Amazon Connect.
+        is_correct: false
+      - text: AWS Storage Gateway.
+        is_correct: true
+      - text: Amazon CloudFront.
+        is_correct: false
+      - text: AWS Direct Connect.
+        is_correct: true
+    explanation: AWS Storage Gateway and AWS Direct Connect both extend on-premises architecture to AWS.
+    diagram: |
+      graph TD
+      OnPrem[On-Premises] -- Extend to --> SG[AWS Storage Gateway]
+      OnPrem -- Extend to --> DC[AWS Direct Connect]
+      SG --> AWS[AWS Cloud]
+      DC --> AWS
+  - id: q28
+    type: multiple_choice
+    question: Which of the following services will automatically scale with an expected increase in web traffic?
+    options:
+      - text: AWS CodePipeline.
+        is_correct: false
+      - text: Elastic Load Balancing.
+        is_correct: true
+      - text: Amazon EBS.
+        is_correct: false
+      - text: AWS Direct Connect.
+        is_correct: false
+    explanation: Elastic Load Balancing automatically distributes increasing traffic across resources.
+    diagram: |
+      graph TD
+      Traffic[Web Traffic Increase] -- Auto-scale --> ELB[Elastic Load Balancing]
+      ELB -- Distribute --> Instances[Multiple Instances]
+  - id: q29
+    type: multiple_choice
+    question: Which service provides a virtually unlimited amount of online highly durable object storage?
+    options:
+      - text: Amazon Redshift.
+        is_correct: false
+      - text: Amazon Elastic File System (Amazon EFS).
+        is_correct: false
+      - text: Amazon Elastic Container Service (Amazon ECS).
+        is_correct: false
+      - text: Amazon S3.
+        is_correct: true
+    explanation: Amazon S3 provides virtually unlimited, highly durable object storage.
+    diagram: |
+      graph TD
+      Storage[Object Storage] -- Unlimited --> S3[Amazon S3]
+      S3 -- High --> Durability[Durability]
+  - id: q30
+    type: multiple_choice
+    question: Which AWS feature should a customer leverage to achieve high availability of an application?
+    options:
+      - text: AWS Direct Connect.
+        is_correct: false
+      - text: Availability Zones.
+        is_correct: true
+      - text: Data centers.
+        is_correct: false
+      - text: Amazon Virtual Private Cloud (Amazon VPC).
+        is_correct: false
+    explanation: Availability Zones enable high availability by distributing resources across failure domains.
+    diagram: |
+      graph TD
+      HA[High Availability] -- Leverage --> AZ[Availability Zones]
+      AZ -- Distribute across --> Zones[Multiple Failure Domains]
+  - id: q31
+    type: multiple_select
+    question: "Which AWS service or feature can enhance network security by blocking requests from a particular network for a web application on AWS? (Select TWO)"
+    options:
+      - text: AWS WAF.
+        is_correct: true
+      - text: AWS Trusted Advisor.
+        is_correct: false
+      - text: AWS Direct Connect.
+        is_correct: false
+      - text: AWS Organizations.
+        is_correct: false
+      - text: Network ACLs.
+        is_correct: true
+    explanation: AWS WAF and Network ACLs both block requests from specific networks.
+    diagram: |
+      graph TD
+      Security[Network Security] -- Blocking --> WAF[AWS WAF]
+      Security -- Blocking --> NACL[Network ACLs]
+  - id: q32
+    type: multiple_choice
+    question: Which of the following is a cloud architectural design principle?
+    options:
+      - text: Scale up not out.
+        is_correct: false
+      - text: Loosely couple components.
+        is_correct: true
+      - text: Build monolithic systems.
+        is_correct: false
+      - text: Use commercial database software.
+        is_correct: false
+    explanation: Loose coupling is a key cloud architecture principle enabling scalability and flexibility.
+    diagram: |
+      graph TD
+      Design[Cloud Architecture] -- Principle --> Loose[Loosely Couple Components]
+      Loose -- Enable --> Independent[Independent Scaling]
+  - id: q33
+    type: multiple_choice
+    question: Which service enables risk auditing by continuously monitoring and logging account activity, including user actions in the AWS Management Console and AWS SDKs?
+    options:
+      - text: Amazon CloudWatch.
+        is_correct: false
+      - text: AWS CloudTrail.
+        is_correct: true
+      - text: AWS Config.
+        is_correct: false
+      - text: AWS Health.
+        is_correct: false
+    explanation: AWS CloudTrail logs and monitors all account activity for auditing and compliance.
+    diagram: |
+      graph TD
+      Audit[Risk Auditing] -- Monitor --> CT[AWS CloudTrail]
+      CT -- Log --> Activity[Account Activity]
+  - id: q34
+    type: multiple_choice
+    question: Where can AWS compliance and certification reports be downloaded?
+    options:
+      - text: AWS Artifact.
+        is_correct: true
+      - text: AWS Concierge.
+        is_correct: false
+      - text: AWS Certificate Manager.
+        is_correct: false
+      - text: AWS Trusted Advisor.
+        is_correct: false
+    explanation: AWS Artifact provides access to compliance certifications and audit reports.
+    diagram: |
+      graph TD
+      Reports[Compliance Reports] -- Download from --> Artifact[AWS Artifact]
+  - id: q35
+    type: multiple_select
+    question: "The financial benefits of using AWS are: (Select TWO)"
+    options:
+      - text: Reduced Total Cost of Ownership (TCO).
+        is_correct: true
+      - text: Increased capital expenditure (capex).
+        is_correct: false
+      - text: Reduced operational expenditure (opex).
+        is_correct: true
+      - text: Deferred payment plans for startups.
+        is_correct: false
+      - text: Business credit lines for startups.
+        is_correct: false
+    explanation: AWS reduces TCO and opex by eliminating hardware purchase and maintenance costs.
+    diagram: |
+      graph TD
+      Financial[Financial Benefits] -- Benefit 1 --> TCO[Reduced TCO]
+      Financial -- Benefit 2 --> OpEx[Reduced OpEx]
+  - id: q36
+    type: multiple_choice
+    question: Which AWS service can serve a static website?
+    options:
+      - text: Amazon S3.
+        is_correct: true
+      - text: Amazon Route 53.
+        is_correct: false
+      - text: Amazon QuickSight.
+        is_correct: false
+      - text: AWS X-Ray.
+        is_correct: false
+    explanation: Amazon S3 can host static websites with high availability and low cost.
+    diagram: |
+      graph TD
+      Static[Static Website] -- Hosted on --> S3[Amazon S3]
+      S3 -- Features --> HA[High Availability]
+  - id: q37
+    type: multiple_select
+    question: "What are the benefits of using the AWS Cloud for companies with customers in many countries around the world (Select TWO)"
+    options:
+      - text: Companies can deploy applications in multiple AWS Regions to reduce latency.
+        is_correct: true
+      - text: Amazon Translate automatically translates third-party website interfaces into multiple languages.
+        is_correct: false
+      - text: Amazon CloudFront has multiple edge locations around the world to reduce latency.
+        is_correct: true
+      - text: Amazon Comprehend allows users to build applications that can respond to user requests in many languages.
+        is_correct: false
+      - text: Elastic Load Balancing can distribute application web traffic to multiple AWS Regions around the world which reduces latency.
+        is_correct: false
+    explanation: Multi-region deployment and CloudFront edge locations both reduce global latency.
+    diagram: |
+      graph TD
+      Global[Global Customers] -- Benefit 1 --> MultiRegion[Multiple AWS Regions]
+      Global -- Benefit 2 --> CF[CloudFront Edge Locations]
+      MultiRegion --> Latency[Reduced Latency]
+      CF --> Latency
+  - id: q38
+    type: multiple_select
+    question: "Which of the following are main components of the AWS global infrastructure? (Select TWO)"
+    options:
+      - text: Resource groups.
+        is_correct: false
+      - text: Availability Zones.
+        is_correct: true
+      - text: Security groups.
+        is_correct: false
+      - text: Regions.
+        is_correct: true
+      - text: Amazon Machine Images (AMIS).
+        is_correct: false
+    explanation: Regions and Availability Zones are core components of the AWS global infrastructure.
+    diagram: |
+      graph TD
+      Global[Global Infrastructure] -- Component 1 --> Regions[Regions]
+      Global -- Component 2 --> AZ[Availability Zones]
+  - id: q39
+    type: multiple_choice
+    question: What is the AWS customer responsible for according to the AWS shared responsibility model?
+    options:
+      - text: Physical access controls.
+        is_correct: false
+      - text: Data encryption.
+        is_correct: true
+      - text: Secure disposal of storage devices.
+        is_correct: false
+      - text: Environmental risk management.
+        is_correct: false
+    explanation: Customers are responsible for encrypting their data in transit and at rest.
+    diagram: |
+      graph TD
+      Customer[Customer Responsibility] -- Activity --> Encryption[Data Encryption]
+      Encryption -- Transit --> InTransit[In Transit]
+      Encryption -- Rest --> AtRest[At Rest]
+  - id: q40
+    type: multiple_choice
+    question: If each department within a company has its own AWS account, what is one way to enable consolidated billing?
+    options:
+      - text: Use AWS Budgets on each account to pay only to budget.
+        is_correct: false
+      - text: Contact AWS Support for a monthly bill.
+        is_correct: false
+      - text: Create an AWS Organization from the payer account and invite the other accounts to join.
+        is_correct: true
+      - text: Put all invoices into one Amazon Simple Storage Service (Amazon S3) bucket, load data into Amazon Redshift, and then run a billing report.
+        is_correct: false
+    explanation: AWS Organizations enables consolidated billing by grouping multiple accounts.
+    diagram: |
+      graph TD
+      Multi[Multiple Accounts] -- Consolidate --> Org[AWS Organization]
+      Org -- Enable --> CB[Consolidated Billing]
+  - id: q41
+    type: multiple_choice
+    question: What costs are included when comparing AWS Total Cost of Ownership (TCO) with on-premises TCO?
+    options:
+      - text: Project management.
+        is_correct: false
+      - text: Antivirus software licensing.
+        is_correct: false
+      - text: Data center security.
+        is_correct: true
+      - text: Software development.
+        is_correct: false
+    explanation: Data center security costs are included in TCO comparisons between AWS and on-premises.
+    diagram: |
+      graph TD
+      TCO[TCO Comparison] -- Costs --> OnPrem[On-Premises]
+      OnPrem -- Include --> Security[Data Center Security]
+  - id: q42
+    type: multiple_choice
+    question: What is the benefit of using AWS managed services, such as Amazon ElastiCache and Amazon Relational Database Service (Amazon RDS)?
+    options:
+      - text: They require the customer to monitor and replace failing instances.
+        is_correct: false
+      - text: They have better performance than customer-managed services.
+        is_correct: false
+      - text: They simplify patching and updating underlying OSs.
+        is_correct: true
+      - text: They do not require the customer to optimize instance type or size selections.
+        is_correct: false
+    explanation: AWS managed services handle patching and OS updates automatically, reducing operational burden.
+    diagram: |
+      graph TD
+      Managed[AWS Managed Services] -- Benefit --> Patching[Simplify Patching]
+      Patching -- Automate --> Updates[OS Updates]
+  - id: q43
+    type: multiple_select
+    question: "Which services can be used across hybrid AWS Cloud architectures? (Select TWO)"
+    options:
+      - text: Amazon Route 53.
+        is_correct: true
+      - text: Virtual Private Gateway.
+        is_correct: true
+      - text: Classic Load Balancer.
+        is_correct: false
+      - text: Auto Scaling.
+        is_correct: false
+      - text: Amazon CloudWatch default metrics.
+        is_correct: false
+    explanation: Amazon Route 53 and Virtual Private Gateway both support hybrid cloud architectures.
+    diagram: |
+      graph TD
+      Hybrid[Hybrid Architecture] -- Service 1 --> Route53[Amazon Route 53]
+      Hybrid -- Service 2 --> VPG[Virtual Private Gateway]
+  - id: q44
+    type: multiple_choice
+    question: Which statement best describes Elastic Load Balancing?
+    options:
+      - text: It translates a domain name into an IP address using DNS.
+        is_correct: false
+      - text: It distributes incoming application traffic across one or more Amazon EC2 instances.
+        is_correct: true
+      - text: It collects metrics on connected Amazon EC2 instances.
+        is_correct: false
+      - text: It automatically adjusts the number of Amazon EC2 instances to support incoming traffic.
+        is_correct: false
+    explanation: Elastic Load Balancing distributes traffic across multiple EC2 instances for scalability.
+    diagram: |
+      graph TD
+      Traffic[Incoming Traffic] -- Distribute --> ELB[Elastic Load Balancing]
+      ELB -- Across --> Instances[EC2 Instances]
+  - id: q45
+    type: multiple_choice
+    question: Which of the following is a fast and reliable NoSQL database service?
+    options:
+      - text: Amazon Redshift.
+        is_correct: false
+      - text: Amazon RDS.
+        is_correct: false
+      - text: Amazon DynamoDB.
+        is_correct: true
+      - text: Amazon S3.
+        is_correct: false
+    explanation: Amazon DynamoDB is a fast, reliable NoSQL database service with millisecond latency.
+    diagram: |
+      graph TD
+      NoSQL[NoSQL Database] -- Service --> DDB[Amazon DynamoDB]
+      DDB -- Performance --> Fast[Fast & Reliable]
+  - id: q46
+    type: multiple_choice
+    question: Which AWS service would you use to obtain compliance reports and certificates?
+    options:
+      - text: AWS Artifact.
+        is_correct: true
+      - text: AWS Lambda.
+        is_correct: false
+      - text: Amazon Inspector.
+        is_correct: false
+      - text: AWS Certificate Manager.
+        is_correct: false
+    explanation: AWS Artifact provides access to compliance reports, certifications, and audit documents.
+    diagram: |
+      graph TD
+      Compliance[Compliance & Certificates] -- Obtain from --> Artifact[AWS Artifact]
+  - id: q47
+    type: multiple_select
+    question: "Which AWS services are defined as global instead of regional? (Select TWO)"
+    options:
+      - text: Amazon Route 53.
+        is_correct: true
+      - text: Amazon EC2.
+        is_correct: false
+      - text: Amazon S3.
+        is_correct: false
+      - text: Amazon CloudFront.
+        is_correct: true
+      - text: Amazon DynamoDB.
+        is_correct: false
+    explanation: Amazon Route 53 and Amazon CloudFront are global services available across regions.
+    diagram: |
+      graph TD
+      Global[Global Services] -- Service 1 --> Route53[Amazon Route 53]
+      Global -- Service 2 --> CF[Amazon CloudFront]
+  - id: q48
+    type: multiple_choice
+    question: How would an AWS customer easily apply common access controls to a large set of users?
+    options:
+      - text: Apply an IAM policy to an IAM group.
+        is_correct: true
+      - text: Apply an IAM policy to an IAM role.
+        is_correct: false
+      - text: Apply the same IAM policy to all IAM users with access to the same workload.
+        is_correct: false
+      - text: Apply an IAM policy to an Amazon Cognito user pool.
+        is_correct: false
+    explanation: IAM groups allow applying policies to multiple users at once, simplifying access management.
+    diagram: |
+      graph TD
+      Users[Multiple Users] -- Group Policy --> Group[IAM Group]
+      Group -- Apply to --> AllUsers[All Group Members]
+  - id: q49
+    type: multiple_choice
+    question: Which of the following is an important architectural design principle when designing cloud applications?
+    options:
+      - text: Use multiple Availability Zones.
+        is_correct: true
+      - text: Use tightly coupled components.
+        is_correct: false
+      - text: Use open source software.
+        is_correct: false
+      - text: Provision extra capacity.
+        is_correct: false
+    explanation: Multi-AZ deployment is essential for achieving high availability and fault tolerance.
+    diagram: |
+      graph TD
+      Design[Cloud Architecture] -- Principle --> MultiAZ[Multiple Availability Zones]
+      MultiAZ -- Provides --> HA[High Availability]
+  - id: q50
+    type: multiple_choice
+    question: Which service allows a company with multiple AWS accounts to combine its usage to obtain volume discounts?
+    options:
+      - text: AWS Server Migration Service.
+        is_correct: false
+      - text: AWS Organizations.
+        is_correct: true
+      - text: AWS Budgets.
+        is_correct: false
+      - text: AWS Trusted Advisor.
+        is_correct: false
+    explanation: AWS Organizations consolidates billing and usage across accounts for volume discounts.
+    diagram: |
+      graph TD
+      Multi[Multiple Accounts] -- Consolidate with --> Org[AWS Organizations]
+      Org -- Achieve --> Discounts[Volume Discounts]

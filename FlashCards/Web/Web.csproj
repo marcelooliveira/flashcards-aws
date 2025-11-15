@@ -24,12 +24,6 @@
     <None Include="wwwroot\Exams\practice-exam-22.md" />
     <None Include="wwwroot\Exams\practice-exam-23.md" />
     <None Include="wwwroot\Exams\practice-exam-3.md" />
-    <None Include="wwwroot\Exams\practice-exam-4.md" />
-    <None Include="wwwroot\Exams\practice-exam-5.md" />
-    <None Include="wwwroot\Exams\practice-exam-6.md" />
-    <None Include="wwwroot\Exams\practice-exam-7.md" />
-    <None Include="wwwroot\Exams\practice-exam-8.md" />
-    <None Include="wwwroot\Exams\practice-exam-9.md" />
   </ItemGroup>
 
   <ItemGroup>

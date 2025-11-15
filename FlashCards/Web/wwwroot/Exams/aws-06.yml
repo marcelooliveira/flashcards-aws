@@ -1,0 +1,881 @@
+questions:
+  - id: q1
+    type: multiple_choice
+    question: Which of the following is true regarding the AWS availability zones and edge locations?
+    options:
+      - text: Edge locations are located in separate Availability Zones worldwide to serve global customers.
+        is_correct: false
+      - text: An availability zone exists within an edge location to distribute content globally with low latency.
+        is_correct: false
+      - text: An Availability Zone is a geographic location where AWS provides multiple, physically separated and isolated edge locations.
+        is_correct: false
+      - text: An AWS Availability Zone is an isolated location within an AWS Region, however edge locations are located in multiple cities worldwide.
+        is_correct: true
+    explanation: Availability Zones are isolated locations within regions, while edge locations are distributed in multiple cities worldwide for content delivery.
+    diagram: |
+      graph TD
+      Region[AWS Region] -- Contains --> AZ[Availability Zones]
+      Edge[Edge Locations] -- Located --> Cities[Multiple Cities Worldwide]
+  - id: q2
+    type: multiple_select
+    question: Which features are included in the AWS Business Support Plan? (Choose TWO)
+    options:
+      - text: 24x7 access to customer service.
+        is_correct: true
+      - text: Access to Cloud Support Engineers via email only during business hours.
+        is_correct: false
+      - text: Access to the Infrastructure Event Management (IEM) feature for additional fee.
+        is_correct: true
+      - text: 24x7 access to the TAM feature.
+        is_correct: false
+      - text: Partial access to the core Trusted Advisor checks.
+        is_correct: false
+    explanation: AWS Business Support includes 24x7 customer service access and IEM feature availability (for additional fee).
+    diagram: |
+      graph TD
+      BSP[Business Support] -- Feature 1 --> 24x7[24x7 Customer Service]
+      BSP -- Feature 2 --> IEM[IEM Feature]
+  - id: q3
+    type: multiple_choice
+    question: A company is developing a mobile application and wants to allow users to use their Amazon, Apple, Facebook, or Google identities to authenticate to the application. Which AWS Service should the company use for this purpose?
+    options:
+      - text: Amazon GuardDuty.
+        is_correct: false
+      - text: Amazon Personalize.
+        is_correct: false
+      - text: Amazon Cognito.
+        is_correct: true
+      - text: AWS IAM.
+        is_correct: false
+    explanation: Amazon Cognito enables user authentication through social identity providers like Amazon, Apple, Facebook, and Google.
+    diagram: |
+      graph TD
+      App[Mobile App] -- Social Auth --> Cognito[Amazon Cognito]
+      Cognito -- Supports --> Providers[Amazon, Apple, Facebook, Google]
+  - id: q4
+    type: multiple_choice
+    question: Which AWS Service allows customers to create a template that programmatically defines policies and configurations of all AWS resources as code and so that the same template can be reused among multiple projects?
+    options:
+      - text: AWS CloudFormation.
+        is_correct: true
+      - text: AWS Config.
+        is_correct: false
+      - text: AWS CloudTrail.
+        is_correct: false
+      - text: AWS Auto Scaling.
+        is_correct: false
+    explanation: AWS CloudFormation enables Infrastructure as Code with reusable templates that define AWS resources and configurations.
+    diagram: |
+      graph TD
+      Template[Template] -- Infrastructure as Code --> CF[AWS CloudFormation]
+      CF -- Reusable --> Projects[Multiple Projects]
+  - id: q5
+    type: multiple_select
+    question: Which of the following are advantages of using AWS as a cloud computing provider? (Choose TWO)
+    options:
+      - text: Eliminates the need to monitor servers and applications.
+        is_correct: false
+      - text: Manages all the compliance and auditing tasks.
+        is_correct: false
+      - text: Provides custom hardware to meet any specification.
+        is_correct: false
+      - text: Eliminates the need to guess on infrastructure capacity needs.
+        is_correct: true
+      - text: Enables customers to trade their capital expenses for operational expenses.
+        is_correct: true
+    explanation: AWS eliminates capacity guessing through elasticity and replaces capital expenses with variable operational expenses.
+    diagram: |
+      graph TD
+      AWS[AWS Advantages] -- Benefit 1 --> Capacity[No Capacity Guessing]
+      AWS -- Benefit 2 --> Expenses[CapEx to OpEx]
+  - id: q6
+    type: multiple_select
+    question: A customer is planning to migrate their Microsoft SQL Server databases to AWS. Which AWS Services can the customer use to run their Microsoft SQL Server database on AWS? (Choose TWO)
+    options:
+      - text: AWS Fargate.
+        is_correct: false
+      - text: Amazon Elastic Compute Cloud.
+        is_correct: true
+      - text: Amazon RDS.
+        is_correct: true
+      - text: AWS Database Migration service (DMS).
+        is_correct: false
+      - text: AWS Lambda.
+        is_correct: false
+    explanation: SQL Server can run on Amazon EC2 instances (self-managed) or Amazon RDS for SQL Server (managed).
+    diagram: |
+      graph TD
+      SQLServer[Microsoft SQL Server] -- Migration Option 1 --> EC2[Amazon EC2]
+      SQLServer -- Migration Option 2 --> RDS[Amazon RDS]
+  - id: q7
+    type: multiple_choice
+    question: Which AWS Service can perform health checks on Amazon EC2 instances?
+    options:
+      - text: AWS CloudFormation.
+        is_correct: false
+      - text: Amazon Route 53.
+        is_correct: true
+      - text: Amazon Chime.
+        is_correct: false
+      - text: Amazon Aurora.
+        is_correct: false
+    explanation: Amazon Route 53 performs health checks on EC2 instances and can route traffic based on health status.
+    diagram: |
+      graph TD
+      Route53[Amazon Route 53] -- Health Check --> EC2[EC2 Instances]
+      Route53 -- Route Traffic --> Healthy[Healthy Instances]
+  - id: q8
+    type: multiple_choice
+    question: A company is developing an application that will leverage facial recognition to automate photo tagging. Which AWS Service should the company use for facial recognition?
+    options:
+      - text: Amazon Comprehend.
+        is_correct: false
+      - text: AWS IAM.
+        is_correct: false
+      - text: Amazon Polly.
+        is_correct: false
+      - text: Amazon Rekognition.
+        is_correct: true
+    explanation: Amazon Rekognition provides facial recognition and image/video analysis capabilities for automated tagging.
+    diagram: |
+      graph TD
+      Photo[Photos/Images] -- Facial Recognition --> Rekognition[Amazon Rekognition]
+      Rekognition -- Auto Tag --> Tags[Photo Tags]
+  - id: q9
+    type: multiple_select
+    question: Which of the following are examples of AWS-managed databases? (Choose TWO)
+    options:
+      - text: Amazon Neptune.
+        is_correct: true
+      - text: Amazon CloudSearch.
+        is_correct: false
+      - text: Microsoft SQL Server on Amazon EC2.
+        is_correct: false
+      - text: MySQL on Amazon EC2.
+        is_correct: false
+      - text: Amazon RDS for MySQL.
+        is_correct: true
+    explanation: Amazon Neptune and Amazon RDS are AWS-managed database services. Databases on EC2 are customer-managed.
+    diagram: |
+      graph TD
+      Managed[AWS-Managed Databases] -- Example 1 --> Neptune[Amazon Neptune]
+      Managed -- Example 2 --> RDS[Amazon RDS for MySQL]
+  - id: q10
+    type: multiple_choice
+    question: A company's AWS workflow requires that it periodically perform large-scale image and video processing jobs. The customer is seeking to minimize cost and has stated that the amount of time it takes to process these jobs is not critical, but that cost minimization is the most important factor in designing the solution. Which EC2 instance class is best suited for this processing?
+    options:
+      - text: EC2 On-Demand Instances.
+        is_correct: false
+      - text: "EC2 Reserved Instances - No Upfront."
+        is_correct: false
+      - text: EC2 Spot Instances.
+        is_correct: true
+      - text: "EC2 Reserved Instances - All Upfront."
+        is_correct: false
+    explanation: EC2 Spot Instances offer up to 90% discount and are ideal for flexible, non-time-critical workloads.
+    diagram: |
+      graph TD
+      Batch[Batch Processing] -- Cost Optimization --> Spot[EC2 Spot Instances]
+      Spot -- Discount --> 90Percent[Up to 90% Off]
+  - id: q11
+    type: multiple_choice
+    question: There is a requirement to grant a DevOps team full administrative access to all resources in an AWS account. Who can grant them these permissions?
+    options:
+      - text: AWS account owner.
+        is_correct: true
+      - text: AWS technical account manager.
+        is_correct: false
+      - text: AWS security team.
+        is_correct: false
+      - text: AWS cloud support engineers.
+        is_correct: false
+    explanation: Only the AWS account owner can grant full administrative access to an AWS account.
+    diagram: |
+      graph TD
+      Owner[AWS Account Owner] -- Grant Permissions --> Admin[Full Administrative Access]
+      Admin -- DevOps Team --> Resources[All Resources]
+  - id: q12
+    type: multiple_choice
+    question: You need to migrate a large number of on-premises workloads to AWS. Which AWS service is the most appropriate?
+    options:
+      - text: AWS File Transfer Acceleration.
+        is_correct: false
+      - text: AWS Server Migration Service.
+        is_correct: true
+      - text: AWS Database Migration Service.
+        is_correct: false
+      - text: AWS Application Discovery Service.
+        is_correct: false
+    explanation: AWS Server Migration Service (AWS SMS) is designed to migrate large numbers of on-premises servers to AWS.
+    diagram: |
+      graph TD
+      OnPrem[On-Premises Servers] -- Migrate --> SMS[AWS Server Migration Service]
+      SMS -- Move to --> AWS[AWS Cloud]
+  - id: q13
+    type: multiple_select
+    question: What are some key benefits of using AWS CloudFormation? (Choose TWO)
+    options:
+      - text: It helps AWS customers deploy their applications without worrying about the underlying infrastructure.
+        is_correct: false
+      - text: It applies advanced IAM security features automatically.
+        is_correct: false
+      - text: It automates the provisioning and updating of your infrastructure in a safe and controlled manner.
+        is_correct: true
+      - text: It allows you to model your entire infrastructure in just a text file.
+        is_correct: true
+      - text: It compiles and builds application code in a timely manner.
+        is_correct: false
+    explanation: CloudFormation automates infrastructure provisioning and allows modeling entire infrastructure as code in templates.
+    diagram: |
+      graph TD
+      CF[AWS CloudFormation] -- Benefit 1 --> Automation[Automated Provisioning]
+      CF -- Benefit 2 --> IaC[Infrastructure as Code]
+  - id: q14
+    type: multiple_choice
+    question: Which of the following is a cloud computing deployment model that connects infrastructure and applications between cloud-based resources and existing resources not located in the cloud?
+    options:
+      - text: On-premises.
+        is_correct: false
+      - text: Mixed.
+        is_correct: false
+      - text: Hybrid.
+        is_correct: true
+      - text: Cloud.
+        is_correct: false
+    explanation: Hybrid cloud deployment model connects cloud-based and on-premises resources for integrated infrastructure.
+    diagram: |
+      graph TD
+      Cloud[Cloud Resources] -- Connected via --> Hybrid[Hybrid Deployment]
+      OnPrem[On-Premises Resources] -- Connected via --> Hybrid
+  - id: q15
+    type: multiple_choice
+    question: A company is hosting business critical workloads in an AWS Region. To protect against data loss and ensure business continuity, a mirror image of the current AWS environment should be created in another AWS Region. Company policy requires that the standby environment must be available in minutes in case of an outage in the primary AWS Region. Which AWS service can be used to meet these requirements?
+    options:
+      - text: CloudEndure Disaster Recovery.
+        is_correct: true
+      - text: CloudEndure Migration.
+        is_correct: false
+      - text: AWS Backup.
+        is_correct: false
+      - text: AWS Glue.
+        is_correct: false
+    explanation: CloudEndure Disaster Recovery enables rapid failover to a mirror environment in another region within minutes.
+    diagram: |
+      graph TD
+      Primary[Primary Region] -- Replicate --> Secondary[Secondary Region]
+      Outage[Outage] -- Failover --> Secondary
+      Secondary -- Minutes --> Available[Available]
+  - id: q16
+    type: multiple_choice
+    question: Which of the following S3 storage classes is most appropriate to host static assets for a popular e-commerce website with stable access patterns?
+    options:
+      - text: S3 Standard-IA.
+        is_correct: false
+      - text: S3 Intelligent-Tiering.
+        is_correct: false
+      - text: S3 Glacier Deep Archive.
+        is_correct: false
+      - text: S3 Standard.
+        is_correct: true
+    explanation: S3 Standard is best for frequently accessed data with stable, predictable access patterns like e-commerce assets.
+    diagram: |
+      graph TD
+      ECommerce[E-commerce Assets] -- Stable Access --> Standard[S3 Standard]
+      Standard -- Frequent Access --> Performance[High Performance]
+  - id: q17
+    type: multiple_choice
+    question: You want to create a backup of your data in another geographical location. Where should you create this backup?
+    options:
+      - text: In another Edge location.
+        is_correct: false
+      - text: In another Region.
+        is_correct: true
+      - text: In another VPC.
+        is_correct: false
+      - text: In another Availability Zone.
+        is_correct: false
+    explanation: Create backups in another Region for geographic redundancy and protection against region-wide outages.
+    diagram: |
+      graph TD
+      Backup[Backup Data] -- Geographical Redundancy --> Region2[Another Region]
+      Region2 -- Protect Against --> Outage[Region-wide Outage]
+  - id: q18
+    type: multiple_choice
+    question: Which statement is true in relation to the security of Amazon EC2?
+    options:
+      - text: You should use instance store volumes to store login data.
+        is_correct: false
+      - text: You should regularly patch the operating system and applications on your EC2 instances.
+        is_correct: true
+      - text: You should deploy critical components of your application in the Availability Zone that you trust.
+        is_correct: false
+      - text: You can track all API calls using Amazon Athena.
+        is_correct: false
+    explanation: Regular patching of OS and applications is a critical security best practice for EC2 instances.
+    diagram: |
+      graph TD
+      Security[EC2 Security] -- Best Practice --> Patching[Regular Patching]
+      Patching -- Include --> OS[OS & Applications]
+  - id: q19
+    type: multiple_choice
+    question: What does AWS Cost Explorer provide to help manage your AWS spend?
+    options:
+      - text: Cost comparisons between AWS Cloud environments and on-premises environments.
+        is_correct: false
+      - text: Accurate estimates of AWS service costs based on your expected usage.
+        is_correct: false
+      - text: Consolidated billing.
+        is_correct: false
+      - text: Highly accurate cost forecasts for up to 12 months ahead.
+        is_correct: true
+    explanation: AWS Cost Explorer provides cost forecasts for up to 12 months to help plan and manage AWS spending.
+    diagram: |
+      graph TD
+      CostExplorer[AWS Cost Explorer] -- Provides --> Forecast[Cost Forecast]
+      Forecast -- Duration --> 12Months[Up to 12 Months]
+  - id: q20
+    type: multiple_choice
+    question: Which of the following is a feature of Amazon RDS that performs automatic failover when the primary database fails to respond?
+    options:
+      - text: RDS Single-AZ.
+        is_correct: false
+      - text: RDS Write Replica.
+        is_correct: false
+      - text: RDS Snapshots.
+        is_correct: false
+      - text: RDS Multi-AZ.
+        is_correct: true
+    explanation: RDS Multi-AZ provides automatic failover to a standby database in another AZ when the primary fails.
+    diagram: |
+      graph TD
+      Primary[Primary DB] -- Multi-AZ --> Standby[Standby DB]
+      Primary -- Fails --> Failover[Automatic Failover]
+      Failover --> Standby
+  - id: q21
+    type: multiple_choice
+    question: You are using several on-demand EC2 Instances to run your development environment. What is the best way to reduce your charges when these instances are not in use?
+    options:
+      - text: Deleting all EBS volumes attached to the instances.
+        is_correct: false
+      - text: You cannot minimize charges for on-demand instances.
+        is_correct: false
+      - text: Terminating the instances.
+        is_correct: false
+      - text: Stopping the instances.
+        is_correct: true
+    explanation: Stopping instances allows you to resume them later while avoiding compute charges during downtime.
+    diagram: |
+      graph TD
+      Running[Running Instance] -- Cost --> Charges[Compute Charges]
+      Stopped[Stopped Instance] -- Cost --> 0[No Compute Charges]
+  - id: q22
+    type: multiple_choice
+    question: Which of the following strategies helps protect your AWS root account?
+    options:
+      - text: Delete root user access keys if you do not need them.
+        is_correct: true
+      - text: Apply MFA for the root account and use it for all of your work.
+        is_correct: false
+      - text: Access the root account only from your personal Mobile Phone.
+        is_correct: false
+      - text: Only share your AWS account password or access keys with trusted persons.
+        is_correct: false
+    explanation: Deleting unnecessary root access keys reduces the risk of unauthorized access to your AWS account.
+    diagram: |
+      graph TD
+      Root[Root Account] -- Protection --> Delete[Delete Unnecessary Keys]
+      Delete -- Reduce Risk --> Security[Enhanced Security]
+  - id: q23
+    type: multiple_select
+    question: Which of the following are factors should be considered for Amazon EBS pricing? (Choose TWO)
+    options:
+      - text: The size of volumes provisioned per month.
+        is_correct: true
+      - text: The compute capacity you consume.
+        is_correct: false
+      - text: The amount of data you have stored in snapshots.
+        is_correct: true
+      - text: The compute time you consume.
+        is_correct: false
+      - text: The number of Snowball storage devices you request.
+        is_correct: false
+    explanation: EBS pricing is based on provisioned volume size and snapshot storage, not compute capacity.
+    diagram: |
+      graph TD
+      EBS[EBS Pricing] -- Factor 1 --> VolumeSize[Volume Size per Month]
+      EBS -- Factor 2 --> Snapshots[Snapshot Storage]
+  - id: q24
+    type: multiple_choice
+    question: You have just set up your AWS environment and have created six IAM user accounts for the DevOps team. What is the AWS recommendation when granting permissions to these IAM accounts?
+    options:
+      - text: Attach a separate IAM policy for each individual account.
+        is_correct: false
+      - text: Apply the Principle of Least Privilege.
+        is_correct: true
+      - text: For security purposes, you should not grant any permission to the DevOps team.
+        is_correct: false
+      - text: Create six different IAM passwords.
+        is_correct: false
+    explanation: The Principle of Least Privilege grants users only the minimum permissions needed to perform their tasks.
+    diagram: |
+      graph TD
+      IAM[IAM Users] -- Best Practice --> PoLP[Principle of Least Privilege]
+      PoLP -- Grant --> MinPerms[Minimum Permissions]
+  - id: q25
+    type: multiple_select
+    question: Which of the following has the greatest impact on cost? (Choose TWO)
+    options:
+      - text: Compute charges.
+        is_correct: true
+      - text: The number of services used.
+        is_correct: false
+      - text: Data Transfer In charges.
+        is_correct: false
+      - text: Data Transfer Out charges.
+        is_correct: true
+      - text: The number of IAM roles provisioned.
+        is_correct: false
+    explanation: Compute charges and Data Transfer Out charges have the greatest impact on AWS costs.
+    diagram: |
+      graph TD
+      Cost[Cost Impact] -- Highest 1 --> Compute[Compute Charges]
+      Cost -- Highest 2 --> DataOut[Data Transfer Out]
+  - id: q26
+    type: multiple_choice
+    question: Who from the following will get the largest discount?
+    options:
+      - text: A user who chooses to buy On-demand, Convertible, Partial upfront instances.
+        is_correct: false
+      - text: A user who chooses to buy Reserved, Convertible, All upfront instances.
+        is_correct: false
+      - text: A user who chooses to buy Reserved, Standard, No upfront instances.
+        is_correct: false
+      - text: A user who chooses to buy Reserved, Standard, All upfront instances.
+        is_correct: true
+    explanation: Reserved Standard instances with all upfront payment provide the largest discount.
+    diagram: |
+      graph TD
+      RI[Reserved Instances] -- Type --> Standard[Standard Class]
+      Standard -- Payment --> Upfront[All Upfront]
+      Upfront -- Discount --> Largest[Largest Discount]
+  - id: q27
+    type: multiple_choice
+    question: Which of the following is an available option when purchasing Amazon EC2 instances?
+    options:
+      - text: The ability to bid to get the lowest possible prices.
+        is_correct: false
+      - text: The ability to register EC2 instances to get volume discounts on every hour the instances are running.
+        is_correct: false
+      - text: The ability to buy Dedicated Instances for up to 90% discount.
+        is_correct: false
+      - text: The ability to pay upfront to get lower hourly costs.
+        is_correct: true
+    explanation: Paying upfront for Reserved Instances provides lower hourly rates compared to On-Demand pricing.
+    diagram: |
+      graph TD
+      EC2[EC2 Instances] -- Payment Option --> Upfront[Pay Upfront]
+      Upfront -- Result --> Lower[Lower Hourly Cost]
+  - id: q28
+    type: multiple_choice
+    question: What does the term "Economies of scale" mean?
+    options:
+      - text: It means that you save more when you consume more.
+        is_correct: false
+      - text: It means as more time passes using AWS, you pay more for its services.
+        is_correct: false
+      - text: It means that AWS will continuously lower costs as it grows.
+        is_correct: true
+      - text: It means that you have the ability to pay as you go.
+        is_correct: false
+    explanation: Economies of scale means AWS reduces costs continuously as the company grows and achieves greater efficiency.
+    diagram: |
+      graph TD
+      AWS[AWS Growth] -- Efficiency --> Costs[Cost Reduction]
+      Costs -- Continuous --> Lower[Lower Prices]
+  - id: q29
+    type: multiple_choice
+    question: A company experiences fluctuations in traffic patterns to their e-commerce website when running flash sales. What service can help the company dynamically match the required compute capacity to handle spikes in traffic during flash sales?
+    options:
+      - text: AWS Auto Scaling.
+        is_correct: true
+      - text: Amazon Elastic Compute Cloud.
+        is_correct: false
+      - text: Amazon Elastic File System.
+        is_correct: false
+      - text: Amazon ElastiCache.
+        is_correct: false
+    explanation: AWS Auto Scaling automatically adjusts compute capacity to handle traffic spikes during flash sales.
+    diagram: |
+      graph TD
+      Traffic[Flash Sale Traffic] -- Spike --> AutoScale[AWS Auto Scaling]
+      AutoScale -- Adjust --> Capacity[Compute Capacity]
+  - id: q30
+    type: multiple_choice
+    question: Which of the below options is true of Amazon VPC?
+    options:
+      - text: Amazon VPC allows customers to control user interactions with all other AWS resources.
+        is_correct: false
+      - text: AWS Customers have complete control over their Amazon VPC virtual networking environment.
+        is_correct: true
+      - text: AWS is responsible for all the management and configuration details of Amazon VPC.
+        is_correct: false
+      - text: Amazon VPC helps customers to review their AWS architecture and adopt best practices.
+        is_correct: false
+    explanation: Customers have complete control over their VPC including subnets, routing, and security configurations.
+    diagram: |
+      graph TD
+      Customer[Customer] -- Control --> VPC[Amazon VPC]
+      VPC -- Configure --> Networking[Virtual Networking]
+  - id: q31
+    type: multiple_choice
+    question: Which tool can a non-AWS customer use to compare the cost of on-premises environment resources to AWS?
+    options:
+      - text: AWS Cost Explorer.
+        is_correct: false
+      - text: AWS Pricing Calculator.
+        is_correct: false
+      - text: AWS Budgets.
+        is_correct: false
+      - text: AWS TCO Calculator.
+        is_correct: true
+    explanation: AWS TCO Calculator compares total cost of ownership between on-premises and AWS environments.
+    diagram: |
+      graph TD
+      OnPrem[On-Premises] -- Compare --> TCO[AWS TCO Calculator]
+      AWS[AWS] -- Compare --> TCO
+  - id: q32
+    type: multiple_select
+    question: Which of the following services provide real-time auditing for compliance and vulnerabilities? (Choose TWO)
+    options:
+      - text: AWS Config.
+        is_correct: true
+      - text: Amazon Redshift.
+        is_correct: false
+      - text: Amazon MQ.
+        is_correct: false
+      - text: AWS Trusted Advisor.
+        is_correct: true
+      - text: Amazon Cognito.
+        is_correct: false
+    explanation: AWS Config and AWS Trusted Advisor provide real-time auditing for compliance and vulnerability assessment.
+    diagram: |
+      graph TD
+      Auditing[Real-time Auditing] -- Service 1 --> Config[AWS Config]
+      Auditing -- Service 2 --> TA[AWS Trusted Advisor]
+  - id: q33
+    type: multiple_choice
+    question: Which of the following AWS services uses Puppet to automate how EC2 instances are configured?
+    options:
+      - text: AWS OpsWorks.
+        is_correct: true
+      - text: AWS CloudFormation.
+        is_correct: false
+      - text: AWS Quick Starts.
+        is_correct: false
+      - text: AWS CloudTrail.
+        is_correct: false
+    explanation: AWS OpsWorks integrates with Puppet to automate the configuration and management of EC2 instances.
+    diagram: |
+      graph TD
+      EC2[EC2 Instances] -- Automate Config --> OpsWorks[AWS OpsWorks]
+      OpsWorks -- Uses --> Puppet[Puppet]
+  - id: q34
+    type: multiple_choice
+    question: An organization uses a hybrid cloud architecture to run their business. Which AWS service enables them to deploy their applications to any AWS or on-premises server?
+    options:
+      - text: Amazon Kinesis.
+        is_correct: false
+      - text: Amazon QuickSight.
+        is_correct: false
+      - text: AWS CodeDeploy.
+        is_correct: true
+      - text: Amazon Athena.
+        is_correct: false
+    explanation: AWS CodeDeploy enables deployment of applications to any AWS or on-premises server in hybrid environments.
+    diagram: |
+      graph TD
+      App[Application] -- Deploy --> CodeDeploy[AWS CodeDeploy]
+      CodeDeploy -- Target --> AWS[AWS Servers]
+      CodeDeploy -- Target --> OnPrem[On-Premises Servers]
+  - id: q35
+    type: multiple_select
+    question: Select the services that are server-based (Choose TWO)
+    options:
+      - text: Amazon RDS.
+        is_correct: true
+      - text: Amazon DynamoDB.
+        is_correct: false
+      - text: AWS Lambda.
+        is_correct: false
+      - text: AWS Fargate.
+        is_correct: false
+      - text: Amazon EMR.
+        is_correct: true
+    explanation: Amazon RDS and Amazon EMR are server-based services requiring server management. DynamoDB, Lambda, and Fargate are serverless.
+    diagram: |
+      graph TD
+      ServerBased[Server-Based Services] -- Example 1 --> RDS[Amazon RDS]
+      ServerBased -- Example 2 --> EMR[Amazon EMR]
+  - id: q36
+    type: multiple_choice
+    question: What best describes penetration testing?
+    options:
+      - text: Testing your application's response time from different locations.
+        is_correct: false
+      - text: Testing your network to find security vulnerabilities that an attacker could exploit.
+        is_correct: true
+      - text: Testing your instances to check for the unhealthy ones.
+        is_correct: false
+      - text: Testing your software for bugs and errors.
+        is_correct: false
+    explanation: Penetration testing simulates attacks to identify security vulnerabilities in your network and systems.
+    diagram: |
+      graph TD
+      Network[Network/System] -- Security Test --> PenTest[Penetration Testing]
+      PenTest -- Identify --> Vulns[Vulnerabilities]
+  - id: q37
+    type: multiple_select
+    question: Which of the following are use cases for Amazon EMR? (Choose TWO)
+    options:
+      - text: Enables you to backup extremely large amounts of data at very low costs.
+        is_correct: false
+      - text: Enables you to move Exabyte-scale data from on-premises datacenters into AWS.
+        is_correct: false
+      - text: Enables you to analyze and process extremely large amounts of data in a timely manner.
+        is_correct: true
+      - text: Enables you to easily run and scale Apache Spark, Hadoop,and other Big Data frameworks.
+        is_correct: true
+      - text: Enables you to easily run and manage Docker containers.
+        is_correct: false
+    explanation: Amazon EMR enables analysis and processing of big data using frameworks like Spark and Hadoop.
+    diagram: |
+      graph TD
+      EMR[Amazon EMR] -- Use Case 1 --> BigData[Process Big Data]
+      EMR -- Use Case 2 --> Frameworks[Spark, Hadoop]
+  - id: q38
+    type: multiple_choice
+    question: Your CTO has asked you to contact AWS support using the chat feature to ask for guidance related to EBS. However, when you open the AWS support center you can't see a way to contact support via Chat. What should you do?
+    options:
+      - text: There is no chat feature in AWS support.
+        is_correct: false
+      - text: The chat feature is available for all plans for an additional fee, but you have to request it first.
+        is_correct: false
+      - text: At a minimum, upgrade to Business support plan.
+        is_correct: true
+      - text: Upgrade from the Basic Support plan to Developer Support.
+        is_correct: false
+    explanation: Chat support is available starting from the Business Support plan or higher.
+    diagram: |
+      graph TD
+      Support[AWS Support] -- Chat Feature --> Business[Business or Higher]
+      Business -- Includes --> Chat[Chat Support]
+  - id: q39
+    type: multiple_choice
+    question: A developer wants to quickly deploy and manage his application in the AWS Cloud, but he doesn't have any experience with cloud computing. Which of the following AWS services would help the developer achieve his goal?
+    options:
+      - text: AWS Fargate.
+        is_correct: false
+      - text: AWS Batch.
+        is_correct: false
+      - text: Amazon Personalize.
+        is_correct: false
+      - text: AWS Elastic Beanstalk.
+        is_correct: true
+    explanation: AWS Elastic Beanstalk simplifies application deployment for developers with limited cloud experience.
+    diagram: |
+      graph TD
+      Dev[Developer] -- No Cloud Experience --> EB[AWS Elastic Beanstalk]
+      EB -- Simplified --> Deploy[Quick Deployment]
+  - id: q40
+    type: multiple_choice
+    question: Which statement best describes the AWS Pay-As-You-Go pricing model?
+    options:
+      - text: With AWS, you replace low upfront expenses with large variable payments.
+        is_correct: false
+      - text: With AWS, you replace low upfront expenses with large fixed payments.
+        is_correct: false
+      - text: With AWS, you replace large upfront expenses with low fixed payments.
+        is_correct: false
+      - text: With AWS, you replace large capital expenses with low variable payments.
+        is_correct: true
+    explanation: AWS Pay-As-You-Go replaces large CapEx with low variable OpEx based on actual usage.
+    diagram: |
+      graph TD
+      Traditional[Traditional Model] -- CapEx --> Large[Large Upfront Cost]
+      AWS[AWS Model] -- OpEx --> Variable[Low Variable Payments]
+  - id: q41
+    type: multiple_select
+    question: For Amazon RDS databases, what does AWS perform on your behalf? (Choose TWO)
+    options:
+      - text: Database setup.
+        is_correct: true
+      - text: Network traffic protection.
+        is_correct: false
+      - text: Management of the operating system.
+        is_correct: true
+      - text: Access management.
+        is_correct: false
+      - text: Management of firewall rules.
+        is_correct: false
+    explanation: AWS handles database setup and OS management for Amazon RDS as a managed service.
+    diagram: |
+      graph TD
+      AWS[AWS Performs] -- Task 1 --> Setup[Database Setup]
+      AWS -- Task 2 --> OS[OS Management]
+  - id: q42
+    type: multiple_choice
+    question: Which of the following strategies help analyze costs in AWS?
+    options:
+      - text: Using tags to group resources.
+        is_correct: true
+      - text: Using AWS CloudFormation to automate the deployment of resources.
+        is_correct: false
+      - text: Deploying resources of the same type in different regions.
+        is_correct: false
+      - text: Configuring Amazon Inspector to automatically analyze costs and email reports.
+        is_correct: false
+    explanation: Using tags to organize resources enables cost analysis and allocation by project, department, or team.
+    diagram: |
+      graph TD
+      Resources[Resources] -- Tag --> Projects[By Project]
+      Resources -- Tag --> Departments[By Department]
+      Tags -- Enable --> Analysis[Cost Analysis]
+  - id: q43
+    type: multiple_choice
+    question: A media company has an application that requires the transfer of large data sets to and from AWS every day. This data is business critical and should be transferred over a consistent connection. Which AWS service should the company use?
+    options:
+      - text: AWS Direct Connect.
+        is_correct: true
+      - text: Amazon Comprehend.
+        is_correct: false
+      - text: AWS Snowmobile.
+        is_correct: false
+      - text: AWS VPN.
+        is_correct: false
+    explanation: AWS Direct Connect provides a dedicated, consistent network connection for large daily data transfers.
+    diagram: |
+      graph TD
+      Data[Large Data Sets] -- Daily Transfer --> DirectConnect[AWS Direct Connect]
+      DirectConnect -- Dedicated Connection --> AWS[AWS Cloud]
+  - id: q44
+    type: multiple_choice
+    question: What is the main benefit of the AWS Storage Gateway service?
+    options:
+      - text: It automates the process of building, maintaining, and running ETL jobs.
+        is_correct: false
+      - text: It provides physical devices to migrate data from on premises to AWS.
+        is_correct: false
+      - text: It allows integration of on-premises IT environments with Cloud Storage.
+        is_correct: true
+      - text: It provides hardware-based key storage for regulatory compliance.
+        is_correct: false
+    explanation: AWS Storage Gateway enables hybrid storage by integrating on-premises environments with AWS cloud storage.
+    diagram: |
+      graph TD
+      OnPrem[On-Premises Storage] -- Integrate --> SG[AWS Storage Gateway]
+      SG -- Connect to --> Cloud[AWS Cloud Storage]
+  - id: q45
+    type: multiple_choice
+    question: To protect against data loss, you need to backup your database regularly. What is the most cost-effective storage option that provides immediate retrieval of your backups?
+    options:
+      - text: Amazon S3 Glacier Deep Archive.
+        is_correct: false
+      - text: Amazon S3 Standard-Infrequent Access.
+        is_correct: true
+      - text: Amazon S3 Glacier.
+        is_correct: false
+      - text: Instance Store.
+        is_correct: false
+    explanation: S3 Standard-IA provides cost-effective storage with immediate retrieval for infrequent backup access.
+    diagram: |
+      graph TD
+      Backups[Database Backups] -- Cost Effective --> SIA[S3 Standard-IA]
+      SIA -- Immediate Access --> Restore[Quick Restore]
+  - id: q46
+    type: multiple_choice
+    question: Which service can you use to route traffic to the endpoint that provides the best application performance for your users worldwide?
+    options:
+      - text: AWS Global Accelerator.
+        is_correct: true
+      - text: AWS Data Pipeline.
+        is_correct: false
+      - text: AWS DAX Accelerator.
+        is_correct: false
+      - text: AWS Transfer Acceleration.
+        is_correct: false
+    explanation: AWS Global Accelerator routes traffic to optimal endpoints worldwide for best application performance.
+    diagram: |
+      graph TD
+      Users[Global Users] -- Route Traffic --> GA[AWS Global Accelerator]
+      GA -- Optimal Endpoint --> Performance[Best Performance]
+  - id: q47
+    type: multiple_choice
+    question: Why are Serverless Architectures more economical than Server-based Architectures?
+    options:
+      - text: Serverless Architectures use new powerful computing devices.
+        is_correct: false
+      - text: With the Server-based Architectures, compute resources continue to run all the time but with serverless architecture, compute resources are only used when code is being executed.
+        is_correct: true
+      - text: When you reserve serverless capacity, you will get large discounts compared to server reservation.
+        is_correct: false
+      - text: With Serverless Architectures you have the ability to scale automatically up or down as demand changes.
+        is_correct: false
+    explanation: Serverless architectures only charge for code execution time, not for idle resources, making them more economical.
+    diagram: |
+      graph TD
+      ServerBased[Server-Based] -- Cost --> Always[Always Running Cost]
+      Serverless[Serverless] -- Cost --> Execution[Only When Executing]
+      Execution -- Savings --> Economic[More Economical]
+  - id: q48
+    type: multiple_select
+    question: Which of the below options are use cases of the Amazon Route 53 service? (Choose TWO)
+    options:
+      - text: Point-to-point connectivity between an on-premises data center and AWS.
+        is_correct: false
+      - text: Detects configuration changes in the AWS environment.
+        is_correct: false
+      - text: DNS configuration and management.
+        is_correct: true
+      - text: Manages global application traffic through a variety of routing types.
+        is_correct: true
+      - text: Provides infrastructure security optimization recommendations.
+        is_correct: false
+    explanation: Amazon Route 53 provides DNS services and manages global application traffic routing.
+    diagram: |
+      graph TD
+      Route53[Amazon Route 53] -- Use Case 1 --> DNS[DNS Configuration]
+      Route53 -- Use Case 2 --> Traffic[Global Traffic Management]
+  - id: q49
+    type: multiple_choice
+    question: You want to transfer 200 Terabytes of data from on-premises locations to the AWS Cloud, which of the following can do the job in a cost-effective way?
+    options:
+      - text: AWS Snowmobile.
+        is_correct: false
+      - text: AWS Import/Export.
+        is_correct: false
+      - text: AWS DMS.
+        is_correct: false
+      - text: AWS Snowball.
+        is_correct: true
+    explanation: AWS Snowball is cost-effective for transferring 200TB of data. Snowmobile is for much larger volumes (Exabytes).
+    diagram: |
+      graph TD
+      Data[200 TB Data] -- Transfer --> Snowball[AWS Snowball]
+      Snowball -- Physical Device --> AWS[AWS Cloud]
+  - id: q50
+    type: multiple_choice
+    question: You have a real-time IoT application that requires sub-millisecond latency. Which of the following services should you use?
+    options:
+      - text: Amazon Redshift.
+        is_correct: false
+      - text: Amazon Athena.
+        is_correct: false
+      - text: AWS Cloud9.
+        is_correct: false
+      - text: Amazon ElastiCache for Redis.
+        is_correct: true
+    explanation: Amazon ElastiCache for Redis provides sub-millisecond latency for real-time IoT applications.
+    diagram: |
+      graph TD
+      IoT[IoT Application] -- Sub-ms Latency --> Redis[ElastiCache for Redis]
+      Redis -- In-memory --> Speed[Ultra-fast Access]

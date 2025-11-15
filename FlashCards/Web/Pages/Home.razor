@@ -85,7 +85,10 @@ else
     int WrongCount = 0;
 
     // Adicione aqui as opções disponíveis
-    List<string> examOptions = new() { "aws-01", "aws-02", "aws-03", "repo-01", "repo-02", "repo-03" };
+    List<string> examOptions = new() { "aws-01", "aws-02", "aws-03", 
+                                        "aws-04", "aws-05", "aws-06",
+                                        "aws-07", "aws-08", "aws-09",
+                                        "repo-01", "repo-02", "repo-03" };
 
     // Remova o OnInitializedAsync
 
@@ -322,13 +325,17 @@ else
                         qo.IsCorrect = q.CorrectOptions.Contains(qo.Index);
                     }
                     q.WasCorrect = string.Join(',', q.SelectedOptions.OrderBy(o => o)) == string.Join(',', q.CorrectOptions.OrderBy(o => o));
-                    q.IsLocked = true;
+                    q.IsLocked = (q.WasCorrect ?? false);
 
                     CorrectCount += q.WasCorrect == true ? 1 : 0;
                     WrongCount += q.WasCorrect == false ? 1 : 0;
                 }
 
-                if (i < Questions.Count - 1)
+                if (!(q.WasCorrect?? false))
+                {
+                    CurrentIndex = i;
+                }
+                else if (i < Questions.Count - 1)
                     CurrentIndex = i + 1;
             }
             catch
