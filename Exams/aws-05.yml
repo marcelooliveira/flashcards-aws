@@ -1,0 +1,877 @@
+questions:
+  - id: q1
+    type: multiple_choice
+    question: A company is using EC2 Instances to run their e-commerce site on the AWS platform. If the site becomes unavailable, the company will lose a significant amount of money for each minute the site is unavailable. Which design principle should the company use to minimize the risk of an outage?
+    options:
+      - text: Least Privilege.
+        is_correct: false
+      - text: Pilot Light.
+        is_correct: false
+      - text: Fault Tolerance.
+        is_correct: true
+      - text: Multi-threading.
+        is_correct: false
+    explanation: Fault Tolerance is a design principle that ensures application components continue to function even if individual components fail, minimizing outage risk.
+    diagram: |
+      graph TD
+      Company[E-commerce Site] -- Minimize Outage --> FaultTol[Fault Tolerance]
+      FaultTol -- Redundancy --> High[High Availability]
+  - id: q2
+    type: multiple_choice
+    question: You decide to buy a reserved instance for a term of one year. Which option provides the largest total discount?
+    options:
+      - text: All up-front reservation.
+        is_correct: true
+      - text: All reserved instance payment options provide the same discount level.
+        is_correct: false
+      - text: Partial up-front reservation.
+        is_correct: false
+      - text: No up-front reservation.
+        is_correct: false
+    explanation: All up-front reservation provides the largest total discount compared to partial or no upfront payment options.
+    diagram: |
+      graph TD
+      RI[Reserved Instance] -- Payment Option --> Upfront[All Up-front]
+      Upfront -- Discount --> Largest[Largest Discount]
+  - id: q3
+    type: multiple_select
+    question: What features does AWS offer to help protect your data in the Cloud? (Choose TWO)
+    options:
+      - text: Access control.
+        is_correct: true
+      - text: Physical MFA devices.
+        is_correct: false
+      - text: Data encryption.
+        is_correct: true
+      - text: Unlimited storage.
+        is_correct: false
+      - text: Load balancing.
+        is_correct: false
+    explanation: AWS offers access control and data encryption to help protect data in the cloud.
+    diagram: |
+      graph TD
+      Data[Customer Data] -- Protect --> AccessControl[Access Control]
+      Data -- Protect --> Encryption[Data Encryption]
+  - id: q4
+    type: multiple_choice
+    question: "An AWS customer has used one Amazon Linux instance for 2 hours, 5 minutes and 9 seconds, and one CentOS instance for 4 hours, 23 minutes and 7 seconds. How much time will the customer be billed for?"
+    options:
+      - text: 3 hours for the Linux instance and 5 hours for the CentOS instance.
+        is_correct: false
+      - text: 2 hours, 5 minutes and 9 seconds for the Linux instance and 4 hours, 23 minutes and 7 seconds for the CentOS instance.
+        is_correct: false
+      - text: 2 hours, 5 minutes and 9 seconds for the Linux instance and 5 hours for the CentOS instance.
+        is_correct: true
+      - text: 3 hours for the Linux instance and 4 hours, 23 minutes and 7 seconds for the CentOS instance.
+        is_correct: false
+    explanation: Linux instances are billed per-second for partial hours. CentOS instances are billed per full hour. Linux instance billed at 2h5m9s, CentOS rounded to 5 hours.
+    diagram: |
+      graph TD
+      Linux[Linux Instance] -- Per-second billing --> 2h5m9s[2h 5m 9s]
+      CentOS[CentOS Instance] -- Per-hour billing --> 5h[5 hours]
+  - id: q5
+    type: multiple_choice
+    question: What is the AWS Support feature that allows customers to manage support cases programmatically?
+    options:
+      - text: AWS Trusted Advisor.
+        is_correct: false
+      - text: AWS Operations Support.
+        is_correct: false
+      - text: AWS Support API.
+        is_correct: true
+      - text: AWS Personal Health Dashboard.
+        is_correct: false
+    explanation: AWS Support API allows customers to programmatically manage support cases without using the AWS Management Console.
+    diagram: |
+      graph TD
+      Customer[Customer] -- Manage Cases --> API[AWS Support API]
+      API -- Programmatic --> Cases[Support Cases]
+  - id: q6
+    type: multiple_select
+    question: Which methods can be used by customers to interact with AWS Identity and Access Management (IAM)? (Choose TWO)
+    options:
+      - text: AWS CLI.
+        is_correct: true
+      - text: AWS Security Groups.
+        is_correct: false
+      - text: AWS SDKs.
+        is_correct: true
+      - text: AWS Network Access Control Lists.
+        is_correct: false
+      - text: AWS CodeCommit.
+        is_correct: false
+    explanation: Customers can interact with AWS IAM using AWS CLI and AWS SDKs for programmatic access.
+    diagram: |
+      graph TD
+      IAM[AWS IAM] -- Access Method 1 --> CLI[AWS CLI]
+      IAM -- Access Method 2 --> SDK[AWS SDKs]
+  - id: q7
+    type: multiple_select
+    question: Which of the following are types of AWS Identity and Access Management (IAM) identities? (Choose TWO)
+    options:
+      - text: AWS Resource Groups.
+        is_correct: false
+      - text: IAM Policies.
+        is_correct: false
+      - text: IAM Roles.
+        is_correct: true
+      - text: IAM Users.
+        is_correct: true
+      - text: AWS Organizations.
+        is_correct: false
+    explanation: IAM Roles and IAM Users are types of IAM identities that can be used to manage access to AWS resources.
+    diagram: |
+      graph TD
+      IAMIdentities[IAM Identities] -- Type 1 --> Roles[IAM Roles]
+      IAMIdentities -- Type 2 --> Users[IAM Users]
+  - id: q8
+    type: multiple_choice
+    question: Which of the following Amazon RDS features facilitates offloading of database read activity?
+    options:
+      - text: Database Snapshots.
+        is_correct: false
+      - text: Multi-AZ Deployments.
+        is_correct: false
+      - text: Automated Backups.
+        is_correct: false
+      - text: Read Replicas.
+        is_correct: true
+    explanation: Read Replicas allow read-only copies of the database, offloading read activity from the primary database.
+    diagram: |
+      graph TD
+      Primary[Primary DB] -- Replicate --> ReadReplica[Read Replica]
+      ReadActivity[Read Activity] -- Offload to --> ReadReplica
+  - id: q9
+    type: multiple_choice
+    question: How does AWS notify customers about security and privacy events pertaining to AWS services?
+    options:
+      - text: Using the AWS ACM service.
+        is_correct: false
+      - text: Using Security Bulletins.
+        is_correct: true
+      - text: Using the AWS Management Console.
+        is_correct: false
+      - text: Using Compliance Resources.
+        is_correct: false
+    explanation: AWS uses Security Bulletins to notify customers about security and privacy events pertaining to AWS services.
+    diagram: |
+      graph TD
+      AWS[AWS] -- Notify --> Bulletins[Security Bulletins]
+      Bulletins -- Alert Customers --> Events[Security & Privacy Events]
+  - id: q10
+    type: multiple_choice
+    question: Which IAM entity can best be used to grant temporary access to your AWS resources?
+    options:
+      - text: IAM Users.
+        is_correct: false
+      - text: Key Pair.
+        is_correct: false
+      - text: IAM Roles.
+        is_correct: true
+      - text: IAM Groups.
+        is_correct: false
+    explanation: IAM Roles can be assumed to grant temporary security credentials with an expiration time for access to AWS resources.
+    diagram: |
+      graph TD
+      TempAccess[Temporary Access] -- Best Practice --> Roles[IAM Roles]
+      Roles -- Provides --> Credentials[Temporary Credentials]
+  - id: q11
+    type: multiple_choice
+    question: A company has a web application that is hosted on a single EC2 instance and is approaching 100 percent CPU Utilization during peak loads. Rather than scaling the server vertically, the company has decided to deploy three Amazon EC2 instances in parallel and to distribute traffic across the three servers. What AWS Service should the company use to distribute the traffic evenly?
+    options:
+      - text: AWS Global Accelerator.
+        is_correct: false
+      - text: AWS Application Load Balancer (ALB).
+        is_correct: true
+      - text: Amazon CloudFront.
+        is_correct: false
+      - text: Transit VPC.
+        is_correct: false
+    explanation: AWS Application Load Balancer distributes incoming traffic evenly across multiple EC2 instances for horizontal scaling.
+    diagram: |
+      graph TD
+      Traffic[Incoming Traffic] -- Distribute --> ALB[Application Load Balancer]
+      ALB -- Route to --> EC21[EC2 Instance 1]
+      ALB -- Route to --> EC22[EC2 Instance 2]
+      ALB -- Route to --> EC23[EC2 Instance 3]
+  - id: q12
+    type: multiple_choice
+    question: Which of the following approaches will help you eliminate human error and automate the process of creating and updating your AWS environment?
+    options:
+      - text: Use Software test automation tools.
+        is_correct: false
+      - text: Use AWS CodeDeploy to build and automate your AWS environment.
+        is_correct: false
+      - text: Use code to provision and operate your AWS infrastructure.
+        is_correct: true
+      - text: Migrate all of your applications to a dedicated host.
+        is_correct: false
+    explanation: Using Infrastructure as Code to provision and operate AWS infrastructure eliminates human error and automates environment creation.
+    diagram: |
+      graph TD
+      IaC[Infrastructure as Code] -- Eliminate Error --> Automation[Automation]
+      Automation -- Provision & Operate --> Environment[AWS Environment]
+  - id: q13
+    type: multiple_choice
+    question: A company is seeking to better secure its AWS account from unauthorized access. Which of the below options can the customer use to achieve this goal?
+    options:
+      - text: Restrict any API call made through SDKs or CLI.
+        is_correct: false
+      - text: Create one IAM account for each department in the company (Development, QA, Production), and share it across all staff in that department.
+        is_correct: false
+      - text: Require Multi-Factor Authentication (MFA) for all IAM User access.
+        is_correct: true
+      - text: Set up two login passwords.
+        is_correct: false
+    explanation: Requiring MFA for all IAM user access adds an additional layer of security to prevent unauthorized access.
+    diagram: |
+      graph TD
+      Security[Account Security] -- Implement --> MFA[Multi-Factor Authentication]
+      MFA -- Prevent --> Unauthorized[Unauthorized Access]
+  - id: q14
+    type: multiple_choice
+    question: Which AWS Service offers volume discounts based on usage?
+    options:
+      - text: Amazon VPC.
+        is_correct: false
+      - text: Amazon S3.
+        is_correct: true
+      - text: Amazon Lightsail.
+        is_correct: false
+      - text: AWS Cost Explorer.
+        is_correct: false
+    explanation: Amazon S3 offers volume discounts when customers store and retrieve data at higher volumes.
+    diagram: |
+      graph TD
+      Usage[Data Usage] -- Volume Discount --> S3[Amazon S3]
+      S3 -- Lower Cost --> Discount[Volume Savings]
+  - id: q15
+    type: multiple_select
+    question: Which of the following factors should be considered when determining the region in which AWS Resources will be deployed? (Choose TWO)
+    options:
+      - text: The AWS Region's security level.
+        is_correct: false
+      - text: Data sovereignty.
+        is_correct: true
+      - text: Cost.
+        is_correct: true
+      - text: The planned number of VPCs.
+        is_correct: false
+      - text: Geographic proximity to the company's location.
+        is_correct: false
+    explanation: Data sovereignty and cost are important factors to consider when selecting an AWS region for resource deployment.
+    diagram: |
+      graph TD
+      RegionSelection[Region Selection] -- Factor 1 --> Sovereignty[Data Sovereignty]
+      RegionSelection -- Factor 2 --> Cost[Cost]
+  - id: q16
+    type: multiple_choice
+    question: You are running a financial services web application on AWS. The application uses a MySQL database to store the data. Which of the following AWS services would improve the performance of your application by allowing you to retrieve information from fast in-memory caches?
+    options:
+      - text: Amazon EFS.
+        is_correct: false
+      - text: Amazon Neptune.
+        is_correct: false
+      - text: Amazon ElastiCache.
+        is_correct: true
+      - text: DAX.
+        is_correct: false
+    explanation: Amazon ElastiCache provides in-memory caching to improve application performance and reduce database load.
+    diagram: |
+      graph TD
+      App[Financial Services App] -- Improve Performance --> Cache[Amazon ElastiCache]
+      Cache -- In-memory Cache --> Data[Fast Data Retrieval]
+  - id: q17
+    type: multiple_choice
+    question: What are the advantages of using Auto Scaling Groups for EC2 instances?
+    options:
+      - text: Auto Scaling Groups caches the most recent responses at global edge locations to reduce latency and improve performance.
+        is_correct: false
+      - text: Auto Scaling Groups scales EC2 instances in multiple Availability Zones to increase application availability and fault tolerance.
+        is_correct: true
+      - text: Auto Scaling Groups scales EC2 instances across multiple regions to reduce latency for global users.
+        is_correct: false
+      - text: Auto Scaling Groups distributes application traffic across multiple Availability Zones to enhance performance.
+        is_correct: false
+    explanation: Auto Scaling Groups increase application availability and fault tolerance by scaling instances across multiple Availability Zones.
+    diagram: |
+      graph TD
+      ASG[Auto Scaling Group] -- Advantage --> MultiAZ[Multiple Availability Zones]
+      MultiAZ -- Increase --> Availability[Availability & Fault Tolerance]
+  - id: q18
+    type: multiple_choice
+    question: The TCO gap between AWS infrastructure and traditional infrastructure has widened over the recent years. Which of the following could be the reason for that?
+    options:
+      - text: AWS helps customers invest more in capital expenditures.
+        is_correct: false
+      - text: AWS automates all infrastructure operations, so customers save more on human resources costs.
+        is_correct: false
+      - text: AWS continues to lower the cost of cloud computing for its customers.
+        is_correct: true
+      - text: AWS secures AWS resources at no additional charge.
+        is_correct: false
+    explanation: AWS continuously lowers cloud computing costs, widening the TCO gap in favor of AWS compared to on-premises infrastructure.
+    diagram: |
+      graph TD
+      TCO[Total Cost of Ownership] -- Gap Widens --> AWS[AWS Costs Lower]
+      AWS -- Reason --> Reduced[Continuous Cost Reduction]
+  - id: q19
+    type: multiple_select
+    question: Which of the following are examples of the customer's responsibility to implement "security IN the cloud"? (Choose TWO)
+    options:
+      - text: Building a schema for an application.
+        is_correct: true
+      - text: Replacing physical hardware.
+        is_correct: false
+      - text: Creating a new hypervisor.
+        is_correct: false
+      - text: Patch management of the underlying infrastructure.
+        is_correct: false
+      - text: File system encryption.
+        is_correct: true
+    explanation: Building application schema and file system encryption are customer responsibilities for security in the cloud.
+    diagram: |
+      graph TD
+      SecurityIn[Security IN the Cloud] -- Example 1 --> Schema[Application Schema]
+      SecurityIn -- Example 2 --> Encryption[File System Encryption]
+  - id: q20
+    type: multiple_choice
+    question: Which of the following is a type of MFA device that customers can use to protect their AWS resources?
+    options:
+      - text: AWS CloudHSM.
+        is_correct: false
+      - text: U2F Security Key.
+        is_correct: true
+      - text: AWS Access Keys.
+        is_correct: false
+      - text: AWS Key Pair.
+        is_correct: false
+    explanation: U2F Security Key is a hardware MFA device that customers can use to add an additional security layer to their AWS accounts.
+    diagram: |
+      graph TD
+      MFA[Multi-Factor Authentication] -- Device Type --> U2F[U2F Security Key]
+      U2F -- Protect --> Resources[AWS Resources]
+  - id: q21
+    type: multiple_choice
+    question: A company is seeking to deploy an existing .NET application onto AWS as quickly as possible. Which AWS Service should the customer use to achieve this goal?
+    options:
+      - text: Amazon SNS.
+        is_correct: false
+      - text: AWS Elastic Beanstalk.
+        is_correct: true
+      - text: AWS Systems Manager.
+        is_correct: false
+      - text: AWS Trusted Advisor.
+        is_correct: false
+    explanation: AWS Elastic Beanstalk enables quick deployment of applications by handling infrastructure provisioning and management automatically.
+    diagram: |
+      graph TD
+      App[.NET Application] -- Deploy Quickly --> EB[AWS Elastic Beanstalk]
+      EB -- Manages --> Infrastructure[Infrastructure]
+  - id: q22
+    type: multiple_select
+    question: "Which of the following is NOT a factor when estimating the costs of Amazon EC2? (Choose TWO)"
+    options:
+      - text: The amount of time the instances will be running.
+        is_correct: false
+      - text: Number of security groups.
+        is_correct: true
+      - text: Allocated Elastic IP Addresses.
+        is_correct: false
+      - text: Number of Hosted Zones.
+        is_correct: true
+      - text: Number of instances.
+        is_correct: false
+    explanation: Number of security groups and number of hosted zones are NOT factors in estimating Amazon EC2 costs.
+    diagram: |
+      graph TD
+      EC2Cost[EC2 Cost Estimation] -- Not a Factor --> SG[Number of Security Groups]
+      EC2Cost -- Not a Factor --> HZ[Number of Hosted Zones]
+  - id: q23
+    type: multiple_choice
+    question: Which AWS Service helps enterprises extend their on-premises storage to AWS in a cost-effective manner?
+    options:
+      - text: AWS Data Pipeline.
+        is_correct: false
+      - text: AWS Storage Gateway.
+        is_correct: true
+      - text: Amazon Aurora.
+        is_correct: false
+      - text: Amazon EFS.
+        is_correct: false
+    explanation: AWS Storage Gateway enables hybrid cloud storage by connecting on-premises environments to AWS storage resources cost-effectively.
+    diagram: |
+      graph TD
+      OnPrem[On-Premises Storage] -- Extend to --> SG[AWS Storage Gateway]
+      SG -- Connect to --> AWS[AWS Cloud Storage]
+  - id: q24
+    type: multiple_choice
+    question: A company is building an online cloud storage platform. They need a storage service that can scale capacity automatically, while minimizing cost. Which AWS storage service should the company use to meet these requirements?
+    options:
+      - text: Amazon Simple Storage Service.
+        is_correct: true
+      - text: Amazon Elastic Block Store.
+        is_correct: false
+      - text: Amazon Elastic Container Service.
+        is_correct: false
+      - text: AWS Storage Gateway.
+        is_correct: false
+    explanation: Amazon S3 automatically scales to accommodate any amount of data and offers cost-effective storage with pay-as-you-go pricing.
+    diagram: |
+      graph TD
+      Platform[Cloud Storage Platform] -- Auto Scale --> S3[Amazon S3]
+      S3 -- Minimize Cost --> Savings[Cost Effective]
+  - id: q25
+    type: multiple_choice
+    question: You have just hired a skilled sys-admin to join your team. As usual, you have created a new IAM user for him to interact with AWS services. On his first day, you ask him to create snapshots of all existing Amazon EBS volumes and save them in a new Amazon S3 bucket. However, the new member reports back that he is unable to create neither EBS snapshots nor S3 buckets. What might prevent him from doing this simple task?
+    options:
+      - text: EBS and S3 are accessible only to the root account owner.
+        is_correct: false
+      - text: The systems administrator must contact AWS Support first to activate his new IAM account.
+        is_correct: false
+      - text: There is not enough space in S3 to store the snapshots.
+        is_correct: false
+      - text: There is a non-explicit deny to all new users.
+        is_correct: true
+    explanation: By default, IAM users have an implicit deny for all actions. Explicit permissions must be granted for the user to access any AWS services.
+    diagram: |
+      graph TD
+      NewUser[New IAM User] -- Implicit --> Deny[Deny All Actions]
+      Deny -- Unless --> Explicit[Explicit Permissions]
+  - id: q26
+    type: multiple_choice
+    question: An external auditor is requesting a log of all accesses to the AWS resources in the company's account. Which of the following services will provide the auditor with the requested information?
+    options:
+      - text: AWS CloudTrail.
+        is_correct: true
+      - text: Amazon CloudFront.
+        is_correct: false
+      - text: AWS CloudFormation.
+        is_correct: false
+      - text: Amazon CloudWatch.
+        is_correct: false
+    explanation: AWS CloudTrail logs all API calls and resource access, providing a complete audit trail of account activity.
+    diagram: |
+      graph TD
+      Auditor[External Auditor] -- Request Logs --> CloudTrail[AWS CloudTrail]
+      CloudTrail -- Provides --> AccessLog[Access Log & Audit Trail]
+  - id: q27
+    type: multiple_choice
+    question: Which of the below options is true of Amazon Cloud Directory?
+    options:
+      - text: Amazon Cloud Directory allows the organization of hierarchies of data across multiple dimensions.
+        is_correct: true
+      - text: Amazon Cloud Directory enables the analysis of video and data streams in real time.
+        is_correct: false
+      - text: Amazon Cloud Directory allows users to access AWS with their existing Active Directory credentials.
+        is_correct: false
+      - text: Amazon Cloud Directory allows for registration and management of domain names.
+        is_correct: false
+    explanation: Amazon Cloud Directory organizes hierarchies of data across multiple dimensions, enabling flexible data organization for applications.
+    diagram: |
+      graph TD
+      CloudDir[Amazon Cloud Directory] -- Feature --> Hierarchies[Data Hierarchies]
+      Hierarchies -- Organize --> Dimensions[Multiple Dimensions]
+  - id: q28
+    type: multiple_choice
+    question: A user has opened a "Production System Down" support case to get help from AWS Support after a production system disruption. What is the expected response time for this type of support case?
+    options:
+      - text: 12 hours.
+        is_correct: false
+      - text: 15 minutes.
+        is_correct: false
+      - text: 24 hours.
+        is_correct: false
+      - text: One hour.
+        is_correct: true
+    explanation: Production System Down support cases typically receive a response time of one hour under most support plans.
+    diagram: |
+      graph TD
+      Case[Production System Down] -- Response Time --> Hour[One Hour]
+  - id: q29
+    type: multiple_choice
+    question: Which of the below options is a best practice for making your application on AWS highly available?
+    options:
+      - text: Deploy the application to at least two Availability Zones.
+        is_correct: true
+      - text: Use Elastic Load Balancing (ELB) across multiple AWS Regions.
+        is_correct: false
+      - text: Deploy the application code on at least two servers in the same Availability Zone.
+        is_correct: false
+      - text: Rewrite the application code to handle all incoming requests.
+        is_correct: false
+    explanation: Deploying applications across multiple Availability Zones ensures fault tolerance and high availability.
+    diagram: |
+      graph TD
+      HighAvail[High Availability] -- Best Practice --> MultiAZ[Multiple Availability Zones]
+      MultiAZ -- Ensure --> FaultTol[Fault Tolerance]
+  - id: q30
+    type: multiple_select
+    question: "Which of the following should be taken into account when performing a TCO analysis regarding the costs of running an application on AWS VS on-premises? (Choose TWO)"
+    options:
+      - text: Labor and IT costs.
+        is_correct: true
+      - text: Cooling and power consumption.
+        is_correct: true
+      - text: Amazon EBS computing power.
+        is_correct: false
+      - text: Software architecture.
+        is_correct: false
+      - text: Software compatibility.
+        is_correct: false
+    explanation: Labor/IT costs and power/cooling costs are critical factors in TCO analysis comparing AWS vs on-premises infrastructure.
+    diagram: |
+      graph TD
+      TCO[TCO Analysis] -- Factor 1 --> Labor[Labor & IT Costs]
+      TCO -- Factor 2 --> Power[Power & Cooling]
+  - id: q31
+    type: multiple_choice
+    question: Your company requires a response time of less than 15 minutes from support interactions about their business-critical systems that are hosted on AWS if those systems go down. Which AWS Support Plan should this company use?
+    options:
+      - text: AWS Basic Support.
+        is_correct: false
+      - text: AWS Developer Support.
+        is_correct: false
+      - text: AWS Business Support.
+        is_correct: false
+      - text: AWS Enterprise Support.
+        is_correct: true
+    explanation: AWS Enterprise Support provides a 15-minute response time for business-critical system outages.
+    diagram: |
+      graph TD
+      Response[15 Min Response Time] -- Requires --> Enterprise[AWS Enterprise Support]
+  - id: q32
+    type: multiple_select
+    question: Which of the following AWS offerings are serverless services? (Choose TWO)
+    options:
+      - text: Amazon EC2.
+        is_correct: false
+      - text: AWS Lambda.
+        is_correct: true
+      - text: Amazon DynamoDB.
+        is_correct: true
+      - text: Amazon EMR.
+        is_correct: false
+      - text: Amazon RDS.
+        is_correct: false
+    explanation: AWS Lambda and Amazon DynamoDB are serverless services that don't require server management.
+    diagram: |
+      graph TD
+      Serverless[Serverless Services] -- Example 1 --> Lambda[AWS Lambda]
+      Serverless -- Example 2 --> DDB[Amazon DynamoDB]
+  - id: q33
+    type: multiple_choice
+    question: Which AWS service enables you to quickly purchase and deploy SSL/TLS certificates?
+    options:
+      - text: Amazon GuardDuty.
+        is_correct: false
+      - text: AWS ACM.
+        is_correct: true
+      - text: Amazon Detective.
+        is_correct: false
+      - text: AWS WAF.
+        is_correct: false
+    explanation: AWS Certificate Manager (ACM) enables quick provisioning and deployment of SSL/TLS certificates.
+    diagram: |
+      graph TD
+      App[Application] -- Deploy Certificate --> ACM[AWS ACM]
+      ACM -- Quickly Provision --> Certificate[SSL/TLS Certificate]
+  - id: q34
+    type: multiple_choice
+    question: Which AWS Service provides integration with Chef to automate the configuration of EC2 instances?
+    options:
+      - text: AWS Config.
+        is_correct: false
+      - text: AWS OpsWorks.
+        is_correct: true
+      - text: AutoScaling.
+        is_correct: false
+      - text: AWS CloudFormation.
+        is_correct: false
+    explanation: AWS OpsWorks integrates with Chef to automate the configuration and management of EC2 instances.
+    diagram: |
+      graph TD
+      EC2[EC2 Instances] -- Automate Config --> OpsWorks[AWS OpsWorks]
+      OpsWorks -- Uses --> Chef[Chef]
+  - id: q35
+    type: multiple_choice
+    question: A customer is seeking to store objects in their AWS environment and to make those objects downloadable over the internet. Which AWS Service can be used to accomplish this?
+    options:
+      - text: Amazon EBS.
+        is_correct: false
+      - text: Amazon EFS.
+        is_correct: false
+      - text: Amazon S3.
+        is_correct: true
+      - text: Amazon Instance Store.
+        is_correct: false
+    explanation: Amazon S3 is ideal for storing objects and making them downloadable over the internet with public access.
+    diagram: |
+      graph TD
+      Objects[Objects to Store] -- Upload to --> S3[Amazon S3]
+      S3 -- Download --> Internet[Internet Users]
+  - id: q36
+    type: multiple_choice
+    question: Which of the following services can be used to monitor the HTTP and HTTPS requests that are forwarded to Amazon CloudFront?
+    options:
+      - text: AWS WAF.
+        is_correct: false
+      - text: Amazon CloudWatch.
+        is_correct: true
+      - text: AWS Cloud9.
+        is_correct: false
+      - text: AWS CloudTrail.
+        is_correct: false
+    explanation: Amazon CloudWatch monitors and logs HTTP/HTTPS requests forwarded through Amazon CloudFront.
+    diagram: |
+      graph TD
+      CF[Amazon CloudFront] -- Monitor Requests --> CW[Amazon CloudWatch]
+      CW -- Log --> Requests[HTTP/HTTPS Requests]
+  - id: q37
+    type: multiple_choice
+    question: A company is migrating a web application to AWS. The application's compute capacity is continually utilized throughout the year. Which of the below options offers the company the most cost-effective solution?
+    options:
+      - text: On-demand Instances.
+        is_correct: false
+      - text: Dedicated Hosts.
+        is_correct: false
+      - text: Spot Instances.
+        is_correct: false
+      - text: Reserved Instances.
+        is_correct: true
+    explanation: Reserved Instances provide the most cost savings for workloads with predictable, continuous usage throughout the year.
+    diagram: |
+      graph TD
+      ContinuousUsage[Continuous Usage] -- Most Cost-Effective --> RI[Reserved Instances]
+      RI -- Savings --> Cost[Lower Cost]
+  - id: q38
+    type: multiple_choice
+    question: A company wants to grant a new employee long-term access to manage Amazon DynamoDB databases. Which of the following is a recommended best-practice when granting these permissions?
+    options:
+      - text: Create an IAM role and attach a policy with Amazon DynamoDB access permissions.
+        is_correct: false
+      - text: Create an IAM role and attach a policy with Administrator access permissions.
+        is_correct: false
+      - text: Create an IAM user and attach a policy with Amazon DynamoDB access permissions.
+        is_correct: true
+      - text: Create an IAM user and attach a policy with Administrator access permissions.
+        is_correct: false
+    explanation: For long-term access, create an IAM user with a policy granting only DynamoDB permissions, following the principle of least privilege.
+    diagram: |
+      graph TD
+      Employee[New Employee] -- Long-term Access --> IAMUser[IAM User]
+      IAMUser -- Grant --> DDBPerms[DynamoDB Permissions]
+  - id: q39
+    type: multiple_choice
+    question: When granting permissions to applications running on Amazon EC2 instances, which of the following is considered best practice?
+    options:
+      - text: Generate new IAM access keys every time you delegate permissions.
+        is_correct: false
+      - text: Store the required AWS credentials directly within the application code.
+        is_correct: false
+      - text: Use temporary security credentials (IAM roles) instead of long-term access keys.
+        is_correct: true
+      - text: Do nothing; Applications that run on Amazon EC2 instances do not need permission to interact with other AWS services or resources.
+        is_correct: false
+    explanation: IAM roles provide temporary security credentials that are automatically rotated, the recommended best practice for EC2 applications.
+    diagram: |
+      graph TD
+      EC2App[EC2 Application] -- Best Practice --> IAMRole[IAM Role]
+      IAMRole -- Temporary Credentials --> Safe[Safe & Secure]
+  - id: q40
+    type: multiple_choice
+    question: Which of the following will help AWS customers save on costs when migrating their workloads to AWS?
+    options:
+      - text: Use servers instead of managed services.
+        is_correct: false
+      - text: Use existing third-party software licenses on AWS.
+        is_correct: true
+      - text: Migrate production workloads to AWS edge locations instead of AWS Regions.
+        is_correct: false
+      - text: Use AWS Outposts to run all workloads in a cost-optimized environment.
+        is_correct: false
+    explanation: Using existing licenses (License Mobility) allows customers to reduce costs by reusing on-premises software licenses on AWS.
+    diagram: |
+      graph TD
+      Licenses[Existing Licenses] -- Reuse on AWS --> CostSave[Cost Savings]
+  - id: q41
+    type: multiple_choice
+    question: An organization has a legacy application designed using monolithic-based architecture. Which AWS Service can be used to decouple the components of the application?
+    options:
+      - text: Amazon SQS.
+        is_correct: true
+      - text: Virtual Private Gateway.
+        is_correct: false
+      - text: AWS Artifact.
+        is_correct: false
+      - text: Amazon CloudFront.
+        is_correct: false
+    explanation: Amazon SQS is a messaging service that decouples application components by allowing asynchronous communication between them.
+    diagram: |
+      graph TD
+      Monolith[Monolithic App] -- Decouple --> SQS[Amazon SQS]
+      SQS -- Messaging --> Components[Application Components]
+  - id: q42
+    type: multiple_select
+    question: Which of the following can be used to enable the Virtual Multi-Factor Authentication? (Choose TWO)
+    options:
+      - text: Amazon Connect.
+        is_correct: false
+      - text: AWS CLI.
+        is_correct: true
+      - text: AWS Identity and Access Management (IAM).
+        is_correct: true
+      - text: Amazon SNS.
+        is_correct: false
+      - text: Amazon Virtual Private Cloud.
+        is_correct: false
+    explanation: AWS CLI and AWS IAM console can both be used to enable virtual multi-factor authentication for user accounts.
+    diagram: |
+      graph TD
+      vMFA[Virtual MFA] -- Enable via --> CLI[AWS CLI]
+      vMFA -- Enable via --> IAM[AWS IAM]
+  - id: q43
+    type: multiple_choice
+    question: According to best practices, which of the below options is best suited for processing a large number of binary files?
+    options:
+      - text: Vertically scaling EC2 instances.
+        is_correct: false
+      - text: Running RDS instances in parallel.
+        is_correct: false
+      - text: Vertically scaling RDS instances.
+        is_correct: false
+      - text: Running EC2 instances in parallel.
+        is_correct: true
+    explanation: Running EC2 instances in parallel (horizontal scaling) is the best practice for processing large amounts of binary files.
+    diagram: |
+      graph TD
+      Files[Binary Files] -- Process --> EC2s[Multiple EC2 Instances]
+      EC2s -- Parallel Processing --> Output[Processed Output]
+  - id: q44
+    type: multiple_choice
+    question: A company is planning to use Amazon S3 and Amazon CloudFront to distribute its video courses globally. What tool can the company use to estimate the costs of these services?
+    options:
+      - text: AWS Cost Explorer.
+        is_correct: false
+      - text: AWS Pricing Calculator.
+        is_correct: true
+      - text: AWS Budgets.
+        is_correct: false
+      - text: AWS Cost & Usage Report.
+        is_correct: false
+    explanation: AWS Pricing Calculator allows customers to estimate costs for AWS services like S3 and CloudFront before deployment.
+    diagram: |
+      graph TD
+      Company[Company] -- Estimate Costs --> Calculator[AWS Pricing Calculator]
+      Calculator -- Calculate --> Estimate[S3 & CloudFront Costs]
+  - id: q45
+    type: multiple_select
+    question: "What should you do if you see resources, which you don't remember creating, in the AWS Management Console? (Choose TWO)"
+    options:
+      - text: Stop all running services and open an investigation.
+        is_correct: false
+      - text: Give your root account password to AWS Support so that they can assist in troubleshooting and securing the account.
+        is_correct: false
+      - text: Check the AWS CloudTrail logs and delete all IAM users that have access to your resources.
+        is_correct: false
+      - text: Open an investigation and delete any potentially compromised IAM users.
+        is_correct: true
+      - text: Change your AWS root account password and the passwords of any IAM users.
+        is_correct: true
+    explanation: Open an investigation to identify the issue and change passwords of potentially compromised accounts to secure your AWS account.
+    diagram: |
+      graph TD
+      Suspicious[Suspicious Resources] -- Action 1 --> Investigate[Open Investigation]
+      Suspicious -- Action 2 --> ChangePass[Change Passwords]
+  - id: q46
+    type: multiple_choice
+    question: A key practice when designing solutions on AWS is to minimize dependencies between components so that the failure of a single component does not impact other components. What is this practice called?
+    options:
+      - text: Elastic coupling.
+        is_correct: false
+      - text: Loosely coupling.
+        is_correct: true
+      - text: Scalable coupling.
+        is_correct: false
+      - text: Tightly coupling.
+        is_correct: false
+    explanation: Loosely coupling minimizes dependencies between components to ensure the failure of one component doesn't affect others.
+    diagram: |
+      graph TD
+      Design[AWS Design Principle] -- Minimize Dependencies --> Loosely[Loosely Coupling]
+      Loosely -- Ensure --> Resilience[Component Resilience]
+  - id: q47
+    type: multiple_choice
+    question: Which AWS Service offers an NFS file system that can be mounted concurrently from multiple EC2 instances?
+    options:
+      - text: Amazon Elastic File System.
+        is_correct: true
+      - text: Amazon Simple Storage Service.
+        is_correct: false
+      - text: Amazon Elastic Block Store.
+        is_correct: false
+      - text: AWS Storage Gateway.
+        is_correct: false
+    explanation: Amazon EFS provides a shared NFS file system that can be mounted by multiple EC2 instances concurrently.
+    diagram: |
+      graph TD
+      NFS[NFS File System] -- Service --> EFS[Amazon Elastic File System]
+      EFS -- Mount --> EC21[EC2 Instance 1]
+      EFS -- Mount --> EC22[EC2 Instance 2]
+      EFS -- Mount --> EC23[EC2 Instance 3]
+  - id: q48
+    type: multiple_choice
+    question: Availability Zones within a Region are connected over low-latency links. Which of the following is a benefit of these links?
+    options:
+      - text: Create private connection to your data center.
+        is_correct: false
+      - text: Achieve global high availability.
+        is_correct: false
+      - text: Automate the process of provisioning new compute resources.
+        is_correct: false
+      - text: Make synchronous replication of your data possible.
+        is_correct: true
+    explanation: Low-latency links between Availability Zones enable synchronous replication of data for consistency and durability.
+    diagram: |
+      graph TD
+      AZ1[Availability Zone 1] -- Low-latency Link --> AZ2[Availability Zone 2]
+      AZ1 -- Sync Replication --> Data[Data]
+      AZ2 -- Replicate --> Data
+  - id: q49
+    type: multiple_select
+    question: "Which of the following are true regarding the languages that are supported on AWS Lambda? (Choose TWO)"
+    options:
+      - text: Lambda only supports Python and Node.js, but third party plugins are available to convert code in other languages to these formats.
+        is_correct: false
+      - text: Lambda natively supports a number of programming languages such as Node.js, Python, and Java.
+        is_correct: true
+      - text: Lambda is AWS' proprietary programming language for microservices.
+        is_correct: false
+      - text: Lambda doesn't support programming languages; it is a serverless compute service.
+        is_correct: false
+      - text: Lambda can support any programming language using an API.
+        is_correct: true
+    explanation: AWS Lambda natively supports multiple languages and can support any language through custom runtimes and APIs.
+    diagram: |
+      graph TD
+      Lambda[AWS Lambda] -- Supported Languages --> Native[Node.js, Python, Java]
+      Lambda -- Custom Runtimes --> Any[Any Language via API]
+  - id: q50
+    type: multiple_select
+    question: What are the capabilities of AWS X-Ray? (Choose TWO)
+    options:
+      - text: Automatically decouples application components.
+        is_correct: false
+      - text: Facilitates tracking of user requests to identify application issues.
+        is_correct: true
+      - text: Helps improve application performance.
+        is_correct: true
+      - text: Deploys applications to Amazon EC2 instances.
+        is_correct: false
+      - text: Deploys applications to on-premises servers.
+        is_correct: false
+    explanation: AWS X-Ray tracks user requests and helps identify and improve application performance issues.
+    diagram: |
+      graph TD
+      XRay[AWS X-Ray] -- Capability 1 --> Tracking[Request Tracking]
+      XRay -- Capability 2 --> Performance[Performance Improvement]

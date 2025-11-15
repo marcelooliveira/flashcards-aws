@@ -1,0 +1,893 @@
+questions:
+  - id: q1
+    type: multiple_select
+    question: Which of the following can help secure your sensitive data in Amazon S3? (Choose TWO)
+    options:
+      - text: Delete the encryption keys once your data is encrypted.
+        is_correct: false
+      - text: With AWS you do not need to worry about encryption.
+        is_correct: false
+      - text: Enable S3 Encryption.
+        is_correct: true
+      - text: Encrypt the data prior to uploading it.
+        is_correct: true
+      - text: Delete all IAM users that have access to S3.
+        is_correct: false
+    explanation: Enable S3 Encryption and encrypt data before uploading are both effective data security practices for S3.
+    diagram: |
+      graph TD
+      Data[Sensitive Data] -- Encrypt Pre-upload --> Encrypt1[Client-side Encryption]
+      Data -- Encrypt At Rest --> Encrypt2[S3 Encryption]
+      Both --> Secure[Secure in S3]
+  - id: q2
+    type: multiple_choice
+    question: Which AWS service helps developers compile and test their code?
+    options:
+      - text: AWS CodeDeploy.
+        is_correct: false
+      - text: AWS CodeCommit.
+        is_correct: false
+      - text: CloudEndure.
+        is_correct: false
+      - text: AWS CodeBuild.
+        is_correct: true
+    explanation: AWS CodeBuild compiles source code, runs tests, and produces deployable software packages.
+    diagram: |
+      graph TD
+      Code[Source Code] -- Compile & Test --> CodeBuild[AWS CodeBuild]
+      CodeBuild -- Produces --> Package[Deployable Package]
+  - id: q3
+    type: multiple_select
+    question: Which of the following will affect how much you are charged for storing objects in S3? (Choose TWO)
+    options:
+      - text: Using default encryption for any number of S3 buckets.
+        is_correct: false
+      - text: The number of EBS volumes attached to your instances.
+        is_correct: false
+      - text: The storage class used for the objects stored.
+        is_correct: true
+      - text: Creating and deleting S3 buckets.
+        is_correct: false
+      - text: The total size in gigabytes of all objects stored.
+        is_correct: true
+    explanation: S3 pricing is affected by storage class and total object size stored. Encryption and bucket operations don't directly affect storage costs.
+    diagram: |
+      graph TD
+      S3Cost[S3 Storage Cost] -- Factor 1 --> StorageClass[Storage Class]
+      S3Cost -- Factor 2 --> Size[Total Size GB]
+  - id: q4
+    type: multiple_select
+    question: What does the Amazon CloudFront service provide? (Choose TWO)
+    options:
+      - text: Tracks user activity and APl usage.
+        is_correct: false
+      - text: Increases application availability by caching at the edge.
+        is_correct: true
+      - text: Enables faster disaster recovery.
+        is_correct: false
+      - text: Stores archived data at very low costs.
+        is_correct: false
+      - text: Delivers content to end users with low latency.
+        is_correct: true
+    explanation: Amazon CloudFront caches content at edge locations for availability and delivers it with low latency.
+    diagram: |
+      graph TD
+      Origin[Origin Server] -- Content --> CF[Amazon CloudFront]
+      CF -- Edge Cache --> Availability[Increased Availability]
+      CF -- Low Latency --> Users[Global Users]
+  - id: q5
+    type: multiple_choice
+    question: You are facing a lot of problems with your current contact center. Which service provides a cloud-based contact center that can deliver a better service for your customers?
+    options:
+      - text: Amazon Lightsail.
+        is_correct: false
+      - text: Amazon Connect.
+        is_correct: true
+      - text: AWS Direct Connect.
+        is_correct: false
+      - text: AWS Elastic Beanstalk.
+        is_correct: false
+    explanation: Amazon Connect is a cloud-based contact center service that delivers scalable and cost-effective customer service.
+    diagram: |
+      graph TD
+      ContactCenter[Traditional Contact Center] -- Migrate --> Connect[Amazon Connect]
+      Connect -- Cloud-based --> Service[Better Customer Service]
+  - id: q6
+    type: multiple_choice
+    question: You have migrated your application to AWS recently. How can you view the AWS costs applied to your account?
+    options:
+      - text: Using the AWS Cost & Usage Report.
+        is_correct: true
+      - text: Using the AWS Total Cost of Ownership (TCO) dashboard.
+        is_correct: false
+      - text: Using the AWS CloudWatch logs dashboard.
+        is_correct: false
+      - text: Using the Amazon VPC dashboard.
+        is_correct: false
+    explanation: AWS Cost & Usage Report provides detailed billing data about AWS costs applied to your account.
+    diagram: |
+      graph TD
+      Account[AWS Account] -- Billing Data --> CUR[AWS Cost & Usage Report]
+      CUR -- View --> Costs[Costs & Usage]
+  - id: q7
+    type: multiple_select
+    question: Which of the following are valid Amazon EC2 Reserved Instance types? (Choose TWO)
+    options:
+      - text: Convertible.
+        is_correct: true
+      - text: Expedited.
+        is_correct: false
+      - text: Bulk.
+        is_correct: false
+      - text: Spot.
+        is_correct: false
+      - text: Standard.
+        is_correct: true
+    explanation: Convertible and Standard are valid EC2 Reserved Instance types. Spot is a separate purchasing option.
+    diagram: |
+      graph TD
+      RI[Reserved Instances] -- Type 1 --> Convertible[Convertible RIs]
+      RI -- Type 2 --> Standard[Standard RIs]
+  - id: q8
+    type: multiple_choice
+    question: Which of the following services gives you access to all AWS auditor-issued reports and certifications?
+    options:
+      - text: AWS Artifact.
+        is_correct: true
+      - text: AWS Config.
+        is_correct: false
+      - text: Amazon CloudWatch.
+        is_correct: false
+      - text: AWS CloudTrail.
+        is_correct: false
+    explanation: AWS Artifact provides access to AWS auditor-issued reports, certifications, and compliance documentation.
+    diagram: |
+      graph TD
+      Compliance[Compliance & Audits] -- Access --> Artifact[AWS Artifact]
+      Artifact -- Provides --> Reports[Auditor-issued Reports]
+  - id: q9
+    type: multiple_choice
+    question: You manage a blog on AWS that has different environments (development, testing, and production). What can you use to create a custom console for each environment to view and manage your resources easily?
+    options:
+      - text: AWS Resource Groups.
+        is_correct: true
+      - text: AWS Placement Groups.
+        is_correct: false
+      - text: AWS Management Console.
+        is_correct: false
+      - text: AWS Tag Editor.
+        is_correct: false
+    explanation: AWS Resource Groups allows you to create custom consoles to view and manage resources by environment.
+    diagram: |
+      graph TD
+      Env[Environments] -- Organize --> RG[AWS Resource Groups]
+      RG -- Custom Console --> Dev[Development]
+      RG -- Custom Console --> Test[Testing]
+      RG -- Custom Console --> Prod[Production]
+  - id: q10
+    type: multiple_choice
+    question: Which AWS service collects metrics from running EC2 instances?
+    options:
+      - text: Amazon Inspector.
+        is_correct: false
+      - text: Amazon CloudWatch.
+        is_correct: true
+      - text: AWS CloudFormation.
+        is_correct: false
+      - text: AWS CloudTrail.
+        is_correct: false
+    explanation: Amazon CloudWatch collects and monitors metrics from EC2 instances and other AWS resources.
+    diagram: |
+      graph TD
+      EC2[EC2 Instances] -- Metrics --> CW[Amazon CloudWatch]
+      CW -- Monitor --> Metrics[Performance Metrics]
+  - id: q11
+    type: multiple_choice
+    question: Your web application currently faces performance issues and suffers from long load times. Which of the following AWS services could help fix these issues and improve performance?
+    options:
+      - text: Amazon Detective.
+        is_correct: false
+      - text: AWS X-Ray.
+        is_correct: true
+      - text: AWS Security Hub.
+        is_correct: false
+      - text: AWS Shield.
+        is_correct: false
+    explanation: AWS X-Ray analyzes and debugs distributed applications to identify performance bottlenecks.
+    diagram: |
+      graph TD
+      App[Web Application] -- Performance Issues --> XRay[AWS X-Ray]
+      XRay -- Analyze --> Bottlenecks[Performance Bottlenecks]
+      Bottlenecks -- Fix --> Improved[Improved Performance]
+  - id: q12
+    type: multiple_select
+    question: Which of the following compute resources are serverless? (Choose TWO)
+    options:
+      - text: Amazon EC2.
+        is_correct: false
+      - text: AWS Fargate.
+        is_correct: true
+      - text: AWS Lambda.
+        is_correct: true
+      - text: Amazon ECS.
+        is_correct: false
+      - text: Amazon EMR.
+        is_correct: false
+    explanation: AWS Fargate and AWS Lambda are serverless compute services that don't require server management.
+    diagram: |
+      graph TD
+      Serverless[Serverless Services] -- Example 1 --> Fargate[AWS Fargate]
+      Serverless -- Example 2 --> Lambda[AWS Lambda]
+  - id: q13
+    type: multiple_choice
+    question: For compliance and regulatory purposes, a government agency requires that their applications must run on hardware that is dedicated to them only. How can you meet this requirement?
+    options:
+      - text: Use EC2 Dedicated Hosts.
+        is_correct: true
+      - text: Use EC2 Reserved Instances.
+        is_correct: false
+      - text: Use EC2 Spot Instances.
+        is_correct: false
+      - text: Use EC2 On-demand Instances.
+        is_correct: false
+    explanation: EC2 Dedicated Hosts provide physical servers dedicated exclusively to your account.
+    diagram: |
+      graph TD
+      Compliance[Compliance Requirement] -- Dedicated Hardware --> DH[EC2 Dedicated Hosts]
+      DH -- Exclusive Hardware --> Agency[Government Agency]
+  - id: q14
+    type: multiple_choice
+    question: Which AWS Cost Governance best practice recommends refining workloads regularly to make the most of existing AWS resources and reduce costs?
+    options:
+      - text: Tagging Enforcement.
+        is_correct: false
+      - text: Architecture Optimization.
+        is_correct: true
+      - text: Budgeting Processes.
+        is_correct: false
+      - text: Resource Controls.
+        is_correct: false
+    explanation: Architecture Optimization involves refining workloads to reduce costs and maximize resource utilization.
+    diagram: |
+      graph TD
+      Workloads[Workloads] -- Refine --> Optimize[Architecture Optimization]
+      Optimize -- Maximize --> Resources[Resource Usage]
+      Optimize -- Reduce --> Cost[Costs]
+  - id: q15
+    type: multiple_choice
+    question: An organization needs to build a financial application that requires support for ACID transactions. Which AWS database service is most appropriate in this case?
+    options:
+      - text: RedShift.
+        is_correct: false
+      - text: RDS.
+        is_correct: true
+      - text: CloudHSM.
+        is_correct: false
+      - text: DMS.
+        is_correct: false
+    explanation: Amazon RDS supports ACID transactions required for financial applications.
+    diagram: |
+      graph TD
+      Financial[Financial App] -- ACID Transactions --> RDS[Amazon RDS]
+      RDS -- Support --> ACID[ACID Properties]
+  - id: q16
+    type: multiple_choice
+    question: What can you use to assign permissions directly to an IAM user?
+    options:
+      - text: IAM Identity.
+        is_correct: false
+      - text: IAM Group.
+        is_correct: false
+      - text: IAM Role.
+        is_correct: false
+      - text: IAM Policy.
+        is_correct: true
+    explanation: IAM Policies are used to assign permissions directly to IAM users, groups, and roles.
+    diagram: |
+      graph TD
+      User[IAM User] -- Assign Permissions --> Policy[IAM Policy]
+      Policy -- Grant --> Permissions[Permissions]
+  - id: q17
+    type: multiple_choice
+    question: The owner of an E-Commerce application notices that the compute capacity requirements vary heavily from time to time. What makes AWS more economical than traditional data centers for this type of application?
+    options:
+      - text: AWS allows customers to launch powerful EC2 instances to handle spikes in load.
+        is_correct: false
+      - text: AWS allows customers to pay upfront to get bigger discounts.
+        is_correct: false
+      - text: AWS allows customers to launch and terminate EC2 instances based on demand.
+        is_correct: true
+      - text: AWS allows customers to choose cheaper types of EC2 instances that best fit their needs.
+        is_correct: false
+    explanation: AWS elasticity allows launching/terminating instances on demand, avoiding fixed capacity costs.
+    diagram: |
+      graph TD
+      ECommerce[E-Commerce] -- Variable Load --> Launch[Launch Instances]
+      ECommerce -- Low Load --> Terminate[Terminate Instances]
+      Elasticity[Elasticity] -- Result --> Economical[More Economical]
+  - id: q18
+    type: multiple_choice
+    question: Amazon RDS supports multiple database engines to choose from. Which of the following is not one of them?
+    options:
+      - text: PostgreSQL.
+        is_correct: false
+      - text: Oracle.
+        is_correct: false
+      - text: Microsoft SQL Server.
+        is_correct: false
+      - text: Teradata.
+        is_correct: true
+    explanation: Teradata is not supported by Amazon RDS. RDS supports PostgreSQL, Oracle, MySQL, SQL Server, and MariaDB.
+    diagram: |
+      graph TD
+      RDS[Amazon RDS] -- Supports --> PostgreSQL[PostgreSQL]
+      RDS -- Supports --> Oracle[Oracle]
+      RDS -- Supports --> MSSQL[SQL Server]
+      RDS -- Not Supported --> Teradata[Teradata]
+  - id: q19
+    type: multiple_choice
+    question: Which of the following AWS services would help you migrate on-premise databases to AWS?
+    options:
+      - text: AWS DMS.
+        is_correct: true
+      - text: Amazon S3 Transfer Acceleration.
+        is_correct: false
+      - text: AWS Directory Service.
+        is_correct: false
+      - text: AWS Transit Gateway.
+        is_correct: false
+    explanation: AWS Database Migration Service (DMS) helps migrate on-premises databases to AWS.
+    diagram: |
+      graph TD
+      OnPremDB[On-Premises DB] -- Migrate --> DMS[AWS DMS]
+      DMS -- Move to --> AWS[AWS Cloud]
+  - id: q20
+    type: multiple_choice
+    question: For new AWS customers, what is the EASIEST way to launch a simple WordPress website on AWS?
+    options:
+      - text: Run WordPress on an Amazon Lightsail instance.
+        is_correct: true
+      - text: Install WordPress on an Amazon EC2 instance.
+        is_correct: false
+      - text: Use the Amazon S3 Web hosting feature.
+        is_correct: false
+      - text: Host the website directly on AWS Cloud Development Kit (AWS CDK).
+        is_correct: false
+    explanation: Amazon Lightsail provides the easiest way for new customers to launch WordPress with pre-configured templates.
+    diagram: |
+      graph TD
+      NewCustomer[New Customer] -- Easiest --> Lightsail[Amazon Lightsail]
+      Lightsail -- Pre-configured --> WordPress[WordPress Website]
+  - id: q21
+    type: multiple_select
+    question: Which of the following would you use to manage your encryption keys in the AWS Cloud? (Choose TWO)
+    options:
+      - text: AWS KMS.
+        is_correct: true
+      - text: AWS Certificate Manager.
+        is_correct: false
+      - text: AWS CodeDeploy.
+        is_correct: false
+      - text: AWS CodeCommit.
+        is_correct: false
+      - text: CloudHSM.
+        is_correct: true
+    explanation: AWS KMS and CloudHSM are services for managing encryption keys in AWS.
+    diagram: |
+      graph TD
+      Keys[Encryption Keys] -- Manage with --> KMS[AWS KMS]
+      Keys -- Manage with --> HSM[CloudHSM]
+  - id: q22
+    type: multiple_choice
+    question: Which of the following services allows you to install and run custom relational database software?
+    options:
+      - text: Amazon EC2.
+        is_correct: true
+      - text: Amazon Cognito.
+        is_correct: false
+      - text: Amazon RDS.
+        is_correct: false
+      - text: Amazon Inspector.
+        is_correct: false
+    explanation: Amazon EC2 allows you to install any custom database software. RDS is for managed databases only.
+    diagram: |
+      graph TD
+      CustomDB[Custom Database] -- Install on --> EC2[Amazon EC2]
+      EC2 -- Full Control --> Database[Database Software]
+  - id: q23
+    type: multiple_choice
+    question: Your application requirements for CPU and RAM are changing in an unpredictable way. Which service can be used to dynamically adjust these resources based on load?
+    options:
+      - text: Auto Scaling.
+        is_correct: true
+      - text: ELB.
+        is_correct: false
+      - text: Amazon Route53.
+        is_correct: false
+      - text: Amazon Elastic Container Service.
+        is_correct: false
+    explanation: AWS Auto Scaling dynamically adjusts compute resources (instances) based on load and demand.
+    diagram: |
+      graph TD
+      Load[Unpredictable Load] -- Dynamic Adjustment --> AutoScale[AWS Auto Scaling]
+      AutoScale -- Adjust --> Resources[CPU & RAM Resources]
+  - id: q24
+    type: multiple_choice
+    question: A company has infrastructure hosted in an on-premises data center. They currently have an operations team that takes care of identity management. If they decide to migrate to the AWS cloud, which of the following services would help them perform the same role in AWS?
+    options:
+      - text: AWS IAM.
+        is_correct: true
+      - text: AWS Outposts.
+        is_correct: false
+      - text: AWS Federation.
+        is_correct: false
+      - text: Amazon Redshift.
+        is_correct: false
+    explanation: AWS IAM provides identity and access management services similar to on-premises identity management.
+    diagram: |
+      graph TD
+      OnPrem[On-Premises IdM] -- Migrate --> IAM[AWS IAM]
+      IAM -- Cloud-based --> Identity[Identity Management]
+  - id: q25
+    type: multiple_select
+    question: What are some key design principles for designing public cloud systems? (Choose TWO)
+    options:
+      - text: Reserved capacity instead of on demand.
+        is_correct: false
+      - text: Loose coupling over tight coupling.
+        is_correct: true
+      - text: Servers instead of managed services.
+        is_correct: false
+      - text: Disposable resources instead of fixed servers.
+        is_correct: true
+      - text: Multi-AZ deployments instead of multi-region deployments.
+        is_correct: false
+    explanation: Loose coupling and disposable resources are key cloud design principles for resilience and flexibility.
+    diagram: |
+      graph TD
+      Design[Cloud Design] -- Principle 1 --> Loose[Loose Coupling]
+      Design -- Principle 2 --> Disposable[Disposable Resources]
+  - id: q26
+    type: multiple_choice
+    question: Where can AWS account owners get a list of all users in their account, including the status of their AWS credentials?
+    options:
+      - text: AWS CloudTrail Trails.
+        is_correct: false
+      - text: IAM Credential Report.
+        is_correct: true
+      - text: AWS Artifact reports.
+        is_correct: false
+      - text: AWS Cost and Usage Report.
+        is_correct: false
+    explanation: IAM Credential Report provides a list of all IAM users and their credential status.
+    diagram: |
+      graph TD
+      Owner[Account Owner] -- View Users --> Report[IAM Credential Report]
+      Report -- Shows --> Users[All Users & Credentials]
+  - id: q27
+    type: multiple_choice
+    question: Which of the following services enables you to easily generate and use your own encryption keys in the AWS Cloud?
+    options:
+      - text: AWS Shield.
+        is_correct: false
+      - text: AWS Certificate Manager.
+        is_correct: false
+      - text: AWS CloudHSM.
+        is_correct: true
+      - text: AWS WAF.
+        is_correct: false
+    explanation: AWS CloudHSM allows you to generate and manage your own encryption keys in a dedicated hardware module.
+    diagram: |
+      graph TD
+      Keys[Generate Keys] -- Service --> HSM[AWS CloudHSM]
+      HSM -- Dedicated Hardware --> Control[Full Control of Keys]
+  - id: q28
+    type: multiple_choice
+    question: You have developed a web application targeting a global audience. Which of the following will help you achieve the highest redundancy and fault tolerance from an infrastructure perspective?
+    options:
+      - text: There is no need to architect for these capabilities in AWS, as AWS is redundant by default.
+        is_correct: false
+      - text: Deploy the application in a single Availability Zone.
+        is_correct: false
+      - text: Deploy the application in multiple Availability Zones in a single AWS region.
+        is_correct: false
+      - text: Deploy the application in multiple Availability Zones in multiple AWS regions.
+        is_correct: true
+    explanation: Multi-region and multi-AZ deployment provides highest redundancy and fault tolerance for global applications.
+    diagram: |
+      graph TD
+      Global[Global Audience] -- Redundancy --> MultiRegion[Multiple Regions]
+      MultiRegion -- MultiAZ --> AZs[Multiple Availability Zones]
+      AZs -- Result --> Fault[Highest Fault Tolerance]
+  - id: q29
+    type: multiple_select
+    question: "For some services, AWS automatically replicates data across multiple Availability Zones to provide fault tolerance in the event of a server failure or Availability Zone outage. Select TWO services that automatically replicate data across Availability Zones."
+    options:
+      - text: Instance Store.
+        is_correct: false
+      - text: S3.
+        is_correct: true
+      - text: DynamoDB.
+        is_correct: true
+      - text: Amazon Route 53.
+        is_correct: false
+      - text: AWS VPN.
+        is_correct: false
+    explanation: Amazon S3 and DynamoDB automatically replicate data across multiple Availability Zones for fault tolerance.
+    diagram: |
+      graph TD
+      Services[Auto-replicating Services] -- Example 1 --> S3[Amazon S3]
+      Services -- Example 2 --> DDB[DynamoDB]
+  - id: q30
+    type: multiple_select
+    question: Which of the following factors affect Amazon CloudFront cost? (Choose TWO)
+    options:
+      - text: Number of Requests.
+        is_correct: true
+      - text: Traffic Distribution.
+        is_correct: true
+      - text: Number of Volumes.
+        is_correct: false
+      - text: Instance type.
+        is_correct: false
+      - text: Storage Class.
+        is_correct: false
+    explanation: CloudFront pricing is affected by the number of requests and traffic distribution to edge locations.
+    diagram: |
+      graph TD
+      CFCost[CloudFront Cost] -- Factor 1 --> Requests[Number of Requests]
+      CFCost -- Factor 2 --> Traffic[Traffic Distribution]
+  - id: q31
+    type: multiple_choice
+    question: Which of the following resources can an AWS customer use to learn more about prohibited uses of the services offered by AWS?
+    options:
+      - text: AWS Service Control Policies (SCPs).
+        is_correct: false
+      - text: AWS Artifact.
+        is_correct: false
+      - text: AWS Budgets.
+        is_correct: false
+      - text: AWS Acceptable Use Policy.
+        is_correct: true
+    explanation: AWS Acceptable Use Policy outlines prohibited uses of AWS services.
+    diagram: |
+      graph TD
+      Customer[Customer] -- Learn Restrictions --> AUP[AWS Acceptable Use Policy]
+      AUP -- Defines --> Prohibited[Prohibited Uses]
+  - id: q32
+    type: multiple_select
+    question: Which of the following security resources are available to any user for free? (Choose TWO)
+    options:
+      - text: AWS Bulletins.
+        is_correct: true
+      - text: AWS TAM.
+        is_correct: false
+      - text: AWS Support APl.
+        is_correct: false
+      - text: AWS Security Blog.
+        is_correct: true
+      - text: AWS Classroom Training.
+        is_correct: false
+    explanation: AWS Bulletins and AWS Security Blog are free security resources available to all AWS customers.
+    diagram: |
+      graph TD
+      Free[Free Security Resources] -- Resource 1 --> Bulletins[AWS Bulletins]
+      Free -- Resource 2 --> Blog[AWS Security Blog]
+  - id: q33
+    type: multiple_choice
+    question: How can you protect data stored on Amazon S3 from accidental deletion?
+    options:
+      - text: By enabling S3 Versioning.
+        is_correct: true
+      - text: By configuring S3 Bucket Policies.
+        is_correct: false
+      - text: By configuring S3 Lifecycle Policies.
+        is_correct: false
+      - text: By disabling S3 Cross-Region Replication (CRR).
+        is_correct: false
+    explanation: S3 Versioning maintains multiple versions of objects, protecting against accidental deletion.
+    diagram: |
+      graph TD
+      Data[S3 Data] -- Protect from Deletion --> Versioning[S3 Versioning]
+      Versioning -- Maintain --> Versions[Multiple Versions]
+  - id: q34
+    type: multiple_choice
+    question: Which of the following is the responsibility of AWS according to the AWS Shared Responsibility Model?
+    options:
+      - text: Securing regions and edge locations.
+        is_correct: true
+      - text: Performing auditing tasks.
+        is_correct: false
+      - text: Monitoring AWS resources usage.
+        is_correct: false
+      - text: Securing access to AWS resources.
+        is_correct: false
+    explanation: AWS is responsible for securing the regions and edge locations (infrastructure security).
+    diagram: |
+      graph TD
+      AWS[AWS Responsibility] -- Secure --> Regions[Regions]
+      AWS -- Secure --> Edges[Edge Locations]
+  - id: q35
+    type: multiple_choice
+    question: Which of the following AWS support plans provides access to only the seven core AWS Trusted Advisor checks?
+    options:
+      - text: Business & Enterprise Support.
+        is_correct: false
+      - text: Basic & Developer Support.
+        is_correct: true
+      - text: Developer & Enterprise Support.
+        is_correct: false
+      - text: Developer & Business Support.
+        is_correct: false
+    explanation: Basic and Developer Support plans provide access to only the seven core Trusted Advisor checks.
+    diagram: |
+      graph TD
+      Support[Support Plans] -- Core Checks --> Basic[Basic Support]
+      Support -- Core Checks --> Developer[Developer Support]
+  - id: q36
+    type: multiple_choice
+    question: Which of the following is NOT a benefit of using AWS Lambda?
+    options:
+      - text: AWS Lambda runs code without provisioning or managing servers.
+        is_correct: false
+      - text: AWS Lambda provides resizable compute capacity in the cloud.
+        is_correct: true
+      - text: There is no charge when your AWS Lambda code is not running.
+        is_correct: false
+      - text: AWS Lambda can be called directly from any mobile app.
+        is_correct: false
+    explanation: Lambda doesn't provide resizable compute capacity - that's an EC2 benefit. Lambda is event-driven with fixed resources.
+    diagram: |
+      graph TD
+      Lambda[AWS Lambda] -- Benefit 1 --> NoServer[No Server Management]
+      Lambda -- Benefit 2 --> NoCost[No Cost When Not Running]
+      Lambda -- Not Benefit --> Resizable[Resizable Capacity]
+  - id: q37
+    type: multiple_choice
+    question: How does AWS help customers achieve compliance in the cloud?
+    options:
+      - text: "It's not possible to meet regulatory compliance requirements in the Cloud."
+        is_correct: false
+      - text: AWS applies the most common Cloud security standards, and is responsible for complying with customers' applicable laws and regulations.
+        is_correct: false
+      - text: AWS has many common assurance certifications such as ISO 9001 and HIPAA.
+        is_correct: true
+      - text: Many AWS services are assessed regularly to comply with local laws and regulations.
+        is_correct: false
+    explanation: AWS maintains certifications like ISO 9001 and HIPAA to help customers meet compliance requirements.
+    diagram: |
+      graph TD
+      AWS[AWS Compliance] -- Certifications --> ISO[ISO 9001]
+      AWS -- Certifications --> HIPAA[HIPAA]
+      Certifications --> Help[Help Customers Comply]
+  - id: q38
+    type: multiple_choice
+    question: Who is responsible for scaling a DynamoDB database in the AWS Shared Responsibility Model?
+    options:
+      - text: Your security team.
+        is_correct: false
+      - text: Your development team.
+        is_correct: false
+      - text: AWS.
+        is_correct: true
+      - text: Your internal DevOps team.
+        is_correct: false
+    explanation: AWS automatically handles scaling for DynamoDB as it's a fully managed service.
+    diagram: |
+      graph TD
+      DDB[DynamoDB] -- Managed Service --> AWS[AWS Responsibility]
+      AWS -- Automatic --> Scaling[Auto-scaling]
+  - id: q39
+    type: multiple_choice
+    question: You are working as a web app developer. You are currently facing issues in media playback for mobile devices because your media format is not supported. Which of the following AWS services can help you convert your media into another format?
+    options:
+      - text: Amazon Elastic Transcoder.
+        is_correct: true
+      - text: Amazon Pinpoint.
+        is_correct: false
+      - text: AmazonS3.
+        is_correct: false
+      - text: Amazon Rekognition.
+        is_correct: false
+    explanation: Amazon Elastic Transcoder converts media between formats for different devices and platforms.
+    diagram: |
+      graph TD
+      Media[Media File] -- Unsupported Format --> Transcoder[Amazon Elastic Transcoder]
+      Transcoder -- Convert --> Format[Supported Format]
+      Format --> Mobile[Mobile Playback]
+  - id: q40
+    type: multiple_select
+    question: What are the benefits of the AWS Organizations service? (Choose TWO)
+    options:
+      - text: Control access to AWS services.
+        is_correct: true
+      - text: Help organizations design and maintain an accelerated path to successful cloud adoption.
+        is_correct: false
+      - text: Manage your organization's payment methods.
+        is_correct: false
+      - text: Help organization achieve their desired business outcomes with AWS.
+        is_correct: false
+      - text: Consolidate billing across multiple AWS accounts.
+        is_correct: true
+    explanation: AWS Organizations provides access control and consolidated billing across multiple accounts.
+    diagram: |
+      graph TD
+      Orgs[AWS Organizations] -- Benefit 1 --> Access[Access Control]
+      Orgs -- Benefit 2 --> Billing[Consolidated Billing]
+  - id: q41
+    type: multiple_choice
+    question: Which AWS service allows you to build a data warehouse in the cloud?
+    options:
+      - text: AWS Shield.
+        is_correct: false
+      - text: Amazon Redshift.
+        is_correct: true
+      - text: Amazon RDS.
+        is_correct: false
+      - text: Amazon Comprehend.
+        is_correct: false
+    explanation: Amazon Redshift is a fully managed data warehouse service for analytics and business intelligence.
+    diagram: |
+      graph TD
+      DW[Data Warehouse] -- Cloud-based --> Redshift[Amazon Redshift]
+      Redshift -- Analytics --> BI[Business Intelligence]
+  - id: q42
+    type: multiple_choice
+    question: What AWS service allows you to buy third-party software solutions and services that run on AWS resources?
+    options:
+      - text: AWS Application Discovery service.
+        is_correct: false
+      - text: Amazon DevPay.
+        is_correct: false
+      - text: AWS Marketplace.
+        is_correct: true
+      - text: Resource Groups.
+        is_correct: false
+    explanation: AWS Marketplace provides access to third-party software solutions and services that run on AWS.
+    diagram: |
+      graph TD
+      ThirdParty[Third-Party Software] -- Buy & Deploy --> Marketplace[AWS Marketplace]
+      Marketplace -- Run on --> AWS[AWS Resources]
+  - id: q43
+    type: multiple_choice
+    question: Which of the following services is an AWS repository management system that allows for storing, versioning, and managing your application code?
+    options:
+      - text: AWS CodePipeline.
+        is_correct: false
+      - text: AWS CodeCommit.
+        is_correct: true
+      - text: AWS X-Ray.
+        is_correct: false
+      - text: Amazon Inspector.
+        is_correct: false
+    explanation: AWS CodeCommit is a fully managed source control service for storing and versioning application code.
+    diagram: |
+      graph TD
+      Code[Application Code] -- Store & Version --> CodeCommit[AWS CodeCommit]
+      CodeCommit -- Repository --> Management[Code Management]
+  - id: q44
+    type: multiple_choice
+    question: Which AWS service can be used to route end users to the nearest AWS Region to reduce latency?
+    options:
+      - text: Amazon Cognito.
+        is_correct: false
+      - text: AWS Systems Manager.
+        is_correct: false
+      - text: AWS Cloud9.
+        is_correct: false
+      - text: Amazon Route 53.
+        is_correct: true
+    explanation: Amazon Route 53 routes traffic to the nearest region based on latency for optimal performance.
+    diagram: |
+      graph TD
+      Users[Global Users] -- Route to Nearest --> Route53[Amazon Route 53]
+      Route53 -- Region --> Latency[Reduced Latency]
+  - id: q45
+    type: multiple_choice
+    question: Which feature enables users to sign into their AWS accounts with their existing corporate credentials?
+    options:
+      - text: Federation.
+        is_correct: true
+      - text: Access keys.
+        is_correct: false
+      - text: IAM Permissions.
+        is_correct: false
+      - text: WAF rules.
+        is_correct: false
+    explanation: Federation allows users to use existing corporate credentials for AWS account access.
+    diagram: |
+      graph TD
+      Corporate[Corporate Credentials] -- Sign In --> Federation[Federation]
+      Federation -- Access --> AWS[AWS Account]
+  - id: q46
+    type: multiple_select
+    question: According to the AWS shared responsibility model, what are the controls that customers fully inherit from AWS? (Choose TWO)
+    options:
+      - text: Awareness and Training.
+        is_correct: false
+      - text: Communications controls.
+        is_correct: false
+      - text: Data center security controls.
+        is_correct: true
+      - text: Environmental controls.
+        is_correct: true
+      - text: Resource Configuration Management.
+        is_correct: false
+    explanation: Customers inherit data center security and environmental controls from AWS.
+    diagram: |
+      graph TD
+      Inherit[Inherited from AWS] -- Control 1 --> DataCenter[Data Center Security]
+      Inherit -- Control 2 --> Environmental[Environmental Controls]
+  - id: q47
+    type: multiple_choice
+    question: "What can you access by visiting the URL: http://status.aws.amazon.com?"
+    options:
+      - text: AWS Billing Dashboard.
+        is_correct: false
+      - text: AWS Cost Dashboard.
+        is_correct: false
+      - text: AWS Service Health Dashboard.
+        is_correct: true
+      - text: AWS Security Dashboard.
+        is_correct: false
+    explanation: status.aws.amazon.com provides the AWS Service Health Dashboard showing service status.
+    diagram: |
+      graph TD
+      URL["status.aws.amazon.com"] -- Provides --> Health[AWS Service Health Dashboard]
+      Health -- Shows --> Status[Service Status]
+  - id: q48
+    type: multiple_select
+    question: Which of the following procedures can reduce latency when your end users are retrieving data? (Choose TWO)
+    options:
+      - text: Store media assets in the region closest to your end users.
+        is_correct: true
+      - text: Store media assets on an additional EBS volume and increase the capacity of your server.
+        is_correct: false
+      - text: Replicate media assets to at least two availability zones.
+        is_correct: false
+      - text: Reduce the size of media assets using the Amazon Elastic Transcoder.
+        is_correct: false
+      - text: Store media assets in S3 and use CloudFront to distribute these assets.
+        is_correct: true
+    explanation: Storing assets near users and using CloudFront for distribution both reduce latency.
+    diagram: |
+      graph TD
+      Latency[Reduce Latency] -- Method 1 --> Region[Regional Proximity]
+      Latency -- Method 2 --> CloudFront[S3 + CloudFront]
+  - id: q49
+    type: multiple_select
+    question: Which of the following are part of the seven design principles for security in the cloud? (Choose TWO)
+    options:
+      - text: Use manual monitoring techniques to protect your AWS resources.
+        is_correct: false
+      - text: Use IAM roles to grant temporary access instead of long-term credentials.
+        is_correct: true
+      - text: Scale horizontally to protect from failures.
+        is_correct: false
+      - text: Enable real-time traceability.
+        is_correct: true
+      - text: Never store sensitive data in the cloud.
+        is_correct: false
+    explanation: Using IAM roles for temporary access and enabling real-time traceability are key security principles.
+    diagram: |
+      graph TD
+      Security[Security Principles] -- Principle 1 --> IAMRoles[IAM Roles for Temp Access]
+      Security -- Principle 2 --> Traceability[Real-time Traceability]
+  - id: q50
+    type: multiple_choice
+    question: A company is migrating production workloads to AWS, and they are concerned about cost management across different departments. Which option should the company implement to categorize and track AWS spending?
+    options:
+      - text: Use the AWS Pricing Calculator service to monitor the costs incurred by each department.
+        is_correct: false
+      - text: Use Amazon Aurora to forecast AWS spending based on usage.
+        is_correct: false
+      - text: Apply cost allocation tags to segment AWS costs by different e projects and departments.
+        is_correct: true
+      - text: Configure AWS Price List API to receive billing updates for each department automatically.
+        is_correct: false
+    explanation: Cost allocation tags allow you to segment and track AWS spending by department and project.
+    diagram: |
+      graph TD
+      Spending[AWS Spending] -- Categorize with --> Tags[Cost Allocation Tags]
+      Tags -- Segment --> Departments[Departments & Projects]
+      Tags -- Track --> Costs[Costs by Category]

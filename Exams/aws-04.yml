@@ -1,0 +1,893 @@
+questions:
+  - id: q1
+    type: multiple_select
+    question: A developer needs to set up an SSL security certificate for a client's eCommerce website in order to use the HTTPS protocol. Which of the following AWS services can be used to deploy the required SSL server certificates? (Choose TWO)
+    options:
+      - text: Amazon Route 53.
+        is_correct: true
+      - text: AWS ACM.
+        is_correct: true
+      - text: AWS Directory Service.
+        is_correct: false
+      - text: AWS Identity & Access Management.
+        is_correct: false
+      - text: AWS Data Pipeline.
+        is_correct: false
+    explanation: Amazon Route 53 and AWS ACM (AWS Certificate Manager) can both be used to deploy SSL server certificates for HTTPS protocol support.
+    diagram: |
+      graph TD
+      Dev[Developer] -- Setup SSL --> Route53[Amazon Route 53]
+      Dev -- Setup SSL --> ACM[AWS ACM]
+      ACM -- Deploy Cert --> WebSite[eCommerce Website]
+  - id: q2
+    type: multiple_select
+    question: Which of the following AWS services scale automatically without your intervention? (Choose TWO)
+    options:
+      - text: Amazon EC2.
+        is_correct: false
+      - text: Amazon S3.
+        is_correct: true
+      - text: AWS Lambda.
+        is_correct: true
+      - text: Amazon EMR.
+        is_correct: false
+      - text: Amazon EBS.
+        is_correct: false
+    explanation: Amazon S3 and AWS Lambda automatically scale without requiring manual intervention.
+    diagram: |
+      graph TD
+      User[User] -- Auto Scale --> S3[Amazon S3]
+      User -- Auto Scale --> Lambda[AWS Lambda]
+  - id: q3
+    type: multiple_select
+    question: A company is planning to migrate an application from Amazon EC2 to AWS Lambda to use a serverless architecture. Which of the following will be the responsibility of AWS after migration? (Choose TWO)
+    options:
+      - text: Application management.
+        is_correct: false
+      - text: Capacity management.
+        is_correct: true
+      - text: Access control.
+        is_correct: false
+      - text: Operating system maintenance.
+        is_correct: true
+      - text: Data management.
+        is_correct: false
+    explanation: AWS is responsible for capacity management and operating system maintenance in a serverless architecture using AWS Lambda.
+    diagram: |
+      graph TD
+      Company[Company] -- Migrate --> Lambda[AWS Lambda]
+      AWS[AWS] -- Manages Capacity --> Lambda
+      AWS -- Maintains OS --> Lambda
+  - id: q4
+    type: multiple_choice
+    question: How do ELBs improve the reliability of your application?
+    options:
+      - text: By distributing traffic across multiple S3 buckets.
+        is_correct: false
+      - text: By replicating data to multiple availability zones.
+        is_correct: false
+      - text: By creating database Read Replicas.
+        is_correct: false
+      - text: By ensuring that only healthy targets receive traffic.
+        is_correct: true
+    explanation: Elastic Load Balancers improve reliability by distributing traffic only to healthy targets, removing unhealthy instances from rotation.
+    diagram: |
+      graph TD
+      User[User] -- Traffic --> ELB[Elastic Load Balancer]
+      ELB -- Healthy --> Target1[Target 1]
+      ELB -- Healthy --> Target2[Target 2]
+  - id: q5
+    type: multiple_choice
+    question: A company needs to migrate their website from on-premises to AWS. Security is a major concern for them, so they need to host their website on hardware that is NOT shared with other AWS customers. Which of the following EC2 instance options meets this requirement?
+    options:
+      - text: On-demand instances.
+        is_correct: false
+      - text: Spot instances.
+        is_correct: false
+      - text: Dedicated instances.
+        is_correct: true
+      - text: Reserved instances.
+        is_correct: false
+    explanation: Dedicated Instances provide hardware that is not shared with other AWS customers, meeting the security requirement.
+    diagram: |
+      graph TD
+      Company[Company] -- Security Requirement --> DedInst[Dedicated Instances]
+      DedInst -- Exclusive Hardware --> User[Company Only]
+  - id: q6
+    type: multiple_choice
+    question: A customer is planning to move billions of images and videos to be stored on Amazon S3. The customer has approximately 60 Petabytes of data to move. Which of the following AWS Services is the best choice to transfer the data to AWS?
+    options:
+      - text: Snowball.
+        is_correct: false
+      - text: S3 Transfer Acceleration.
+        is_correct: false
+      - text: Snowmobile.
+        is_correct: true
+      - text: Amazon VPC.
+        is_correct: false
+    explanation: AWS Snowmobile is the best option for transferring extremely large amounts of data (60 Petabytes). Snowball is for smaller data transfers.
+    diagram: |
+      graph TD
+      Data[60 PB Data] -- Transfer --> Snowmobile[AWS Snowmobile]
+      Snowmobile -- Delivers to --> S3[Amazon S3]
+  - id: q7
+    type: multiple_choice
+    question: A company plans to migrate a large amount of archived data to AWS. The archived data must be maintained for a period of 5 years and must be retrievable within 5 hours of a request. What is the most cost-effective AWS storage service to use?
+    options:
+      - text: Amazon S3 Glacier.
+        is_correct: true
+      - text: Amazon EFS.
+        is_correct: false
+      - text: Amazon S3 Standard.
+        is_correct: false
+      - text: Amazon EBS.
+        is_correct: false
+    explanation: Amazon S3 Glacier is the most cost-effective option for long-term data archival with retrieval times of 5 hours or more.
+    diagram: |
+      graph TD
+      Archive[Archived Data] -- 5 Years Storage --> Glacier[Amazon S3 Glacier]
+      Glacier -- Retrieve within 5 hours --> Company[Company]
+  - id: q8
+    type: multiple_choice
+    question: Which AWS Service is used to manage user permissions?
+    options:
+      - text: Security Groups.
+        is_correct: false
+      - text: Amazon ECS.
+        is_correct: false
+      - text: AWS IAM.
+        is_correct: true
+      - text: AWS Support.
+        is_correct: false
+    explanation: AWS IAM (Identity and Access Management) is used to manage user permissions and access to AWS resources.
+    diagram: |
+      graph TD
+      Admin[Administrator] -- Manage Permissions --> IAM[AWS IAM]
+      IAM -- Grant Access --> User[Users]
+  - id: q9
+    type: multiple_choice
+    question: Which support plan includes AWS Support Concierge Service?
+    options:
+      - text: Premium Support.
+        is_correct: false
+      - text: Business Support.
+        is_correct: false
+      - text: Enterprise Support.
+        is_correct: true
+      - text: Standard Support.
+        is_correct: false
+    explanation: Enterprise Support plan includes the AWS Support Concierge Service for dedicated support and account management.
+    diagram: |
+      graph TD
+      Customer[Customer] -- Requires Premium Support --> Enterprise[Enterprise Support]
+      Enterprise -- Includes --> Concierge[Support Concierge Service]
+  - id: q10
+    type: multiple_choice
+    question: A company needs to track resource changes using the API call history. Which AWS service can help the company achieve this goal?
+    options:
+      - text: AWS Config.
+        is_correct: false
+      - text: Amazon CloudWatch.
+        is_correct: false
+      - text: AWS CloudTrail.
+        is_correct: true
+      - text: AWS CloudFormation.
+        is_correct: false
+    explanation: AWS CloudTrail is the service that tracks and logs API calls and resource changes, providing a complete history of account activity.
+    diagram: |
+      graph TD
+      Company[Company] -- Track Changes --> CloudTrail[AWS CloudTrail]
+      CloudTrail -- API Call History --> Company
+  - id: q11
+    type: multiple_select
+    question: What are the benefits of using an AWS-managed service? (Choose TWO)
+    options:
+      - text: Provides complete control over the virtual infrastructure.
+        is_correct: false
+      - text: Allows customers to deliver new solutions faster.
+        is_correct: true
+      - text: Lowers operational complexity.
+        is_correct: true
+      - text: Eliminates the need to encrypt data.
+        is_correct: false
+      - text: Allows developers to control all patching related activities.
+        is_correct: false
+    explanation: AWS-managed services allow customers to deliver solutions faster and lower operational complexity by handling infrastructure management.
+    diagram: |
+      graph TD
+      Customer[Customer] -- Use Managed Service --> AWS[AWS Service]
+      AWS -- Faster Delivery --> Solution[Solution]
+      AWS -- Lower Complexity --> Operations[Operations]
+  - id: q12
+    type: multiple_select
+    question: Which of the following are use cases for Amazon S3? (Choose TWO)
+    options:
+      - text: Hosting static websites.
+        is_correct: true
+      - text: Hosting websites that require sustained high CPU utilization.
+        is_correct: false
+      - text: Cost-effective database and log storage.
+        is_correct: false
+      - text: A media store for the CloudFront service.
+        is_correct: true
+      - text: Processing data streams at any scale.
+        is_correct: false
+    explanation: Amazon S3 is ideal for hosting static websites and serving as a media store for CloudFront.
+    diagram: |
+      graph TD
+      S3[Amazon S3] -- Use Case 1 --> Website[Static Websites]
+      S3 -- Use Case 2 --> CloudFront[CloudFront Media Store]
+  - id: q13
+    type: multiple_choice
+    question: What is the AWS' recommendation regarding access keys?
+    options:
+      - text: Delete all access keys and use passwords instead.
+        is_correct: false
+      - text: Only share them with trusted people.
+        is_correct: false
+      - text: Rotate them regularly.
+        is_correct: true
+      - text: Save them within your application code.
+        is_correct: false
+    explanation: AWS recommends rotating access keys regularly to maintain security and prevent unauthorized access.
+    diagram: |
+      graph TD
+      User[User] -- Maintain Security --> Keys[Access Keys]
+      Keys -- Rotate Regularly --> Secure[Secure]
+  - id: q14
+    type: multiple_choice
+    question: What is the AWS IAM feature that provides an additional layer of security on top of user-name and password authentication?
+    options:
+      - text: Key Pair.
+        is_correct: false
+      - text: Access Keys.
+        is_correct: false
+      - text: SDK.
+        is_correct: false
+      - text: MFA.
+        is_correct: true
+    explanation: Multi-Factor Authentication (MFA) provides an additional layer of security beyond username and password authentication.
+    diagram: |
+      graph TD
+      User[User] -- Username & Password --> Auth[Authentication]
+      Auth -- Add MFA --> MFA[Multi-Factor Auth]
+      MFA -- Additional Security --> Access[Access Granted]
+  - id: q15
+    type: multiple_choice
+    question: What is the benefit of using an API to access AWS Services?
+    options:
+      - text: It improves the performance of AWS resources.
+        is_correct: false
+      - text: It reduces the time needed to provision AWS resources.
+        is_correct: false
+      - text: It reduces the number of developers necessary.
+        is_correct: false
+      - text: It allows for programmatic management of AWS resources.
+        is_correct: true
+    explanation: APIs allow for programmatic management of AWS resources, enabling automation and integration with applications.
+    diagram: |
+      graph TD
+      App[Application] -- API Call --> AWS[AWS Service]
+      AWS -- Programmatic Control --> App
+  - id: q16
+    type: multiple_choice
+    question: A company is planning to migrate a database with high read/write activity to AWS. What is the best storage option to use?
+    options:
+      - text: AWS Storage Gateway.
+        is_correct: false
+      - text: Amazon S3.
+        is_correct: false
+      - text: Amazon EBS.
+        is_correct: true
+      - text: Amazon Glacier.
+        is_correct: false
+    explanation: Amazon EBS (Elastic Block Store) is ideal for databases with high read/write activity due to its low-latency and high-performance characteristics.
+    diagram: |
+      graph TD
+      DB[Database] -- High Activity --> EBS[Amazon EBS]
+      EBS -- Low Latency --> Performance[High Performance]
+  - id: q17
+    type: multiple_choice
+    question: How can AWS customers track and avoid over-spending on underutilized reserved instances?
+    options:
+      - text: Customers can add all AWS accounts to an AWS Organization, enable Consolidated Billing, and turn off Reserved Instance sharing.
+        is_correct: false
+      - text: Customers can use Amazon Neptune to track and analyze their usage patterns, detect underutilized reserved instances, and then sell them on the Amazon EC2 Reserved Instance Marketplace.
+        is_correct: false
+      - text: Customers can use the AWS Budgets service to track the reserved instances usage and set up alert notifications when their utilization drops below the threshold that they define.
+        is_correct: true
+      - text: Customers can use Amazon CloudTrail to automatically check for unused reservations and get recommendations to reduce their bill.
+        is_correct: false
+    explanation: AWS Budgets allows customers to track reserved instance usage and set up alerts for underutilization to prevent overspending.
+    diagram: |
+      graph TD
+      Customer[Customer] -- Monitor RI Usage --> Budgets[AWS Budgets]
+      Budgets -- Alert on Underutilization --> Customer
+  - id: q18
+    type: multiple_choice
+    question: What is the AWS service that provides five times the performance of a standard MySQL database?
+    options:
+      - text: Amazon Aurora.
+        is_correct: true
+      - text: Amazon Redshift.
+        is_correct: false
+      - text: Amazon DynamoDB.
+        is_correct: false
+      - text: Amazon Neptune.
+        is_correct: false
+    explanation: Amazon Aurora provides up to 5 times the performance of a standard MySQL database while maintaining MySQL compatibility.
+    diagram: |
+      graph TD
+      MySQL[MySQL Database] -- 5x Performance --> Aurora[Amazon Aurora]
+      Aurora -- Compatible --> MySQL
+  - id: q19
+    type: multiple_choice
+    question: What does AWS Service Catalog provide?
+    options:
+      - text: It enables customers to quickly find descriptions and use cases for AWS services.
+        is_correct: false
+      - text: It enables customers to explore the different catalogs of AWS services.
+        is_correct: false
+      - text: It simplifies organizing and governing commonly deployed IT services.
+        is_correct: true
+      - text: It allows developers to deploy infrastructure on AWS using familiar programming languages.
+        is_correct: false
+    explanation: AWS Service Catalog simplifies organizing and governing commonly deployed IT services, allowing organizations to create and manage portfolios of services.
+    diagram: |
+      graph TD
+      Org[Organization] -- Manage Services --> Catalog[AWS Service Catalog]
+      Catalog -- Organize & Govern --> Services[IT Services]
+  - id: q20
+    type: multiple_select
+    question: For managed services like Amazon DynamoDB, which of the below is AWS responsible for? (Choose TWO)
+    options:
+      - text: Protecting credentials.
+        is_correct: false
+      - text: Logging access activity.
+        is_correct: false
+      - text: Patching the database software.
+        is_correct: true
+      - text: Operating system maintenance.
+        is_correct: true
+      - text: Creating access policies.
+        is_correct: false
+    explanation: AWS is responsible for patching database software and operating system maintenance for managed services like Amazon DynamoDB.
+    diagram: |
+      graph TD
+      AWS[AWS] -- Responsible for --> Patching[Patching DB Software]
+      AWS -- Responsible for --> OSmaint[OS Maintenance]
+  - id: q21
+    type: multiple_choice
+    question: Which of the following AWS Services helps with planning application migration to the AWS Cloud?
+    options:
+      - text: AWS Snowball Migration Service.
+        is_correct: false
+      - text: AWS Application Discovery Service.
+        is_correct: true
+      - text: AWS DMS.
+        is_correct: false
+      - text: AWS Migration Hub.
+        is_correct: false
+    explanation: AWS Application Discovery Service helps plan application migration by discovering on-premises infrastructure and analyzing dependencies.
+    diagram: |
+      graph TD
+      OnPrem[On-Premises] -- Discover --> ADS[AWS Application Discovery Service]
+      ADS -- Plan Migration --> Cloud[AWS Cloud]
+  - id: q22
+    type: multiple_choice
+    question: A company is trying to analyze the costs applied to their AWS account recently. Which of the following provides them the most granular data about their AWS costs and usage?
+    options:
+      - text: Amazon Machine Image.
+        is_correct: false
+      - text: AWS Cost Explorer.
+        is_correct: false
+      - text: AWS Cost & Usage Report.
+        is_correct: true
+      - text: Amazon CloudWatch.
+        is_correct: false
+    explanation: AWS Cost & Usage Report provides the most granular and detailed information about AWS costs and usage patterns.
+    diagram: |
+      graph TD
+      Company[Company] -- Analyze Costs --> CUR[AWS Cost & Usage Report]
+      CUR -- Granular Data --> Company
+  - id: q23
+    type: multiple_choice
+    question: Which statement best describes the concept of an AWS region?
+    options:
+      - text: An AWS Region is a geographical location with a collection of Edge locations.
+        is_correct: false
+      - text: An AWS Region is a virtual network dedicated only to a single AWS customer.
+        is_correct: false
+      - text: An AWS Region is a geographical location with a collection of Availability Zones.
+        is_correct: true
+      - text: An AWS Region represents the country where the AWS infrastructure exist.
+        is_correct: false
+    explanation: An AWS Region is a geographical location that contains multiple Availability Zones for high availability and fault tolerance.
+    diagram: |
+      graph TD
+      Region[AWS Region] -- Contains --> AZ1[Availability Zone 1]
+      Region -- Contains --> AZ2[Availability Zone 2]
+      Region -- Contains --> AZ3[Availability Zone 3]
+  - id: q24
+    type: multiple_choice
+    question: A company has discovered that multiple S3 buckets were deleted, but it is unclear who deleted the buckets. Which of the following can the company use to determine the identity that deleted the buckets?
+    options:
+      - text: SNS logs.
+        is_correct: false
+      - text: SQS logs.
+        is_correct: false
+      - text: CloudWatch Logs.
+        is_correct: false
+      - text: CloudTrail logs.
+        is_correct: true
+    explanation: AWS CloudTrail logs all API calls including S3 bucket deletions, allowing the company to identify who deleted the buckets.
+    diagram: |
+      graph TD
+      S3[S3 Buckets Deleted] -- Investigate --> CloudTrail[AWS CloudTrail]
+      CloudTrail -- API Call History --> Identity[Identify Deletion User]
+  - id: q25
+    type: multiple_select
+    question: Which of the following are factors in determining the appropriate database technology to use for a specific workload? (Choose TWO)
+    options:
+      - text: Availability Zones.
+        is_correct: false
+      - text: Data sovereignty.
+        is_correct: true
+      - text: The number of reads and writes per second.
+        is_correct: true
+      - text: The nature of the queries.
+        is_correct: false
+      - text: Software bugs.
+        is_correct: false
+    explanation: Data sovereignty and read/write performance requirements are key factors in choosing the appropriate database technology.
+    diagram: |
+      graph TD
+      Workload[Workload Requirements] -- Data Sovereignty --> DB[Database Selection]
+      Workload -- Read/Write Rate --> DB
+  - id: q26
+    type: multiple_select
+    question: What are the benefits of implementing a tagging strategy for AWS resources? (Choose TWO)
+    options:
+      - text: Quickly identify resources that belong to a specific project.
+        is_correct: true
+      - text: Quickly identify software solutions on AWS.
+        is_correct: false
+      - text: Track API calls in your AWS account.
+        is_correct: false
+      - text: Quickly identify deleted resources and their metadata.
+        is_correct: false
+      - text: Track AWS spending across multiple resources.
+        is_correct: true
+    explanation: Tagging strategy enables quick identification of project resources and tracking spending across multiple resources.
+    diagram: |
+      graph TD
+      Resources[AWS Resources] -- Tag --> Project[Project Identification]
+      Resources -- Tag --> Spending[Cost Tracking]
+  - id: q27
+    type: multiple_choice
+    question: What are AWS shared controls?
+    options:
+      - text: Controls that are solely the responsibility of the customer based on the application they are deploying within AWS services.
+        is_correct: false
+      - text: Controls that a customer inherits from AWS.
+        is_correct: false
+      - text: Controls that apply to both the infrastructure layer and customer layers.
+        is_correct: false
+      - text: Controls that the customer and AWS collaborate together upon to secure the infrastructure.
+        is_correct: true
+    explanation: Shared controls are the responsibility of both AWS and the customer to ensure the security of the infrastructure.
+    diagram: |
+      graph TD
+      AWS[AWS] -- Shared Control --> Infrastructure[Infrastructure Security]
+      Customer[Customer] -- Shared Control --> Infrastructure
+  - id: q28
+    type: multiple_select
+    question: Which design principles relate to performance efficiency in AWS? (Choose TWO)
+    options:
+      - text: Build multi-region architectures to better serve global customers.
+        is_correct: true
+      - text: Apply security at all layers.
+        is_correct: false
+      - text: Implement strong Identity and Access controls.
+        is_correct: false
+      - text: Use serverless architectures.
+        is_correct: true
+      - text: Enable audit logging.
+        is_correct: false
+    explanation: Multi-region architectures and serverless architectures are design principles that relate to performance efficiency.
+    diagram: |
+      graph TD
+      PerfEff[Performance Efficiency] -- Multi-Region --> Global[Global Customers]
+      PerfEff -- Serverless --> Efficiency[Efficient Operations]
+  - id: q29
+    type: multiple_select
+    question: Which of the below are responsibilities of the customer when using Amazon EC2? (Choose TWO)
+    options:
+      - text: Protecting sensitive data.
+        is_correct: true
+      - text: Patching of the underlying infrastructure.
+        is_correct: false
+      - text: Setup and operation of managed databases.
+        is_correct: false
+      - text: Maintaining consistent hardware components.
+        is_correct: false
+      - text: Installing and configuring third-party software.
+        is_correct: true
+    explanation: Customers are responsible for protecting sensitive data and installing/configuring third-party software on EC2 instances.
+    diagram: |
+      graph TD
+      Customer[Customer] -- Responsibility --> DataSec[Protect Sensitive Data]
+      Customer -- Responsibility --> Software[Install & Configure Software]
+  - id: q30
+    type: multiple_select
+    question: Why would an organization decide to use AWS over an on-premises data center? (Choose TWO)
+    options:
+      - text: Free commercial software licenses.
+        is_correct: false
+      - text: Free technical support.
+        is_correct: false
+      - text: Elastic resources.
+        is_correct: true
+      - text: On-site visits for auditing.
+        is_correct: false
+      - text: Cost Savings.
+        is_correct: true
+    explanation: Organizations choose AWS for elastic resources and cost savings compared to on-premises data centers.
+    diagram: |
+      graph TD
+      Org[Organization] -- Choose AWS --> Elastic[Elastic Resources]
+      Org -- Choose AWS --> Cost[Cost Savings]
+  - id: q31
+    type: multiple_select
+    question: Which of the following AWS services can help you perform security analysis and regulatory compliance auditing? (Choose TWO)
+    options:
+      - text: Amazon Inspector.
+        is_correct: true
+      - text: AWS Virtual Private Gateway.
+        is_correct: false
+      - text: AWS Batch.
+        is_correct: false
+      - text: Amazon ECS.
+        is_correct: false
+      - text: AWS Config.
+        is_correct: true
+    explanation: Amazon Inspector and AWS Config help perform security analysis and regulatory compliance auditing.
+    diagram: |
+      graph TD
+      Security[Security & Compliance] -- Inspector --> Vulnerabilities[Vulnerability Assessment]
+      Security -- Config --> Compliance[Compliance Auditing]
+  - id: q32
+    type: multiple_choice
+    question: Which of the following is NOT a characteristic of Amazon Elastic Compute Cloud (Amazon EC2)?
+    options:
+      - text: Amazon EC2 is considered a Serverless Web Service.
+        is_correct: true
+      - text: Amazon EC2 eliminates the need to invest in hardware upfront.
+        is_correct: false
+      - text: Amazon EC2 can launch as many or as few virtual servers as needed.
+        is_correct: false
+      - text: Amazon EC2 offers scalable computing.
+        is_correct: false
+    explanation: Amazon EC2 is NOT a serverless service - it requires you to manage instances. Serverless services like Lambda don't require instance management.
+    diagram: |
+      graph TD
+      EC2[Amazon EC2] -- Not Characteristic --> Serverless[Serverless]
+      EC2 -- Characteristic --> Scalable[Scalable Computing]
+  - id: q33
+    type: multiple_choice
+    question: What is the AWS Compute service that executes code only when triggered by events?
+    options:
+      - text: AWS Lambda.
+        is_correct: true
+      - text: Amazon CloudWatch.
+        is_correct: false
+      - text: AWS Transit Gateway.
+        is_correct: false
+      - text: Amazon EC2.
+        is_correct: false
+    explanation: AWS Lambda is the compute service that executes code only when triggered by events without requiring server management.
+    diagram: |
+      graph TD
+      Event[Event] -- Trigger --> Lambda[AWS Lambda]
+      Lambda -- Execute Code --> Result[Result]
+  - id: q34
+    type: multiple_choice
+    question: Both AWS and traditional IT distributors provide a wide range of virtual servers to meet their customers' requirements. What is the name of these virtual servers in AWS?
+    options:
+      - text: Amazon EBS Snapshots.
+        is_correct: false
+      - text: Amazon VPC.
+        is_correct: false
+      - text: AWS Managed Servers.
+        is_correct: false
+      - text: Amazon EC2 Instances.
+        is_correct: true
+    explanation: Virtual servers in AWS are called Amazon EC2 Instances.
+    diagram: |
+      graph TD
+      VirtualServers[Virtual Servers] -- AWS Name --> EC2[Amazon EC2 Instances]
+  - id: q35
+    type: multiple_choice
+    question: What is the framework created by AWS Professional Services that helps organizations design a road map to successful cloud adoption?
+    options:
+      - text: AWS Secrets Manager.
+        is_correct: false
+      - text: AWS WAF.
+        is_correct: false
+      - text: AWS CAF.
+        is_correct: true
+      - text: Amazon EFS.
+        is_correct: false
+    explanation: AWS Cloud Adoption Framework (CAF) helps organizations design a roadmap for successful cloud adoption.
+    diagram: |
+      graph TD
+      Org[Organization] -- Guidance --> CAF[AWS Cloud Adoption Framework]
+      CAF -- Roadmap --> Success[Successful Cloud Adoption]
+  - id: q36
+    type: multiple_choice
+    question: TYMO Cloud Corp is looking forward to migrating their entire on-premises data center to AWS. What tool can they use to perform a cost-benefit analysis of moving to the AWS Cloud?
+    options:
+      - text: AWS Cost Explorer.
+        is_correct: false
+      - text: AWS TCO Calculator.
+        is_correct: true
+      - text: AWS Budgets.
+        is_correct: false
+      - text: AWS Pricing Calculator.
+        is_correct: false
+    explanation: AWS Total Cost of Ownership (TCO) Calculator helps perform a cost-benefit analysis for moving to AWS.
+    diagram: |
+      graph TD
+      Company[TYMO Cloud Corp] -- Analyze -> TCO[AWS TCO Calculator]
+      TCO -- Cost Benefit --> Decision[Migration Decision]
+  - id: q37
+    type: multiple_choice
+    question: Which of the following activities supports the Operational Excellence pillar of the AWS Well-Architected Framework?
+    options:
+      - text: Using AWS Trusted Advisor to find underutilized resources.
+        is_correct: false
+      - text: Using AWS CloudTrail to record user activities.
+        is_correct: false
+      - text: Using AWS CloudFormation to manage infrastructure as code.
+        is_correct: true
+      - text: Deploying an application in multiple Availability Zones.
+        is_correct: false
+    explanation: Using AWS CloudFormation to manage infrastructure as code supports the Operational Excellence pillar.
+    diagram: |
+      graph TD
+      OpEx[Operational Excellence] -- Support --> IaC[Infrastructure as Code]
+      IaC -- CloudFormation --> Management[Infrastructure Management]
+  - id: q38
+    type: multiple_select
+    question: Why do many startup companies prefer AWS over traditional on-premises solutions? (Choose TWO)
+    options:
+      - text: AWS allows them to pay later when their business succeed.
+        is_correct: false
+      - text: AWS can build complete data centers faster than any other Cloud provider.
+        is_correct: false
+      - text: Using AWS, they can reduce time-to-market by focusing on business activities rather than on building and managing data centers.
+        is_correct: true
+      - text: AWS removes the need to invest in operational expenditure.
+        is_correct: false
+      - text: Using AWS allows companies to replace large capital expenditure with low variable costs.
+        is_correct: true
+    explanation: Startups prefer AWS because it reduces time-to-market and replaces capital expenditure with low variable costs.
+    diagram: |
+      graph TD
+      Startup[Startup] -- Advantage 1 --> TimeToMarket[Reduce Time-to-Market]
+      Startup -- Advantage 2 --> CostModel[Low Variable Costs]
+  - id: q39
+    type: multiple_select
+    question: What are the benefits of using DynamoDB? (Choose TWO)
+    options:
+      - text: Automatically scales to meet required throughput capacity.
+        is_correct: true
+      - text: Provides resizable instances to match the current demand.
+        is_correct: false
+      - text: Supports both relational and non-relational data models.
+        is_correct: false
+      - text: Offers extremely low (single-digit millisecond) latency.
+        is_correct: true
+      - text: Supports the most popular NoSQL database engines such as CouchDB and MongoDB.
+        is_correct: false
+    explanation: DynamoDB automatically scales and offers single-digit millisecond latency for high-performance applications.
+    diagram: |
+      graph TD
+      DDB[Amazon DynamoDB] -- Benefit 1 --> AutoScale[Auto Scaling]
+      DDB -- Benefit 2 --> Latency[Single-digit ms Latency]
+  - id: q40
+    type: multiple_select
+    question: Which of the following can be used to protect data at rest on Amazon S3? (Choose TWO)
+    options:
+      - text: Versioning.
+        is_correct: true
+      - text: Deduplication.
+        is_correct: false
+      - text: Permissions.
+        is_correct: true
+      - text: Decryption.
+        is_correct: false
+      - text: Conversion.
+        is_correct: false
+    explanation: Versioning and Permissions are features that can be used to protect data at rest on Amazon S3.
+    diagram: |
+      graph TD
+      S3[Amazon S3] -- Protect Data --> Versioning[Versioning]
+      S3 -- Protect Data --> Permissions[Permissions]
+  - id: q41
+    type: multiple_select
+    question: As part of the AWS Migration Acceleration Program (MAP), what does AWS provide to accelerate Enterprise adoption of AWS? (Choose TWO)
+    options:
+      - text: AWS Partners.
+        is_correct: true
+      - text: AWS Artifact.
+        is_correct: false
+      - text: AWS Professional Services.
+        is_correct: true
+      - text: Amazon Athena.
+        is_correct: false
+      - text: Amazon PinPoint.
+        is_correct: false
+    explanation: AWS Migration Acceleration Program provides AWS Partners and AWS Professional Services to accelerate enterprise adoption.
+    diagram: |
+      graph TD
+      MAP[AWS MAP] -- Provides --> Partners[AWS Partners]
+      MAP -- Provides --> ProfServices[AWS Professional Services]
+  - id: q42
+    type: multiple_choice
+    question: AWS recommends some practices to help organizations avoid unexpected charges on their bill. Which of the following is NOT one of these practices?
+    options:
+      - text: Deleting unused EBS volumes after terminating an EC2instance.
+        is_correct: false
+      - text: Deleting unused AutoScaling launch configuration.
+        is_correct: true
+      - text: Deleting unused Elastic Load Balancers.
+        is_correct: false
+      - text: Releasing unused Elastic IPs after terminating an EC2instance.
+        is_correct: false
+    explanation: Deleting unused AutoScaling launch configurations is NOT a recommended practice to avoid charges, as launch configurations don't incur costs.
+    diagram: |
+      graph TD
+      Charges[Unexpected Charges] -- Avoid --> EBS[Delete unused EBS volumes]
+      Charges -- Avoid --> ELB[Delete unused ELBs]
+      Charges -- Avoid --> EIP[Release unused Elastic IPs]
+  - id: q43
+    type: multiple_choice
+    question: What is the AWS tool that can help a company visualize their AWS spending in the last few months?
+    options:
+      - text: AWS Cost Explorer.
+        is_correct: true
+      - text: AWS Pricing Calculator.
+        is_correct: false
+      - text: AWS Budgets.
+        is_correct: false
+      - text: AWS Consolidated Billing.
+        is_correct: false
+    explanation: AWS Cost Explorer allows companies to visualize and analyze their AWS spending patterns over time.
+    diagram: |
+      graph TD
+      Company[Company] -- Visualize Spending --> CostExplorer[AWS Cost Explorer]
+      CostExplorer -- Display Trends --> Company
+  - id: q44
+    type: multiple_select
+    question: "When running a workload in AWS, the customer is NOT responsible for: (Select TWO)"
+    options:
+      - text: Running penetration tests.
+        is_correct: false
+      - text: Reserving capacity.
+        is_correct: false
+      - text: Data center operations.
+        is_correct: true
+      - text: Auditing and regulatory compliance.
+        is_correct: false
+      - text: Infrastructure security.
+        is_correct: true
+    explanation: Customers are NOT responsible for data center operations and infrastructure security - these are AWS's responsibility.
+    diagram: |
+      graph TD
+      AWS[AWS Responsibility] -- Not Customer --> DataCenterOps[Data Center Operations]
+      AWS -- Not Customer --> InfraSecurity[Infrastructure Security]
+  - id: q45
+    type: multiple_choice
+    question: Which AWS service can be used to send promotional text messages (SMS) to more than 200 countries worldwide?
+    options:
+      - text: Amazon Simple Email Service (Amazon SES).
+        is_correct: false
+      - text: Amazon Simple Storage Service (Amazon S3).
+        is_correct: false
+      - text: Amazon Simple Notification Service (Amazon SNS).
+        is_correct: true
+      - text: Amazon Simple Queue Service (Amazon SQS).
+        is_correct: false
+    explanation: Amazon SNS (Simple Notification Service) can be used to send SMS messages to more than 200 countries worldwide.
+    diagram: |
+      graph TD
+      Promo[Promotional Message] -- Send SMS --> SNS[Amazon SNS]
+      SNS -- Global Reach --> Countries[200+ Countries]
+  - id: q46
+    type: multiple_select
+    question: Which of the following allows you to create new RDS instances? (Choose TWO)
+    options:
+      - text: AWS CodeDeploy.
+        is_correct: false
+      - text: AWS Quick Starts.
+        is_correct: true
+      - text: AWS CloudFormation.
+        is_correct: true
+      - text: AWS DMS.
+        is_correct: false
+      - text: AWS Management Console.
+        is_correct: false
+    explanation: AWS Quick Starts and AWS CloudFormation can be used to create new RDS instances.
+    diagram: |
+      graph TD
+      Create[Create RDS Instance] -- Option 1 --> QuickStart[AWS Quick Starts]
+      Create -- Option 2 --> CloudFormation[AWS CloudFormation]
+  - id: q47
+    type: multiple_choice
+    question: One of the major advantages of using AWS is cost savings. What does AWS provide to reduce the cost of running Amazon EC2 instances?
+    options:
+      - text: Low monthly instance maintenance costs.
+        is_correct: false
+      - text: Low-cost instance tagging.
+        is_correct: false
+      - text: Per-second instance billing.
+        is_correct: true
+      - text: Low instance start-up fees.
+        is_correct: false
+    explanation: AWS provides per-second instance billing to reduce costs by charging only for the exact compute time used.
+    diagram: |
+      graph TD
+      EC2[EC2 Instance] -- Cost Benefit --> Billing[Per-Second Billing]
+      Billing -- Only Pay --> TimeUsed[Time Used]
+  - id: q48
+    type: multiple_choice
+    question: Which AWS Group assists customers in achieving their desired business outcomes?
+    options:
+      - text: AWS Security Team.
+        is_correct: false
+      - text: AWS Professional Services.
+        is_correct: true
+      - text: AWS Trusted Advisor.
+        is_correct: false
+      - text: AWS Concierge Support Team.
+        is_correct: false
+    explanation: AWS Professional Services assists customers in achieving their desired business outcomes through expertise and consulting.
+    diagram: |
+      graph TD
+      Customer[Customer] -- Business Outcomes --> ProfServices[AWS Professional Services]
+      ProfServices -- Expertise --> Success[Success]
+  - id: q49
+    type: multiple_choice
+    question: Which AWS service or feature is used to manage the keys used to encrypt customer data?
+    options:
+      - text: AWS KMS.
+        is_correct: true
+      - text: AWS Service Control Policies (SCPs).
+        is_correct: false
+      - text: Multi-Factor Authentication (MFA).
+        is_correct: false
+      - text: Amazon Macie.
+        is_correct: false
+    explanation: AWS Key Management Service (KMS) is used to manage encryption keys for customer data.
+    diagram: |
+      graph TD
+      Data[Customer Data] -- Encrypt --> KMS[AWS KMS]
+      KMS -- Manage Keys --> Keys[Encryption Keys]
+  - id: q50
+    type: multiple_choice
+    question: Which AWS Service allows customers to download AWS SOC & PCI reports?
+    options:
+      - text: AWS Well-Architected Tool.
+        is_correct: false
+      - text: AWS Artifact.
+        is_correct: true
+      - text: AWS Glue.
+        is_correct: false
+      - text: Amazon Chime.
+        is_correct: false
+    explanation: AWS Artifact allows customers to download compliance reports including AWS SOC and PCI reports.
+    diagram: |
+      graph TD
+      Customer[Customer] -- Download Reports --> Artifact[AWS Artifact]
+      Artifact -- Compliance Reports --> Reports[SOC & PCI Reports]
