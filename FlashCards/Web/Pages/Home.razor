@@ -1,6 +1,7 @@
 ﻿@page "/"
 @using System.Text.RegularExpressions
 @using System.Security.Cryptography
+@using System.Text.Json
 @using Web.Model
 @using YamlDotNet.Core
 @using YamlDotNet.RepresentationModel;
@@ -23,6 +24,9 @@
     </div>
     <button class="mdc-button mdc-button--raised" @onclick="OnExamSelected" disabled="@string.IsNullOrEmpty(examName)">
         Carregar
+    </button>
+    <button class="mdc-button mdc-button--outlined" @onclick="ClearSavedAnswers" disabled="@(string.IsNullOrEmpty(examName) || Questions.Count == 0)">
+        Limpar respostas salvas
     </button>
 </div>
 
@@ -91,6 +95,8 @@ else
         examLoaded = false;
         Questions.Clear();
         await LoadQuestions();
+        // Após carregar perguntas, tente restaurar respostas salvas
+        await LoadSavedAnswers();
         examLoaded = true;
         StateHasChanged();
     }
@@ -124,7 +130,8 @@ else
             }
             else if (line.StartsWith("    - "))
             {
-                current?.QuestionOptions.Add(new QuestionOption(line.Substring(6).Trim()));
+                int optionIndex = current?.QuestionOptions.Count ?? 0;
+                current?.QuestionOptions.Add(new QuestionOption(optionIndex, line.Substring(6).Trim()));
             }
             else if (line.Contains("Correct answer:"))
             {
@@ -236,7 +243,7 @@ else
                         bool.TryParse(isCorrectScalar.Value, out isCorrect);
                     }
 
-                    var newOption = new QuestionOption(optText);
+                    var newOption = new QuestionOption(idx, optText);
                     optionsList.Add((newOption, isCorrect));
 
                     idx++;
@@ -245,6 +252,7 @@ else
                 // Embaralhar as opções
                 var rng = RandomNumberGenerator.Create();
                 optionsList = optionsList.OrderBy(x => RandomNumber(rng)).ToList();
+                // optionsList = optionsList.ToList();
 
                 // Atualizar as listas de opções e índices corretos
                 question.QuestionOptions.Clear();
@@ -274,6 +282,108 @@ else
         return questions;
     }
 
+    async Task LoadSavedAnswers()
+    {
+        if (string.IsNullOrEmpty(examName) || Questions == null || Questions.Count == 0)
+            return;
+
+        for (int i = 0; i < Questions.Count; i++)
+        {
+            var key = GetStorageKey(i);
+            try
+            {
+                var json = await JS.InvokeAsync<string>("localStorage.getItem", key);
+                if (string.IsNullOrEmpty(json))
+                    continue;
+
+                var saved = JsonSerializer.Deserialize<SavedAnswer>(json);
+                if (saved == null) continue;
+
+                var q = Questions[i];
+                q.SelectedOptions = saved.SelectedOptions ?? new List<int>();
+                q.WasCorrect = saved.WasCorrect;
+                q.IsLocked = saved.IsLocked;
+
+                // Reflect selections on QuestionOptions
+                if (q.QuestionOptions != null && q.SelectedOptions != null)
+                {
+                    for (int j = 0; j < q.QuestionOptions.Count; j++)
+                    {
+                        QuestionOption qo = q.QuestionOptions[j];
+
+                        qo.IsSelected = q.SelectedOptions.Contains(qo.Index);
+                        q.WasCorrect = q.CorrectOptions.Contains(qo.Index)
+                        && q.SelectedOptions.Count() == q.CorrectOptions.Count();
+                    }
+                }
+            }
+            catch
+            {
+                // ignore errors reading localStorage
+            }
+        }
+    }
+
+    async Task SaveAnswerAsync(Question q, int index)
+    {
+        if (string.IsNullOrEmpty(examName) || q == null)
+            return;
+
+        var key = GetStorageKey(index);
+        var payload = new SavedAnswer
+        {
+            SelectedOptions = q.SelectedOptions ?? new List<int>(),
+            WasCorrect = q.WasCorrect,
+            IsLocked = q.IsLocked
+        };
+
+        try
+        {
+            var json = JsonSerializer.Serialize(payload);
+            await JS.InvokeVoidAsync("localStorage.setItem", key, json);
+        }
+        catch
+        {
+            // ignore storage errors
+        }
+    }
+
+    async Task ClearSavedAnswers()
+    {
+        if (string.IsNullOrEmpty(examName) || Questions == null)
+            return;
+
+        for (int i = 0; i < Questions.Count; i++)
+        {
+            var key = GetStorageKey(i);
+            try
+            {
+                await JS.InvokeVoidAsync("localStorage.removeItem", key);
+            }
+            catch
+            {
+                // ignore
+            }
+        }
+
+        // Also clear in-memory selections
+        foreach (var q in Questions)
+        {
+            q.SelectedOptions = new List<int>();
+            q.WasCorrect = null;
+            q.IsLocked = false;
+            if (q.QuestionOptions != null)
+            {
+                foreach (var opt in q.QuestionOptions)
+                {
+                    opt.IsSelected = false;
+                }
+            }
+        }
+
+        StateHasChanged();
+    }
+
     void NextQuestion()
     {
         if (CurrentIndex < Questions.Count - 1)
@@ -291,17 +401,29 @@ else
         Questions[CurrentIndex].IsLocked = true;
     }
 
-    void OnQuestionAnswered(Question q)
+    async Task OnQuestionAnswered(Question q)
     {
+        // Save the user's answer for this question
+        await SaveAnswerAsync(q, CurrentIndex);
         StateHasChanged();
     }
 
     [Inject] NavigationManager NavigationManager { get; set; } = default!;
+    [Inject] IJSRuntime JS { get; set; } = default!;
 
     private static int RandomNumber(RandomNumberGenerator rng)
     {
         var bytes = new byte[4];
         rng.GetBytes(bytes);
         return BitConverter.ToInt32(bytes, 0);
+    }
+
+    private string GetStorageKey(int index) => $"{examName}-{index}";
+
+    private class SavedAnswer
+    {
+        public List<int> SelectedOptions { get; set; } = new();
+        public bool? WasCorrect { get; set; }
+        public bool IsLocked { get; set; }
     }
 }

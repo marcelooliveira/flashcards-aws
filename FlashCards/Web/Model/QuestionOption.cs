@@ -2,8 +2,9 @@
 {
     public class QuestionOption
     {
-        public QuestionOption(string text)
+        public QuestionOption(int index, string text)
         {
+            Index = index;
             Text = text;
         }
 
