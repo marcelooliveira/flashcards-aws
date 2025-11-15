@@ -13,5 +13,6 @@
         public bool IsSelected { get; set; }
         public bool IsCorrect { get; set; }
         public string Explanation { get; set; }
+        public string ShuffleGuid { get; set; }
     }
 }

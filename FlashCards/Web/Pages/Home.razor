@@ -55,7 +55,7 @@ else
         <button class="mdc-button mdc-button--raised" @onclick="ShowAnswer" disabled="@question.IsLocked">
             <span class="mdc-button__label">Answer</span>
         </button>
-        <button class="mdc-button mdc-button--raised" @onclick="NextQuestion" disabled="@(!question.IsLocked || CurrentIndex == Questions.Count - 1)">
+        <button class="mdc-button mdc-button--raised" @onclick="@(() => NextQuestion(question))" disabled="@(!question.IsLocked || CurrentIndex == Questions.Count - 1)">
             <span class="mdc-button__label">Next</span>
         </button>
     </div>
@@ -81,8 +81,8 @@ else
     string examName { get; set; }
     bool examLoaded = false;
     int CurrentIndex = 0;
-    int CorrectCount => Questions.Count(q => q.WasCorrect == true);
-    int WrongCount => Questions.Count(q => q.WasCorrect == false);
+    int CorrectCount = 0;
+    int WrongCount = 0;
 
     // Adicione aqui as opções disponíveis
     List<string> examOptions = new() { "aws-01", "aws-02", "aws-03", "repo-01", "repo-02", "repo-03" };
@@ -250,9 +250,9 @@ else
                 }
 
                 // Embaralhar as opções
-                var rng = RandomNumberGenerator.Create();
-                optionsList = optionsList.OrderBy(x => RandomNumber(rng)).ToList();
-                // optionsList = optionsList.ToList();
+                optionsList.ForEach(o => o.option.ShuffleGuid = Guid.NewGuid().ToString());
+                // optionsList = optionsList.OrderBy(x => RandomNumber(rng)).ToList();
+                optionsList = optionsList.ToList();
 
                 // Atualizar as listas de opções e índices corretos
                 question.QuestionOptions.Clear();
@@ -289,6 +289,8 @@ else
         if (string.IsNullOrEmpty(examName) || Questions == null || Questions.Count == 0)
             return;
 
+        ResetCounts();
+
         for (int i = 0; i < Questions.Count; i++)
         {
             var key = GetStorageKey(i);
@@ -296,7 +298,9 @@ else
             {
                 var json = await JS.InvokeAsync<string>("localStorage.getItem", key);
                 if (string.IsNullOrEmpty(json))
-                    continue;
+                {
+                    continue;                    
+                }
 
                 var saved = JsonSerializer.Deserialize<SavedAnswer>(json);
                 if (saved == null) continue;
@@ -304,6 +308,7 @@ else
                 var q = Questions[i];
                 q.SelectedOptions = saved.SelectedOptions ?? new List<int>();
                 q.WasCorrect = saved.WasCorrect;
+
                 q.IsLocked = saved.IsLocked;
 
                 // Reflect selections on QuestionOptions
@@ -315,11 +320,16 @@ else
 
                         qo.IsSelected = q.SelectedOptions.Contains(qo.Index);
                         qo.IsCorrect = q.CorrectOptions.Contains(qo.Index);
-                        q.WasCorrect = qo.IsCorrect
-                            && q.SelectedOptions.Count() == q.CorrectOptions.Count();
-                        q.IsLocked = true;
                     }
+                    q.WasCorrect = string.Join(',', q.SelectedOptions.OrderBy(o => o)) == string.Join(',', q.CorrectOptions.OrderBy(o => o));
+                    q.IsLocked = true;
+
+                    CorrectCount += q.WasCorrect == true ? 1 : 0;
+                    WrongCount += q.WasCorrect == false ? 1 : 0;
                 }
+
+                if (i < Questions.Count - 1)
+                    CurrentIndex = i + 1;
             }
             catch
             {
@@ -385,11 +395,16 @@ else
             }
         }
 
+        ResetCounts();
+
         StateHasChanged();
     }
 
-    void NextQuestion()
+    void NextQuestion(Question question)
     {
+        CorrectCount += question.WasCorrect == true ? 1 : 0;
+        WrongCount += question.WasCorrect == false ? 1 : 0;
+
         if (CurrentIndex < Questions.Count - 1)
             CurrentIndex++;
     }
@@ -405,22 +420,22 @@ else
         Questions[CurrentIndex].IsLocked = true;
     }
 
+    void ResetCounts()
+    {
+        CorrectCount = 0;
+        WrongCount = 0;
+    }
+
     async Task OnQuestionAnswered(Question q)
     {
         // Save the user's answer for this question
         await SaveAnswerAsync(q, CurrentIndex);
+
         StateHasChanged();
     }
 
     [Inject] NavigationManager NavigationManager { get; set; } = default!;
     [Inject] IJSRuntime JS { get; set; } = default!;
-
-    private static int RandomNumber(RandomNumberGenerator rng)
-    {
-        var bytes = new byte[4];
-        rng.GetBytes(bytes);
-        return BitConverter.ToInt32(bytes, 0);
-    }
 
     private string GetStorageKey(int index) => $"{examName}-{index}";
 
