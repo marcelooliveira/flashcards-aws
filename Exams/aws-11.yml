@@ -83,7 +83,7 @@ questions:
         is_correct: true
       - text: Elastic Load Balancing.
         is_correct: false
-    explanation: VPC dashboard lets you configure security groups and subnets. The wrong answers are services managed outside VPC dashboard: CloudFront is a CDN, Route 53 is DNS, and ELB is managed in the EC2/Load Balancer consoles.
+    explanation: VPC dashboard lets you configure security groups and subnets. The wrong answers are services managed outside VPC dashboard; CloudFront is a CDN, Route 53 is DNS, and ELB is managed in the EC2/Load Balancer consoles.
     diagram: |
       graph TD
       VPC[Amazon VPC] --> SG[Security Groups]
@@ -105,7 +105,7 @@ questions:
         is_correct: false
       - text: AWS CloudTrail Logs.
         is_correct: false
-    explanation: AWS is solely responsible for physical security of data centers. The incorrect options are customer responsibilities or shared tasks: IAM policies, S3 bucket policies, and CloudTrail configuration are managed by the customer.
+    explanation: AWS is solely responsible for physical security of data centers. The incorrect options are customer responsibilities or shared tasks; IAM policies, S3 bucket policies, and CloudTrail configuration are managed by the customer.
     diagram: |
       graph TD
       Audit[Auditing Responsibility] --> Physical[Physical Security (AWS)]
@@ -152,7 +152,7 @@ questions:
         is_correct: false
       - text: Running penetration tests.
         is_correct: false
-    explanation: AWS managed services like RDS can automate patching and backups. The other tasks are typically customer responsibilities: testing app releases, schema design, and penetration testing are customer activities.
+    explanation: AWS managed services like RDS can automate patching and backups. The other tasks are typically customer responsibilities; testing app releases, schema design, and penetration testing are customer activities.
     diagram: |
       graph TD
       AWSManaged --> Patch[RDS Patching]
@@ -174,7 +174,7 @@ questions:
         is_correct: true
       - text: Download the AWS Management Console for the new Region.
         is_correct: false
-    explanation: To use a new region, you simply deploy resources there. The wrong options are incorrect: no new contract is usually required, AZs cannot be moved between regions, and the console is the same—no download needed.
+    explanation: To use a new region, you simply deploy resources there. The wrong options are incorrect; no new contract is usually required, AZs cannot be moved between regions, and the console is the same—no download needed.
     diagram: |
       graph TD
       Expand --> Deploy[Deploy Resources in New Region]
@@ -195,7 +195,7 @@ questions:
         is_correct: true
       - text: They automatically adjust capacity. They are provided at no charge to users.
         is_correct: false
-    explanation: ELBs help distribute traffic and handle changing traffic patterns. The wrong options are incorrect: the first two are nonsensical conversions, and ELBs are not free and don’t 'auto-adjust capacity' in the sense of provisioning compute—they distribute traffic across instances.
+    explanation: ELBs help distribute traffic and handle changing traffic patterns. The wrong options are incorrect; the first two are nonsensical conversions, and ELBs are not free and don’t 'auto-adjust capacity' in the sense of provisioning compute—they distribute traffic across instances.
     diagram: |
       graph TD
       ELB --> Handle[Handles Traffic Patterns]
@@ -345,7 +345,7 @@ questions:
         is_correct: false
       - text: Amazon RDS.
         is_correct: true
-    explanation: Amazon RDS is AWS's managed relational database service. The wrong options are unrelated: Batch manages batch jobs, Artifact provides compliance documents, and Data Pipeline orchestrates data workflows.
+    explanation: Amazon RDS is AWS's managed relational database service. The wrong options are unrelated; Batch manages batch jobs, Artifact provides compliance documents, and Data Pipeline orchestrates data workflows.
     diagram: |
       graph TD
       Databases --> RDS[Amazon RDS]
@@ -795,7 +795,7 @@ questions:
         is_correct: false
       - text: Amazom CloudFront.
         is_correct: true
-    explanation: S3 stores the objects and CloudFront caches and delivers them at low latency. The wrong options are not appropriate: appGateway is not an AWS service, EFS is for file storage to instances, and Glacier is archival with slow retrieval.
+    explanation: S3 stores the objects and CloudFront caches and delivers them at low latency. The wrong options are not appropriate; appGateway is not an AWS service, EFS is for file storage to instances, and Glacier is archival with slow retrieval.
     diagram: |
       graph TD
       Video --> S3[Amazon S3]
@@ -873,7 +873,7 @@ questions:
 
   - id: q41
     type: multiple_choice
-    question: One of the advantages to moving infrastructure from an on-premises data center to the AWS Cloud is:
+    question: One of the advantages to moving infrastructure from an on-premises data center to the AWS Cloud is
     options:
       - text: It allows the business to eliminate IT bills.
         is_correct: false
@@ -883,7 +883,7 @@ questions:
         is_correct: true
       - text: It allows the business to leave servers unpatched.
         is_correct: false
-    explanation: Moving to AWS offloads infrastructure management so the business can focus on core activities. The wrong options are false: AWS doesn't eliminate all IT costs, doesn't place servers in customers' data centers by default, and does not encourage leaving servers unpatched.
+    explanation: Moving to AWS offloads infrastructure management so the business can focus on core activities. The wrong options are false; AWS doesn't eliminate all IT costs, doesn't place servers in customers' data centers by default, and does not encourage leaving servers unpatched.
     diagram: |
       graph TD
       MoveToCloud --> Focus[Focus on Business Activities]

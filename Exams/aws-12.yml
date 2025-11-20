@@ -22,7 +22,7 @@ questions:
 
   - id: q2
     type: multiple_choice
-    question: One benefit of On-Demand Amazon Elastic Compute Cloud (Amazon EC2) pricing is:
+    question: One benefit of On-Demand Amazon Elastic Compute Cloud (Amazon EC2) pricing is
     options:
       - text: The ability to bid for a lower hourly cost.
         is_correct: false
@@ -66,7 +66,7 @@ questions:
 
   - id: q4
     type: multiple_choice
-    question: A characteristic of edge locations is that they:
+    question: A characteristic of edge locations is that they
     options:
       - text: Host Amazon EC2 instances closer to users.
         is_correct: false
@@ -536,7 +536,7 @@ questions:
 
   - id: q26
     type: multiple_choice
-    question: Compared with costs in traditional and virtualized data centers, AWS has:
+    question: Compared with costs in traditional and virtualized data centers, AWS has
     options:
       - text: Greater variable costs and greater upfront costs.
         is_correct: false
@@ -582,7 +582,7 @@ questions:
         is_correct: false
       - text: They automatically add or replace instances across multiple Availability Zones when the application needs it.
         is_correct: true
-      - text: They enable the application’s stalk: content to reside closer to end users.
+      - text: They enable the application’s stalk; content to reside closer to end users.
         is_correct: false
       - text: They are able to distribute incoming requests across a tier of web server instances.
         is_correct: false
@@ -912,7 +912,7 @@ questions:
 
   - id: q44
     type: multiple_choice
-    question: One benefit of On-Demand Amazon Elastic Compute Cloud (Amazon EC2) pricing is:
+    question: One benefit of On-Demand Amazon Elastic Compute Cloud (Amazon EC2) pricing is
     options:
       - text: The ability to bid for a lower hourly cost.
         is_correct: false
@@ -955,7 +955,7 @@ questions:
 
   - id: q46
     type: multiple_choice
-    question: A characteristic of edge locations is that they:
+    question: A characteristic of edge locations is that they
     options:
       - text: Host Amazon EC2 instances closer to users.
         is_correct: false
