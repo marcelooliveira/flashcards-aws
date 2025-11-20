@@ -15,5 +15,6 @@
         public List<int> SelectedOptions { get; set; } = new();
         public bool? WasCorrect { get; set; } = null;
         public bool IsLocked { get; set; }
+        public bool AnswerIncomplete => CorrectOptions.Count != SelectedOptions.Count;
     }
 }

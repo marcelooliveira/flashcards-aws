@@ -52,7 +52,7 @@ else
         <button class="mdc-button mdc-button--outlined" @onclick="PrevQuestion" disabled="@(!question.IsLocked || CurrentIndex == 0)">
             <span class="mdc-button__label">Previous</span>
         </button>
-        <button class="mdc-button mdc-button--raised" @onclick="ShowAnswer" disabled="@question.IsLocked">
+        <button class="mdc-button mdc-button--raised" @onclick="ShowAnswer" disabled="@(question.IsLocked || question.AnswerIncomplete)">
             <span class="mdc-button__label">Answer</span>
         </button>
         <button class="mdc-button mdc-button--raised" @onclick="@(() => NextQuestion(question))" disabled="@(!question.IsLocked || CurrentIndex == Questions.Count - 1)">
