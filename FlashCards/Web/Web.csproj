@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\Exams\practice-exam-1.md" />
     <None Include="wwwroot\Exams\practice-exam-10.md" />
     <None Include="wwwroot\Exams\practice-exam-11.md" />
     <None Include="wwwroot\Exams\practice-exam-12.md" />
@@ -18,12 +17,10 @@
     <None Include="wwwroot\Exams\practice-exam-17.md" />
     <None Include="wwwroot\Exams\practice-exam-18.md" />
     <None Include="wwwroot\Exams\practice-exam-19.md" />
-    <None Include="wwwroot\Exams\practice-exam-2.md" />
     <None Include="wwwroot\Exams\practice-exam-20.md" />
     <None Include="wwwroot\Exams\practice-exam-21.md" />
     <None Include="wwwroot\Exams\practice-exam-22.md" />
     <None Include="wwwroot\Exams\practice-exam-23.md" />
-    <None Include="wwwroot\Exams\practice-exam-3.md" />
   </ItemGroup>
 
   <ItemGroup>
