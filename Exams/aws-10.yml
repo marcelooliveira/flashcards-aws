@@ -1,0 +1,1185 @@
+questions:
+  - id: q1
+    type: multiple_select
+    question: Which of the following can an AWS customer use to launch a new Amazon Relational Database Service (Amazon RDS) cluster? (Select TWO)
+    options:
+      - text: AWS Concierge.
+        is_correct: false
+      - text: AWS CloudFormation.
+        is_correct: true
+      - text: Amazon Simple Storage Service (Amazon S3).
+        is_correct: false
+      - text: Amazon EC2 Auto Scaling.
+        is_correct: false
+      - text: AWS Management Console.
+        is_correct: true
+    explanation: AWS CloudFormation and AWS Management Console are the correct ways to launch RDS clusters. AWS Concierge provides support recommendations but cannot launch resources. Amazon S3 is object storage unrelated to RDS deployment. Amazon EC2 Auto Scaling manages EC2 instances, not RDS clusters.
+    diagram: |
+      graph TD
+      RDS[Launch RDS Cluster] -- Method 1 --> CFN[AWS CloudFormation]
+      RDS -- Method 2 --> Console[AWS Management Console]
+      RDS -.->|Not Used| S3[Amazon S3]
+      RDS -.->|Not Used| ASG[EC2 Auto Scaling]
+    tags: [rds, cloudformation, management-console]
+    difficulty: easy
+    points: 5
+
+  - id: q2
+    type: multiple_choice
+    question: Which of the following Reserved Instance (RI) pricing models provides the highest average savings compared to On-Demand pricing?
+    options:
+      - text: One-year, No Upfront, Standard RI pricing.
+        is_correct: false
+      - text: One-year, All Upfront, Convertible RI pricing.
+        is_correct: false
+      - text: Three-year, All Upfront, Standard RI pricing.
+        is_correct: true
+      - text: Three-year, No Upfront, Convertible RI pricing.
+        is_correct: false
+    explanation: Three-year all-upfront standard RIs offer the highest discount because customers commit for the longest term with immediate payment. One-year commitments provide less savings than three-year. No Upfront options cost more than All Upfront. Convertible RIs have lower discount rates than Standard RIs.
+    diagram: |
+      graph TD
+      RI[RI Pricing Models] -- Best Savings --> ThreeAllStd[Three-year All Upfront Standard]
+      RI -- Lower Savings --> OneNoStd[One-year No Upfront Standard]
+      RI -- Lower Savings --> OneAllConv[One-year All Upfront Convertible]
+      RI -- Lower Savings --> ThreeNoConv[Three-year No Upfront Convertible]
+    tags: [ec2, pricing, reserved-instances]
+    difficulty: medium
+    points: 7
+
+  - id: q3
+    type: multiple_select
+    question: Which of the following are features of Amazon CloudWatch Logs? (Select TWO)
+    options:
+      - text: Summaries by Amazon Simple Notification Service (Amazon SNS).
+        is_correct: false
+      - text: Free Amazon Elasticsearch Service analytics.
+        is_correct: false
+      - text: Provided at no charge.
+        is_correct: false
+      - text: Real-time monitoring.
+        is_correct: true
+      - text: Adjustable retention.
+        is_correct: true
+    explanation: CloudWatch Logs provides real-time monitoring and adjustable retention policies. SNS summaries are not built-in. Free Elasticsearch analytics is not included—that would require separate service. CloudWatch Logs charges are based on data ingested and stored, not free.
+    diagram: |
+      graph TD
+      CWL[CloudWatch Logs Features] -- Feature 1 --> RealTime[Real-time Monitoring]
+      CWL -- Feature 2 --> Retention[Adjustable Retention]
+      CWL -.->|Not Included| SNS[SNS Summaries]
+      CWL -.->|Not Included| ES[Free Elasticsearch]
+    tags: [cloudwatch, monitoring, logs]
+    difficulty: easy
+    points: 5
+
+  - id: q4
+    type: multiple_choice
+    question: Which of the following is an AWS-managed compute service?
+    options:
+      - text: Amazon SWF.
+        is_correct: false
+      - text: Amazon EC2.
+        is_correct: false
+      - text: AWS Lambda.
+        is_correct: true
+      - text: Amazon Aurora.
+        is_correct: false
+    explanation: AWS Lambda is a fully managed serverless compute service. Amazon SWF is a workflow service, not compute. Amazon EC2 requires customer management of instances. Amazon Aurora is a database service, not compute.
+    diagram: |
+      graph TD
+      Compute[AWS-Managed Compute] -- Service --> Lambda[AWS Lambda]
+      Compute -.->|Not Compute| SWF[Amazon SWF]
+      Compute -.->|Customer Managed| EC2[Amazon EC2]
+      Compute -.->|Database| Aurora[Amazon Aurora]
+    tags: [lambda, compute, managed-services]
+    difficulty: easy
+    points: 5
+
+  - id: q5
+    type: multiple_choice
+    question: A company wants to reduce the physical compute footprint that developers use to run code. Which service would meet that need by enabling serverless architectures?
+    options:
+      - text: Amazon Elastic Compute Cloud (Amazon EC2).
+        is_correct: false
+      - text: AWS Lambda.
+        is_correct: true
+      - text: Amazon DynamoDB.
+        is_correct: false
+      - text: AWS CodeCommit.
+        is_correct: false
+    explanation: AWS Lambda enables serverless execution without managing servers. EC2 requires provisioning and managing virtual machines. DynamoDB is a database service, not for code execution. CodeCommit is a version control service, not for running code.
+    diagram: |
+      graph TD
+      Reduce[Reduce Physical Footprint] -- Serverless --> Lambda[AWS Lambda]
+      Reduce -.->|Requires Server| EC2[Amazon EC2]
+      Reduce -.->|Database Service| DDB[Amazon DynamoDB]
+      Reduce -.->|Version Control| CC[AWS CodeCommit]
+    tags: [lambda, serverless, architecture]
+    difficulty: easy
+    points: 5
+
+  - id: q6
+    type: multiple_choice
+    question: Which of the following is the customer's responsibility under the AWS shared responsibility model?
+    options:
+      - text: Patching underlying infrastructure
+        is_correct: false
+      - text: Physical security
+        is_correct: false
+      - text: Patching Amazon EC2 instances
+        is_correct: true
+      - text: Patching network infrastructure
+        is_correct: false
+    explanation: Customers are responsible for patching applications and operating systems on EC2 instances they manage. AWS handles underlying infrastructure patching, physical security, and network infrastructure maintenance.
+    diagram: |
+      graph TD
+      SRM[Shared Responsibility Model] -- Customer --> EC2Patch[Patch EC2 Instances]
+      SRM -- AWS --> InfraPatch[Patch Infrastructure]
+      SRM -- AWS --> Physical[Physical Security]
+      SRM -- AWS --> Network[Network Infrastructure]
+    tags: [shared-responsibility, security, ec2]
+    difficulty: medium
+    points: 7
+
+  - id: q7
+    type: multiple_choice
+    question: According to the AWS shared responsibility model who is responsible for configuration management?
+    options:
+      - text: It is solely the responsibility of the customer.
+        is_correct: false
+      - text: It is solely the responsibility of AWS.
+        is_correct: false
+      - text: It is shared between AWS and the customer.
+        is_correct: true
+      - text: It is not part of the AWS shared responsibility model.
+        is_correct: false
+    explanation: Configuration management is a shared responsibility where AWS manages AWS service configuration and customers manage their application and resource configurations. It cannot be solely one party's responsibility, and it is definitely part of the shared responsibility model.
+    diagram: |
+      graph TD
+      ConfigMgmt[Configuration Management] -- AWS Manages --> Services[AWS Service Config]
+      ConfigMgmt -- Customer Manages --> Apps[Application & Resource Config]
+      ConfigMgmt -- Shared --> Responsibility[Responsibility]
+    tags: [shared-responsibility, configuration]
+    difficulty: medium
+    points: 7
+
+  - id: q8
+    type: multiple_choice
+    question: Which security service automatically recognizes and classifies sensitive data or intellectual property on AWS?
+    options:
+      - text: Amazon GuardDuty.
+        is_correct: false
+      - text: Amazon Macie.
+        is_correct: true
+      - text: Amazon Inspector.
+        is_correct: false
+      - text: AWS Shield.
+        is_correct: false
+    explanation: Amazon Macie uses machine learning to discover and classify sensitive data. GuardDuty detects threats and anomalies. Inspector assesses application vulnerabilities. Shield protects against DDoS attacks.
+    diagram: |
+      graph TD
+      Security[Security Services] -- Classifies Sensitive Data --> Macie[Amazon Macie]
+      Security -- Detects Threats --> GD[Amazon GuardDuty]
+      Security -- Finds Vulnerabilities --> Inspector[Amazon Inspector]
+      Security -- DDoS Protection --> Shield[AWS Shield]
+    tags: [security, macie, data-discovery]
+    difficulty: medium
+    points: 7
+
+  - id: q9
+    type: multiple_select
+    question: Which of the following BEST describe the AWS pricing model? (Select TWO)
+    options:
+      - text: Fixed-term.
+        is_correct: false
+      - text: Pay-as-you-go.
+        is_correct: true
+      - text: Colocation.
+        is_correct: false
+      - text: Planned.
+        is_correct: false
+      - text: Variable cost.
+        is_correct: true
+    explanation: AWS uses pay-as-you-go pricing with variable costs based on usage. There are no fixed-term requirements (though Reserved Instances are optional). Colocation refers to physical data center models. Planned pricing implies fixed costs upfront.
+    diagram: |
+      graph TD
+      Pricing[AWS Pricing Model] -- Characteristic 1 --> PAYG[Pay-as-you-go]
+      Pricing -- Characteristic 2 --> Variable[Variable Cost]
+      Pricing -.->|Not Required| Fixed[Fixed-term]
+      Pricing -.->|Not AWS| Colo[Colocation]
+    tags: [pricing, aws-model, pay-as-you-go]
+    difficulty: easy
+    points: 5
+
+  - id: q10
+    type: multiple_select
+    question: Under the shared responsibility model, which of the following tasks are the responsibility of the AWS customer? (Select TWO)
+    options:
+      - text: Ensuring that application data is encrypted at rest.
+        is_correct: true
+      - text: Ensuring that AWS NTP servers are set to the correct time.
+        is_correct: false
+      - text: Ensuring that users have received security training in the use of AWS services.
+        is_correct: true
+      - text: Ensuring that access to data centers is restricted.
+        is_correct: false
+      - text: Ensuring that hardware is disposed of properly.
+        is_correct: false
+    explanation: Customers are responsible for application data encryption and user security training. AWS manages NTP servers, data center access controls, and hardware disposal as part of infrastructure responsibilities.
+    diagram: |
+      graph TD
+      Customer[Customer Responsibilities] -- Security --> DataEnc[Encrypt Application Data]
+      Customer -- Training --> Training[Security Training for Users]
+      AWS[AWS Responsibilities] -- Infrastructure --> NTP[NTP Server Management]
+      AWS -- Security --> DataCenter[Data Center Access]
+      AWS -- Operations --> Hardware[Hardware Disposal]
+    tags: [shared-responsibility, security, customer]
+    difficulty: medium
+    points: 7
+
+  - id: q11
+    type: multiple_choice
+    question: A customer is using multiple AWS accounts with separate billing. How can the customer take advantage of volume discounts with minimal impact to the AWS resources?
+    options:
+      - text: Create one global AWS account and move all AWS resources to that account.
+        is_correct: false
+      - text: Sign up for three years of Reserved Instance pricing up front.
+        is_correct: false
+      - text: Use the consolidated billing feature from AWS Organizations.
+        is_correct: true
+      - text: Sign up for the AWS Enterprise support plan to get volume discounts.
+        is_correct: false
+    explanation: AWS Organizations consolidated billing pools usage across accounts for volume discounts without consolidating resources. Moving all resources to one account risks availability and governance. Reserved Instances are separate from volume discounts. Support plans don't provide volume discounts.
+    diagram: |
+      graph TD
+      Discount[Volume Discounts] -- Consolidate Billing --> Org[AWS Organizations]
+      Org -- Pool Usage --> Accounts[Multiple Accounts]
+      Discount -.->|Disrupts Resources| OneAccount[Single Account]
+      Discount -.->|Different Discount| RI[Reserved Instances]
+    tags: [organizations, billing, cost-optimization]
+    difficulty: medium
+    points: 7
+
+  - id: q12
+    type: multiple_choice
+    question: Which Amazon EC2 pricing model offers the MOST significant discount when compared to OnDemand Instances?
+    options:
+      - text: A Partial Upfront Reserved Instances for a 1-year term.
+        is_correct: false
+      - text: All Upfront Reserved instances for a 1 year form.
+        is_correct: false
+      - text: All Upfront Reserved Instances for a 3 year term.
+        is_correct: true
+      - text: No Upfront Reserved Instances for a 3 year term.
+        is_correct: false
+    explanation: Three-year all-upfront RIs offer the steepest discount. One-year terms provide smaller discounts. Partial or No Upfront options have higher effective costs than All Upfront.
+    diagram: |
+      graph TD
+      Discount[EC2 Pricing Discounts] -- Highest --> ThreeAllUpfront[3-year All Upfront]
+      Discount -- Medium --> ThreeNoUp[3-year No Upfront]
+      Discount -- Lower --> OneAll[1-year All Upfront]
+      Discount -- Lowest --> OnePartial[1-year Partial Upfront]
+    tags: [ec2, reserved-instances, pricing]
+    difficulty: medium
+    points: 7
+
+  - id: q13
+    type: multiple_select
+    question: Which AWS services should be used for read/write of constantly changing data? (Select TWO)
+    options:
+      - text: Amazon Glacier.
+        is_correct: false
+      - text: Amazon RDS.
+        is_correct: true
+      - text: AWS Snowball.
+        is_correct: false
+      - text: Amazon Redshift.
+        is_correct: false
+      - text: Amazon EFS.
+        is_correct: true
+    explanation: RDS and EFS support frequent read/write operations. Glacier is for archive storage with slow retrieval. Snowball is for bulk data transfer. Redshift is for analytics and reporting on historical data, not real-time changes.
+    diagram: |
+      graph TD
+      RW[Read/Write Constantly Changing] -- Database --> RDS[Amazon RDS]
+      RW -- File System --> EFS[Amazon EFS]
+      RW -.->|Archive Storage| Glacier[Amazon Glacier]
+      RW -.->|Bulk Transfer| Snowball[AWS Snowball]
+      RW -.->|Analytics| Redshift[Amazon Redshift]
+    tags: [rds, efs, database, storage]
+    difficulty: medium
+    points: 7
+
+  - id: q14
+    type: multiple_choice
+    question: Which AWS service allows users to identify the changes made to a resource over time?
+    options:
+      - text: Amazon Inspector.
+        is_correct: false
+      - text: AWS Config.
+        is_correct: true
+      - text: AWS Service Catalog.
+        is_correct: false
+      - text: AWS IAM.
+        is_correct: false
+    explanation: AWS Config tracks configuration changes over time. Inspector assesses security vulnerabilities. Service Catalog manages approved products. IAM manages access control, not resource change tracking.
+    diagram: |
+      graph TD
+      Changes[Track Resource Changes] -- Service --> Config[AWS Config]
+      Changes -- Timeline --> History[Change History]
+      Changes -.->|Vulnerabilities| Inspector[Amazon Inspector]
+      Changes -.->|Products| Catalog[AWS Service Catalog]
+    tags: [config, compliance, tracking]
+    difficulty: medium
+    points: 7
+
+  - id: q15
+    type: multiple_choice
+    question: According to best practices, how should an application be designed to run in the AWS Cloud?
+    options:
+      - text: Use tightly coupled components.
+        is_correct: false
+      - text: Use loosely coupled components.
+        is_correct: true
+      - text: Use infrequently coupled components.
+        is_correct: false
+      - text: Use frequently coupled components.
+        is_correct: false
+    explanation: Loosely coupled components enable independent scaling and failure isolation. Tightly coupled components create dependencies and single points of failure. Infrequently or frequently coupled are not standard architectural terms.
+    diagram: |
+      graph TD
+      Design[Application Design] -- Best Practice --> Loose[Loosely Coupled]
+      Loose -- Benefits --> Independent[Independent Scaling]
+      Loose -- Benefits --> Isolation[Failure Isolation]
+      Design -.->|Problematic| Tight[Tightly Coupled]
+    tags: [architecture, design-principles, best-practices]
+    difficulty: medium
+    points: 7
+
+  - id: q16
+    type: multiple_select
+    question: Which benefits are included with the AWS Business Support plan? (Select TWO)
+    options:
+      - text: 24/7 assistance by way of live chat or a telephone call.
+        is_correct: true
+      - text: Support from a dedicated AWS Technical Account Manager.
+        is_correct: false
+      - text: An unlimited number of cases and contacts.
+        is_correct: true
+      - text: 15-minute response time for production system interruption cases.
+        is_correct: false
+      - text: Annual operational reviews with AWS Solutions Architects.
+        is_correct: false
+    explanation: Business support offers 24/7 phone/chat and unlimited cases. Dedicated TAM, 15-minute response, and architectural reviews are Enterprise features only.
+    diagram: |
+      graph TD
+      Business[Business Support Plan] -- Benefit 1 --> Support24[24/7 Support]
+      Business -- Benefit 2 --> UnlimitedCases[Unlimited Cases]
+      Business -.->|Enterprise Only| TAM[Dedicated TAM]
+      Business -.->|Enterprise Only| Response[15-min Response]
+    tags: [support, business-plan, aws-support]
+    difficulty: medium
+    points: 7
+
+  - id: q17
+    type: multiple_choice
+    question: Which of the following is an AWS managed Domain Name System (DNS) web service?
+    options:
+      - text: Amazon Route 53.
+        is_correct: true
+      - text: Amazon Neptune.
+        is_correct: false
+      - text: Amazon SageMaker.
+        is_correct: false
+      - text: Amazon Lightsail.
+        is_correct: false
+    explanation: Route 53 is AWS's managed DNS service. Neptune is a graph database. SageMaker is for machine learning. Lightsail is a simplified compute service.
+    diagram: |
+      graph TD
+      DNS[AWS DNS Service] --> Route53[Amazon Route 53]
+      Route53 -- Features --> Domain[Domain Name Resolution]
+      Route53 -- Features --> HealthCheck[Health Checking]
+      DNS -.->|Database| Neptune[Amazon Neptune]
+      DNS -.->|ML Service| SageMaker[Amazon SageMaker]
+    tags: [route53, dns, networking]
+    difficulty: easy
+    points: 5
+
+  - id: q18
+    type: multiple_choice
+    question: A user must meet compliance and software licensing requirements that state a workload must be hosted on a physical server. When Amazon EC2 instance pricing option will meet these requirements?
+    options:
+      - text: Dedicated Hosts.
+        is_correct: true
+      - text: Dedicated Instances.
+        is_correct: false
+      - text: Spot Instances.
+        is_correct: false
+      - text: Reserved Instances.
+        is_correct: false
+    explanation: Dedicated Hosts provide physical server access for licensing compliance. Dedicated Instances are isolated but still shared hardware. Spot Instances are cost-effective but can be interrupted. Reserved Instances are just a pricing model.
+    diagram: |
+      graph TD
+      Compliance[Compliance & Licensing] -- Physical Server --> DH[Dedicated Hosts]
+      DH -- Features --> BYOL[BYOL Support]
+      DH -- Features --> Physical[Physical Server Access]
+      Compliance -.->|Shared Hardware| DI[Dedicated Instances]
+      Compliance -.->|Pricing Model| RI[Reserved Instances]
+    tags: [ec2, dedicated-hosts, compliance]
+    difficulty: medium
+    points: 7
+
+  - id: q19
+    type: multiple_choice
+    question: Which of the Reserved Instance (RI) pricing models can change the attributes of the RI as long as the exchange results in the creation of RIs of equal or greater value?
+    options:
+      - text: Dedicated RIs.
+        is_correct: false
+      - text: Scheduled RIs.
+        is_correct: false
+      - text: Convertible RIs.
+        is_correct: true
+      - text: Standard RIs.
+        is_correct: false
+    explanation: Convertible RIs allow changing instance families and other attributes. Standard RIs cannot be changed. Dedicated and Scheduled RIs are not standard RI types with exchange capabilities.
+    diagram: |
+      graph TD
+      RI[Reserved Instance Types] -- Flexible --> Convertible[Convertible RIs]
+      Convertible -- Allow Changes --> Exchange[Change Attributes]
+      RI -- Fixed --> Standard[Standard RIs]
+      RI -.->|Not Standard| Scheduled[Scheduled RIs]
+    tags: [ec2, reserved-instances, pricing]
+    difficulty: medium
+    points: 7
+
+  - id: q20
+    type: multiple_choice
+    question: Which service is best for storing common database query results, which helps to alleviate database access load?
+    options:
+      - text: Amazon Machine Learning.
+        is_correct: false
+      - text: Amazon SQS.
+        is_correct: false
+      - text: Amazon ElastiCache.
+        is_correct: true
+      - text: Amazon EC2 Instance Store.
+        is_correct: false
+    explanation: ElastiCache provides in-memory caching for query results. Machine Learning is for ML workloads. SQS is for message queuing. Instance Store is temporary block storage.
+    diagram: |
+      graph TD
+      Cache[Cache Query Results] -- In-Memory --> EC[Amazon ElastiCache]
+      EC -- Reduces --> DBLoad[Database Load]
+      Cache -.->|ML Service| ML[Amazon ML]
+      Cache -.->|Message Queue| SQS[Amazon SQS]
+    tags: [elasticache, caching, performance]
+    difficulty: easy
+    points: 5
+
+  - id: q21
+    type: multiple_select
+    question: When should a company consider using Amazon EC2 Spot Instances? (Select TWO)
+    options:
+      - text: For non-production applications.
+        is_correct: true
+      - text: For stateful workloads.
+        is_correct: false
+      - text: For applications that cannot have interruptions.
+        is_correct: false
+      - text: For fault-tolerant flexible applications.
+        is_correct: true
+      - text: For sensitive database applications.
+        is_correct: false
+    explanation: Spot Instances are ideal for non-production and fault-tolerant flexible workloads. They're unsuitable for stateful workloads, applications requiring high availability, and databases due to interruption risk.
+    diagram: |
+      graph TD
+      Spot[EC2 Spot Instances] -- Use Case 1 --> NonProd[Non-production]
+      Spot -- Use Case 2 --> FaultTolerant[Fault-tolerant Applications]
+      Spot -.->|Risk of Interruption| Stateful[Stateful Workloads]
+      Spot -.->|Risk of Interruption| DB[Database Applications]
+    tags: [ec2, spot-instances, cost-optimization]
+    difficulty: medium
+    points: 7
+
+  - id: q22
+    type: multiple_select
+    question: Which AWS tools assist with estimating costs? (Select three)
+    options:
+      - text: Detailed billing report.
+        is_correct: false
+      - text: Cost allocation tags.
+        is_correct: true
+      - text: AWS Simple Monthly Calculator.
+        is_correct: true
+      - text: AWS Total Cost of Ownership (TCO) Calculator.
+        is_correct: true
+      - text: Cost Estimator.
+        is_correct: false
+    explanation: Cost allocation tags, Simple Monthly Calculator, and TCO Calculator help estimate costs. Detailed billing reports show historical costs, not estimates. Cost Estimator is not an official AWS tool.
+    diagram: |
+      graph TD
+      Estimate[Cost Estimation Tools] -- Tool 1 --> Tags[Cost Allocation Tags]
+      Estimate -- Tool 2 --> SMC[Simple Monthly Calculator]
+      Estimate -- Tool 3 --> TCO[TCO Calculator]
+      Estimate -.->|Historical Data| DBR[Detailed Billing Report]
+    tags: [cost-management, estimation, tools]
+    difficulty: medium
+    points: 7
+
+  - id: q23
+    type: multiple_choice
+    question: A company wants to focus on business activities instead of managing compute and capacity. Which AWS service can be used to automatically add or remove Amazon EC2 instances based on demand?
+    options:
+      - text: Elastic Load Balancer.
+        is_correct: false
+      - text: Amazon EC2 Auto Scaling.
+        is_correct: true
+      - text: Amazon Route 53.
+        is_correct: false
+      - text: Amazon CloudFront.
+        is_correct: false
+    explanation: EC2 Auto Scaling automatically adjusts instance count based on demand. ELB distributes traffic. Route 53 manages DNS. CloudFront delivers content globally.
+    diagram: |
+      graph TD
+      Focus[Focus on Business] -- Auto-scale --> ASG[EC2 Auto Scaling]
+      ASG -- Adjusts --> Instances[EC2 Instances by Demand]
+      Focus -.->|Traffic Distribution| ELB[Elastic Load Balancer]
+      Focus -.->|DNS| Route53[Amazon Route 53]
+    tags: [auto-scaling, ec2, automation]
+    difficulty: easy
+    points: 5
+
+  - id: q24
+    type: multiple_choice
+    question: Which is the minimum AWS Support plan that includes Infrastructure Event Management without additional costs?
+    options:
+      - text: Enterprise.
+        is_correct: true
+      - text: Business.
+        is_correct: false
+      - text: Developer.
+        is_correct: false
+      - text: Basic.
+        is_correct: false
+    explanation: Infrastructure Event Management is included with Enterprise support at no extra cost. Business, Developer, and Basic plans don't include this feature.
+    diagram: |
+      graph TD
+      IEM[Infrastructure Event Management] -- Included --> Enterprise[Enterprise Support]
+      IEM -.->|Not Included| Business[Business Support]
+      IEM -.->|Not Included| Developer[Developer Support]
+      IEM -.->|Not Included| Basic[Basic Support]
+    tags: [support, enterprise, event-management]
+    difficulty: medium
+    points: 7
+
+  - id: q25
+    type: multiple_choice
+    question: Access keys in AWS Identity and Access Management (IAM) are used to:
+    options:
+      - text: Log in to the AWS Management Console.
+        is_correct: false
+      - text: Make programmatic calls to AWS from AWS APIs.
+        is_correct: true
+      - text: Log in to Amazon EC2 instances.
+        is_correct: false
+      - text: Authenticate to AWS CodeCommit repositories.
+        is_correct: false
+    explanation: Access keys are for programmatic access to AWS APIs. Console login uses username/password. EC2 login uses key pairs. CodeCommit authentication uses HTTPS credentials or SSH keys.
+    diagram: |
+      graph TD
+      AccessKeys[Access Keys] -- Purpose --> Programmatic[Programmatic API Access]
+      AccessKeys -.->|Username/Password| Console[AWS Console]
+      AccessKeys -.->|Key Pairs| EC2[EC2 Login]
+      AccessKeys -.->|Different Auth| CodeCommit[CodeCommit]
+    tags: [iam, access-keys, authentication]
+    difficulty: easy
+    points: 5
+
+  - id: q26
+    type: multiple_choice
+    question: Which AWS service can be used to query stored datasets directly from Amazon S3 using standard SQL?
+    options:
+      - text: AWS Glue.
+        is_correct: false
+      - text: AWS Data Pipeline.
+        is_correct: false
+      - text: Amazon CloudSearch.
+        is_correct: false
+      - text: Amazon Athena.
+        is_correct: true
+    explanation: Amazon Athena allows SQL queries on S3 data directly. AWS Glue is for data preparation and ETL. Data Pipeline is for workflow orchestration. CloudSearch is for search functionality.
+    diagram: |
+      graph TD
+      SQL[Query S3 with SQL] -- Service --> Athena[Amazon Athena]
+      Athena -- Access --> S3[Amazon S3]
+      SQL -.->|Data Preparation| Glue[AWS Glue]
+      SQL -.->|Workflow Orchestration| Pipeline[Data Pipeline]
+    tags: [athena, s3, analytics]
+    difficulty: medium
+    points: 7
+
+  - id: q27
+    type: multiple_choice
+    question: How does AWS shorten the time to provision IT resources?
+    options:
+      - text: It supplies an online IT ticketing platform for resource requests.
+        is_correct: false
+      - text: It supports automatic code validation services.
+        is_correct: false
+      - text: It provides the ability to programmatically provision existing resources.
+        is_correct: true
+      - text: It automates the resource request process from a company's IT vendor list.
+        is_correct: false
+    explanation: AWS enables programmatic provisioning through APIs and Infrastructure as Code. Ticketing platforms don't provision resources. Code validation is separate from provisioning. Vendor automation is not AWS's role.
+    diagram: |
+      graph TD
+      Shorten[Shorten Provisioning Time] -- Method --> Programmatic[Programmatic Provisioning]
+      Programmatic -- Tools --> API[AWS APIs]
+      Programmatic -- Tools --> IaC[Infrastructure as Code]
+      Shorten -.->|Ticketing| Ticketing[Request Tickets]
+    tags: [provisioning, infrastructure-as-code, automation]
+    difficulty: medium
+    points: 7
+
+  - id: q28
+    type: multiple_select
+    question: Which AWS services can be used to gather information about AWS account activity? (Select TWO)
+    options:
+      - text: Amazon CloudFront.
+        is_correct: false
+      - text: AWS Cloud9.
+        is_correct: false
+      - text: AWS CloudTrail.
+        is_correct: true
+      - text: AWS CloudHSM.
+        is_correct: false
+      - text: Amazon CloudWatch.
+        is_correct: true
+    explanation: CloudTrail logs API activity and CloudWatch monitors metrics and logs. CloudFront is a CDN. Cloud9 is an IDE. CloudHSM manages hardware security modules.
+    diagram: |
+      graph TD
+      Activity[Account Activity Monitoring] -- Service 1 --> CT[AWS CloudTrail]
+      Activity -- Service 2 --> CW[Amazon CloudWatch]
+      Activity -.->|CDN Service| CF[Amazon CloudFront]
+      Activity -.->|IDE| Cloud9[AWS Cloud9]
+    tags: [cloudtrail, cloudwatch, monitoring]
+    difficulty: medium
+    points: 7
+
+  - id: q29
+    type: multiple_select
+    question: Which of the following are characteristics of Amazon S3? (Select TWO)
+    options:
+      - text: A global file system.
+        is_correct: false
+      - text: An object store.
+        is_correct: true
+      - text: A local file store.
+        is_correct: false
+      - text: A network file system.
+        is_correct: false
+      - text: A durable storage system.
+        is_correct: true
+    explanation: S3 is an object store with high durability. It's not a file system—that's EFS. It's not local or limited to a network; it's globally accessible and distributed.
+    diagram: |
+      graph TD
+      S3[Amazon S3 Characteristics] -- Characteristic 1 --> ObjectStore[Object Store]
+      S3 -- Characteristic 2 --> Durable[Durable Storage]
+      S3 -.->|Not S3| FileSystem[File System]
+      S3 -.->|Not S3| LocalStore[Local Store]
+    tags: [s3, storage, object-storage]
+    difficulty: easy
+    points: 5
+
+  - id: q30
+    type: multiple_choice
+    question: A user wants guidance on possible savings when migrating from on-premises to AWS. Which tool is suitable for this scenario?
+    options:
+      - text: AWS Budgets.
+        is_correct: false
+      - text: Cost Explorer.
+        is_correct: false
+      - text: AWS Total Cost of Ownership (TCO) Calculator.
+        is_correct: true
+      - text: AWS Well-Architected Tool.
+        is_correct: false
+    explanation: TCO Calculator compares on-premises costs with AWS costs. Budgets manage current AWS spending. Cost Explorer analyzes existing AWS bills. Well-Architected Tool assesses architecture best practices.
+    diagram: |
+      graph TD
+      Guidance[Migration Cost Guidance] -- Tool --> TCO[AWS TCO Calculator]
+      TCO -- Compare --> OnPrem[On-premises vs AWS]
+      Guidance -.->|Existing Bills| Explorer[Cost Explorer]
+      Guidance -.->|Architecture| WAT[Well-Architected Tool]
+    tags: [cost-management, migration, tco]
+    difficulty: easy
+    points: 5
+
+  - id: q31
+    type: multiple_choice
+    question: Which of the following services is in the category of AWS serverless platform?
+    options:
+      - text: Amazon EMR.
+        is_correct: false
+      - text: Elastic Load Balancing.
+        is_correct: false
+      - text: AWS Lambda.
+        is_correct: true
+      - text: AWS Mobile Hub.
+        is_correct: false
+    explanation: AWS Lambda is the primary serverless compute service. EMR is for big data processing. ELB is for load balancing. Mobile Hub was a legacy service.
+    diagram: |
+      graph TD
+      Serverless[AWS Serverless Platform] -- Service --> Lambda[AWS Lambda]
+      Lambda -- Features --> NoServers[No Server Management]
+      Lambda -- Features --> PayPerUse[Pay Per Use]
+      Serverless -.->|Big Data| EMR[Amazon EMR]
+      Serverless -.->|Load Balancing| ELB[Elastic Load Balancing]
+    tags: [lambda, serverless, compute]
+    difficulty: easy
+    points: 5
+
+  - id: q32
+    type: multiple_choice
+    question: The use of what AWS feature or service allows companies to track and categorize spending on a detailed level?
+    options:
+      - text: Cost allocation tags.
+        is_correct: true
+      - text: Consolidated billing.
+        is_correct: false
+      - text: AWS Budgets.
+        is_correct: false
+      - text: AWS Marketplace.
+        is_correct: false
+    explanation: Cost allocation tags enable detailed categorization and tracking of spending. Consolidated billing combines bills from multiple accounts. Budgets sets spending limits. Marketplace is for purchasing third-party software.
+    diagram: |
+      graph TD
+      Track[Track Detailed Spending] -- Feature --> Tags[Cost Allocation Tags]
+      Tags -- Enables --> Categorize[Categorization]
+      Tags -- Enables --> Detail[Detailed Tracking]
+      Track -.->|Consolidation| ConsolidatedBilling[Consolidated Billing]
+    tags: [cost-management, tags, billing]
+    difficulty: easy
+    points: 5
+
+  - id: q33
+    type: multiple_choice
+    question: Which of the following inspects AWS environments to find opportunities that can save money for users and also improve system performance?
+    options:
+      - text: AWS Cost Explorer.
+        is_correct: false
+      - text: AWS Trusted Advisor.
+        is_correct: true
+      - text: Consolidated billing.
+        is_correct: false
+      - text: Detailed billing.
+        is_correct: false
+    explanation: AWS Trusted Advisor provides recommendations for cost savings and performance improvements. Cost Explorer analyzes spending. Consolidated/detailed billing shows costs, not recommendations.
+    diagram: |
+      graph TD
+      Optimize[Optimize Cost & Performance] -- Service --> TA[AWS Trusted Advisor]
+      TA -- Recommendations --> CostSavings[Cost Savings]
+      TA -- Recommendations --> Performance[Performance Improvements]
+      Optimize -.->|Spending Analysis| CE[Cost Explorer]
+    tags: [trusted-advisor, optimization, best-practices]
+    difficulty: easy
+    points: 5
+
+  - id: q34
+    type: multiple_choice
+    question: Web servers running on Amazon EC2 access a legacy application running in a corporate data center. What term would describe this model?
+    options:
+      - text: Cloud-native.
+        is_correct: false
+      - text: Partner network.
+        is_correct: false
+      - text: Hybrid architecture.
+        is_correct: true
+      - text: Infrastructure as a service.
+        is_correct: false
+    explanation: Hybrid architecture combines cloud (EC2) and on-premises resources. Cloud-native is entirely in the cloud. Partner network refers to AWS partners. IaaS is a service model, not architecture type.
+    diagram: |
+      graph TD
+      Model[Architecture Model] --> Hybrid[Hybrid Architecture]
+      Hybrid -- Components --> EC2[Cloud EC2]
+      Hybrid -- Components --> OnPrem[On-premises Legacy]
+      Model -.->|All Cloud| CloudNative[Cloud-native]
+    tags: [hybrid, architecture, on-premises]
+    difficulty: easy
+    points: 5
+
+  - id: q35
+    type: multiple_choice
+    question: What technology enables compute capacity to adjust as loads change?
+    options:
+      - text: Load balancing.
+        is_correct: false
+      - text: Automatic failover.
+        is_correct: false
+      - text: Round robin.
+        is_correct: false
+      - text: Auto Scaling.
+        is_correct: true
+    explanation: Auto Scaling adjusts compute capacity based on demand. Load balancing distributes traffic. Automatic failover handles failures. Round robin is a distribution method.
+    diagram: |
+      graph TD
+      Adjust[Adjust Capacity by Load] -- Technology --> AutoScale[Auto Scaling]
+      AutoScale -- Actions --> ScaleUp[Scale Up]
+      AutoScale -- Actions --> ScaleDown[Scale Down]
+      Adjust -.->|Traffic Distribution| LB[Load Balancing]
+    tags: [auto-scaling, elasticity, capacity]
+    difficulty: easy
+    points: 5
+
+  - id: q36
+    type: multiple_choice
+    question: Which AWS service is a managed NoSQL database?
+    options:
+      - text: Amazon Redshift.
+        is_correct: false
+      - text: Amazon DynamoDB.
+        is_correct: true
+      - text: Amazon Aurora.
+        is_correct: false
+      - text: Amazon RDS for ManaDB.
+        is_correct: false
+    explanation: DynamoDB is AWS's managed NoSQL database. Redshift is a data warehouse. Aurora is a relational database. The fourth option is not a real AWS service.
+    diagram: |
+      graph TD
+      NoSQL[Managed NoSQL Database] -- Service --> DDB[Amazon DynamoDB]
+      DDB -- Data Model --> KeyValue[Key-Value & Documents]
+      NoSQL -.->|Data Warehouse| Redshift[Amazon Redshift]
+      NoSQL -.->|Relational| Aurora[Amazon Aurora]
+    tags: [dynamodb, nosql, database]
+    difficulty: easy
+    points: 5
+
+  - id: q37
+    type: multiple_choice
+    question: Which of the following is a correct relationship between regions, Availability Zones, and edge locations?
+    options:
+      - text: Data centers contain regions.
+        is_correct: false
+      - text: Regions contain Availability Zones.
+        is_correct: true
+      - text: Availability Zones contain edge locations.
+        is_correct: false
+      - text: Edge locations contain regions.
+        is_correct: false
+    explanation: Regions contain multiple Availability Zones. Data centers are contained in Availability Zones. Edge locations are separate from the regional hierarchy.
+    diagram: |
+      graph TD
+      Hierarchy[AWS Infrastructure Hierarchy] -- Top --> Region[AWS Regions]
+      Region -- Contains --> AZ[Availability Zones]
+      AZ -- Contains --> DataCenter[Data Centers]
+      Hierarchy -- Separate --> EdgeLoc[Edge Locations]
+    tags: [regions, availability-zones, infrastructure]
+    difficulty: medium
+    points: 7
+
+  - id: q38
+    type: multiple_choice
+    question: What approach to transcoding a large number of individual video files adheres to AWS architecture principles?
+    options:
+      - text: Using many instances in parallel.
+        is_correct: true
+      - text: Using a single large instance during off-peak hours.
+        is_correct: false
+      - text: Using dedicated hardware.
+        is_correct: false
+      - text: Using a large GPU instance type.
+        is_correct: false
+    explanation: Parallel processing with many instances aligns with AWS's elasticity and scalability principles. Single instances lack parallelism. Dedicated hardware is expensive. GPU instances are for specific workloads.
+    diagram: |
+      graph TD
+      Transcode[Video Transcoding] -- Best Practice --> Parallel[Many Instances in Parallel]
+      Parallel -- Benefit --> Elasticity[Elasticity]
+      Parallel -- Benefit --> Speed[Faster Processing]
+      Transcode -.->|Inefficient| SingleLarge[Single Large Instance]
+    tags: [architecture, scalability, parallel-processing]
+    difficulty: medium
+    points: 7
+
+  - id: q39
+    type: multiple_select
+    question: Which AWS services can host a Microsoft SQL Server database? (Select TWO)
+    options:
+      - text: Amazon EC2.
+        is_correct: true
+      - text: Amazon Relational Database Service (Amazon RDS).
+        is_correct: true
+      - text: Amazon Aurora.
+        is_correct: false
+      - text: Amazon Redshift.
+        is_correct: false
+      - text: Amazon S3.
+        is_correct: false
+    explanation: EC2 and RDS support SQL Server. Aurora is MySQL/PostgreSQL only. Redshift is a data warehouse. S3 is object storage.
+    diagram: |
+      graph TD
+      MSSQL[SQL Server Database] -- Host on --> EC2[Amazon EC2]
+      MSSQL -- Host on --> RDS[Amazon RDS]
+      MSSQL -.->|MySQL/PostgreSQL| Aurora[Amazon Aurora]
+      MSSQL -.->|Data Warehouse| Redshift[Amazon Redshift]
+    tags: [sql-server, rds, ec2, database]
+    difficulty: medium
+    points: 7
+
+  - id: q40
+    type: multiple_choice
+    question: Which AWS IAM feature allows developers to access AWS services through the AWS CLI?
+    options:
+      - text: API keys.
+        is_correct: false
+      - text: Access keys.
+        is_correct: true
+      - text: User names/Passwords.
+        is_correct: false
+      - text: SSH keys.
+        is_correct: false
+    explanation: Access keys enable CLI authentication to AWS. API keys are generic. Username/password is for console login. SSH keys are for EC2 instance access.
+    diagram: |
+      graph TD
+      CLI[AWS CLI Access] -- Credentials --> AccessKeys[Access Keys]
+      AccessKeys -- Includes --> AccessKeyID[Access Key ID]
+      AccessKeys -- Includes --> SecretAccessKey[Secret Access Key]
+      CLI -.->|Console| UserPass[Username/Password]
+      CLI -.->|EC2| SSHKeys[SSH Keys]
+    tags: [iam, cli, authentication]
+    difficulty: easy
+    points: 5
+
+  - id: q41
+    type: multiple_choice
+    question: The user is fully responsible for which action when running workloads on AWS?
+    options:
+      - text: Patching the infrastructure components.
+        is_correct: false
+      - text: Maintaining the underlying infrastructure components.
+        is_correct: false
+      - text: Maintaining physical and environmental controls.
+        is_correct: false
+      - text: Implementing controls to route application traffic.
+        is_correct: true
+    explanation: Customers are responsible for application-layer controls like traffic routing. AWS manages infrastructure patching, maintenance, and physical controls.
+    diagram: |
+      graph TD
+      Responsibility[Customer Responsibility] -- Action --> TrafficRouting[Route Application Traffic]
+      TrafficRouting -- Examples --> LB[Load Balancing]
+      TrafficRouting -- Examples --> SG[Security Groups]
+      Responsibility -.->|AWS| InfraPatch[Infrastructure Patching]
+      Responsibility -.->|AWS| Physical[Physical Controls]
+    tags: [shared-responsibility, security, application]
+    difficulty: medium
+    points: 7
+
+  - id: q42
+    type: multiple_choice
+    question: Which AWS support plan includes a dedicated Technical Account Manager?
+    options:
+      - text: Developer.
+        is_correct: false
+      - text: Enterprise.
+        is_correct: true
+      - text: Business.
+        is_correct: false
+      - text: Basic.
+        is_correct: false
+    explanation: Enterprise support includes a dedicated Technical Account Manager (TAM). Developer, Business, and Basic plans do not offer this service.
+    diagram: |
+      graph TD
+      TAM[Dedicated TAM] -- Included in --> Enterprise[Enterprise Support]
+      Enterprise -- TAM Provides --> Guidance[Strategic Guidance]
+      TAM -.->|Not Included| Business[Business Support]
+      TAM -.->|Not Included| Developer[Developer Support]
+    tags: [support, enterprise, tam]
+    difficulty: easy
+    points: 5
+
+  - id: q43
+    type: multiple_choice
+    question: What time-savings advantage is offered with the use of Amazon Rekognition?
+    options:
+      - text: Amazon Rekognition provides automatic watermarking of images.
+        is_correct: false
+      - text: Amazon Rekognition provides automatic detection of objects appearing in pictures.
+        is_correct: true
+      - text: Amazon Recognition provides the ability to resize millions of images automatically.
+        is_correct: false
+      - text: Amazon Rekognition uses Amazon Mechanical Turk to allow humans to bid on object detection jobs.
+        is_correct: false
+    explanation: Rekognition automatically detects objects in images using machine learning, saving manual effort. Watermarking and resizing are different features. Mechanical Turk is manual labor, not Rekognition.
+    diagram: |
+      graph TD
+      Rekog[Amazon Rekognition] -- Feature --> ObjectDetection[Automatic Object Detection]
+      ObjectDetection -- Saves --> ManualLabor[Manual Labeling Time]
+      Rekog -.->|Different Service| Watermark[Image Watermarking]
+      Rekog -.->|Manual Labor| MechanicalTurk[Mechanical Turk]
+    tags: [rekognition, machine-learning, automation]
+    difficulty: medium
+    points: 7
+
+  - id: q44
+    type: multiple_choice
+    question: Which AWS service can be used to automatically scale an application up and down without making capacity planning decisions?
+    options:
+      - text: Amazon AutoScaling.
+        is_correct: true
+      - text: Amazon Redshift.
+        is_correct: false
+      - text: AWS CloudTrail.
+        is_correct: false
+      - text: AWS Lambda.
+        is_correct: false
+    explanation: Auto Scaling automatically adjusts capacity based on demand without manual planning. Redshift is for data warehouses. CloudTrail logs activities. Lambda is serverless but doesn't auto-scale in the same way.
+    diagram: |
+      graph TD
+      Scale[Auto Scale Application] -- Service --> AutoScale[Amazon AutoScaling]
+      AutoScale -- No Manual Planning --> Automatic[Automatic Adjustment]
+      Scale -.->|Data Warehouse| Redshift[Amazon Redshift]
+      Scale -.->|Logging| CloudTrail[AWS CloudTrail]
+    tags: [auto-scaling, capacity-planning, automation]
+    difficulty: easy
+    points: 5
+
+  - id: q45
+    type: multiple_choice
+    question: Amazon Relational Database Service (Amazon RDS) offers which of the following benefits over traditional database management?
+    options:
+      - text: AWS manages the data stored in Amazon RDS tables.
+        is_correct: false
+      - text: AWS manages the maintenance of the operating system.
+        is_correct: true
+      - text: AWS automatically scales up instance types on demand.
+        is_correct: false
+      - text: AWS manages the database type.
+        is_correct: false
+    explanation: RDS automates OS maintenance like patching. AWS doesn't manage table data—customers do. Instance scaling requires manual action. Customers choose the database type.
+    diagram: |
+      graph TD
+      RDS[Amazon RDS Benefits] -- Benefit --> OSMaint[OS Maintenance]
+      OSMaint -- Includes --> Patching[Patching]
+      OSMaint -- Includes --> Updates[Updates]
+      RDS -.->|Customer Managed| TableData[Table Data]
+      RDS -.->|Manual Action| Scaling[Instance Scaling]
+    tags: [rds, database, managed-service]
+    difficulty: medium
+    points: 7
+
+  - id: q46
+    type: multiple_choice
+    question: A company's web application currently has light dependencies on underlying components so when one component fails the entire web application fails. Applying which AWS Cloud design principle will address the current design issue?
+    options:
+      - text: Implementing elasticity enabling the application to scale up or scale down as demand changes.
+        is_correct: false
+      - text: Enabling several EC2 instances to run in parallel to achieve better performance.
+        is_correct: false
+      - text: Focusing on decoupling components by isolating them and ensuring individual components can function when other components.
+        is_correct: true
+      - text: Doubling EC2 computing resources to increase system fault tolerance.
+        is_correct: false
+    explanation: Decoupling components isolates failures and enables individual components to function independently. Elasticity manages scaling, not dependencies. Parallel instances without decoupling still fail together. Doubling resources without decoupling doesn't help.
+    diagram: |
+      graph TD
+      Failure[Prevent Cascade Failure] -- Principle --> Decouple[Decouple Components]
+      Decouple -- Benefit --> Independent[Independent Functioning]
+      Decouple -- Benefit --> Isolation[Failure Isolation]
+      Failure -.->|Not the Issue| Elasticity[Elasticity]
+      Failure -.->|Doesn't Help| MoreResources[More Resources]
+    tags: [architecture, loosely-coupled, design-principles]
+    difficulty: medium
+    points: 7
+
+  - id: q47
+    type: multiple_choice
+    question: A customer would like to design and build a new workload on AWS Cloud but does not have the AWS-related software technical expertise in-house. Which of the following AWS programs can a customer take advantage of to achieve that outcome?
+    options:
+      - text: AWS Partner Network Technology Partners.
+        is_correct: false
+      - text: AWS Marketplace.
+        is_correct: false
+      - text: AWS Partner Network Consulting Partners.
+        is_correct: true
+      - text: AWS Service Catalog.
+        is_correct: false
+    explanation: APN Consulting Partners provide design and implementation services. Technology Partners provide software solutions. Marketplace is for purchasing software. Service Catalog manages approved products.
+    diagram: |
+      graph TD
+      Design[Design New Workload] -- Expertise --> APN[APN Consulting Partners]
+      APN -- Services --> Architecture[Architectural Guidance]
+      APN -- Services --> Implementation[Implementation Support]
+      Design -.->|Software| TechPartners[Tech Partners]
+      Design -.->|Product Catalog| ServiceCatalog[Service Catalog]
+    tags: [apn, partner-network, consulting]
+    difficulty: medium
+    points: 7
+
+  - id: q48
+    type: multiple_choice
+    question: Which service stores objects, provides real-time access to those objects, and offers versioning and lifecycle capabilities?
+    options:
+      - text: Amazon Glacier.
+        is_correct: false
+      - text: AWS Storage Gateway.
+        is_correct: false
+      - text: Amazon S3.
+        is_correct: true
+      - text: Amazon EBS.
+        is_correct: false
+    explanation: S3 stores objects with real-time access, versioning, and lifecycle management. Glacier is for archive storage with slow retrieval. Storage Gateway bridges on-premises and AWS. EBS provides block storage.
+    diagram: |
+      graph TD
+      Storage[Object Storage Service] -- Service --> S3[Amazon S3]
+      S3 -- Features --> RealTime[Real-time Access]
+      S3 -- Features --> Versioning[Versioning]
+      S3 -- Features --> Lifecycle[Lifecycle Management]
+      Storage -.->|Archive| Glacier[Amazon Glacier]
+      Storage -.->|Block| EBS[Amazon EBS]
+    tags: [s3, object-storage, versioning]
+    difficulty: easy
+    points: 5
+
+  - id: q49
+    type: multiple_choice
+    question: Distributing workloads across multiple Availability Zones supports which cloud architecture design principle?
+    options:
+      - text: Implement automation.
+        is_correct: false
+      - text: Design for agility.
+        is_correct: false
+      - text: Design for failure.
+        is_correct: true
+      - text: Implement elasticity.
+        is_correct: false
+    explanation: Multi-AZ distribution designs for failure by isolating failures to single zones. Automation is separate. Agility refers to rapid changes. Elasticity is about scaling.
+    diagram: |
+      graph TD
+      MultiAZ[Multi-AZ Distribution] -- Principle --> DesignForFailure[Design for Failure]
+      DesignForFailure -- Benefit --> Isolation[Failure Isolation]
+      DesignForFailure -- Benefit --> Resilience[Resilience]
+      MultiAZ -.->|Different Principle| Automation[Implement Automation]
+      MultiAZ -.->|Different Principle| Elasticity[Implement Elasticity]
+    tags: [multi-az, design-principles, high-availability]
+    difficulty: medium
+    points: 7
+
+  - id: q50
+    type: multiple_choice
+    question: Which service should a customer use to consolidate and centrally manage multiple AWS accounts?
+    options:
+      - text: AWS IAM.
+        is_correct: false
+      - text: AWS Organizations.
+        is_correct: true
+      - text: AWS Schema Conversion Tool.
+        is_correct: false
+      - text: AWS Config.
+        is_correct: false
+    explanation: AWS Organizations consolidates and manages multiple accounts centrally. IAM manages access within accounts. Schema Conversion Tool migrates database schemas. Config tracks resource configurations.
+    diagram: |
+      graph TD
+      Consolidate[Consolidate Multiple Accounts] -- Service --> Org[AWS Organizations]
+      Org -- Features --> Billing[Unified Billing]
+      Org -- Features --> Policies[Central Policies]
+      Consolidate -.->|Access Control| IAM[AWS IAM]
+      Consolidate -.->|Migration| SCT[Schema Conversion Tool]
+    tags: [organizations, account-management, consolidation]
+    difficulty: easy
+    points: 5

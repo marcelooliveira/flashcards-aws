@@ -1,0 +1,743 @@
+﻿questions:
+  - id: q1
+    type: multiple_choice
+    question: Which AWS offering enables customers to find, buy, and immediately start using software solutions in their AWS environment?
+    options:
+      - text: AWS Config
+        is_correct: false
+      - text: AWS OpsWorks
+        is_correct: false
+      - text: AWS SDK
+        is_correct: false
+      - text: AWS Marketplace
+        is_correct: true
+    explanation: |
+      <https://aws.amazon.com/mp/>
+  - id: q2
+    type: multiple_choice
+    question: Which AWS networking service enables a company to create a virtual network within AWS?
+    options:
+      - text: AWS Config
+        is_correct: false
+      - text: Amazon Route 53
+        is_correct: false
+      - text: AWS Direct Connect
+        is_correct: false
+      - text: Amazon Virtual Private Cloud (Amazon VPC.
+        is_correct: true
+    explanation: |
+      <https://aws.amazon.com/vpc/>
+  - id: q3
+    type: multiple_choice
+    question: Which of the following is AWS's responsibility under the AWS shared responsibility model?
+    options:
+      - text: Configuring third-party applications
+        is_correct: false
+      - text: Maintaining physical hardware
+        is_correct: true
+      - text: Securing application access and data
+        is_correct: false
+      - text: Managing custom Amazon Machine Images (AMIs)
+        is_correct: false
+    explanation: |
+      <https://aws.amazon.com/compliance/shared-responsibility-model/>
+  - id: q4
+    type: multiple_choice
+    question: Which component of AWS global infrastructure does Amazon CloudFront use to ensure low-latency delivery?
+    options:
+      - text: AWS Regions
+        is_correct: false
+      - text: AWS edge locations
+        is_correct: true
+      - text: AWS Availability Zones
+        is_correct: false
+      - text: Amazon Virtual Private Cloud (Amazon VPC.
+        is_correct: false
+    explanation: |
+      <https://aws.amazon.com/cloudfront/>
+  - id: q5
+    type: multiple_choice
+    question: How would a system administrator add an additional layer of login security to a user's AWS Management Console?
+    options:
+      - text: Use AWS Cloud Directory
+        is_correct: false
+      - text: Audit AWS Identity and Access Management (IAM) roles
+        is_correct: false
+      - text: Enable Multi-Factor Authentication
+        is_correct: true
+      - text: Enable AWS CloudTrail
+        is_correct: false
+    explanation: |
+      <https://aws.amazon.com/iam/details/mfa/>
+  - id: q6
+    type: multiple_choice
+    question: Which service can identify the user that made the API call when an Amazon Elastic Compute Cloud (Amazon EC2) instance is terminated?
+    options:
+      - text: Amazon CloudWatch
+        is_correct: false
+      - text: AWS CloudTrail
+        is_correct: true
+      - text: AWS X-Ray
+        is_correct: false
+      - text: AWS Identity and Access Management (AWS IAM)
+        is_correct: false
+    explanation: |
+      <http://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html>
+  - id: q7
+    type: multiple_choice
+    question: Which service would you use to send alerts based on Amazon CloudWatch alarms?
+    options:
+      - text: Amazon Simple Notification Service (Amazon SNS)
+        is_correct: true
+      - text: AWS CloudTrail
+        is_correct: false
+      - text: AWS Trusted Advisor
+        is_correct: false
+      - text: Amazon Route 53
+        is_correct: false
+    explanation: |
+      <http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html>
+  - id: q8
+    type: multiple_choice
+    question: Where can a customer find information about prohibited actions on AWS infrastructure?
+    options:
+      - text: AWS Trusted Advisor
+        is_correct: false
+      - text: AWS Identity and Access Management (IAM)
+        is_correct: false
+      - text: AWS Billing Console
+        is_correct: false
+      - text: AWS Acceptable Use Policy
+        is_correct: true
+    explanation: |
+      <https://aws.amazon.com/aup/>
+  - id: q9
+    type: multiple_choice
+    question: Which of the following is an example of how moving to the AWS Cloud reduces upfront cost?
+    options:
+      - text: By replacing large variable costs with lower capital investments
+        is_correct: false
+      - text: By replacing large capital investments with lower variable costs
+        is_correct: true
+      - text: By allowing the provisioning of compute and storage at a fixed level to meet peak demand
+        is_correct: false
+      - text: By replacing the repeated scaling of virtual servers with a simpler fixed-scale model
+        is_correct: false
+    explanation: |
+      AWS does not require minimum spend commitments or long-term contracts.
+      You replace large upfront expenses with low variable payments that only apply to what you use.
+      With AWS you are not bound to multi-year agreements or complicated licensing models.
+    Reference: <https://aws.amazon.com/economics/>
+  - id: q10
+    type: multiple_choice
+    question: When designing a typical three-tier web application, which AWS services and/or features improve availability and reduce the impact failures? (Choose two.)
+    options:
+      - text: AWS Auto Scaling for Amazon EC2 instances
+        is_correct: true
+      - text: Amazon VPC subnet ACLs to check the health of a service
+        is_correct: false
+      - text: Distributed resources across multiple Availability Zones
+        is_correct: true
+      - text: AWS Server Migration Service (AWS SMS) to move Amazon EC2 instances into a different Region
+        is_correct: false
+      - text: Distributed resources across multiple AWS points of presence
+        is_correct: false
+    explanation: |
+      <https://d1.awsstatic.com/whitepapers/AWS_Cloud_Best_Practices.pdf>
+  - id: q11
+    type: multiple_choice
+    question: Which cloud design principle aligns with AWS Cloud best practices?
+    options:
+      - text: Create fixed dependencies among application components
+        is_correct: false
+      - text: Aggregate services on a single instance
+        is_correct: false
+      - text: Deploy applications in a single Availability Zone
+        is_correct: false
+      - text: Distribute the compute load across multiple resources
+        is_correct: true
+    explanation: |
+      Use load balancing for offloading encryption termination (TLS) to improve performance and to manage and route traffic effectively.
+      Distribute traffic across multiple resources or services to allow your workload to take advantage of the elasticity that AWS provides.
+    Reference: <https://d1.awsstatic.com/whitepapers/architecture/AWS_Well-Architected_Framework.pdf>
+  - id: q12
+    type: multiple_choice
+    question: Which of the following are recommended practices for managing IAM users? (Choose two.)
+    options:
+      - text: Require IAM users to change their passwords after a specified period of time
+        is_correct: true
+      - text: Prevent IAM users from reusing previous passwords
+        is_correct: true
+      - text: Recommend that the same password be used on AWS and other sites
+        is_correct: false
+      - text: Require IAM users to store their passwords in raw text
+        is_correct: false
+      - text: Disable multi-factor authentication (MFA) for IAM users
+        is_correct: false
+    explanation: |
+      <https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html>
+  - id: q13
+    type: multiple_choice
+    question: A company is migrating from on-premises data centers to the AWS Cloud and is looking for hands-on help with the project. <br/> How can the company get this support? (Choose two.)
+    options:
+      - text: Ask for a quote from the AWS Marketplace team to perform a migration into the company's AWS account.
+        is_correct: false
+      - text: Contact AWS Support and open a case for assistance
+        is_correct: false
+      - text: Use AWS Professional Services to provide guidance and to set up an AWS Landing Zone in the company's AWS account
+        is_correct: true
+      - text: Select a partner from the AWS Partner Network (APN) to assist with the migration
+        is_correct: true
+      - text: Use Amazon Connect to create a new request for proposal (RFP) for expert assistance in migrating to the AWS Cloud.
+        is_correct: false
+    explanation: |
+      <https://aws.amazon.com/solutions/aws-landing-zone/>
+  - id: q14
+    type: multiple_choice
+    question: How does the AWS Enterprise Support Concierge team help users?
+    options:
+      - text: Supporting application development
+        is_correct: false
+      - text: Providing architecture guidance
+        is_correct: false
+      - text: Answering billing and account inquires
+        is_correct: true
+      - text: Answering questions regarding technical support cases
+        is_correct: false
+    explanation: |
+      <https://aws.amazon.com/premiumsupport/plans/enterprise/>
+  - id: q15
+    type: multiple_choice
+    question: An application designed to span multiple Availability Zones is described as
+    options:
+      - text: being highly available
+        is_correct: true
+      - text: having global reach
+        is_correct: false
+      - text: using an economy of scale
+        is_correct: false
+      - text: having elasticity
+        is_correct: false
+  - id: q16
+    type: multiple_choice
+    question: A new service using AWS must be highly available. Yet, due to regulatory requirements, all of its Amazon EC2 instances must be located in a single geographic area. <br/> According to best practices, to meet these requirements, the EC2 instances must be placed in at least two
+    options:
+      - text: AWS Regions
+        is_correct: false
+      - text: Availability Zones
+        is_correct: true
+      - text: subnets
+        is_correct: false
+      - text: placement groups
+        is_correct: false
+    explanation: |
+      <https://aws.amazon.com/ec2/faqs/>
+  - id: q17
+    type: multiple_choice
+    question: Which AWS tool is used to compare the cost of running an application on-premises to running the application in the AWS Cloud?
+    options:
+      - text: AWS Trusted Advisor
+        is_correct: false
+      - text: AWS Simple Monthly Calculator
+        is_correct: false
+      - text: AWS Pricing Calculator
+        is_correct: true
+      - text: Cost Explorer
+        is_correct: false
+    explanation: |
+      <https://aws.amazon.com/tco-calculator/>
+  - id: q18
+    type: multiple_choice
+    question: A company has multiple AWS accounts within AWS Organizations and wants to apply the Amazon EC2 Reserved Instances benefit to a single account only. <br/> Which action should be taken?
+    options:
+      - text: Purchase the Reserved Instances from master payer account and turn off Reserved Instance sharing.
+        is_correct: true
+      - text: Enable billing alerts in the AWS Billing and Cost Management console.
+        is_correct: false
+      - text: Purchase the Reserved Instances in individual linked accounts and turn off Reserved Instance sharing from the payer level.
+        is_correct: false
+      - text: Enable Reserved Instance sharing in the AWS Billing and Cost Management console.
+        is_correct: false
+    explanation: |
+      <https://aws.amazon.com/premiumsupport/knowledge-center/ec2-ri-consolidated-billing/>
+  - id: q19
+    type: multiple_choice
+    question: Which situation should be reported to the AWS Abuse team?
+    options:
+      - text: In Availability Zone has a service disruption
+        is_correct: false
+      - text: An intrusion attempt is made from an AWS IP address
+        is_correct: true
+      - text: A user has trouble accessing an Amazon S3 bucket from an AWS IP address
+        is_correct: false
+      - text: A user needs to change payment methods due to a compromise
+        is_correct: false
+    explanation: |
+      <https://aws.amazon.com/premiumsupport/knowledge-center/report-aws-abuse/>
+  - id: q20
+    type: multiple_choice
+    question: A company is planning to launch an ecommerce site in a single AWS Region to a worldwide user base. <br/> Which AWS services will allow the company to reach users and provide low latency and high transfer speeds? (Choose two.)
+    options:
+      - text: Application Load Balancer
+        is_correct: false
+      - text: AWS Global Accelerator
+        is_correct: true
+      - text: AWS Direct Connect
+        is_correct: false
+      - text: Amazon CloudFront
+        is_correct: true
+      - text: AWS Lambda
+        is_correct: false
+    explanation: |
+      <https://aws.amazon.com/cloudfront/faqs/>
+  - id: q21
+    type: multiple_choice
+    question: Which AWS service or resource is serverless?
+    options:
+      - text: AWS Lambda
+        is_correct: true
+      - text: Amazon EC2 instances
+        is_correct: false
+      - text: Amazon Lightsail
+        is_correct: false
+      - text: Amazon ElastiCache
+        is_correct: false
+    explanation: |
+      <https://blogs.itemis.com/en/serverless-services-on-aws>
+  - id: q22
+    type: multiple_choice
+    question: Which of the following are components of Amazon VPC? (Choose two.)
+    options:
+      - text: Objects
+        is_correct: false
+      - text: Subnets
+        is_correct: true
+      - text: Buckets
+        is_correct: false
+      - text: Internet gateways
+        is_correct: true
+      - text: Access key
+        is_correct: false
+    explanation: |
+      <https://subscription.packtpub.com/book/virtualization_and_cloud/9781788293723/3/ch03lvl1sec26/vpc-components>
+  - id: q23
+    type: multiple_choice
+    question: AWS Budgets can be used to
+    options:
+      - text: prevent a given user from creating a resource
+        is_correct: false
+      - text: send an alert when the utilization of Reserved Instances drops below a certain percentage
+        is_correct: false
+      - text: set resource limits in AWS accounts to prevent overspending
+        is_correct: true
+      - text: split an AWS bill across multiple forms of payment
+        is_correct: false
+    explanation: |
+      <https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/budgets-managing-costs.html>
+  - id: q24
+    type: multiple_choice
+    question: Which of the following will enhance the security of access to the AWS Management Console? (Choose two.)
+    options:
+      - text: AWS Secrets Manager
+        is_correct: false
+      - text: AWS Certificate Manager
+        is_correct: false
+      - text: AWS Multi-Factor Authentication (AWS MFA)
+        is_correct: true
+      - text: Security groups
+        is_correct: false
+      - text: Password policies
+        is_correct: true
+    explanation: |
+      <https://aws.amazon.com/blogs/security/guidelines-for-protecting-your-aws-account-while-using-programmatic-access/>
+  - id: q25
+    type: multiple_choice
+    question: The AWS Trusted Advisor checks include recommendations regarding which of the following? (Choose two.)
+    options:
+      - text: Information on Amazon S3 bucket permissions
+        is_correct: true
+      - text: AWS service outages
+        is_correct: false
+      - text: Multi-factor authentication enabled on the AWS account root user
+        is_correct: true
+      - text: Available software patches
+        is_correct: false
+      - text: Number of users in the account
+        is_correct: false
+    explanation: |
+      <https://aws.amazon.com/premiumsupport/technology/trusted-advisor/best-practice-checklist/>
+  - id: q26
+    type: multiple_choice
+    question: Which functions can users perform using AWS KMS?
+    options:
+      - text: Create and manage AWS access keys for the AWS account root user
+        is_correct: false
+      - text: Create and manage AWS access keys for an AWS account IAM user
+        is_correct: false
+      - text: Create and manage keys for encryption and decryption of data
+        is_correct: true
+      - text: Create and manage keys for multi-factor authentication
+        is_correct: false
+    explanation: |
+      <https://docs.aws.amazon.com/kms/latest/developerguide/control-access.html>
+  - id: q27
+    type: multiple_choice
+    question: How does AWS Trusted Advisor provide guidance to users of the AWS Cloud? (Choose two.)
+    options:
+      - text: It identifies software vulnerabilities in applications running on AWS
+        is_correct: false
+      - text: It provides a list of cost optimization recommendations based on current AWS usage
+        is_correct: true
+      - text: It detects potential security vulnerabilities caused by permissions settings on account resources
+        is_correct: true
+      - text: It automatically corrects potential security issues caused by permissions settings on account resources
+        is_correct: false
+      - text: It provides proactive alerting whenever an Amazon EC2 instance has been compromised
+        is_correct: false
+  - id: q28
+    type: multiple_choice
+    question: Which of the following are advantages of the AWS Cloud? (Choose two.)
+    options:
+      - text: AWS manages the maintenance of the cloud infrastructure
+        is_correct: true
+      - text: AWS manages the security of applications built on AWS
+        is_correct: false
+      - text: AWS manages capacity planning for physical servers
+        is_correct: true
+      - text: AWS manages the development of applications on AWS
+        is_correct: false
+      - text: AWS manages cost planning for virtual servers
+        is_correct: false
+    explanation: |
+      <https://aws.amazon.com/compliance/data-center/controls/>
+  - id: q29
+    type: multiple_choice
+    question: A user deploys an Amazon RDS DB instance in multiple Availability Zones. <br/> This strategy involves which pillar of the AWS Well-Architected Framework?
+    options:
+      - text: Performance efficiency
+        is_correct: false
+      - text: Reliability
+        is_correct: true
+      - text: Cost optimization
+        is_correct: false
+      - text: Security
+        is_correct: false
+    explanation: |
+      <https://aws.amazon.com/blogs/apn/the-5-pillars-of-the-aws-well-architected-framework/>
+  - id: q30
+    type: multiple_choice
+    question: Which AWS services provide a user with connectivity between the AWS Cloud and on-premises resources? (Choose two.)
+    options:
+      - text: AWS VPN
+        is_correct: true
+      - text: Amazon Connect
+        is_correct: false
+      - text: Amazon Cognito
+        is_correct: false
+      - text: AWS Direct Connect
+        is_correct: true
+      - text: AWS Managed Services
+        is_correct: false
+    explanation: |
+      <https://aws.amazon.com/directconnect/>
+      <https://aws.amazon.com/blogs/networking-and-content-delivery/introducing-aws-client-vpn-to-securely-access-aws-and-on-premises-resources/>
+  - id: q31
+    type: multiple_choice
+    question: Which AWS service is used to pay AWS bills, and monitor usage and budget costs?
+    options:
+      - text: AWS Billing and Cost Management
+        is_correct: true
+      - text: Consolidated billing
+        is_correct: false
+      - text: Amazon CloudWatch
+        is_correct: false
+      - text: Amazon QuickSight
+        is_correct: false
+    explanation: |
+      <https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/billing-what-is.html>
+  - id: q32
+    type: multiple_choice
+    question: Which element of the AWS global infrastructure consists of one or more discrete data centers, each with redundant power, networking, and connectivity, which are housed in separate facilities?
+    options:
+      - text: AWS Regions
+        is_correct: false
+      - text: Availability Zones
+        is_correct: true
+      - text: Edge locations
+        is_correct: false
+      - text: Amazon CloudFront
+        is_correct: false
+    explanation: |
+      <https://docs.aws.amazon.com/whitepapers/latest/aws-overview/global-infrastructure.html>
+  - id: q33
+    type: multiple_choice
+    question: Which Amazon VPC feature enables users to capture information about the IP traffic that reaches Amazon EC2 instances?
+    options:
+      - text: Security groups
+        is_correct: false
+      - text: Elastic network interfaces
+        is_correct: false
+      - text: Network ACLs
+        is_correct: false
+      - text: VPC Flow Logs
+        is_correct: true
+    explanation: |
+      VPC Flow Logs is a feature that enables you to capture information about the IP traffic going to and from network interfaces in your VPC.
+      Flow log data can be published to Amazon CloudWatch Logs or Amazon S3. After you've created a flow log, you can retrieve and view its data in the chosen destination.
+    Reference: <https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs.html>
+  - id: q34
+    type: multiple_choice
+    question: Which AWS service can be used to automatically scale an application up and down without making capacity planning decisions?
+    options:
+      - text: Amazon AutoScaling
+        is_correct: true
+      - text: Amazon Redshift
+        is_correct: false
+      - text: AWS CloudTrail
+        is_correct: false
+      - text: AWS Lambda
+        is_correct: false
+    explanation: |
+      <https://aws.amazon.com/blogs/aws/category/auto-scaling/>
+  - id: q35
+    type: multiple_choice
+    question: AWS Enterprise Support users have access to which service or feature that is not available to users with other AWS Support plans?
+    options:
+      - text: AWS Trusted Advisor
+        is_correct: false
+      - text: AWS Support case
+        is_correct: false
+      - text: Concierge team
+        is_correct: true
+      - text: Amazon Connect
+        is_correct: false
+    explanation: |
+      <https://aws.amazon.com/premiumsupport/plans/>
+  - id: q36
+    type: multiple_choice
+    question: A company wants to migrate a MySQL database to AWS but does not have the budget for Database Administrators to handle routine tasks including provisioning, patching, and performing backups. <br/> Which AWS service will support this use case?
+    options:
+      - text: Amazon RDS
+        is_correct: true
+      - text: Amazon DynamoDB
+        is_correct: false
+      - text: Amazon DocumentDB
+        is_correct: false
+      - text: Amazon ElastiCache
+        is_correct: false
+    explanation: |
+      Amazon RDS makes it easy to set up, operate, and scale a relational database in the cloud.
+      It provides cost-efficient and resizable capacity while automating time-consuming administration tasks, such as hardware provisioning, database setup, patching, and backups.
+      It frees you to focus on your applications, so you can give them the fast performance, high availability, security, and compatibility that they need.
+    Reference: <https://aws.amazon.com/blogs/database/part-1-role-of-the-dba-when-moving-to-amazon-rds-responsibilities/>
+  - id: q37
+    type: multiple_choice
+    question: A company wants to expand from one AWS Region into a second AWS Region. <br/> What does the company need to do to start supporting the new Region?
+    options:
+      - text: Contact an AWS Account Manager to sign a new contract
+        is_correct: false
+      - text: Move an Availability Zone to the new Region
+        is_correct: false
+      - text: Begin deploying resources in the second Region
+        is_correct: true
+      - text: Download the AWS Management Console for the new Region
+        is_correct: false
+    explanation: |
+      <https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-plan-region.html>
+  - id: q38
+    type: multiple_choice
+    question: A user must meet compliance and software licensing requirements that state a workload must be hosted on a physical server. <br/> Which Amazon EC2 instance pricing option will meet these requirements?
+    options:
+      - text: Dedicated Hosts
+        is_correct: true
+      - text: Dedicated Instances
+        is_correct: false
+      - text: Spot Instances
+        is_correct: false
+      - text: Reserved Instances
+        is_correct: false
+    explanation: |
+      <https://aws.amazon.com/ec2/dedicated-hosts/>
+  - id: q39
+    type: multiple_choice
+    question: Which AWS service will provide a way to generate encryption keys that can be used to encrypt data? (Choose two.)
+    options:
+      - text: Amazon Macie
+        is_correct: false
+      - text: AWS Certificate Manager
+        is_correct: false
+      - text: AWS Key Management Service (AWS KMS)
+        is_correct: true
+      - text: AWS Secrets Manager
+        is_correct: false
+      - text: AWS CloudHSM
+        is_correct: true
+    explanation: |
+      <https://docs.aws.amazon.com/crypto/latest/userguide/awscryp-service-hsm.html>
+      <https://docs.aws.amazon.com/kms/latest/developerguide/overview.html>
+  - id: q40
+    type: multiple_choice
+    question: A company is planning to migrate from on-premises to the AWS Cloud. <br/> Which AWS tool or service provides detailed reports on estimated cost savings after migration?
+    options:
+      - text: AWS Total Cost of Ownership (TCO) Calculator
+        is_correct: true
+      - text: Cost Explorer
+        is_correct: false
+      - text: AWS Budgets
+        is_correct: false
+      - text: AWS Migration Hub
+        is_correct: false
+    explanation: |
+      <https://docs.aws.amazon.com/migrationhub/latest/ug/hub-api.pdf> (26)
+  - id: q41
+    type: multiple_choice
+    question: What can assist in evaluating an application for migration to the cloud? (Choose two.)
+    options:
+      - text: AWS Trusted Advisor
+        is_correct: false
+      - text: AWS Professional Services
+        is_correct: true
+      - text: AWS Systems Manager
+        is_correct: false
+      - text: AWS Partner Network (APN)
+        is_correct: true
+      - text: AWS Secrets Manager
+        is_correct: false
+  - id: q42
+    type: multiple_choice
+    question: Which AWS service helps users meet contractual and regulatory compliance requirements for data security by using dedicated hardware appliances within the AWS Cloud?
+    options:
+      - text: AWS Secrets Manager
+        is_correct: false
+      - text: AWS CloudHSM
+        is_correct: true
+      - text: AWS Key Management Service (AWS KMS)
+        is_correct: false
+      - text: AWS Directory Service
+        is_correct: false
+    explanation: |
+      The AWS CloudHSM service helps you meet corporate, contractual, and regulatory compliance requirements for data security by using dedicated Hardware Security Module (HSM) instances within the AWS cloud.
+      AWS and AWS Marketplace partners offer a variety of solutions for protecting sensitive data within the AWS platform, but for some applications and data subject to contractual or regulatory mandates for managing cryptographic keys, additional protection may be necessary.
+      CloudHSM complements existing data protection solutions and allows you to protect your encryption keys within HSMs that are designed and validated to government standards for secure key management.
+      CloudHSM allows you to securely generate, store, and manage cryptographic keys used for data encryption in a way that keys are accessible only by you.
+    Reference: <https://aws.amazon.com/cloudhsm/faqs/>
+  - id: q43
+    type: multiple_choice
+    question: Under the AWS shared responsibility model, the customer manages which of the following? (Choose two.)
+    options:
+      - text: Decommissioning of physical storage devices
+        is_correct: false
+      - text: Security group and ACL configuration
+        is_correct: true
+      - text: Patch management of an Amazon RDS instance operating system
+        is_correct: false
+      - text: Controlling physical access to data centers
+        is_correct: false
+      - text: Patch management of an Amazon EC2 instance operating system
+        is_correct: true
+    explanation: |
+      <https://www.whizlabs.com/blog/aws-security-shared-responsibility/>
+  - id: q44
+    type: multiple_choice
+    question: Which AWS service is suitable for an event-driven workload?
+    options:
+      - text: Amazon EC2
+        is_correct: false
+      - text: AWS Elastic Beanstalk
+        is_correct: false
+      - text: AWS Lambda
+        is_correct: true
+      - text: Amazon Lumberyard
+        is_correct: false
+    explanation: |
+      easy-to-use service for deploying and scaling web applications and web services developed in a number of programming languages.
+      You can configure event notifications for your Elastic Beanstalk environment so that notable events can be automatically published to an SNS topic, then pushed to topic subscribers.
+      an example, you may use this event-driven architecture to coordinate your continuous integration pipeline (such as Jenkins CI).
+      That way, whenever an environment is created, Elastic Beanstalk publishes this event to an SNS topic, which triggers a subscribing Lambda function, which then kicks off a CI job against your newly created Elastic Beanstalk environment.
+    Reference: <https://aws.amazon.com/blogs/compute/event-driven-computing-with-amazon-sns-compute-storage-database-and-networking-services/>
+  - id: q45
+    type: multiple_choice
+    question: What is a value proposition of the AWS Cloud?
+    options:
+      - text: AWS is responsible for security in the AWS Cloud
+        is_correct: false
+      - text: No long-term contract is required
+        is_correct: true
+      - text: Provision new servers in days
+        is_correct: false
+      - text: AWS manages user applications in the AWS Cloud
+        is_correct: false
+    explanation: |
+      <https://d1.awsstatic.com/whitepapers/aws-whitepaper-business-value-of-aws.pdf>
+  - id: q46
+    type: multiple_choice
+    question: What is a characteristic of Amazon S3 cross-region replication?
+    options:
+      - text: Both source and destination S3 buckets must have versioning disabled
+        is_correct: false
+      - text: The source and destination S3 buckets cannot be in different AWS Regions
+        is_correct: false
+      - text: S3 buckets configured for cross-region replication can be owned by a single AWS account or by different accounts
+        is_correct: true
+      - text: The source S3 bucket owner must have the source and destination AWS Regions disabled for their account
+        is_correct: false
+    explanation: |
+      <https://docs.aws.amazon.com/AmazonS3/latest/dev/replication.html>
+  - id: q47
+    type: multiple_choice
+    question: What is a user responsible for when running an application in the AWS Cloud?
+    options:
+      - text: Managing physical hardware
+        is_correct: false
+      - text: Updating the underlying hypervisor
+        is_correct: false
+      - text: Providing a list of users approved for data center access
+        is_correct: false
+      - text: Managing application software updates
+        is_correct: true
+    explanation: |
+      <https://aws.amazon.com/compliance/shared-responsibility-model/>
+  - id: q48
+    type: multiple_choice
+    question: A company that does business online needs to quickly deliver new functionality in an iterative manner, minimizing the time to market. <br/> Which AWS Cloud feature can provide this?
+    options:
+      - text: Elasticity
+        is_correct: false
+      - text: High availability
+        is_correct: false
+      - text: Agility
+        is_correct: true
+      - text: Reliability
+        is_correct: false
+    explanation: |
+      <https://aws.amazon.com/devops/partner-solutions/>
+  - id: q49
+    type: multiple_choice
+    question: Which features or services can be used to monitor costs and expenses for an AWS account? (Choose two.)
+    options:
+      - text: AWS Cost and Usage report
+        is_correct: true
+      - text: AWS product pages
+        is_correct: false
+      - text: AWS Simple Monthly Calculator
+        is_correct: false
+      - text: Billing alerts and Amazon CloudWatch alarms
+        is_correct: true
+      - text: AWS Price List API
+        is_correct: false
+    explanation: |
+      <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/monitor_estimated_charges_with_cloudwatch.html>
+  - id: q50
+    type: multiple_choice
+    question: Amazon Route 53 enables users to
+    options:
+      - text: encrypt data in transit
+        is_correct: false
+      - text: register DNS domain names
+        is_correct: true
+      - text: generate and manage SSL certificates
+        is_correct: false
+      - text: establish a dedicated network connection to AWS
+        is_correct: false
+    explanation: |
+      <https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html>

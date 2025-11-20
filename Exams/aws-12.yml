@@ -1,0 +1,1057 @@
+questions:
+  - id: q1
+    type: multiple_choice
+    question: Which of the following components of the AWS Global Infrastructure consists of one or more discrete data centers interconnected through low latency links?
+    options:
+      - text: Availability Zone
+        is_correct: true
+      - text: Edge location
+        is_correct: false
+      - text: Region
+        is_correct: false
+      - text: Private networking
+        is_correct: false
+    explanation: An Availability Zone consists of one or more discrete data centers interconnected with low-latency links. Edge locations are CDN endpoints; regions are geographic groupings of AZs; private networking is not an infrastructure component in this sense. The wrong options are incorrect because Regions encompass AZs, edge locations are separate CDN caches, and private networking is a networking concept rather than a physical infrastructure unit.
+    diagram: |
+      graph TD
+      Region --> AZ[Availability Zone (Data Centers)]
+      AZ --> DC[Data Centers Interconnected]
+    tags: [infrastructure]
+    difficulty: easy
+    points: 5
+
+  - id: q2
+    type: multiple_choice
+    question: One benefit of On-Demand Amazon Elastic Compute Cloud (Amazon EC2) pricing is:
+    options:
+      - text: The ability to bid for a lower hourly cost.
+        is_correct: false
+      - text: Paying a daily rate regardless of time used.
+        is_correct: false
+      - text: Paying only for time used.
+        is_correct: true
+      - text: Pre-paying for instances and paying a lower hourly rate.
+        is_correct: false
+    explanation: On-Demand pricing charges for compute by the time used with no long-term commitment. Bidding is for Spot, daily rates are not standard, and pre-paying for lower hourly rates applies to Reserved Instances.
+    diagram: |
+      graph TD
+      OnDemand --> PayPerUse[Pay Only for Time Used]
+      OnDemand -.->|Spot| Bid[Bid for Lower Cost]
+    tags: [ec2, pricing]
+    difficulty: easy
+    points: 5
+
+  - id: q3
+    type: multiple_select
+    question: What can assist in evaluating an application for migration to the cloud? (Select TWO)
+    options:
+      - text: AWS Trusted Advisor.
+        is_correct: false
+      - text: AWS Professional Services.
+        is_correct: true
+      - text: AWS Systems Manager.
+        is_correct: false
+      - text: AWS Partner Network (APN).
+        is_correct: true
+      - text: AWS Secrets Manager.
+        is_correct: false
+    explanation: Professional Services and APN partners can assist with migration evaluation. Trusted Advisor provides optimization checks, Systems Manager manages operations, and Secrets Manager stores secrets; these are not primary migration evaluation tools.
+    diagram: |
+      graph TD
+      Migrate --> PS[Professional Services]
+      Migrate --> APN[APN Partners]
+    tags: [migration]
+    difficulty: medium
+    points: 7
+
+  - id: q4
+    type: multiple_choice
+    question: A characteristic of edge locations is that they:
+    options:
+      - text: Host Amazon EC2 instances closer to users.
+        is_correct: false
+      - text: Help lower latency and improve performance for users.
+        is_correct: true
+      - text: Cache frequently changing data without reaching the origin server.
+        is_correct: false
+      - text: Refresh data changes daily.
+        is_correct: false
+    explanation: Edge locations (CloudFront) cache content and reduce latency. They don't host generic EC2 for customers or guarantee caching of frequently changing data without origin reach; refresh schedules vary by cache settings.
+    diagram: |
+      graph TD
+      Edge --> LowerLatency[Lower Latency]
+      Edge --> Cache[Cache Content]
+      Edge -.->|Not Host| EC2[Host EC2 Instances]
+    tags: [cloudfront, edge]
+    difficulty: easy
+    points: 5
+
+  - id: q5
+    type: multiple_select
+    question: Which of the following are valid ways for a customer to interact with AWS services? (Select TWO)
+    options:
+      - text: Command line interface.
+        is_correct: true
+      - text: On-premises.
+        is_correct: false
+      - text: Software Development Kits.
+        is_correct: true
+      - text: Software-as-a-service.
+        is_correct: false
+      - text: Hybrid.
+        is_correct: false
+    explanation: Customers interact with AWS via CLI and SDKs. 'On-premises' and 'hybrid' describe deployment models rather than interaction methods; SaaS is a service model, not an interaction interface.
+    diagram: |
+      graph TD
+      Interact --> CLI[Command Line Interface]
+      Interact --> SDKs[Software Development Kits]
+    tags: [sdk, cli]
+    difficulty: easy
+    points: 5
+
+  - id: q6
+    type: multiple_choice
+    question: What is a value proposition of the AWS Cloud?
+    options:
+      - text: AWS is responsible for security in the AWS Cloud.
+        is_correct: false
+      - text: No long-term contract is required.
+        is_correct: true
+      - text: Provision new servers in days.
+        is_correct: false
+      - text: AWS manages user applications in the AWS Cloud.
+        is_correct: false
+    explanation: A key value of AWS is pay-as-you-go with no long-term contract required. AWS shares security responsibilities with customers; servers can be provisioned in minutes rather than days; AWS does not manage customers' applications unless they use specific managed services.
+    diagram: |
+      graph TD
+      Value --> NoContract[No Long-term Contract]
+      Value -.->|Shared| Security[Shared Responsibility]
+    tags: [value-proposition]
+    difficulty: easy
+    points: 5
+
+  - id: q7
+    type: multiple_choice
+    question: A company is migrating an application that is running non-interruptible workloads for a three-year time frame. Which pricing construct would provide the MOST cost-effective solution?
+    options:
+      - text: Amazon EC2 Spot Instances.
+        is_correct: false
+      - text: Amazon EC2 Dedicated Instances.
+        is_correct: false
+      - text: Amazon EC2 On-Demand Instances.
+        is_correct: false
+      - text: Amazon EC2 Reserved Instances.
+        is_correct: true
+    explanation: Reserved Instances (or Savings Plans) are best for predictable, long-term, non-interruptible workloads. Spot is interruptible; Dedicated Instances focus on tenancy; On-Demand is costlier for long-term use.
+    diagram: |
+      graph TD
+      Pricing --> Reserved[Reserved Instances]
+      Pricing -.->|Interruptible| Spot[Spot Instances]
+    tags: [pricing, reserved-instances]
+    difficulty: medium
+    points: 7
+
+  - id: q8
+    type: multiple_choice
+    question: Which AWS service is used to track record, and audit configuration changes made to AWS resources?
+    options:
+      - text: AWS Shield.
+        is_correct: false
+      - text: AWS Config.
+        is_correct: true
+      - text: AWS IAM.
+        is_correct: false
+      - text: Amazon Inspector.
+        is_correct: false
+    explanation: AWS Config records and audits configuration changes. Shield is DDoS protection; IAM manages identity; Inspector scans for vulnerabilities.
+    diagram: |
+      graph TD
+      Audit --> Config[AWS Config]
+      Audit -.->|DDoS| Shield[Shield]
+    tags: [config]
+    difficulty: easy
+    points: 5
+
+  - id: q9
+    type: multiple_choice
+    question: Which feature of the AWS Cloud will support an international company’s requirement for low latency to all of its customers?
+    options:
+      - text: Fault tolerance.
+        is_correct: false
+      - text: Global reach.
+        is_correct: true
+      - text: Pay-as-you-go pricing.
+        is_correct: false
+      - text: High availability.
+        is_correct: false
+    explanation: Global reach (multiple regions and edge locations) reduces latency for global users. Fault tolerance and high availability improve resilience but not necessarily global latency. Pay-as-you-go is a pricing model.
+    diagram: |
+      graph TD
+      Global --> Regions[Multiple Regions & Edge Locations]
+      Global --> LowerLatency[Lower Latency]
+    tags: [global-reach]
+    difficulty: easy
+    points: 5
+
+  - id: q10
+    type: multiple_choice
+    question: How can one AWS account use Reserved Instances from another AWS account?
+    options:
+      - text: By using Amazon EC2 Dedicated Instances.
+        is_correct: false
+      - text: By using AWS Organizations consolidated billing.
+        is_correct: true
+      - text: By using the AWS Cost Explorer tool.
+        is_correct: false
+      - text: By using AWS Budgets.
+        is_correct: false
+    explanation: Reserved Instance discounts can apply across accounts via Consolidated Billing in AWS Organizations. Dedicated instances are tenancy options; Cost Explorer and Budgets are analytics and planning tools.
+    diagram: |
+      graph TD
+      RI --> Org[Consolidated Billing via Organizations]
+      RI -.->|Analytics| Explorer[Cost Explorer]
+    tags: [organizations, billing]
+    difficulty: medium
+    points: 7
+
+  - id: q11
+    type: multiple_select
+    question: What are the benefits of developing and running a new application in the AWS Cloud compared to on-premises? (Select TWO)
+    options:
+      - text: AWS automatically distributes the data globally for higher durability.
+        is_correct: false
+      - text: AWS will take care of operating the application.
+        is_correct: false
+      - text: AWS makes it easy to architect for high availability.
+        is_correct: true
+      - text: AWS can easily accommodate application demand changes.
+        is_correct: true
+      - text: AWS takes care of application security patching.
+        is_correct: false
+    explanation: AWS provides services and features making high availability and scalability easier. It doesn't automatically operate or patch customer applications nor automatically distribute data globally without explicit configuration.
+    diagram: |
+      graph TD
+      Benefits --> HA[Architect for High Availability]
+      Benefits --> Elasticity[Accommodate Demand Changes]
+      Benefits -.->|Not Automatic| AppOps[Operate Applications]
+    tags: [benefits, cloud]
+    difficulty: medium
+    points: 7
+
+  - id: q12
+    type: multiple_choice
+    question: Which of the following services falls under the responsibility of the customer to maintain operating system configuration, security patching, and networking?
+    options:
+      - text: Amazon RDS.
+        is_correct: false
+      - text: Amazon EC2.
+        is_correct: true
+      - text: Amazon ElastiCache.
+        is_correct: false
+      - text: AWS Fargate.
+        is_correct: false
+    explanation: EC2 instances are customer-managed virtual servers; customers manage OS and networking. RDS, ElastiCache, and Fargate are managed services where AWS handles some of the underlying maintenance.
+    diagram: |
+      graph TD
+      Manage --> EC2[Amazon EC2 (Customer Responsibility)]
+      Manage -.->|AWS Managed| RDS[RDS]
+    tags: [ec2, shared-responsibility]
+    difficulty: medium
+    points: 7
+
+  - id: q13
+    type: multiple_select
+    question: AWS supports which of the following methods to add security to Identity and Access Management (IAM) users? (Select TWO)
+    options:
+      - text: Implementing Amazon Rekognition.
+        is_correct: false
+      - text: Using AWS Shield-protected resources.
+        is_correct: false
+      - text: Blocking access with Security Groups.
+        is_correct: false
+      - text: Using Multi-Factor Authentication (MFA).
+        is_correct: true
+      - text: Enforcing password strength and expiration.
+        is_correct: true
+    explanation: MFA and password policies secure IAM users. Rekognition, Shield, and Security Groups serve other purposes (vision, DDoS protection, network-level access control).
+    diagram: |
+      graph TD
+      SecureIAM --> MFA[MFA]
+      SecureIAM --> Passwords[Password Policies]
+    tags: [iam, security]
+    difficulty: easy
+    points: 5
+
+  - id: q14
+    type: multiple_choice
+    question: Which service provides a hybrid storage service that enables on-premises applications to seamlessly use cloud storage?
+    options:
+      - text: Amazon Glacier
+        is_correct: false
+      - text: AWS Snowball
+        is_correct: false
+      - text: AWS Storage Gateway
+        is_correct: true
+      - text: Amazon Elastic Block Storage (Amazon EBS)
+        is_correct: false
+    explanation: AWS Storage Gateway integrates on-premises applications with AWS storage. Glacier is archival, Snowball is for data transfer, and EBS is block storage for EC2.
+    diagram: |
+      graph TD
+      HybridStorage --> SG[Storage Gateway]
+      HybridStorage -.->|Not Transfer| Snowball[Snowball]
+    tags: [storage, hybrid]
+    difficulty: easy
+    points: 5
+
+  - id: q15
+    type: multiple_choice
+    question: Where should a company go to search software listings from independent software vendors to find, test, buy and deploy software that runs on AWS?
+    options:
+      - text: AWS Marketplace.
+        is_correct: true
+      - text: Amazon Lumberyard.
+        is_correct: false
+      - text: AWS Artifact.
+        is_correct: false
+      - text: Amazon CloudSearch.
+        is_correct: false
+    explanation: AWS Marketplace lists third-party software for AWS. Lumberyard is a game engine, Artifact provides compliance docs, and CloudSearch is a managed search service.
+    diagram: |
+      graph TD
+      SearchSoftware --> Marketplace[AWS Marketplace]
+    tags: [marketplace]
+    difficulty: easy
+    points: 5
+
+  - id: q16
+    type: multiple_choice
+    question: Which of the following is a component of the AWS Global Infrastructure?
+    options:
+      - text: Amazon Alexa.
+        is_correct: false
+      - text: AWS Regions.
+        is_correct: true
+      - text: Amazon Lightsail.
+        is_correct: false
+      - text: AWS Organizations.
+        is_correct: false
+    explanation: AWS Regions are core infrastructure components. Alexa and Lightsail are services; Organizations is an account management service.
+    diagram: |
+      graph TD
+      Infrastructure --> Regions[AWS Regions]
+    tags: [infrastructure]
+    difficulty: easy
+    points: 5
+
+  - id: q17
+    type: multiple_choice
+    question: Which Amazon EC2 pricing model adjusts based on supply and demand of EC2 instances?
+    options:
+      - text: On-Demand Instances.
+        is_correct: false
+      - text: Reserved Instances.
+        is_correct: false
+      - text: Spot Instances.
+        is_correct: true
+      - text: Convertible Reserved Instances.
+        is_correct: false
+    explanation: Spot pricing varies with supply and demand. On-Demand is fixed per region/instance type, Reserved is a commitment pricing model, and Convertible RIs are a variant of RIs.
+    diagram: |
+      graph TD
+      Pricing --> Spot[Spot Instances (Supply/Demand Based)]
+    tags: [ec2, spot]
+    difficulty: easy
+    points: 5
+
+  - id: q18
+    type: multiple_select
+    question: A company wants to migrate its applications to a VPC on AWS These applications will need to access on-premises resources. What combination of actions will enable the company to accomplish this goals? (Select TWO)
+    options:
+      - text: Use the AWS Service Catalog to identify a list of on-premises resources that can be migrated
+        is_correct: false
+      - text: Build a VPN connection between an on-premises device and a virtual private gateway in the new VPC
+        is_correct: true
+      - text: Use Amazon Athena to query data from the on-premises database servers
+        is_correct: false
+      - text: Connect the company’s on-premises data center to AWS using AWS Direct Connect
+        is_correct: true
+      - text: Leverage Amazon CloudFront to restrict access to static web content provided through the company’s on-premises web servers
+        is_correct: false
+    explanation: A VPN or Direct Connect provides secure network connectivity between on-premises and VPC. Service Catalog, Athena, and CloudFront are unrelated to establishing hybrid connectivity.
+    diagram: |
+      graph TD
+      Hybrid --> VPN[VPN to Virtual Private Gateway]
+      Hybrid --> DX[Direct Connect]
+    tags: [networking, hybrid]
+    difficulty: medium
+    points: 7
+
+  - id: q19
+    type: multiple_choice
+    question: A Cloud Practitioner must determine if any security groups in an AWS account have been provisioned to allow unrestricted access for specific ports. What is the SIMPLEST way to do this?
+    options:
+      - text: Review the inbound rules for each security group in the Amazon EC2 management console to check for port 0.0.0.0/0.
+        is_correct: false
+      - text: Run AWS Trusted Advisor and review the findings.
+        is_correct: true
+      - text: Open the AWS IAM console and check the inbound rule filters for open access.
+        is_correct: false
+      - text: In AWS Config, create a custom rule that invokes an AWS Lambda function to review firewall rules for inbound access.
+        is_correct: false
+    explanation: Trusted Advisor provides direct checks for security groups allowing open access; manually checking each SG is time-consuming, IAM console doesn't show SG rules, and creating custom Config rules is more effort than using Trusted Advisor.
+    diagram: |
+      graph TD
+      Check --> TA[Trusted Advisor Security Checks]
+      Check -.->|Manual| Console[Review EC2 Console]
+    tags: [security, trusted-advisor]
+    difficulty: medium
+    points: 7
+
+  - id: q20
+    type: multiple_select
+    question: Which of the following security-related services does AWS offer? (Select TWO)
+    options:
+      - text: Multi-factor authentication physical tokens.
+        is_correct: false
+      - text: AWS Trusted Advisor security checks.
+        is_correct: true
+      - text: Data encryption.
+        is_correct: true
+      - text: Automated penetration testing.
+        is_correct: false
+      - text: Amazon S3 copyrighted content detection.
+        is_correct: false
+    explanation: Trusted Advisor provides security best-practice checks and AWS offers encryption tools/services; physical MFA tokens are available via vendors, automated penetration testing is not provided by AWS as a customer service, and S3 copyrighted content detection is not a core AWS security offering.
+    diagram: |
+      graph TD
+      Security --> TA[Trusted Advisor]
+      Security --> Encryption[AWS Encryption Services]
+    tags: [security]
+    difficulty: medium
+    points: 7
+
+  - id: q21
+    type: multiple_select
+    question: Which of the following services have Distributed Denial of Service (DDoS) mitigation features? (Select TWO)
+    options:
+      - text: AWS WAF.
+        is_correct: true
+      - text: Amazon DynamoDB.
+        is_correct: false
+      - text: Amazon EC2.
+        is_correct: false
+      - text: Amazon CloudFront.
+        is_correct: true
+      - text: Amazon Inspector.
+        is_correct: false
+    explanation: AWS WAF and CloudFront work with AWS Shield to mitigate DDoS. DynamoDB and EC2 may be targets but do not include DDoS mitigation features by themselves; Inspector is for vulnerability assessment.
+    diagram: |
+      graph TD
+      DDoS --> WAF[AWS WAF]
+      DDoS --> CF[CloudFront]
+    tags: [security, ddos]
+    difficulty: medium
+    points: 7
+
+  - id: q22
+    type: multiple_choice
+    question: Which of the following AWS features enables a user to launch a pre-configured Amazon Elastic Compute Cloud (Amazon EC2) instance?
+    options:
+      - text: Amazon Elastic Block Store (Amazon EBS).
+        is_correct: false
+      - text: Amazon Machine Image.
+        is_correct: true
+      - text: Amazon EC2 Systems Manager.
+        is_correct: false
+      - text: Amazon AppStream 2.0.
+        is_correct: false
+    explanation: An AMI is the template used to launch EC2 instances. EBS is block storage, Systems Manager is for operations, and AppStream is application streaming.
+    diagram: |
+      graph TD
+      Launch --> AMI[Amazon Machine Image]
+      Launch -.->|Storage| EBS[EBS]
+    tags: [ec2, ami]
+    difficulty: easy
+    points: 5
+
+  - id: q23
+    type: multiple_choice
+    question: A solution that is able to support growth in users, traffic, or data size with no drop in performance aligns with which cloud architecture principle?
+    options:
+      - text: Think parallel.
+        is_correct: false
+      - text: Implement elasticity.
+        is_correct: true
+      - text: Decouple your components.
+        is_correct: false
+      - text: Design for failure.
+        is_correct: false
+    explanation: Elasticity enables scaling to handle growth without performance loss. While decoupling and designing for failure are important, the specific principle for scaling is elasticity.
+    diagram: |
+      graph TD
+      Principle --> Elasticity[Implement Elasticity]
+    tags: [elasticity]
+    difficulty: easy
+    points: 5
+
+  - id: q24
+    type: multiple_choice
+    question: Which AWS Cloud benefit eliminates the need for users to try estimating future infrastructure usage?
+    options:
+      - text: Easy and fast deployment of applications in multiple Regions around the world.
+        is_correct: false
+      - text: Security of the AWS Cloud.
+        is_correct: false
+      - text: Elasticity of the AWS Cloud.
+        is_correct: true
+      - text: Lower variable costs due to massive economies of scale.
+        is_correct: false
+    explanation: Elasticity removes the need to estimate future capacity because resources scale dynamically. The other benefits are valid but do not specifically remove capacity-planning needs.
+    diagram: |
+      graph TD
+      Benefit --> Elasticity[Elasticity]
+    tags: [elasticity]
+    difficulty: easy
+    points: 5
+
+  - id: q25
+    type: multiple_choice
+    question: What can users access from AWS Artifact?
+    options:
+      - text: AWS security and compliance documents.
+        is_correct: true
+      - text: A download of configuration management details for all AWS resources.
+        is_correct: false
+      - text: Training materials for AWS services.
+        is_correct: false
+      - text: A security assessment of the applications deployed in the AWS Cloud.
+        is_correct: false
+    explanation: AWS Artifact provides compliance reports and security documents. It does not provide configuration details, training materials, or application security assessments.
+    diagram: |
+      graph TD
+      Artifact --> Compliance[Compliance Documents]
+    tags: [artifact, compliance]
+    difficulty: easy
+    points: 5
+
+  - id: q26
+    type: multiple_choice
+    question: Compared with costs in traditional and virtualized data centers, AWS has:
+    options:
+      - text: Greater variable costs and greater upfront costs.
+        is_correct: false
+      - text: Fixed usage costs and lower upfront costs.
+        is_correct: false
+      - text: Lower variable costs and greater upfront costs.
+        is_correct: false
+      - text: Lower variable costs and lower upfront costs.
+        is_correct: true
+    explanation: AWS typically lowers both variable and upfront costs due to economies of scale and pay-as-you-go consumption. The other options incorrectly describe the cost characteristics.
+    diagram: |
+      graph TD
+      Costs --> Lower[Lower Variable & Upfront Costs]
+    tags: [costs]
+    difficulty: medium
+    points: 7
+
+  - id: q27
+    type: multiple_choice
+    question: Which AWS service would a customer use with a static website to achieve tower latency and high transfer speeds?
+    options:
+      - text: AWS Lambda.
+        is_correct: false
+      - text: Amazon DynamoDB Accelerator.
+        is_correct: false
+      - text: Amazon Route 53.
+        is_correct: false
+      - text: Amazon CloudFront.
+        is_correct: true
+    explanation: CloudFront is the CDN that reduces latency and improves transfer speeds for static websites. Lambda is serverless compute, DAX is a cache for DynamoDB, and Route 53 is DNS.
+    diagram: |
+      graph TD
+      StaticSite --> CF[CloudFront]
+    tags: [cloudfront]
+    difficulty: easy
+    points: 5
+
+  - id: q28
+    type: multiple_choice
+    question: How do Amazon EC2 Auto Scaling groups help achieve high availability for a web application?
+    options:
+      - text: They automatically add more instances across multiple AWS Regions based on global demand of the application.
+        is_correct: false
+      - text: They automatically add or replace instances across multiple Availability Zones when the application needs it.
+        is_correct: true
+      - text: They enable the application’s stalk: content to reside closer to end users.
+        is_correct: false
+      - text: They are able to distribute incoming requests across a tier of web server instances.
+        is_correct: false
+    explanation: Auto Scaling manages instances across AZs for availability and replacement; it doesn't automatically provision across regions by default or distribute requests (that's ELB's role).
+    diagram: |
+      graph TD
+      ASG --> AZ[Auto Scaling Across AZs]
+    tags: [autoscaling]
+    difficulty: medium
+    points: 7
+
+  - id: q29
+    type: multiple_choice
+    question: Which of the following can limit Amazon Simple Storage Service (Amazon S3) bucket access to specific users?
+    options:
+      - text: A public and private key-pair.
+        is_correct: false
+      - text: Amazon Inspector.
+        is_correct: false
+      - text: AWS Identity and Access Management (IAM) policies.
+        is_correct: true
+      - text: Security Groups.
+        is_correct: false
+    explanation: IAM policies restrict S3 bucket access to specific principals. Key-pairs are for EC2 SSH, Inspector is a vulnerability service, and Security Groups are network-level controls.
+    diagram: |
+      graph TD
+      S3Access --> IAM[IAM Policies]
+    tags: [s3, iam]
+    difficulty: easy
+    points: 5
+
+  - id: q30
+    type: multiple_choice
+    question: How should a customer forecast the future costs for running a new web application?
+    options:
+      - text: Amazon Aurora Backtrack.
+        is_correct: false
+      - text: Amazon CloudWatch Billing Alarms.
+        is_correct: false
+      - text: AWS Simple Monthly Calculator.
+        is_correct: true
+      - text: AWS Cost and Usage report.
+        is_correct: false
+    explanation: The Simple Monthly Calculator helps estimate future costs. CloudWatch Billing Alarms monitor spend but don't forecast; Cost and Usage report gives historical data; Aurora Backtrack is unrelated.
+    diagram: |
+      graph TD
+      Forecast --> SMC[Simple Monthly Calculator]
+    tags: [cost-management]
+    difficulty: easy
+    points: 5
+
+  - id: q31
+    type: multiple_choice
+    question: Where are AWS compliance documents, such as an SOC 1 report, located?
+    options:
+      - text: Amazon Inspector.
+        is_correct: false
+      - text: AWS CloudTrail.
+        is_correct: false
+      - text: AWS Artifact.
+        is_correct: true
+      - text: AWS Certificate Manager.
+        is_correct: false
+    explanation: AWS Artifact hosts compliance reports. Inspector checks vulnerabilities, CloudTrail logs, and ACM manages certificates.
+    diagram: |
+      graph TD
+      Compliance --> Artifact[AWS Artifact]
+    tags: [artifact]
+    difficulty: easy
+    points: 5
+
+  - id: q32
+    type: multiple_choice
+    question: Which of the following tasks is the responsibility of AWS?
+    options:
+      - text: Encrypting client-side data.
+        is_correct: false
+      - text: Configuring AWS Identity and Access Management (IAM) roles.
+        is_correct: false
+      - text: Securing the Amazon EC2 hypervisor.
+        is_correct: true
+      - text: Setting user password policies.
+        is_correct: false
+    explanation: AWS secures the hypervisor and underlying infrastructure. Client-side encryption, IAM role management, and password policies are customer responsibilities.
+    diagram: |
+      graph TD
+      AWSResp --> Hypervisor[Secure EC2 Hypervisor]
+    tags: [shared-responsibility]
+    difficulty: medium
+    points: 7
+
+  - id: q33
+    type: multiple_select
+    question: Under the shared responsibility model which of the following areas are the customer’s responsibility? (Select TWO)
+    options:
+      - text: Firmware upgrades of network infrastructure.
+        is_correct: false
+      - text: Patching of operating systems.
+        is_correct: true
+      - text: Patching of the underlying hypervisor.
+        is_correct: false
+      - text: Physical security of data centers.
+        is_correct: false
+      - text: Configuration of the security group.
+        is_correct: true
+    explanation: Customers manage OS patching and security group configuration. Firmware, hypervisor patching, and physical security are AWS responsibilities.
+    diagram: |
+      graph TD
+      CustomerResp --> OS[Patching OS]
+      CustomerResp --> SG[Configure Security Group]
+    tags: [shared-responsibility]
+    difficulty: medium
+    points: 7
+
+  - id: q34
+    type: multiple_choice
+    question: A company is looking for a scalable data warehouse solution. Which of the following AWS solutions would meet the company’s needs?
+    options:
+      - text: Amazon Simple Storage Service (Amazon S3).
+        is_correct: false
+      - text: Amazon DynamoDB.
+        is_correct: false
+      - text: Amazon Kinesis.
+        is_correct: false
+      - text: Amazon Redshift.
+        is_correct: true
+    explanation: Redshift is a scalable data warehouse. S3 is storage, DynamoDB is NoSQL, and Kinesis is streaming data service.
+    diagram: |
+      graph TD
+      DataWarehouse --> Redshift[Amazon Redshift]
+    tags: [redshift]
+    difficulty: easy
+    points: 5
+
+  - id: q35
+    type: multiple_select
+    question: Much AWS services provide a way to extend an on-premises architecture to the AWS Cloud? (Select TWO)
+    options:
+      - text: Amazon EBS.
+        is_correct: false
+      - text: AWS Direct Connect.
+        is_correct: true
+      - text: Amazon CloudFront.
+        is_correct: false
+      - text: AWS Storage Gateway.
+        is_correct: true
+      - text: Amazon Connect.
+        is_correct: false
+    explanation: Direct Connect and Storage Gateway extend on-premises architectures. EBS is block storage for EC2, CloudFront is CDN, and Amazon Connect is a contact center service.
+    diagram: |
+      graph TD
+      Hybrid --> DX[Direct Connect]
+      Hybrid --> SG[Storage Gateway]
+    tags: [hybrid]
+    difficulty: medium
+    points: 7
+
+  - id: q36
+    type: multiple_select
+    question: What are the advantages of the AWS Cloud (Select TWO)
+    options:
+      - text: Fixed rate monthly cost.
+        is_correct: false
+      - text: No need to guess capacity requirements.
+        is_correct: true
+      - text: Increased speed to market.
+        is_correct: true
+      - text: Increased upfront capital expenditure.
+        is_correct: false
+      - text: Physical access to cloud data centers.
+        is_correct: false
+    explanation: Elasticity reduces capacity planning and cloud services accelerate time to market. Fixed monthly rates, higher upfront capex, and physical data center access are not advantages of cloud.
+    diagram: |
+      graph TD
+      Advantages --> NoGuess[No Need to Guess Capacity]
+      Advantages --> Speed[Increased Speed to Market]
+    tags: [benefits]
+    difficulty: medium
+    points: 7
+
+  - id: q37
+    type: multiple_choice
+    question: How can the AWS Cloud increase user workforce productivity after migration from an on-premises data center?
+    options:
+      - text: Users do not have to wait for infrastructure provisioning.
+        is_correct: true
+      - text: The AWS Cloud infrastructure is much faster than an on-premises data center infrastructure.
+        is_correct: false
+      - text: AWS takes over application configuration management on behalf of users.
+        is_correct: false
+      - text: Users do not need to address security and compliance issues.
+        is_correct: false
+    explanation: Faster provisioning reduces wait times and increases productivity. AWS doesn't automatically take over app config management or eliminate security responsibilities.
+    diagram: |
+      graph TD
+      Productivity --> Provisioning[Faster Provisioning]
+    tags: [productivity]
+    difficulty: easy
+    points: 5
+
+  - id: q38
+    type: multiple_select
+    question: Which of the following services could be used to deploy an application to servers running on-premises? (Select TWO)
+    options:
+      - text: AWS Elastic Beanstalk.
+        is_correct: false
+      - text: AWS OpsWorks.
+        is_correct: true
+      - text: AWS CodeDeploy.
+        is_correct: true
+      - text: AWS Batch.
+        is_correct: false
+      - text: AWS X-Ray.
+        is_correct: false
+    explanation: OpsWorks and CodeDeploy support on-premises deployment. Beanstalk is for managed AWS deployments; Batch is for batch compute and X-Ray is tracing.
+    diagram: |
+      graph TD
+      DeployOnPrem --> OpsWorks[OpsWorks]
+      DeployOnPrem --> CodeDeploy[CodeDeploy]
+    tags: [deployment]
+    difficulty: medium
+    points: 7
+
+  - id: q39
+    type: multiple_choice
+    question: What is an example of agility in the AWS Cloud?
+    options:
+      - text: Access to multiple instance types.
+        is_correct: false
+      - text: Access to managed services.
+        is_correct: false
+      - text: Using Consolidated Billing to produce one bill.
+        is_correct: false
+      - text: Decreased acquisition time for new compute resources.
+        is_correct: true
+    explanation: Agility is demonstrated by how quickly resources can be provisioned. Managed services and instance types contribute to agility but the direct example of agility is decreased acquisition time.
+    diagram: |
+      graph TD
+      Agility --> Speed[Decreased Acquisition Time]
+    tags: [agility]
+    difficulty: easy
+    points: 5
+
+  - id: q40
+    type: multiple_choice
+    question: Which AWS security service protects applications from distributed denial of service attacks with always-on detection and automatic inline mitigations?
+    options:
+      - text: Amazon Inspector.
+        is_correct: false
+      - text: AWS Web Application Firewall (AWS WAF).
+        is_correct: false
+      - text: Elastic Load Balancing (ELB).
+        is_correct: false
+      - text: AWS Shield.
+        is_correct: true
+    explanation: AWS Shield provides always-on DDoS protection with inline mitigations. WAF helps block application-level attacks; Inspector is for vulnerability scanning; ELB distributes traffic.
+    diagram: |
+      graph TD
+      DDoSProtection --> Shield[AWS Shield]
+    tags: [security, shield]
+    difficulty: medium
+    points: 7
+
+  - id: q41
+    type: multiple_select
+    question: Which of the following are advantages of AWS consolidated billing? (Choose two)
+    options:
+      - text: The ability to receive one bill for multiple accounts.
+        is_correct: true
+      - text: Service limits increasing by default in all accounts.
+        is_correct: false
+      - text: A fixed discount on the monthly bill.
+        is_correct: false
+      - text: Potential volume discounts, as usage in all accounts is combined.
+        is_correct: true
+      - text: The automatic extension of the master account’s AWS support plan to all accounts.
+        is_correct: false
+    explanation: Consolidated billing provides one bill and the possibility of volume discounts; it doesn't change service limits or automatically extend support plans.
+    diagram: |
+      graph TD
+      Consolidated --> OneBill[One Bill]
+      Consolidated --> VolumeDiscounts[Potential Volume Discounts]
+    tags: [billing]
+    difficulty: easy
+    points: 5
+
+  - id: q42
+    type: multiple_choice
+    question: A company is considering using AWS for a self-hosted database that requires a nightly shutdown for maintenance and cost-saving purposes. Which service should the company use?
+    options:
+      - text: Amazon Redshift.
+        is_correct: false
+      - text: Amazon DynamoDB.
+        is_correct: false
+      - text: Amazon Elastic Compute Cloud (Amazon EC2) with Amazon EC2 instance store.
+        is_correct: false
+      - text: Amazon EC2 with Amazon Elastic Block Store (Amazon EBS).
+        is_correct: true
+    explanation: EC2 with EBS allows control over instance lifecycle for nightly shutdowns while preserving data on EBS volumes. Redshift is a managed data warehouse, DynamoDB is managed NoSQL, and instance store is ephemeral and lost on stop.
+    diagram: |
+      graph TD
+      NightlyShutdown --> EC2EBS[EC2 with EBS]
+      NightlyShutdown -.->|Ephemeral| InstStore[Instance Store]
+    tags: [ec2, ebs]
+    difficulty: medium
+    points: 7
+
+  - id: q43
+    type: multiple_choice
+    question: Which of the following components of the AWS Global Infrastructure consists of one or more discrete data centers interconnected through low latency links?
+    options:
+      - text: Availability Zone
+        is_correct: true
+      - text: Edge location
+        is_correct: false
+      - text: Region
+        is_correct: false
+      - text: Private networking
+        is_correct: false
+    explanation: Availability Zones are discrete data center locations within a region. (Duplicate of q1 in file context.) Other options are incorrect for the same reasons listed earlier.
+    diagram: |
+      graph TD
+      Region --> AZ[Availability Zone]
+    tags: [infrastructure]
+    difficulty: easy
+    points: 5
+
+  - id: q44
+    type: multiple_choice
+    question: One benefit of On-Demand Amazon Elastic Compute Cloud (Amazon EC2) pricing is:
+    options:
+      - text: The ability to bid for a lower hourly cost.
+        is_correct: false
+      - text: Paying a daily rate regardless of time used.
+        is_correct: false
+      - text: Paying only for time used.
+        is_correct: true
+      - text: Pre-paying for instances and paying a lower hourly rate.
+        is_correct: false
+    explanation: On-Demand means pay for usage time; bidding is for Spot and pre-paying is for Reserved Instances. (Duplicate of earlier q2.)
+    diagram: |
+      graph TD
+      OnDemand --> PayPerUse[Pay Only for Time Used]
+    tags: [ec2, pricing]
+    difficulty: easy
+    points: 5
+
+  - id: q45
+    type: multiple_choice
+    question: What can assist in evaluating an application for migration to the cloud? (Select TWO)
+    options:
+      - text: AWS Trusted Advisor.
+        is_correct: false
+      - text: AWS Professional Services.
+        is_correct: true
+      - text: AWS Systems Manager.
+        is_correct: false
+      - text: AWS Partner Network (APN).
+        is_correct: true
+      - text: AWS Secrets Manager.
+        is_correct: false
+    explanation: Professional Services and APN can assist with migration evaluation. (Duplicate of earlier q3.)
+    diagram: |
+      graph TD
+      Migrate --> PS[Professional Services]
+      Migrate --> APN[APN Partners]
+    tags: [migration]
+    difficulty: medium
+    points: 7
+
+  - id: q46
+    type: multiple_choice
+    question: A characteristic of edge locations is that they:
+    options:
+      - text: Host Amazon EC2 instances closer to users.
+        is_correct: false
+      - text: Help lower latency and improve performance for users.
+        is_correct: true
+      - text: Cache frequently changing data without reaching the origin server.
+        is_correct: false
+      - text: Refresh data changes daily.
+        is_correct: false
+    explanation: Edge locations reduce latency by caching content; they are not general compute hosts. (Duplicate of earlier q4.)
+    diagram: |
+      graph TD
+      Edge --> LowerLatency[Lower Latency]
+    tags: [cloudfront, edge]
+    difficulty: easy
+    points: 5
+
+  - id: q47
+    type: multiple_select
+    question: Which of the following are valid ways for a customer to interact with AWS services? (Select TWO)
+    options:
+      - text: Command line interface.
+        is_correct: true
+      - text: On-premises.
+        is_correct: false
+      - text: Software Development Kits.
+        is_correct: true
+      - text: Software-as-a-service.
+        is_correct: false
+      - text: Hybrid.
+        is_correct: false
+    explanation: CLI and SDKs are valid interaction methods. (Duplicate of earlier q5.)
+    diagram: |
+      graph TD
+      Interact --> CLI[CLI]
+      Interact --> SDK[SDKs]
+    tags: [sdk, cli]
+    difficulty: easy
+    points: 5
+
+  - id: q48
+    type: multiple_choice
+    question: What is a value proposition of the AWS Cloud?
+    options:
+      - text: AWS is responsible for security in the AWS Cloud.
+        is_correct: false
+      - text: No long-term contract is required.
+        is_correct: true
+      - text: Provision new servers in days.
+        is_correct: false
+      - text: AWS manages user applications in the AWS Cloud.
+        is_correct: false
+    explanation: No long-term contract is required; (Duplicate of earlier q6.)
+    diagram: |
+      graph TD
+      Value --> NoContract[No Long-term Contract]
+    tags: [value-proposition]
+    difficulty: easy
+    points: 5
+
+  - id: q49
+    type: multiple_choice
+    question: A company is migrating an application that is running non-interruptible workloads for a three-year time frame. Which pricing construct would provide the MOST cost-effective solution?
+    options:
+      - text: Amazon EC2 Spot Instances.
+        is_correct: false
+      - text: Amazon EC2 Dedicated Instances.
+        is_correct: false
+      - text: Amazon EC2 On-Demand Instances.
+        is_correct: false
+      - text: Amazon EC2 Reserved Instances.
+        is_correct: true
+    explanation: Reserved Instances are most cost-effective for predictable long-term workloads. (Duplicate of earlier q7.)
+    diagram: |
+      graph TD
+      Pricing --> Reserved[Reserved Instances]
+    tags: [pricing]
+    difficulty: medium
+    points: 7
+
+  - id: q50
+    type: multiple_choice
+    question: Which AWS service is used to track record, and audit configuration changes made to AWS resources?
+    options:
+      - text: AWS Shield.
+        is_correct: false
+      - text: AWS Config.
+        is_correct: true
+      - text: AWS IAM.
+        is_correct: false
+      - text: Amazon Inspector.
+        is_correct: false
+    explanation: AWS Config records configuration changes. (Duplicate of earlier q8.)
+    diagram: |
+      graph TD
+      Audit --> Config[AWS Config]
+    tags: [config]
+    difficulty: easy
+    points: 5
