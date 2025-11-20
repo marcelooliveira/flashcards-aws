@@ -572,7 +572,7 @@ questions:
 
   - id: q25
     type: multiple_choice
-    question: Access keys in AWS Identity and Access Management (IAM) are used to:
+    question: Access keys in AWS Identity and Access Management (IAM) are used to
     options:
       - text: Log in to the AWS Management Console.
         is_correct: false
