@@ -1,9 +1,11 @@
 ﻿@using MermaidJS.Blazor
 @using System.Security.Cryptography
+@using Toolbelt.Blazor.SpeechSynthesis
 @inject IJSRuntime JS
 
 <div class="mdc-card question-card mb">
-    <div class="mdc-typography--headline6 mb">@Question.Text</div>
+  <div><button @onclick="SpeakText" style="font-size: 36px;">📢</button></div>
+  <div><span class="mdc-typography--body1">@Question.Text</span></div>
     <ul>
         @{
             var optionsList = Question.QuestionOptions.OrderBy(o => o.ShuffleGuid).ToList();
@@ -29,6 +31,33 @@
         </div>
         <MermaidDiagram Definition="@Question.Diagram"/>
     }
+    <script type="text/javascript">
+    // Add this script block to your main HTML file (or a referenced JS file)
+
+    function speakText(options) {
+        if ('speechSynthesis' in window) {
+            // Cancel any existing speech to prevent overlapping
+            window.speechSynthesis.cancel();
+
+            const utterance = new SpeechSynthesisUtterance(options.text);
+
+            // Apply options passed from Blazor
+            utterance.lang = options.lang || 'en-US';
+            utterance.pitch = options.pitch || .5;
+            utterance.rate = options.rate || .5;
+            utterance.volume = options.volume || 1.0;
+
+            // Optional: Select a specific voice if needed, otherwise browser default is used
+            // const voices = window.speechSynthesis.getVoices();
+            // utterance.voice = voices.find(v => v.lang === utterance.lang) || null;
+
+            window.speechSynthesis.speak(utterance);
+        } else {
+            console.error("Browser does not support the Web Speech API for synthesis.");
+            alert("Text-to-Speech is not supported in this browser.");
+        }
+    }
+    </script>
 </div>
 
 @code {
@@ -65,4 +94,32 @@
         ";
         await JS.InvokeVoidAsync("renderMermaid", "mermaidChart", mermaidDefinition);
     }
+
+  async Task SpeakText()
+  {
+    // 1. Specify the JavaScript function name
+    const string jsFunctionName = "speakText";
+
+    // 2. Prepare the utterance options
+    var utteranceOptions = new
+    {
+      text = Question.Text,
+      lang = "en-US",
+      pitch = .5,
+      rate = .8,
+      volume = 1.0
+      // You can also add 'voiceURI' if you want a specific voice
+    };
+
+    // 3. Invoke the JavaScript function, passing the options
+    try
+    {
+      await JS.InvokeVoidAsync(jsFunctionName, utteranceOptions);
+    }
+    catch (Exception ex)
+    {
+      // Handle cases where the JS interop fails (e.g., browser doesn't support the API)
+      Console.WriteLine($"Speech synthesis failed: {ex.Message}");
+    }
+  }
 }
