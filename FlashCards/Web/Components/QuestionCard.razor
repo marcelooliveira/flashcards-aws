@@ -3,8 +3,8 @@
 @using Toolbelt.Blazor.SpeechSynthesis
 @inject IJSRuntime JS
 
-<div class="mdc-card question-card mb">
-  <div><button @onclick="SpeakText" style="font-size: 36px;">📢</button></div>
+<div class="mdc-card question-card mb" id="question">
+  <div><button @onclick="@(() => SpeakText(Question.Text))" style="font-size: 36px;">📢</button></div>
   <div><span class="mdc-typography--body1">@Question.Text</span></div>
     <ul>
         @{
@@ -26,8 +26,11 @@
             <span class="answer-right">@string.Join(", ", Question.CorrectOptions.Select(i => (char)('A' + i)))</span>
         </div>
         <div class="mdc-typography--subtitle2">
-            <b>Explanation:</b>
-            <span class="mdc-typography--body1">@Question.Explanation</span>
+            <div>
+                <b>Explanation:</b>
+                <span class="mdc-typography--body1">@Question.Explanation</span>
+            </div>
+            <div><button @onclick="@(() => SpeakText(Question.Explanation))" style="font-size: 36px;">📢</button></div>
         </div>
         <MermaidDiagram Definition="@Question.Diagram"/>
     }
@@ -95,7 +98,7 @@
         await JS.InvokeVoidAsync("renderMermaid", "mermaidChart", mermaidDefinition);
     }
 
-  async Task SpeakText()
+  async Task SpeakText(string text)
   {
     // 1. Specify the JavaScript function name
     const string jsFunctionName = "speakText";
@@ -103,7 +106,7 @@
     // 2. Prepare the utterance options
     var utteranceOptions = new
     {
-      text = Question.Text,
+      text = text,
       lang = "en-US",
       pitch = 1.0,
       rate = .8,

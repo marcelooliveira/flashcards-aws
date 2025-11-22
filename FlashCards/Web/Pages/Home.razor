@@ -74,18 +74,24 @@ else
             <span class="md-highlight"></span>
         </div>
     </div>
+
+  <script type="text/javascript">
+    function scrollToElement(id) {
+      document.getElementById(id).scrollIntoView();
+    }
+  </script>
 }
 
 @code {
-    List<Question> Questions = new();
-    string examName { get; set; }
-    bool examLoaded = false;
-    int CurrentIndex = 0;
-    int CorrectCount = 0;
-    int WrongCount = 0;
+  List<Question> Questions = new();
+  string examName { get; set; }
+  bool examLoaded = false;
+  int CurrentIndex = 0;
+  int CorrectCount = 0;
+  int WrongCount = 0;
 
-    // Adicione aqui as opções disponíveis
-    List<string> examOptions = new() { "aws-01", "aws-02", "aws-03", 
+  // Adicione aqui as opções disponíveis
+  List<string> examOptions = new() { "aws-01", "aws-02", "aws-03", 
                                         "aws-04", "aws-05", "aws-06",
                                         "aws-07", "aws-08", "aws-09",
                                         "aws-10", "aws-11", "aws-12",
@@ -93,349 +99,351 @@ else
                                         "aws-16", "aws-17", "aws-18", "aws-19",
                                         "repo-01", "repo-02", "repo-03" };
 
-    // Remova o OnInitializedAsync
+  // Remova o OnInitializedAsync
 
-    async Task OnExamSelected()
+  async Task OnExamSelected()
+  {
+    CurrentIndex = 0;
+    examLoaded = false;
+    Questions.Clear();
+    await LoadQuestions();
+    // Após carregar perguntas, tente restaurar respostas salvas
+    await LoadSavedAnswers();
+    examLoaded = true;
+    StateHasChanged();
+  }
+
+  async Task LoadQuestions()
+  {
+    try
     {
-        CurrentIndex = 0;
-        examLoaded = false;
-        Questions.Clear();
-        await LoadQuestions();
-        // Após carregar perguntas, tente restaurar respostas salvas
-        await LoadSavedAnswers();
-        examLoaded = true;
-        StateHasChanged();
+      var http = new HttpClient { BaseAddress = new Uri(NavigationManager.BaseUri) };
+      var yamlContent = await http.GetStringAsync($"Exams/{examName}.yml");
+      Questions = ParseQuestionsFromYaml(yamlContent);
     }
-
-    async Task LoadQuestions()
+    catch
     {
-        try
-        {
-            var http = new HttpClient { BaseAddress = new Uri(NavigationManager.BaseUri) };
-            var yamlContent = await http.GetStringAsync($"Exams/{examName}.yml");
-            Questions = ParseQuestionsFromYaml(yamlContent);
-        }
-        catch
-        {
-            Questions = new();
-        }
+      Questions = new();
     }
+  }
 
-    List<Question> ParseQuestions(string md)
+  List<Question> ParseQuestions(string md)
+  {
+    var questions = new List<Question>();
+    var lines = md.Split('\n');
+    Question? current = null;
+    for (int i = 0; i < lines.Length; i++)
     {
-        var questions = new List<Question>();
-        var lines = md.Split('\n');
-        Question? current = null;
-        for (int i = 0; i < lines.Length; i++)
-        {
-            var line = lines[i].TrimEnd();
-            if (Regex.IsMatch(line, "^\\d+\\. "))
-            {
-                if (current != null) questions.Add(current);
-                current = new Question { Text = line.Substring(line.IndexOf('.') + 1).Trim() };
-            }
-            else if (line.StartsWith("    - "))
-            {
-                int optionIndex = current?.QuestionOptions.Count ?? 0;
-                current?.QuestionOptions.Add(new QuestionOption(optionIndex, line.Substring(6).Trim()));
-            }
-            else if (line.Contains("Correct answer:"))
-            {
-                var match = Regex.Match(line, "Correct answer: ([A-Z, ]+)");
-                if (match.Success && current != null)
-                {
-                    var letters = match.Groups[1].Value.Split(',').Select(s => s.Trim());
-                    foreach (var l in letters)
-                    {
-                        if (l.Length == 1 && l[0] >= 'A' && l[0] <= 'Z')
-                            current.CorrectOptions.Add(l[0] - 'A');
-                    }
-                }
-            }
-        }
+      var line = lines[i].TrimEnd();
+      if (Regex.IsMatch(line, "^\\d+\\. "))
+      {
         if (current != null) questions.Add(current);
-        return questions;
+        current = new Question { Text = line.Substring(line.IndexOf('.') + 1).Trim() };
+      }
+      else if (line.StartsWith("    - "))
+      {
+        int optionIndex = current?.QuestionOptions.Count ?? 0;
+        current?.QuestionOptions.Add(new QuestionOption(optionIndex, line.Substring(6).Trim()));
+      }
+      else if (line.Contains("Correct answer:"))
+      {
+        var match = Regex.Match(line, "Correct answer: ([A-Z, ]+)");
+        if (match.Success && current != null)
+        {
+          var letters = match.Groups[1].Value.Split(',').Select(s => s.Trim());
+          foreach (var l in letters)
+          {
+            if (l.Length == 1 && l[0] >= 'A' && l[0] <= 'Z')
+              current.CorrectOptions.Add(l[0] - 'A');
+          }
+        }
+      }
+    }
+    if (current != null) questions.Add(current);
+    return questions;
+  }
+
+  public List<Question> ParseQuestionsFromYaml(string yamlContent)
+  {
+    var questions = new List<Question>();
+    var input = new StringReader(yamlContent);
+    var yamlStream = new YamlStream();
+    yamlStream.Load(input);
+
+    // Ensure the root node is a mapping (e.g., 'questions: [...]')
+    var root = yamlStream.Documents[0].RootNode as YamlMappingNode;
+    if (root == null)
+    {
+      throw new YamlException("Root of the YAML document is not a mapping node.");
     }
 
-    public List<Question> ParseQuestionsFromYaml(string yamlContent)
+    // Try to get the 'questions' key
+    if (!root.Children.TryGetValue(new YamlScalarNode("questions"), out var questionsNode))
     {
-        var questions = new List<Question>();
-        var input = new StringReader(yamlContent);
-        var yamlStream = new YamlStream();
-        yamlStream.Load(input);
-
-        // Ensure the root node is a mapping (e.g., 'questions: [...]')
-        var root = yamlStream.Documents[0].RootNode as YamlMappingNode;
-        if (root == null)
-        {
-            throw new YamlException("Root of the YAML document is not a mapping node.");
-        }
-
-        // Try to get the 'questions' key
-        if (!root.Children.TryGetValue(new YamlScalarNode("questions"), out var questionsNode))
-        {
-            throw new YamlException("YAML document does not contain a 'questions' key at the root.");
-        }
-
-        var questionsSequence = questionsNode as YamlSequenceNode;
-        if (questionsSequence == null)
-        {
-            throw new YamlException("'questions' node is not a sequence.");
-        }
-
-        foreach (var qNodeBase in questionsSequence.Children)
-        {
-            var qNode = qNodeBase as YamlMappingNode;
-            if (qNode == null)
-            {
-                Console.WriteLine($"Warning: Skipping non-mapping node in 'questions' sequence: {qNodeBase.NodeType}");
-                continue; // Skip if it's not a mapping node (e.g., an empty line or malformed entry)
-            }
-
-            var question = new Question();
-
-            // Helper to safely get scalar value
-            string GetScalarValue(YamlMappingNode node, string key)
-            {
-                if (node.Children.TryGetValue(new YamlScalarNode(key), out var valueNode) && valueNode is YamlScalarNode scalar)
-                {
-                    return scalar.Value;
-                }
-                return null;
-            }
-
-            // Populate basic properties
-            question.Id = GetScalarValue(qNode, "id");
-            question.Text = GetScalarValue(qNode, "question"); // Use QuestionText
-            question.Type = GetScalarValue(qNode, "type");
-            question.Explanation = GetScalarValue(qNode, "explanation");
-            question.Diagram = GetScalarValue(qNode, "diagram");
-            question.Difficulty = GetScalarValue(qNode, "difficulty");
-
-            // Parse Points (int)
-            if (qNode.Children.TryGetValue(new YamlScalarNode("points"), out var pointsNode) && pointsNode is YamlScalarNode pointsScalar && int.TryParse(pointsScalar.Value, out int parsedPoints))
-            {
-                question.Points = parsedPoints;
-            }
-
-            // Parse Tags (list of strings)
-            if (qNode.Children.TryGetValue(new YamlScalarNode("tags"), out var tagsNode) && tagsNode is YamlSequenceNode tagsSequence)
-            {
-                question.Tags = tagsSequence.Children
-                                            .OfType<YamlScalarNode>()
-                                            .Select(t => t.Value)
-                                            .Where(v => v != null) // Ensure no null values from empty tags
-                                            .ToList();
-            }
-
-            // Parse Options (list of QuestionOption)
-            if (qNode.Children.TryGetValue(new YamlScalarNode("options"), out var optionsNode) && optionsNode is YamlSequenceNode optionsSeq)
-            {
-                int idx = 0;
-                var optionsList = new List<(QuestionOption option, bool isCorrect)>();
-                foreach (var optNodeBase in optionsSeq.Children)
-                {
-                    var opt = optNodeBase as YamlMappingNode;
-                    if (opt == null)
-                    {
-                        Console.WriteLine($"Warning: Skipping non-mapping node in 'options' sequence: {optNodeBase.NodeType}");
-                        continue;
-                    }
-
-                    var optText = GetScalarValue(opt, "text");
-                    bool isCorrect = false;
-                    if (opt.Children.TryGetValue(new YamlScalarNode("is_correct"), out var isCorrectNode) && isCorrectNode is YamlScalarNode isCorrectScalar)
-                    {
-                        bool.TryParse(isCorrectScalar.Value, out isCorrect);
-                    }
-
-                    var newOption = new QuestionOption(idx, optText);
-                    optionsList.Add((newOption, isCorrect));
-
-                    idx++;
-                }
-
-                // Embaralhar as opções
-                optionsList.ForEach(o => o.option.ShuffleGuid = Guid.NewGuid().ToString());
-                // optionsList = optionsList.OrderBy(x => RandomNumber(rng)).ToList();
-                optionsList = optionsList.ToList();
-
-                // Atualizar as listas de opções e índices corretos
-                question.QuestionOptions.Clear();
-                question.CorrectOptions.Clear();
-                for (int i = 0; i < optionsList.Count; i++)
-                {
-                    question.QuestionOptions.Add(optionsList[i].option);
-                    if (optionsList[i].isCorrect)
-                    {
-                        question.CorrectOptions.Add(i);
-                    }
-                }
-            }
-
-            // Handle specific properties for short_answer
-            if (question.Type == "short_answer")
-            {
-                // question.CorrectAnswer = GetScalarValue(qNode, "correct_answer");
-                if (qNode.Children.TryGetValue(new YamlScalarNode("allow_case_sensitive"), out var acsNode) && acsNode is YamlScalarNode acsScalar)
-                {
-                    bool.TryParse(acsScalar.Value, out bool allowCaseSensitive);
-                    // question.AllowCaseSensitive = allowCaseSensitive;
-                }
-            }
-
-            questions.Add(question);
-        }
-
-        return questions;
+      throw new YamlException("YAML document does not contain a 'questions' key at the root.");
     }
 
-    async Task LoadSavedAnswers()
+    var questionsSequence = questionsNode as YamlSequenceNode;
+    if (questionsSequence == null)
     {
-        if (string.IsNullOrEmpty(examName) || Questions == null || Questions.Count == 0)
-            return;
-
-        ResetCounts();
-
-        int firstWrongIndex = -1;
-        int firstUnansweredIndex = -1;
-
-        for (int i = 0; i < Questions.Count; i++)
-        {
-            var key = GetStorageKey(i);
-            try
-            {
-                var json = await JS.InvokeAsync<string>("localStorage.getItem", key);
-                if (string.IsNullOrEmpty(json))
-                {
-                    if (firstUnansweredIndex == -1)
-                    {
-                        firstUnansweredIndex = i;
-                    }
-
-                    continue;                    
-                }
-
-                var saved = JsonSerializer.Deserialize<SavedAnswer>(json);
-                if (saved == null) continue;
-
-                var q = Questions[i];
-                q.SelectedOptions = saved.SelectedOptions ?? new List<int>();
-                q.WasCorrect = saved.WasCorrect;
-
-                q.IsLocked = saved.IsLocked;
-
-                // Reflect selections on QuestionOptions
-                if (q.QuestionOptions != null && q.SelectedOptions != null)
-                {
-                    for (int j = 0; j < q.QuestionOptions.Count; j++)
-                    {
-                        QuestionOption qo = q.QuestionOptions[j];
-
-                        qo.IsSelected = q.SelectedOptions.Contains(qo.Index);
-                        qo.IsCorrect = q.CorrectOptions.Contains(qo.Index);
-                    }
-                    q.WasCorrect = string.Join(',', q.SelectedOptions.OrderBy(o => o)) == string.Join(',', q.CorrectOptions.OrderBy(o => o));
-                    q.IsLocked = (q.WasCorrect ?? false);
-
-                    CorrectCount += q.WasCorrect == true ? 1 : 0;
-                    WrongCount += q.WasCorrect == false ? 1 : 0;
-                }
-
-                if (!(q.WasCorrect?? false))
-                {
-                    if (firstWrongIndex == -1)
-                    {
-                        firstWrongIndex = i;
-                    }
-                }
-            }
-            catch
-            {
-                // ignore errors reading localStorage
-            }
-        }
-
-        if (firstWrongIndex != -1)
-        {
-            CurrentIndex = firstWrongIndex;
-        }
-        else if (firstUnansweredIndex != -1)
-        {
-            CurrentIndex = firstUnansweredIndex;
-        }
+      throw new YamlException("'questions' node is not a sequence.");
     }
 
-    async Task SaveAnswerAsync(Question q, int index)
+    foreach (var qNodeBase in questionsSequence.Children)
     {
-        if (string.IsNullOrEmpty(examName) || q == null)
-            return;
+      var qNode = qNodeBase as YamlMappingNode;
+      if (qNode == null)
+      {
+        Console.WriteLine($"Warning: Skipping non-mapping node in 'questions' sequence: {qNodeBase.NodeType}");
+        continue; // Skip if it's not a mapping node (e.g., an empty line or malformed entry)
+      }
 
-        var key = GetStorageKey(index);
-        var payload = new SavedAnswer
+      var question = new Question();
+
+      // Helper to safely get scalar value
+      string GetScalarValue(YamlMappingNode node, string key)
+      {
+        if (node.Children.TryGetValue(new YamlScalarNode(key), out var valueNode) && valueNode is YamlScalarNode scalar)
+        {
+          return scalar.Value;
+        }
+        return null;
+      }
+
+      // Populate basic properties
+      question.Id = GetScalarValue(qNode, "id");
+      question.Text = GetScalarValue(qNode, "question"); // Use QuestionText
+      question.Type = GetScalarValue(qNode, "type");
+      question.Explanation = GetScalarValue(qNode, "explanation");
+      question.Diagram = GetScalarValue(qNode, "diagram");
+      question.Difficulty = GetScalarValue(qNode, "difficulty");
+
+      // Parse Points (int)
+      if (qNode.Children.TryGetValue(new YamlScalarNode("points"), out var pointsNode) && pointsNode is YamlScalarNode pointsScalar && int.TryParse(pointsScalar.Value, out int parsedPoints))
+      {
+        question.Points = parsedPoints;
+      }
+
+      // Parse Tags (list of strings)
+      if (qNode.Children.TryGetValue(new YamlScalarNode("tags"), out var tagsNode) && tagsNode is YamlSequenceNode tagsSequence)
+      {
+        question.Tags = tagsSequence.Children
+                                    .OfType<YamlScalarNode>()
+                                    .Select(t => t.Value)
+                                    .Where(v => v != null) // Ensure no null values from empty tags
+                                    .ToList();
+      }
+
+      // Parse Options (list of QuestionOption)
+      if (qNode.Children.TryGetValue(new YamlScalarNode("options"), out var optionsNode) && optionsNode is YamlSequenceNode optionsSeq)
+      {
+        int idx = 0;
+        var optionsList = new List<(QuestionOption option, bool isCorrect)>();
+        foreach (var optNodeBase in optionsSeq.Children)
+        {
+          var opt = optNodeBase as YamlMappingNode;
+          if (opt == null)
+          {
+            Console.WriteLine($"Warning: Skipping non-mapping node in 'options' sequence: {optNodeBase.NodeType}");
+            continue;
+          }
+
+          var optText = GetScalarValue(opt, "text");
+          bool isCorrect = false;
+          if (opt.Children.TryGetValue(new YamlScalarNode("is_correct"), out var isCorrectNode) && isCorrectNode is YamlScalarNode isCorrectScalar)
+          {
+            bool.TryParse(isCorrectScalar.Value, out isCorrect);
+          }
+
+          var newOption = new QuestionOption(idx, optText);
+          optionsList.Add((newOption, isCorrect));
+
+          idx++;
+        }
+
+        // Embaralhar as opções
+        optionsList.ForEach(o => o.option.ShuffleGuid = Guid.NewGuid().ToString());
+        // optionsList = optionsList.OrderBy(x => RandomNumber(rng)).ToList();
+        optionsList = optionsList.ToList();
+
+        // Atualizar as listas de opções e índices corretos
+        question.QuestionOptions.Clear();
+        question.CorrectOptions.Clear();
+        for (int i = 0; i < optionsList.Count; i++)
+        {
+          question.QuestionOptions.Add(optionsList[i].option);
+          if (optionsList[i].isCorrect)
+          {
+            question.CorrectOptions.Add(i);
+          }
+        }
+      }
+
+      // Handle specific properties for short_answer
+      if (question.Type == "short_answer")
+      {
+        // question.CorrectAnswer = GetScalarValue(qNode, "correct_answer");
+        if (qNode.Children.TryGetValue(new YamlScalarNode("allow_case_sensitive"), out var acsNode) && acsNode is YamlScalarNode acsScalar)
+        {
+          bool.TryParse(acsScalar.Value, out bool allowCaseSensitive);
+          // question.AllowCaseSensitive = allowCaseSensitive;
+        }
+      }
+
+      questions.Add(question);
+    }
+
+    return questions;
+  }
+
+  async Task LoadSavedAnswers()
+  {
+    if (string.IsNullOrEmpty(examName) || Questions == null || Questions.Count == 0)
+      return;
+
+    ResetCounts();
+
+    int firstWrongIndex = -1;
+    int firstUnansweredIndex = -1;
+
+    for (int i = 0; i < Questions.Count; i++)
+    {
+      var key = GetStorageKey(i);
+      try
+      {
+        var json = await JS.InvokeAsync<string>("localStorage.getItem", key);
+        if (string.IsNullOrEmpty(json))
+        {
+          if (firstUnansweredIndex == -1)
+          {
+            firstUnansweredIndex = i;
+          }
+
+          continue;                    
+        }
+
+        var saved = JsonSerializer.Deserialize<SavedAnswer>(json);
+        if (saved == null) continue;
+
+        var q = Questions[i];
+        q.SelectedOptions = saved.SelectedOptions ?? new List<int>();
+        q.WasCorrect = saved.WasCorrect;
+
+        q.IsLocked = saved.IsLocked;
+
+        // Reflect selections on QuestionOptions
+        if (q.QuestionOptions != null && q.SelectedOptions != null)
+        {
+          for (int j = 0; j < q.QuestionOptions.Count; j++)
+          {
+            QuestionOption qo = q.QuestionOptions[j];
+
+            qo.IsSelected = q.SelectedOptions.Contains(qo.Index);
+            qo.IsCorrect = q.CorrectOptions.Contains(qo.Index);
+          }
+          q.WasCorrect = string.Join(',', q.SelectedOptions.OrderBy(o => o)) == string.Join(',', q.CorrectOptions.OrderBy(o => o));
+          q.IsLocked = (q.WasCorrect ?? false);
+
+          CorrectCount += q.WasCorrect == true ? 1 : 0;
+          WrongCount += q.WasCorrect == false ? 1 : 0;
+        }
+
+        if (!(q.WasCorrect?? false))
+        {
+          if (firstWrongIndex == -1)
+          {
+            firstWrongIndex = i;
+          }
+        }
+      }
+      catch
+      {
+        // ignore errors reading localStorage
+      }
+    }
+
+    if (firstWrongIndex != -1)
+    {
+      CurrentIndex = firstWrongIndex;
+    }
+    else if (firstUnansweredIndex != -1)
+    {
+      CurrentIndex = firstUnansweredIndex;
+    }
+  }
+
+  async Task SaveAnswerAsync(Question q, int index)
+  {
+    if (string.IsNullOrEmpty(examName) || q == null)
+      return;
+
+    var key = GetStorageKey(index);
+    var payload = new SavedAnswer
         {
             SelectedOptions = q.SelectedOptions ?? new List<int>(),
             WasCorrect = q.WasCorrect,
             IsLocked = q.IsLocked
         };
 
-        try
-        {
-            var json = JsonSerializer.Serialize(payload);
-            await JS.InvokeVoidAsync("localStorage.setItem", key, json);
-        }
-        catch
-        {
-            // ignore storage errors
-        }
-    }
-
-    async Task ClearSavedAnswers()
+    try
     {
-        if (string.IsNullOrEmpty(examName) || Questions == null)
-            return;
-
-        for (int i = 0; i < Questions.Count; i++)
-        {
-            var key = GetStorageKey(i);
-            try
-            {
-                await JS.InvokeVoidAsync("localStorage.removeItem", key);
-            }
-            catch
-            {
-                // ignore
-            }
-        }
-
-        // Also clear in-memory selections
-        foreach (var q in Questions)
-        {
-            q.SelectedOptions = new List<int>();
-            q.WasCorrect = null;
-            q.IsLocked = false;
-            if (q.QuestionOptions != null)
-            {
-                foreach (var opt in q.QuestionOptions)
-                {
-                    opt.IsSelected = false;
-                }
-            }
-        }
-
-        ResetCounts();
-
-        StateHasChanged();
+      var json = JsonSerializer.Serialize(payload);
+      await JS.InvokeVoidAsync("localStorage.setItem", key, json);
     }
-
-    void NextQuestion(Question question)
+    catch
     {
-        CorrectCount += question.WasCorrect == true ? 1 : 0;
-        WrongCount += question.WasCorrect == false ? 1 : 0;
-
-        if (CurrentIndex < Questions.Count - 1)
-            CurrentIndex++;
+      // ignore storage errors
     }
+  }
+
+  async Task ClearSavedAnswers()
+  {
+    if (string.IsNullOrEmpty(examName) || Questions == null)
+      return;
+
+    for (int i = 0; i < Questions.Count; i++)
+    {
+      var key = GetStorageKey(i);
+      try
+      {
+        await JS.InvokeVoidAsync("localStorage.removeItem", key);
+      }
+      catch
+      {
+        // ignore
+      }
+    }
+
+    // Also clear in-memory selections
+    foreach (var q in Questions)
+    {
+      q.SelectedOptions = new List<int>();
+      q.WasCorrect = null;
+      q.IsLocked = false;
+      if (q.QuestionOptions != null)
+      {
+        foreach (var opt in q.QuestionOptions)
+        {
+          opt.IsSelected = false;
+        }
+      }
+    }
+
+    ResetCounts();
+
+    StateHasChanged();
+  }
+
+  async Task NextQuestion(Question question)
+  {
+    CorrectCount += question.WasCorrect == true ? 1 : 0;
+    WrongCount += question.WasCorrect == false ? 1 : 0;
+
+    if (CurrentIndex < Questions.Count - 1)
+      CurrentIndex++;
+
+    await JS.InvokeAsync<string>("scrollToElement", "question");
+  }
 
     void PrevQuestion()
     {
