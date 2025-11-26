@@ -1,0 +1,860 @@
+questions:
+  - id: q151
+    type: multiple_choice
+    question: A developer is writing an application that will process data delivered into an Amazon S3 bucket. The data is delivered approximately 10 times a day, and the developer expects the data will be processed in less than 1 minute, on average. How can the developer deploy and invoke the application with the lowest cost and lowest latency?
+    options:
+     - text: Deploy the application as an AWS Lambda function and invoke it with an Amazon CloudWatch alarm triggered by an S3 object upload.
+       is_correct: false
+     - text: Deploy the application as an AWS Lambda function and invoke it with an S3 event notification.
+       is_correct: true
+     - text: Deploy the application as an AWS Lambda function and invoke it with an Amazon CloudWatch scheduled event.
+       is_correct: false
+     - text: Deploy the application onto an Amazon EC2 instance and have it poll the S3 bucket for new objects.
+       is_correct: false
+    explanation: |
+      The correct option uses S3 event notifications to trigger Lambda directly, providing low latency and minimal cost because Lambda only runs when objects arrive and S3 pushes the event.
+
+      The incorrect options either add unnecessary polling or scheduling overhead (EC2 polling or scheduled CloudWatch events) or misuse CloudWatch alarms for object uploads, which are not the native S3->Lambda integration.
+
+  - id: q152
+    type: multiple_choice
+    question: A company is using Amazon API Gateway to manage its public-facing API. The CISO requires that the APIs be used by test account users only. What is the MOST secure way to restrict API access to users of this particular AWS account?
+    options:
+     - text: Client-side SSL certificates for authentication.
+       is_correct: false
+     - text: API Gateway resource policies.
+       is_correct: true
+     - text: Cross-origin resource sharing (CORS).
+       is_correct: false
+     - text: Usage plans.
+       is_correct: false
+    explanation: |
+      API Gateway resource policies can restrict access to callers from a specific AWS account or VPC by evaluating the caller's principal and account, making them the most secure way to limit access to a particular account.
+
+      The incorrect options either address client TLS (not account restriction), CORS (browser origin control), or usage plans (rate limiting and quotas) which do not enforce account-level access control.
+
+  - id: q153
+    type: multiple_choice
+    question: A Developer is migrating existing applications to AWS. These applications use MongoDB as their primary data store, and they will be deployed to Amazon EC2 instances. Management requires that the Developer minimize changes to applications while using AWS services. Which solution should the Developer use to host MongoDB in AWS?
+    options:
+     - text: Install MongoDB on the same instance where the application is running.
+       is_correct: false
+     - text: Deploy Amazon DocumentDB in MongoDB compatibility mode.
+       is_correct: true
+     - text: Use Amazon API Gateway to translate API calls from MongoDB to Amazon DynamoDB.
+       is_correct: false
+     - text: Replicate the existing MongoDB workload to Amazon DynamoDB.
+       is_correct: false
+    explanation: |
+      Amazon DocumentDB offers MongoDB-compatible APIs and reduces the amount of application change required while providing a managed service that runs on AWS.
+
+      The incorrect options either require running and managing MongoDB yourself on the same instance, or propose translating or migrating to DynamoDB which would require significant application changes.
+
+  - id: q154
+    type: multiple_choice
+    question: A company requires that AWS Lambda functions written by Developers log errors so System Administrators can more effectively troubleshoot issues. What should the Developers implement to meet this need?
+    options:
+     - text: Publish errors to a dedicated Amazon SQS queue.
+       is_correct: false
+     - text: Create an Amazon CloudWatch Events event trigger based on certain Lambda events.
+       is_correct: false
+     - text: Report errors through logging statements in Lambda function code.
+       is_correct: true
+     - text: Set up an Amazon SNS topic that sends logging statements upon failure.
+       is_correct: false
+    explanation: |
+      Adding logging statements in the Lambda code ensures errors are written to CloudWatch Logs automatically, providing administrators with direct, searchable error information for troubleshooting.
+
+      The incorrect options introduce extra infrastructure or indirect approaches (SQS, CloudWatch Events, SNS) instead of simply emitting logs from the function, which is the straightforward and standard practice.
+
+  - id: q155
+    type: multiple_choice
+    question: A Developer is writing an application that runs on Amazon EC2 instances in an Auto Scaling group. The application data is stored in an Amazon DynamoDB table and records are constantly updated by all instances. An instance sometimes retrieves old data. The Developer wants to correct this by making sure the reads are strongly consistent. How can the Developer accomplish this?
+    options:
+     - text: Set 'ConsistentRead' to 'true' when calling 'GetItem'
+       is_correct: true
+     - text: Create a new DynamoDB Accelerator (DAX) table.
+       is_correct: false
+     - text: Set Consistency to strong when calling 'UpdateTable'
+       is_correct: false
+     - text: Use the 'GetShardIterator' command.
+       is_correct: false
+    explanation: |
+      Enabling 'ConsistentRead=true' on GetItem requests requests strongly consistent reads from DynamoDB so the caller gets the latest committed value rather than eventually-consistent data.
+
+      The incorrect options either reference DAX (which is eventually consistent cache), incorrect API operations, or streaming shard iterators which are unrelated to read consistency on DynamoDB GetItem calls.
+
+  - id: q156
+    type: multiple_choice
+    question: A Developer has an application that must accept a large amount of incoming data streams and process the data before sending it to many downstream users. Which serverless solution should the Developer use to meet these requirements?
+    options:
+     - text: Amazon RDS MySQL stored procedure with AWS Lambda.
+       is_correct: false
+     - text: AWS Direct Connect with AWS Lambda.
+       is_correct: false
+     - text: Amazon Kinesis Data Streams with AWS Lambda.
+       is_correct: true
+     - text: Amazon EC2 bash script with AWS Lambda.
+       is_correct: false
+    explanation: |
+      Amazon Kinesis Data Streams ingests high-throughput streaming data and can trigger Lambda consumers to process records, making it a serverless, scalable approach for stream processing.
+
+      The incorrect options either mix non-serverless or networking services or databases that are not designed as a scalable streaming ingestion and processing pipeline.
+
+  - id: q157
+    type: multiple_choice
+    question: An application is experiencing performance issues based on increased demand. This increased demand is on read-only historical records pulled from an Amazon RDS-hosted database with custom views and queries. A Developer must improve performance without changing the database structure. Which approach will improve performance and MINIMIZE management overhead?
+    options:
+     - text: Deploy Amazon DynamoDB, move all the data, and point to DynamoDB.
+       is_correct: false
+     - text: Deploy Amazon ElastiCache for Redis and cache the data for the application.
+       is_correct: true
+     - text: Deploy Memcached on Amazon EC2 and cache the data for the application.
+       is_correct: false
+     - text: Deploy Amazon DynamoDB Accelerator (DAX) on Amazon RDS to improve cache performance.
+       is_correct: false
+    explanation: |
+      Deploying ElastiCache for Redis provides a managed in-memory cache that can store frequently read historical data, reducing load on RDS and improving read performance with minimal management.
+
+      The incorrect options either require large architectural changes (migrating to DynamoDB), involve self-managed caching (Memcached on EC2), or reference DAX which is for DynamoDB, not RDS.
+
+  - id: q158
+    type: multiple_choice
+    question: A Developer has an Amazon DynamoDB table that must be in provisioned mode to comply with user requirements. The application needs to support the following; Average item size; 10 KB. Item reads each second; 10 strongly consistent. Item writes each second; 2 transactional. Which read and write capacity cost-effectively meets these requirements?
+    options:
+     - text: Read '10'; write '2'
+       is_correct: false
+     - text: Read '30'; write '40'
+       is_correct: true
+     - text: Use on-demand scaling.
+       is_correct: false
+     - text: Read '300'; write '400'
+       is_correct: false
+    explanation: |
+      For 10 KB items, each strongly consistent read costs 2 RCUs (each 4 KB chunk uses 2 RCUs), so 10 reads require 20 RCUs; transactional writes cost 2 WCUs per write times additional overhead—choosing read 30 and write 40 provides safe provisioned capacity with headroom.
+
+      The incorrect options either under-provision capacity, propose on-demand despite the requirement to use provisioned mode, or vastly over-provision leading to unnecessary cost.
+
+  - id: q159
+    type: multiple_choice
+    question: A company wants to containerize an existing three-tier web application and deploy it to Amazon ECS Fargate. The application is using session data to keep track of user activities. Which approach would provide the BEST user experience?
+    options:
+     - text: Provision a Redis cluster in Amazon ElastiCache and save the session data in the cluster.
+       is_correct: true
+     - text: Create a session table in Amazon Redshift and save the session data in the database table.
+       is_correct: false
+     - text: Enable session stickiness in the existing Network Load Balancer and manage the session data in the container.
+       is_correct: false
+     - text: Use an Amazon S3 bucket as data store and save the session data in the bucket.
+       is_correct: false
+    explanation: |
+      Using ElastiCache (Redis) provides a low-latency, shared session store suitable for containerized services on Fargate, giving users consistent session state regardless of which container handles their requests.
+
+      The incorrect options use storage systems unsuited for fast session reads/writes (Redshift, S3) or rely on container-local storage or load-balancer stickiness which reduces resilience and scalability.
+
+  - id: q160
+    type: multiple_choice
+    question: An application is using a single-node Amazon ElastiCache for Redis instance to improve read performance. Over time, demand for the application has increased exponentially, which has increased the load on the ElastiCache instance. It is critical that this cache layer handles the load and is resilient in case of node failures. What can the Developer do to address the load and resiliency requirements?
+    options:
+     - text: Add a read replica instance.
+       is_correct: true
+     - text: Migrate to a Memcached cluster.
+       is_correct: false
+     - text: Migrate to an Amazon Elasticsearch Service cluster.
+       is_correct: false
+     - text: Vertically scale the ElastiCache instance.
+       is_correct: false
+    explanation: |
+      Adding read replicas (Redis replication or cluster mode) spreads read traffic across nodes and improves resiliency by providing failover options, addressing both load and availability concerns.
+
+      The incorrect options suggest migrating to unrelated services or only vertical scaling which may not provide the required resilience and horizontal scalability.
+
+  - id: q161
+    type: multiple_choice
+    question: A Developer is investigating an application's performance issues. The application consists of hundreds of microservices, and a single API call can potentially have a deep call stack. The Developer must isolate the component that is causing the issue. Which AWS service or feature should the Developer use to gather information about what is happening and isolate the fault?
+    options:
+     - text: AWS X-Ray.
+       is_correct: true
+     - text: VPC Flow Logs.
+       is_correct: false
+     - text: Amazon GuardDuty.
+       is_correct: false
+     - text: Amazon Macie.
+       is_correct: false
+    explanation: |
+      AWS X-Ray provides distributed tracing to visualize service maps and trace latencies across microservices, helping isolate the component or segment causing performance issues.
+
+      The incorrect options focus on network traffic (VPC Flow Logs) or security/monitoring services (GuardDuty, Macie) that do not provide end-to-end distributed tracing for application performance debugging.
+
+  - id: q162
+    type: multiple_choice
+    question: A Company runs continuous integration/continuous delivery (CI/CD) pipelines for its application on AWS CodePipeline. A Developer must write unit tests and run them as part of the pipelines before staging the artifacts for testing. How should the Developer incorporate unit tests as part of CI/CD pipelines?
+    options:
+     - text: Create a separate CodePipeline pipeline to run unit tests.
+       is_correct: false
+     - text: Update the AWS CodeBuild specification to include a phase for running unit tests.
+       is_correct: true
+     - text: Install the AWS CodeDeploy agent on an Amazon EC2 instance to run unit tests.
+       is_correct: false
+     - text: Create a testing branch in AWS CodeCommit to run unit tests.
+       is_correct: false
+    explanation: |
+      Adding a unit test phase to the CodeBuild 'buildspec' integrates tests into the CI/CD pipeline stage that builds artifacts, enabling automated test runs before deployment.
+
+      The incorrect options either create extra pipelines, misuse CodeDeploy (which is for deployment), or rely on branch workflows instead of integrating tests into the build step.
+
+  - id: q163
+    type: multiple_choice
+    question: An application has the following requirements; Performance efficiency of seconds with up to a minute of latency. The data storage size may grow up to thousands of terabytes. Per-message sizes may vary between 100 KB and 100 MB. Data can be stored as key/value stores supporting eventual consistency. What is the MOST cost-effective AWS service to meet these requirements?
+    options:
+     - text: Amazon DynamoDB.
+       is_correct: true
+     - text: Amazon S3.
+       is_correct: false
+     - text: Amazon RDS (with a MySQL engine).
+       is_correct: false
+     - text: Amazon ElastiCache.
+       is_correct: false
+    explanation: |
+      Amazon DynamoDB is a scalable key-value store that supports large datasets and eventual consistency with low-latency reads suitable for many-terabyte growth and variable item sizes.
+
+      The incorrect options either target object storage (S3), relational databases (RDS), or in-memory caches (ElastiCache) which do not match the key/value scalable, managed database semantics required.
+
+  - id: q164
+    type: multiple_choice
+    question: A Developer must allow guest users without logins to access an Amazon Cognito-enabled site to view files stored within an Amazon S3 bucket. How should the Developer meet these requirements?
+    options:
+     - text: Create a blank user ID in a user pool, add to the user group, and grant access to AWS resources.
+       is_correct: false
+     - text: Create a new identity pool, enable access to unauthenticated identities, and grant access to AWS resources.
+       is_correct: true
+     - text: Create a new user pool, enable access to authenticated identifies, and grant access to AWS resources.
+       is_correct: false
+     - text: Create a new user pool, disable authentication access, and grant access to AWS resources.
+       is_correct: false
+    explanation: |
+      Cognito identity pools support unauthenticated identities, allowing guest users to obtain temporary credentials and access S3 with restricted permissions without creating user accounts.
+
+      The incorrect options misuse user pools (which are for authenticated users) or propose hacks like blank users, which are insecure and not the designed approach for guest access.
+
+  - id: q165
+    type: multiple_choice
+    question: A Developer has written code for an application and wants to share it with other Developers on the team to receive feedback. The shared application code needs to be stored long-term with multiple versions and batch change tracking. Which AWS service should the Developer use?
+    options:
+     - text: AWS CodeBuild.
+       is_correct: false
+     - text: Amazon S3.
+       is_correct: false
+     - text: AWS CodeCommit.
+       is_correct: true
+     - text: AWS Cloud9.
+       is_correct: false
+    explanation: |
+      AWS CodeCommit is a managed Git repository service that provides version control, branching, and collaborative workflows suited for long-term source code storage and review.
+
+      The incorrect options either build artifacts (CodeBuild), object storage (S3) without Git semantics, or an IDE (Cloud9) which does not replace a version control system.
+
+  - id: q166
+    type: multiple_choice
+    question: A Developer has discovered that an application responsible for processing messages in an Amazon SQS queue is routinely falling behind. The application is capable of processing multiple messages in one execution, but is only receiving one message at a time. What should the Developer do to increase the number of messages the application receives?
+    options:
+     - text: Call the 'ChangeMessageVisibility' API for the queue and set 'MaxNumberOfMessages' to a value greater than the default of '1'
+       is_correct: false
+     - text: Call the 'AddPermission' API to set 'MaxNumberOfMessages' for the 'ReceiveMessage' action to a value greater than the default of '1'
+       is_correct: false
+     - text: Call the 'ReceiveMessage' API to set 'MaxNumberOfMessages' to a value greater than the default of '1'
+       is_correct: true
+     - text: Call the 'SetQueueAttributes' API for the queue and set 'MaxNumberOfMessages' to a value greater than the default of '1'
+       is_correct: false
+    explanation: |
+      The ReceiveMessage API supports a 'MaxNumberOfMessages' parameter (up to 10) that allows the consumer to retrieve multiple messages in a single call, increasing processing throughput.
+
+      The incorrect options reference APIs or attributes that don't control how many messages are returned by ReceiveMessage; ChangeMessageVisibility and AddPermission are unrelated to batching retrieval.
+
+  - id: q167
+    type: multiple_choice
+    question: A Developer registered an AWS Lambda function as a target for an Application Load Balancer (ALB) using a CLI command. However, the Lambda function is not being invoked when the client sends requests through the ALB. Why is the Lambda function not being invoked?
+    options:
+     - text: A Lambda function cannot be registered as a target for an ALB.
+       is_correct: false
+     - text: A Lambda function can be registered with an ALB using AWS Management Console only.
+       is_correct: false
+     - text: The permissions to invoke the Lambda function are missing.
+       is_correct: true
+     - text: Cross-zone is not enabled on the ALB.
+       is_correct: false
+    explanation: |
+      When using ALB with Lambda targets, you must grant permission for the ALB to invoke the function (via lambda:AddPermission). Missing invoke permissions prevent the ALB from calling the Lambda.
+
+      The incorrect options either deny ALB support for Lambda (ALB does support Lambda targets) or mention unrelated ALB settings like cross-zone load balancing.
+
+  - id: q168
+    type: multiple_choice
+    question: A company provides APIs as a service and commits to a service level agreement (SLA) with all its users. To comply with each SLA, what should the company do?
+    options:
+     - text: Enable throttling limits for each method in Amazon API Gateway.
+       is_correct: false
+     - text: Create a usage plan for each user and request API keys to access the APIs.
+       is_correct: true
+     - text: Enable API rate limiting in Amazon Cognito for each user.
+       is_correct: false
+     - text: Enable default throttling limits for each stage after deploying the APIs.
+       is_correct: false
+    explanation: |
+      Usage plans let you define per-customer throttling and quota limits and associate API keys with users, enabling the company to enforce individual SLAs for request rate and usage.
+
+      The incorrect options either apply global throttling per method or stage or suggest Cognito, none of which provide per-customer SLA enforcement as usage plans do.
+
+  - id: q169
+    type: multiple_choice
+    question: "A Developer is preparing a deployment package using AWS CloudFormation. The package consists of two separate templates: one for the infrastructure and one for the application. The application has to be inside the VPC that is created from the infrastructure template. How can the application stack refer to the VPC created from the infrastructure template?"
+    options:
+     - text: Use the Ref function to import the VPC into the application stack from the infrastructure template.
+       is_correct: false
+     - text: Use the export flag in the infrastructure template, and then use the 'Fn::ImportValue' function in the application template.
+       is_correct: true
+     - text: Use the 'DependsOn' attribute to specify that the application instance depends on the VPC in the application template.
+       is_correct: false
+     - text: Use the 'Fn::GetAtt' function to include the attribute of the VPC in the application template.
+       is_correct: false
+    explanation: |
+      Exporting the VPC's output in the infrastructure stack and using 'Fn::ImportValue' in the application stack is the CloudFormation-native way to reference resources across stacks.
+
+      The incorrect options misuse Ref/GetAtt (which work within a stack) or DependsOn (which doesn't import resources from another stack) and therefore do not enable cross-stack references.
+
+  - id: q170
+    type: multiple_choice
+    question: A Developer needs to create an application that supports Security Assertion Markup Language (SAML) and Facebook authentication. It must also allow access to AWS services, such as Amazon DynamoDB. Which AWS service or feature will meet these requirements with the LEAST amount of additional coding?
+    options:
+     - text: AWS AppSync.
+       is_correct: false
+     - text: Amazon Cognito identity pools.
+       is_correct: true
+     - text: Amazon Cognito user pools.
+       is_correct: false
+     - text: Amazon Lambda@Edge.
+       is_correct: false
+    explanation: |
+      Cognito identity pools provide federation support for multiple identity providers (including SAML and social providers like Facebook) and can issue temporary AWS credentials for service access with minimal custom coding.
+
+      The incorrect options are not focused on identity federation with credentials for AWS services: user pools are for authentication profiles, AppSync is for GraphQL APIs, and Lambda@Edge is for edge compute.
+
+  - id: q171
+    type: multiple_choice
+    question: A Developer is trying to monitor an application's status by running a cron job that returns 1 if the service is up and 0 if the service is down. The Developer created code that uses an AWS CLI 'put-metric-alarm' command to publish the custom metrics to Amazon CloudWatch and create an alarm. However, the Developer is unable to create an alarm as the custom metrics do not appear in the CloudWatch console. What is causing this issue?
+    options:
+     - text: Sending custom metrics using the CLI is not supported.
+       is_correct: false
+     - text: The Developer needs to use the 'put-metric-data' command.
+       is_correct: true
+     - text: The Developer must use a unified CloudWatch agent to publish custom metrics.
+       is_correct: false
+     - text: The code is not running on an Amazon EC2 instance.
+       is_correct: false
+    explanation: |
+      The correct CLI command to publish custom metric data to CloudWatch is 'put-metric-data'; without publishing metric data, alarms cannot be created based on those metrics.
+
+      The incorrect options either deny CLI support (false), suggest unnecessary agents, or assume EC2 execution, none of which explain the missing custom metric data.
+
+  - id: q172
+    type: multiple_choice
+    question: A Developer has written an application that runs on Amazon EC2 instances and generates a value every minute. The Developer wants to monitor and graph the values generated over time without logging in to the instance each time. Which approach should the Developer use to achieve this goal?
+    options:
+     - text: Use the Amazon CloudWatch metrics reported by default for all EC2 instances. View each value from the CloudWatch console.
+       is_correct: false
+     - text: Develop the application to store each value in a file on Amazon S3 every minute with the timestamp as the name.
+       is_correct: false
+     - text: Publish each generated value as a custom metric to Amazon CloudWatch using available AWS SDKs.
+       is_correct: true
+     - text: Store each value as a variable and add the variable to the list of EC2 metrics that should be reported to the Amazon CloudWatch console.
+       is_correct: false
+    explanation: |
+      Publishing each generated value as a custom CloudWatch metric lets the developer visualize and monitor the data over time through CloudWatch dashboards without accessing the instance.
+
+      The incorrect options either rely on default EC2 metrics that do not include the custom value, store metrics in S3 which is not a monitoring visualization tool, or suggest unsupported ways to extend default EC2 metrics.
+
+  - id: q173
+    type: multiple_choice
+    question: A Development team decides to adopt a continuous integration/continuous delivery (CI/CD) process using AWS CodePipeline and AWS CodeCommit for a new application. However, management wants a person to review and approve the code before it is deployed to production. How can the Development team add a manual approver to the CI/CD pipeline?
+    options:
+     - text: Use AWS SES to send an email to approvers when their action is required. Develop a simple application that allows approvers to accept or reject a build. Invoke an AWS Lambda function to advance the pipeline when a build is accepted.
+       is_correct: false
+     - text: If approved, add an approved tag when pushing changes to the CodeCommit repository. CodePipeline will proceed to build and deploy approved commits without interruption.
+       is_correct: false
+     - text: Add an approval step to CodeCommit. Commits will not be saved until approved.
+       is_correct: false
+     - text: Add an approval action to the pipeline. Configure the approval action to publish to an Amazon SNS topic when approval is required. The pipeline execution will stop and wait for an approval.
+       is_correct: true
+    explanation: |
+      CodePipeline supports a built-in manual approval action that can send notifications (for example via SNS) and pause execution until an approver accepts, providing a controlled human approval step.
+
+      The incorrect options propose building custom approval systems or misuse CodeCommit, which are more complex and unnecessary compared to the native approval action in CodePipeline.
+
+  - id: q174
+    type: multiple_choice
+    question: A Developer is building a serverless application using AWS Lambda and must create a REST API using an HTTP GET method. What needs to be defined to meet this requirement? (Choose TWO)
+    options:
+     - text: A Lambda@Edge function.
+       is_correct: false
+     - text: An Amazon API Gateway with a Lambda function.
+       is_correct: true
+     - text: An exposed GET method in an Amazon API Gateway.
+       is_correct: true
+     - text: An exposed GET method in the Lambda function.
+       is_correct: false
+     - text: An exposed GET method in Amazon Route 53.
+       is_correct: false
+    explanation: |
+      To create a REST GET endpoint for a serverless app, define an API Gateway API and configure a GET method that integrates with the Lambda function to handle requests.
+
+      The incorrect options refer to unrelated services or misunderstand where HTTP methods are defined: Lambda@Edge and Route 53 are not used to define REST GET methods, and methods are defined in API Gateway, not inside the Lambda code.
+
+  - id: q175
+    type: multiple_choice
+    question: A Developer is writing an application in AWS Lambda. To simplify testing and deployments, the Developer needs the database connection string to be easily changed without modifying the Lambda code. How can this requirement be met?
+    options:
+     - text: Store the connection string as a secret in AWS Secrets Manager.
+       is_correct: true
+     - text: Store the connection string in an IAM user account.
+       is_correct: false
+     - text: Store the connection string in AWS KMS.
+       is_correct: false
+     - text: Store the connection string as a Lambda layer.
+       is_correct: false
+    explanation: |
+      Storing the connection string as a secret in AWS Secrets Manager allows secure storage, easy rotation, and retrieval at runtime without changing the Lambda code.
+
+      The incorrect options either misuse IAM or KMS (which are not secret stores for config), or Lambda layers (meant for libraries), none of which provide secure, easily changeable secrets management like Secrets Manager.
+
+  - id: q176
+    type: multiple_choice
+    question: A company is launching an ecommerce website and will host the static data in Amazon S3. The company expects approximately 1,000 transactions per second (TPS) for GET and PUT requests in total. Logging must be enabled to track all requests and must be retained for auditing purposes. What is the MOST cost-effective solution?
+    options:
+     - text: Enable AWS CloudTrail logging for the S3 bucket-level action and create a lifecycle policy to move the data from the log bucket to Amazon S3 Glacier in 90 days.
+       is_correct: false
+     - text: Enable S3 server access logging and create a lifecycle policy to expire the data in 90 days.
+       is_correct: false
+     - text: Enable AWS CloudTrail logging for the S3 bucket-level action and create a lifecycle policy to expire the data in 90 days.
+       is_correct: false
+     - text: Enable S3 server access logging and create a lifecycle policy to move the data to Amazon S3 Glacier in 90 days.
+       is_correct: true
+    explanation: |
+      Server access logging records detailed request logs for S3 and moving logs to Glacier after 90 days via lifecycle policies balances audit retention needs and cost savings for long-term storage.
+
+      The incorrect options either use CloudTrail (which is not optimized for detailed S3 object access logs) or expire logs prematurely instead of archiving them for audits.
+
+  - id: q177
+    type: multiple_choice
+    question: A Developer decides to store highly secure data in Amazon S3 and wants to implement server-side encryption (SSE) with granular control of who can access the master key. Company policy requires that the master key be created, rotated, and disabled easily when needed, all for security reasons. Which solution should be used to meet these requirements?
+    options:
+     - text: SSE with Amazon S3 managed keys (SSE-S3).
+       is_correct: false
+     - text: SSE with AWS KMS managed keys (SSE-KMS).
+       is_correct: true
+     - text: SSE with AWS Secrets Manager.
+       is_correct: false
+     - text: SSE with customer-provided encryption keys.
+       is_correct: false
+    explanation: |
+      SSE-KMS uses AWS KMS to manage customer master keys (CMKs) with fine-grained IAM controls, rotation, and key disabling features that meet the requirement for key lifecycle management.
+
+      The incorrect options either rely on S3-managed keys (less control), Secrets Manager (not an SSE provider), or customer-provided keys (SSE-C) which place key management burden on the customer rather than KMS.
+
+  - id: q178
+    type: multiple_choice
+    question: A Developer is migrating an on-premises application to AWS. The application currently takes user uploads and saves them to a local directory on the server. All uploads must be saved and made immediately available to all instances in an Auto Scaling group. Which approach will meet these requirements?
+    options:
+     - text: Use Amazon EBS and configure the application AMI to use a snapshot of the same EBS instance on boot.
+       is_correct: false
+     - text: Use Amazon S3 and rearchitect the application so all uploads are placed in S3.
+       is_correct: true
+     - text: Use instance storage and share it between instances launched from the same Amazon Machine Image (AMI).
+       is_correct: false
+     - text: Use Amazon EBS and file synchronization software to achieve eventual consistency among the Auto Scaling group.
+       is_correct: false
+    explanation: |
+      Storing uploads in S3 makes them instantly available to all instances and is the scalable, durable approach for shared file storage in an Auto Scaling environment.
+
+      The incorrect options rely on instance-local or EBS snapshots/syncing which do not provide immediate shared availability across instances or introduce complexity and inconsistency.
+
+  - id: q179
+    type: multiple_choice
+    question: A Developer implemented a static website hosted in Amazon S3 that makes web service requests hosted in Amazon API Gateway and AWS Lambda. The site is showing an error that reads; 'No Access-Control-Allow-Origin' header is present on the requested resource. Origin 'null' is therefore not allowed access.' What should the Developer do to resolve this issue?
+    options:
+     - text: Enable cross-origin resource sharing (CORS) on the S3 bucket.
+       is_correct: false
+     - text: Enable cross-origin resource sharing (CORS) for the method in API Gateway.
+       is_correct: true
+     - text: Add the 'Access-Control-Request-Method' header to the request.
+       is_correct: false
+     - text: Add the 'Access-Control-Request-Headers' header to the request.
+       is_correct: false
+    explanation: |
+      Enabling CORS on the API Gateway method ensures the API includes the proper 'Access-Control-Allow-Origin' header in responses, allowing browser clients from the static site to make cross-origin requests.
+
+      The incorrect options either configure CORS in the wrong place (S3 bucket CORS affects assets served from S3) or suggest adding request headers which do not solve the missing response header from the API.
+
+  - id: q180
+    type: multiple_choice
+    question: A Developer is building an application that needs to store data in Amazon S3. Management requires that the data be encrypted before it is sent to Amazon S3 for storage. The encryption keys need to be managed by the Security team. Which approach should the Developer take to meet these requirements?
+    options:
+     - text: Implement server-side encryption using customer-provided encryption keys (SSE-C).
+       is_correct: false
+     - text: Implement server-side encryption by using a client-side master key.
+       is_correct: false
+     - text: Implement client-side encryption using an AWS KMS managed customer master key (CMK).
+       is_correct: true
+     - text: Implement client-side encryption using Amazon S3 managed keys.
+       is_correct: false
+    explanation: |
+      Client-side encryption with a KMS-managed CMK allows the Security team to manage keys while ensuring data is encrypted before transmission to S3, satisfying the requirement that encryption happens client-side and keys are controlled by security.
+
+      The incorrect options either place key management on S3/server-side (SSE-C requires you to supply keys each request), misuse server-side options, or use S3-managed keys which do not meet the requirement to manage keys by the Security team client-side.
+
+  - id: q181
+    type: multiple_choice
+    question: A Developer has written an Amazon Kinesis Data Streams application. As usage grows and traffic increases over time, the application is regularly receiving 'ProvisionedThroughputExceededException' error messages. Which steps should the Developer take to resolve the error? (Choose TWO)
+    options:
+     - text: Use Auto Scaling to scale the stream for better performance.
+       is_correct: false
+     - text: Increase the delay between the 'GetRecords' call and the 'PutRecords' call.
+       is_correct: false
+     - text: Increase the number of shards in the data stream.
+       is_correct: true
+     - text: Specify a shard iterator using the 'ShardIterator' parameter.
+       is_correct: false
+     - text: Implement exponential backoff on the 'GetRecords' call and the 'PutRecords' call.
+       is_correct: true
+    explanation: |
+      Increasing the number of shards increases capacity for reads and writes on the stream, and implementing exponential backoff reduces immediate retry pressure; together they address throttling errors effectively.
+
+      The incorrect options either reference unsupported auto scaling in this context, suggest unrelated parameter changes, or misuse shard iterator parameters that do not resolve throughput limits.
+
+  - id: q182
+    type: multiple_choice
+    question: A Developer is publishing critical log data to a log group in Amazon CloudWatch Logs, which was created 2 months ago. The Developer must encrypt the log data using an AWS KMS customer master key (CMK) so future data can be encrypted to comply with the company's security policy. How can the Developer meet this requirement?
+    options:
+     - text: Use the CloudWatch Logs console and enable the encrypt feature on the log group.
+       is_correct: false
+     - text: Use the AWS CLI 'create-log-group' command and specify the key Amazon Resource Name (ARN).
+       is_correct: false
+     - text: Use the KMS console and associate the CMK with the log group.
+       is_correct: false
+     - text: Use the AWS CLI 'associate-kms-key' command and specify the key Amazon Resource Name (ARN)
+       is_correct: true
+    explanation: |
+      The correct approach is to call 'aws logs associate-kms-key' (or use the console equivalent) to associate a KMS CMK ARN with an existing CloudWatch Logs log group so future log events are encrypted.
+
+      The incorrect options either reference creating a log group (not applicable to existing groups), or suggest using the KMS console directly which does not associate keys with log groups without the proper logs API call.
+
+  - id: q183
+    type: multiple_choice
+    question: A Developer has code running on Amazon EC2 instances that needs read-only access to an Amazon DynamoDB table. What is the MOST secure approach the Developer should take to accomplish this task?
+    options:
+     - text: Create a user access key for each EC2 instance with read-only access to DynamoDB. Place the keys in the code. Redeploy the code as keys rotate.
+       is_correct: false
+     - text: Use an IAM role with an AmazonDynamoDBReadOnlyAccess policy applied to the EC2 instances.
+       is_correct: true
+     - text: Run all code with only AWS account root user access keys to ensure maximum access to services.
+       is_correct: false
+     - text: Use an IAM role with Administrator access applied to the EC2 instance.
+       is_correct: false
+    explanation: |
+      Assigning an IAM role to EC2 instances with a least-privilege read-only policy is secure and avoids embedding long-lived credentials in code, enabling automatic credential rotation.
+
+      The incorrect options include insecure practices like hardcoding keys, using root credentials, or granting overly broad administrator rights, all of which violate security best practices.
+
+  - id: q184
+    type: multiple_choice
+    question: A Developer migrated a web application to AWS. As part of the migration, the Developer implemented an automated continuous integration/continuous improvement (CI/CD) process using a blue/green deployment. The deployment provisions new Amazon EC2 instances in an Auto Scaling group behind a new Application Load Balancer. After the migration was completed, the Developer began receiving complaints from users getting booted out of the system. The system also requires users to log in after every new deployment. How can these issues be resolved?
+    options:
+     - text: Use rolling updates instead of a blue/green deployment.
+       is_correct: false
+     - text: Externalize the user sessions to Amazon ElastiCache.
+       is_correct: true
+     - text: Turn on sticky sessions in the Application Load Balancer.
+       is_correct: false
+     - text: Use multicast to replicate session information.
+       is_correct: false
+    explanation: |
+      Externalizing sessions to a shared store like ElastiCache ensures session continuity across deployments and instances, preventing users from being logged out or losing session state during blue/green cutovers.
+
+      The incorrect options either do not solve the problem (rolling updates don't address session persistence), propose stickiness which ties sessions to instances and defeats scaling/replaceability, or suggest multicast which is not applicable in this environment.
+
+  - id: q185
+    type: multiple_choice
+    question: A Developer wants to insert a record into an Amazon DynamoDB table as soon as a new file is added to an Amazon S3 bucket. Which set of steps would be necessary to achieve this?
+    options:
+     - text: Create an event with Amazon CloudWatch Events that will monitor the S3 bucket and then insert the records into DynamoDB.
+       is_correct: false
+     - text: Configure an S3 event to invoke a Lambda function that inserts records into DynamoDB.
+       is_correct: true
+     - text: Create a Lambda function that will poll the S3 bucket and then insert the records into DynamoDB.
+       is_correct: false
+     - text: Create a cron job that will run at a scheduled time and insert the records into DynamoDB.
+       is_correct: false
+    explanation: |
+      Configuring S3 event notifications to trigger a Lambda function that performs the DynamoDB insert is event-driven, low-latency, and cost-effective for reacting to new objects.
+
+      The incorrect options rely on polling, scheduled jobs, or CloudWatch Events which are not the native S3-to-Lambda event integration and would add latency or complexity.
+
+  - id: q186
+    type: multiple_choice
+    question: A company has implemented AWS CodeDeploy as part of its cloud native CI/CD stack. The company enables automatic rollbacks while deploying a new version of a popular web application from in-place to Amazon EC2. What occurs if the deployment of the new version fails due to code regression?
+    options:
+     - text: The last known good deployment is automatically restored using the snapshot stored in Amazon S3.
+       is_correct: false
+     - text: CodeDeploy switches the Amazon Route 53 alias records back to the known good green deployment and terminates the failed blue deployment.
+       is_correct: false
+     - text: A new deployment of the last known version of the application is deployed with a new deployment ID.
+       is_correct: true
+     - text: AWS CodePipeline promotes the most recent deployment with a SUCCEEDED status to production.
+       is_correct: false
+    explanation: |
+      For in-place deployments, automatic rollback triggers a fresh deployment of the last known good application version (creating a new deployment record) to restore service to the previous state.
+
+      The incorrect options describe blue/green DNS swaps or S3 snapshot restores which are not how in-place automatic rollbacks operate in CodeDeploy.
+
+  - id: q187
+    type: multiple_choice
+    question: A Developer uses Amazon S3 buckets for static website hosting. The Developer creates one S3 bucket for the code and another S3 bucket for the assets, such as image and video files. Access is denied when a user attempts to access the assets bucket from the code bucket, with the website application showing a '403' error. How should the Developer solve this issue?
+    options:
+     - text: Create an IAM role and apply it to the assets bucket for the code bucket to be granted access.
+       is_correct: false
+     - text: Edit the bucket policy of the assets bucket to allow access from the code bucket.
+       is_correct: true
+     - text: Edit the bucket policy of the assets bucket to open access to all principals.
+       is_correct: false
+     - text: Change the code bucket to use AWS Lambda functions instead of static website hosting.
+       is_correct: false
+    explanation: |
+      Updating the assets bucket policy to permit requests originating from the static site (or the site's origin) allows cross-bucket access securely without opening the bucket publicly.
+
+      The incorrect options either propose inappropriate IAM roles for buckets, making the bucket publicly accessible (which is insecure), or unnecessary architectural changes.
+
+  - id: q188
+    type: multiple_choice
+    question: A company has implemented AWS CodePipeline to automate its release pipelines. The Development team is writing an AWS Lambda function what will send notifications for state changes of each of the actions in the stages. Which steps must be taken to associate the Lambda function with the event source?
+    options:
+     - text: Create a trigger that invokes the Lambda function from the Lambda console by selecting CodePipeline as the event source.
+       is_correct: false
+     - text: Create an event trigger and specify the Lambda function from the CodePipeline console.
+       is_correct: true
+     - text: Create an Amazon CloudWatch alarm that monitors status changes in Code Pipeline and triggers the Lambda function.
+       is_correct: false
+     - text: Create an Amazon CloudWatch Events rule that uses CodePipeline as an event source.
+       is_correct: false
+    explanation: |
+      You can configure notifications or event triggers for CodePipeline from the CodePipeline console to invoke a Lambda function when pipeline state changes occur, making the direct integration straightforward.
+
+      The incorrect options either reference a Lambda console trigger selection that isn't how CodePipeline integrates or suggest CloudWatch alarms/rules that are not the typical path for CodePipeline event notifications.
+
+  - id: q189
+    type: multiple_choice
+    question: A Developer has built an application running on AWS Lambda using AWS Serverless Application Model (AWS SAM). What is the correct order of execution to successfully deploy the application?
+    options:
+     - text: 1. Build the SAM template in Amazon EC2. 2. Package the SAM template to Amazon EBS storage. 3. Deploy the SAM template from Amazon EBS.
+       is_correct: false
+     - text: 1. Build the SAM template locally. 2. Package the SAM template onto Amazon S3. 3. Deploy the SAM template from Amazon S3.
+       is_correct: true
+     - text: 1. Build the SAM template locally. 2. Deploy the SAM template from Amazon S3. 3. Package the SAM template for use.
+       is_correct: false
+     - text: 1. Build the SAM template locally. 2. Package the SAM template from AWS CodeCommit. 3. Deploy the SAM template to CodeCommit.
+       is_correct: false
+    explanation: |
+      The SAM workflow builds local artifacts, packages them (uploading to S3), and then deploys the packaged template from S3, which is the standard SAM deployment sequence.
+
+      The incorrect options describe nonsensical or out-of-order steps such as using EBS instead of S3 or deploying before packaging.
+
+  - id: q190
+    type: multiple_choice
+    question: A company wants to migrate an imaging service to Amazon EC2 while following security best practices. The images are sourced and read from a non-public Amazon S3 bucket. What should a Developer do to meet these requirements?
+    options:
+     - text: Create an IAM user with read-only permissions for the S3 bucket. Temporarily store the user credentials in the Amazon EBS volume of the EC2 instance.
+       is_correct: false
+     - text: Create an IAM user with read-only permissions for the S3 bucket. Temporarily store the user credentials in the user data of the EC2 instance.
+       is_correct: false
+     - text: Create an EC2 service role with read-only permissions for the S3 bucket. Attach the role to the EC2 instance.
+       is_correct: true
+     - text: Create an S3 service role with read-only permissions for the S3 bucket. Attach the role to the EC2 instance.
+       is_correct: false
+    explanation: |
+      Attaching an IAM instance role to the EC2 instance grants temporary credentials and follows security best practices without hardcoding or storing static credentials on the instance.
+
+      The incorrect options involve embedding long-lived IAM user credentials in instance storage or user data, or reference non-existent S3 service roles, which are insecure or invalid.
+
+  - id: q191
+    type: multiple_choice
+    question: A Development team wants to immediately build and deploy an application whenever there is a change to the source code. Which approaches could be used to trigger the deployment? (Choose TWO)
+    options:
+     - text: Store the source code in an Amazon S3 bucket. Configure AWS CodePipeline to start whenever a file in the bucket changes.
+       is_correct: true
+     - text: Store the source code in an encrypted Amazon EBS volume. Configure AWS CodePipeline to start whenever a file in the volume changes.
+       is_correct: false
+     - text: Store the source code in an AWS CodeCommit repository. Configure AWS CodePipeline to start whenever a change is committed to the repository.
+       is_correct: true
+     - text: Store the source code in an Amazon S3 bucket. Configure AWS CodePipeline to start every 15 minutes.
+       is_correct: false
+     - text: Store the source code in an Amazon EC2 instance's ephemeral storage. Configure the instance to start AWS CodePipeline whenever there are changes to the source code.
+       is_correct: false
+    explanation: |
+      CodePipeline can be triggered by changes in S3 or commits to CodeCommit; both provide immediate, event-driven triggers for automated build and deployment.
+
+      The incorrect options rely on ephemeral or inappropriate storage (EBS, EC2 local storage) or polling every 15 minutes which is not immediate nor efficient.
+
+  - id: q192
+    type: multiple_choice
+    question: An application ingests a large number of small messages and stores them in a database. The application uses AWS Lambda. A Development team is making changes to the application's processing logic. In testing, it is taking more than 15 minutes to process each message. The team is concerned the current backend may time out. Which changes should be made to the backend system to ensure each message is processed in the MOST scalable way?
+    options:
+     - text: Add the messages to an Amazon SQS queue. Set up and Amazon EC2 instance to poll the queue and process messages as they arrive.
+       is_correct: false
+     - text: Add the messages to an Amazon SQS queue. Set up Amazon EC2 instances in an Auto Scaling group to poll the queue and process the messages as they arrive.
+       is_correct: true
+     - text: Create a support ticket to increase the Lambda timeout to 60 minutes to allow for increased processing time.
+       is_correct: false
+     - text: Change the application to directly insert the body of the message into an Amazon RDS database.
+       is_correct: false
+    explanation: |
+      Moving processing to EC2 instances in an Auto Scaling group that poll SQS provides scalable, long-running processing for messages that exceed Lambda's execution limits, making it the most scalable approach.
+
+      The incorrect options either use a single EC2 instance (single point of failure), request impractical Lambda time increases, or suggest direct DB insertion which doesn't address processing time or scalability.
+
+  - id: q193
+    type: multiple_choice
+    question: A Software Engineer developed an AWS Lambda function in Node.js to do some CPU-intensive data processing. With the default settings, the Lambda function takes about 5 minutes to complete. Which approach should a Developer take to increase the speed of completion?
+    options:
+     - text: Instead of using Node.js, rewrite the Lambda function using Python.
+       is_correct: false
+     - text: Instead of packaging the libraries in the 'ZIP' file with the function, move them to a Lambda layer and use the layer with the function.
+       is_correct: false
+     - text: Allocate the maximum available CPU units to the function.
+       is_correct: false
+     - text: Increase the available memory to the function.
+       is_correct: true
+    explanation: |
+      Increasing Lambda memory also increases CPU allocation proportionally, which speeds up CPU-bound Node.js processing without changing the runtime or code.
+
+      The incorrect options either recommend changing language (not necessary), moving libraries to layers (helps packaging, not CPU), or an unsupported explicit CPU setting separate from memory.
+
+  - id: q194
+    type: multiple_choice
+    question: An online retail company has deployed a serverless application with AWS Lambda, Amazon API Gateway, Amazon S3, and Amazon DynamoDB using AWS CloudFormation. The company rolled out a new release with major upgrades to the Lambda function and deployed the release to production. Subsequently, the application stopped working. Which solution should bring the application back up as quickly as possible?
+    options:
+     - text: Redeploy the application on Amazon EC2 so the Lambda function can resolve dependencies.
+       is_correct: false
+     - text: Migrate DynamoDB to Amazon RDS and redeploy the Lambda function.
+       is_correct: false
+     - text: Roll back the Lambda function to the previous version.
+       is_correct: true
+     - text: Deploy the latest Lambda function in a different Region.
+       is_correct: false
+    explanation: |
+      Rolling back the Lambda function to the previous version quickly restores the previous working code and is the fastest way to recover from a faulty release.
+
+      The incorrect options propose heavy migrations or region changes that are slow and unnecessary compared to a simple rollback.
+
+  - id: q195
+    type: multiple_choice
+    question: A Developer is writing an application that will run on Amazon EC2 instances in an Auto Scaling group. The Developer wants to externalize session state to support the application. Which services will meet these needs? (Choose TWO)
+    options:
+     - text: Amazon DynamoDB.
+       is_correct: true
+     - text: Amazon Cognito.
+       is_correct: false
+     - text: Amazon ElastiCache.
+       is_correct: true
+     - text: Amazon EBS.
+       is_correct: false
+     - text: Amazon SQS.
+       is_correct: false
+    explanation: |
+      Both Amazon DynamoDB and ElastiCache provide shared storage for session state: DynamoDB offers durable storage while ElastiCache provides low-latency in-memory session storage for fast access.
+
+      The incorrect options either are not suitable for shared session state (EBS is instance-attached, SQS is a queue) or are authentication services (Cognito) not intended as a session store.
+
+  - id: q196
+    type: multiple_choice
+    question: A Developer has a legacy application that is hosted on-premises. Other applications hosted on AWS depend on the on-premises application for proper functioning. In case of any application errors, the Developer wants to be able to use Amazon CloudWatch to monitor and troubleshoot all applications from one place. How can the Developer accomplish this?
+    options:
+     - text: Install an AWS SDK on the on-premises server to automatically send logs to CloudWatch.
+       is_correct: false
+     - text: Download the CloudWatch agent to the on-premises server. Configure the agent to use IAM user credentials with permissions for CloudWatch.
+       is_correct: true
+     - text: Upload log files from the on-premises server to Amazon S3 and have CloudWatch read the files.
+       is_correct: false
+     - text: Upload log files from the on-premises server to an Amazon EC2 instance and have the instance forward the logs to CloudWatch.
+       is_correct: false
+    explanation: |
+      Installing and configuring the CloudWatch agent on-premises allows logs and metrics to be sent securely to CloudWatch for centralized monitoring, using appropriate IAM credentials.
+
+      The incorrect options either suggest ad-hoc uploading to S3 or EC2 as intermediate steps or reference SDK installation without the agent, which is not the recommended centralized monitoring approach.
+
+  - id: q197
+    type: multiple_choice
+    question: A company is developing an application that will be accessed through the Amazon API Gateway REST API. Registered users should be the only ones who can access certain resources of this API. The token being used should expire automatically and needs to be refreshed periodically. How can a Developer meet these requirements?
+    options:
+     - text: Create an Amazon Cognito identity pool, configure the Amazon Cognito Authorizer in API Gateway, and use the temporary credentials generated by the identity pool.
+       is_correct: false
+     - text: Create and maintain a database record for each user with a corresponding token and use an AWS Lambda authorizer in API Gateway.
+       is_correct: false
+     - text: Create an Amazon Cognito user pool, configure the Cognito Authorizer in API Gateway, and use the identity or access token.
+       is_correct: true
+     - text: Create an IAM user for each API user, attach an invoke permissions policy to the API, and use an IAM authorizer in API Gateway.
+       is_correct: false
+    explanation: |
+      Cognito user pools provide managed user authentication with tokens that expire and can be refreshed, and integrating a Cognito authorizer with API Gateway enforces authenticated access to resources.
+
+      The incorrect options either misuse identity pools (which are for AWS credentials), propose maintaining a custom token DB (more work and less secure), or suggest creating IAM users per API user which is impractical.
+
+  - id: q198
+    type: multiple_choice
+    question: A Developer is working on a serverless project based in Java. Initial testing shows a cold start takes about 8 seconds on average for AWS Lambda functions. What should the Developer do to reduce the cold start time? (Choose TWO)
+    options:
+     - text: Add the Spring Framework to the project and enable dependency injection.
+       is_correct: false
+     - text: Reduce the deployment package by including only needed modules from the AWS SDK for Java.
+       is_correct: true
+     - text: Increase the memory allocation setting for the Lambda function.
+       is_correct: true
+     - text: Increase the timeout setting for the Lambda function.
+       is_correct: false
+     - text: Change the Lambda invocation mode from synchronous to asynchronous.
+       is_correct: false
+    explanation: |
+      Reducing package size minimizes cold start initialization work, and increasing memory can reduce cold start latency since it often increases CPU resources, both helping to shorten cold starts.
+
+      The incorrect options either add heavy frameworks (Spring increases cold starts), change timeout or invocation type which do not reduce cold start time.
+
+  - id: q199
+    type: multiple_choice
+    question: A Developer is leveraging a Border Gateway Protocol (BGP)-based AWS VPN connection to connect from on-premises to Amazon EC2 instances in the Developer's account. The Developer is able to access an EC2 instance in subnet A, but is unable to access an EC2 instance in subnet B in the same VPC. Which logs can the Developer use to verify whether the traffic is reaching subnet B?
+    options:
+     - text: VPN logs.
+       is_correct: false
+     - text: BGP log.
+       is_correct: false
+     - text: VPC Flow Logs.
+       is_correct: true
+     - text: AWS CloudTrail logs.
+       is_correct: false
+    explanation: |
+      VPC Flow Logs capture IP traffic information for network interfaces in the VPC and can be used to verify whether packets are reaching resources in subnet B.
+
+      The incorrect options either refer to VPN/BGP logs which are less granular for intra-VPC traffic, or CloudTrail which logs API calls rather than network flow.
+
+  - id: q200
+    type: multiple_choice
+    question: A Developer has created a new AWS IAM user that has 's3:putObject' permission to write to a specific Amazon S3 bucket. This S3 bucket uses server-side encryption with AWS KMS managed keys (SSE-KMS) as the default encryption. Using the access key and secret key of the IAM user, the application received an access denied error when calling the 'PutObject' API. How can this issue be resolved?
+    options:
+     - text: Update the policy of the IAM user to allow the 's3:EncryptionConfiguration' action.
+       is_correct: false
+     - text: Update the bucket policy of the S3 bucket to allow the IAM user to upload objects.
+       is_correct: false
+     - text: Update the policy of the IAM user to allow the 'kms:GenerateDataKey' action.
+       is_correct: true
+     - text: Update the ACL of the S3 bucket to allow the IAM user to upload objects.
+       is_correct: false
+    explanation: |
+      When a bucket uses SSE-KMS, the caller needs permission to use the KMS key for envelope key operations such as 'kms:GenerateDataKey'; granting this permission to the IAM user resolves the access denied error for PutObject.
+
+      The incorrect options either reference non-existent S3 actions, rely on ACLs (not sufficient for KMS access), or assume changing the bucket policy alone will grant KMS permissions, which must also be allowed on the KMS key.

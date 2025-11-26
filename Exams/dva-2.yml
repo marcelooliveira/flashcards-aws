@@ -1,0 +1,1008 @@
+questions:
+  - id: q51
+    type: multiple_choice
+    question: A Developer is asked to implement a caching layer in front of Amazon RDS. Cached content is expensive to regenerate in case of service failure. Which implementation below would work while maintaining maximum uptime?
+    options:
+     - text: Implement Amazon ElastiCache Redis in Cluster Mode.
+       is_correct: true
+     - text: Install Redis on an Amazon EC2 instance.
+       is_correct: false
+     - text: Implement Amazon ElastiCache Memcached.
+       is_correct: false
+     - text: Migrate the database to Amazon Redshift.
+       is_correct: false
+    explanation: |
+      Redis in ElastiCache Cluster Mode provides a managed, highly available in-memory cache that supports clustering and replication, making it suitable for cached content that is costly to regenerate while maximizing uptime.
+
+      The incorrect options either rely on self-managed Redis (increasing operational risk), use Memcached which lacks persistence and advanced clustering features, or suggest migrating to Redshift which is not an in-memory cache solution and does not meet the uptime/caching requirements.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q52
+    type: multiple_choice
+    question: A company has written a Java AWS Lambda function to be triggered whenever a user uploads an image to an Amazon S3 bucket. The function converts the original image to several different formats and then copies the resulting images to another Amazon S3 bucket. The Developers find that no images are being copied to the second Amazon S3 bucket. They have tested the code on an Amazon EC2 instance with 1GB of RAM, and it takes an average of 500 seconds to complete. What is the MOST likely cause of the problem?
+    options:
+     - text: The Lambda function has insufficient memory and needs to be increased to 1 GB to match the Amazon EC2 instance.
+       is_correct: true
+     - text: Files need to be copied to the same Amazon S3 bucket for processing, so the second bucket needs to be deleted.
+       is_correct: false
+     - text: Lambda functions have a maximum execution limit of 15 minutes, therefore the function is not completing.
+       is_correct: false
+     - text: There is a problem with the Java runtime for Lambda, and the function needs to be converted to node.js.
+       is_correct: false
+    explanation: |
+      The most likely cause is that the Lambda function needs more memory because processing large images is memory and CPU intensive; increasing memory also increases CPU and can reduce execution time to complete the processing within Lambda limits.
+
+      The incorrect options either propose unnecessary or irrelevant changes (deleting buckets, switching runtimes) or misstate the execution limit: Lambda has a 15-minute limit which should be sufficient for 500 seconds, so those options do not address the core resource issue.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q53
+    type: multiple_choice
+    question: A web application is using Amazon Kinesis Streams for clickstream data that may not be consumed for up to 12 hours. How can the Developer implement encryption at rest for data within the Kinesis Streams?
+    options:
+     - text: Enable SSL connections to Kinesis.
+       is_correct: false
+     - text: Use Amazon Kinesis Consumer Library.
+       is_correct: false
+     - text: Encrypt the data once it is at rest with a Lambda function.
+       is_correct: false
+     - text: Enable server-side encryption in Kinesis Streams.
+       is_correct: true
+    explanation: |
+      Enabling server-side encryption in Kinesis Streams ensures data at rest is encrypted using AWS KMS keys, protecting stored records while they remain in the stream for long retention periods.
+
+      The incorrect options either address transport security (SSL), client-side consumption libraries (KCL), or ad-hoc lambda processing which is less secure and more complex than built-in server-side encryption.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q54
+    type: multiple_choice
+    question: A Developer is creating a mobile application with a limited budget. The solution requires a scalable service that will enable customers to sign up and authenticate into the mobile application while using the organization's current SAML 2.0 identity provider. Which AWS service should be used to meet these requirements?
+    options:
+     - text: AWS Lambda.
+       is_correct: false
+     - text: Amazon Cognito.
+       is_correct: true
+     - text: AWS IAM.
+       is_correct: false
+     - text: Amazon EC2.
+       is_correct: false
+    explanation: |
+      Amazon Cognito supports federated authentication including SAML 2.0, provides user sign-up and sign-in features, and scales without significant operational overhead, making it cost-effective for mobile apps.
+
+      The incorrect options either are compute services (Lambda, EC2) or IAM which is for AWS resource access and not designed as a user-facing authentication service with SAML federation features.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q55
+    type: multiple_choice
+    question: A company wants to migrate its web application to AWS and leverage Auto Scaling to handle peak workloads. The Solutions Architect determined that the best metric for an Auto Scaling event is the number of concurrent users. Based on this information, what should the Developer use to autoscale based on concurrent users?
+    options:
+     - text: An Amazon SNS topic to be triggered when a concurrent user threshold is met.
+       is_correct: false
+     - text: An Amazon Cloudwatch NetworkIn metric.
+       is_correct: false
+     - text: Amazon CloudFront to leverage AWS Edge Locations.
+       is_correct: false
+     - text: A Custom Amazon CloudWatch metric for concurrent users.
+       is_correct: true
+    explanation: |
+      Using a custom CloudWatch metric allows the application to publish the number of concurrent users, which Auto Scaling can consume to make scaling decisions tailored to the actual user count.
+
+      The incorrect options either use unrelated services (SNS, CloudFront) or a generic network metric that does not directly represent concurrent users, so they will not provide precise scaling triggers based on actual user concurrency.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q56
+    type: multiple_choice
+    question: A Developer has written a serverless application using multiple AWS services. The business logic is written as a Lambda function which has dependencies on third-party libraries. The Lambda function endpoints will be exposed using Amazon API Gateway. The Lambda function will write the information to Amazon DynamoDB. The Developer is ready to deploy the application but must have the ability to rollback. How can this deployment be automated, based on these requirements?
+    options:
+     - text: Deploy using Amazon Lambda API operations to create the Lambda function by providing a deployment package.
+       is_correct: false
+     - text: Use an AWS CloudFormation template and use CloudFormation syntax to define the Lambda function resource in the template.
+       is_correct: false
+     - text: Use syntax conforming to the Serverless Application Model in the AWS CloudFormation template to define the Lambda function resource.
+       is_correct: true
+     - text: Create a bash script which uses AWS CLI to package and deploy the application.
+       is_correct: false
+    explanation: |
+      The Serverless Application Model (SAM) extends CloudFormation with serverless resource types and supports automated packaging, deployment, and easy rollbacks, which fits the need for automation plus rollback capability.
+
+      The incorrect options either use lower-level manual approaches (direct Lambda API or shell scripts) or plain CloudFormation without SAM conveniences, making packaging, deployment, and rollback more cumbersome.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q57
+    type: multiple_choice
+    question: A game stores user game data in an Amazon DynamoDB table. Individual users should not have access to other users' game data. How can this be accomplished?
+    options:
+     - text: Encrypt the game data with individual user keys.
+       is_correct: false
+     - text: Restrict access to specific items based on certain primary key values.
+       is_correct: true
+     - text: Stage data in SQS queues to inject metadata before accessing DynamoDB.
+       is_correct: false
+     - text: Read records from DynamoDB and discard irrelevant data client-side.
+       is_correct: false
+    explanation: |
+      Restricting access based on primary key values in IAM policies or application logic enforces per-user access control at the item level, ensuring users can only access their own data.
+
+      The incorrect options either add unnecessary complexity (per-user encryption keys, SQS staging) or leave security to client-side filtering, which does not prevent unauthorized reads.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q58
+    type: multiple_choice
+    question: A Developer is creating a web application that requires authentication, but also needs to support guest access to provide users limited access without having to authenticate. What service can provide support for the application to allow guest access?
+    options:
+     - text: IAM temporary credentials using AWS STS.
+       is_correct: false
+     - text: Amazon Directory Service.
+       is_correct: false
+     - text: Amazon Cognito with unauthenticated access enabled.
+       is_correct: true
+     - text: IAM with SAML integration
+       is_correct: false
+    explanation: |
+      Amazon Cognito supports unauthenticated (guest) identities alongside authenticated users, allowing limited access without full sign-in while integrating with identity providers for authenticated flows.
+
+      The incorrect options are not designed for guest user scenarios: IAM/STs and Directory Service are for AWS resource access or enterprise directories, and SAML via IAM is for federated authenticated access rather than guest access.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q59
+    type: multiple_choice
+    question: Given the source code for an AWS Lambda function in the local 'store.py' containing a handler function called 'get_store' and the following AWS CloudFormation template. What should be done to prepare the template so that it can be deployed using the AWS CLI command 'aws cloudformation deploy'
+    img: images/question59.jpg
+    options:
+     - text: Use AWS CloudFormation compile to base64 encode and embed the source file into a modified CloudFormation template.
+       is_correct: false
+     - text: Use AWS CloudFormation package to upload the source code to an Amazon S3 bucket and produce a modified CloudFormation template.
+       is_correct: true
+     - text: Use AWS Lambda zip to package the source file together with the CloudFormation template and deploy the resulting zip archive.
+       is_correct: false
+     - text: Use AWS Serverless 'create-package' to embed the source file directly into the existing CloudFormation template.
+       is_correct: false
+    explanation: |
+      The 'aws cloudformation package' command uploads local artifacts like Lambda code to S3 and outputs a transformed template that references the S3 locations, which is required before running 'aws cloudformation deploy'.
+
+      The incorrect options describe unsupported or unnecessary steps: there is no generic 'CloudFormation compile' or 'create-package' command, and zipping the template together with code is not the standard deploy workflow.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q60
+    type: multiple_choice
+    question: "A Developer has created a large Lambda function, and deployment is failing with the following error; 'ClientError: An error occurred (InvalidParameterValueException) when calling the CreateFunction operation: Unzipped size must be smaller than XXXXXXXXX bytes.', where 'XXXXXXXXX' is the current Lambda limit. What can the Developer do to fix this problem?"
+    options:
+     - text: Submit a limit increase request to AWS Support to increase the function to the size needed.
+       is_correct: false
+     - text: Use a compression algorithm that is more efficient than 'ZIP'
+       is_correct: false
+     - text: Break the function into multiple smaller Lambda functions.
+       is_correct: true
+     - text: ZIP the 'ZIP' file twice to compress it further.
+       is_correct: false
+    explanation: |
+      Breaking the logic into multiple smaller Lambda functions reduces package size, fits within Lambda limits, and improves maintainability and deployment reliability compared to trying to circumvent size limits.
+
+      The incorrect options propose impractical or unsupported solutions: increasing the limit is not typically available for that limit, changing compression or double-zipping does not reliably solve the unzipped size constraint, and are not recommended.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q61
+    type: multiple_choice
+    question: A serverless application uses an API Gateway and AWS Lambda. Where should the Lambda function store its session information across function calls?
+    options:
+     - text: In an Amazon DynamoDB table.
+       is_correct: true
+     - text: In an Amazon SQS queue.
+       is_correct: false
+     - text: In the local filesystem.
+       is_correct: false
+     - text: In an SQLite session table using 'CDSQLITE_ENABLE_SESSION'
+       is_correct: false
+    explanation: |
+      Persistent session state for serverless functions belongs in an external durable store like DynamoDB, which provides low-latency access and durability across invocations.
+
+      The incorrect options are unsuitable: SQS is a message queue not a session store, the Lambda local filesystem is ephemeral and not shared across invocations, and embedding SQLite with custom flags is not a managed serverless approach.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q62
+    type: multiple_choice
+    question: An application reads data from an Amazon DynamoDB table. Several times a day, for a period of 15 seconds, the application receives multiple 'ProvisionedThroughputExceeded' errors. How should this exception be handled?
+    options:
+     - text: Create a new global secondary index for the table to help with the additional requests.
+       is_correct: false
+     - text: Retry the failed read requests with exponential backoff.
+       is_correct: true
+     - text: Immediately retry the failed read requests.
+       is_correct: false
+     - text: Use the DynamoDB 'UpdateItem' API to increase the provisioned throughput capacity of the table.
+       is_correct: false
+    explanation: |
+      Implementing exponential backoff for retries reduces immediate retry storms and is a best practice to handle transient ProvisionedThroughputExceeded errors, allowing requests to succeed when capacity becomes available.
+
+      The incorrect options either do not address transient throttling (immediate retries make the problem worse), or propose structural changes or indexes that may not be required or appropriate for short transient spikes.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q63
+    type: multiple_choice
+    question: A Developer is writing a Linux-based application to run on AWS Elastic Beanstalk. Application requirements state that the application must maintain full capacity during updates while minimizing cost. Which type of Elastic Beanstalk deployment policy should the Developer specify for the environment?
+    options:
+     - text: Immutable.
+       is_correct: false
+     - text: Rolling.
+       is_correct: false
+     - text: All at Once.
+       is_correct: false
+     - text: Rolling with additional batch.
+       is_correct: true
+    explanation: |
+      Rolling with additional batch keeps full capacity during updates by provisioning an extra batch during deployment while avoiding the higher cost of creating a full immutable environment, thus meeting both capacity and cost constraints.
+
+      The incorrect options either reduce capacity during updates (Rolling, All at Once) or are more expensive than needed (Immutable creates a parallel environment) and therefore do not meet both requirements.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q64
+    type: multiple_choice
+    question: When writing a Lambda function, what is the benefit of instantiating AWS clients outside the scope of the handler?
+    options:
+     - text: Legibility and stylistic convention.
+       is_correct: false
+     - text: Taking advantage of connection re-use.
+       is_correct: true
+     - text: Better error handling.
+       is_correct: false
+     - text: Creating a new instance per invocation.
+       is_correct: false
+    explanation: |
+      Instantiating clients outside the handler enables connection reuse across invocations in the same execution environment, reducing latency and cold-start overhead by avoiding repeated client initialization.
+
+      The incorrect options either misstate the benefit (legibility or error handling) or describe the opposite behavior (creating new instances per invocation is what we avoid by instantiating externally).
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q65
+    type: multiple_choice
+    question: A current architecture uses many Lambda functions invoking one another as large state machine. The coordination of this state machine is legacy custom code that breaks easily. Which AWS Service can help refactor and manage the state machine?
+    options:
+     - text: AWS Data Pipeline.
+       is_correct: false
+     - text: AWS SNS with AWS SQS.
+       is_correct: false
+     - text: Amazon Elastic MapReduce.
+       is_correct: false
+     - text: AWS Step Functions.
+       is_correct: true
+    explanation: |
+      AWS Step Functions provides a managed workflow orchestration service with state management, retries, and visual debugging, making it suitable to replace fragile custom state machine code.
+
+      The incorrect services are for ETL, messaging, or batch processing and do not provide the built-in orchestration semantics and state management that Step Functions offers for coordinating serverless workflows.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q66
+    type: multiple_choice
+    question: A company is developing a new online game that will run on top of Amazon ECS. Four distinct Amazon ECS services will be part of the architecture, each requiring specific permissions to various AWS services. The company wants to optimize the use of the underlying Amazon EC2 instances by bin packing the containers based on memory reservation. Which configuration would allow the Development team to meet these requirements MOST securely?
+    options:
+     - text: Create a new Identity and Access Management (IAM) instance profile containing the required permissions for the various ECS services, then associate that instance role with the underlying EC2 instances.
+       is_correct: false
+     - text: Create four distinct IAM roles, each containing the required permissions for the associated ECS service, then configure each ECS service to reference the associated IAM role.
+       is_correct: false
+     - text: Create four distinct IAM roles, each containing the required permissions for the associated ECS service, then, create an IAM group and configure the ECS cluster to reference that group.
+       is_correct: false
+     - text: Create four distinct IAM roles, each containing the required permissions for the associated ECS service, then configure each ECS task definition to referenсe the associated IAM role.
+       is_correct: true
+    explanation: |
+      Defining distinct IAM roles for each ECS task and referencing them in task definitions follows the principle of least privilege and allows containers to run with specific permissions regardless of the underlying EC2 instance role, while supporting bin packing.
+
+      The incorrect options either grant broad instance-level permissions (instance profile) or misuse IAM groups and service-level role assignment that do not provide per-task least-privilege control.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q67
+    type: multiple_choice
+    question: A Developer must re-implement the business logic for an order fulfilment system. The business logic has to make requests to multiple vendors to decide where to purchase an item. The whole process can take up to a week to complete. What is the MOST efficient and SIMPLEST way to implement a system that meets these requirements?
+    options:
+     - text: Use AWS Step Functions to execute parallel Lambda functions, and join the results.
+       is_correct: true
+     - text: Create an AWS SQS for each vendor, poll the queue from a worker instance, and joint the results.
+       is_correct: false
+     - text: Use AWS Lambda to asynchronously call a Lambda function for each vendor, and join the results.
+       is_correct: false
+     - text: Use Amazon CloudWatch Events to orchestrate the Lambda functions.
+       is_correct: false
+    explanation: |
+      AWS Step Functions can manage long-running workflows, execute tasks in parallel, provide durable state, and handle retries and waits, which makes it ideal for a process that can span days.
+
+      The incorrect options either build custom orchestration with queues and workers or rely on asynchronous Lambda invocations and scheduled events, which lack durable, built-in state management and orchestration simplicity that Step Functions provide.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q68
+    type: multiple_choice
+    question: A mobile app stores blog posts in an Amazon DynamoDB table. Millions of posts are added every day, and each post represents a single item in the table. The mobile app requires only recent posts. Any post that is older than 48 hours can be removed. What is the MOST cost-effective way to delete posts that are older than 48 hours?
+    options:
+     - text: For each item, add a new attribute of type 'String' that has a timestamp that is set to the blog post creation time. Create a script to find old posts with a table scan and remove posts that are older than 48 hours by using the 'BatchWriteItem' API operation. Schedule a cron job on an Amazon EC2 instance once an hour to start the script.
+       is_correct: false
+     - text: For each item, add a new attribute of type 'String' that has a timestamp that is set to the blog post creation time. Create a script to find old posts with a table scan and remove posts that are older than 48 hours by using the 'BatchWriteItem' API operation. Place the script in a container image. Schedule an Amazon Elastic Container Service (Amazon ECS) task on AWS Fargate that invokes the container every 5 minutes.
+       is_correct: false
+     - text: For each item, add a new attribute of type 'Date' that has a timestamp that is set to 48 hours after the blog post creation time. Create a Global Secondary Index (GSI) that uses the new attribute as a sort key. Create an AWS Lambda function that references the GSI and removes expired items by using the 'BatchWriteItem' API operation. Schedule the function with an Amazon CloudWatch event every minute.
+       is_correct: false
+     - text: For each item, add a new attribute of type 'Number' that has a timestamp that is set to 48 hours after the blog post creation time. Configure the DynamoDB table with a TTL that references the new attribute.
+       is_correct: true
+    explanation: |
+      Using DynamoDB Time To Live (TTL) with a numeric timestamp attribute automatically and cost-effectively removes items after 48 hours without extra compute or scanning, which is ideal for high-volume ephemeral data.
+
+      The incorrect options involve manual scanning, scheduled jobs, or additional infrastructure which incur cost and complexity compared to the built-in TTL feature.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q69
+    type: multiple_choice
+    question: A Developer is receiving HTTP '400'; 'ThrottlingException' errors intermittently when calling the Amazon CloudWatch API. When a call fails, no data is retrieved. What best practice should first be applied to address this issue?
+    options:
+     - text: Contact AWS Support for a limit increase.
+       is_correct: false
+     - text: Use the AWS CLI to get the metrics.
+       is_correct: false
+     - text: Analyze the applications and remove the API call.
+       is_correct: false
+     - text: Retry the call with exponential backoff.
+       is_correct: true
+    explanation: |
+      Implementing retries with exponential backoff is the recommended first response to transient throttling errors, reducing immediate retry storms and allowing the service to recover.
+
+      The incorrect options either delay addressing the transient nature of throttling, suggest irrelevant tooling, or propose removing calls without diagnosing the problem, none of which are best-first practices.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q70
+    type: multiple_choice
+    question: An application is real-time processing millions of events that are received through an API. What service could be used to allow multiple consumers to process the data concurrently and MOST cost-effectively?
+    options:
+     - text: Amazon SNS with fanout to an SQS queue for each application.
+       is_correct: false
+     - text: Amazon SNS with fanout to an SQS FIFO (first-in, first-out) queue for each application.
+       is_correct: false
+     - text: Amazon Kinesis Firehose.
+       is_correct: false
+     - text: Amazon Kinesis Streams.
+       is_correct: true
+    explanation: |
+      Amazon Kinesis Streams supports high-throughput ingestion with ordered shards and multiple consumers that can read in parallel, making it suitable and cost-effective for real-time processing at scale.
+
+      The incorrect options either target different use cases (Firehose for delivery to destinations, SNS/SQS fanout with potential scaling limits or ordering constraints) and are not as well-suited for massive parallel real-time stream processing.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q71
+    type: multiple_choice
+    question: Where should the 'appspec.yml' file be placed in order for AWS CodeDeploy to work?
+    options:
+     - text: In the root of the application source code directory structure.
+       is_correct: true
+     - text: In the 'bin' folder along with all the complied code.
+       is_correct: false
+     - text: In an S3 bucket.
+       is_correct: false
+     - text: In the same folder as the application configuration files.
+       is_correct: false
+    explanation: |
+      CodeDeploy expects 'appspec.yml' at the root of the application bundle so it can find the deployment hooks and file mappings when executing a deployment.
+
+      The incorrect options place the file in subfolders, in S3 directly, or with other config files, which prevents CodeDeploy from locating the file in the expected root location of the application package.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q72
+    type: multiple_choice
+    question: An application will ingest data at a very high throughput from many sources and must store the data in an Amazon S3 bucket. Which service would BEST accomplish this task?
+    options:
+     - text: Amazon Kinesis Firehose.
+       is_correct: true
+     - text: Amazon S3 Acceleration Transfer.
+       is_correct: false
+     - text: Amazon SQS.
+       is_correct: false
+     - text: Amazon SNS.
+       is_correct: false
+    explanation: |
+      Kinesis Firehose is a managed service designed for high-throughput ingestion and continuous delivery to destinations like S3, providing buffering, scaling, and format conversion with minimal management.
+
+      The incorrect options are either transfer acceleration tools or messaging services not specifically designed to manage high-throughput streaming ingestion and delivery directly into S3 as Firehose does.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q73
+    type: multiple_choice
+    question: A Developer is creating a Lambda function and will be using external libraries that are not included in the standard Lambda libraries. What action would minimize the Lambda compute time consumed?
+    options:
+     - text: Install the dependencies and external libraries at the beginning of the Lambda function.
+       is_correct: false
+     - text: Create a Lambda deployment package that includes the external libraries.
+       is_correct: false
+     - text: Copy the external libraries to Amazon S3, and reference the external libraries to the S3 location.
+       is_correct: false
+     - text: Install the external libraries in Lambda Layer to be available to all Lambda functions.
+       is_correct: true
+    explanation: |
+      Using Lambda Layers to provide external libraries reduces deployment package size and cold-start time for functions by separating shared dependencies, improving compute efficiency across multiple functions.
+
+      The incorrect options either increase initialization time by installing at runtime, rely on packaging everything per function, or reference S3 in ways that add download overhead, all of which can increase compute time.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q74
+    type: multiple_choice
+    question: During non-peak hours, a Developer wants to minimize the execution time of a full Amazon DynamoDB table scan without affecting normal workloads. The workloads average half of the strongly consistent read capacity units during non-peak hours. How would the Developer optimize this scan?
+    options:
+     - text: Use parallel scans while limiting the rate.
+       is_correct: true
+     - text: Use sequential scans.
+       is_correct: false
+     - text: Increase read capacity units during the scan operation.
+       is_correct: false
+     - text: Change consistency to eventually consistent during the scan operation.
+       is_correct: false
+    explanation: |
+      Parallel scans with a limited read rate allow the scan to complete faster by distributing reads across segments while controlling throughput to avoid impacting normal workloads.
+
+      The incorrect options either perform inefficient sequential scans, require increasing capacity (costly), or change consistency which does not directly optimize scan parallelism and may not be acceptable.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q75
+    type: multiple_choice
+    question: A large e-commerce site is being designed to deliver static objects from Amazon S3. The Amazon S3 bucket will server more than 300 GET requests per second. What should be done to optimize performance? (Choose TWO)
+    options:
+     - text: Integrate Amazon CloudFront with Amazon S3.
+       is_correct: true
+     - text: Enable Amazon S3 cross-region replication.
+       is_correct: false
+     - text: Delete expired Amazon S3 server log files.
+       is_correct: false
+     - text: Configure Amazon S3 lifecycle rules.
+       is_correct: false
+     - text: Randomize Amazon S3 key name prefixes.
+       is_correct: true
+    explanation: |
+      Using CloudFront caches content at edge locations to handle high request rates and randomizing key prefixes helps distribute load across S3 partitions, both improving request performance at scale.
+
+      The incorrect options either address replication, logging cleanup, or lifecycle management which do not directly help request performance for high GET rates.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q76
+    type: multiple_choice
+    question: A legacy service has an XML-based SOAP interface. The Developer wants to expose the functionality of the service to external clients with the Amazon API Gateway. Which technique will accomplish this?
+    options:
+     - text: Create a RESTful API with the API Gateway; transform the incoming JSON into a valid XML message for the SOAP interface using mapping templates.
+       is_correct: true
+     - text: Create a RESTful API with the API Gateway; pass the incoming JSON to the SOAP interface through an Application Load Balancer.
+       is_correct: false
+     - text: Create a RESTful API with the API Gateway; pass the incoming XML to the SOAP interface through an Application Load Balancer.
+       is_correct: false
+     - text: Create a RESTful API with the API Gateway; transform the incoming XML into a valid message for the SOAP interface using mapping templates.
+       is_correct: false
+    explanation: |
+      API Gateway mapping templates can transform JSON requests into the XML format expected by a SOAP backend, allowing a RESTful front-end to interact with a SOAP service transparently.
+
+      The incorrect options either rely on ALB which does not perform content transformation, or suggest transforming XML in a way that does not match the typical JSON-to-SOAP path described in the correct option.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q77
+    type: multiple_choice
+    question: A Developer has an application that can upload tens of thousands of objects per second to Amazon S3 in parallel within a single AWS account. As part of new requirements, data stored in S3 must use server side encryption with AWS KMS (SSE-KMS). After creating this change, performance of the application is slower. Which of the following is MOST likely the cause of the application latency?
+    options:
+     - text: Amazon S3 throttles the rate at which uploaded objects can be encrypted using Customer Master Keys.
+       is_correct: false
+     - text: The AWS KMS API calls limit is less than needed to achieve the desired performance.
+       is_correct: true
+     - text: The client encryption of the objects is using a poor algorithm.
+       is_correct: false
+     - text: KMS requires that an alias be used to create an independent display name that can be mapped to a CM.
+       is_correct: false
+    explanation: |
+      SSE-KMS requires calling KMS for envelope key operations, and the KMS API limits (request rate) can become the bottleneck when uploading massive numbers of objects, causing added latency.
+
+      The incorrect options either misunderstand S3 behavior, blame client-side algorithms, or reference aliases which are unrelated to the performance hit in this scenario.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q78
+    type: multiple_choice
+    question: A customer wants to deploy its source code on an AWS Elastic Beanstalk environment. The customer needs to perform deployment with minimal outage and should only use existing instances to retain application access log. What deployment policy would satisfy these requirements?
+    options:
+     - text: Rolling.
+       is_correct: true
+     - text: All at once.
+       is_correct: false
+     - text: Rolling with an additional batch.
+       is_correct: false
+     - text: Immutable.
+       is_correct: false
+    explanation: |
+      A Rolling deployment updates instances in batches using existing instances, minimizing outage while preserving instance-level artifacts like local logs because it does not replace all instances at once.
+
+      The incorrect options either update all instances simultaneously (All at once), launch new temporary instances (Rolling with additional batch or Immutable), or do not meet the constraint to use only existing instances while minimizing downtime.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q79
+    type: multiple_choice
+    question: A Developer has setup an Amazon Kinesis Stream with 4 shards to ingest a maximum of 2500 records per second. A Lambda function has been configured to process these records. In which order will these records be processed?
+    options:
+     - text: Lambda will receive each record in the reverse order it was placed into the stream following a LIFO (last-in, first-out) method.
+       is_correct: false
+     - text: Lambda will receive each record in the exact order it was placed into the stream following a FIFO (first­-in, first-out) method.
+       is_correct: false
+     - text: Lambda will receive each record in the exact order it was placed into the shard following a FIFO (first-in, first-out) method. There is no guarantee of order across shards.
+       is_correct: true
+     - text: The Developer can select FIFO, (first-in, first-out), LIFO (last-in, last-out), random, or request specific record using the getRecords API.
+       is_correct: false
+    explanation: |
+      Kinesis preserves order within each shard (FIFO per shard), so records are processed in the order they arrived for a given shard, but there is no ordering guarantee across multiple shards.
+
+      The incorrect options claim reverse ordering, global FIFO across all shards, or unsupported ordering modes, none of which reflect how Kinesis shard ordering works.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q80
+    type: multiple_choice
+    question: An organization must store thousands of sensitive audio and video files in an Amazon S3 bucket. Organizational security policies require that all data written to this bucket be encrypted. How can compliance with this policy be ensured?
+    options:
+     - text: Use AWS Lambda to send notifications to the security team if unencrypted objects are put in the bucket.
+       is_correct: false
+     - text: Configure an Amazon S3 bucket policy to prevent the upload of objects that do not contain the 'x-amz­-server-side-encryption' header.
+       is_correct: true
+     - text: Create an Amazon CloudWatch event rule to verify that all objects stored in the Amazon S3 bucket are encrypted.
+       is_correct: false
+     - text: Configure an Amazon S3 bucket policy to prevent the upload of objects that contain the 'x-amz-server­side-encryption' header.
+       is_correct: false
+    explanation: |
+      A bucket policy that denies uploads missing the 'x-amz-server-side-encryption' header enforces encryption at upload time and prevents unencrypted objects from being stored in the bucket.
+
+      The incorrect options are reactive (notifications, events) or incorrectly deny encrypted uploads, which do not proactively prevent unencrypted object storage as effectively as a denial policy.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q81
+    type: multiple_choice
+    question: An application is designed to use Amazon SQS to manage messages from many independent senders. Each sender's messages must be processed in the order they are received. Which SQS feature should be implemented by the Developer?
+    options:
+     - text: Configure each sender with a unique MessageGroupId.
+       is_correct: true
+     - text: Enable MessageDeduplicationIds on the SQS queue.
+       is_correct: false
+     - text: Configure each message with unique MessageGroupIds.
+       is_correct: false
+     - text: Enable ContentBasedDeduplication on the SQS queue.
+       is_correct: false
+    explanation: |
+      Using a unique MessageGroupId per sender on an SQS FIFO queue ensures that messages from each sender are processed in order while allowing parallel processing of different groups.
+
+      The incorrect options either confuse deduplication features with ordering or suggest per-message group IDs that are not the recommended pattern to ensure sender-level ordering.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q82
+    type: multiple_choice
+    question: A Developer created a dashboard for an application using Amazon API Gateway, Amazon S3, AWS Lambda, and Amazon RDS. The Developer needs an authentication mechanism allowing a user to sign in and view the dashboard. It must be accessible from mobile applications, desktops, and tablets, and must remember user preferences across platforms. Which AWS service should the Developer use to support this authentication scenario?
+    options:
+     - text: AWS KMS.
+       is_correct: false
+     - text: Amazon Cognito.
+       is_correct: true
+     - text: AWS Directory Service.
+       is_correct: false
+     - text: Amazon IAM.
+       is_correct: false
+    explanation: |
+      Amazon Cognito provides user sign-in, sign-up, and profile management with support for multiple platforms and persistent user preferences, making it well-suited for application authentication across devices.
+
+      The incorrect options are services for encryption keys (KMS), directory services for enterprise resources, or AWS resource access (IAM), none of which offer the integrated user-facing authentication and profile features required.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q83
+    type: multiple_choice
+    question: A Lambda function is packaged for deployment to multiple environments, including development, test, production, etc. Each environment has unique set of resources such as databases, etc. How can the Lambda function use the resources for the current environment?
+    options:
+     - text: Apply tags to the Lambda functions.
+       is_correct: false
+     - text: Hardcore resources in the source code.
+       is_correct: false
+     - text: Use environment variables for the Lambda functions.
+       is_correct: true
+     - text: Use separate function for development and production.
+       is_correct: false
+    explanation: |
+      Environment variables allow a single Lambda function package to reference different resource endpoints and configuration per deployment environment, enabling reuse across dev/test/prod without code changes.
+
+      The incorrect options either hardcode sensitive settings, rely on tagging which does not supply runtime config, or duplicate functions for each environment which increases maintenance overhead.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q84
+    type: multiple_choice
+    question: A Developer needs temporary access to resources in a second account. What is the MOST secure way to achieve this?
+    options:
+     - text: Use the Amazon Cognito user pools to get short-lived credentials for the second account.
+       is_correct: false
+     - text: Create a dedicated IAM access key for the second account, and send it by mail.
+       is_correct: false
+     - text: Create a cross-account access role, and use 'sts:AssumeRole' API to get short-lived credentials.
+       is_correct: true
+     - text: Establish trust, and add an SSH key for the second account to the IAM user.
+       is_correct: false
+    explanation: |
+      Creating a cross-account IAM role and using STS AssumeRole grants short-lived credentials with scoped permissions and is the recommended secure method for temporary cross-account access.
+
+      The incorrect options are insecure or inappropriate: sharing long-lived keys, misusing Cognito for cross-account AWS access, or using SSH keys with IAM do not provide the proper secure temporary credential mechanism.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q85
+    type: multiple_choice
+    question: A Developer needs to use AWS X-Ray to monitor an application that is deployed on EC2 instances. What steps have to be executed to perform the monitoring?
+    options:
+     - text: Deploy the X-Ray SDK with the application and use X-Ray annotation.
+       is_correct: false
+     - text: Install the X-Ray daemon and instrument the application code.
+       is_correct: true
+     - text: Install the X-Ray daemon and configure it to forward data to Amazon CloudWatch Events.
+       is_correct: false
+     - text: Deploy the X-Ray SDK with the application and instrument the application code.
+       is_correct: false
+    explanation: |
+      To capture traces from an EC2-hosted application, you must instrument the application with the X-Ray SDK and run the X-Ray daemon as a local process to buffer and send trace data to the X-Ray service.
+
+      The incorrect options either omit installing the daemon, suggest forwarding to CloudWatch Events which is not how X-Ray works, or are incomplete without the daemon component necessary for trace collection.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q86
+    type: multiple_choice
+    question: A Developer is creating an Auto Scaling group whose instances need to publish a custom metric to Amazon CloudWatch. Which method would be the MOST secure way to authenticate a CloudWatch PUT request?
+    options:
+     - text: Create an IAM user with 'PutMetricData' permission and put the user credentials in a private repository; have applications pull the credentials as needed.
+       is_correct: false
+     - text: Create an IAM user with 'PutMetricData' permission, and modify the Auto Scaling launch configuration to inject the user credentials into the instance user data.
+       is_correct: false
+     - text: Modify the CloudWatch metric policies to allow the 'PutMetricData' permission to instances from the Auto Scaling group.
+       is_correct: false
+     - text: Create an IAM role with 'PutMetricData' permission and modify the Auto Scaling launching configuration to launch instances using that role.
+       is_correct: true
+    explanation: |
+      Assigning an IAM role to instances via the Auto Scaling launch configuration provides temporary credentials and follows AWS best practices for secure authentication when calling CloudWatch PutMetricData.
+
+      The incorrect options involve embedding long-lived credentials or modifying policies in unsupported ways, which are insecure or operationally problematic compared to using instance roles.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q87
+    type: multiple_choice
+    question: A Developer is working on an application that tracks hundreds of millions of product reviews in an Amazon DynamoDB table. The records include the data elements shown in the table. Which field, when used as the partition key, would result in the MOST consistent performance using DynamoDB?
+    img: images/question87.jpg
+    options:
+     - text: 'starRating'
+       is_correct: false
+     - text: 'reviewID'
+       is_correct: true
+     - text: 'comment'
+       is_correct: false
+     - text: 'productID'
+       is_correct: false
+    explanation: |
+      A unique attribute like 'reviewID' provides a high-cardinality partition key which evenly distributes items across partitions, yielding the most consistent performance for a very large dataset.
+
+      The incorrect options have low cardinality or large attribute sizes ('starRating', 'productID' may concentrate traffic, 'comment' is variable and large), which can cause hot partitions or performance variability.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q88
+    type: multiple_choice
+    question: A development team consists of 10 team members. Similar to a home directory for each team member, the manager wants to grant access to user-specific folders in an Amazon S3 bucket. For the team member with the username 'TeamMemberX', the snippet of the IAM policy looks like this. Instead of creating distinct policies for each team member, what approach can be used to make this policy snippet generic for all team members?
+    img: images/question88.jpg
+    options:
+     - text: Use IAM policy condition.
+       is_correct: true
+     - text: Use IAM policy principal.
+       is_correct: false
+     - text: Use IAM policy variables.
+       is_correct: false
+     - text: Use IAM policy resource.
+       is_correct: false
+    explanation: |
+      Using IAM policy conditions (for example with condition keys like 'aws:username' or 's3:prefix') can generalize the policy so it enforces per-user access control without creating separate policies per user.
+
+      The incorrect options refer to principals, variables, or resources in ways that do not directly provide the conditional per-user restriction needed to make the policy generic for all team members.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q89
+    type: multiple_choice
+    question: A company needs to encrypt data at rest, but it wants to leverage an AWS managed service using its own master key. Which of the following AWS service can be used to meet these requirements?
+    options:
+     - text: SSE with Amazon S3.
+       is_correct: false
+     - text: SSE with AWS KMS.
+       is_correct: true
+     - text: Client-side encryption.
+       is_correct: false
+     - text: AWS IAM roles and policies.
+       is_correct: false
+    explanation: |
+      Server-side encryption with AWS KMS (SSE-KMS) allows AWS-managed encryption while using a customer-managed KMS key, giving control over the master key and supporting auditing and access control.
+
+      The incorrect options either do not provide a customer-managed key option (SSE-S3), place key management entirely on the client, or refer to IAM which is not an encryption service.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q90
+    type: multiple_choice
+    question: A Developer has created a software package to be deployed on multiple EC2 instances using IAM roles. What actions could be performed to verify IAM access to get records from Amazon Kinesis Streams? (Select TWO)
+    options:
+     - text: Use the AWS CLI to retrieve the IAM group.
+       is_correct: false
+     - text: Query Amazon EC2 metadata for in-line IAM policies.
+       is_correct: false
+     - text: Request a token from AWS STS, and perform a describe action.
+       is_correct: false
+     - text: Perform a get action using the '--dry-run' argument.
+       is_correct: true
+     - text: Validate the IAM role policy with the IAM policy simulator.
+       is_correct: true
+    explanation: |
+      Performing a dry-run (where supported) can validate permissions without executing the action, and using the IAM policy simulator verifies that a role policy allows the required Kinesis actions, making these two practical verification steps.
+
+      The incorrect options either retrieve unrelated group info, query instance metadata for inline policies (which is not a validation step for permissions), or use STS token requests which are not direct permission verification methods.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q91
+    type: multiple_choice
+    question: A company wants to implement a continuous integration for its workloads on AWS. The company wants to trigger unit test in its pipeline for commits-on its code repository, and wants to be notified of failure events in the pipeline. How can these requirements be met?
+    options:
+     - text: Store the source code in AWS CodeCommit. Create a CodePipeline to automate unit testing. Use Amazon SNS to trigger notifications of failure events.
+       is_correct: true
+     - text: Store the source code in GitHub. Create a CodePipeline to automate unit testing. Use Amazon SES to trigger notifications of failure events.
+       is_correct: false
+     - text: Store the source code on GitHub. Create a CodePipeline to automate unit testing. Use Amazon CloudWatch to trigger notifications of failure events.
+       is_correct: false
+     - text: Store the source code in AWS CodeCommit. Create a CodePipeline to automate unit testing. Use Amazon CloudWatch to trigger notification of failure events.
+       is_correct: false
+    explanation: |
+      Storing code in CodeCommit, using CodePipeline to run unit tests, and SNS for notifications provides an integrated CI workflow with publish/subscribe notifications for failures.
+
+      The incorrect options either choose less appropriate notification services (SES or CloudWatch directly) or rely on external repositories without the integrated AWS CodeCommit+CodePipeline flow described.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q92
+    type: multiple_choice
+    question: An application takes 40 seconds to process instructions received in an Amazon SQS message. Assuming the SQS queue is configured with the default 'VisibilityTimeout' value, what is the BEST way, upon receiving a message, to ensure that no other instances can retrieve a message that has already been processed or is currently being processed?
+    options:
+     - text: Use the 'ChangeMessageVisibility' API to increase the 'VisibilityTimeout', then use the 'DeleteMessage' API to delete the message.
+       is_correct: true
+     - text: Use the 'DeleteMessage' API call to delete the message from the queue, then call 'DeleteQueue' API to remove the queue.
+       is_correct: false
+     - text: Use the 'ChangeMessageVisibility' API to decrease the timeout value, then use the 'DeleteMessage' API to delete the message.
+       is_correct: false
+     - text: Use the 'DeleteMessageVisibility' API to cancel the 'VisibilityTimeout', then use the 'DeleteMessage' API to delete the message.
+       is_correct: false
+    explanation: |
+      Calling ChangeMessageVisibility to extend the visibility timeout ensures the processing instance retains exclusive access while it works, and then DeleteMessage removes it when done, preventing duplicate processing.
+
+      The incorrect options propose deleting the entire queue, reducing the visibility timeout, or using a nonexistent API, none of which ensure safe exclusive processing for long-running tasks.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q93
+    type: multiple_choice
+    question: A Developer is developing an application that manages financial transactions. To improve security, multi-factor authentication (MFA) will be required as part of the login protocol. What services can the Developer use to meet these requirements?
+    options:
+     - text: Amazon DynamoDB to store MFA session data, and Amazon SNS to send MFA codes.
+       is_correct: false
+     - text: Amazon Cognito with MFA.
+       is_correct: true
+     - text: AWS Directory Service.
+       is_correct: false
+     - text: AWS IAM with MFA enabled.
+       is_correct: false
+    explanation: |
+      Amazon Cognito supports MFA for user authentication flows and provides user management and secure delivery of verification codes, making it suitable for application-level MFA.
+
+      The incorrect options either mix storage and messaging without an integrated authentication system, use directory services not tailored for customer MFA flows, or confuse IAM MFA (which is for AWS accounts not application users).
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q94
+    type: multiple_choice
+    question: A Developer is writing transactions into a DynamoDB table called 'SystemUpdates' that has 5 write capacity units. Which option has the highest read throughput?
+    options:
+     - text: Eventually consistent reads of 5 read capacity units reading items that are 4 KB in size.
+       is_correct: true
+     - text: Strongly consistent reads of 5 read capacity units reading items that are 4 KB in size.
+       is_correct: false
+     - text: Eventually consistent reads of 15 read capacity units reading items that are 1 KB in size.
+       is_correct: false
+     - text: Strongly consistent reads of 15 read capacity units reading items that are 1 KB in size.
+       is_correct: false
+    explanation: |
+      Eventually consistent reads consume half the read capacity of strongly consistent reads for the same item size, so 5 RCUs of eventually consistent reads yield more effective throughput than the equivalent strongly consistent option.
+
+      The incorrect options either use strongly consistent reads (which cost more RCUs) or specify larger read unit allocations for smaller items which are not directly comparable to the eventually consistent case selected.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q95
+    type: multiple_choice
+    question: A Developer has created an S3 bucket' s3://mycoolapp' and has enabled server across logging that points to the folder 's3://mycoolapp/logs'. The Developer moved 100 KB of Cascading Style Sheets (CSS) documents to the folder 's3://mycoolapp/css', and then stopped work. When the developer came back a few days later, the bucket was 50 GB. What is the MOST likely cause of this situation?
+    options:
+     - text: The CSS files were not compressed and S3 versioning was enabled.
+       is_correct: false
+     - text: S3 replication was enabled on the bucket.
+       is_correct: false
+     - text: Logging into the same bucket caused exponential log growth.
+       is_correct: true
+     - text: An S3 lifecycle policy has moved the entire CSS file to S3 Infrequent Access.
+       is_correct: false
+    explanation: |
+      Enabling server access logging that writes logs to the same bucket can cause a feedback loop where each upload generates logs which generate more logs, rapidly increasing storage usage.
+
+      The incorrect options either point to unrelated features (replication, versioning) or to lifecycle transitions which do not explain a sudden large increase in stored bytes due to continuous log generation.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q96
+    type: multiple_choice
+    question: A Developer is testing a Docker-based application that uses the AWS SDK to interact with Amazon DynamoDB. In the local development environment, the application has used IAM access keys. The application is now ready for deployment onto an ECS cluster. How should the application authenticate with AWS services in production?
+    options:
+     - text: Configure an ECS task IAM role for the application to use.
+       is_correct: true
+     - text: Refactor the application to call AWS STS 'AssumeRole' based on an instance role.
+       is_correct: false
+     - text: Configure AWS access 'key/secret' access key environment variables with new credentials.
+       is_correct: false
+     - text: Configure the credentials file with a new access 'key/secret' access key.
+       is_correct: false
+    explanation: |
+      Assigning an IAM role to the ECS task (task role) provides temporary, managed credentials scoped to the task's permissions and is the recommended secure method for ECS applications to access AWS services.
+
+      The incorrect options involve long-lived credentials or complex instance-based role assumptions, both of which are less secure or unnecessary compared to a task role.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q97
+    type: multiple_choice
+    question: A company is using AWS CodeBuild to compile a website from source code stored in AWS CodeCommit. A recent change to the source code has resulted in the CodeBuild project being unable to successfully compile the website. How should the Developer identify the cause of the failures?
+    options:
+     - text: Modify the 'buildspec.yml' file to include steps to send the output of build commands to Amazon CloudWatch.
+       is_correct: false
+     - text: Use a custom Docker image that includes the AWS X-Ray agent in the AWS CodeBuild project configuration.
+       is_correct: false
+     - text: Check the build logs of the failed phase in the last build attempt in the AWS CodeBuild project build history.
+       is_correct: true
+     - text: Manually re-run the build process on a local machine so that the output can be visualized.
+       is_correct: false
+    explanation: |
+      Reviewing the CodeBuild build logs for the failed phase provides direct error output and context to diagnose compilation failures, which is the most efficient first step.
+
+      The incorrect options either add unnecessary instrumentation, suggest local reproduction which is slower, or modify buildspec without first checking the provided logs.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q98
+    type: multiple_choice
+    question: For a deployment using AWS CodeDeploy, what is the run order of the hooks for in-place deployments?
+    options:
+     - text: Before Install -> Application Stop -> Application Start -> After Install.
+       is_correct: false
+     - text: Application Stop -> Before Install -> After Install -> Application Start.
+       is_correct: true
+     - text: Before Install -> Application Stop -> Validate Service -> Application Start.
+       is_correct: false
+     - text: Application Stop -> Before Install -> Validate Service -> Application Start.
+       is_correct: false
+    explanation: |
+      For in-place CodeDeploy deployments, the typical hook sequence is to stop the application, run BeforeInstall, AfterInstall tasks, and then start the application, which matches the correct option ordering.
+
+      The incorrect options either misorder the lifecycle hooks or include nonexistent steps in the standard in-place deployment hook sequence.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q99
+    type: multiple_choice
+    question: A Developer executed a AWS CLI command and received the error shown below. What action should the Developer perform to make this error human-readable?
+    img: images/question99.jpg
+    options:
+     - text: Make a call to AWS KMS to decode the message.
+       is_correct: false
+     - text: Use the AWS STS 'decode-authorization-message' API to decode the message.
+       is_correct: true
+     - text: Use an open source decoding library to decode the message.
+       is_correct: false
+     - text: Use the AWS IAM 'decode-authorization-message' API to decode this message.
+       is_correct: false
+    explanation: |
+      The 'decode-authorization-message' API in AWS STS decodes encoded authorization messages from AWS so they can be inspected in a human-readable form, which is the appropriate action for this error.
+
+      The incorrect options either reference the wrong service (KMS, IAM) or suggest third-party decoding which will not properly decode the AWS-encoded authorization message.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q100
+    type: multiple_choice
+    question: A Developer uses AWS CodeDeploy to automate application deployment that connects to an external MySQL database. The Developer wants to securely access the encrypted secrets, such as API keys and database passwords. Which of the following solutions would involve the LEAST administrative effort?
+    options:
+     - text: Save the secrets in Amazon S3 with AWS KMS server-side encryption, and use a signed URL to access them by using the IAM role from Amazon EC2 instances.
+       is_correct: false
+     - text: Use the instance metadata to store the secrets and to programmatically access the secrets from EC2 instances.
+       is_correct: false
+     - text: Use the Amazon DynamoDB client-side encryption library to save the secrets in DynamoDB and to programmatically access the secrets from EC2 instances.
+       is_correct: false
+     - text: Use AWS SSM Parameter Store to store the secrets and to programmatically access them by using the IAM role from EC2 instances.
+       is_correct: true
+    explanation: |
+      AWS Systems Manager Parameter Store (especially with the SecureString type backed by KMS) provides an easy, managed way to store and retrieve secrets with minimal administration and integration with EC2 IAM roles.
+
+      The incorrect options require more administrative work or insecure practices (managing S3 signed URLs, storing secrets in instance metadata, or implementing client-side encryption libraries), making them less desirable.
+    tags: 
+    difficulty: 
+    points: 
