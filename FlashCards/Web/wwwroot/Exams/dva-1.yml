@@ -1,0 +1,973 @@
+questions:
+  - id: q1
+    type: multiple_choice
+    question: Which of the following are good use cases for how Amazon ElastiCache can help an application? (Select TWO)
+    options:
+     - text: Improve the performance of S3 PUT operations.
+       is_correct: false
+     - text: Improve the latency of deployments performed by AWS CodeDeploy.
+       is_correct: false
+     - text: Improve latency and throughput for read-heavy application workloads.
+       is_correct: true
+     - text: Reduce the time required to merge AWS CodeCommit branches.
+       is_correct: false
+     - text: Improve performance of compute-intensive applications.
+       is_correct: true
+    explanation: |
+      As opções corretas destacam que o ElastiCache acelera leituras frequentes armazenando dados em memória, reduzindo latência e aumentando throughput em workloads com muitas leituras; também pode acelerar aplicações que se beneficiam de cache na memória para reduzir trabalho computacional repetido.
+      As opções incorretas descrevem ações que não são responsabilidades de um cache em memória (operações S3 PUT, deployments, ou gestão de código), portanto não são usos apropriados do ElastiCache.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q2
+    type: multiple_choice
+    question: Which of the following services are key/value stores? (Choose 3 answers)
+    options:
+     - text: Amazon ElastiCache.
+       is_correct: true
+     - text: Simple Notification Service.
+       is_correct: false
+     - text: DynamoDB.
+       is_correct: true
+     - text: Simple Workflow Service.
+       is_correct: false
+     - text: Simple Storage Service.
+       is_correct: true
+    explanation: |
+      As opções corretas (ElastiCache, DynamoDB e S3) podem ser usadas como stores chave/valor: ElastiCache armazena pares em memória, DynamoDB é um banco NoSQL chave/valor, e objetos S3 podem ser acessados por chave.
+      As opções incorretas (SNS, SWF) são serviços de mensageria ou orquestração e não funcionam como stores chave/valor, por isso não se encaixam na categoria.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q3
+    type: multiple_choice
+    question: A developer wants to send multi-value headers to an AWS Lambda function that is registered as a target with an Application Load Balancer (ALB). What should the developer do to achieve this?
+    options:
+     - text: Place the Lambda function and target group in the same account.
+       is_correct: false
+     - text: Send the request body to the Lambda function with a size less than 1 MB 0.
+       is_correct: false
+     - text: Include the Base64 encoding status status code, status description, and headers in the Lambda function.
+       is_correct: false
+     - text: Enable the multi-value headers on the ALB.
+       is_correct: true
+    explanation: |
+      A opção correta indica que é preciso habilitar a funcionalidade de multi-value headers no ALB para que os cabeçalhos com múltiplos valores sejam entregues à função Lambda tal como enviados pelo cliente.
+      As opções incorretas não habilitam nem garantem a passagem de múltiplos valores de cabeçalhos (são sobre conta, tamanho do corpo ou manipulação na função), então não resolvem o requisito.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q4
+    type: multiple_choice
+    question: A company's ecommerce website is experiencing massive traffic spikes, which are causing performance problems in the company database. Users are reporting that accessing the website takes a long time. A developer wants to implement a caching layer using Amazon ElastiCache. The website is required to be responsive no matter which product a user views, and the updates to product information and prices must be strongly consistent. Which cache writing policy will satisfy these requirements?
+    options:
+     - text: Write to the cache directly and sync the backend at a later time.
+       is_correct: false
+     - text: Write to the backend first and wait for the cache to expire.
+       is_correct: false
+     - text: Write to the cache and the backend at the same time.
+       is_correct: false
+     - text: Write to the backend first and invalidate the cache.
+       is_correct: true
+    explanation: |
+      A opção correta (escrever no backend primeiro e invalidar o cache) garante consistência forte porque o banco de dados é a fonte de verdade e o cache é invalidado para que leituras subsequentes obtenham o dado atualizado.
+      As opções incorretas correm risco de inconsistência (escrever só no cache, atrasar sincronização, ou escrever simultaneamente sem invalidação pode fazer com que leituras retornem dados obsoletos), portanto não satisfazem o requisito de forte consistência.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q5
+    type: multiple_choice
+    question: A Developer wants to upload data to Amazon S3 and must encrypt the data in transit. Which of the following solutions will accomplish this task? (Choose TWO)
+    options:
+     - text: Set up hardware VPN tunnels to a VPC and access S3 through a VPC endpoint.
+       is_correct: false
+     - text: Set up Client-Side Encryption with an AWS KMS-Managed Customer Master Key.
+       is_correct: true
+     - text: Set up Server-Side Encryption with AWS KMS-Managed Keys.
+       is_correct: false
+     - text: Transfer the data over an SSL connection.
+       is_correct: true
+     - text: Set up Server-Side Encryption with S3-Managed Keys.
+       is_correct: false
+    explanation: |
+      As opções corretas garantem criptografia em trânsito: transferir dados sobre SSL/TLS protege o canal, e a criptografia do lado do cliente (client-side) assegura que os dados sejam cifrados antes de saírem da aplicação.
+      As opções incorretas referem-se principalmente a criptografia em repouso (server-side) ou a soluções complexas que não garantem criptografia em trânsito por si só, por isso não atendem ao requisito solicitado.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q6
+    type: multiple_choice
+    question: A Developer wants to encrypt new objects that are being uploaded to an Amazon S3 bucket by an application. There must be an audit trail of who has used the key during this process. There should be no change to the performance of the application. Which type of encryption meets these requirements?
+    options:
+     - text: Server-side encryption using S3-managed keys.
+       is_correct: false
+     - text: Server-side encryption with AWS KMS-managed keys.
+       is_correct: true
+     - text: Client-side encryption with a client-side symmetric master key.
+       is_correct: false
+     - text: Client-side encryption with AWS KMS-managed keys.
+       is_correct: false
+    explanation: |
+      A opção correta (SSE-KMS) fornece criptografia transparente no lado do servidor com integração ao AWS KMS, que gera um trilho de auditoria sobre o uso da chave sem impactar significativamente a aplicação.
+      As opções incorretas ou não oferecem auditoria de uso de chaves (S3-managed) ou exigem mudanças de aplicação e desempenho (client-side), por isso não atendem simultaneamente todos os requisitos.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q7
+    type: multiple_choice
+    question: An application is being developed to audit several AWS accounts. The application will run in Account A and must access AWS services in Accounts B and C. What is the MOST secure way to allow the application to call AWS services in each audited account?
+    options:
+     - text: Configure cross-account roles in each audited account. Write code in Account A that assumes those roles.
+       is_correct: true
+     - text: Use S3 cross-region replication to communicate among accounts, with Amazon S3 event notifications to trigger Lambda functions.
+       is_correct: false
+     - text: Deploy an application in each audited account with its own role. Have Account A authenticate with the application.
+       is_correct: false
+     - text: Create an IAM user with an access key in each audited account. Write code in Account A that uses those access keys.
+       is_correct: false
+    explanation: |
+      A opção correta (assumir roles cross-account) é a prática mais segura: cada conta mantém controle das permissões e o aplicativo em Account A assume temporariamente permissões com credenciais temporárias.
+      As opções incorretas envolvem soluções menos seguras ou complexas (compartilhar chaves de usuário, replicação S3 para comunicação ou implantar aplicações em cada conta), o que aumenta superfície de ataque ou complexidade.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q8
+    type: multiple_choice
+    question: A company uses a third-party tool to build, bundle, and package rts applications on-premises and store them locally. The company uses Amazon EC2 instances to run its front-end applications. How can an application be deployed from the source control system onto the EC2 instances?
+    options:
+     - text: Use AWS CodeDeploy and point it to the local storage to directly deploy a bundle m a zip. tar. or tar.gz format.
+       is_correct: false
+     - text: Upload the bundle to an Amazon S3 bucket and specify the S3 location when doing a deployment using AWS CodeDeploy.
+       is_correct: true
+     - text: Create a repository using AWS CodeCommit to automatically trigger a deployment to the EC2 instances.
+       is_correct: false
+     - text: Use AWS CodeBuild to automatically deploy the latest build to the latest EC2 instances.
+       is_correct: false
+    explanation: |
+      A opção correta descreve o fluxo suportado: fazer upload do pacote para S3 e instruir o CodeDeploy a usar esse artefato para implantação nas instâncias EC2.
+      As opções incorretas não refletem o procedimento direto ou usam serviços de forma inadequada (apontar direto para armazenamento local não é suportado, CodeCommit/CodeBuild não substituem o envio do bundle para S3 para CodeDeploy nesse cenário).
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q9
+    type: multiple_choice
+    question: A company is building a compute-intensive application that will run on a fleet of Amazon EC2 instances. The application uses attached Amazon EBS disks for storing data. The application will process sensitive information and all the data must be encrypted. What should a developer do to ensure the data is encrypted on disk without impacting performance?
+    options:
+     - text: Configure the Amazon EC2 instance fleet to use encrypted EBS volumes for storing data.
+       is_correct: true
+     - text: Add logic to write all data to an encrypted Amazon S3 bucket.
+       is_correct: false
+     - text: Add a custom encryption algorithm to the application that will encrypt and decrypt all data.
+       is_correct: false
+     - text: Create a new Amazon Machine Image (AMI) with an encrypted root volume and store the data to ephemeral disks.
+       is_correct: false
+    explanation: |
+      A opção correta (volumes EBS criptografados) providencia criptografia em repouso gerenciada pelo serviço sem necessidade de alterar a aplicação e com impacto mínimo na performance.
+      As opções incorretas exigem mudanças de arquitetura ou código (gravar em S3, implementar criptografia customizada) ou usam armazenamento efêmero que pode não ser adequado para dados persistentes, portanto não são ideais.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q10
+    type: multiple_choice
+    question: A global company has an application running on Amazon EC2 instances that serves image files from Amazon S3. User requests from the browser are causing high traffic, which results in degraded performance. Which optimization solution should a Developer implement to increase application performance?
+    options:
+     - text: Create multiple prefix in the S3 bucket to increase the request rate.
+       is_correct: false
+     - text: Create an Amazon ElastiCache cluster to cache and serve frequently accessed items.
+       is_correct: false
+     - text: Use Amazon CloudFront to serve the content of images stored in Amazon S3.
+       is_correct: true
+     - text: Submit a ticket to AWS support to request a rate limit increase for the S3 bucket.
+       is_correct: false
+    explanation: |
+      A opção correta (CloudFront) diminui a latência globalmente e reduz o tráfego direto ao S3, usando uma CDN para entregar as imagens de forma mais eficiente.
+      As opções incorretas ou não resolvem o problema global de entrega (prefixos S3, ElastiCache para objetos estáticos sem integração adequada, ou pedir aumento de limite) e, portanto, não são a solução mais adequada.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q11
+    type: multiple_choice
+    question: An AWS Lambda function generates a 3MB JSON file and then uploads it to an Amazon S3 bucket daily. The file contains sensitive information, so the Developer must ensure that it is encrypted before uploading to the bucket. Which of the following modifications should the Developer make to ensure that the data is encrypted before uploading it to the bucket?
+    options:
+     - text: Use the default AWS KMS customer master key for S3 in the Lambda function code.
+       is_correct: false
+     - text: Use the S3 managed key and call the 'GenerateDataKey' API to encrypt the file.
+       is_correct: false
+     - text: Use the 'GenerateDataKey' API, then use that data key to encrypt the file in the Lambda function code.
+       is_correct: true
+     - text: Use a custom KMS customer master key created for S3 in the Lambda function code.
+       is_correct: false
+    explanation: |
+      A opção correta descreve usar 'GenerateDataKey' para obter uma chave de dados que é usada para cifrar o objeto localmente antes do upload, garantindo que o conteúdo esteja criptografado ao enviar para S3.
+      As opções incorretas ou confundem gerenciamento de chaves gerenciadas pelo S3 com a geração e uso de uma data key no código, ou dependem de chaves default sem o processo explícito de cifrar antes do upload.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q12
+    type: multiple_choice
+    question: Company D is running their corporate website on Amazon S3 accessed from 'http://www.companyd.com'. Their marketing team has published new web fonts to a separate S3 bucket accessed by the S3 endpoint 'https://s3-us-west-1.amazonaws.com/cdfonts'. While testing the new web fonts, Company D recognized the web fonts are being blocked by the browser. What should Company D do to prevent the web fonts from being blocked by the browser?
+    options:
+     - text: Enable versioning on the cdfonts bucket for each web font.
+       is_correct: false
+     - text: Create a policy on the cdfonts bucket to enable access to everyone.
+       is_correct: false
+     - text: Add the 'Content-MD5' header to the request for webfonts in the cdfonts bucket from the website.
+       is_correct: false
+     - text: Configure the cdfonts bucket to allow cross-origin requests by creating a CORS configuration.
+       is_correct: true
+    explanation: |
+      A opção correta (configurar CORS) permite que recursos hospedados em outro domínio sejam carregados pelo navegador, resolvendo o bloqueio de fontes devido a políticas de mesma origem.
+      As opções incorretas não tratam do problema de CORS (versionamento, política pública imprudente ou header Content-MD5) e, portanto, não resolvem o bloqueio do navegador de forma adequada.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q13
+    type: multiple_choice
+    question: A developer must extend an existing application that is based on the AWS Serverless Application Model (AWS SAM). The developer has used the AWS SAM CLI to create the project. The project contains different AWS Lambda functions. Which combination of commands must the developer use to redeploy the AWS SAM application? (Select TWO)
+    options:
+     - text: 'sam init'
+       is_correct: false
+     - text: 'sam validate'
+       is_correct: false
+     - text: 'sam build'
+       is_correct: true
+     - text: 'sam deploy'
+       is_correct: true
+     - text: 'sam publish'
+       is_correct: false
+    explanation: |
+      As opções corretas ('sam build' e 'sam deploy') são o fluxo padrão para compilar artefatos do SAM e então implantar a aplicação atualizada na AWS.
+      As opções incorretas são comandos para iniciar um projeto novo, validar localmente ou publicar um pacote público, que não substituem o fluxo de build+deploy para redeploy do aplicativo.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q14
+    type: multiple_choice
+    question: An application deployed on AWS Elastic Beanstalk experiences increased error rates during deployments of new application versions, resulting in service degradation for users. The Development team believes that this is because of the reduction in capacity during the deployment steps. The team would like to change the deployment policy configuration of the environment to an option that maintains full capacity during deployment while using the existing instances. Which deployment policy will meet these requirements while using the existing instances?
+    options:
+     - text: All at once.
+       is_correct: false
+     - text: Rolling.
+       is_correct: false
+     - text: Rolling with additional batch.
+       is_correct: true
+     - text: Immutable.
+       is_correct: false
+    explanation: |
+      A opção correta (Rolling with additional batch) permite adicionar uma batch extra para manter a capacidade durante a implantação usando instâncias adicionais temporárias, evitando redução de capacidade visível.
+      As opções incorretas ou reduzem capacidade durante deploy (All at once ou Rolling) ou criam instâncias novas imutáveis (Immutable) em vez de usar instâncias existentes conforme o requisito.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q15
+    type: multiple_choice
+    question: A Developer is creating an application that needs to locate the public IPv4 address of the Amazon EC2 instance on which it runs. How can the application locate this information?
+    options:
+     - text: Get the instance metadata by retrieving 'http://169.254.169.254/latest/metadata/'
+       is_correct: true
+     - text: Get the instance user data by retrieving 'http://169.254.169.254/latest/userdata/'
+       is_correct: false
+     - text: Get the application to run 'IFCONFIG' to get the public IP address.
+       is_correct: false
+     - text: Get the application to run 'IPCONFIG' to get the public IP address.
+       is_correct: false
+    explanation: |
+      A opção correta é recuperar os metadados da instância no endpoint de metadata (169.254.169.254) para obter o IP público de forma programática e confiável.
+      As opções incorretas ou consultam user-data (não metadados) ou dependem de comandos de sistema que podem não expor o IP público diretamente ou não serem portáveis entre SOs.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q16
+    type: multiple_choice
+    question: The development team is working on an API that will be served from Amazon API gateway. The API will be served from three environments; development, test, and production. The API Gateway is configured to use 237 GB of cache in all three stages. Which is the MOST cost-efficient deployment strategy?
+    options:
+     - text: Create a single API Gateway with all three stages.
+       is_correct: false
+     - text: Create three API Gateways, one for each stage in a single AWS account.
+       is_correct: false
+     - text: Create an API Gateway in three separate AWS accounts.
+       is_correct: false
+     - text: Enable the cache for development and test environments only when needed.
+       is_correct: true
+    explanation: |
+      A opção correta sugere ativar cache apenas quando necessário nos ambientes de desenvolvimento e teste para evitar custo contínuo de cache provisionado, mantendo produção com cache adequado.
+      As opções incorretas implicam custos fixos desnecessários (criar múltiplos gateways ou sempre habilitar cache em todas as stages) e não atendem ao requisito de eficiência de custos.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q17
+    type: multiple_choice
+    question: A company is migrating its on-premises database to Amazon RDS for MySQL. The company has read-heavy workloads, and wants to make sure it re-factors its code to achieve optimum read performance for its queries. How can this objective be met?
+    options:
+     - text: Add database retries to effectively use RDS with vertical scaling.
+       is_correct: false
+     - text: Use RDS with multi-AZ deployment.
+       is_correct: false
+     - text: Add a connection string to use an RDS read replica for read queries.
+       is_correct: true
+     - text: Add a connection string to use a read replica on an EC2 instance.
+       is_correct: false
+    explanation: |
+      A opção correta recomenda direcionar as consultas de leitura para réplicas de leitura (read replicas), descarregando a instância primária e melhorando o desempenho de leituras intensivas.
+      As opções incorretas não resolvem a natureza read-heavy de forma eficiente (retries ou multi-AZ são sobre disponibilidade/recuperação, não escalonamento de leitura; read replica em EC2 não é padrão).
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q18
+    type: multiple_choice
+    question: A developer needs to modify an application architecture to meet new functional requirements. Application data is stored in Amazon DynamoDB and processed for analysis in a nightly batch. The system analysts do not want to wait unit the next day to view the processed data and have asked to have it available in near-real time. Which application architect pattern would enables the data to be processed as it is received?
+    options:
+     - text: Event driven.
+       is_correct: true
+     - text: Client served driven.
+       is_correct: false
+     - text: Fan-out driven.
+       is_correct: false
+     - text: Schedule driven.
+       is_correct: false
+    explanation: |
+      A opção correta (event-driven) processa dados assim que chegam por meio de eventos e serviços em tempo real, permitindo análise quase em tempo real em vez de processamento noturno.
+      As opções incorretas envolvem abordagens baseadas em agendamento ou padrões que não garantem processamento imediato ao recebimento dos dados.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q19
+    type: multiple_choice
+    question: A developer has built an application that inserts data into an Amazon DynamoDB table. The table is configured to use provisioned capacity. The application is deployed on a burstable nano Amazon EC2 Instance. The application logs show that the application has been failing because of a 'ProvisionedThroughputExceedException' error. Which actions should the developer take to resolve this issue? (Choose two.)
+    options:
+     - text: Move the application to a larger EC instance.
+       is_correct: false
+     - text: Increase the number or read capacity units (RCUs) that are provisioned for the DynamoDB table.
+       is_correct: false
+     - text: Reduce the frequency of requests to DynamoDB by implement ng exponential backoff.
+       is_correct: true
+     - text: Increase the frequency of requests to DynamoDB by decreasing the retry delay.
+       is_correct: false
+     - text: Change the capacity mode of the DynamoDB table from provisioned to on-demand.
+       is_correct: true
+    explanation: |
+      As opções corretas (implementar backoff exponencial e mudar para on-demand) ajudam a reduzir colisões de throughput e permitem que a tabela escale automaticamente conforme a demanda.
+      As opções incorretas não tratam do problema corretamente (mover a instância não altera o throughput do DynamoDB, aumentar RCUs foi marcado como incorreto neste conjunto, e aumentar frequência de tentativas piora o problema).
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q20
+    type: multiple_choice
+    question: A software company needs to make sure user-uploaded documents are securely stored in Amazon S3. The documents must be encrypted at rest in Amazon S3. The company does not want to manage the security infrastructure in-house, but the company still needs extra protection to ensure it has control over its encryption keys due to industry regulations. Which encryption strategy should a developer use to meet these requirements?
+    options:
+     - text: Server-side encryption with Amazon S3 managed keys (SSE-S3).
+       is_correct: false
+     - text: Server-side encryption with customer-provided encryption keys (SSE-C).
+       is_correct: false
+     - text: Server-side encryption with AWS KMS managed keys (SSE-KMS).
+       is_correct: true
+     - text: Client-side encryption.
+       is_correct: false
+    explanation: |
+      A opção correta (SSE-KMS) oferece gerenciamento de chaves pelo KMS com controle e auditoria adicionais, sem forçar a gestão completa das chaves pela própria empresa, atendendo requisitos regulatórios.
+      As opções incorretas ou delegam totalmente a gestão de chaves ao S3 (SSE-S3), exigem que o cliente forneça e gerencie chaves (SSE-C) ou movem a responsabilidade para o cliente (client-side), o que não atende aos requisitos descritos.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q21
+    type: multiple_choice
+    question: An application uses Amazon Kinesis Data Streams to ingest and process large streams of data records in real time. Amazon EC2 instances consume and process the data from the shards of the Kinesis data stream by using Amazon Kinesis Client Library (KCL). The application handles the failure scenarios and does not require standby workers. The application reports that a specific shard is receiving more data than expected. To adapt to the changes in the rate of data flow, the 'hot' shard is resharded. Assuming that the initial number of shards in the Kinesis data stream is 4, and after resharding the number of shards increased to 6, what is the maximum number of EC2 instances that can be deployed to process data from all the shards?
+    options:
+     - text: 12.
+       is_correct: false
+     - text: 6.
+       is_correct: true
+     - text: 4.
+       is_correct: false
+     - text: 1.
+       is_correct: false
+    explanation: |
+      A opção correta (6) corresponde ao número de shards após o resharding — cada shard pode ser processado por uma instância/worker com KCL, então o máximo de instâncias necessárias é igual ao número de shards.
+      As opções incorretas representam números inconsistentes com a contagem de shards resultante e, portanto, não são corretas.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q22
+    type: multiple_choice
+    question: A gaming company is developing a mobile game application for iOS® and Android® platforms. This mobile game securely stores user data locally on the device. The company wants to allow users to use multiple device for the game, which requires user data synchronization across device.Which service should be used to synchronize user data across devices without the need to create a backend application?
+    options:
+     - text: AWS Lambda.
+       is_correct: false
+     - text: Amazon S3.
+       is_correct: false
+     - text: Amazon DynamoDB.
+       is_correct: false
+     - text: Amazon Cognito.
+       is_correct: true
+    explanation: |
+      A opção correta (Amazon Cognito) fornece funcionalidades de sincronização de dados para usuários entre dispositivos sem exigir um backend completo, facilitando a sincronização de preferências e dados do usuário.
+      As opções incorretas são serviços que não oferecem a sincronização de dados de usuário entre dispositivos pronta para uso sem desenvolvimento adicional de backend.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q23
+    type: multiple_choice
+    question: A Developer is making changes to a custom application that is currently using AWS Elastic Beanstalk. After the Developer completes the changes, what solutions will update the Elastic Beanstalk environment with the new application version? (Choose TWO)
+    options:
+     - text: Package the application code into a '.zip' file, and upload, then deploy the packaged application from the AWS Management Console.
+       is_correct: true
+     - text: Package the application code into a '.tar' file, create a new application version from the AWS Management Console, then update the environment by using AWS CLI.
+       is_correct: false
+     - text: Package the application code into a '.tar' file, and upload and deploy the packaged application from the AWS Management Console.
+       is_correct: false
+     - text: Package the application code into a '.zip' file, create a new application version from the packaged application by using AWS CLI, then update the environment by using AWS CLI.
+       is_correct: true
+     - text: Package the application code into a '.zip' file, create a new application version from the AWS Management Console, then rebuild the environment by using AWS CLI.
+       is_correct: false
+    explanation: |
+      As opções corretas descrevem métodos suportados de criar uma versão da aplicação (zip e upload via console ou criar versão via CLI) e então atualizar o ambiente Elastic Beanstalk.
+      As opções incorretas usam formatos ou passos não adequados ao fluxo padrão (tar sem suporte direto no console/fluxo apresentado, ou rebuild desnecessário) e, portanto, não são corretas.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q24
+    type: multiple_choice
+    question: A company is running an application built on AWS Lambda functions. One Lambda function has performance issues when it has to download a 50MB file from the Internet in every execution. This function is called multiple times a second. What solution would give the BEST performance increase?
+    options:
+     - text: Cache the file in the '/tmp' directory.
+       is_correct: true
+     - text: Increase the Lambda maximum execution time.
+       is_correct: false
+     - text: Put an Elastic Load Balancer in front of the Lambda function.
+       is_correct: false
+     - text: Cache the file in Amazon S3.
+       is_correct: false
+    explanation: |
+      A opção correta (cache em '/tmp') permite reutilizar o arquivo entre invocações na mesma execução do container Lambda e reduz downloads repetidos, melhorando a performance.
+      As opções incorretas não resolvem o problema de forma eficaz (aumentar timeout não evita downloads, ELB não reduz downloads, e S3 ainda exigiria download a cada invocação sem cache local).
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q25
+    type: multiple_choice
+    question: Queries to an Amazon DynamoDB table are consuming a large amount of read capacity. The table has a significant number of large attributes. The application does not need all of the attribute data. How can DynamoDB costs be minimized while maximizing application performance?
+    options:
+     - text: Batch all the writes, and perform the write operations when no or few reads are being performed.
+       is_correct: false
+     - text: Create a global secondary index with a minimum set of projected attributes.
+       is_correct: true
+     - text: Implement exponential backoffs in the application.
+       is_correct: false
+     - text: Load balance the reads to the table using an Application Load Balancer.
+       is_correct: false
+    explanation: |
+      A opção correta (GSI com conjunto mínimo de atributos projetados) permite consultas eficientes que retornam apenas os atributos necessários, reduzindo consumo de RCUs e melhorando performance.
+      As opções incorretas não abordam diretamente a redução de dados retornados (batch de writes, backoff, ou ALB) e portanto não são soluções apropriadas para esse caso.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q26
+    type: multiple_choice
+    question: A Developer is writing a REST service that will add items to a shopping list. The service is built on Amazon API Gateway with AWS Lambda integrations. The shopping list items are send as query string parameters in the method request. How should the Developer convert the query string parameters to arguments for the Lambda function?
+    options:
+     - text: Enable request validation.
+       is_correct: false
+     - text: Include the Amazon Resource Name (ARN) of the Lambda function.
+       is_correct: false
+     - text: Change the integration type.
+       is_correct: false
+     - text: Create a mapping template.
+       is_correct: true
+    explanation: |
+      A opção correta (criar um mapping template) permite transformar parâmetros de query em formato JSON ou outro esperado pela função Lambda, mapeando entradas do método para o payload do Lambda.
+      As opções incorretas não realizam essa transformação diretamente (validação, ARN ou alterar integração não convertem query strings em argumentos do handler).
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q27
+    type: multiple_choice
+    question: A development team is creating a new application designed to run on AWS. While the test and production environments will run on Amazon EC2 instances, developers will each run their own environment on their laptops. Which of the following is the simplest and MOST secure way to access AWS services from the local development machines?
+    options:
+     - text: Use an IAM role to assume a role and execute API calls using the role.
+       is_correct: false
+     - text: Create an IAM user to be shared with the entire development team, provide the development team with the access key.
+       is_correct: false
+     - text: Create an IAM user for each developer on the team; provide each developer with a unique access key.
+       is_correct: true
+     - text: Set up a federation through an Amazon Cognito user pool.
+       is_correct: false
+    explanation: |
+      A opção correta (IAM user por desenvolvedor) fornece credenciais individuais e rastreabilidade, mantendo segurança e simplicidade para acesso de desenvolvedores locais.
+      As opções incorretas incluem compartilhar uma única conta (inseguro), ou soluções mais complexas e não diretamente adequadas para simples uso de desenvolvedor local (federation via Cognito) ou uso incorreto de roles sem credenciais locais.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q28
+    type: multiple_choice
+    question: How is provisioned throughput affected by the chosen consistency model when reading data from a DynamoDB table?
+    options:
+     - text: Strongly consistent reads use the same amount of throughput as eventually consistent reads.
+       is_correct: false
+     - text: Strongly consistent reads use more throughput than eventually consistent reads.
+       is_correct: true
+     - text: Strongly consistent reads use less throughput than eventually consistent reads.
+       is_correct: false
+     - text: Strongly consistent reads use variable throughput depending on read activity.
+       is_correct: false
+    explanation: |
+      A opção correta indica que leituras fortemente consistentes consomem mais throughput (RCUs) que leituras eventualmente consistentes, pois exigem confirmação imediata dos dados atualizados.
+      As opções incorretas negam essa diferença ou apresentam comportamento variável que não descreve corretamente o custo das leituras fortemente consistentes.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q29
+    type: multiple_choice
+    question: A developer needs to deploy a new version to an AWS Elastic Beanstalk application. How can the developer accomplish this task?
+    options:
+     - text: Upload and deploy the new application version in the Elastic Beanstalk console.
+       is_correct: true
+     - text: Use the eb init CLI command to deploy a new version.
+       is_correct: false
+     - text: Terminate the current Elastic Beanstalk environment and create a new one.
+       is_correct: false
+     - text: Modify the ebextensions folder to add a source option to services.
+       is_correct: false
+    explanation: |
+      A opção correta recomenda usar o console do Elastic Beanstalk para fazer upload e implantar uma nova versão, que é o fluxo suportado para atualização de aplicações.
+      As opções incorretas envolvem comandos ou ações que não realizam diretamente o deploy de uma nova versão (eb init é para inicializar, terminar ambiente é drástico, e alterar ebextensions não efetua o deploy por si só).
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q30
+    type: multiple_choice
+    question: A gaming application stores scores for players in an Amazon DynamoDB table that has four attributes; 'user_id', 'user_name', 'user_score', and 'user_rank'. The users are allowed to update their names only if a user is authenticated by web identity federation. Which set of conditions should be added in the policy attached to the role for the 'dynamodb:PutItem' API call?
+    options:
+     - text: Option A.
+       is_correct: true
+       img: images/question30_A.jpg
+     - text: Option B.
+       is_correct: false
+       img: images/question30_B.jpg
+     - text: Option C.
+       is_correct: false
+       img: images/question30_C.jpg
+     - text: Option D.
+       is_correct: false
+       img: images/question30_D.jpg
+    explanation: |
+      A opção correta (Option A) aplica condições que permitem a ação apenas quando o usuário estiver autenticado por web identity e possua as condições corretas para atualizar o atributo 'user_name', atendendo o requisito de controle de acesso.
+      As demais opções não implementam corretamente as condições de web identity ou protegem especificamente o atributo que deve ser limitado, tornando-as inadequadas.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q31
+    type: multiple_choice
+    question: A developer wants the ability to roll back to a previous version of an AWS Lambda function in the event of errors caused by a new deployment. How can the developer achieve this with MINIMAL impact on users?
+    options:
+     - text: Change the application to use an alias that points to the current version. Deploy the new version of the code. Update the alias to use the newly deployed version. If too many errors are encountered, point the alias back to the previous version.
+       is_correct: false
+     - text: Change the application to use an alias that points to the current version. Deploy the new version of the code. Update the alias to direct 10% of users to the newly deployed version. If too many errors are encountered, send 100% of traffic to the previous version.
+       is_correct: true
+     - text: Do not make any changes to the application Deploy the new version of the code. If too many errors are encountered, point the application back to the previous version using the version number in the Amazon Resource Name (ARN).
+       is_correct: false
+     - text: Create three aliases; new, existing, and router. Point the existing alias to the current version. Have the router alias direct 100% of users to the existing alias. Update the application to use the router alias. Deploy the new version of the code. Point the new alias to this version. Update the router alias to direct 10% of users to the new alias. If too many errors are encountered, send 100% of traffic to the existing alias.
+       is_correct: false
+    explanation: |
+      A opção correta descreve uma estratégia de canary usando aliases e distribuição gradual de tráfego (10%), permitindo rollback rápido com impacto mínimo aos usuários se houver erros.
+      As opções incorretas não implementam uma migração gradual segura ou são mais complexas/menos eficazes para rollback com baixo impacto.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q32
+    type: multiple_choice
+    question: An application contains two components; one component to handle HTTP requests, and another component to handle background processing tasks. Each component must scale independently. The developer wants to deploy this application using AWS Elastic Beanstalk. How should this application be deployed, based on these requirements?
+    options:
+     - text: Deploy the application in a single Elastic Beanstalk environment.
+       is_correct: false
+     - text: Deploy each component in a separate Elastic Beanstalk environment.
+       is_correct: true
+     - text: Use multiple Elastic Beanstalk environments for the HTTP component but one environment for the background task component.
+       is_correct: false
+     - text: Use multiple Elastic Beanstalk environments for the background task component but one environment for the HTTP component.
+       is_correct: false
+    explanation: |
+      A opção correta recomenda ambientes separados para cada componente, permitindo que cada um escale de forma independente conforme demanda específica.
+      As opções incorretas consolidam componentes ou propõem configurações inconsistentes que não suportam escalonamento independente conforme exigido.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q33
+    type: multiple_choice
+    question: A company is using AWS CloudFormation templates to deploy AWS resources. The company needs to update one of its AWS CloudFormation stacks. What can the company do to find out how the changes will impact the resources that are running?
+    options:
+     - text: Investigate the change sets.
+       is_correct: true
+     - text: Investigate the stack policies.
+       is_correct: false
+     - text: Investigate the 'Metadata' section.
+       is_correct: false
+     - text: Investigate the 'Resources' section.
+       is_correct: false
+    explanation: |
+      A opção correta é usar change sets, que mostram as diferenças e o impacto das mudanças antes de aplicar a atualização na stack.
+      As opções incorretas referem-se a seções ou políticas que não oferecem a previsão detalhada de alterações sobre os recursos em execução como os change sets.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q34
+    type: multiple_choice
+    question: A developer is creating a serverless web application and maintains different branches of code. The developer wants to avoid updating the Amazon API Gateway target endpoint each time a new code push is performed. What solution would allow the developer to perform a code push efficiently, without the need to update the API Gateway?
+    options:
+     - text: Associate different AWS Lambda functions to an API Gateway target endpoint.
+       is_correct: false
+     - text: Create different stages in API Gateway, then associate API Gateway with AWS Lambda.
+       is_correct: false
+     - text: Create aliases and versions in AWS Lambda.
+       is_correct: true
+     - text: Tag the AWS Lambda functions with different names.
+       is_correct: false
+    explanation: |
+      A opção correta (aliases e versions) permite apontar um mesmo endpoint para uma alias que pode ser atualizada para diferentes versões da função sem mudar o endpoint do API Gateway.
+      As opções incorretas não fornecem o mesmo nível de abstração eficiente (associar múltiplas funções, criar stages ou tags não resolve o problema de atualizar endpoint sem alterações adicionais).
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q35
+    type: multiple_choice
+    question: An application running on EC2 instances is storing data in an S3 bucket. Security policy mandates that all data must be encrypted in transit. How can the Developer ensure that all traffic to the S3 bucket is encrypted?
+    options:
+     - text: Install certificates on the EC2 instances.
+       is_correct: false
+     - text: Create a bucket policy that allows traffic where 'SecureTransport' is 'true'
+       is_correct: false
+     - text: Create an HTTPS redirect on the EC2 instances.
+       is_correct: false
+     - text: Create a bucket policy that denies traffic where 'SecureTransport' is 'false'
+       is_correct: true
+    explanation: |
+      A opção correta (política que nega tráfego sem SecureTransport) garante que apenas requisições via HTTPS/TLS sejam aceitas no bucket, aplicando a exigência de criptografia em trânsito.
+      As opções incorretas não impõem corretamente a exigência no nível do bucket (instalar certificados locais, redirects ou permitir apenas tráfego quando SecureTransport true sem negar o restante não garantem a proteção desejada).
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q36
+    type: multiple_choice
+    question: A supplier is writing a new RESTful API for customers to query the status of orders. The customers requested the following API endpoint 'http://www.supplierdomain.com/status/customerID'. Which of the following application designs meet the requirements? (Select TWO)
+    options:
+     - text: Amazon SQS; Amazon SNS.
+       is_correct: false
+     - text: Elastic Load Balancing; Amazon EC2.
+       is_correct: true
+     - text: Amazon ElastiCache; Amazon Elacticsearch Service.
+       is_correct: false
+     - text: Amazon API Gateway; AWS Lambda.
+       is_correct: true
+     - text: Amazon S3; Amazon CloudFront.
+       is_correct: false
+    explanation: |
+      As opções corretas (ELB+EC2 e API Gateway+Lambda) representam arquiteturas válidas para expor um endpoint REST que atende requisições em tempo real, seja via servidores gerenciados ou serverless.
+      As opções incorretas envolvem serviços inadequados para fornecer um endpoint REST dinâmico (SQS/SNS para mensageria, ElastiCache/ES para busca/caching ou S3/CloudFront para conteúdo estático).
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q37
+    type: multiple_choice
+    question: A developer Is designing an AWS Lambda function that create temporary files that are less than 10 MB during execution. The temporary files will be accessed and modified multiple times during execution. The developer has no need to save or retrieve these files in the future. Where should the temporary file be stored?
+    options:
+     - text: the '/tmp' directory.
+       is_correct: true
+     - text: Amazon EFS.
+       is_correct: false
+     - text: Amazon EBS.
+       is_correct: false
+     - text: Amazon S3.
+       is_correct: false
+    explanation: |
+      A opção correta ('/tmp') é o espaço temporário local disponível para funções Lambda, adequado para arquivos pequenos acessados múltiplas vezes durante a execução e que não precisam de persistência.
+      As opções incorretas implicam armazenamento persistente ou serviços externos (EFS, EBS, S3) que são desnecessários e mais complexos para arquivos temporários e de pequeno porte.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q38
+    type: multiple_choice
+    question: A website's page load times are gradually increasing as more users access the system at the same time. Analysis indicates that a user profile is being loaded from a database in all the web pages being visited by each user and this is increasing the database load and the page load latency. To address this issue the Developer decides to cache the user profile data. Which caching strategy will address this situation MOST efficiently?
+    options:
+     - text: Create a new Amazon EC2 Instance and run a NoSQL database on it. Cache the profile data within this database using the write-through caching strategy.
+       is_correct: false
+     - text: Create an Amazon ElastiCache cluster to cache the user profile data. Use a cache-aside caching strategy.
+       is_correct: true
+     - text: Use a dedicated Amazon RDS instance for caching profile data. Use a write-through caching strategy.
+       is_correct: false
+     - text: Create an ElastiCache cluster to cache the user profile data. Use a write-through caching strategy.
+       is_correct: false
+    explanation: |
+      A opção correta (ElastiCache com cache-aside) permite que a aplicação recupere do cache quando disponível e carregue/atualize o cache quando necessário, reduzindo cargas no banco e latência de página.
+      As opções incorretas propõem soluções mais pesadas ou menos apropriadas (rodar NoSQL em EC2, usar RDS como cache, ou write-through que pode aumentar latência na escrita) e não são tão eficientes para esse caso.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q39
+    type: multiple_choice
+    question: An advertising company has a dynamic website with heavy traffic. The company wants to migrate the website infrastructure to AWS to handle everything except website development. Which solution BEST meets these requirements?
+    options:
+     - text: Use AWS VM Import to migrate a web server image to AWS Launch the image on a compute-optimized Amazon EC2 instance.
+       is_correct: false
+     - text: Launch multiple Amazon Lightsail instance behind a load balancer. Set up the website on those instances.
+       is_correct: false
+     - text: Deploy the website code in an AWS Elastic Beanstalk environment. Use Auto Scaling to scale the numbers of instance.
+       is_correct: true
+     - text: Use Amazon S3 to host the website. Use Amazon CloudFornt to deliver the content at scale.
+       is_correct: false
+    explanation: |
+      A opção correta (Elastic Beanstalk com Auto Scaling) permite que a empresa delegue a gestão da infraestrutura, escalabilidade e deployments à plataforma, mantendo foco no desenvolvimento do site.
+      As opções incorretas envolvem migração manual de VM, Lightsail (mais gerenciado, mas menos adequado para alto tráfego dinâmico) ou S3/CloudFront (adequado para sites estáticos, não dinâmicos), não atendendo ao requisito completamente.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q40
+    type: multiple_choice
+    question: A developer is writing an AWS Lambda function. The developer wants to log key events that occur during the Lambda function and include a unique identifier to associate the events with a specific function invocation. Which of the following will help the developer accomplish this objective?
+    options:
+     - text: Obtain the request identifier from the Lambda context object. Architect the application to write logs to the console.
+       is_correct: true
+     - text: Obtain the request identifier from the Lambda event object. Architect the application to write logs to a file.
+       is_correct: false
+     - text: Obtain the request identifier from the Lambda event object. Architect the application to write logs to the console.
+       is_correct: false
+     - text: Obtain the request identifier from the Lambda context object. Architect the application to write logs to a file.
+       is_correct: false
+    explanation: |
+      A opção correta recomenda obter o request ID do objeto context (fornecido pela plataforma) e escrever logs no console para que o CloudWatch capture automaticamente essas entradas associadas à invocação.
+      As opções incorretas tentam obter o ID do evento (nem sempre contém um identificador único) ou escrever em arquivo local, que não é a prática recomendada para integração com CloudWatch Logs.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q41
+    type: multiple_choice
+    question: A company stores all personally identifiable information (PII) in an Amazon DynamoDB table named PII in Account A. An application running on Amazon EC2 instances in Account B requires access to the PII table. An administrators in Account A created an IAM role named AccessPII with privileges to access the PII table, and made account B a trusted entity. Which combination of actional steps should Developers take to access the table? (Select TWO)
+    options:
+     - text: Allow the EC2 IAM role the permission to assume the AccessPII role.
+       is_correct: true
+     - text: Allow the EC2 IAM role the permission to access the PII table.
+       is_correct: false
+     - text: Include the AWS API in the application code logic to obtain temporary credentials from the EC2 IAM role to access the PII table.
+       is_correct: false
+     - text: Include the 'AssumeRole' API operation in the application code logic to obtain temporary credentials to access the PII table.
+       is_correct: true
+     - text: Include the GetSessionToken API operation in the application code logic to obtain temporary credentials to access the PII table.
+       is_correct: false
+    explanation: |
+      As opções corretas indicam que a role do EC2 deve ter permissão para assumir a role AccessPII e que a aplicação deve usar 'AssumeRole' para obter credenciais temporárias que permitam acessar a tabela na outra conta.
+      As opções incorretas confundem permissões diretas ou APIs inadequadas (GetSessionToken não é a operação apropriada para assumir uma role cross-account e conceder acesso direto ao EC2 role na outra conta não é suficiente sem o AssumeRole).
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q42
+    type: multiple_choice
+    question: An AWS Lambda function accesses two Amazon DynamoDB tables. A developer wants to improve the performance of the Lambda function by identifying bottlenecks in the function. How can the developer inspect the timing of the DynamoDB API calls?
+    options:
+     - text: Add DynamoDB as an event source to the Lambda function. View the performance with Amazon CloudWatch metrics.
+       is_correct: false
+     - text: Place an Application Load Balancer (ALB) in front of the two DynamoDB tables. Inspect the ALB logs.
+       is_correct: false
+     - text: Limit Lambda to no more than five concurrent invocations Monitor from the Lambda console.
+       is_correct: false
+     - text: Enable AWS X-Ray tracing for the function. View the traces from the X-Ray service.
+       is_correct: true
+    explanation: |
+      A opção correta (habilitar X-Ray) permite traçar chamadas externas como as APIs do DynamoDB e inspecionar o tempo gasto em cada operação para identificar gargalos.
+      As opções incorretas não permitem visualizar detalhadamente o tempo das chamadas DynamoDB (atrair métricas CloudWatch, ALB ou limitar concorrência não fornece traços distribuídos das chamadas de API).
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q43
+    type: multiple_choice
+    question: An Amazon RDS database instance is used by many applications to look up historical data. The query rate is relatively constant. When the historical data is updated each day, the resulting write traffic slows the read query performance and affects all application users. What can be done to eliminate the performance impact on application users?
+    options:
+     - text: Make sure Amazon RDS is Multi-AZ so it can better absorb increased traffic.
+       is_correct: false
+     - text: Create an RDS Read Replica and direct all read traffic to the replica.
+       is_correct: true
+     - text: Implement Amazon ElastiCache in front of Amazon RDS to buffer the write traffic.
+       is_correct: false
+     - text: Use Amazon DynamoDB instead of Amazon RDS to buffer the read traffic.
+       is_correct: false
+    explanation: |
+      A opção correta (read replica) permite direcionar consultas de leitura para uma réplica, isolando o impacto das escritas na instância primária e mantendo a performance para leitores.
+      As opções incorretas não isolam adequadamente o impacto de gravações (multi-AZ é para disponibilidade, ElastiCache não lida com consistência de updates massivos sem estratégia, e migrar para DynamoDB é uma mudança arquitetural maior).
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q44
+    type: multiple_choice
+    question: A company is developing a serverless ecommerce web application. The application needs to make coordinated, all-or-nothing changes to multiple items in the company's inventory table in Amazon DynamoDB. Which solution will meet these requirements?
+    options:
+     - text: Enable transactions for the DynamoDB table. Use the 'BatchWriteItem' operation to update the items.
+       is_correct: false
+     - text: Use the 'TransactWriteitems' operation to group the changes. Update the items in the table.
+       is_correct: true
+     - text: Set up a FIFO queue using Amazon SQS. Group the changes in the queue. Update the table based on the grouped changes.
+       is_correct: false
+     - text: Create a transaction table in an Amazon Aurora DB cluster to manage the transactions. Write a backend process to sync the Aurora DB table and the DynamoDB table.
+       is_correct: false
+    explanation: |
+      A opção correta (TransactWriteItems) oferece transações atômicas no DynamoDB para garantir alterações all-or-nothing em múltiplos itens.
+      As opções incorretas ou não fornecem transações atômicas (BatchWriteItem não é transacional) ou introduzem complexidade desnecessária com filas ou um banco relacional para coordenar transações.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q45
+    type: multiple_choice
+    question: An application is running on an EC2 instance. The Developer wants to store an application metric in Amazon CloudWatch. What is the best practice for implementing this requirement?
+    options:
+     - text: Use the PUT Object API call to send data to an S3 bucket. Use an event notification to invoke a Lambda function to publish data to CloudWatch.
+       is_correct: false
+     - text: Publish the metric data to an Amazon Kinesis Stream using a 'PutRecord' API call. Subscribe a Lambda function that publishes data to CloudWatch.
+       is_correct: false
+     - text: Use the CloudWatch 'PutMetricData' API call to submit a custom metric to CloudWatch. Provide the required credentials to enable the API call.
+       is_correct: false
+     - text: Use the CloudWatch 'PutMetricData' API call to submit a custom metric to CloudWatch. Launch the EC2 instance with the required IAM role to enable the API call.
+       is_correct: true
+    explanation: |
+      A opção correta recomenda usar 'PutMetricData' com a instância EC2 lançada com uma IAM role adequada, permitindo envio direto e seguro de métricas sem embutir credenciais.
+      As opções incorretas introduzem passos indiretos ou desnecessários (usar S3+eventos, Kinesis+Lambda, ou fornecer credenciais manualmente) quando a role do EC2 com PutMetricData é a prática recomendada.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q46
+    type: multiple_choice
+    question: A Developer needs to design an application running on AWS that will be used to consume Amazon SQS messages that range from 1 KB up to 1GB in size. How should the Amazon SQS messages be managed?
+    options:
+     - text: Use Amazon S3 and the Amazon SQS CLI.
+       is_correct: false
+     - text: Use Amazon S3 and the Amazon SQS Extended Client Library for Java.
+       is_correct: true
+     - text: Use Amazon EBS and the Amazon SQS CLI.
+       is_correct: false
+     - text: Use Amazon EFS and the Amazon SQS CLI.
+       is_correct: false
+    explanation: |
+      A opção correta (S3 + SQS Extended Client Library) é a abordagem recomendada para mensagens muito grandes: o corpo é armazenado no S3 e apenas uma referência é colocada na mensagem SQS.
+      As opções incorretas propõem uso de EBS/EFS ou ferramentas inadequadas que não são a solução integrada para mensagens de até 1GB com SQS.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q47
+    type: multiple_choice
+    question: A developer has written a multi-threaded application that is running on a fleet of Amazon EC2 instances. The operations team has requested a graphical method to monitor the number of running threads over time. What is the MOST efficient way to fulfill this request?
+    options:
+     - text: Periodically send the thread count to AWS X-Ray segments, then generate a service graph on demand.
+       is_correct: false
+     - text: Create a custom Amazon CloudWatch metric and periodically perform a 'PutMetricData' call with the current thread count.
+       is_correct: true
+     - text: Periodically log thread count data to Amazon S3. Use Amazon Kinesis to process the data into a graph.
+       is_correct: false
+     - text: Periodically write the current thread count to a table using Amazon DynarnoDB and use Amazon CloudFront to create a graph.
+       is_correct: false
+    explanation: |
+      A opção correta (métrica customizada no CloudWatch) permite envio periódico do contador de threads e visualização gráfica imediata através do console do CloudWatch.
+      As opções incorretas são soluções excessivamente complexas ou inapropriadas para o objetivo simples de monitoramento de uma métrica ao longo do tempo.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q48
+    type: multiple_choice
+    question: The Lambda function below is being called through an API using Amazon API Gateway. The average execution time for the Lambda function is about 1 second. The pseudocode for the Lambda function is as shown in the exhibit. What two actions can be taken to improve the performance of this Lambda function without increasing the cost of the solution? (Select TWO)
+    img: images/question48.jpg
+    options:
+     - text: Package only the modules the Lambda function requires.
+       is_correct: true
+     - text: Use Amazon DynamoDB instead of Amazon RDS.
+       is_correct: false
+     - text: Move the initialization of the variable Amazon RDS connection outside of the handler function.
+       is_correct: true
+     - text: Implement custom database connection pooling with the Lambda function.
+       is_correct: false
+     - text: Implement local caching of Amazon RDS data so Lambda can re-use the cache.
+       is_correct: false
+    explanation: |
+      As opções corretas (reduzir dependências empacotadas e inicializar a conexão ao RDS fora do handler) reduzem o tempo de cold start e evitam re-criar conexões em cada invocação, melhorando a latência sem aumentar custos.
+      As opções incorretas ou implicam mudanças arquiteturais que podem aumentar custo ou complexidade (substituir RDS por DynamoDB, pooling customizado ou caching local inadequado) e não são as ações mais diretas conforme o enunciado.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q49
+    type: multiple_choice
+    question: An application on AWS is using third-party APIs. The Developer needs to monitor API errors in the code, and wants to receive notifications if failures go above a set threshold value. How can the Developer achieve these requirements?
+    options:
+     - text: Publish a custom metric on Amazon CloudWatch and use Amazon Simple Email Service (SES) for notification.
+       is_correct: false
+     - text: Use an Amazon CloudWatch API-error metric and use Amazon Simple Notification Service (SNS) for notification.
+       is_correct: false
+     - text: Use an Amazon CloudWatch API-error metric and use Amazon SES for notification.
+       is_correct: false
+     - text: Publish a custom metric on Amazon CloudWatch and use Amazon SNS for notification.
+       is_correct: true
+    explanation: |
+      A opção correta (publicar métrica customizada e usar SNS) permite criar alarmes no CloudWatch sobre erros e usar SNS para enviar notificações a assinantes (e-mail, SMS, etc.).
+      As opções incorretas combinam métricas existentes e serviços de notificação de forma inadequada ou escolhem SES (que não é o serviço de notificação direto para alarmes), portanto não são a melhor prática.
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q50
+    type: multiple_choice
+    question: The release process workflow of an application requires a manual approval before the code is deployed into the production environment. What is the BEST way to achieve this using AWS CodePipeline?
+    options:
+     - text: Use multiple pipelines to allow approval.
+       is_correct: false
+     - text: Use an approval action in a stage.
+       is_correct: true
+     - text: Disable the stage transition to allow manual approval.
+       is_correct: false
+     - text: Disable a stage just prior the deployment stage.
+       is_correct: false
+    explanation: |
+      A opção correta (adicionar uma ação de aprovação em um estágio) é a forma nativa do CodePipeline para requerer intervenção humana antes de prosseguir com o deploy.
+      As opções incorretas propõem workarounds inadequados ou impraticáveis (múltiplos pipelines, desabilitar transições/estágios) que não fornecem um fluxo de aprovação controlado.
+    tags: 
+    difficulty: 
+    points: 

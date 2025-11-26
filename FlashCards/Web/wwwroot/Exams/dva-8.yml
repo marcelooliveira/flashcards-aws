@@ -1,0 +1,642 @@
+questions:
+  - id: q351
+    type: multiple_choice
+    question: An on-premises application makes repeated calls to store files to Amazon S3. As usage of the application has increased, 'LimitExceeded' errors are being logged. What should be changed to fix this error?
+    options:
+     - text: Implement exponential backoffs in the application.
+       is_correct: true
+     - text: Load balance the application to multiple servers.
+       is_correct: false
+     - text: Move the application to Amazon EC2.
+       is_correct: false
+     - text: Add a one second delay to each API call.
+       is_correct: false
+    explanation: 
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q352
+    type: multiple_choice
+    question: A company caches session information for a web application in an Amazon DynamoDB table. The company wants an automated way to delete old items from the table. What is the simplest way to do this?
+    options:
+     - text: Write a script that deletes old records; schedule the scripts as a cron job on an Amazon EC2 instance.
+       is_correct: false
+     - text: Add an attribute with the expiration time; enable the 'Time To Live' feature based on that attribute.
+       is_correct: true
+     - text: Each day, create a new table to hold session data; delete the previous day's table.
+       is_correct: false
+     - text: Add an attribute with the expiration time; name the attribute 'ItemExpiration'
+       is_correct: false
+    explanation: 
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q353
+    type: multiple_choice
+    question: An application is expected to process many files. Each file takes four minutes to process each AWS Lambda invocation. The Lambda function does not return any important data. What is the fastest way to process all the files?
+    options:
+     - text: First split the files to make them smaller, then process with synchronous RequestResponse Lambda invocations.
+       is_correct: false
+     - text: Make synchronous RequestResponse Lambda invocations and process the files one by one.
+       is_correct: false
+     - text: Make asynchronous Event Lambda invocations and process the files in parallel.
+       is_correct: true
+     - text: First join all the files, then process it all at once with an asynchronous Event Lambda invocation.
+       is_correct: false
+    explanation: 
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q354
+    type: multiple_choice
+    question: The upload of a 15 GB object to Amazon S3 fails. The error message reads - 'Your proposed upload exceeds the maximum allowed object size.'. What technique will allow the Developer to upload this object?
+    options:
+     - text: Upload the object using the multi-part upload API.
+       is_correct: true
+     - text: Upload the object over an AWS Direct Connect connection.
+       is_correct: false
+     - text: Contact AWS Support to increase the object size limit.
+       is_correct: false
+     - text: Upload the object to another AWS region.
+       is_correct: false
+    explanation: 
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q355
+    type: multiple_choice
+    question: AWS CodeBuild builds code for an application, creates the Docker image, pushes the image to Amazon Elastic Container Registry (Amazon ECR), and tags the image with a unique identifier. If the Developers already have AWS CLI configured on their workstations, how can the Docker images be pulled to the workstations?
+    options:
+     - text: "Run the following: 'docker pull REPOSITORY URI : TAG'"
+       is_correct: false
+     - text: "Run the output of the following: aws ecr get-login and then run: 'docker pull REPOSITORY URI : TAG'"
+       is_correct: true
+     - text: "Run the following: 'aws ecr get-login' and then run: 'docker pull REPOSITORY URI : TAG'"
+       is_correct: false
+     - text: "Run the output of the following: 'aws ecr get-download-url-for-layer' and then run: 'docker pull REPOSITORY URI : TAG'"
+       is_correct: false
+    explanation: 
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q356
+    type: multiple_choice
+    question: A web application is designed to allow new users to create accounts using their email addresses. The application will store attributes for each user, and is expecting millions of user to sign up. What should the Developer implement to achieve the design goals?
+    options:
+     - text: Amazon Cognito user pools.
+       is_correct: true
+     - text: AWS Mobile Hub user data storage.
+       is_correct: false
+     - text: Amazon Cognito Sync.
+       is_correct: false
+     - text: AWS Mobile Hub cloud logic.
+       is_correct: false
+    explanation: 
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q357
+    type: multiple_choice
+    question: A company needs a new REST API that can return information about the contents of an Amazon S3 bucket, such as a count of the objects stored in it. The company has decided that the new API should be written as a microservice using AWS Lambda and Amazon API Gateway. How should the Developer ensure that the microservice has the necessary access to the Amazon S3 bucket, while adhering to security best practices?
+    options:
+     - text: Create an IAM user that has permissions to access the Amazon S3 bucket, and store the IAM user credentials in the Lambda function source code.
+       is_correct: false
+     - text: Create an IAM role that has permissions to access the Amazon S3 bucket and assign it to the Lambda function as its execution role.
+       is_correct: true
+     - text: Create an Amazon S3 bucket policy that specifies the Lambda service as its principal and assign it to the Amazon S3 bucket.
+       is_correct: false
+     - text: Create an IAM role, attach the AmazonS3FullAccess managed policy to it, and assign the role to the Lambda function as its execution role.
+       is_correct: false
+    explanation: 
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q358
+    type: multiple_choice
+    question: An organization is using Amazon CloudFront to ensure that its users experience low-latency access to its web application. The organization has identified a need to encrypt all traffic between users and CloudFront, and all traffic between CloudFront and the web application. How can these requirements be met? (Choose TWO)
+    options:
+     - text: Use AWS KMS to encrypt traffic between CloudFront and the web application.
+       is_correct: false
+     - text: Set the Origin Protocol Policy to 'HTTPS Only'
+       is_correct: true
+     - text: Set the Origin's HTTP Port to '443'
+       is_correct: false
+     - text: Set the Viewer Protocol Policy to 'HTTPS Only' or 'Redirect HTTP to HTTPS'
+       is_correct: true
+     - text: Enable the CloudFront option 'Restrict Viewer Access'
+       is_correct: false
+    explanation: 
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q359
+    type: multiple_choice
+    question: An application is using Amazon DynamoDB as its data store, and should be able to read 100 items per second as strongly consistent reads. Each item is 5 KB in size. To what value should the table's provisioned read throughput be set?
+    options:
+     - text: 50 read capacity units.
+       is_correct: false
+     - text: 100 read capacity units.
+       is_correct: false
+     - text: 200 read capacity units.
+       is_correct: true
+     - text: 500 read capacity units.
+       is_correct: false
+    explanation: 
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q360
+    type: multiple_choice
+    question: An application uses Lambda functions to extract metadata from files uploaded to an S3 bucket; the metadata is stored in Amazon DynamoDB. The application starts behaving unexpectedly, and the Developer wants to examine the logs of the Lambda function code for errors. Based on this system configuration, where would the Developer find the logs?
+    options:
+     - text: Amazon S3.
+       is_correct: false
+     - text: AWS CloudTrail.
+       is_correct: false
+     - text: Amazon CloudWatch.
+       is_correct: true
+     - text: Amazon DynamoDB
+       is_correct: false
+    explanation: 
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q361
+    type: multiple_choice
+    question: A Developer is creating a Lambda function that will generate and export a file. The function requires 100 MB of temporary storage for temporary files while executing. These files will not be needed after the function is complete. How can the Developer MOST efficiently handle the temporary files?
+    options:
+     - text: Store the files in EBS and delete the files at the end of the Lambda function.
+       is_correct: false
+     - text: Copy the files to EFS and delete the files at the end of the Lambda function.
+       is_correct: false
+     - text: Store the files in the '/tmp' directory and delete the files at the end of the Lambda function.
+       is_correct: true
+     - text: Copy the files to an S3 bucket with a lifecycle policy to delete the files.
+       is_correct: false
+    explanation: 
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q362
+    type: multiple_choice
+    question: A Developer has developed a web application and wants to deploy it quickly on a Tomcat server on AWS. The Developer wants to avoid having to manage the underlying infrastructure. What is the easiest way to deploy the application, based on these requirements?
+    options:
+     - text: AWS CloudFormation.
+       is_correct: false
+     - text: AWS Elastic Beanstalk.
+       is_correct: true
+     - text: Amazon S3.
+       is_correct: false
+     - text: AWS CodePipeline
+       is_correct: false
+    explanation: 
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q363
+    type: multiple_choice
+    question: An application runs on multiple EC2 instances behind an ELB. Where is the session data best written so that it can be served reliably across multiple requests?
+    options:
+     - text: Write data to Amazon ElastiCache.
+       is_correct: true
+     - text: Write data to Amazon Elastic Block Store.
+       is_correct: false
+     - text: Write data to Amazon EC2 Instance Store.
+       is_correct: false
+     - text: Write data to the 'root' filesystem.
+       is_correct: false
+    explanation: 
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q364
+    type: multiple_choice
+    question: A company is migrating from a monolithic architecture to a microservices-based architecture. The Developers need to refactor the application so that the many microservices can asynchronously communicate with each other without impacting performance. Use of which managed AWS services will enable asynchronous message passing? (Choose TWO)
+    options:
+     - text: Amazon SQS.
+       is_correct: true
+     - text: Amazon Cognito.
+       is_correct: false
+     - text: Amazon Kinesis.
+       is_correct: false
+     - text: Amazon SNS.
+       is_correct: true
+     - text: Amazon ElastiCache.
+       is_correct: false
+    explanation: 
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q365
+    type: multiple_choice
+    question: According to best practice, how should access keys be managed in AWS? (Choose TWO)
+    options:
+     - text: Use the same access key in all applications for consistency.
+       is_correct: false
+     - text: Delete all access keys for the account 'root' user.
+       is_correct: true
+     - text: Leave unused access keys in the account for tracking purposes.
+       is_correct: false
+     - text: Embed and encrypt access keys in code for continuous deployment.
+       is_correct: false
+     - text: Use Amazon IAM roles instead of access keys where possible.
+       is_correct: true
+    explanation: 
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q366
+    type: multiple_choice
+    question: An application running on an Amazon Linux EC2 instance needs to manage the AWS infrastructure. How can the EC2 instance be configured to make AWS API calls securely?
+    options:
+     - text: Sign the AWS CLI command using the signature version 4 process.
+       is_correct: false
+     - text: Run the 'aws configure' AWS CLI command and specify the access key id and secret access key.
+       is_correct: false
+     - text: Specify a role for the EC2 instance with the necessary privileges.
+       is_correct: true
+     - text: Pass the access key id and secret access key as parameters for each AWS CLI command.
+       is_correct: false
+    explanation: 
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q367
+    type: multiple_choice
+    question: An application needs to use the IP address of the client in its processing. The application has been moved into AWS and has been placed behind an Application Load Balancer (ALB). However, all the client IP addresses now appear to be the same. The application must maintain the ability to scale horizontally. Based on this scenario, what is the MOST cost-effective solution to this problem?
+    options:
+     - text: Remove the application from the ALB. Delete the ALB and change Amazon Route 53 to direct traffic to the instance running the application.
+       is_correct: false
+     - text: Remove the application from the ALB. Create a Classic Load Balancer in its place. Direct traffic to the application using the HTTP protocol.
+       is_correct: false
+     - text: Alter the application code to inspect the 'X-Forwarded-For' header. Ensure that the code can work properly if a list of IP addresses is passed in the header.
+       is_correct: true
+     - text: Alter the application code to inspect a custom header. Alter the client code to pass the IP address in the custom header.
+       is_correct: false
+    explanation: 
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q368
+    type: multiple_choice
+    question: A development team is using AWS Elastic Beanstalk to deploy a two-tier application that consists of a load-balanced web tier and an Amazon RDS database tier in production. The team would like to separate the RDS instance from the Elastic Beanstalk. How can this be accomplished?
+    options:
+     - text: Use the Elastic Beanstalk CLI to disassociate the database.
+       is_correct: false
+     - text: Use the AWS CLI to disassociate the database.
+       is_correct: false
+     - text: Change the deployment policy to disassociate the database.
+       is_correct: false
+     - text: Recreate a new Elastic Beanstalk environment without Amazon RDS.
+       is_correct: true
+    explanation: 
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q369
+    type: multiple_choice
+    question: A company is using AWS CodePipeline to deliver one of its applications. The delivery pipeline is triggered by changes to the master branch of an AWS CodeCommit repository and uses AWS CodeBuild to implement the test and build stages of the process and AWS CodeDeploy to deploy the application. The pipeline has been operating successfully for several months and there have been no modifications. Following a recent change to the application's source code, AWS CodeDeploy has not deployed the updates application as expected. What are the possible causes? (Choose TWO)
+    options:
+     - text: The change was not made in the master branch of the AWS CodeCommit repository.
+       is_correct: true
+     - text: One of the earlier stages in the pipeline failed and the pipeline has terminated.
+       is_correct: true
+     - text: One of the Amazon EC2 instances in the company's AWS CodePipeline cluster is inactive.
+       is_correct: false
+     - text: The AWS CodePipeline is incorrectly configured and is not executing AWS CodeDeploy.
+       is_correct: false
+     - text: AWS CodePipeline does not have permissions to access AWS CodeCommit.
+       is_correct: false
+    explanation: 
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q370
+    type: multiple_choice
+    question: A social media company is using Amazon Cognito in order to synchronize profiles across different mobile devices, to enable end users to have a seamless experience. Which of the following configurations can be used to silently notify users whenever an update is available on all other devices?
+    options:
+     - text: Modify the user pool to include all the devices which keep them in sync.
+       is_correct: false
+     - text: Use the SyncCallback interface to receive notifications on the application.
+       is_correct: false
+     - text: Use an Amazon Cognito stream to analyze the data and push the notifications.
+       is_correct: false
+     - text: Use the push synchronization feature with the appropriate IAM role.
+       is_correct: true
+    explanation: 
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q371
+    type: multiple_choice
+    question: An on-premises application is implemented using a Linux, Apache, MySQL and PHP (LAMP) stack. The Developer wants to run this application in AWS. Which of the following sets of AWS services can be used to run this stack?
+    options:
+     - text: Amazon API Gateway, Amazon S3.
+       is_correct: false
+     - text: AWS Lambda, Amazon DynamoDB.
+       is_correct: false
+     - text: Amazon EC2, Amazon Aurora.
+       is_correct: true
+     - text: Amazon Cognito, Amazon RDS.
+       is_correct: false
+     - text: Amazon ECS, Amazon EBS.
+       is_correct: false
+    explanation: 
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q372
+    type: multiple_choice
+    question: An application displays a status dashboard. The status is updated by 1 KB messages from an SQS queue. Although the status changes infrequently, the Developer must minimize the time between the message arrival in the queue and the dashboard update. What technique provides the shortest delay in updating the dashboard?
+    options:
+     - text: Retrieve the messages from the queue using long polling every 20 seconds.
+       is_correct: true
+     - text: Reduce the size of the messages by compressing them before sending.
+       is_correct: false
+     - text: Retrieve the messages from the queue using short polling every 10 seconds.
+       is_correct: false
+     - text: Reduce the size of each message payload by sending it in two parts.
+       is_correct: false
+    explanation: 
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q373
+    type: multiple_choice
+    question: An on-premises legacy application is caching data files locally and writing shared images to local disks. What is necessary to allow for horizontal scaling when migrating the application to AWS?
+    options:
+     - text: Modify the application to have both shared images and caching data written to Amazon EBS.
+       is_correct: false
+     - text: Modify the application to read and write cache data on Amazon S3, and also store shared images on S3.
+       is_correct: true
+     - text: Modify the application to use Amazon S3 for serving shared images; cache data can then be written to local disks.
+       is_correct: false
+     - text: Modify the application to read and write cache data on Amazon S3, while continuing to write shared images to local disks.
+       is_correct: false
+    explanation: 
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q374
+    type: multiple_choice
+    question: A Developer must trigger an AWS Lambda function based on the item lifecycle activity in an Amazon DynamoDB table. How can the Developer create the solution?
+    options:
+     - text: Enable a DynamoDB stream that publishes an Amazon SNS message. Trigger the Lambda function synchronously from the SNS message.
+       is_correct: false
+     - text: Enable a DynamoDB stream that publishes an SNS message. Trigger the Lambda function asynchronously from the SNS message.
+       is_correct: false
+     - text: Enable a DynamoDB stream, and trigger the Lambda function synchronously from the stream.
+       is_correct: true
+     - text: Enable a DynamoDB stream, and trigger the Lambda function asynchronously from the stream.
+       is_correct: false
+    explanation: 
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q375
+    type: multiple_choice
+    question: "After installing the AWS CLI, a Developer tries to run the command 'aws configure' but receives the following error: 'Error: aws: command not found'. What is the most likely cause of this error?"
+    options:
+     - text: The 'aws' executable is not in the 'PATH' environment variable.
+       is_correct: true
+     - text: Access to the 'aws' executable has been denied to the installer.
+       is_correct: false
+     - text: Incorrect AWS credentials were provided.
+       is_correct: false
+     - text: The 'aws' script does not have an executable file mode.
+       is_correct: false
+    explanation: 
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q376
+    type: multiple_choice
+    question: The Developer for a retail company must integrate a fraud detection solution into the order processing solution. The fraud detection solution takes between ten and thirty minutes to verify an order. At peak, the web site can receive one hundred orders per minute. What is the most scalable method to add the fraud detection solution to the order processing pipeline?
+    options:
+     - text: Add all new orders to an Amazon SQS queue. Configure a fleet of 10 EC2 instances spanning multiple AZs with the fraud detection solution installed on them to pull orders from this queue. Update the order with a pass or fails status.
+       is_correct: false
+     - text: Add all new orders to an SQS queue. Configure an Auto Scaling group that uses the queue depth metric as its unit of scale to launch a dynamically-sized fleet of EC2 instances spanning multiple AZs with the fraud detection solution installed on them to pull orders from this queue. Update the order with a pass or fails status.
+       is_correct: true
+     - text: Add all new orders to an Amazon Kinesis Stream. Subscribe a Lambda function to automatically read batches of records from the Kinesis Stream. The Lambda function includes the fraud detection software and will update the order with a pass or fail status.
+       is_correct: false
+     - text: Write all new orders to Amazon DynamoDB. Configure DynamoDB Streams to include all new orders. Subscribe a Lambda function to automatically read batches of records from the Kinesis Stream. The Lambda function includes the fraud detection software and will update the order with a pass or fail status.
+       is_correct: false
+    explanation: 
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q377
+    type: multiple_choice
+    question: When a Developer tries to run an AWS CodeBuild project, it raises an error because the length of all environment variables exceeds the limit for the combined maximum of characters. What is the recommended solution?
+    options:
+     - text: Add the export 'LC_ALL="en_US.utf8"' command to the 'pre_build' section to ensure 'POSIX' localization.
+       is_correct: false
+     - text: Use Amazon Cognito to store key-value pairs for large numbers of environment variables.
+       is_correct: false
+     - text: Update the settings for the build project to use an Amazon S3 bucket for large numbers of environment variables.
+       is_correct: false
+     - text: Use AWS Systems Manager Parameter Store to store large numbers of environment variables.
+       is_correct: true
+    explanation: 
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q378
+    type: multiple_choice
+    question: A set of APIs are exposed to customers using the Amazon API Gateway. These APIs have caching enabled on the API Gateway. Customers have asked for an option to invalidate this cache for each of the APIs. What action can be taken to allow API customers to invalidate the API Cache?
+    options:
+     - text: Ask customers to use AWS credentials to call the 'InvalidateCache' API.
+       is_correct: false
+     - text: Ask customers to invoke an AWS API endpoint which invalidates the cache.
+       is_correct: false
+     - text: Ask customers to pass an HTTP header called 'Cache-Control:max-age=0'
+       is_correct: true
+     - text: Ask customers to add a query string parameter called 'INVALIDATE_CACHE' when making an API call.
+       is_correct: false
+    explanation: 
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q379
+    type: multiple_choice
+    question: A Developer has been asked to build a real-time dashboard web application to visualize the key prefixes and storage size of objects in Amazon S3 buckets. Amazon DynamoDB will be used to store the Amazon S3 metadata. What is the optimal and MOST cost-effective design to ensure that the real-time dashboard is kept up to date with the state of the objects in the Amazon S3 buckets?
+    options:
+     - text: Use an Amazon CloudWatch event backed by an AWS Lambda function. Issue an Amazon S3 API call to get a list of all Amazon S3 objects and persist the metadata within DynamoDB. Have the web application poll the DynamoDB table to reflect this change.
+       is_correct: false
+     - text: Use Amazon S3 Event Notification backed by a Lambda function to persist the metadata into DynamoDB. Have the web application poll the DynamoDB table to reflect this change.
+       is_correct: true
+     - text: Run a cron job within an Amazon EC2 instance to list all objects within Amazon S3 and persist the metadata into DynamoDB. Have the web application poll the DynamoDB table to reflect this change.
+       is_correct: false
+     - text: Create a new Amazon EMR cluster to get all the metadata about Amazon S3 objects; persist the metadata into DynamoDB. Have the web application poll the DynamoDB table to reflect this change.
+       is_correct: false
+    explanation: 
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q380
+    type: multiple_choice
+    question: A Developer must repeatedly and consistently deploy a serverless RESTful API on AWS. Which techniques will work? (Choose TWO)
+    options:
+     - text: Define a Swagger file. Use AWS Elastic Beanstalk to deploy the Swagger file.
+       is_correct: false
+     - text: Define a Swagger file. Use AWS CodeDeploy to deploy the Swagger file.
+       is_correct: false
+     - text: Deploy a SAM template with an inline Swagger definition.
+       is_correct: true
+     - text: Define a Swagger file. Deploy a SAM template that references the Swagger file.
+       is_correct: true
+     - text: Define an inline Swagger definition in a Lambda function. Invoke the Lambda function.
+       is_correct: false
+    explanation: 
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q381
+    type: multiple_choice
+    question: An existing serverless application processes uploaded image files. The process currently uses a single Lambda function that takes an image file, performs the processing, and stores the file in Amazon S3. Users of the application now require thumbnail generation of the images. Users want to avoid any impact to the time it takes to perform the image uploads. How can thumbnail generation be added to the application, meeting user requirements while minimizing changes to existing code?
+    options:
+     - text: Change the existing Lambda function handling the uploads to create thumbnails at the time of upload. Have the function store both the image and thumbnail in Amazon S3.
+       is_correct: false
+     - text: Create a second Lambda function that handles thumbnail generation and storage. Change the existing Lambda function to invoke it asynchronously.
+       is_correct: false
+     - text: Create an S3 event notification with a Lambda function destination. Create a new Lambda function to generate and store thumbnails.
+       is_correct: true
+     - text: Create an S3 event notification to an SQS Queue. Create a scheduled Lambda function that processes the queue, and generates and stores thumbnails.
+       is_correct: false
+    explanation: 
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q382
+    type: multiple_choice
+    question: A company is using Amazon API Gateway to manage access to a set of microservices implemented as AWS Lambda functions. Following a bug report, the company makes a minor breaking change to one of the APIs. In order to avoid impacting existing clients when the new API is deployed, the company wants to allow clients six months to migrate from v1 to v2. Which approach should the Developer use to handle this change?
+    options:
+     - text: Update the underlying Lambda function and provide clients with the new Lambda invocation URL.
+       is_correct: false
+     - text: Use API Gateway to automatically propagate the change to clients, specifying 180 days in the phased deployment parameter.
+       is_correct: false
+     - text: Use API Gateway to deploy a new stage named v2 to the API and provide users with its URL.
+       is_correct: true
+     - text: Update the underlying Lambda function, create an Amazon CloudFront distribution with the updated Lambda function as its origin.
+       is_correct: false
+    explanation: 
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q383
+    type: multiple_choice
+    question: A company developed a set of APIs that are being served through the Amazon API Gateway. The API calls need to be authenticated based on OpenID identity providers such as Amazon or Facebook. The APIs should allow access based on a custom authorization model. Which is the simplest and MOST secure design to use to build an authentication and authorization model for the APIs?
+    options:
+     - text: Use Amazon Cognito user pools and a custom authorizer to authenticate and authorize users based on JSON Web Tokens.
+       is_correct: true
+     - text: Build a OpenID token broker with Amazon and Facebook. Users will authenticate with these identify providers and pass the JSON Web Token to the API to authenticate each API call.
+       is_correct: false
+     - text: Store user credentials in Amazon DynamoDB and have the application retrieve temporary credentials from AWS STS. Make API calls by passing user credentials to the APIs for authentication and authorization.
+       is_correct: false
+     - text: Use Amazon RDS to store user credentials and pass them to the APIs for authentications and authorization.
+       is_correct: false
+    explanation: 
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q384
+    type: multiple_choice
+    question: Where should an Elastic Beanstalk configuration file named 'healthcheckur1.config' be placed in the application source bundle?
+    options:
+     - text: In the 'root' of the application.
+       is_correct: false
+     - text: In the 'bin' folder.
+       is_correct: false
+     - text: In 'healthcheckur1.config.ebextension' under 'root'
+       is_correct: false
+     - text: In the '.ebextensions' folder.
+       is_correct: true
+    explanation: 
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q385
+    type: multiple_choice
+    question: A Developer has implemented a Lambda function that needs to add new customers to an RDS database that is expected to run hundreds of times per hour. The Lambda function is configured to use 512MB of RAM and is based on the following pseudo code. After testing the Lambda function, the Developer notices that the Lambda execution time is much longer than expected. What should the Developer do to improve performance?
+    img: images/question385.jpg
+    options:
+     - text: Increase the amount of RAM allocated to the Lambda function, which will increase the number of threads the Lambda can use.
+       is_correct: false
+     - text: Increase the size of the RDS database to allow for an increased number of database connections each hour.
+       is_correct: false
+     - text: Move the database connection and close statement out of the handler. Place the connection in the global space.
+       is_correct: true
+     - text: Replace RDS wit Amazon DynamoDB to implement control over the number of writes per second.
+       is_correct: false
+    explanation: 
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q386
+    type: multiple_choice
+    question: A static website is hosted in an Amazon S3 bucket. Several HTML pages on the site use JavaScript to download images from another Amazon S3 bucket. These images are not displayed when users browse the site. What is the possible cause for the issue?
+    options:
+     - text: The referenced Amazon S3 bucket is in another region.
+       is_correct: false
+     - text: The images must be stored in the same Amazon S3 bucket.
+       is_correct: false
+     - text: Port 80 must be opened on the security group in which the Amazon S3 bucket is located.
+       is_correct: false
+     - text: Cross Origin Resource Sharing must be enabled on the Amazon S3 bucket.
+       is_correct: true
+    explanation: 
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q387
+    type: multiple_choice
+    question: "Amazon S3 has the following structure: 'S3://BUCKET/FOLDERNAME/FILENAME.zip'. Which S3 best practice would optimize performance with thousands of PUT request each second to a single bucket?"
+    options:
+     - text: Prefix folder names with user id; for example, 's3://BUCKET/2013-FOLDERNAME/FILENAME.zip'
+       is_correct: false
+     - text: Prefix file names with timestamps; for example, 's3://BUCKET/FOLDERNAME/2013-26-05-15-00-00-FILENAME.zip'
+       is_correct: false
+     - text: Prefix file names with random hex hashes; for example, 's3://BUCKET/FOLDERNAME/23a6-FILENAME.zip'
+       is_correct: false
+     - text: Prefix folder names with random hex hashes; for example, 's3://BUCKET/23a6-FOLDERNAME/FILENAME.zip'
+       is_correct: true
+    explanation: 
+    tags: 
+    difficulty: 
+    points: 
