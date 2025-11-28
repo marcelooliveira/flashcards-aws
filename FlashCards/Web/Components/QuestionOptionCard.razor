@@ -4,12 +4,13 @@
 }
 
 <li class="mdc-list-item" style="@liStyle" @onclick="() => SelectOption()">
-    <span>
+    <div>
         <input type="checkbox" class="mdc-radio" name="question-option" checked="@QuestionOption.IsSelected" disabled="@IsLocked" />
         <span class="mdc-typography--body1">
             @QuestionOption.Text
         </span>
-    </span>
+    </div>
+    <img src="@QuestionOption.Img" />
 </li>
 
 @code {

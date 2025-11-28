@@ -258,7 +258,13 @@ else
             bool.TryParse(isCorrectScalar.Value, out isCorrect);
           }
 
-          var newOption = new QuestionOption(idx, optText);
+          string img = string.Empty;
+          if (opt.Children.TryGetValue(new YamlScalarNode("img"), out var img) && img is YamlScalarNode imgScalar)
+          {
+             img = imgScalar.Value;
+          }
+
+          var newOption = new QuestionOption(idx, optText, img);
           optionsList.Add((newOption, isCorrect));
 
           idx++;
