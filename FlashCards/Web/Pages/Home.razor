@@ -146,7 +146,7 @@ else
       else if (line.StartsWith("    - "))
       {
         int optionIndex = current?.QuestionOptions.Count ?? 0;
-        current?.QuestionOptions.Add(new QuestionOption(optionIndex, line.Substring(6).Trim()));
+        current?.QuestionOptions.Add(new QuestionOption(optionIndex, line.Substring(6).Trim(), ""));
       }
       else if (line.Contains("Correct answer:"))
       {
@@ -216,6 +216,13 @@ else
       // Populate basic properties
       question.Id = GetScalarValue(qNode, "id");
       question.Text = GetScalarValue(qNode, "question"); // Use QuestionText
+
+      string image = GetScalarValue(qNode, "img");
+      if (!string.IsNullOrWhiteSpace(image))
+      {
+        question.Img = $"Exams/{image}";
+      }
+
       question.Type = GetScalarValue(qNode, "type");
       question.Explanation = GetScalarValue(qNode, "explanation");
       question.Diagram = GetScalarValue(qNode, "diagram");
@@ -258,13 +265,13 @@ else
             bool.TryParse(isCorrectScalar.Value, out isCorrect);
           }
 
-          string img = string.Empty;
+          image = string.Empty;
           if (opt.Children.TryGetValue(new YamlScalarNode("img"), out var img) && img is YamlScalarNode imgScalar)
           {
-             img = imgScalar.Value;
+            image = imgScalar.Value;
           }
 
-          var newOption = new QuestionOption(idx, optText, img);
+          var newOption = new QuestionOption(idx, optText, image);
           optionsList.Add((newOption, isCorrect));
 
           idx++;

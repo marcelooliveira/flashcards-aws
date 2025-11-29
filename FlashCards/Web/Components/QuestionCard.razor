@@ -6,6 +6,9 @@
 <div class="mdc-card question-card mb" id="question">
   <div><button @onclick="@(() => SpeakText(Question.Text))" style="font-size: 36px;">📢</button></div>
   <div><span class="mdc-typography--body1">@Question.Text</span></div>
+    <div>
+        <img src="@Question.Img" />
+    </div>
     <ul>
         @{
             var optionsList = Question.QuestionOptions.OrderBy(o => o.ShuffleGuid).ToList();

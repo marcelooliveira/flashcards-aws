@@ -4,6 +4,7 @@
     {
         public string Id { get; set; }
         public string Text { get; set; } = string.Empty;
+        public string Img { get; set; }
         public string Type { get; set; }
         public string Explanation { get; set; }
         public string Diagram { get; set; }
