@@ -411,7 +411,7 @@ questions:
 
   - id: q22
     type: multiple_choice
-    question: A gaming company is developing a mobile game application for iOS reg and Android reg platforms. This mobile game securely stores user data locally on the device. The company wants to allow users to use multiple device for the game, which requires user data synchronization across device.Which service should be used to synchronize user data across devices without the need to create a backend application?
+    question: A gaming company is developing a mobile game application for iOS's and Android's platforms. This mobile game securely stores user data locally on the device. The company wants to allow users to use multiple device for the game, which requires user data synchronization across device.Which service should be used to synchronize user data across devices without the need to create a backend application?
     options:
      - text: AWS Lambda.
        is_correct: false
