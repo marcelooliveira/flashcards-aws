@@ -231,3 +231,42 @@ code {
 .md-select:focus + .md-highlight {
     width: 100%;
 }
+
+/* Styles for option images inside question list items */
+.full-width {
+    /* allow image container to align to the end of the flex row */
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+.full-width img {
+    /* limit size so images don't break layout and keep aspect ratio */
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 6px;
+    box-shadow: 0 1px 4px #0001;
+}
+
+/* Responsive: stack image below text on narrow screens and make it fluid */
+@media (max-width: 600px) {
+    .question-card li {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .full-width {
+        margin-left: 0;
+        width: 100%;
+        justify-content: flex-start;
+        margin-top: 0.5rem;
+    }
+
+    .full-width img {
+        max-width: 100%;
+        height: auto;
+    }
+}
