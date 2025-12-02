@@ -125,7 +125,7 @@ else
       var yamlContent = await http.GetStringAsync($"Exams/{examName}.yml");
       Questions = ParseQuestionsFromYaml(yamlContent);
     }
-    catch
+    catch (Exception ex)
     {
       Questions = new();
     }
