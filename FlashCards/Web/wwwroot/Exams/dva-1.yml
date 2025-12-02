@@ -14,8 +14,8 @@ questions:
      - text: Improve performance of compute-intensive applications.
        is_correct: true
     explanation: |
-      As opções corretas destacam que o ElastiCache acelera leituras frequentes armazenando dados em memória, reduzindo latência e aumentando throughput em workloads com muitas leituras; também pode acelerar aplicações que se beneficiam de cache na memória para reduzir trabalho computacional repetido.
-      As opções incorretas descrevem ações que não são responsabilidades de um cache em memória (operações S3 PUT, deployments, ou gestão de código), portanto não são usos apropriados do ElastiCache.
+      Correct: ElastiCache speeds up frequent reads by storing data in memory, reducing latency and increasing throughput for read-heavy workloads. It also helps applications that benefit from in-memory caching to avoid repeated computational work.
+      Incorrect: The incorrect options describe responsibilities that are not appropriate for an in-memory cache (S3 PUT operations, deployments, or code management), so they are not valid ElastiCache use cases.
     tags: 
     difficulty: 
     points: 
@@ -35,8 +35,8 @@ questions:
      - text: Simple Storage Service.
        is_correct: true
     explanation: |
-      As opções corretas (ElastiCache, DynamoDB e S3) podem ser usadas como stores chave/valor: ElastiCache armazena pares em memória, DynamoDB é um banco NoSQL chave/valor, e objetos S3 podem ser acessados por chave.
-      As opções incorretas (SNS, SWF) são serviços de mensageria ou orquestração e não funcionam como stores chave/valor, por isso não se encaixam na categoria.
+      Correct: The correct options (ElastiCache, DynamoDB, and S3) can be used as key/value stores: ElastiCache stores key/value pairs in memory, DynamoDB is a NoSQL key/value database, and S3 objects are accessed by a key.
+      Incorrect: The incorrect options (SNS, SWF) are messaging or orchestration services and do not function as key/value stores.
     tags: 
     difficulty: 
     points: 
@@ -54,8 +54,8 @@ questions:
      - text: Enable the multi-value headers on the ALB.
        is_correct: true
     explanation: |
-      A opção correta indica que é preciso habilitar a funcionalidade de multi-value headers no ALB para que os cabeçalhos com múltiplos valores sejam entregues à função Lambda tal como enviados pelo cliente.
-      As opções incorretas não habilitam nem garantem a passagem de múltiplos valores de cabeçalhos (são sobre conta, tamanho do corpo ou manipulação na função), então não resolvem o requisito.
+      Correct: You must enable the multi-value headers feature on the ALB so that headers with multiple values are delivered to the Lambda function exactly as sent by the client.
+      Incorrect: The other options (account placement, request body size, or handling Base64 status) do not enable delivery of multi-value headers from the ALB to Lambda.
     tags: 
     difficulty: 
     points: 
@@ -73,8 +73,8 @@ questions:
      - text: Write to the backend first and invalidate the cache.
        is_correct: true
     explanation: |
-      A opção correta (escrever no backend primeiro e invalidar o cache) garante consistência forte porque o banco de dados é a fonte de verdade e o cache é invalidado para que leituras subsequentes obtenham o dado atualizado.
-      As opções incorretas correm risco de inconsistência (escrever só no cache, atrasar sincronização, ou escrever simultaneamente sem invalidação pode fazer com que leituras retornem dados obsoletos), portanto não satisfazem o requisito de forte consistência.
+      Correct: Writing to the backend first and then invalidating the cache ensures strong consistency because the database remains the source of truth and the cache is invalidated so subsequent reads get the updated data.
+      Incorrect: The other strategies risk stale reads or inconsistency (writing only to cache, delayed sync, or simultaneous writes without proper invalidation) and therefore do not meet the strong consistency requirement.
     tags: 
     difficulty: 
     points: 
@@ -94,8 +94,8 @@ questions:
      - text: Set up Server-Side Encryption with S3-Managed Keys.
        is_correct: false
     explanation: |
-      As opções corretas garantem criptografia em trânsito: transferir dados sobre SSL/TLS protege o canal, e a criptografia do lado do cliente (client-side) assegura que os dados sejam cifrados antes de saírem da aplicação.
-      As opções incorretas referem-se principalmente a criptografia em repouso (server-side) ou a soluções complexas que não garantem criptografia em trânsito por si só, por isso não atendem ao requisito solicitado.
+      Correct: Transferring data over SSL/TLS protects the channel (encryption in transit), and client-side encryption ensures data is encrypted before it leaves the application, satisfying requirements for data in transit.
+      Incorrect: The server-side encryption options are primarily about encryption at rest, and hardware VPN/VPC endpoint is not a direct guarantee of in-transit encryption in this context.
     tags: 
     difficulty: 
     points: 
@@ -113,8 +113,8 @@ questions:
      - text: Client-side encryption with AWS KMS-managed keys.
        is_correct: false
     explanation: |
-      A opção correta (SSE-KMS) fornece criptografia transparente no lado do servidor com integração ao AWS KMS, que gera um trilho de auditoria sobre o uso da chave sem impactar significativamente a aplicação.
-      As opções incorretas ou não oferecem auditoria de uso de chaves (S3-managed) ou exigem mudanças de aplicação e desempenho (client-side), por isso não atendem simultaneamente todos os requisitos.
+      Correct: SSE-KMS provides server-side encryption integrated with AWS KMS and records a key usage audit trail without requiring application changes that would impact performance.
+      Incorrect: S3-managed keys do not provide the same key usage auditability, and client-side encryption would require application changes and could impact performance.
     tags: 
     difficulty: 
     points: 
@@ -132,8 +132,8 @@ questions:
      - text: Create an IAM user with an access key in each audited account. Write code in Account A that uses those access keys.
        is_correct: false
     explanation: |
-      A opção correta (assumir roles cross-account) é a prática mais segura: cada conta mantém controle das permissões e o aplicativo em Account A assume temporariamente permissões com credenciais temporárias.
-      As opções incorretas envolvem soluções menos seguras ou complexas (compartilhar chaves de usuário, replicação S3 para comunicação ou implantar aplicações em cada conta), o que aumenta superfície de ataque ou complexidade.
+      Correct: Configuring cross-account IAM roles in the audited accounts and having the application in Account A assume those roles is the most secure approach, because each account retains control and temporary credentials are used.
+      Incorrect: The other options are less secure or more complex (sharing static access keys, replicating via S3, or deploying agents in each account) and increase attack surface or operational burden.
     tags: 
     difficulty: 
     points: 
@@ -151,8 +151,8 @@ questions:
      - text: Use AWS CodeBuild to automatically deploy the latest build to the latest EC2 instances.
        is_correct: false
     explanation: |
-      A opção correta descreve o fluxo suportado: fazer upload do pacote para S3 e instruir o CodeDeploy a usar esse artefato para implantação nas instâncias EC2.
-      As opções incorretas não refletem o procedimento direto ou usam serviços de forma inadequada (apontar direto para armazenamento local não é suportado, CodeCommit/CodeBuild não substituem o envio do bundle para S3 para CodeDeploy nesse cenário).
+      Correct: The supported flow is to upload the deployment bundle to S3 and instruct CodeDeploy to use that artifact for deploying to EC2 instances.
+      Incorrect: Pointing CodeDeploy directly to local storage is not supported in this way, and CodeCommit/CodeBuild do not replace the need to provide the deployment artifact to CodeDeploy in this scenario.
     tags: 
     difficulty: 
     points: 
@@ -170,8 +170,8 @@ questions:
      - text: Create a new Amazon Machine Image (AMI) with an encrypted root volume and store the data to ephemeral disks.
        is_correct: false
     explanation: |
-      A opção correta (volumes EBS criptografados) providencia criptografia em repouso gerenciada pelo serviço sem necessidade de alterar a aplicação e com impacto mínimo na performance.
-      As opções incorretas exigem mudanças de arquitetura ou código (gravar em S3, implementar criptografia customizada) ou usam armazenamento efêmero que pode não ser adequado para dados persistentes, portanto não são ideais.
+      Correct: Using encrypted EBS volumes provides at-rest encryption managed by the service without changing the application and with minimal performance impact.
+      Incorrect: The other options require architectural changes or custom encryption logic or use ephemeral storage that may not be suitable for persistent data.
     tags: 
     difficulty: 
     points: 
@@ -189,8 +189,8 @@ questions:
      - text: Submit a ticket to AWS support to request a rate limit increase for the S3 bucket.
        is_correct: false
     explanation: |
-      A opção correta (CloudFront) diminui a latência globalmente e reduz o tráfego direto ao S3, usando uma CDN para entregar as imagens de forma mais eficiente.
-      As opções incorretas ou não resolvem o problema global de entrega (prefixos S3, ElastiCache para objetos estáticos sem integração adequada, ou pedir aumento de limite) e, portanto, não são a solução mais adequada.
+      Correct: Using CloudFront reduces global latency and offloads traffic from S3 by delivering images via a CDN.
+      Incorrect: The other options do not address global content delivery effectively (S3 prefixes, ElastiCache without integration, or requesting rate increases) and are not the best fit.
     tags: 
     difficulty: 
     points: 
@@ -208,8 +208,8 @@ questions:
      - text: Use a custom KMS customer master key created for S3 in the Lambda function code.
        is_correct: false
     explanation: |
-      A opção correta descreve usar 'GenerateDataKey' para obter uma chave de dados que é usada para cifrar o objeto localmente antes do upload, garantindo que o conteúdo esteja criptografado ao enviar para S3.
-      As opções incorretas ou confundem gerenciamento de chaves gerenciadas pelo S3 com a geração e uso de uma data key no código, ou dependem de chaves default sem o processo explícito de cifrar antes do upload.
+      Correct: Calling 'GenerateDataKey' returns a plaintext data key and an encrypted copy; using the plaintext data key to encrypt the object locally before upload ensures the content is encrypted in transit and at rest.
+      Incorrect: The other options either misunderstand how to use KMS for client-side encryption or rely on default server-side keys without explicitly encrypting the file prior to upload.
     tags: 
     difficulty: 
     points: 
@@ -227,8 +227,8 @@ questions:
      - text: Configure the cdfonts bucket to allow cross-origin requests by creating a CORS configuration.
        is_correct: true
     explanation: |
-      A opção correta (configurar CORS) permite que recursos hospedados em outro domínio sejam carregados pelo navegador, resolvendo o bloqueio de fontes devido a políticas de mesma origem.
-      As opções incorretas não tratam do problema de CORS (versionamento, política pública imprudente ou header Content-MD5) e, portanto, não resolvem o bloqueio do navegador de forma adequada.
+      Correct: Configuring a CORS policy on the cdfonts bucket allows resources hosted on another domain to be loaded by the browser, resolving font blocking caused by same-origin policies.
+      Incorrect: Versioning, making the bucket public, or adding a Content-MD5 header do not address the cross-origin request blocking issue.
     tags: 
     difficulty: 
     points: 
@@ -248,8 +248,8 @@ questions:
      - text: 'sam publish'
        is_correct: false
     explanation: |
-      As opções corretas ('sam build' e 'sam deploy') são o fluxo padrão para compilar artefatos do SAM e então implantar a aplicação atualizada na AWS.
-      As opções incorretas são comandos para iniciar um projeto novo, validar localmente ou publicar um pacote público, que não substituem o fluxo de build+deploy para redeploy do aplicativo.
+      Correct: 'sam build' and 'sam deploy' are the standard workflow to build SAM artifacts and deploy the updated application to AWS.
+      Incorrect: The other commands are for initializing a project, validating templates, or publishing packages and do not by themselves perform the build+deploy redeploy flow.
     tags: 
     difficulty: 
     points: 
@@ -267,8 +267,8 @@ questions:
      - text: Immutable.
        is_correct: false
     explanation: |
-      A opção correta (Rolling with additional batch) permite adicionar uma batch extra para manter a capacidade durante a implantação usando instâncias adicionais temporárias, evitando redução de capacidade visível.
-      As opções incorretas ou reduzem capacidade durante deploy (All at once ou Rolling) ou criam instâncias novas imutáveis (Immutable) em vez de usar instâncias existentes conforme o requisito.
+      Correct: 'Rolling with additional batch' adds temporary instances to maintain capacity during deployment, preventing visible capacity reduction while using the existing instances.
+      Incorrect: The other options either reduce capacity during deployment (All at once or Rolling) or create new immutable instances rather than using existing instances per the requirement.
     tags: 
     difficulty: 
     points: 
@@ -278,6 +278,7 @@ questions:
     question: A Developer is creating an application that needs to locate the public IPv4 address of the Amazon EC2 instance on which it runs. How can the application locate this information?
     options:
      - text: Get the instance metadata by retrieving 'http://169.254.169.254/latest/metadata/'
+
        is_correct: true
      - text: Get the instance user data by retrieving 'http://169.254.169.254/latest/userdata/'
        is_correct: false
@@ -286,8 +287,8 @@ questions:
      - text: Get the application to run 'IPCONFIG' to get the public IP address.
        is_correct: false
     explanation: |
-      A opção correta é recuperar os metadados da instância no endpoint de metadata (169.254.169.254) para obter o IP público de forma programática e confiável.
-      As opções incorretas ou consultam user-data (não metadados) ou dependem de comandos de sistema que podem não expor o IP público diretamente ou não serem portáveis entre SOs.
+      Correct: The instance metadata endpoint (169.254.169.254) provides the public IP address programmatically and reliably.
+      Incorrect: User data is not the right source for public IP, and OS commands like ifconfig/ipconfig may not reliably provide the public IP or be portable across OSes.
     tags: 
     difficulty: 
     points: 
@@ -305,8 +306,8 @@ questions:
      - text: Enable the cache for development and test environments only when needed.
        is_correct: true
     explanation: |
-      A opção correta sugere ativar cache apenas quando necessário nos ambientes de desenvolvimento e teste para evitar custo contínuo de cache provisionado, mantendo produção com cache adequado.
-      As opções incorretas implicam custos fixos desnecessários (criar múltiplos gateways ou sempre habilitar cache em todas as stages) e não atendem ao requisito de eficiência de custos.
+      Correct: Enabling cache only when required for development and test avoids continuous provisioned cache costs while keeping production appropriately configured.
+      Incorrect: Creating multiple gateways or always enabling large caches in all stages would incur unnecessary fixed costs.
     tags: 
     difficulty: 
     points: 
@@ -324,8 +325,8 @@ questions:
      - text: Add a connection string to use a read replica on an EC2 instance.
        is_correct: false
     explanation: |
-      A opção correta recomenda direcionar as consultas de leitura para réplicas de leitura (read replicas), descarregando a instância primária e melhorando o desempenho de leituras intensivas.
-      As opções incorretas não resolvem a natureza read-heavy de forma eficiente (retries ou multi-AZ são sobre disponibilidade/recuperação, não escalonamento de leitura; read replica em EC2 não é padrão).
+      Correct: Directing read queries to read replicas offloads the primary database and improves read performance for read-heavy workloads.
+      Incorrect: Retries or multi-AZ address availability rather than scaling reads, and using a read replica on EC2 is not a standard approach.
     tags: 
     difficulty: 
     points: 
@@ -343,8 +344,8 @@ questions:
      - text: Schedule driven.
        is_correct: false
     explanation: |
-      A opção correta (event-driven) processa dados assim que chegam por meio de eventos e serviços em tempo real, permitindo análise quase em tempo real em vez de processamento noturno.
-      As opções incorretas envolvem abordagens baseadas em agendamento ou padrões que não garantem processamento imediato ao recebimento dos dados.
+      Correct: An event-driven architecture processes data as it arrives using events and services that support near-real-time processing instead of nightly batches.
+      Incorrect: The other patterns are schedule-based or otherwise do not guarantee immediate processing upon data arrival.
     tags: 
     difficulty: 
     points: 
@@ -364,8 +365,8 @@ questions:
      - text: Change the capacity mode of the DynamoDB table from provisioned to on-demand.
        is_correct: true
     explanation: |
-      As opções corretas (implementar backoff exponencial e mudar para on-demand) ajudam a reduzir colisões de throughput e permitem que a tabela escale automaticamente conforme a demanda.
-      As opções incorretas não tratam do problema corretamente (mover a instância não altera o throughput do DynamoDB, aumentar RCUs foi marcado como incorreto neste conjunto, e aumentar frequência de tentativas piora o problema).
+      Correct: Implementing exponential backoff reduces request collisions with provisioned throughput, and switching to on-demand mode lets the table scale automatically to handle spikes.
+      Incorrect: Moving the instance or changing retry behavior to increase requests does not address DynamoDB throughput limits; although increasing RCUs could help, it was not selected in this question set.
     tags: 
     difficulty: 
     points: 
@@ -383,8 +384,8 @@ questions:
      - text: Client-side encryption.
        is_correct: false
     explanation: |
-      A opção correta (SSE-KMS) oferece gerenciamento de chaves pelo KMS com controle e auditoria adicionais, sem forçar a gestão completa das chaves pela própria empresa, atendendo requisitos regulatórios.
-      As opções incorretas ou delegam totalmente a gestão de chaves ao S3 (SSE-S3), exigem que o cliente forneça e gerencie chaves (SSE-C) ou movem a responsabilidade para o cliente (client-side), o que não atende aos requisitos descritos.
+      Correct: SSE-KMS offers KMS-managed keys with additional control and auditing while offloading key management to AWS, meeting regulatory needs without fully managing keys in-house.
+      Incorrect: SSE-S3 gives less control/auditability, SSE-C requires the customer to manage keys, and client-side encryption shifts responsibility to the customer.
     tags: 
     difficulty: 
     points: 
@@ -402,15 +403,15 @@ questions:
      - text: 1.
        is_correct: false
     explanation: |
-      A opção correta (6) corresponde ao número de shards após o resharding — cada shard pode ser processado por uma instância/worker com KCL, então o máximo de instâncias necessárias é igual ao número de shards.
-      As opções incorretas representam números inconsistentes com a contagem de shards resultante e, portanto, não são corretas.
+      Correct: After resharding there are 6 shards; each shard can be processed by one worker, so the maximum number of instances needed to process all shards is equal to the shard count (6).
+      Incorrect: The other numbers do not match the shard count after resharding and are therefore incorrect.
     tags: 
     difficulty: 
     points: 
 
   - id: q22
     type: multiple_choice
-    question: A gaming company is developing a mobile game application for iOS® and Android® platforms. This mobile game securely stores user data locally on the device. The company wants to allow users to use multiple device for the game, which requires user data synchronization across device.Which service should be used to synchronize user data across devices without the need to create a backend application?
+    question: A gaming company is developing a mobile game application for iOS reg and Android reg platforms. This mobile game securely stores user data locally on the device. The company wants to allow users to use multiple device for the game, which requires user data synchronization across device.Which service should be used to synchronize user data across devices without the need to create a backend application?
     options:
      - text: AWS Lambda.
        is_correct: false
@@ -421,8 +422,8 @@ questions:
      - text: Amazon Cognito.
        is_correct: true
     explanation: |
-      A opção correta (Amazon Cognito) fornece funcionalidades de sincronização de dados para usuários entre dispositivos sem exigir um backend completo, facilitando a sincronização de preferências e dados do usuário.
-      As opções incorretas são serviços que não oferecem a sincronização de dados de usuário entre dispositivos pronta para uso sem desenvolvimento adicional de backend.
+      Correct: Amazon Cognito provides synchronization features for user data across devices without requiring a full backend, enabling preferences and user data sync.
+      Incorrect: The other services do not provide the built-in device data synchronization feature without additional backend development.
     tags: 
     difficulty: 
     points: 
@@ -442,8 +443,8 @@ questions:
      - text: Package the application code into a '.zip' file, create a new application version from the AWS Management Console, then rebuild the environment by using AWS CLI.
        is_correct: false
     explanation: |
-      As opções corretas descrevem métodos suportados de criar uma versão da aplicação (zip e upload via console ou criar versão via CLI) e então atualizar o ambiente Elastic Beanstalk.
-      As opções incorretas usam formatos ou passos não adequados ao fluxo padrão (tar sem suporte direto no console/fluxo apresentado, ou rebuild desnecessário) e, portanto, não são corretas.
+      Correct: The correct options describe supported methods to create an application version (zip and upload via console or create via CLI) and then update the Elastic Beanstalk environment.
+      Incorrect: The incorrect options use unsupported formats or unnecessary steps (tar in the console flow, or rebuilding the environment) and are not the standard procedures.
     tags: 
     difficulty: 
     points: 
@@ -461,8 +462,8 @@ questions:
      - text: Cache the file in Amazon S3.
        is_correct: false
     explanation: |
-      A opção correta (cache em '/tmp') permite reutilizar o arquivo entre invocações na mesma execução do container Lambda e reduz downloads repetidos, melhorando a performance.
-      As opções incorretas não resolvem o problema de forma eficaz (aumentar timeout não evita downloads, ELB não reduz downloads, e S3 ainda exigiria download a cada invocação sem cache local).
+      Correct: Caching the file in '/tmp' allows reusing the file between invocations within the same Lambda container and reduces repeated downloads, improving performance.
+      Incorrect: Increasing timeout, placing an ELB in front of Lambda, or caching in S3 do not avoid repeated downloads in the same cost-effective way.
     tags: 
     difficulty: 
     points: 
@@ -480,8 +481,8 @@ questions:
      - text: Load balance the reads to the table using an Application Load Balancer.
        is_correct: false
     explanation: |
-      A opção correta (GSI com conjunto mínimo de atributos projetados) permite consultas eficientes que retornam apenas os atributos necessários, reduzindo consumo de RCUs e melhorando performance.
-      As opções incorretas não abordam diretamente a redução de dados retornados (batch de writes, backoff, ou ALB) e portanto não são soluções apropriadas para esse caso.
+      Correct: Creating a GSI with a minimal set of projected attributes returns only the required data for queries and reduces RCU consumption while improving performance.
+      Incorrect: The other options do not directly reduce the amount of data returned per query or are not appropriate solutions for minimizing read capacity usage.
     tags: 
     difficulty: 
     points: 
@@ -499,8 +500,8 @@ questions:
      - text: Create a mapping template.
        is_correct: true
     explanation: |
-      A opção correta (criar um mapping template) permite transformar parâmetros de query em formato JSON ou outro esperado pela função Lambda, mapeando entradas do método para o payload do Lambda.
-      As opções incorretas não realizam essa transformação diretamente (validação, ARN ou alterar integração não convertem query strings em argumentos do handler).
+      Correct: Creating a mapping template transforms query string parameters into the JSON payload or format expected by the Lambda handler.
+      Incorrect: Validation, ARNs, or changing integration type do not perform the transformation of query string parameters into handler arguments.
     tags: 
     difficulty: 
     points: 
@@ -518,8 +519,8 @@ questions:
      - text: Set up a federation through an Amazon Cognito user pool.
        is_correct: false
     explanation: |
-      A opção correta (IAM user por desenvolvedor) fornece credenciais individuais e rastreabilidade, mantendo segurança e simplicidade para acesso de desenvolvedores locais.
-      As opções incorretas incluem compartilhar uma única conta (inseguro), ou soluções mais complexas e não diretamente adequadas para simples uso de desenvolvedor local (federation via Cognito) ou uso incorreto de roles sem credenciais locais.
+      Correct: Creating an IAM user per developer gives each person unique credentials and auditability while keeping the approach simple and secure for local development.
+      Incorrect: Sharing a single user is insecure, and assuming roles or setting up federation are more complex approaches not necessary for simple developer access scenarios.
     tags: 
     difficulty: 
     points: 
@@ -537,8 +538,8 @@ questions:
      - text: Strongly consistent reads use variable throughput depending on read activity.
        is_correct: false
     explanation: |
-      A opção correta indica que leituras fortemente consistentes consomem mais throughput (RCUs) que leituras eventualmente consistentes, pois exigem confirmação imediata dos dados atualizados.
-      As opções incorretas negam essa diferença ou apresentam comportamento variável que não descreve corretamente o custo das leituras fortemente consistentes.
+      Correct: Strongly consistent reads consume more RCUs than eventually consistent reads because they require immediate confirmation of the latest data.
+      Incorrect: The other statements either deny this difference or imply variable behavior that does not describe the throughput cost of strongly consistent reads.
     tags: 
     difficulty: 
     points: 
@@ -556,8 +557,8 @@ questions:
      - text: Modify the ebextensions folder to add a source option to services.
        is_correct: false
     explanation: |
-      A opção correta recomenda usar o console do Elastic Beanstalk para fazer upload e implantar uma nova versão, que é o fluxo suportado para atualização de aplicações.
-      As opções incorretas envolvem comandos ou ações que não realizam diretamente o deploy de uma nova versão (eb init é para inicializar, terminar ambiente é drástico, e alterar ebextensions não efetua o deploy por si só).
+      Correct: Uploading and deploying a new application version via the Elastic Beanstalk console is the supported flow for updating an application.
+      Incorrect: The other options involve initialization, destructive environment replacement, or configuration changes that do not directly deploy a new version.
     tags: 
     difficulty: 
     points: 
@@ -579,8 +580,8 @@ questions:
        is_correct: false
        img: images/question30_D.jpg
     explanation: |
-      A opção correta (Option A) aplica condições que permitem a ação apenas quando o usuário estiver autenticado por web identity e possua as condições corretas para atualizar o atributo 'user_name', atendendo o requisito de controle de acesso.
-      As demais opções não implementam corretamente as condições de web identity ou protegem especificamente o atributo que deve ser limitado, tornando-as inadequadas.
+      Correct: Option A includes conditions that allow the action only when the user is authenticated via web identity and enforces the correct condition to limit updates to the 'user_name' attribute.
+      Incorrect: The other options do not correctly implement web identity conditions or enforce attribute-level restrictions as required.
     tags: 
     difficulty: 
     points: 
@@ -598,8 +599,8 @@ questions:
      - text: Create three aliases; new, existing, and router. Point the existing alias to the current version. Have the router alias direct 100% of users to the existing alias. Update the application to use the router alias. Deploy the new version of the code. Point the new alias to this version. Update the router alias to direct 10% of users to the new alias. If too many errors are encountered, send 100% of traffic to the existing alias.
        is_correct: false
     explanation: |
-      A opção correta descreve uma estratégia de canary usando aliases e distribuição gradual de tráfego (10%), permitindo rollback rápido com impacto mínimo aos usuários se houver erros.
-      As opções incorretas não implementam uma migração gradual segura ou são mais complexas/menos eficazes para rollback com baixo impacto.
+      Correct: The canary deployment strategy using aliases and shifting 10% of traffic allows a gradual rollout and quick rollback with minimal user impact if errors occur.
+      Incorrect: The other options either do not implement a gradual rollout or are unnecessarily complex and do not provide the same low-impact rollback behavior.
     tags: 
     difficulty: 
     points: 
@@ -617,8 +618,8 @@ questions:
      - text: Use multiple Elastic Beanstalk environments for the background task component but one environment for the HTTP component.
        is_correct: false
     explanation: |
-      A opção correta recomenda ambientes separados para cada componente, permitindo que cada um escale de forma independente conforme demanda específica.
-      As opções incorretas consolidam componentes ou propõem configurações inconsistentes que não suportam escalonamento independente conforme exigido.
+      Correct: Deploying each component in its own Elastic Beanstalk environment allows independent scaling according to each component's needs.
+      Incorrect: Combining components in a single environment or unbalanced environment allocation does not provide independent scaling as required.
     tags: 
     difficulty: 
     points: 
@@ -636,8 +637,8 @@ questions:
      - text: Investigate the 'Resources' section.
        is_correct: false
     explanation: |
-      A opção correta é usar change sets, que mostram as diferenças e o impacto das mudanças antes de aplicar a atualização na stack.
-      As opções incorretas referem-se a seções ou políticas que não oferecem a previsão detalhada de alterações sobre os recursos em execução como os change sets.
+      Correct: Change sets show the differences and the impact of changes before applying an update to the stack.
+      Incorrect: Stack policies, Metadata, or Resources sections do not provide a pre-update preview of resource changes like change sets do.
     tags: 
     difficulty: 
     points: 
@@ -655,8 +656,8 @@ questions:
      - text: Tag the AWS Lambda functions with different names.
        is_correct: false
     explanation: |
-      A opção correta (aliases e versions) permite apontar um mesmo endpoint para uma alias que pode ser atualizada para diferentes versões da função sem mudar o endpoint do API Gateway.
-      As opções incorretas não fornecem o mesmo nível de abstração eficiente (associar múltiplas funções, criar stages ou tags não resolve o problema de atualizar endpoint sem alterações adicionais).
+      Correct: Using Lambda aliases and versions lets the API Gateway point to an alias and you can update the alias to point to a new version without changing the gateway endpoint.
+      Incorrect: Associating multiple functions or tagging functions does not provide the same transparent version routing without updating the gateway.
     tags: 
     difficulty: 
     points: 
@@ -674,8 +675,8 @@ questions:
      - text: Create a bucket policy that denies traffic where 'SecureTransport' is 'false'
        is_correct: true
     explanation: |
-      A opção correta (política que nega tráfego sem SecureTransport) garante que apenas requisições via HTTPS/TLS sejam aceitas no bucket, aplicando a exigência de criptografia em trânsito.
-      As opções incorretas não impõem corretamente a exigência no nível do bucket (instalar certificados locais, redirects ou permitir apenas tráfego quando SecureTransport true sem negar o restante não garantem a proteção desejada).
+      Correct: A bucket policy that explicitly denies requests where 'SecureTransport' is false enforces that only HTTPS/TLS requests are accepted by the bucket.
+      Incorrect: Installing certificates on instances or redirects do not enforce bucket-level transport security; allowing SecureTransport without denial does not prevent non-secure requests.
     tags: 
     difficulty: 
     points: 
@@ -695,8 +696,8 @@ questions:
      - text: Amazon S3; Amazon CloudFront.
        is_correct: false
     explanation: |
-      As opções corretas (ELB+EC2 e API Gateway+Lambda) representam arquiteturas válidas para expor um endpoint REST que atende requisições em tempo real, seja via servidores gerenciados ou serverless.
-      As opções incorretas envolvem serviços inadequados para fornecer um endpoint REST dinâmico (SQS/SNS para mensageria, ElastiCache/ES para busca/caching ou S3/CloudFront para conteúdo estático).
+      Correct: ELB+EC2 and API Gateway+Lambda are valid architectures for providing a real-time REST endpoint, either with managed servers or serverless functions.
+      Incorrect: The other options are more suited to messaging, caching/search, or static content and are not appropriate for a dynamic REST endpoint.
     tags: 
     difficulty: 
     points: 
@@ -714,8 +715,8 @@ questions:
      - text: Amazon S3.
        is_correct: false
     explanation: |
-      A opção correta ('/tmp') é o espaço temporário local disponível para funções Lambda, adequado para arquivos pequenos acessados múltiplas vezes durante a execução e que não precisam de persistência.
-      As opções incorretas implicam armazenamento persistente ou serviços externos (EFS, EBS, S3) que são desnecessários e mais complexos para arquivos temporários e de pequeno porte.
+      Correct: The '/tmp' directory is the local temporary storage available to Lambda functions and is appropriate for small files that are used during execution and do not need persistence.
+      Incorrect: EFS, EBS, and S3 are persistent or external storage solutions that are unnecessary and more complex for this temporary use case.
     tags: 
     difficulty: 
     points: 
@@ -733,8 +734,8 @@ questions:
      - text: Create an ElastiCache cluster to cache the user profile data. Use a write-through caching strategy.
        is_correct: false
     explanation: |
-      A opção correta (ElastiCache com cache-aside) permite que a aplicação recupere do cache quando disponível e carregue/atualize o cache quando necessário, reduzindo cargas no banco e latência de página.
-      As opções incorretas propõem soluções mais pesadas ou menos apropriadas (rodar NoSQL em EC2, usar RDS como cache, ou write-through que pode aumentar latência na escrita) e não são tão eficientes para esse caso.
+      Correct: Using ElastiCache with a cache-aside strategy allows the application to read from cache when available and update the cache when needed, reducing database load and page latency.
+      Incorrect: The other options propose heavier or less appropriate solutions (running NoSQL on EC2, using RDS as a cache, or write-through caching that can increase write latency) and are not as efficient for this case.
     tags: 
     difficulty: 
     points: 
@@ -752,8 +753,8 @@ questions:
      - text: Use Amazon S3 to host the website. Use Amazon CloudFornt to deliver the content at scale.
        is_correct: false
     explanation: |
-      A opção correta (Elastic Beanstalk com Auto Scaling) permite que a empresa delegue a gestão da infraestrutura, escalabilidade e deployments à plataforma, mantendo foco no desenvolvimento do site.
-      As opções incorretas envolvem migração manual de VM, Lightsail (mais gerenciado, mas menos adequado para alto tráfego dinâmico) ou S3/CloudFront (adequado para sites estáticos, não dinâmicos), não atendendo ao requisito completamente.
+      Correct: Elastic Beanstalk with Auto Scaling lets the company offload infrastructure management, scaling, and deployments to the platform while focusing on website development.
+      Incorrect: VM import, Lightsail, or S3/CloudFront (for static sites) do not meet the requirement to handle a dynamic, managed web application as effectively.
     tags: 
     difficulty: 
     points: 
@@ -771,8 +772,8 @@ questions:
      - text: Obtain the request identifier from the Lambda context object. Architect the application to write logs to a file.
        is_correct: false
     explanation: |
-      A opção correta recomenda obter o request ID do objeto context (fornecido pela plataforma) e escrever logs no console para que o CloudWatch capture automaticamente essas entradas associadas à invocação.
-      As opções incorretas tentam obter o ID do evento (nem sempre contém um identificador único) ou escrever em arquivo local, que não é a prática recomendada para integração com CloudWatch Logs.
+      Correct: The Lambda context object contains a request ID for the invocation; writing logs to the console lets CloudWatch capture them and associate logs with that request ID.
+      Incorrect: The event object may not contain a unique request ID and writing logs to a file is not the recommended integration pattern for CloudWatch Logs.
     tags: 
     difficulty: 
     points: 
@@ -792,8 +793,8 @@ questions:
      - text: Include the GetSessionToken API operation in the application code logic to obtain temporary credentials to access the PII table.
        is_correct: false
     explanation: |
-      As opções corretas indicam que a role do EC2 deve ter permissão para assumir a role AccessPII e que a aplicação deve usar 'AssumeRole' para obter credenciais temporárias que permitam acessar a tabela na outra conta.
-      As opções incorretas confundem permissões diretas ou APIs inadequadas (GetSessionToken não é a operação apropriada para assumir uma role cross-account e conceder acesso direto ao EC2 role na outra conta não é suficiente sem o AssumeRole).
+      Correct: The EC2 role must be permitted to assume the AccessPII role, and the application should call 'AssumeRole' to obtain temporary credentials that allow access to the PII table in the other account.
+      Incorrect: Granting direct access to the EC2 role in the other account or using GetSessionToken is not the correct cross-account delegation approach in this scenario.
     tags: 
     difficulty: 
     points: 
@@ -811,8 +812,8 @@ questions:
      - text: Enable AWS X-Ray tracing for the function. View the traces from the X-Ray service.
        is_correct: true
     explanation: |
-      A opção correta (habilitar X-Ray) permite traçar chamadas externas como as APIs do DynamoDB e inspecionar o tempo gasto em cada operação para identificar gargalos.
-      As opções incorretas não permitem visualizar detalhadamente o tempo das chamadas DynamoDB (atrair métricas CloudWatch, ALB ou limitar concorrência não fornece traços distribuídos das chamadas de API).
+      Correct: Enabling AWS X-Ray tracing for the Lambda function provides distributed traces that show the time spent in DynamoDB API calls and helps identify bottlenecks.
+      Incorrect: The other options do not provide detailed tracing of DynamoDB API call timings.
     tags: 
     difficulty: 
     points: 
@@ -830,8 +831,8 @@ questions:
      - text: Use Amazon DynamoDB instead of Amazon RDS to buffer the read traffic.
        is_correct: false
     explanation: |
-      A opção correta (read replica) permite direcionar consultas de leitura para uma réplica, isolando o impacto das escritas na instância primária e mantendo a performance para leitores.
-      As opções incorretas não isolam adequadamente o impacto de gravações (multi-AZ é para disponibilidade, ElastiCache não lida com consistência de updates massivos sem estratégia, e migrar para DynamoDB é uma mudança arquitetural maior).
+      Correct: Creating a read replica and directing read traffic to it isolates read load from write activity on the primary, eliminating the write-induced slowdown for readers.
+      Incorrect: Multi-AZ improves availability, ElastiCache does not address write contention without a cache invalidation strategy, and migrating to DynamoDB is a large architectural change.
     tags: 
     difficulty: 
     points: 
@@ -849,8 +850,8 @@ questions:
      - text: Create a transaction table in an Amazon Aurora DB cluster to manage the transactions. Write a backend process to sync the Aurora DB table and the DynamoDB table.
        is_correct: false
     explanation: |
-      A opção correta (TransactWriteItems) oferece transações atômicas no DynamoDB para garantir alterações all-or-nothing em múltiplos itens.
-      As opções incorretas ou não fornecem transações atômicas (BatchWriteItem não é transacional) ou introduzem complexidade desnecessária com filas ou um banco relacional para coordenar transações.
+      Correct: 'TransactWriteItems' provides atomic, all-or-nothing writes across multiple items in DynamoDB.
+      Incorrect: 'BatchWriteItem' is not transactional, and the other solutions add complexity without providing native atomic transactions.
     tags: 
     difficulty: 
     points: 
@@ -868,8 +869,8 @@ questions:
      - text: Use the CloudWatch 'PutMetricData' API call to submit a custom metric to CloudWatch. Launch the EC2 instance with the required IAM role to enable the API call.
        is_correct: true
     explanation: |
-      A opção correta recomenda usar 'PutMetricData' com a instância EC2 lançada com uma IAM role adequada, permitindo envio direto e seguro de métricas sem embutir credenciais.
-      As opções incorretas introduzem passos indiretos ou desnecessários (usar S3+eventos, Kinesis+Lambda, ou fornecer credenciais manualmente) quando a role do EC2 com PutMetricData é a prática recomendada.
+      Correct: Use 'PutMetricData' with the EC2 instance launched with an IAM role that grants the necessary permissions so the instance can securely send metrics without embedded credentials.
+      Incorrect: The other approaches are indirect or add unnecessary complexity compared to the recommended role+PutMetricData pattern.
     tags: 
     difficulty: 
     points: 
@@ -887,8 +888,8 @@ questions:
      - text: Use Amazon EFS and the Amazon SQS CLI.
        is_correct: false
     explanation: |
-      A opção correta (S3 + SQS Extended Client Library) é a abordagem recomendada para mensagens muito grandes: o corpo é armazenado no S3 e apenas uma referência é colocada na mensagem SQS.
-      As opções incorretas propõem uso de EBS/EFS ou ferramentas inadequadas que não são a solução integrada para mensagens de até 1GB com SQS.
+      Correct: The SQS Extended Client Library stores large payloads in S3 and places a reference in the SQS message, which is the recommended approach for very large messages.
+      Incorrect: EBS/EFS or using the SQS CLI do not provide the integrated solution for handling messages up to 1GB.
     tags: 
     difficulty: 
     points: 
@@ -906,8 +907,8 @@ questions:
      - text: Periodically write the current thread count to a table using Amazon DynarnoDB and use Amazon CloudFront to create a graph.
        is_correct: false
     explanation: |
-      A opção correta (métrica customizada no CloudWatch) permite envio periódico do contador de threads e visualização gráfica imediata através do console do CloudWatch.
-      As opções incorretas são soluções excessivamente complexas ou inapropriadas para o objetivo simples de monitoramento de uma métrica ao longo do tempo.
+      Correct: Publishing a custom CloudWatch metric via 'PutMetricData' lets the team visualize the thread count over time in CloudWatch dashboards.
+      Incorrect: The other options are overly complex or not designed to provide direct time-series visualization of a metric.
     tags: 
     difficulty: 
     points: 
@@ -928,8 +929,8 @@ questions:
      - text: Implement local caching of Amazon RDS data so Lambda can re-use the cache.
        is_correct: false
     explanation: |
-      As opções corretas (reduzir dependências empacotadas e inicializar a conexão ao RDS fora do handler) reduzem o tempo de cold start e evitam re-criar conexões em cada invocação, melhorando a latência sem aumentar custos.
-      As opções incorretas ou implicam mudanças arquiteturais que podem aumentar custo ou complexidade (substituir RDS por DynamoDB, pooling customizado ou caching local inadequado) e não são as ações mais diretas conforme o enunciado.
+      Correct: Reducing package size and moving RDS connection initialization outside the handler reduce cold start time and avoid recreating connections on each invocation, improving latency without extra cost.
+      Incorrect: Replacing RDS with DynamoDB, custom pooling, or local caching introduce architectural changes or complexity and are not the most direct low-cost improvements.
     tags: 
     difficulty: 
     points: 
@@ -947,8 +948,8 @@ questions:
      - text: Publish a custom metric on Amazon CloudWatch and use Amazon SNS for notification.
        is_correct: true
     explanation: |
-      A opção correta (publicar métrica customizada e usar SNS) permite criar alarmes no CloudWatch sobre erros e usar SNS para enviar notificações a assinantes (e-mail, SMS, etc.).
-      As opções incorretas combinam métricas existentes e serviços de notificação de forma inadequada ou escolhem SES (que não é o serviço de notificação direto para alarmes), portanto não são a melhor prática.
+      Correct: Publishing a custom CloudWatch metric for API errors and using SNS for notifications allows creating alarms and delivering alerts to subscribers (email, SMS, etc.).
+      Incorrect: The other combinations either use SES inappropriately for alarms or assume a built-in API-error metric that may not meet the custom monitoring requirement.
     tags: 
     difficulty: 
     points: 
@@ -966,8 +967,8 @@ questions:
      - text: Disable a stage just prior the deployment stage.
        is_correct: false
     explanation: |
-      A opção correta (adicionar uma ação de aprovação em um estágio) é a forma nativa do CodePipeline para requerer intervenção humana antes de prosseguir com o deploy.
-      As opções incorretas propõem workarounds inadequados ou impraticáveis (múltiplos pipelines, desabilitar transições/estágios) que não fornecem um fluxo de aprovação controlado.
+      Correct: Adding an approval action in a pipeline stage is the native CodePipeline mechanism to require human approval before progressing to deployment.
+      Incorrect: The other approaches are workarounds or impractical and do not provide the controlled approval workflow offered by an approval action.
     tags: 
     difficulty: 
     points: 
