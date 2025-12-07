@@ -11,7 +11,10 @@ questions:
        is_correct: false
      - text: Add a one second delay to each API call.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Implementing exponential backoff in the application reduces the rate of retry attempts when throttling or rate limits are encountered and is the recommended pattern for handling 'LimitExceeded' errors from AWS services.
+
+      Incorrect: Adding a fixed one-second delay, load balancing to more servers, or moving the application to EC2 do not address the root cause of exceeding service limits; a simple fixed delay is inefficient compared to exponential backoff.
     tags: 
     difficulty: 
     points: 
@@ -28,7 +31,10 @@ questions:
        is_correct: false
      - text: Add an attribute with the expiration time; name the attribute 'ItemExpiration'
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Enabling DynamoDB Time To Live (TTL) on an attribute containing the expiration timestamp automatically removes expired items without custom code or additional infrastructure.
+
+      Incorrect: Running cron jobs, rotating tables daily, or merely naming the attribute in a certain way are more complex or ineffective approaches compared to using built-in TTL.
     tags: 
     difficulty: 
     points: 
@@ -45,7 +51,10 @@ questions:
        is_correct: true
      - text: First join all the files, then process it all at once with an asynchronous Event Lambda invocation.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Using asynchronous (Event) Lambda invocations allows the processing of many files in parallel without waiting for each invocation to return, which is the fastest approach when individual results are not needed synchronously.
+
+      Incorrect: Synchronous RequestResponse invocations process files serially (or block the caller), splitting or joining files adds overhead or is unnecessary; therefore those options are slower or less suitable.
     tags: 
     difficulty: 
     points: 
@@ -62,7 +71,10 @@ questions:
        is_correct: false
      - text: Upload the object to another AWS region.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: The S3 multipart upload API lets you upload large objects in parts and is the supported method for uploading objects larger than the single PUT limit, enabling a 15 GB upload.
+
+      Incorrect: Changing network connectivity, contacting support, or switching regions does not change the single-request size limit; multipart upload is the appropriate solution.
     tags: 
     difficulty: 
     points: 
@@ -79,7 +91,10 @@ questions:
        is_correct: false
      - text: "Run the output of the following: 'aws ecr get-download-url-for-layer' and then run: 'docker pull REPOSITORY URI : TAG'"
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Developers must first run the AWS CLI command that returns Docker login credentials (e.g., the output of 'aws ecr get-login' or the modern 'aws ecr get-login-password' piped into 'docker login') and then run 'docker pull REPOSITORY_URI:TAG' to pull the image.
+
+      Incorrect: Directly running 'docker pull' without authenticating to ECR will fail; the other commands listed do not provide the correct authenticated flow for pulling from ECR.
     tags: 
     difficulty: 
     points: 
@@ -96,7 +111,10 @@ questions:
        is_correct: false
      - text: AWS Mobile Hub cloud logic.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Amazon Cognito user pools provide a scalable user directory, sign-up and sign-in flows, and user attribute storage suitable for millions of users.
+
+      Incorrect: AWS Mobile Hub features or Cognito Sync are not the primary scalable user directory solution for sign-up and attribute management; Cognito user pools are the intended service.
     tags: 
     difficulty: 
     points: 
@@ -113,7 +131,10 @@ questions:
        is_correct: false
      - text: Create an IAM role, attach the AmazonS3FullAccess managed policy to it, and assign the role to the Lambda function as its execution role.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Granting the Lambda function an execution role with the specific S3 permissions it needs follows least-privilege and is the secure best practice for giving the function access to the bucket.
+
+      Incorrect: Embedding IAM user credentials in code is insecure; granting overly broad managed policies like AmazonS3FullAccess violates least-privilege; S3 bucket policies cannot list the Lambda service as a principal to impersonate the function's permissions.
     tags: 
     difficulty: 
     points: 
@@ -132,7 +153,10 @@ questions:
        is_correct: true
      - text: Enable the CloudFront option 'Restrict Viewer Access'
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: To encrypt traffic end-to-end, configure CloudFront's Viewer Protocol Policy to require HTTPS from clients and set the Origin Protocol Policy to 'HTTPS Only' so CloudFront communicates with the origin over TLS.
+
+      Incorrect: KMS does not encrypt network traffic, changing the origin port alone is not sufficient, and 'Restrict Viewer Access' relates to signed URLs/cookies and does not enforce HTTPS.
     tags: 
     difficulty: 
     points: 
@@ -149,7 +173,10 @@ questions:
        is_correct: true
      - text: 500 read capacity units.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: A strongly consistent read of a 5 KB item consumes 2 read capacity units (RCU) because reads are calculated per 4 KB chunk; for 100 reads/sec you need 100 * 2 = 200 RCUs.
+
+      Incorrect: 50 or 100 RCUs are insufficient for 100 strong reads of 5 KB items, and 500 RCUs is an excessive allocation for this requirement.
     tags: 
     difficulty: 
     points: 
@@ -166,7 +193,10 @@ questions:
        is_correct: true
      - text: Amazon DynamoDB
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Lambda function logs are sent to Amazon CloudWatch Logs by default, so the Developer should look in CloudWatch to examine function error logs and execution traces.
+
+      Incorrect: S3 stores objects, CloudTrail records API calls for auditing, and DynamoDB stores data records; none are the primary location for Lambda execution logs.
     tags: 
     difficulty: 
     points: 
@@ -183,7 +213,10 @@ questions:
        is_correct: true
      - text: Copy the files to an S3 bucket with a lifecycle policy to delete the files.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Lambda provides ephemeral disk space at '/tmp' (typically 512 MB or configurable) for temporary files during execution; using '/tmp' is the most efficient approach for transient storage.
+
+      Incorrect: Attaching EBS or EFS is heavier weight and unnecessary for temporary per-invocation files, and copying to S3 and deleting later adds latency and costs.
     tags: 
     difficulty: 
     points: 
@@ -200,7 +233,10 @@ questions:
        is_correct: false
      - text: AWS CodePipeline
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: AWS Elastic Beanstalk provides a managed platform for running web applications on Tomcat without needing to manage underlying infrastructure, making it the easiest deployment option for this scenario.
+
+      Incorrect: CloudFormation is an infrastructure-as-code tool that still requires template management, S3 is object storage not an application host, and CodePipeline is a CI/CD service rather than a hosting platform.
     tags: 
     difficulty: 
     points: 
@@ -217,7 +253,10 @@ questions:
        is_correct: false
      - text: Write data to the 'root' filesystem.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Amazon ElastiCache is a shared, in-memory store that provides low-latency access to session data across multiple instances, making it ideal for session storage behind a load balancer.
+
+      Incorrect: EBS, instance store, or root filesystem are local to a single instance and would not reliably serve session data across multiple EC2 instances behind a load balancer.
     tags: 
     difficulty: 
     points: 
@@ -236,7 +275,10 @@ questions:
        is_correct: true
      - text: Amazon ElastiCache.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Amazon SQS (queues) and Amazon SNS (pub/sub) provide managed asynchronous messaging patterns that help microservices communicate without tight coupling and without degrading performance.
+
+      Incorrect: Cognito is for identity, Kinesis is for streaming data (not general async messaging between microservices in the same way), and ElastiCache is an in-memory store rather than a messaging service.
     tags: 
     difficulty: 
     points: 
@@ -255,7 +297,10 @@ questions:
        is_correct: false
      - text: Use Amazon IAM roles instead of access keys where possible.
        is_correct: true
-    explanation: 
+    explanation: |
+      Correct: Best practices are to delete root user access keys and to rely on IAM roles instead of long-lived access keys wherever possible to reduce risk and management overhead.
+
+      Incorrect: Reusing the same access key across applications, leaving unused keys, or embedding keys in code (even if encrypted) are insecure practices and violate least-privilege and credential hygiene recommendations.
     tags: 
     difficulty: 
     points: 
@@ -272,7 +317,10 @@ questions:
        is_correct: true
      - text: Pass the access key id and secret access key as parameters for each AWS CLI command.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Assigning an IAM role to the EC2 instance (instance profile) provides temporary credentials to make AWS API calls securely without embedding static credentials.
+
+      Incorrect: Manually configuring access keys or passing them as parameters exposes long-lived credentials and increases security risk; signing with SigV4 is used internally but does not replace the need for secure credential management.
     tags: 
     difficulty: 
     points: 
@@ -289,7 +337,10 @@ questions:
        is_correct: true
      - text: Alter the application code to inspect a custom header. Alter the client code to pass the IP address in the custom header.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: ALBs add an 'X-Forwarded-For' header containing the original client IP; modifying the application to read this header preserves horizontal scalability while obtaining client IPs.
+
+      Incorrect: Removing the ALB or relying on custom client headers is impractical and breaks scalability; Classic Load Balancer replacement or DNS tricks are not necessary when the X-Forwarded-For header is available.
     tags: 
     difficulty: 
     points: 
@@ -306,7 +357,10 @@ questions:
        is_correct: false
      - text: Recreate a new Elastic Beanstalk environment without Amazon RDS.
        is_correct: true
-    explanation: 
+    explanation: |
+      Correct: To separate the RDS instance from an Elastic Beanstalk-managed environment, the recommended approach is to create a new environment without RDS and migrate the application to use an externally managed RDS instance.
+
+      Incorrect: There is no simple toggle or deployment policy to disassociate an RDS instance from an existing Beanstalk environment; CLI commands alone do not perform the safe migration that recreating the environment and managing RDS externally achieves.
     tags: 
     difficulty: 
     points: 
@@ -325,7 +379,10 @@ questions:
        is_correct: false
      - text: AWS CodePipeline does not have permissions to access AWS CodeCommit.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Common reasons why CodeDeploy did not run include pushing the change to a non-master branch (so the pipeline wasn't triggered) or a failure in an earlier pipeline stage that prevented deployment from continuing.
+
+      Incorrect: An inactive EC2 instance in an unrelated cluster, an incorrectly configured pipeline (if it had been working previously), or missing CodeCommit permissions are less likely given that the pipeline was functioning before and the symptoms point to branch or stage issues.
     tags: 
     difficulty: 
     points: 
@@ -342,7 +399,10 @@ questions:
        is_correct: false
      - text: Use the push synchronization feature with the appropriate IAM role.
        is_correct: true
-    explanation: 
+    explanation: |
+      Correct: Cognito's push synchronization feature allows updates to be pushed to devices silently when appropriate permissions and IAM roles are configured, enabling seamless sync notifications.
+
+      Incorrect: Modifying user pools or using streams or a SyncCallback interface are not the standard mechanisms to silently notify devices of synchronized updates; push sync is the intended feature.
     tags: 
     difficulty: 
     points: 
@@ -361,7 +421,10 @@ questions:
        is_correct: false
      - text: Amazon ECS, Amazon EBS.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Running the traditional LAMP stack on EC2 with a managed relational backend like Amazon Aurora (MySQL-compatible) provides a direct and flexible way to host the application on AWS.
+
+      Incorrect: Serverless options like Lambda/DynamoDB or API Gateway/S3 do not directly map to a LAMP stack, and Cognito/RDS or ECS/EBS combinations are not the straightforward match for running a LAMP application as described.
     tags: 
     difficulty: 
     points: 
@@ -378,7 +441,10 @@ questions:
        is_correct: false
      - text: Reduce the size of each message payload by sending it in two parts.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Long polling with a shorter wait interval reduces empty responses and allows the consumer to receive messages as soon as they arrive, minimizing the delay between message arrival and dashboard update.
+
+      Incorrect: Compressing or splitting messages or using short polling at infrequent intervals does not improve the end-to-end latency in the same way as using long polling.
     tags: 
     difficulty: 
     points: 
@@ -395,7 +461,10 @@ questions:
        is_correct: false
      - text: Modify the application to read and write cache data on Amazon S3, while continuing to write shared images to local disks.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Moving both shared images and cache data to S3 centralizes storage and allows multiple horizontally scaled instances to access the same data without relying on local disks.
+
+      Incorrect: Using EBS or keeping cache data on local disks would not provide the shared, distributed storage needed for horizontal scaling in AWS.
     tags: 
     difficulty: 
     points: 
@@ -412,7 +481,10 @@ questions:
        is_correct: true
      - text: Enable a DynamoDB stream, and trigger the Lambda function asynchronously from the stream.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Enabling DynamoDB Streams and configuring an event source mapping so Lambda is invoked directly from the stream is the standard way to trigger functions on item lifecycle events.
+
+      Incorrect: Routing DynamoDB Streams through SNS adds unnecessary indirection and is not the typical or recommended pattern for directly triggering Lambda on table changes.
     tags: 
     difficulty: 
     points: 
@@ -429,7 +501,10 @@ questions:
        is_correct: false
      - text: The 'aws' script does not have an executable file mode.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: The most common cause of 'command not found' is that the 'aws' executable is not on the system PATH, so the shell cannot locate the CLI program.
+
+      Incorrect: Permission issues or file modes are less likely if the installer reported success; incorrect credentials would not cause a 'command not found' error.
     tags: 
     difficulty: 
     points: 
@@ -446,7 +521,10 @@ questions:
        is_correct: false
      - text: Write all new orders to Amazon DynamoDB. Configure DynamoDB Streams to include all new orders. Subscribe a Lambda function to automatically read batches of records from the Kinesis Stream. The Lambda function includes the fraud detection software and will update the order with a pass or fail status.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Using SQS with an Auto Scaling group that scales based on queue depth lets you elastically provision workers to handle long-running fraud checks and cope with peak order rates without over-provisioning.
+
+      Incorrect: A fixed fleet of 10 EC2 instances may be insufficient at peak; Kinesis with Lambda is not suitable for long-running (10–30 minute) tasks because Lambda has execution time limits; the DynamoDB/Streams approach is unnecessary and mis-specified.
     tags: 
     difficulty: 
     points: 
@@ -463,7 +541,10 @@ questions:
        is_correct: false
      - text: Use AWS Systems Manager Parameter Store to store large numbers of environment variables.
        is_correct: true
-    explanation: 
+    explanation: |
+      Correct: Storing configuration and secrets in Systems Manager Parameter Store and retrieving them at build time reduces the size of inlined environment variables and is the recommended approach for large or sensitive values.
+
+      Incorrect: Localization commands, Cognito, or S3 are not appropriate solutions for managing many environment variables in CodeBuild; Parameter Store is the supported option.
     tags: 
     difficulty: 
     points: 
@@ -480,7 +561,10 @@ questions:
        is_correct: true
      - text: Ask customers to add a query string parameter called 'INVALIDATE_CACHE' when making an API call.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: API Gateway honors cache-control headers from clients; by passing 'Cache-Control: max-age=0' in the request, clients can force cache revalidation/expiration for their requests.
+
+      Incorrect: Asking customers to call AWS management APIs or special endpoints is impractical and insecure; using a custom query parameter does not automatically instruct API Gateway's cache to invalidate without additional backend logic.
     tags: 
     difficulty: 
     points: 
@@ -497,7 +581,10 @@ questions:
        is_correct: false
      - text: Create a new Amazon EMR cluster to get all the metadata about Amazon S3 objects; persist the metadata into DynamoDB. Have the web application poll the DynamoDB table to reflect this change.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Using S3 Event Notifications to trigger a Lambda that updates DynamoDB provides near-real-time updates and is cost-effective because it is serverless and reacts only to object changes.
+
+      Incorrect: Periodic polling via CloudWatch Events, EC2 cron jobs, or running EMR are more expensive, higher-latency, or overkill compared to event-driven S3 notifications and Lambda.
     tags: 
     difficulty: 
     points: 
@@ -516,7 +603,10 @@ questions:
        is_correct: true
      - text: Define an inline Swagger definition in a Lambda function. Invoke the Lambda function.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: AWS Serverless Application Model (SAM) supports inline or referenced Swagger/OpenAPI definitions for API Gateway resources, enabling consistent, repeatable deployments of serverless APIs.
+
+      Incorrect: Elastic Beanstalk and CodeDeploy are not the correct deployment targets for Swagger definitions for API Gateway, and embedding Swagger inside arbitrary Lambda code is not a deployment pattern.
     tags: 
     difficulty: 
     points: 
@@ -533,7 +623,10 @@ questions:
        is_correct: true
      - text: Create an S3 event notification to an SQS Queue. Create a scheduled Lambda function that processes the queue, and generates and stores thumbnails.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Adding an S3 event notification that triggers a new Lambda function to generate thumbnails decouples thumbnail work from upload processing and ensures uploads are not delayed while minimizing changes to existing code.
+
+      Incorrect: Modifying the existing upload function to also create thumbnails increases upload latency; invoking another function from the uploader or using a scheduled poller adds unnecessary coupling or latency compared to direct S3 event triggers.
     tags: 
     difficulty: 
     points: 
@@ -550,7 +643,10 @@ questions:
        is_correct: true
      - text: Update the underlying Lambda function, create an Amazon CloudFront distribution with the updated Lambda function as its origin.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Deploying a new API stage (for example 'v2') in API Gateway and exposing its URL lets existing clients continue using 'v1' while others migrate to 'v2', providing a safe migration path.
+
+      Incorrect: Providing direct Lambda URLs or relying on a non-existent phased deployment parameter are not appropriate methods to maintain backward compatibility; CloudFront origins do not solve API versioning.
     tags: 
     difficulty: 
     points: 
@@ -567,7 +663,10 @@ questions:
        is_correct: false
      - text: Use Amazon RDS to store user credentials and pass them to the APIs for authentications and authorization.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Amazon Cognito user pools can federate OpenID providers and issue JWTs, and using a custom authorizer in API Gateway lets you implement a custom authorization model securely and simply.
+
+      Incorrect: Building your own token broker or storing credentials in DynamoDB/RDS places the burden of secure authentication and token management on your team and is less secure and more complex than using Cognito and API Gateway authorizers.
     tags: 
     difficulty: 
     points: 
@@ -584,7 +683,10 @@ questions:
        is_correct: false
      - text: In the '.ebextensions' folder.
        is_correct: true
-    explanation: 
+    explanation: |
+      Correct: Elastic Beanstalk configuration files with the '.config' extension must be placed in the '.ebextensions' folder at the root of the application source bundle to be processed.
+
+      Incorrect: Placing the file in the root, bin, or using a different filename or extension will prevent Elastic Beanstalk from recognizing and applying the configuration.
     tags: 
     difficulty: 
     points: 
@@ -602,7 +704,10 @@ questions:
        is_correct: true
      - text: Replace RDS wit Amazon DynamoDB to implement control over the number of writes per second.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Reusing a database connection across invocations by placing it in the function's global scope reduces connection setup overhead and improves performance for frequently-invoked Lambda functions.
+
+      Incorrect: Increasing RAM or database size may not address connection setup latency and may be wasteful; replacing RDS with DynamoDB is a major architectural change and not necessary to solve the connection reuse problem.
     tags: 
     difficulty: 
     points: 
@@ -619,7 +724,10 @@ questions:
        is_correct: false
      - text: Cross Origin Resource Sharing must be enabled on the Amazon S3 bucket.
        is_correct: true
-    explanation: 
+    explanation: |
+      Correct: Browsers enforce same-origin policies; if JavaScript in one bucket tries to access resources in another bucket, the target bucket must have CORS configured to allow those requests.
+
+      Incorrect: The other options (region differences, same bucket requirement, or security group port settings) are not the typical causes of client-side JavaScript failing to load cross-bucket resources; enabling CORS is the correct fix.
     tags: 
     difficulty: 
     points: 
@@ -636,7 +744,10 @@ questions:
        is_correct: false
      - text: Prefix folder names with random hex hashes; for example, 's3://BUCKET/23a6-FOLDERNAME/FILENAME.zip'
        is_correct: true
-    explanation: 
+    explanation: |
+      Correct: Adding random prefixes to key name prefixes (for example adding random hex to folder names) distributes writes across S3's internal partitions and helps avoid hot spots when handling very high PUT rates.
+
+      Incorrect: Using predictable prefixes like user IDs, timestamps, or hashing only the filename can still create hotspots at the same internal partition level; randomizing the leading prefix is the recommended approach to distribute requests.
     tags: 
     difficulty: 
     points: 

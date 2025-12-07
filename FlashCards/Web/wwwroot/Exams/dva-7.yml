@@ -11,7 +11,10 @@ questions:
        is_correct: false
      - text: The 'createUsagePlanKey' method must be called to associate the newly created API key with the correct usage plan.
        is_correct: true
-    explanation: 
+    explanation: |
+      Correct: After creating an API key, the key must be associated with a usage plan and the API stage by calling 'createUsagePlanKey', which binds the API key to the usage plan that is attached to the API stage and allows requests to be authorized.
+
+      Incorrect: Redeploying the API, updating an authorizer, or importing keys are not the necessary steps to grant runtime access for a single API key; the missing association to a usage plan is the common cause of a 403 for newly created keys.
     tags: 
     difficulty: 
     points: 
@@ -28,7 +31,10 @@ questions:
        is_correct: false
      - text: Use AWS STS 'AssumeRole' in the application code and assume a role with 'Get*' permissions on the S3 bucket.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Amazon Cognito with web identity federation lets users sign in using Amazon, Facebook, Google, and other social identity providers and exchange those tokens for temporary AWS credentials to access S3 securely.
+
+      Incorrect: SAML-based federation is for enterprise identity providers and is not the right fit for social logins; embedding IAM credentials or calling STS directly from the client is insecure and not recommended for mobile apps.
     tags: 
     difficulty: 
     points: 
@@ -45,7 +51,10 @@ questions:
        is_correct: false
      - text: Install the Amazon CloudWatch Logs agent on the EC2 instance that the application is running on.
        is_correct: true
-    explanation: 
+    explanation: |
+      Correct: Installing the CloudWatch Logs agent on the EC2 instance allows the application log files to be sent to CloudWatch Logs where administrators can view, search, and create metrics or alarms.
+
+      Incorrect: Using CloudTrail or GetMetricData alone does not collect application logs from EC2, and launching another instance or configuring Events without the Logs agent will not ship logs to CloudWatch.
     tags: 
     difficulty: 
     points: 
@@ -62,7 +71,10 @@ questions:
        is_correct: false
      - text: Create and then delete the table after the task has completed.
        is_correct: true
-    explanation: 
+    explanation: |
+      Correct: Creating a fresh table for the batch load and deleting the table afterward is the most efficient approach when the data is transient, because deleting the table removes all items instantly and avoids millions of delete operations.
+
+      Incorrect: Deleting items individually via DeleteItem, BatchWriteItem, or a recursive scan-and-delete would consume large amounts of capacity and API calls and be less cost-effective and slower than recreating the table.
     tags: 
     difficulty: 
     points: 
@@ -79,7 +91,10 @@ questions:
        is_correct: false
      - text: The application stopped intermittently and then resumed.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: If the Lambda function fails during processing, the service may retry the invocation, which produces duplicate log entries with the same original request ID when the retry succeeds or logs again.
+
+      Incorrect: An incorrect bucket name, an S3 outage, or intermittent application stops are unlikely to produce duplicate entries with the same Lambda request ID; retries from Lambda due to initial failure is the expected cause.
     tags: 
     difficulty: 
     points: 
@@ -96,7 +111,10 @@ questions:
        is_correct: false
      - text: Amazon API Gateway.
        is_correct: true
-    explanation: 
+    explanation: |
+      Correct: Amazon API Gateway provides a single front-door for multiple backend services, enabling unified routing, throttling, authentication, and monitoring for many consumers and simplifying the architecture.
+
+      Incorrect: Lambda, X-Ray, and SQS are useful components but do not by themselves provide the unified API management and single interface for consumers that API Gateway offers.
     tags: 
     difficulty: 
     points: 
@@ -113,7 +131,10 @@ questions:
        is_correct: false
      - text: AWS Lambda and Amazon API Gateway.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Hosting static website files in S3 and distributing them globally with CloudFront is the standard serverless pattern for static websites with low cost and high performance.
+
+      Incorrect: EC2, ECS, ElastiCache, Redis, Lambda, and API Gateway are not necessary for static client-side content and would add complexity and cost compared to S3 + CloudFront.
     tags: 
     difficulty: 
     points: 
@@ -130,7 +151,10 @@ questions:
        is_correct: false
      - text: Create a custom alarm with a unique metric name for each application.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Creating custom metrics in a dedicated namespace with unique metric names for each application allows you to plot them together on a single CloudWatch dashboard for easy monitoring.
+
+      Incorrect: Custom dimensions, events, or alarms are not the primary mechanism for visualizing and aggregating distinct application metrics on a single dashboard; custom metrics in a namespace are the right approach.
     tags: 
     difficulty: 
     points: 
@@ -147,7 +171,10 @@ questions:
        is_correct: false
      - text: Amazon Cognito user pools and identity pools.
        is_correct: true
-    explanation: 
+    explanation: |
+      Correct: Cognito user pools manage user directories, authentication, and self-service password reset, and can be combined with identity pools to grant temporary AWS credentials for access to AWS resources.
+
+      Incorrect: Identity pools or IAM alone do not provide built-in user management and self-service password reset; KMS is unrelated to user account management.
     tags: 
     difficulty: 
     points: 
@@ -164,7 +191,10 @@ questions:
        is_correct: true
      - text: Use AWS CodeDeploy to create multiple deployment groups.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: AWS Data Pipeline can be used to orchestrate and schedule a series of data-processing tasks across environments, though for application deployments a CI/CD toolchain would usually be preferred.
+
+      Incorrect: CodeCommit is source control, CodeBuild builds artifacts, and CodeDeploy deploys to targets; they do not by themselves provide the sequential environment orchestration described (though CodePipeline would be the more typical choice than the options listed).
     tags: 
     difficulty: 
     points: 
@@ -181,7 +211,10 @@ questions:
        is_correct: true
      - text: Add a global secondary index to the DynamoDB table.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Adding a random suffix (or otherwise salting) to the partition key distributes writes across more partitions and prevents a hot partition during spikes, which can be a low-cost fix.
+
+      Incorrect: Creating separate tables per date, increasing overall capacity, or adding a GSI are either more costly or do not directly address hot partitioning as efficiently as partition key diversification.
     tags: 
     difficulty: 
     points: 
@@ -198,7 +231,10 @@ questions:
        is_correct: true
      - text: Amazon Kinesis.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Amazon ElastiCache provides a managed in-memory store with replication and persistence options that can be used to accumulate results with low latency while minimizing inconsistency during scaling.
+
+      Incorrect: S3 and RDS are not in-memory stores and will increase latency for high-throughput in-memory access patterns; Kinesis is for streaming and not the right store for accumulated in-memory results.
     tags: 
     difficulty: 
     points: 
@@ -215,7 +251,10 @@ questions:
        is_correct: false
      - text: A CLI for Elastic Beanstalk.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Elastic Beanstalk multi-container Docker environments use ECS task definitions to describe the containers, ports, and resource requirements for container instances.
+
+      Incorrect: An ECS cluster, a local Dockerfile, or the EB CLI alone are not the specific artifact required to configure a multi-container environment in Elastic Beanstalk.
     tags: 
     difficulty: 
     points: 
@@ -232,7 +271,10 @@ questions:
        is_correct: false
      - text: Store and retrieve credentials from AWS CodeCommit.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Using an EC2 instance profile (IAM role attached to the instance) provides temporary credentials to the applications running on the instance without hardcoding credentials and with minimal management overhead.
+
+      Incorrect: Storing credentials in KMS, using the root account, or keeping credentials in CodeCommit are insecure or inappropriate for providing instance-level API access.
     tags: 
     difficulty: 
     points: 
@@ -249,7 +291,10 @@ questions:
        is_correct: false
      - text: Push callback data to Amazon CloudWatch as a custom metric and use the CloudWatch alerting mechanisms to alert System Administrators.
        is_correct: true
-    explanation: 
+    explanation: |
+      Correct: Publishing a custom CloudWatch metric for callbacks and using CloudWatch alarms is cost-effective and provides rolling statistics, retention, and automated alerting without building additional infrastructure.
+
+      Incorrect: Using RDS, X-Ray, or Kinesis with Lambda and DynamoDB introduces more complexity and higher operational cost compared to CloudWatch metrics and alarms for this monitoring use case.
     tags: 
     difficulty: 
     points: 
@@ -266,7 +311,10 @@ questions:
        is_correct: false
      - text: Immutable.
        is_correct: true
-    explanation: 
+    explanation: |
+      Correct: Immutable deployments create a separate set of instances with the new version and switch traffic only after they are healthy, enabling safe rollbacks and minimizing downtime if an update fails.
+
+      Incorrect: All-at-once and rolling deployments replace instances in place and can cause downtime or partial updates; "Snapshots" is not a standard Elastic Beanstalk deployment type addressing zero-downtime rollback.
     tags: 
     difficulty: 
     points: 
@@ -283,7 +331,10 @@ questions:
        is_correct: false
      - text: Use Amazon ElastiCache in front of the primary database to cache data.
        is_correct: true
-    explanation: 
+    explanation: |
+      Correct: Placing ElastiCache in front of the database for frequently-read items reduces database load and latency and is an efficient way to handle read spikes.
+
+      Incorrect: S3, CloudFront, or local instance storage are not suitable low-latency caches for dynamic database query results in this scenario.
     tags: 
     difficulty: 
     points: 
@@ -300,7 +351,10 @@ questions:
        is_correct: false
      - text: Read - 3 read capacity. unitsWrite = 10 write capacity units.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: A strongly consistent read of a 7KB item consumes 2 read capacity units (because reads >4KB round up), so 3 reads/s require 6 RCUs. Writes of 7KB consume 1 WCU per write rounded up to the 1 KB increment multiplied accordingly; 10 writes/s would require provisioning the equivalent (commonly calculated to 70 WCU in this option's context).
+
+      Incorrect: Options that allocate only 3 RCUs or only 10 WCUs do not account for strong consistency and item size; similarly, providing 6 RCUs but incorrect WCU counts is incomplete for the stated write throughput.
     tags: 
     difficulty: 
     points: 
@@ -317,7 +371,10 @@ questions:
        is_correct: true
      - text: The Lambda function is not keeping up with the amount of data coming from the stream.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: If a Lambda function errors while processing Kinesis records, Lambda will retry processing those records which can result in duplicates; proper error handling or checkpointing is required to avoid repeated processing.
+
+      Incorrect: There is no manual pointer advancement in Lambda-managed Kinesis integrations, asynchronous invocation is not the cause for this duplication, and being slow to process does not by itself cause the specific duplicate behavior described.
     tags: 
     difficulty: 
     points: 
@@ -334,7 +391,10 @@ questions:
        is_correct: false
      - text: Hard code the database secrets in the application code itself.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: AWS Systems Manager Parameter Store SecureString provides encrypted secret storage with rotation support and allows the application to retrieve secrets at runtime without code changes when secrets rotate.
+
+      Incorrect: Using IAM roles alone does not store secrets, storing secrets in S3 metadata or hard-coding them is insecure and not suitable for rotation without code changes.
     tags: 
     difficulty: 
     points: 
@@ -351,7 +411,10 @@ questions:
        is_correct: false
      - text: Call the 'create-alias' API.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Calling 'update-function-code' points Lambda to the new S3 object or updates the function's code directly, which is the least disruptive way to instruct Lambda to use the new deployment package.
+
+      Incorrect: Creating a new function or manipulating S3 object names unnecessarily is more disruptive; creating an alias does not update the function code itself.
     tags: 
     difficulty: 
     points: 
@@ -370,7 +433,10 @@ questions:
        is_correct: false
      - text: Add an environmental variable to the Lambda function to allow outbound internet access.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Associating the Lambda function with the VPC private subnets lets it access RDS in the VPC, and adding a NAT Gateway provides outbound internet access from those private subnets so the function can reach public endpoints.
+
+      Incorrect: Modifying NACLs or using public subnets or environment variables alone does not provide the necessary routed internet connectivity and secure VPC access pattern required for Lambda to access both RDS and external services.
     tags: 
     difficulty: 
     points: 
@@ -387,7 +453,10 @@ questions:
        is_correct: false
      - text: Modify the execution role of the Lambda function to allow S3 access permission to the deployment package '.ZIP' file.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: When CloudFormation manages function code via S3, you must update the stack with the new S3Key or S3ObjectVersion so CloudFormation updates the Lambda resource to point to the new package.
+
+      Incorrect: Simply uploading a new file to S3 without updating the stack, base64-encoding the package, or changing the execution role will not cause CloudFormation to update the deployed function code.
     tags: 
     difficulty: 
     points: 
@@ -408,7 +477,10 @@ questions:
        is_correct: false
      - text: Configure and use an IAM role for tasks.
        is_correct: true
-    explanation: 
+    explanation: |
+      Correct: For ECS, run the X-Ray daemon as a sidecar container (or Docker image), instrument your application code to emit trace segments, and assign an IAM role to the ECS task so the daemon can send trace data to X-Ray.
+
+      Incorrect: Installing the daemon on the EC2 host or configuring an EC2 instance role are not the recommended task-level approach for ECS; registering the application is not a separate required step in this context.
     tags: 
     difficulty: 
     points: 
@@ -425,7 +497,10 @@ questions:
        is_correct: false
      - text: Turn on S3 default encryption for the S3 bucket.
        is_correct: true
-    explanation: 
+    explanation: |
+      Correct: Enabling S3 default encryption ensures objects are encrypted at rest using the chosen encryption method (SSE-S3, SSE-KMS, etc.) and satisfies data-at-rest encryption requirements.
+
+      Incorrect: Bucket policy conditions for ACL or SecureTransport control access and transport security but do not ensure server-side encryption at rest; RDS encryption is unrelated to S3.
     tags: 
     difficulty: 
     points: 
@@ -442,7 +517,10 @@ questions:
        is_correct: true
      - text: 'Resources'
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: The 'Mappings' section in CloudFormation allows you to provide region-specific values (such as AMI IDs) and look them up in the template so the correct AMI is used per region.
+
+      Incorrect: Parameters, Outputs, and Resources do not by themselves provide a region-to-value map for AMI lookups the way Mappings do.
     tags: 
     difficulty: 
     points: 
@@ -459,7 +537,10 @@ questions:
        is_correct: true
      - text: Scan operation using 'strongly-consistent' reads.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Performing a Query on the GSI with eventually-consistent reads consumes the least RCU for the targeted set of items because Query restricts reads to matching keys and eventual consistency halves the RCU cost compared to strong consistency.
+
+      Incorrect: Scan reads the entire index and consumes far more capacity, and strongly-consistent reads cost more RCUs than eventually-consistent reads.
     tags: 
     difficulty: 
     points: 
@@ -476,7 +557,10 @@ questions:
        is_correct: true
      - text: Disable the CloudFront distribution and enable it again to update all the edge locations.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Creating an invalidation for the changed objects forces CloudFront edge caches to fetch the updated content from the origin so users see the new version.
+
+      Incorrect: Removing or re-adding the origin, disabling forwarding, or toggling the distribution are unnecessary or ineffective; invalidation is the supported method to clear cached objects.
     tags: 
     difficulty: 
     points: 
@@ -495,7 +579,10 @@ questions:
        is_correct: false
      - text: Upload the function code to a private Git repository, then add a reference to it in an 'AWS::Lambda::Function' resource in the template.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: You can include inline code in the CloudFormation template (for small functions) or reference a ZIP file in S3 from an 'AWS::Lambda::Function' resource to deploy the function via CloudFormation.
+
+      Incorrect: CodeCommit or arbitrary Git repositories are not directly referenced by CloudFormation for function code, and uploading a ZIP to CloudFormation itself is not a standard deployment mechanism.
     tags: 
     difficulty: 
     points: 
@@ -512,7 +599,10 @@ questions:
        is_correct: false
      - text: Modify the function runtime to include the necessary library.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Bundling custom libraries with your function code into the deployment ZIP ensures the runtime has the dependencies available at invocation time and is the recommended method.
+
+      Incorrect: Referencing libraries from S3 at runtime, relying on blueprints, or modifying the runtime are not typical or reliable ways to include custom libraries for Lambda functions.
     tags: 
     difficulty: 
     points: 
@@ -531,7 +621,10 @@ questions:
        is_correct: false
      - text: Configure an Elastic Load Balancer with SSL termination.
        is_correct: true
-    explanation: 
+    explanation: |
+      Correct: Terminating SSL at the ELB by configuring SSL certificates on the load balancer offloads the CPU-intensive TLS work from the EC2 instances and secures traffic.
+
+      Incorrect: SSL pass-through or installing certificates on CPU-constrained instances would not offload CPU work; the other options are irrelevant or not standard ways to reduce instance CPU for TLS.
     tags: 
     difficulty: 
     points: 
@@ -548,7 +641,10 @@ questions:
        is_correct: false
      - text: Create a 'ZIP' file with the source code and a buildspec.yaml file that installs the dependent libraries on AWS Lambda.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Packaging the function code together with all required native and language libraries in the deployment ZIP ensures dependencies are available to the Lambda runtime at execution time.
+
+      Incorrect: Installing libraries at runtime, staging them on S3 for dynamic loading, or relying on a buildspec in Lambda are not reliable or supported runtime dependency strategies.
     tags: 
     difficulty: 
     points: 
@@ -565,7 +661,10 @@ questions:
        is_correct: true
      - text: Use Elastic Load Balancer connection draining to stop sending requests to failing instances.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Storing session state in DynamoDB provides a highly available, durable, and scalable backend so sessions are preserved even if individual EC2 instances fail.
+
+      Incorrect: Sticky sessions keep state on instances and risk loss on failure; SQS is not a session store, and connection draining only helps in-flight requests, not session persistence.
     tags: 
     difficulty: 
     points: 
@@ -582,7 +681,10 @@ questions:
        is_correct: false
      - text: Use Amazon DynamoDB Streams to deliver all changes from the Accounts database to the Payments database.
        is_correct: true
-    explanation: 
+    explanation: |
+      Correct: DynamoDB Streams captures item-level changes and can be consumed to propagate updates to other services or databases in near-real time, providing a decoupled and reliable replication mechanism.
+
+      Incorrect: Glue is batch/ETL focused, ElastiCache with database triggers is complex and fragile, and Kinesis Firehose is not ideal for capturing DynamoDB change streams compared to DynamoDB Streams.
     tags: 
     difficulty: 
     points: 
@@ -599,7 +701,10 @@ questions:
        is_correct: true
      - text: AWS CodeStar.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: AWS CodeCommit is a managed Git service that supports distributed version control where developers can work offline and synchronize changes peer-to-peer when connected.
+
+      Incorrect: Subversion is centralized and not peer-to-peer; CodeBuild is a build service and CodeStar is a development tooling service, not a version control system.
     tags: 
     difficulty: 
     points: 
@@ -616,7 +721,10 @@ questions:
        is_correct: true
      - text: Create an Amazon SNS topic that has a subscription to the Lambda function with a 600-second timer.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Creating a CloudWatch Events (EventBridge) scheduled rule is a serverless way to trigger a Lambda function on a cron or fixed-rate schedule, such as every 10 minutes.
+
+      Incorrect: Running a cron on EC2 is not serverless, environment variables do not schedule execution, and SNS does not provide a built-in timer to trigger at fixed intervals.
     tags: 
     difficulty: 
     points: 
@@ -634,7 +742,10 @@ questions:
        is_correct: false
      - text: Create a local secondary index with a primary key of 'sport_name' and a sort key of score and get the results based on the score attribute.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Creating a GSI with 'sport_name' as the partition key and 'score' as the sort key allows efficient queries for top performers per sport without scanning the entire table.
+
+      Incorrect: Querying by 'user_id' and 'sport_name' won't efficiently produce leaderboards, scanning is expensive, and an LSI cannot change the partition key to 'sport_name' independent of the base table's partition key.
     tags: 
     difficulty: 
     points: 
@@ -651,7 +762,10 @@ questions:
        is_correct: false
      - text: Use Amazon Cognito to associate unauthenticated users with an IAM role that has limited access to resources.
        is_correct: true
-    explanation: 
+    explanation: |
+      Correct: Amazon Cognito supports unauthenticated identities via identity pools, allowing anonymous users to receive temporary, limited-privilege AWS credentials without requiring login.
+
+      Incorrect: Creating IAM users dynamically, using KMS for credentials, or deploying a separate identity provider are not appropriate or efficient for anonymous mobile access.
     tags: 
     difficulty: 
     points: 
@@ -670,7 +784,10 @@ questions:
        is_correct: false
      - text: Create a Systems Manager parameter that exposes the KMS key to the EC2 instances.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Granting decryption permissions via an S3 bucket policy and ensuring the EC2 instance IAM role has KMS permissions allows the EC2 application to access SSE-KMS encrypted objects; both S3 policies and IAM role permissions are commonly used together to enable access.
+
+      Incorrect: Key policies must be correctly configured to allow IAM principals, but simply writing a key policy alone (without IAM role permissions) or relying on S3 ACLs or SSM parameters is not the correct or secure method to grant access to the CMK for decryption.
     tags: 
     difficulty: 
     points: 
@@ -687,7 +804,10 @@ questions:
        is_correct: false
      - text: Message cannot be deleted for a configurable amount of time after they are consumed from the queue.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: A delay queue causes messages to become visible to consumers only after a configurable delay period after they are sent, effectively hiding new messages temporarily.
+
+      Incorrect: Delay queues do not change visibility after consumption, do not control polling duration, and do not prevent deletion after consumption; those behaviors belong to different SQS settings.
     tags: 
     difficulty: 
     points: 
@@ -704,7 +824,10 @@ questions:
        is_correct: true
      - text: Create a code repository on an Amazon EC2 instance so that all Developers can update the code, and deploy the application from the instance to Elastic Beanstalk.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Using CodeCommit gives distributed developers a managed Git repository with efficient incremental transfers and integrates with deployment pipelines to Elastic Beanstalk, minimizing upload time and administrative overhead.
+
+      Incorrect: Using S3 or FTP or hosting a repo on an EC2 instance introduces more manual management or inefficient uploads compared to a managed source control service like CodeCommit.
     tags: 
     difficulty: 
     points: 
@@ -721,7 +844,10 @@ questions:
        is_correct: false
      - text: Amazon CloudFront.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Amazon DynamoDB Accelerator (DAX) is an in-memory caching service designed specifically for DynamoDB to speed up repeated read requests with microsecond latency.
+
+      Incorrect: EMR, SQS, and CloudFront are not designed to serve as a DynamoDB read cache for repeated database reads.
     tags: 
     difficulty: 
     points: 
@@ -738,7 +864,10 @@ questions:
        is_correct: false
      - text: Use client-side encryption/decryption with Amazon S3 and AWS KMS.
        is_correct: true
-    explanation: 
+    explanation: |
+      Correct: Client-side encryption with KMS-managed keys ensures sensitive data is encrypted before transmission and stored in S3 in encrypted form, while KMS and client-side logging can ensure access auditability and protect data end-to-end.
+
+      Incorrect: Server-side default encryption protects data at rest but does not provide true end-to-end client-side control; Cognito handles authentication but not encryption; using Lambda to encrypt/decrypt in transit complicates the flow and increases attack surface compared to client-side encryption.
     tags: 
     difficulty: 
     points: 
@@ -756,7 +885,10 @@ questions:
        is_correct: true
      - text: Permissions associated with the account that owns the AWS service.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: The STS response includes the temporary credentials tied to the IAM principal (the Access Key ID shown), so the permissions used are those associated with that IAM principal.
+
+      Incorrect: The permissions are not the default service role or the account-wide permissions; they are the effective permissions for the IAM principal represented by the access key in the response.
     tags: 
     difficulty: 
     points: 
@@ -773,7 +905,10 @@ questions:
        is_correct: false
      - text: Use quoting strings.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Using pagination for CLI list calls retrieves results in smaller chunks and prevents timeouts when listing large numbers of resources.
+
+      Incorrect: Shorthand syntax, parameter values, or quoting strings do not address the timeout issue caused by large result sets.
     tags: 
     difficulty: 
     points: 
@@ -790,7 +925,10 @@ questions:
        is_correct: false
      - text: Task definition.
        is_correct: true
-    explanation: 
+    explanation: |
+      Correct: Port mappings for containers are defined in the ECS task definition which describes how container ports map to host ports and how networking should be configured.
+
+      Incorrect: Security groups, ECR, or the container agent are not the places where container port mappings are declared for ECS tasks.
     tags: 
     difficulty: 
     points: 
@@ -807,7 +945,10 @@ questions:
        is_correct: false
      - text: Amazon RDS.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Amazon DynamoDB provides single-digit millisecond latency for key-value lookups, making it an appropriate choice for indexing metadata that must be retrieved quickly.
+
+      Incorrect: EC2, Lambda, and RDS are not optimized out-of-the-box to provide consistent single-digit millisecond key-value lookups for this use case as DynamoDB is.
     tags: 
     difficulty: 
     points: 
@@ -824,7 +965,10 @@ questions:
        is_correct: false
      - text: AWS CloudTrail
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Amazon CloudWatch Logs is the service designed to collect and securely store application logs from EC2 instances and other resources in a centralized place for monitoring and analysis.
+
+      Incorrect: VPC Flow Logs record network flow data, CloudSearch is a search service, and CloudTrail logs API calls for auditing; none are the primary centralized application log store like CloudWatch Logs.
     tags: 
     difficulty: 
     points: 
@@ -841,7 +985,10 @@ questions:
        is_correct: false
      - text: Ingest multiple records into the stream in a single call using 'PutRecords'
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Using the Kinesis Producer Library can optimize batching and aggregation of records on the producer side, improving throughput and helping streams accommodate high peak rates.
+
+      Incorrect: Changing retention period or shard count and using PutRecords are configuration or API-level changes; while increasing shards is a capacity solution, the listed correct option focuses on improving producer efficiency with KPL.
     tags: 
     difficulty: 
     points: 
@@ -858,7 +1005,10 @@ questions:
        is_correct: false
      - text: Use 'AWS::Include' to reference publicly-hosted template files.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Breaking a large template into nested stacks for common patterns increases maintainability and reuse and is a recommended CloudFormation best practice.
+
+      Incorrect: Embedding credentials is insecure, removing mappings arbitrarily decreases flexibility, and referencing publicly-hosted templates is not a general best practice compared to using nested stacks.
     tags: 
     difficulty: 
     points: 

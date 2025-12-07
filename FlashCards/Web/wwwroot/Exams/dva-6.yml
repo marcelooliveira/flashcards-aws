@@ -13,7 +13,10 @@ questions:
        is_correct: false
      - text: Upload to a different region.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Using the S3 multipart upload API allows you to upload objects larger than the single PUT limit (5 GB) by splitting the file into parts and assembling them on the server, which is the appropriate solution for a 6 GB file.
+
+      Incorrect: The other options are wrong because S3 supports objects larger than 5 GB via multipart uploads; there is no separate "large object upload API", contacting support does not change the single PUT limit, and changing region does not address the technical requirement.
     tags: 
     difficulty: 
     points: 
@@ -34,7 +37,10 @@ questions:
        is_correct: false
      - text: SQS Queues.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Elastic Beanstalk can provision and manage resources such as Auto Scaling groups, Elastic Load Balancers, and RDS instances as part of an environment to simplify deployment and scaling of applications.
+
+      Incorrect: Route 53 hosted zones, Elastic IP addresses and SQS queues are not automatically provisioned as standard managed resources by Beanstalk; they can be used with Beanstalk but are not part of the typical managed resource set.
     tags: 
     difficulty: 
     points: 
@@ -51,7 +57,10 @@ questions:
        is_correct: true
      - text: Establish cross account access between the mobile app and the DynamoDB table to sign the requests
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Requesting temporary security credentials via web identity federation (for example using Cognito or STS with Facebook tokens) is secure because it avoids embedding long-lived credentials in the app and limits permissions and lifetime.
+
+      Incorrect: Distributing permanent credentials (IAM user or root) in the mobile app is insecure; cross-account access alone does not provide a secure, short-lived credential flow for mobile clients.
     tags: 
     difficulty: 
     points: 
@@ -70,7 +79,10 @@ questions:
        is_correct: true
      - text: SQL.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: AWS provides official SDKs for many languages, including PHP and Java, which are maintained by AWS to access AWS services.
+
+      Incorrect: Perl, Pascal and SQL are not listed as languages with official AWS SDKs (though third-party libraries may exist), so they are not correct choices.
     tags: 
     difficulty: 
     points: 
@@ -89,7 +101,10 @@ questions:
        is_correct: false
      - text: 3600 write capacity units.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: 600 writes per minute is approximately 10 writes per second; each write is 1 KB which consumes 1 write capacity unit, so about 10 WCU are required.
+
+      Incorrect: The other options either under- or overestimate the required throughput; 1 WCU is insufficient for 10 writes/sec and values like 60/600/3600 WCU are excessive for this scenario.
     tags: 
     difficulty: 
     points: 
@@ -106,7 +121,10 @@ questions:
        is_correct: false
      - text: 4xx HTTP response code.
        is_correct: true
-    explanation: 
+    explanation: |
+      Correct: 4xx HTTP response codes indicate client errors (bad request, unauthorized, not found, etc.) and mean there was a problem with the request sent to DynamoDB.
+
+      Incorrect: 5xx codes are server errors, 200 indicates success, and 306 is not generally used to indicate client request errors.
     tags: 
     difficulty: 
     points: 
@@ -123,7 +141,10 @@ questions:
        is_correct: false
      - text: Set the 'DelaySeconds' parameter of a message to 20 seconds.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Setting 'ReceiveMessageWaitTimeSeconds' enables long polling, which reduces empty responses by allowing the receive call to wait up to the specified time for messages instead of returning immediately.
+
+      Incorrect: VisibilityTimeout affects how long a message remains invisible after being received; MessageRetentionPeriod controls how long messages are stored; DelaySeconds delays individual messages—none of these reduce polling empty responses like long polling does.
     tags: 
     difficulty: 
     points: 
@@ -140,7 +161,10 @@ questions:
        is_correct: false
      - text: 'myawsbucket.tokyo.amazonaws.com'
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: The S3 website endpoint for the Tokyo region (ap-northeast-1) uses the format 'myawsbucket.s3-website-ap-northeast-1.amazonaws.com', which is the correct region-specific website endpoint.
+
+      Incorrect: Other formats with 'www', the global S3 endpoint, or '.tokyo' are not the S3 website endpoint for that region.
     tags: 
     difficulty: 
     points: 
@@ -157,7 +181,10 @@ questions:
        is_correct: true
      - text: Create a new table per hour.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Creating and deleting tables on an hourly basis allows you to remove large sets of items efficiently by deleting the table, saving on storage and avoiding many individual delete operations.
+
+      Incorrect: Keeping all items in one table or deleting items individually would consume significant throughput and API calls; creating new tables without deleting them does not solve the removal problem.
     tags: 
     difficulty: 
     points: 
@@ -176,7 +203,10 @@ questions:
        is_correct: true
      - text: Use Glacier to save session slate.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Externalizing session state to a shared cache like ElastiCache ensures session data is available to all instances behind the load balancer and prevents users from being logged out when requests are routed to different servers.
+
+      Incorrect: Storing session state in instance memory, local storage, EBS, or Glacier does not provide the shared, low-latency access needed across instances and may lead to lost sessions.
     tags: 
     difficulty: 
     points: 
@@ -193,7 +223,10 @@ questions:
        is_correct: false
      - text: Block the IPs of the offending websites in Security Groups.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Removing public read access and using signed, time-limited URLs ensures only authorized requests can access your objects, preventing hotlinking and unauthorized use.
+
+      Incorrect: Storing on EBS, using CloudFront without access controls, or blocking IPs via security groups are not effective ways to prevent hotlinking; security groups do not control HTTP access from arbitrary web clients.
     tags: 
     difficulty: 
     points: 
@@ -212,7 +245,10 @@ questions:
        is_correct: false
      - text: DynamoDB restricts item access during writes.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: DynamoDB uses optimistic concurrency control and supports conditional writes to help prevent conflicting updates and maintain consistency without using pessimistic locks.
+
+      Incorrect: DynamoDB does not employ a pessimistic locking model by default and does not restrict access in the way implied by the incorrect statements; reads and writes are managed via consistency models and conditional operations.
     tags: 
     difficulty: 
     points: 
@@ -229,7 +265,10 @@ questions:
        is_correct: false
      - text: Call the 'CreatePlatformEndPoint' API function to register multiple device tokens.
        is_correct: true
-    explanation: 
+    explanation: |
+      Correct: The 'CreatePlatformEndpoint' API is used to register device tokens (endpoints) with SNS programmatically, which is the recommended way to register and manage device endpoints for push notifications.
+
+      Incorrect: Uploading CSV via the console does not scale, relying solely on the push service does not register tokens with SNS, and while a token vending service is a pattern, the direct recommended API for registering endpoints is CreatePlatformEndpoint.
     tags: 
     difficulty: 
     points: 
@@ -248,7 +287,10 @@ questions:
        is_correct: false
      - text: You haven't configured DynamoDB Auto Scaling triggers.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Throttling can occur due to a hot partition caused by a heavily used partition key (hash key); even if the table's aggregate capacity is available, a single partition can exceed its allocated throughput.
+
+      Incorrect: The other options do not explain the common cause of this exception; storage instances, range/sort key limits, or missing auto scaling configuration are not the primary reason in this scenario.
     tags: 
     difficulty: 
     points: 
@@ -267,7 +309,10 @@ questions:
        is_correct: false
      - text: 'YYYY-MM-DD-HH-logInstanceID'
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Using a prefix that varies by instance (for example starting with 'instanceID_...') helps distribute object keys across S3 partitions and avoids hotspots, improving performance for many parallel writers.
+
+      Incorrect: Sequential names or names that start with identical timestamp prefixes for many instances can cause S3 prefix hotspots, degrading performance.
     tags: 
     difficulty: 
     points: 
@@ -284,7 +329,10 @@ questions:
        is_correct: false
      - text: Messages will be delivered one or more times and message delivery order is indeterminate.
        is_correct: true
-    explanation: 
+    explanation: |
+      Correct: Standard SQS delivers messages at-least-once (one or more times) and does not guarantee ordering; FIFO queues provide ordering and deduplication but are a different queue type.
+
+      Incorrect: The other statements mix guarantee types incorrectly; exactly-once delivery and FIFO ordering only apply to FIFO queues under specific conditions, not to standard SQS behavior.
     tags: 
     difficulty: 
     points: 
@@ -303,7 +351,10 @@ questions:
        is_correct: true
      - text: Develop an identity broker which authenticates against IAM Security Token Service to assume an IAM Role to get temporary AWS security credentials. The application calls the identity broker to get AWS temporary security credentials with access to the appropriate S3 bucket.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Two valid approaches are: authenticate against LDAP and then assume an IAM role via STS mapped to the user, or implement an identity broker that authenticates against LDAP and requests federated credentials from STS to provide scoped access to S3.
+
+      Incorrect: Options that imply authenticating directly to STS with LDAP credentials or calling a generic "IAM Security Service" with LDAP credentials are incorrect because STS requires proper credential mappings and is typically accessed via a broker or role assumption flow.
     tags: 
     difficulty: 
     points: 
@@ -322,7 +373,10 @@ questions:
        is_correct: false
      - text: Set the Error Document property to welcome.html.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: You must upload 'welcome.html' to the bucket and set the bucket's Website Hosting Index Document to 'welcome.html' so it will be served as the root page.
+
+      Incorrect: Creating subfolders or moving the existing index without changing the index document will not make 'welcome.html' the root document; setting the Error Document is for error responses, not the index.
     tags: 
     difficulty: 
     points: 
@@ -339,7 +393,10 @@ questions:
        is_correct: false
      - text: RC5.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Amazon S3 server-side encryption uses the Advanced Encryption Standard (AES), commonly AES-256, as the block cipher for encrypting objects.
+
+      Incorrect: Triple DES, Blowfish and RC5 are not the standard algorithms used by S3 for server-side encryption; AES is the recommended and implemented algorithm.
     tags: 
     difficulty: 
     points: 
@@ -356,7 +413,10 @@ questions:
        is_correct: false
      - text: Install required plugins for the appropriate AWS SDK.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Add annotations to segments in X-Ray; annotations are indexed and let you filter and query traces efficiently, so adding them in code and segment documents enables the desired indexing.
+
+      Incorrect: Metadata is stored but not indexed for filtering; environment variables and SDK plugins do not by themselves provide indexable fields for filtering traces.
     tags: 
     difficulty: 
     points: 
@@ -373,7 +433,10 @@ questions:
        is_correct: false
      - text: 1. Edit the environment definitions in the existing deployment. 2. Change the associated load balancer type according to the requirements. 3. Rebuild the environment with the new load balancer type.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: In the Elastic Beanstalk console you can change the environment configuration to select a new load balancer type and then deploy a new version; updating the configuration and redeploying is the straightforward approach.
+
+      Incorrect: The other choices describe more complex or incorrect workflows (cloning and swapping CNAMEs or invalid edits) rather than the direct configuration update in the environment.
     tags: 
     difficulty: 
     points: 
@@ -390,7 +453,10 @@ questions:
        is_correct: false
      - text: AWS CodeCommit.
        is_correct: true
-    explanation: 
+    explanation: |
+      Correct: AWS CodeCommit is a managed source control service (Git) that supports commits across multiple files, branching and version history for collaborative development.
+
+      Incorrect: CodePipeline is for CI/CD orchestration, CodeBuild handles builds, and S3 is object storage—none provide distributed version control like CodeCommit.
     tags: 
     difficulty: 
     points: 
@@ -407,7 +473,10 @@ questions:
        is_correct: false
      - text: AWS CodeDeploy.
        is_correct: true
-    explanation: 
+    explanation: |
+      Correct: AWS CodeDeploy supports automated deployments to EC2 instances and on-premises servers, making it the appropriate service for this requirement.
+
+      Incorrect: CodePipeline orchestrates pipelines, CodeBuild runs builds, and Elastic Beanstalk manages application environments; they do not specifically handle coordinated deployments to both EC2 and on-premises servers like CodeDeploy does.
     tags: 
     difficulty: 
     points: 
@@ -424,7 +493,10 @@ questions:
        is_correct: false
      - text: Contact AWS Support to increase the concurrent execution limits.
        is_correct: true
-    explanation: 
+    explanation: |
+      Correct: To support 50 requests/sec with 100s average execution, the required concurrency may exceed the account's default limit; you must request a concurrency limit increase from AWS Support before deployment.
+
+      Incorrect: Dead-letter queues and error handling are good practices but do not address account concurrency limits; adding an event source does not increase concurrency quotas.
     tags: 
     difficulty: 
     points: 
@@ -441,7 +513,10 @@ questions:
        is_correct: true
      - text: Create an Amazon DynamoDB table, then implement session handling at the application level to leverage the table for session data storage.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Using ElastiCache (Memcached) provides in-memory session storage with very low latency, which is ideal for externalizing session state while keeping the web tier stateless and meeting performance requirements.
+
+      Incorrect: RDS or a shared file system introduces higher latency; DynamoDB is scalable but typically has higher latency than an in-memory cache for session access.
     tags: 
     difficulty: 
     points: 
@@ -458,7 +533,10 @@ questions:
        is_correct: false
      - text: A large write operation is being performed against another table.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Updates to the primary table must also be written to the GSI; if the GSI's write capacity is underprovisioned, writes to the primary table can be throttled even while the table's own WCU appear available.
+
+      Incorrect: Read capacity on the primary table, missing Streams, or activity on another table do not explain the observed throttling; the GSI write capacity is the relevant factor.
     tags: 
     difficulty: 
     points: 
@@ -475,7 +553,10 @@ questions:
        is_correct: false
      - text: Batch writes.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Conditional writes allow you to specify a condition (for example only update if the current value matches an expected value) which prevents accidental overwrites in concurrent update scenarios.
+
+      Incorrect: Labels like "concurrent" or "atomic" in the options are not the specific DynamoDB mechanism; batch writes group operations but do not prevent conflicting concurrent updates without conditions.
     tags: 
     difficulty: 
     points: 
@@ -492,7 +573,10 @@ questions:
        is_correct: false
      - text: Increase the maximum execution time (timeout) setting of the Lambda function.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: You must configure an event source mapping between the DynamoDB stream and the Lambda function so that stream records trigger Lambda invocations.
+
+      Incorrect: Changing StreamViewType controls what data is captured but does not wire the stream to Lambda; mapping an SNS topic or increasing timeout does not create the required event source mapping.
     tags: 
     difficulty: 
     points: 
@@ -509,7 +593,10 @@ questions:
        is_correct: false
      - text: Create a standard-resolution custom Amazon CloudWatch metric for user activity data, then publish data every 5 seconds.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: High-resolution CloudWatch metrics allow publishing at sub-minute intervals (as low as 1 second); publishing every 5 seconds gives the granularity needed to base scaling on the last 15 seconds of activity.
+
+      Incorrect: Standard-resolution metrics do not support the required high frequency and 30-second publishing is too coarse for a 15-second scaling requirement.
     tags: 
     difficulty: 
     points: 
@@ -526,7 +613,10 @@ questions:
        is_correct: false
      - text: Use Amazon Kinesis Data Streams with Kinesis Client Library to ingest and deliver messages.
        is_correct: true
-    explanation: 
+    explanation: |
+      Correct: Amazon Kinesis Data Streams is designed for real-time ingestion of large volumes of streaming data from many producers and provides low-latency processing suitable for fraud detection and live dashboards.
+
+      Incorrect: SQS, S3, and Data Pipeline do not provide the same level of low-latency real-time streaming and scaling for thousands of concurrent producers as Kinesis.
     tags: 
     difficulty: 
     points: 
@@ -544,7 +634,10 @@ questions:
        is_correct: false
      - text: '"codecommit:*"'
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: The least-privilege approach is to add the specific actions 'codecommit:CreateBranch' and 'codecommit:DeleteBranch' which are exactly what is required to create and delete branches.
+
+      Incorrect: Broad permissions like 'Put*', 'Update*' or 'codecommit:*' grant excessive access and violate the principle of least privilege.
     tags: 
     difficulty: 
     points: 
@@ -563,7 +656,10 @@ questions:
        is_correct: true
      - text: Amazon GuardDuty.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: AWS Systems Manager Parameter Store (with SecureString parameters) can store secrets and AWS KMS can be used to encrypt them; together they provide secure storage and encryption for rotated credentials used by Lambda.
+
+      Incorrect: ACM, Trusted Advisor, and GuardDuty do not provide managed secret storage and encryption for application credentials in the same way as Parameter Store plus KMS.
     tags: 
     difficulty: 
     points: 
@@ -580,7 +676,10 @@ questions:
        is_correct: true
      - text: 'ebextensions.config'
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: 'appspec.yml' is the file used by CodeDeploy to define deployment actions and hooks; updating it (or ensuring it is present and correct) is required for CodeDeploy to apply the deployment.
+
+      Incorrect: 'dockerrun.aws.json' is used for Elastic Beanstalk Docker configs, 'buildspec.yml' is for CodeBuild, and '.ebextensions' is for Beanstalk—none of these control CodeDeploy deployments.
     tags: 
     difficulty: 
     points: 
@@ -597,7 +696,10 @@ questions:
        is_correct: false
      - text: Invoke the 'GenerateDataKey' API to retrieve the plaintext version of the data encryption key to encrypt the data.
        is_correct: true
-    explanation: 
+    explanation: |
+      Correct: The recommended pattern is to call 'GenerateDataKey' to receive both the plaintext data encryption key (for local encryption) and the encrypted data key for storage; this enables client-side encryption of large objects without sending plaintext to KMS.
+
+      Incorrect: Calling Encrypt with the entire document is not suitable for large files; GenerateRandom is not the standard DEK workflow, and obtaining only the encrypted DEK without the plaintext key would not allow local encryption.
     tags: 
     difficulty: 
     points: 
@@ -616,7 +718,10 @@ questions:
        is_correct: true
      - text: Count.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: 'IntegrationLatency' measures the time taken by the backend integration (for example, Lambda) to respond to API Gateway, and 'Latency' measures the total client-perceived latency; both help diagnose timeouts.
+
+      Incorrect: CacheHitCount, CacheMissCount and Count do not directly indicate backend integration latency or end-to-end request latency relevant to timeouts.
     tags: 
     difficulty: 
     points: 
@@ -633,7 +738,10 @@ questions:
        is_correct: false
      - text: Use Amazon API Gateway and AWS Lambda to control access to an S3 bucket.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: CloudFront with signed URLs in front of S3 provides global low-latency delivery and controlled access to downloads at low cost, making it an efficient choice for firmware distribution.
+
+      Incorrect: Creating a distribution per customer is impractical and costly; Lambda@Edge or API Gateway add complexity and extra cost compared to signed URLs with CloudFront.
     tags: 
     difficulty: 
     points: 
@@ -650,7 +758,10 @@ questions:
        is_correct: false
      - text: Send the items to DynamoDB through Amazon Kinesis Data Firehose.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Implementing exponential backoff for retries is the recommended approach to handle DynamoDB throttling errors, reducing retry pressure and allowing operations to succeed as capacity becomes available.
+
+      Incorrect: While SQS, API Gateway, or Firehose could be part of alternative architectures, the direct and recommended method to handle throttling errors is exponential backoff in the client retry logic.
     tags: 
     difficulty: 
     points: 
@@ -667,7 +778,10 @@ questions:
        is_correct: false
      - text: Enable session stickiness using elastic load balancers.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Amazon ElastiCache (Redis or Memcached) offers in-memory session storage with low latency and options for replication and high availability, making it well-suited for session state in scalable applications.
+
+      Incorrect: CloudFront is not a session store, S3 has higher latency and is not ideal for session access, and ELB stickiness does not provide the resilience and scalability required to protect sessions from instance failures.
     tags: 
     difficulty: 
     points: 
@@ -684,7 +798,10 @@ questions:
        is_correct: true
      - text: A CloudFormation serverless plugin.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: The AWS Serverless Application Model (SAM) provides a simplified syntax for declaring serverless resources (API Gateway, Lambda, DynamoDB) in CloudFormation templates.
+
+      Incorrect: The other options are not the standard tool for simplified serverless syntax; SAM is the established model for this purpose.
     tags: 
     difficulty: 
     points: 
@@ -703,7 +820,10 @@ questions:
        is_correct: true
      - text: Use an ELB with an Auto Scaling group.
        is_correct: true
-    explanation: 
+    explanation: |
+      Correct: Moving session state to a scalable managed store like DynamoDB and using an ELB with an Auto Scaling group for the web tier are effective refactors to increase elasticity.
+
+      Incorrect: Pessimistic concurrency in DynamoDB, CloudFront or WAF alone do not provide the primary elasticity improvements required; the two selected changes directly address session sharing and instance scaling.
     tags: 
     difficulty: 
     points: 
@@ -720,7 +840,10 @@ questions:
        is_correct: true
      - text: Run Amazon Inspector agents and then analyze performance.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: AWS X-Ray provides distributed tracing that helps correlate calls across components, identify latencies and errors, and pinpoint root causes in production systems.
+
+      Incorrect: CloudWatch Logs are useful but do not provide distributed tracing easily; CloudTrail is for API auditing, and Inspector is for security assessments, not distributed performance tracing.
     tags: 
     difficulty: 
     points: 
@@ -737,7 +860,10 @@ questions:
        is_correct: false
      - text: Metric data points for logs groups can be filtered only after they are exported to an Amazon S3 bucket.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: CloudWatch metric filters start producing metrics only for log events that occur after the filter is created; they do not retroactively create metrics for past log entries.
+
+      Incorrect: You do not need a VPC endpoint for basic metric filtering, and exporting to Elasticsearch or S3 is not required for metric filters to work.
     tags: 
     difficulty: 
     points: 
@@ -754,7 +880,10 @@ questions:
        is_correct: true
      - text: 'Properties'
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: The 'Transform' section must be present in the template root to indicate the SAM transform, which enables the use of SAM shorthand resources.
+
+      Incorrect: 'Conditions', 'Globals', and 'Properties' are optional or unrelated to enabling SAM; only 'Transform' is required for SAM constructs.
     tags: 
     difficulty: 
     points: 
@@ -771,7 +900,10 @@ questions:
        is_correct: true
      - text: Amazon RDS read replica.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Amazon ElastiCache provides an in-memory cache (Redis or Memcached) which reduces latency and database load for frequently-read data.
+
+      Incorrect: Multi-AZ improves availability, read replicas help scale reads but do not provide the same low-latency cache benefits, and SQS is not a cache.
     tags: 
     difficulty: 
     points: 
@@ -788,7 +920,10 @@ questions:
        is_correct: true
      - text: Reduce the throttling limits in the API Gateway /MyAPI endpoint
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Setting a reserved concurrency limit on the second Lambda function prevents it from consuming the entire account concurrency pool and ensures capacity remains for other functions.
+
+      Incorrect: Reducing account-level limits or adding stages does not properly isolate concurrency, and changing API Gateway throttling does not address another function consuming concurrency.
     tags: 
     difficulty: 
     points: 
@@ -805,7 +940,10 @@ questions:
        is_correct: false
      - text: An Amazon EC2 instance dedicated to session data.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: ElastiCache for Redis provides in-memory session storage with options for replication and high availability, making sessions fault tolerant and reducing downtime.
+
+      Incorrect: EBS, local disk, or a dedicated EC2 instance present single points of failure or higher latency compared to a managed cache with replication.
     tags: 
     difficulty: 
     points: 
@@ -823,7 +961,10 @@ questions:
        is_correct: false
      - text: Change the namespace of the option settings to a custom namespace.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Files inside '.ebextensions' must have a '.config' extension to be processed by Elastic Beanstalk; renaming 'healthcheckurl.yaml' to 'healthcheckurl.config' will allow the settings to be applied.
+
+      Incorrect: Converting to JSON or changing sections/namespace will not fix the issue if the file extension is incorrect; the key problem is that the file was not named with the '.config' extension.
     tags: 
     difficulty: 
     points: 
@@ -840,7 +981,10 @@ questions:
        is_correct: false
      - text: Increase the allocated memory for the Lambda function.
        is_correct: true
-    explanation: 
+    explanation: |
+      Correct: Increasing the memory allocation for a Lambda function also increases the proportionate CPU available to the function, which can improve compute performance.
+
+      Incorrect: Lambda does not expose instance sizes to choose from, increasing timeout does not add CPU, and you cannot specify compute separately at invocation time.
     tags: 
     difficulty: 
     points: 
@@ -860,7 +1004,10 @@ questions:
        is_correct: true
      - text: Batch login requests from hundreds of users together as a single read request to the database.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Caching user data in ElastiCache reduces database read latency, and making database calls asynchronous allows the application to continue processing without blocking while waiting for the DB response.
+
+      Incorrect: Moving login to Lambda or changing the load balancer does not directly address database latency; batching hundreds of login requests into one read is impractical and insecure.
     tags: 
     difficulty: 
     points: 
@@ -877,7 +1024,10 @@ questions:
        is_correct: true
      - text: Use Cognito events.
        is_correct: false
-    explanation: 
+    explanation: |
+      Correct: Cognito Sync (or the equivalent data sync features) allows synchronizing user profile data across devices associated with an identity without requiring a custom backend, enabling updates to be propagated to all devices.
+
+      Incorrect: Federated identities and user pools handle authentication/authorization but do not by themselves provide cross-device data sync; events are not a substitute for the sync service.
     tags: 
     difficulty: 
     points: 
