@@ -54,7 +54,7 @@ questions:
      - text: Enable the multi-value headers on the ALB.
        is_correct: true
     explanation: |
-      Correct: You must enable the multi-value headers feature on the ALB so that headers with multiple values are delivered to the Lambda function exactly as sent by the client.
+      CORRECT: You must enable the multi-value headers feature on the ALB so that headers with multiple values are delivered to the Lambda function exactly as sent by the client.
       The following example request has two query parameters with the same key:
       ```
       http://www.example.com?&myKey=val1&myKey=val2
