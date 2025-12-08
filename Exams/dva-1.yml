@@ -55,6 +55,21 @@ questions:
        is_correct: true
     explanation: |
       Correct: You must enable the multi-value headers feature on the ALB so that headers with multiple values are delivered to the Lambda function exactly as sent by the client.
+      The following example request has two query parameters with the same key:
+      ```
+      http://www.example.com?&myKey=val1&myKey=val2
+      ```
+      With the default format, the load balancer uses the last value sent by the client and sends you an event that includes query string parameters using queryStringParameters. For example:
+      
+      ```json
+      "queryStringParameters": { "myKey": "val2"},
+      ```
+      If you enable multi-value headers, the load balancer uses both key values sent by the client and sends you an event that includes query string parameters using multiValueQueryStringParameters. For example:
+      
+      ```json
+      "multiValueQueryStringParameters": { "myKey": ["val1", "val2"] },
+      ```
+
       Incorrect: The other options (account placement, request body size, or handling Base64 status) do not enable delivery of multi-value headers from the ALB to Lambda.
     tags: 
     difficulty: 
