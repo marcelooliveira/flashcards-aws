@@ -18,6 +18,25 @@ questions:
     tags: 
     difficulty: 
     points: 
+    diagram: |
+        flowchart LR
+            App[Application]
+
+            subgraph "Recommended"
+                Redis[ElastiCache Redis<br>Cluster Mode<br>Replication + High Availability]
+            end
+
+            subgraph "Not Recommended"
+                SR[Self-Managed Redis<br>Higher Ops Risk]
+                MC[Memcached<br>No Persistence<br>Limited Clustering]
+                RS[Amazon Redshift<br>Not In-Memory Cache]
+            end
+
+            App --> Redis
+            App -.-> SR
+            App -.-> MC
+            App -.-> RS
+  
 
   - id: q52
     type: multiple_choice
@@ -621,6 +640,35 @@ questions:
     tags: 
     difficulty: 
     points: 
+    diagram: |
+        flowchart LR
+            subgraph Senders
+                A[Sender A<br>Order Events]
+                B[Sender B<br>nOrder Events]
+                C[Sender C<br>nOrder Events]
+            end
+
+            subgraph "Amazon SQS FIFO Queue"
+                Q[(SQS FIFO Queue)]
+                G1[MessageGroupId:<br>Sender-A]
+                G2[MessageGroupId:<br>Sender-B]
+                G3[MessageGroupId:<br>Sender-C]
+            end
+
+            subgraph Consumer
+                W[Order<br>Processing<br>Service]
+            end
+
+            A -->|msg 1,2,3| G1
+            B -->|msg 1,2| G2
+            C -->|msg 1,2,3,4| G3
+
+            G1 --> Q
+            G2 --> Q
+            G3 --> Q
+
+            Q --> W
+  
 
   - id: q82
     type: multiple_choice
@@ -641,6 +689,34 @@ questions:
     tags: 
     difficulty: 
     points: 
+    diagram: |
+        flowchart LR
+            subgraph Devices
+                M[Mobile Game App<br>Login]
+                C[Console Game<br>Login]
+                P[PC Game Client<br>Login]
+            end
+
+            subgraph "Amazon Cognito"
+                UP[(User Pool<br>Custom Attributes<br>level, coins, skins)]
+            end
+
+            subgraph Backend
+                API[Game Backend API<br>Authorized Calls]
+            end
+
+            M --> UP
+            C --> UP
+            P --> UP
+
+            UP -->|JWT Token<br>with attributes| M
+            UP -->|JWT Token<br>with attributes| C
+            UP -->|JWT Token<br>with attributes| P
+
+            M --> API
+            C --> API
+            P --> API
+  
 
   - id: q83
     type: multiple_choice
@@ -661,6 +737,20 @@ questions:
     tags: 
     difficulty: 
     points: 
+    diagram: |
+        flowchart LR
+            Code[Single Lambda<br>Function Package]
+
+            subgraph Environments
+                Dev[Dev Environment<br>ENV: API_URL=dev.api]
+                Test[Test Environment<br>ENV: API_URL=test.api]
+                Prod[Prod Environment<br>ENV: API_URL=prod.api]
+            end
+
+            Code --> Dev
+            Code --> Test
+            Code --> Prod
+  
 
   - id: q84
     type: multiple_choice
@@ -681,6 +771,20 @@ questions:
     tags: 
     difficulty: 
     points: 
+    diagram: |
+        flowchart LR
+            A[Account A<br>Application]
+
+            subgraph "Account B"
+                R[IAM Role<br>Scoped Permissions]
+                S[STS<br>AssumeRole]
+                Res[AWS Resource]
+            end
+
+            A -->|AssumeRole| S
+            S -->|Temporary Credentials| A
+            A -->|Access with temp creds| Res
+  
 
   - id: q85
     type: multiple_choice
@@ -701,6 +805,15 @@ questions:
     tags: 
     difficulty: 
     points: 
+    diagram: |
+        flowchart LR
+            App[EC2 Application<br>Instrumented with<br>X-Ray SDK]
+            Daemon[X-Ray Daemon<br>Running on EC2]
+            XRay[AWS X-Ray<br>Service]
+
+            App -->|Send trace data| Daemon
+            Daemon -->|Buffer & forward| XRay
+  
 
   - id: q86
     type: multiple_choice
@@ -721,6 +834,18 @@ questions:
     tags: 
     difficulty: 
     points: 
+    diagram: |
+      flowchart LR
+        subgraph "Auto Scaling Group"
+            LC[Launch Configuration<br>IAM Role Attached]
+            EC2[EC2 Instances]
+        end
+
+        CW[Amazon CloudWatch]
+
+        LC --> EC2
+        EC2 -->|Temporary Credentials<br>PutMetricData| CW
+
 
   - id: q87
     type: multiple_choice
@@ -742,6 +867,15 @@ questions:
     tags: 
     difficulty: 
     points: 
+    diagram: |
+        flowchart LR
+            subgraph "DynamoDB Table"
+                PK1[Partition Key<br>reviewID<br>High Cardinality<br>Even Distribution]
+                PK2[Partition Key<br>starRating<br>Low Cardinality<br>Hot Partitions]
+                PK3[Partition Key<br>productID<br>Skewed Access<br>Traffic Concentration]
+                PK4[Partition Key<br>comment<br>Large & Variable<br>Poor Key Choice]
+            end
+  
 
   - id: q88
     type: multiple_choice
@@ -763,6 +897,22 @@ questions:
     tags: 
     difficulty: 
     points: 
+    diagram: |
+        flowchart LR
+            User[Team Member<br>TeamMemberX]
+
+            subgraph "IAM Policy - Generic"
+                Cond[Condition<br>aws:username<br>or s3:prefix]
+            end
+
+            subgraph "Amazon S3 Bucket"
+                Bucket[S3 Bucket]
+                Folder[User Folder<br>slash TeamMemberX slash]
+            end
+
+            User -->|Request Access| Bucket
+            Cond -->|Enforce per-user access| Folder
+  
 
   - id: q89
     type: multiple_choice
@@ -783,6 +933,18 @@ questions:
     tags: 
     difficulty: 
     points: 
+    diagram: |
+        flowchart LR
+            App[Application<br>Stores Data]
+
+            subgraph "AWS Managed Encryption"
+                S3[S3 Object Storage]
+                KMS[AWS KMS<br>Customer-Managed Key]
+            end
+
+            App -->|Put Object| S3
+            S3 -->|Encrypt at Rest<br>SSE-KMS| KMS
+  
 
   - id: q90
     type: multiple_choice
@@ -805,6 +967,24 @@ questions:
     tags: 
     difficulty: 
     points: 
+    diagram: |
+        flowchart LR
+            Dev[Developer<br>EC2 Application<br>IAM Role Attached]
+
+            subgraph "Verification Methods (Correct)"
+                Sim[IAM Policy Simulator<br>Validate Kinesis Permissions]
+                Dry[API Call<br>--dry-run<br>Permission Check]
+            end
+
+            subgraph "Amazon Kinesis"
+                K[Kinesis Streams]
+            end
+
+            Dev --> Sim
+            Dev --> Dry
+            Dry -.->|No execution| K
+  
+
 
   - id: q91
     type: multiple_choice
@@ -825,6 +1005,20 @@ questions:
     tags: 
     difficulty: 
     points: 
+    diagram: |
+        flowchart LR
+            Dev[Developer<br>Commit Code]
+
+            Repo[AWS CodeCommit<br>Source Repository]
+
+            Pipeline[AWS CodePipeline<br>Build & Unit Tests]
+
+            SNS[Amazon SNS<br>Failure Notifications]
+
+            Dev --> Repo
+            Repo -->|Trigger on commit| Pipeline
+            Pipeline -->|On failure| SNS
+  
 
   - id: q92
     type: multiple_choice
@@ -845,6 +1039,16 @@ questions:
     tags: 
     difficulty: 
     points: 
+    diagram: |
+      sequenceDiagram
+          participant Worker as Processing Instance
+          participant SQS as Amazon SQS Queue
+          Worker->>SQS: ReceiveMessage
+          SQS-->>Worker: Message, VisibilityTimeout = 30s
+          Worker->>SQS: ChangeMessageVisibility<br>Increase VisibilityTimeout e.g. 60s
+          Note over Worker: Process message, takes ~40 seconds
+          Worker->>SQS: DeleteMessage
+          SQS-->>Worker: Message removed from queue
 
   - id: q93
     type: multiple_choice
@@ -865,6 +1069,22 @@ questions:
     tags: 
     difficulty: 
     points: 
+    diagram: |
+        flowchart LR
+            User[User<br>Login Attempt]
+
+            subgraph "Amazon Cognito"
+                Auth[User Authentication]
+                MFA[MFA Challenge<br>SMS / Authenticator App]
+            end
+
+            App[Application<br>Financial Transactions]
+
+            User --> App
+            App --> Auth
+            Auth --> MFA
+            MFA -->|Verified| App
+  
 
   - id: q94
     type: multiple_choice
@@ -885,10 +1105,30 @@ questions:
     tags: 
     difficulty: 
     points: 
+    diagram: |
+        flowchart LR
+            App[Application<br>Read Requests]
+
+            subgraph "DynamoDB Table"
+                Table[SystemUpdates<br>5 WCUs]
+            end
+
+            subgraph "Read Options"
+                EC[Eventually Consistent Reads<br>15 RCUs<br>1 KB Items<br>Highest Throughput]
+                SC1[Strongly Consistent Reads<br>5 RCUs<br>4 KB Items]
+                SC2[Strongly Consistent Reads<br>15 RCUs<br>1 KB Items]
+                EC2[Eventually Consistent Reads<br>5 RCUs<br>4 KB Items]
+            end
+
+            App --> Table
+            Table --> EC
+            Table -.-> SC1
+            Table -.-> SC2
+            Table -.-> EC2
 
   - id: q95
     type: multiple_choice
-    question: A Developer has created an S3 bucket' s3://mycoolapp' and has enabled server across logging that points to the folder 's3://mycoolapp/logs'. The Developer moved 100 KB of Cascading Style Sheets (CSS) documents to the folder 's3://mycoolapp/css', and then stopped work. When the developer came back a few days later, the bucket was 50 GB. What is the MOST likely cause of this situation?
+    question: A Developer has created an S3 bucket' s3://mycoolapp' and has enabled server access logging that points to the folder 's3://mycoolapp/logs'. The Developer moved 100 KB of Cascading Style Sheets (CSS) documents to the folder 's3://mycoolapp/css', and then stopped work. When the developer came back a few days later, the bucket was 50 GB. What is the MOST likely cause of this situation?
     options:
      - text: The CSS files were not compressed and S3 versioning was enabled.
        is_correct: false
@@ -905,6 +1145,19 @@ questions:
     tags: 
     difficulty: 
     points: 
+    diagram: |
+        flowchart LR
+            Dev[Developer<br>Uploads CSS Files]
+
+            subgraph "S3 Bucket: mycoolapp"
+                CSS[css/<br>CSS Files]
+                Logs[logs/<br>Access Logs]
+            end
+
+            Dev -->|PutObject| CSS
+            CSS -->|Server Access Logging| Logs
+            Logs -->|New log objects| Logs
+  
 
   - id: q96
     type: multiple_choice
@@ -925,6 +1178,21 @@ questions:
     tags: 
     difficulty: 
     points: 
+    diagram: |
+        flowchart LR
+            Dev[Developer<br>Local Docker App<br>Uses Access Keys]
+
+            subgraph "Production: Amazon ECS"
+                Task[ECS Task<br>Application Container]
+                Role[IAM Task Role<br>Scoped Permissions]
+            end
+
+            DDB[Amazon DynamoDB]
+
+            Dev -->|Deploy| Task
+            Role -->|Temporary Credentials| Task
+            Task -->|AWS SDK Calls| DDB
+  
 
   - id: q97
     type: multiple_choice
@@ -945,6 +1213,21 @@ questions:
     tags: 
     difficulty: 
     points: 
+    diagram: |
+        flowchart LR
+            Dev[Developer]
+
+            Repo[AWS CodeCommit<br>Source Code]
+
+            Build[AWS CodeBuild<br>Build Project]
+
+            Logs[CodeBuild Build Logs<br>Failed Phase Details]
+
+            Dev --> Repo
+            Repo -->|Trigger Build| Build
+            Build -->|Failure| Logs
+            Dev -->|Review Logs| Logs
+  
 
   - id: q98
     type: multiple_choice
@@ -965,6 +1248,16 @@ questions:
     tags: 
     difficulty: 
     points: 
+    diagram: |
+        sequenceDiagram
+            participant CD as AWS CodeDeploy
+            participant EC2 as EC2 Instance
+
+            CD->>EC2: ApplicationStop
+            CD->>EC2: BeforeInstall
+            CD->>EC2: AfterInstall
+            CD->>EC2: ApplicationStart
+  
 
   - id: q99
     type: multiple_choice
@@ -986,6 +1279,20 @@ questions:
     tags: 
     difficulty: 
     points: 
+    diagram: |
+        flowchart LR
+            Dev[Developer<br>AWS CLI Command]
+
+            Err[Encoded Authorization<br>Error Message]
+
+            STS[AWS STS<br>DecodeAuthorizationMessage API]
+
+            Readable[Human-Readable<br>Error Details]
+
+            Dev --> Err
+            Dev -->|Call decode-authorization-message| STS
+            STS --> Readable
+  
 
   - id: q100
     type: multiple_choice
@@ -1006,3 +1313,21 @@ questions:
     tags: 
     difficulty: 
     points: 
+    diagram: |
+        flowchart LR
+            CD[AWS CodeDeploy<br>Deployment Process]
+
+            subgraph "EC2 Instance"
+                App[Application]
+                Role[IAM Role]
+            end
+
+            PS[AWS SSM Parameter Store<br>SecureString + KMS]
+            DB[External MySQL<br>Database]
+
+            CD --> App
+            Role --> App
+            App -->|GetParameter Secure| PS
+            App -->|Use Secrets| DB
+
+  
