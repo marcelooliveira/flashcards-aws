@@ -1,0 +1,903 @@
+questions:
+  - id: q1
+    type: multiple_choice
+    question: What is the primary function of the Datadog Agent?
+    options:
+      - text: To act as a code repository for infrastructure scripts.
+        is_correct: false
+      - text: To collect metrics, logs, and traces from hosts and send them to Datadog.
+        is_correct: true
+      - text: To serve as a load balancer for web applications.
+        is_correct: false
+      - text: To store long-term historical data locally on the server.
+        is_correct: false
+    explanation: |
+      Correct: The Datadog Agent is software that runs on your hosts. Its main job is to collect events and metrics from the host and send them to Datadog, where you can analyze your monitoring and performance data.
+    tags: ["Agent", "Fundamentals"]
+    difficulty: "Easy"
+    points: 1
+
+  - id: q2
+    type: multiple_choice
+    question: Which of the following is the default port used by the Datadog Agent to receive DogStatsD metrics?
+    options:
+      - text: 8080
+        is_correct: false
+      - text: 443
+        is_correct: false
+      - text: 8125
+        is_correct: true
+      - text: 9090
+        is_correct: false
+    explanation: |
+      Correct: By default, DogStatsD listens on UDP port 8125 for custom metrics sent from your application code.
+    tags: ["Agent", "Network"]
+    difficulty: "Medium"
+    points: 1
+
+  - id: q3
+    type: multiple_choice
+    question: "In Datadog, what are the three main types of telemetry data? (Select THREE)"
+    options:
+      - text: Metrics
+        is_correct: true
+      - text: Traces
+        is_correct: true
+      - text: Spreadsheets
+        is_correct: false
+      - text: Logs
+        is_correct: true
+      - text: Emails
+        is_correct: false
+    explanation: |
+      Correct: The "three pillars of observability" supported by Datadog are Metrics (numerical data), Traces (APM/request flow), and Logs (text records of events).
+    tags: ["Fundamentals", "Observability"]
+    difficulty: "Easy"
+    points: 1
+
+  - id: q4
+    type: multiple_choice
+    question: Which Metric type should you use to track the number of requests per second?
+    options:
+      - text: Gauge
+        is_correct: false
+      - text: COUNT
+        is_correct: true
+      - text: RATE
+        is_correct: true
+      - text: Set
+        is_correct: false
+    explanation: |
+      Correct: Both COUNT and RATE are appropriate for tracking request volume. COUNT tracks the total number of events over a time interval, while RATE tracks the number of events per second.
+    tags: ["Metrics"]
+    difficulty: "Medium"
+    points: 1
+
+  - id: q5
+    type: multiple_choice
+    question: What is the purpose of "Tags" in Datadog?
+    options:
+      - text: To encrypt sensitive log data.
+        is_correct: false
+      - text: To filter and aggregate data across different dimensions (e.g., env, region).
+        is_correct: true
+      - text: To increase the billable cost of a single metric.
+        is_correct: false
+      - text: To replace the need for an Agent.
+        is_correct: false
+    explanation: |
+      Correct: Tags allow you to assign metadata to your data, making it easy to slice and dice information by environment, service, host, or any other custom dimension.
+    tags: ["Fundamentals", "Tagging"]
+    difficulty: "Easy"
+    points: 1
+
+  - id: q6
+    type: multiple_choice
+    question: Which Datadog feature allows you to visualize the flow of requests across distributed services?
+    options:
+      - text: Log Explorer
+        is_correct: false
+      - text: Infrastructure List
+        is_correct: false
+      - text: APM (Application Performance Monitoring)
+        is_correct: true
+      - text: Synthetic Monitoring
+        is_correct: false
+    explanation: |
+      Correct: APM provides distributed tracing, which tracks a request as it moves through various microservices and databases.
+    tags: ["APM"]
+    difficulty: "Easy"
+    points: 1
+
+  - id: q7
+    type: multiple_choice
+    question: What is a "Service Map" in the context of Datadog APM?
+    options:
+      - text: A physical map of the data centers.
+        is_correct: false
+      - text: A visual representation of how services are interconnected and communicating.
+        is_correct: true
+      - text: A list of all users who have access to the dashboard.
+        is_correct: false
+      - text: A tool to schedule service maintenance windows.
+        is_correct: false
+    explanation: |
+      Correct: The Service Map automatically decomposes your environment into a visual map of dependencies between services, helping you identify bottlenecks.
+    tags: ["APM", "Visualization"]
+    difficulty: "Medium"
+    points: 1
+
+  - id: q8
+    type: multiple_choice
+    question: In Log Management, what does a "Pipeline" do?
+    options:
+      - text: It physically moves the server to a new location.
+        is_correct: false
+      - text: It processes and parses raw logs into structured attributes.
+        is_correct: true
+      - text: It deletes logs that are more than 24 hours old.
+        is_correct: false
+      - text: It converts metrics into logs.
+        is_correct: false
+    explanation: |
+      Correct: Pipelines contain processors that take raw log data and transform it into structured data using Grok parsers, date remappers, and other tools.
+    tags: ["Logs"]
+    difficulty: "Medium"
+    points: 1
+
+  - id: q9
+    type: multiple_choice
+    question: Which monitor type is best suited for alerting when a specific metric exceeds a static threshold?
+    options:
+      - text: Outlier Monitor
+        is_correct: false
+      - text: Metric Monitor
+        is_correct: true
+      - text: Forecast Monitor
+        is_correct: false
+      - text: Anomaly Monitor
+        is_correct: false
+    explanation: |
+      Correct: A Metric monitor compares the value of a single metric (or a calculation) against a fixed threshold over a set period of time.
+    tags: ["Monitors"]
+    difficulty: "Easy"
+    points: 1
+
+  - id: q10
+    type: multiple_choice
+    question: What is "Service Level Objective" (SLO) in Datadog?
+    options:
+      - text: A target level of service reliability over a period of time.
+        is_correct: true
+      - text: The maximum amount of money you want to spend on Datadog.
+        is_correct: false
+      - text: A document describing the hardware specs of a server.
+        is_correct: false
+      - text: A type of dashboard specifically for developers.
+        is_correct: false
+    explanation: |
+      Correct: SLOs help teams track their performance against reliability goals, typically expressed as a percentage (e.g., 99.9% uptime).
+    tags: ["SLO", "Fundamentals"]
+    difficulty: "Medium"
+    points: 1
+
+  - id: q11
+    type: multiple_choice
+    question: Which feature allows you to simulate user behavior (like logging in or adding to cart) to test application availability?
+    options:
+      - text: Log Management
+        is_correct: false
+      - text: Synthetic Monitoring
+        is_correct: true
+      - text: Infrastructure Monitoring
+        is_correct: false
+      - text: Network Device Monitoring
+        is_correct: false
+    explanation: |
+      Correct: Synthetic Monitoring allows you to create "Browser tests" or "API tests" that run from various global locations to ensure your application is functional and responsive.
+    tags: ["Synthetics"]
+    difficulty: "Medium"
+    points: 1
+
+  - id: q12
+    type: multiple_choice
+    question: What does the "Integration" page in Datadog provide?
+    options:
+      - text: A list of Datadog employees you can contact.
+        is_correct: false
+      - text: Pre-built connectors for over 600+ services and technologies.
+        is_correct: true
+      - text: A way to download the Datadog source code.
+        is_correct: false
+      - text: A billing portal for external vendors.
+        is_correct: false
+    explanation: |
+      Correct: Datadog Integrations allow you to easily pull data from AWS, Azure, GCP, databases, web servers, and many other technologies with minimal configuration.
+    tags: ["Integrations"]
+    difficulty: "Easy"
+    points: 1
+
+  - id: q13
+    type: multiple_choice
+    question: What is the "Host Map" visualization useful for?
+    options:
+      - text: Identifying geographic locations of customers.
+        is_correct: false
+      - text: Visualizing your entire infrastructure as a collection of hexagons to identify outliers.
+        is_correct: true
+      - text: Seeing the internal floor plan of your office.
+        is_correct: false
+      - text: Listing all the IP addresses in a text format.
+        is_correct: false
+    explanation: |
+      Correct: The Host Map provides a bird's-eye view of your fleet, allowing you to group hosts by tags and color them by metrics to spot patterns or issues.
+    tags: ["Infrastructure", "Visualization"]
+    difficulty: "Easy"
+    points: 1
+
+  - id: q14
+    type: multiple_choice
+    question: In Datadog monitors, what is a "Multi Alert"?
+    options:
+      - text: An alert that sends an email to multiple people.
+        is_correct: false
+      - text: An alert that triggers for each unique value of a tag (e.g., each host).
+        is_correct: true
+      - text: An alert that triggers multiple times per hour.
+        is_correct: false
+      - text: A monitor that combines Metrics and Logs.
+        is_correct: false
+    explanation: |
+      Correct: A Multi Alert generates separate notifications for each member of a group, such as an alert for "each host" when CPU is high, rather than one alert for the average of all hosts.
+    tags: ["Monitors"]
+    difficulty: "Medium"
+    points: 1
+
+  - id: q15
+    type: multiple_choice
+    question: Which of these is a valid way to send logs to Datadog? (Select TWO)
+    options:
+      - text: Using the Datadog Agent.
+        is_correct: true
+      - text: Mailing a physical hard drive to Datadog HQ.
+        is_correct: false
+      - text: Using the HTTP API.
+        is_correct: true
+      - text: Sending a fax with the log text.
+        is_correct: false
+    explanation: |
+      Correct: Logs can be collected via the Datadog Agent (tailing files) or sent directly via the HTTP API from serverless functions or applications.
+    tags: ["Logs"]
+    difficulty: "Medium"
+    points: 1
+
+  - id: q16
+    type: multiple_choice
+    question: What is the purpose of the "Check" function in the Datadog Agent?
+    options:
+      - text: To verify the user's credit card.
+        is_correct: false
+      - text: To run a specific integration script to collect data from a service (like Nginx or Redis).
+        is_correct: true
+      - text: To check for software updates on the host.
+        is_correct: false
+      - text: To verify if the Datadog website is up.
+        is_correct: false
+    explanation: |
+      Correct: Agent checks are the core mechanism for integrations. The Agent runs these scripts periodically to gather status and metrics from the services they monitor.
+    tags: ["Agent", "Integrations"]
+    difficulty: "Medium"
+    points: 1
+
+  - id: q17
+    type: multiple_choice
+    question: "A Gauge metric represents:"
+    options:
+      - text: The total cumulative value since the service started.
+        is_correct: false
+      - text: A snapshot of a value at a specific point in time (e.g., Temperature, Memory usage).
+        is_correct: true
+      - text: The number of unique users.
+        is_correct: false
+      - text: The speed of a network connection only.
+        is_correct: false
+    explanation: |
+      Correct: Gauges are used for values that can go up and down and represent a specific state at a given time.
+    tags: ["Metrics"]
+    difficulty: "Easy"
+    points: 1
+
+  - id: q18
+    type: multiple_choice
+    question: What does "Retention Analysis" in APM allow you to do?
+    options:
+      - text: Keep all traces forever for free.
+        is_correct: false
+      - text: Define custom rules to keep specific traces (e.g., errors or high-latency requests) for longer periods.
+        is_correct: true
+      - text: Delete logs that are too large.
+        is_correct: false
+      - text: Track employee retention in the HR department.
+        is_correct: false
+    explanation: |
+      Correct: Retention Filters in APM allow you to decide which spans are indexed and searchable for 15 days, ensuring you keep the most important data without paying to store every single "OK" trace.
+    tags: ["APM"]
+    difficulty: "Hard"
+    points: 1
+
+  - id: q19
+    type: multiple_choice
+    question: Which dashboard type is better for real-time troubleshooting and "social" sharing during an incident?
+    options:
+      - text: Screenboard
+        is_correct: true
+      - text: Timeboard
+        is_correct: false
+      - text: Spreadsheet
+        is_correct: false
+      - text: Notebook
+        is_correct: false
+    explanation: |
+      Correct: Screenboards are grid-free and can contain a variety of widgets, making them ideal for high-level overviews or "War Room" displays during an incident. (Note: Datadog is currently unifying these, but the distinction is fundamental to the platform's history).
+    tags: ["Dashboards"]
+    difficulty: "Medium"
+    points: 1
+
+  - id: q20
+    type: multiple_choice
+    question: In Datadog, what is the "Live Process" monitoring feature?
+    options:
+      - text: A way to record video of the server room.
+        is_correct: false
+      - text: Real-time visibility into the resource consumption of every process running on your hosts.
+        is_correct: true
+      - text: A list of all active Datadog users.
+        is_correct: false
+      - text: A tool to restart servers automatically.
+        is_correct: false
+    explanation: |
+      Correct: Live Process monitoring provides a view similar to 'top' or 'htop' across your entire fleet, showing CPU, memory, and thread counts for individual processes.
+    tags: ["Infrastructure"]
+    difficulty: "Medium"
+    points: 1
+
+  - id: q21
+    type: multiple_choice
+    question: Which of the following describes the "DogStatsD" component?
+    options:
+      - text: A sidecar process that only collects logs.
+        is_correct: false
+      - text: A metrics aggregation service that bundles custom metrics before sending them to the Agent.
+        is_correct: true
+      - text: A tool used exclusively for monitoring databases.
+        is_correct: false
+      - text: A hardware appliance provided by Datadog.
+        is_correct: false
+    explanation: |
+      Correct: DogStatsD is a metrics aggregation server bundled with the Datadog Agent. It implements the StatsD protocol plus Datadog-specific extensions like tagging.
+    tags: ["Agent", "Metrics"]
+    difficulty: "Medium"
+    points: 1
+
+  - id: q22
+    type: multiple_choice
+    question: In Datadog APM, what is a "Span"?
+    options:
+      - text: The total time a monitor stays in an alert state.
+        is_correct: false
+      - text: A logical unit of work within a trace, representing a specific operation (e.g., a database query).
+        is_correct: true
+      - text: The physical distance between two data centers.
+        is_correct: false
+      - text: A tag used to identify the cloud provider.
+        is_correct: false
+    explanation: |
+      Correct: A trace is composed of spans. Each span represents a specific amount of time for a single operation within a distributed request.
+    tags: ["APM"]
+    difficulty: "Medium"
+    points: 1
+
+  - id: q23
+    type: multiple_choice
+    question: What is the benefit of using "Runtime Metrics" in Datadog APM?
+    options:
+      - text: It allows you to see the source code of the application.
+        is_correct: false
+      - text: It correlates application performance with language-level metrics like Heap usage and GC.
+        is_correct: true
+      - text: It automatically fixes bugs in the code.
+        is_correct: false
+      - text: It makes the application run faster.
+        is_correct: false
+    explanation: |
+      Correct: Runtime metrics (e.g., for Java, Python, or Go) provide insight into the health of the runtime environment where the traced application is executing.
+    tags: ["APM", "Metrics"]
+    difficulty: "Medium"
+    points: 1
+
+  - id: q24
+    type: multiple_choice
+    question: Which monitor type uses machine learning to detect when a metric is behaving differently than its historical patterns?
+    options:
+      - text: Threshold Monitor
+        is_correct: false
+      - text: Anomaly Monitor
+        is_correct: true
+      - text: Check Summary
+        is_correct: false
+      - text: Event Monitor
+        is_correct: false
+    explanation: |
+      Correct: Anomaly detection identifies when a metric is behaving "strangely" based on past behavior, accounting for trends and seasonality.
+    tags: ["Monitors", "ML"]
+    difficulty: "Medium"
+    points: 1
+
+  - id: q25
+    type: multiple_choice
+    question: What is "Log Rehydration"?
+    options:
+      - text: Adding water to the server cooling system.
+        is_correct: false
+      - text: The process of moving logs from cold storage (S3/Azure/GCS) back into Datadog for searching.
+        is_correct: true
+      - text: Converting text logs into audio files.
+        is_correct: false
+      - text: Restarting the Datadog Agent after a crash.
+        is_correct: false
+    explanation: |
+      Correct: If logs have been archived to your own cloud storage, Rehydration allows you to pull them back into Datadog for investigation at a later date.
+    tags: ["Logs"]
+    difficulty: "Hard"
+    points: 1
+
+  - id: q26
+    type: multiple_choice
+    question: Which of the following is an example of a "Standard Tag" automatically added by the Datadog Agent?
+    options:
+      - text: host
+        is_correct: true
+      - text: user_id
+        is_correct: false
+      - text: shopping_cart_value
+        is_correct: false
+      - text: favorite_color
+        is_correct: false
+    explanation: |
+      Correct: Datadog automatically assigns tags like 'host', 'device', and cloud-specific tags (like 'instance-type') to your data.
+    tags: ["Tagging"]
+    difficulty: "Easy"
+    points: 1
+
+  - id: q27
+    type: multiple_choice
+    question: How does "Network Performance Monitoring" (NPM) differ from standard Infrastructure monitoring?
+    options:
+      - text: NPM only monitors home Wi-Fi speeds.
+        is_correct: false
+      - text: NPM focuses on the traffic and connectivity between services, containers, and zones.
+        is_correct: true
+      - text: NPM is used to send emails faster.
+        is_correct: false
+      - text: There is no difference; they are the same.
+        is_correct: false
+    explanation: |
+      Correct: NPM provides visibility into network flows (throughput, retransmits, RTT) between your infrastructure components.
+    tags: ["Network", "Infrastructure"]
+    difficulty: "Medium"
+    points: 1
+
+  - id: q28
+    type: multiple_choice
+    question: What are "Faceted" logs?
+    options:
+      - text: Logs that have been deleted.
+        is_correct: false
+      - text: Logs that have specific attributes indexed to allow for filtering and grouping.
+        is_correct: true
+      - text: Logs that are encrypted with a special key.
+        is_correct: false
+      - text: Logs that contain only numbers.
+        is_correct: false
+    explanation: |
+      Correct: Facets are the building blocks for log searching. Creating a facet on a log attribute (like 'status' or 'service') allows you to filter and aggregate your logs easily.
+    tags: ["Logs"]
+    difficulty: "Medium"
+    points: 1
+
+  - id: q29
+    type: multiple_choice
+    question: What is the primary purpose of a Datadog "Notebook"?
+    options:
+      - text: To write code and compile it into an app.
+        is_correct: false
+      - text: To create data-driven reports, post-mortems, and runbooks using a mix of text and live graphs.
+        is_correct: true
+      - text: To store passwords for the team.
+        is_correct: false
+      - text: To play games during downtime.
+        is_correct: false
+    explanation: |
+      Correct: Notebooks provide a collaborative canvas to document incidents, create monthly reports, or build interactive runbooks.
+    tags: ["Notebooks", "Collaboration"]
+    difficulty: "Easy"
+    points: 1
+
+  - id: q30
+    type: multiple_choice
+    question: Which of the following is a "Service Level Indicator" (SLI) commonly used in Datadog?
+    options:
+      - text: The number of employees in the office.
+        is_correct: false
+      - text: The error rate of an API over a 30-day window.
+        is_correct: true
+      - text: The font size of a dashboard.
+        is_correct: false
+      - text: The total number of tags in the account.
+        is_correct: false
+    explanation: |
+      Correct: An SLI is a quantitative measure of some aspect of the level of service that is provided (e.g., Latency, Availability).
+    tags: ["SLO"]
+    difficulty: "Medium"
+    points: 1
+
+  - id: q31
+    type: multiple_choice
+    question: What does the "Mute" function on a monitor do?
+    options:
+      - text: Permanently deletes the monitor.
+        is_correct: false
+      - text: Prevents the monitor from sending notifications for a specified period.
+        is_correct: true
+      - text: Lowers the volume of the computer speakers.
+        is_correct: false
+      - text: Stops the monitor from collecting data.
+        is_correct: false
+    explanation: |
+      Correct: Muting a monitor prevents it from sending alerts (emails, PagerDuty, Slack) during planned maintenance or known issues.
+    tags: ["Monitors"]
+    difficulty: "Easy"
+    points: 1
+
+  - id: q32
+    type: multiple_choice
+    question: Which Datadog tool helps identify "heavy" metrics that contribute significantly to custom metric costs?
+    options:
+      - text: Metrics Summary / Metrics Explorer
+        is_correct: true
+      - text: Service Map
+        is_correct: false
+      - text: Log Explorer
+        is_correct: false
+      - text: Synthetics Page
+        is_correct: false
+    explanation: |
+      Correct: The Metrics Summary page allows you to see the volume and cardinality of your metrics, helping you manage costs.
+    tags: ["Metrics", "Billing"]
+    difficulty: "Hard"
+    points: 1
+
+  - id: q33
+    type: multiple_choice
+    question: What is "RUM" in Datadog?
+    options:
+      - text: Remote Unit Monitoring
+        is_correct: false
+      - text: Real User Monitoring
+        is_correct: true
+      - text: Read Usage Metric
+        is_correct: false
+      - text: Redundant User Management
+        is_correct: false
+    explanation: |
+      Correct: RUM provides visibility into the individual sessions and journeys of actual users on your website or mobile app.
+    tags: ["RUM"]
+    difficulty: "Easy"
+    points: 1
+
+  - id: q34
+    type: multiple_choice
+    question: In a Datadog monitor, what does the "@" symbol do in the notification message?
+    options:
+      - text: It multiplies the metric by 10.
+        is_correct: false
+      - text: It triggers a notification to a specific person, team, or service (e.g., @slack-channel).
+        is_correct: true
+      - text: It marks the end of a query.
+        is_correct: false
+      - text: It hides the message from the logs.
+        is_correct: false
+    explanation: |
+      Correct: The @ handle is used to direct notifications to specific integrations or teammates.
+    tags: ["Monitors", "Notifications"]
+    difficulty: "Easy"
+    points: 1
+
+  - id: q35
+    type: multiple_choice
+    question: Which of these is a valid way to install the Datadog Agent? (Select TWO)
+    options:
+      - text: Using a one-line install command for Linux.
+        is_correct: true
+      - text: Deploying as a DaemonSet in Kubernetes.
+        is_correct: true
+      - text: Downloading it from the Apple App Store.
+        is_correct: false
+      - text: Buying a CD-ROM from a retail store.
+        is_correct: false
+    explanation: |
+      Correct: Datadog supports various installation methods, including package managers (yum/apt), container orchestrators (Kubernetes/ECS), and configuration management tools (Chef/Puppet/Ansible).
+    tags: ["Agent"]
+    difficulty: "Medium"
+    points: 1
+
+  - id: q36
+    type: multiple_choice
+    question: What is "Profiling" (Continuous Profiler) used for?
+    options:
+      - text: To see which users are visiting the site.
+        is_correct: false
+      - text: To analyze code-level performance, such as identifying the specific line of code consuming the most CPU.
+        is_correct: true
+      - text: To update the user's profile picture.
+        is_correct: false
+      - text: To track the location of the office laptop.
+        is_correct: false
+    explanation: |
+      Correct: The Continuous Profiler analyzes application performance at the method and line-of-code level with very low overhead.
+    tags: ["APM", "Profiling"]
+    difficulty: "Hard"
+    points: 1
+
+  - id: q37
+    type: multiple_choice
+    question: When using the Cloud-to-Cloud integration (e.g., AWS), how does Datadog primarily get data without an Agent?
+    options:
+      - text: Via carrier pigeons.
+        is_correct: false
+      - text: By polling the cloud provider's API (e.g., CloudWatch API).
+        is_correct: true
+      - text: By hacking into the cloud console.
+        is_correct: false
+      - text: It doesn't; an Agent is always required.
+        is_correct: false
+    explanation: |
+      Correct: For managed services where you cannot install an Agent (like RDS or S3), Datadog uses API integrations to pull metrics.
+    tags: ["Integrations", "Cloud"]
+    difficulty: "Medium"
+    points: 1
+
+  - id: q38
+    type: multiple_choice
+    question: What does the "Event Stream" show?
+    options:
+      - text: A continuous feed of all metrics.
+        is_correct: false
+      - text: A timeline of significant events, such as monitor alerts, deployments, or configuration changes.
+        is_correct: true
+      - text: A video stream of the data center.
+        is_correct: false
+      - text: A list of all API keys.
+        is_correct: false
+    explanation: |
+      Correct: The Event Stream captures and displays events from across your infrastructure, providing context for metric spikes or service outages.
+    tags: ["Events", "Fundamentals"]
+    difficulty: "Easy"
+    points: 1
+
+  - id: q39
+    type: multiple_choice
+    question: What is "Cardinality" in the context of Datadog metrics?
+    options:
+      - text: The number of unique combinations of tags for a single metric.
+        is_correct: true
+      - text: The speed at which a metric is sent.
+        is_correct: false
+      - text: The total number of servers in a cluster.
+        is_correct: false
+      - text: A type of bird used as a mascot.
+        is_correct: false
+    explanation: |
+      Correct: High cardinality refers to metrics that have many unique tag values (like user_id). This is important because Datadog billing is often based on the number of unique custom metric series.
+    tags: ["Metrics", "Billing"]
+    difficulty: "Hard"
+    points: 1
+
+  - id: q40
+    type: multiple_choice
+    question: Which of the following allows you to group multiple monitors together for a single status view?
+    options:
+      - text: A single graph.
+        is_correct: false
+      - text: Monitor Groups or Service Summary.
+        is_correct: true
+      - text: An Excel spreadsheet.
+        is_correct: false
+      - text: A log pipeline.
+        is_correct: false
+    explanation: |
+      Correct: You can use "Monitor Groups" or visual widgets like the "Manage Monitors" list to see a unified status of several related monitors.
+    tags: ["Monitors"]
+    difficulty: "Medium"
+    points: 1
+
+  - id: q41
+    type: multiple_choice
+    question: Which feature in Datadog Database Monitoring (DBM) allows you to see the exact execution plan of a slow-running query?
+    options:
+      - text: Query Samples and Explain Plans
+        is_correct: true
+      - text: Log Explorer
+        is_correct: false
+      - text: Service Map
+        is_correct: false
+      - text: Network Performance Monitoring
+        is_correct: false
+    explanation: |
+      Correct: Database Monitoring (DBM) provides deep visibility by capturing query samples and their associated execution (explain) plans to help identify why a query is slow.
+      Incorrect: Log Explorer shows event text, Service Map shows service dependencies, and NPM shows traffic flow; none of these show the internal DB execution logic.
+    tags: ["DBM", "Databases"]
+    difficulty: "Medium"
+    points: 1
+
+  - id: q42
+    type: multiple_choice
+    question: What is the primary purpose of the 'Sensitive Data Scanner' in Datadog?
+    options:
+      - text: To encrypt the Datadog Agent configuration files.
+        is_correct: false
+      - text: To detect and mask PII or PCI data in logs and traces before they are stored.
+        is_correct: true
+      - text: To scan source code for security vulnerabilities.
+        is_correct: false
+      - text: To block users from restricted geographic regions.
+        is_correct: false
+    explanation: |
+      Correct: The Sensitive Data Scanner helps with compliance (GDPR, HIPAA, PCI) by automatically identifying and redacting sensitive info like emails or credit card numbers at the intake level.
+    tags: ["Security", "Compliance"]
+    difficulty: "Medium"
+    points: 1
+
+  - id: q43
+    type: multiple_choice
+    question: In the Datadog Agent configuration, what does the 'datadog.yaml' file primarily control?
+    options:
+      - text: Individual database query parameters.
+        is_correct: false
+      - text: The global settings for the Agent, such as API keys and site destination.
+        is_correct: true
+      - text: The visual layout of all Dashboards.
+        is_correct: false
+      - text: The billing tier of the Datadog account.
+        is_correct: false
+    explanation: |
+      Correct: datadog.yaml is the main configuration file used to set system-wide parameters, API keys, and which Datadog site (US1, EU, etc.) the data should be sent to.
+    tags: ["Agent", "Configuration"]
+    difficulty: "Easy"
+    points: 1
+
+  - id: q44
+    type: multiple_choice
+    question: Which of the following is a key advantage of using 'Exclusion Filters' in Log Management?
+    options:
+      - text: They allow you to index all logs without incurring any cost.
+        is_correct: false
+      - text: They provide a way to control which logs are indexed and billed while still allowing them to be archived.
+        is_correct: true
+      - text: They automatically translate logs into multiple languages.
+        is_correct: false
+      - text: They increase the collection speed of the Datadog Agent.
+        is_correct: false
+    explanation: |
+      Correct: Exclusion filters allow you to save on indexing costs by filtering out high-volume, low-value logs while still sending them to your long-term storage (S3/GCS) via Archives.
+    tags: ["Logs", "Cost Management"]
+    difficulty: "Medium"
+    points: 1
+
+  - id: q45
+    type: multiple_choice
+    question: What is the function of the 'Process Agent' within the Datadog Agent architecture?
+    options:
+      - text: To send email notifications to the system administrator.
+        is_correct: false
+      - text: To collect granular data about running processes, including CPU and memory usage per process.
+        is_correct: true
+      - text: To act as a reverse proxy for all web traffic.
+        is_correct: false
+      - text: To manage the installation of security patches on the host.
+        is_correct: false
+    explanation: |
+      Correct: The Process Agent is a specialized component of the Datadog Agent that powers the "Live Processes" view, showing real-time resource consumption for every process.
+    tags: ["Agent", "Infrastructure"]
+    difficulty: "Medium"
+    points: 1
+
+  - id: q46
+    type: multiple_choice
+    question: What does the 'Apdex' score represent in Datadog APM?
+    options:
+      - text: The total number of requests per second.
+        is_correct: false
+      - text: A measure of user satisfaction with response times, ranging from 0 to 1.
+        is_correct: true
+      - text: The percentage of memory used by the application.
+        is_correct: false
+      - text: The amount of billable custom metrics in an account.
+        is_correct: false
+    explanation: |
+      Correct: Apdex (Application Performance Index) is an open standard that measures user satisfaction with the response time of web applications and services.
+    tags: ["APM", "Metrics"]
+    difficulty: "Medium"
+    points: 1
+
+  - id: q47
+    type: multiple_choice
+    question: Which monitor type is most effective for detecting a 'seasonal' metric that naturally peaks every Monday morning?
+    options:
+      - text: Simple Threshold Monitor
+        is_correct: false
+      - text: Anomaly Monitor
+        is_correct: true
+      - text: Process Check
+        is_correct: false
+      - text: Host Map
+        is_correct: false
+    explanation: |
+      Correct: Anomaly monitors use machine learning algorithms that understand seasonality (weekly, daily patterns) and won't alert on normal, recurring peaks.
+    tags: ["Monitors", "ML"]
+    difficulty: "Hard"
+    points: 1
+
+  - id: q48
+    type: multiple_choice
+    question: What is the 'Trace ID' used for in Datadog?
+    options:
+      - text: To uniquely identify and correlate all spans belonging to a single request as it flows through a system.
+        is_correct: true
+      - text: To identify the physical serial number of the server.
+        is_correct: false
+      - text: To track the version of the Datadog Agent being used.
+        is_correct: false
+      - text: To encrypt the communication between the Agent and the platform.
+        is_correct: false
+    explanation: |
+      Correct: The Trace ID is the common denominator that links every "span" (step) of a request together so you can see the full distributed path in APM.
+    tags: ["APM", "Fundamentals"]
+    difficulty: "Medium"
+    points: 1
+
+  - id: q49
+    type: multiple_choice
+    question: What is a 'Metric Summary' in Datadog useful for?
+    options:
+      - text: Creating a PDF report for executives.
+        is_correct: false
+      - text: Viewing metric names, their cardinality, and which tags are being used.
+        is_correct: true
+      - text: Seeing a list of all current alerts.
+        is_correct: false
+      - text: Calculating the total cost of cloud storage.
+        is_correct: false
+    explanation: |
+      Correct: The Metric Summary page provides a detailed view of all the metrics ingested by your account, helping you audit high-cardinality tags and manage your custom metric usage.
+    tags: ["Metrics", "Administration"]
+    difficulty: "Medium"
+    points: 1
+
+  - id: q50
+    type: multiple_choice
+    question: Which component of the Datadog Agent is responsible for collecting traces from an application?
+    options:
+      - text: DogStatsD
+        is_correct: false
+      - text: Trace Agent
+        is_correct: true
+      - text: Log Agent
+        is_correct: false
+      - text: Core Agent
+        is_correct: false
+    explanation: |
+      Correct: The Trace Agent (also known as the APM Agent) is the specific process that listens for spans from instrumentation libraries and forwards them to Datadog.
+    tags: ["Agent", "APM"]
+    difficulty: "Medium"
+    points: 1

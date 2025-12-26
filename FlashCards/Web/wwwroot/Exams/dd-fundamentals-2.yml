@@ -1,0 +1,900 @@
+questions:
+  - id: q101
+    type: multiple_choice
+    question: Which processor in a Log Pipeline is used to convert a string (like "200") into a numeric attribute for mathematical operations?
+    options:
+      - text: Grok Parser
+        is_correct: false
+      - text: Arithmetic Processor
+        is_correct: false
+      - text: Type Remapper
+        is_correct: true
+      - text: URL Parser
+        is_correct: false
+    explanation: |
+      Correct: The Type Remapper allows you to cast a log attribute to a specific type (integer, float, boolean, or string) so you can use it in range filters or dashboards.
+    tags: ["Logs", "Pipelines"]
+    difficulty: "Medium"
+    points: 1
+
+  - id: q102
+    type: multiple_choice
+    question: What is the purpose of the "Datadog Admission Controller" in a Kubernetes environment?
+    options:
+      - text: To prevent users from logging into the cluster.
+        is_correct: false
+      - text: To automatically inject the Datadog Agent and library configuration into new pods.
+        is_correct: true
+      - text: To delete pods that consume too much memory.
+        is_correct: false
+      - text: To manage the billing of the Kubernetes nodes.
+        is_correct: false
+    explanation: |
+      Correct: The Admission Controller simplifies the deployment of APM and library configurations by automatically injecting necessary environment variables into pods at creation time.
+    tags: ["Kubernetes", "Agent"]
+    difficulty: "Hard"
+    points: 1
+
+  - id: q103
+    type: multiple_choice
+    question: In RUM, which metric measures the time from the start of the page load until the largest image or text block is fully rendered?
+    options:
+      - text: First Input Delay (FID)
+        is_correct: false
+      - text: Cumulative Layout Shift (CLS)
+        is_correct: false
+      - text: Largest Contentful Paint (LCP)
+        is_correct: true
+      - text: Time to Interactive (TTI)
+        is_correct: false
+    explanation: |
+      Correct: LCP is a Core Web Vital that measures the perceived loading speed of a page.
+    tags: ["RUM", "Web Vitals"]
+    difficulty: "Medium"
+    points: 1
+
+  - id: q104
+    type: multiple_choice
+    question: Which feature allows you to execute an automated workflow (like "Block IP" or "Restart Service") directly from a Security Signal?
+    options:
+      - text: Workflow Automation
+        is_correct: true
+      - text: Metric Summary
+        is_correct: false
+      - text: Log Rehydration
+        is_correct: false
+      - text: Dashboards
+        is_correct: false
+    explanation: |
+      Correct: Workflow Automation enables teams to orchestrate and automate remedial actions or common operational tasks across various 3rd party tools.
+    tags: ["Security", "Automation"]
+    difficulty: "Hard"
+    points: 1
+
+  - id: q105
+    type: multiple_choice
+    question: What is the main benefit of "Log Aggregation to Metrics"?
+    options:
+      - text: It allows you to search the text of the logs forever.
+        is_correct: false
+      - text: It generates long-term, high-granularity metrics from logs with 15-month retention at a lower cost than indexing.
+        is_correct: true
+      - text: It automatically deletes error logs.
+        is_correct: false
+      - text: It translates logs into different languages.
+        is_correct: false
+    explanation: |
+      Correct: Generating metrics from logs allows you to keep the numerical trends of your log data (like error counts) for a much longer period than the log indexing retention.
+    tags: ["Logs", "Metrics"]
+    difficulty: "Medium"
+    points: 1
+
+  - id: q106
+    type: multiple_choice
+    question: Which monitor type is designed to alert on the health of a group of services relative to a target objective?
+    options:
+      - text: SLO Monitor
+        is_correct: true
+      - text: Event Monitor
+        is_correct: false
+      - text: Process Check
+        is_correct: false
+      - text: Forecast Monitor
+        is_correct: false
+    explanation: |
+      Correct: Service Level Objective (SLO) monitors alert you based on your "Error Budget" and help ensure you are meeting reliability targets.
+    tags: ["SLO", "Reliability"]
+    difficulty: "Medium"
+    points: 1
+
+  - id: q107
+    type: multiple_choice
+    question: What is the "Datadog Site" (e.g., US1, US3, EU1)?
+    options:
+      - text: The physical office building of Datadog.
+        is_correct: false
+      - text: The specific regional instance of the Datadog platform where your data is stored and processed.
+        is_correct: true
+      - text: A local server in your data center.
+        is_correct: false
+      - text: The URL of your own application.
+        is_correct: false
+    explanation: |
+      Correct: Datadog maintains multiple independent sites for data residency and compliance reasons. You must configure the Agent to point to the correct site.
+    tags: ["Fundamentals", "Agent"]
+    difficulty: "Easy"
+    points: 1
+
+  - id: q108
+    type: multiple_choice
+    question: How does "Cloud Security Management (CSM) Threat Detection" differ from Cloud SIEM?
+    options:
+      - text: They are the same product.
+        is_correct: false
+      - text: CSM focuses on host and container-level threats (using eBPF), while SIEM focuses on audit log analysis.
+        is_correct: true
+      - text: CSM is only for physical servers.
+        is_correct: false
+      - text: SIEM is only for mobile apps.
+        is_correct: false
+    explanation: |
+      Correct: CSM Threat Detection uses the Security Agent to watch real-time system activity, while Cloud SIEM looks for patterns across high-volume log data.
+    tags: ["Security"]
+    difficulty: "Hard"
+    points: 1
+
+  - id: q109
+    type: multiple_choice
+    question: In Datadog APM, what is "Sampling"?
+    options:
+      - text: A way to test different colors for the UI.
+        is_correct: false
+      - text: The process of selecting a representative subset of traces to store to manage volume and cost.
+        is_correct: true
+      - text: Deleting data randomly.
+        is_correct: false
+      - text: Analyzing the temperature of the CPU.
+        is_correct: false
+    explanation: |
+      Correct: Sampling ensures you get enough data to be statistically significant without needing to index every single trace generated by high-traffic services.
+    tags: ["APM", "Cost Management"]
+    difficulty: "Medium"
+    points: 1
+
+  - id: q110
+    type: multiple_choice
+    question: Which Synthetic test type allows you to record a series of actions on a website and play them back from different regions?
+    options:
+      - text: API Test
+        is_correct: false
+      - text: Browser Test
+        is_correct: true
+      - text: TCP Test
+        is_correct: false
+      - text: DNS Test
+        is_correct: false
+    explanation: |
+      Correct: Browser tests use a recorder to simulate user journeys like "Add to Cart" or "Login" across different global locations.
+    tags: ["Synthetics"]
+    difficulty: "Easy"
+    points: 1
+
+  - id: q111
+    type: multiple_choice
+    question: What does a "404 Not Found" status in a Synthetic API test assertion usually imply?
+    options:
+      - text: The test passed perfectly.
+        is_correct: false
+      - text: The endpoint was reached but the requested resource does not exist.
+        is_correct: true
+      - text: The server is physically missing.
+        is_correct: false
+      - text: The internet is down.
+        is_correct: false
+    explanation: |
+      Correct: A 404 indicates the web server is responding but cannot find the specific URL you are testing.
+    tags: ["Synthetics", "Networking"]
+    difficulty: "Easy"
+    points: 1
+
+  - id: q112
+    type: multiple_choice
+    question: Which Datadog role allows a user to view dashboards but NOT create or edit monitors?
+    options:
+      - text: Datadog Admin
+        is_correct: false
+      - text: Datadog Read-Only
+        is_correct: true
+      - text: Datadog Standard
+        is_correct: false
+      - text: Datadog Billing
+        is_correct: false
+    explanation: |
+      Correct: The Read-Only role is designed for users who need to consume data but should not change configuration or alerting logic.
+    tags: ["Administration", "RBAC"]
+    difficulty: "Easy"
+    points: 1
+
+  - id: q113
+    type: multiple_choice
+    question: What is "Database Monitoring (DBM)" primarily focused on compared to standard Infrastructure monitoring?
+    options:
+      - text: Only monitoring the host's RAM.
+        is_correct: false
+      - text: Deep visibility into SQL query performance, wait events, and internal database health.
+        is_correct: true
+      - text: Changing the database password.
+        is_correct: false
+      - text: Deleting old tables.
+        is_correct: false
+    explanation: |
+      Correct: DBM goes beyond OS metrics to show you what is happening inside the database engine (Postgres, MySQL, SQL Server, etc.).
+    tags: ["Databases", "DBM"]
+    difficulty: "Medium"
+    points: 1
+
+  - id: q114
+    type: multiple_choice
+    question: Which feature is used to define "Custom Roles" with granular permissions?
+    options:
+      - text: Team Management
+        is_correct: false
+      - text: RBAC (Role-Based Access Control)
+        is_correct: true
+      - text: Log Pipelines
+        is_correct: false
+      - text: Notebooks
+        is_correct: false
+    explanation: |
+      Correct: RBAC allows you to create specific roles that grant only the permissions a user needs (e.g., "Logs Viewer" or "Monitors Editor").
+    tags: ["Administration", "Security"]
+    difficulty: "Medium"
+    points: 1
+
+  - id: q115
+    type: multiple_choice
+    question: What is the "Datadog Marketplace"?
+    options:
+      - text: A place to buy Datadog t-shirts.
+        is_correct: false
+      - text: A hub for third-party integrations and monitoring solutions built by partners.
+        is_correct: true
+      - text: A stock exchange for tech companies.
+        is_correct: false
+      - text: A list of Datadog's competitors.
+        is_correct: false
+    explanation: |
+      Correct: The Marketplace offers specialized tools and integrations from partners that extend the capabilities of the Datadog platform.
+    tags: ["Integrations", "Fundamentals"]
+    difficulty: "Easy"
+    points: 1
+
+  - id: q116
+    type: multiple_choice
+    question: Which agent process is responsible for "Application Security Management" (ASM)?
+    options:
+      - text: DogStatsD
+        is_correct: false
+      - text: The Security Agent
+        is_correct: true
+      - text: The Process Agent
+        is_correct: false
+      - text: The Metadata Agent
+        is_correct: false
+    explanation: |
+      Correct: The Security Agent handles ASM and Cloud Workload Security (CWS) functions.
+    tags: ["Agent", "Security"]
+    difficulty: "Hard"
+    points: 1
+
+  - id: q117
+    type: multiple_choice
+    question: What is "Serverless Monitoring" in Datadog primarily used for?
+    options:
+      - text: Monitoring AWS Lambda or Azure Functions.
+        is_correct: true
+      - text: Monitoring physical servers in a closet.
+        is_correct: false
+      - text: Monitoring the power usage of the building.
+        is_correct: false
+      - text: Running tests without an internet connection.
+        is_correct: false
+    explanation: |
+      Correct: Serverless monitoring provides visibility into ephemeral functions where you cannot install a traditional persistent Agent.
+    tags: ["Serverless", "Cloud"]
+    difficulty: "Medium"
+    points: 1
+
+  - id: q118
+    type: multiple_choice
+    question: Which component is used to aggregate and forward logs to Datadog from a server where the Agent cannot be installed?
+    options:
+      - text: A Syslog or HTTP forwarder.
+        is_correct: true
+      - text: The Trace Agent.
+        is_correct: false
+      - text: A database trigger.
+        is_correct: false
+      - text: A Synthetic browser test.
+        is_correct: false
+    explanation: |
+      Correct: You can send logs directly to Datadog via the API or Syslog endpoint if the host cannot run the Datadog Agent.
+    tags: ["Logs", "Networking"]
+    difficulty: "Medium"
+    points: 1
+
+  - id: q119
+    type: multiple_choice
+    question: What is the "Usage" page useful for in Datadog?
+    options:
+      - text: Seeing which users are currently logged in.
+        is_correct: false
+      - text: Monitoring your billable consumption of hosts, metrics, logs, and other products.
+        is_correct: true
+      - text: Checking the CPU usage of the Datadog website.
+        is_correct: false
+      - text: Writing Python code.
+        is_correct: false
+    explanation: |
+      Correct: The Usage page helps admins track spending and stay within budget.
+    tags: ["Billing", "Administration"]
+    difficulty: "Easy"
+    points: 1
+
+  - id: q120
+    type: multiple_choice
+    question: In Datadog APM, what does a "Span" duration represent?
+    options:
+      - text: The total time of the entire user session.
+        is_correct: false
+      - text: The time it took to complete a single discrete operation within a trace.
+        is_correct: true
+      - text: The distance between the server and the user.
+        is_correct: false
+      - text: The number of lines of code executed.
+        is_correct: false
+    explanation: |
+      Correct: A span represents a specific amount of time spent on a task (like a DB query or an HTTP call) during a request.
+    tags: ["APM", "Fundamentals"]
+    difficulty: "Easy"
+    points: 1
+
+  - id: q121
+    type: multiple_choice
+    question: Which of the following is a benefit of using the Datadog "Service Map"?
+    options:
+      - text: It shows you which servers have low disk space.
+        is_correct: false
+      - text: It visualizes the dependencies and data flow between microservices.
+        is_correct: true
+      - text: It automatically fixes network errors.
+        is_correct: false
+      - text: It generates a list of team members.
+        is_correct: false
+    explanation: |
+      Correct: The Service Map helps teams understand how their services interact and identify "bottleneck" services in their architecture.
+    tags: ["APM", "Visualization"]
+    difficulty: "Easy"
+    points: 1
+
+  - id: q122
+    type: multiple_choice
+    question: What is "Dynamic Instrumentation" in Datadog?
+    options:
+      - text: A way to play music through the server speakers.
+        is_correct: false
+      - text: A feature that allows you to add logs or metrics to a running application without restarting or redeploying code.
+        is_correct: true
+      - text: A tool for monitoring physical instruments.
+        is_correct: false
+      - text: A method for increasing the speed of the Agent.
+        is_correct: false
+    explanation: |
+      Correct: Dynamic Instrumentation allows you to capture "snapshots" and data from live production code to debug issues on the fly.
+    tags: ["APM", "Debugging"]
+    difficulty: "Hard"
+    points: 1
+
+  - id: q123
+    type: multiple_choice
+    question: Which monitor type is used to detect if a metric is significantly higher or lower than its "peers"?
+    options:
+      - text: Threshold Monitor
+        is_correct: false
+      - text: Outlier Monitor
+        is_correct: true
+      - text: Forecast Monitor
+        is_correct: false
+      - text: Event Monitor
+        is_correct: false
+    explanation: |
+      Correct: Outlier monitors compare a group of entities (like 10 web servers) and alert if one is behaving differently from the rest of the group.
+    tags: ["Monitors", "Infrastructure"]
+    difficulty: "Medium"
+    points: 1
+
+  - id: q124
+    type: multiple_choice
+    question: In the Datadog Agent, what is the "Check" directory (conf.d) used for?
+    options:
+      - text: To store user passwords.
+        is_correct: false
+      - text: To store the YAML configuration files for specific integrations (like Redis, Nginx, or Postgres).
+        is_correct: true
+      - text: To store the Agent's source code.
+        is_correct: false
+      - text: To store images for the dashboard.
+        is_correct: false
+    explanation: |
+      Correct: Each integration has its own configuration file in the conf.d directory that tells the Agent how to connect to that service.
+    tags: ["Agent", "Configuration"]
+    difficulty: "Easy"
+    points: 1
+
+  - id: q125
+    type: multiple_choice
+    question: What does "Log Remapping" do?
+    options:
+      - text: Changes the geographic location of the logs.
+        is_correct: false
+      - text: Assigns a standard Datadog attribute name (like 'status' or 'message') to a custom field in your logs.
+        is_correct: true
+      - text: Deletes logs from a specific server.
+        is_correct: false
+      - text: Translates logs into JSON.
+        is_correct: false
+    explanation: |
+      Correct: Remapping ensures that different log formats from various services use consistent attribute names so they can be searched together.
+    tags: ["Logs", "Pipelines"]
+    difficulty: "Medium"
+    points: 1
+
+  - id: q126
+    type: multiple_choice
+    question: Which feature in Datadog RUM allows you to see the "User Journey" across multiple pages?
+    options:
+      - text: Session Explorer
+        is_correct: true
+      - text: Log Explorer
+        is_correct: false
+      - text: Host Map
+        is_correct: false
+      - text: Infrastructure Summary
+        is_correct: false
+    explanation: |
+      Correct: The Session Explorer in RUM groups a user's views and actions into a single timeline.
+    tags: ["RUM"]
+    difficulty: "Easy"
+    points: 1
+
+  - id: q127
+    type: multiple_choice
+    question: What is "Watchdog Insights" in the Log Explorer?
+    options:
+      - text: A list of logs that Datadog thinks are boring.
+        is_correct: false
+      - text: An AI-driven feature that automatically surfaces common patterns and anomalies in your filtered logs.
+        is_correct: true
+      - text: A tool for watching the logs of your pet's webcam.
+        is_correct: false
+      - text: A way to hide logs from specific users.
+        is_correct: false
+    explanation: |
+      Correct: Watchdog Insights helps you find the "needle in the haystack" by pointing out unusual clusters of errors or latency in your logs.
+    tags: ["Logs", "Watchdog"]
+    difficulty: "Medium"
+    points: 1
+
+  - id: q128
+    type: multiple_choice
+    question: Which Datadog tool is best for monitoring the availability of a DNS server?
+    options:
+      - text: DNS Synthetic Test
+        is_correct: true
+      - text: APM
+        is_correct: false
+      - text: Log Explorer
+        is_correct: false
+      - text: Cloud SIEM
+        is_correct: false
+    explanation: |
+      Correct: A DNS Synthetic test checks that your domain names are resolving correctly to the right IP addresses from multiple locations.
+    tags: ["Synthetics", "Networking"]
+    difficulty: "Easy"
+    points: 1
+
+  - id: q129
+    type: multiple_choice
+    question: What is the "APM Service Directory"?
+    options:
+      - text: A phone book for Datadog employees.
+        is_correct: false
+      - text: A centralized list of all services reporting traces to Datadog, showing their health, deployments, and metadata.
+        is_correct: true
+      - text: A list of all the servers in the world.
+        is_correct: false
+      - text: A place to download the Agent.
+        is_correct: false
+    explanation: |
+      Correct: The Service Directory is the starting point for investigating application performance, providing a high-level view of every service.
+    tags: ["APM", "Fundamentals"]
+    difficulty: "Easy"
+    points: 1
+
+  - id: q130
+    type: multiple_choice
+    question: Which metric type is a "monotonically increasing" value (like total requests)?
+    options:
+      - text: Gauge
+        is_correct: false
+      - text: Counter / Count
+        is_correct: true
+      - text: Distribution
+        is_correct: false
+      - text: Metadata
+        is_correct: false
+    explanation: |
+      Correct: A Counter is used for values that only go up (or reset to zero). Datadog uses this to calculate rates of change.
+    tags: ["Metrics", "Fundamentals"]
+    difficulty: "Easy"
+    points: 1
+
+  - id: q131
+    type: multiple_choice
+    question: What is "Cloud Security Management (CSM) Vulnerability Management"?
+    options:
+      - text: A way to fix bugs in your code automatically.
+        is_correct: false
+      - text: A feature that scans your running hosts, containers, and functions for known software vulnerabilities (CVEs).
+        is_correct: true
+      - text: A monitor for cloud billing issues.
+        is_correct: false
+      - text: A tool for managing user passwords.
+        is_correct: false
+    explanation: |
+      Correct: CSM Vulnerability Management continuously scans your environment to find outdated or insecure software packages.
+    tags: ["Security", "Vulnerabilities"]
+    difficulty: "Hard"
+    points: 1
+
+  - id: q132
+    type: multiple_choice
+    question: How do you "Group" a monitor to receive separate alerts for each host?
+    options:
+      - text: By adding a 'group by' tag (e.g., host) in the monitor's query.
+        is_correct: true
+      - text: By sending multiple emails.
+        is_correct: false
+      - text: By buying more licenses.
+        is_correct: false
+      - text: By restarting the Agent.
+        is_correct: false
+    explanation: |
+      Correct: Multi-alert monitors allow you to set one alerting logic that applies individually to every value of a specific tag.
+    tags: ["Monitors"]
+    difficulty: "Medium"
+    points: 1
+
+  - id: q133
+    type: multiple_choice
+    question: In Datadog, what is a "Pipeline" in Log Management?
+    options:
+      - text: A physical pipe in the data center.
+        is_correct: false
+      - text: A sequence of processors that execute on logs as they are ingested to parse, enrich, and transform them.
+        is_correct: true
+      - text: A way to send logs to a printer.
+        is_correct: false
+      - text: A list of all your web services.
+        is_correct: false
+    explanation: |
+      Correct: Log Pipelines are the engine used to structure your logs for analysis.
+    tags: ["Logs", "Pipelines"]
+    difficulty: "Medium"
+    points: 1
+
+  - id: q134
+    type: multiple_choice
+    question: Which feature allows you to "Mute" a monitor only during specific hours (e.g., every night)?
+    options:
+      - text: Maintenance Windows / Downtimes
+        is_correct: true
+      - text: Log Explorer
+        is_correct: false
+      - text: Service Map
+        is_correct: false
+      - text: Infrastructure Map
+        is_correct: false
+    explanation: |
+      Correct: Downtimes (or Maintenance Windows) allow you to schedule periods where monitor notifications are silenced for planned events.
+    tags: ["Monitors", "Fundamentals"]
+    difficulty: "Easy"
+    points: 1
+
+  - id: q135
+    type: multiple_choice
+    question: What is "Software Supply Chain Security" in Datadog?
+    options:
+      - text: A way to track physical trucks.
+        is_correct: false
+      - text: A feature that scans your container images and GitHub repositories for vulnerabilities and hardcoded secrets.
+        is_correct: true
+      - text: A tool for managing cloud costs.
+        is_correct: false
+      - text: A list of all your software vendors.
+        is_correct: false
+    explanation: |
+      Correct: This feature helps secure the "supply chain" of your code by identifying risks in libraries and build processes.
+    tags: ["Security", "CI Visibility"]
+    difficulty: "Hard"
+    points: 1
+
+  - id: q136
+    type: multiple_choice
+    question: Which Datadog feature provides "Heatmaps" to visualize the distribution of a metric across many hosts?
+    options:
+      - text: Dashboard Heatmap Widget
+        is_correct: true
+      - text: Log Explorer
+        is_correct: false
+      - text: Service Map
+        is_correct: false
+      - text: Synthetic Monitoring
+        is_correct: false
+    explanation: |
+      Correct: Heatmaps are excellent for seeing patterns and outliers across a large number of entities simultaneously.
+    tags: ["Dashboards", "Visualization"]
+    difficulty: "Easy"
+    points: 1
+
+  - id: q137
+    type: multiple_choice
+    question: What is "Network Path" in Datadog Network Performance Monitoring?
+    options:
+      - text: A physical map of the cables.
+        is_correct: false
+      - text: A visualization of the network hops between a source and a destination (including cloud transit).
+        is_correct: true
+      - text: A list of all IP addresses.
+        is_correct: false
+      - text: A way to increase internet speed.
+        is_correct: false
+    explanation: |
+      Correct: Network Path helps you identify where latency is being introduced in the network (e.g., in a specific cloud gateway or ISP).
+    tags: ["Networking", "NPM"]
+    difficulty: "Medium"
+    points: 1
+
+  - id: q138
+    type: multiple_choice
+    question: In the context of Monitors, what is a "Composite Monitor"?
+    options:
+      - text: A monitor that can only track one metric.
+        is_correct: false
+      - text: A monitor that combines the status of two or more existing monitors using logic (e.g., alert if A AND B are critical).
+        is_correct: true
+      - text: A monitor that sends a physical letter.
+        is_correct: false
+      - text: A monitor used for physical security.
+        is_correct: false
+    explanation: |
+      Correct: Composite monitors allow for more complex alerting conditions than single-metric monitors.
+    tags: ["Monitors"]
+    difficulty: "Medium"
+    points: 1
+
+  - id: q139
+    type: multiple_choice
+    question: Which Datadog component is used to collect metrics from a physical router via SNMP?
+    options:
+      - text: The Agent's SNMP Integration
+        is_correct: true
+      - text: The Trace Agent
+        is_correct: false
+      - text: The RUM SDK
+        is_correct: false
+      - text: The Log Agent
+        is_correct: false
+    explanation: |
+      Correct: The Datadog Agent includes a specialized SNMP integration for gathering performance data from network devices.
+    tags: ["Networking", "Agent"]
+    difficulty: "Medium"
+    points: 1
+
+  - id: q140
+    type: multiple_choice
+    question: What is "Data Streams Monitoring" used for in an event-driven architecture?
+    options:
+      - text: To watch movies.
+        is_correct: false
+      - text: To track the latency and health of messages as they move through Kafka, RabbitMQ, or SQS.
+        is_correct: true
+      - text: To count the number of users on a website.
+        is_correct: false
+      - text: To monitor the temperature of the data center.
+        is_correct: false
+    explanation: |
+      Correct: Data Streams Monitoring provides end-to-end visibility into asynchronous data pipelines.
+    tags: ["Data Streams", "Messaging"]
+    difficulty: "Hard"
+    points: 1
+
+  - id: q141
+    type: multiple_choice
+    question: Which feature allows you to "Share" a specific dashboard with someone who does NOT have a Datadog account?
+    options:
+      - text: Public Sharing / Shared Dashboards
+        is_correct: true
+      - text: Log Explorer
+        is_correct: false
+      - text: RBAC
+        is_correct: false
+      - text: Incident Management
+        is_correct: false
+    explanation: |
+      Correct: You can generate a secure, external URL to share dashboards with clients or stakeholders.
+    tags: ["Dashboards", "Fundamentals"]
+    difficulty: "Easy"
+    points: 1
+
+  - id: q142
+    type: multiple_choice
+    question: In Datadog APM, what is an "Exception"?
+    options:
+      - text: A specialized type of dashboard.
+        is_correct: false
+      - text: An error captured from the application code (like a NullPointerException) and attached to a span.
+        is_correct: true
+      - text: A server that is not running the Agent.
+        is_correct: false
+      - text: A user who has special permissions.
+        is_correct: false
+    explanation: |
+      Correct: Traces capture stack traces and error messages from application exceptions to help with debugging.
+    tags: ["APM", "Debugging"]
+    difficulty: "Easy"
+    points: 1
+
+  - id: q143
+    type: multiple_choice
+    question: What is "Watchdog Insights" for Infrastructure?
+    options:
+      - text: A list of all your hosts.
+        is_correct: false
+      - text: An AI-driven feature that highlights unusual behavior in your infrastructure metrics, like a disk filling up faster than normal.
+        is_correct: true
+      - text: A way to hide servers from the map.
+        is_correct: false
+      - text: A list of recommended server upgrades.
+        is_correct: false
+    explanation: |
+      Correct: Watchdog Insights for Infrastructure proactively finds problems in your system metrics.
+    tags: ["Infrastructure", "Watchdog"]
+    difficulty: "Medium"
+    points: 1
+
+  - id: q144
+    type: multiple_choice
+    question: Which tool is used to manage "Service Level Indicators" (SLIs)?
+    options:
+      - text: SLO Manager
+        is_correct: true
+      - text: Log Explorer
+        is_correct: false
+      - text: Host Map
+        is_correct: false
+      - text: Process Agent
+        is_correct: false
+    explanation: |
+      Correct: The SLO tool allows you to define SLIs (the metrics you measure) and set targets (the SLOs).
+    tags: ["SLO"]
+    difficulty: "Medium"
+    points: 1
+
+  - id: q145
+    type: multiple_choice
+    question: What is the purpose of "Custom Tags" in Datadog?
+    options:
+      - text: They are required for the Agent to run.
+        is_correct: false
+      - text: To add business-specific context (like 'team:payment' or 'app:shopping-cart') to your data for better filtering.
+        is_correct: true
+      - text: To change the color of the Agent's icon.
+        is_correct: false
+      - text: To increase the speed of the dashboard.
+        is_correct: false
+    explanation: |
+      Correct: Tags are the core of Datadog's flexible data model, allowing you to slice and dice information however you need.
+    tags: ["Tagging", "Fundamentals"]
+    difficulty: "Easy"
+    points: 1
+
+  - id: q146
+    type: multiple_choice
+    question: Which feature allows you to "Export" a dashboard as a PDF or PNG for a report?
+    options:
+      - text: Dashboard Export / Schedule Report
+        is_correct: true
+      - text: Log Pipeline
+        is_correct: false
+      - text: Incident Management
+        is_correct: false
+      - text: APM
+        is_correct: false
+    explanation: |
+      Correct: You can manually export or schedule automated email reports of your dashboards.
+    tags: ["Dashboards", "Fundamentals"]
+    difficulty: "Easy"
+    points: 1
+
+  - id: q147
+    type: multiple_choice
+    question: What is "Data Privacy" masking in the Datadog Agent?
+    options:
+      - text: A way to hide the dashboard.
+        is_correct: false
+      - text: A feature that allows you to scrub sensitive data (like passwords or credit cards) from logs at the source before they leave your network.
+        is_correct: true
+      - text: A tool for encrypting the hard drive.
+        is_correct: false
+      - text: A list of all private IP addresses.
+        is_correct: false
+    explanation: |
+      Correct: Scrubbing at the Agent level ensures sensitive data never even reaches the Datadog cloud.
+    tags: ["Security", "Agent"]
+    difficulty: "Medium"
+    points: 1
+
+  - id: q148
+    type: multiple_choice
+    question: Which Datadog feature is used to monitor "Cloud Costs" from AWS, Azure, and GCP?
+    options:
+      - text: Cloud Cost Management
+        is_correct: true
+      - text: APM
+        is_correct: false
+      - text: Log Explorer
+        is_correct: false
+      - text: Synthetic Monitoring
+        is_correct: false
+    explanation: |
+      Correct: This tool helps teams understand and optimize their cloud spending in the same platform they use for observability.
+    tags: ["Billing", "Cloud"]
+    difficulty: "Medium"
+    points: 1
+
+  - id: q149
+    type: multiple_choice
+    question: In the context of Monitors, what does "Renotify" do?
+    options:
+      - text: It deletes the alert.
+        is_correct: false
+      - text: It sends another notification after a certain period if the monitor stays in an alert state.
+        is_correct: true
+      - text: It changes the name of the monitor.
+        is_correct: false
+      - text: It restarts the server.
+        is_correct: false
+    explanation: |
+      Correct: Renotify ensures that critical issues aren't forgotten if they aren't resolved immediately.
+    tags: ["Monitors"]
+    difficulty: "Easy"
+    points: 1
+
+  - id: q150
+    type: multiple_choice
+    question: What is "Mobile App Monitoring" in Datadog?
+    options:
+      - text: Monitoring the cell phone tower.
+        is_correct: false
+      - text: RUM and Error Tracking specifically for iOS and Android applications.
+        is_correct: true
+      - text: A list of all mobile phone numbers.
+        is_correct: false
+      - text: A way to call the Datadog support team.
+        is_correct: false
+    explanation: |
+      Correct: Datadog provides SDKs to monitor the performance and stability of native mobile applications.
+    tags: ["RUM", "Mobile"]
+    difficulty: "Medium"
+    points: 1
