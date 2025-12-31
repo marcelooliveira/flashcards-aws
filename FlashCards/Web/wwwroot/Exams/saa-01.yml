@@ -1,0 +1,856 @@
+﻿questions:
+  - id: q1
+    type: multiple_choice
+    question: |
+      A company collects data for temperature, humidity, and atmospheric pressure in cities across multiple continents. The average volume of data that the company collects from each site daily is 500 GB. Each site has a high-speed Internet connection.
+      The company wants to aggregate the data from all these global sites as quickly as possible in a single Amazon S3 bucket. The solution must minimize operational complexity.
+      Which solution meets these requirements?
+    options:
+     - text: Turn on S3 Transfer Acceleration on the destination S3 bucket. Use multipart uploads to directly upload site data to the destination S3 bucket.
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct:
+        Turn on S3 Transfer Acceleration on the destination S3 bucket. Use multipart uploads to directly upload site data to the destination S3 bucket. 
+        General line- Collect huge amount of the files across multiple continents
+        Conditions- High speed Internet connectivity
+        Task- aggregate the data from all in a single S3 bucket
+        Requirements- as quick as possible, minimize operational complexity
+        S3 Transfer Acceleration because...
+        ...ideally works with objects for long-distance transfer (uses Edge Locations)
+        ...can speed up content transfers to and from S3 as much as 50-500%
+        ...use cases- mobile & web application uploads and downloads, distributed office transfers, data exchange with trusted partners. Generally for sharing of large data sets between companies, customers can set up special access to their S3 buckets with accelerated uploads to speed data exchanges and the pace of innovation.
+      Incorrect: 
+        "***replace later***"
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q2
+    type: multiple_choice
+    question: |
+      A company needs the ability to analyze the log files of its proprietary application. The logs are stored in JSON format in an Amazon S3 bucket. Queries will be simple and will run on-demand. A solutions architect needs to perform the analysis with minimal changes to the existing architecture.
+      What should the solutions architect do to meet these requirements with the LEAST amount of operational overhead?
+    options:
+     - text: Use Amazon Athena directly with Amazon S3 to run the queries as needed.
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Amazon Athena is an interactive query service that makes it easy to analyze data directly in Amazon Simple Storage Service (Amazon S3) using standard SQL. With a few actions in the AWS Management Console, you can point Athena at your data stored in Amazon S3 and begin using standard SQL to run ad-hoc queries and get results in seconds.
+      Incorrect: 
+        "***replace later***"
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q3
+    type: multiple_choice
+    question: |
+      A company uses AWS Organizations to manage multiple AWS accounts for different departments. The management account has an Amazon S3 bucket that contains project reports. The company wants to limit access to this S3 bucket to only users of accounts within the organization in AWS Organizations.
+      Which solution meets these requirements with the LEAST amount of operational overhead?
+    options:
+     - text: Add the aws:PrincipalOrgID global condition key with a reference to the organization ID to the S3 bucket policy.
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Adding the aws:PrincipalOrgID global condition key with a reference to the organization ID to the S3 bucket policy limits access to only users of accounts within the organization, simplifying management and reducing operational overhead compared to listing all account IDs.
+      Incorrect: 
+        "***replace later***"
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q4
+    type: multiple_choice
+    question: |
+      An application runs on an Amazon EC2 instance in a VPC. The application processes logs that are stored in an Amazon S3 bucket. The EC2 instance needs to access the S3 bucket without connectivity to the internet.
+      Which solution will provide private network connectivity to Amazon S3?
+    options:
+     - text: Create a gateway VPC endpoint to the S3 bucket.
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct: A gateway VPC endpoint allows private connectivity from the VPC to Amazon S3 without requiring internet access, NAT, or a public IP.
+      Incorrect: 
+        "***replace later***"
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q5
+    type: multiple_choice
+    question: |
+      A company is hosting a web application on AWS using a single Amazon EC2 instance that stores user-uploaded documents in an Amazon EBS volume. For better scalability and availability, the company duplicated the architecture and created a second EC2 instance and EBS volume in another Availability Zone, placing both behind an Application Load Balancer. After completing this change, users reported that, each time they refreshed the website, they could see one subset of their documents or the other, but never all of the documents at the same time.
+      What should a solutions architect propose to ensure users see all of their documents at once?
+    options:
+     - text: Copy the data from both EBS volumes to Amazon EFS. Modify the application to save new documents to Amazon EFS.
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Amazon EFS provides a shared file system accessible by multiple EC2 instances across Availability Zones, ensuring all users see the same documents regardless of which instance serves their request.
+      Incorrect: 
+        "***replace later***"
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q6
+    type: multiple_choice
+    question: |
+      A company uses NFS to store large video files in on-premises network attached storage. Each video file ranges in size from 1 MB to 500 GB. The total storage is 70 TB and is no longer growing. The company decides to migrate the video files to Amazon S3. The company must migrate the video files as soon as possible while using the least possible network bandwidth.
+      Which solution will meet these requirements?
+    options:
+     - text: Create an AWS Snowball Edge job. Receive a Snowball Edge device on premises. Use the Snowball Edge client to transfer data to the device. Return the device so that AWS can import the data into Amazon S3.
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct: AWS Snowball Edge allows for fast, offline transfer of large datasets with zero network bandwidth usage, ideal for 70 TB of data.
+      Incorrect: 
+        "***replace later***"
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q7
+    type: multiple_choice
+    question: |
+      A company has an application that ingests incoming messages. Dozens of other applications and microservices then quickly consume these messages. The number of messages varies drastically and sometimes increases suddenly to 100,000 each second. The company wants to decouple the solution and increase scalability.
+      Which solution meets these requirements?
+    options:
+     - text: Publish the messages to an Amazon SNS topic with multiple Amazon SQS subscriptions. Configure the consumer applications to process the messages from the queues.
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct: SNS with SQS subscriptions allows for scalable, decoupled, and parallel message processing, supporting sudden spikes in message volume.
+      Incorrect: 
+        "***replace later***"
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q8
+    type: multiple_choice
+    question: |
+      A company is migrating a distributed application to AWS. The application serves variable workloads. The legacy platform consists of a primary server that coordinates jobs across multiple compute nodes. The company wants to modernize the application with a solution that maximizes resiliency and scalability.
+      How should a solutions architect design the architecture to meet these requirements?
+    options:
+     - text: Configure an Amazon SQS queue as a destination for the jobs. Implement the compute nodes with Amazon EC2 instances that are managed in an Auto Scaling group. Configure EC2 Auto Scaling based on the size of the queue.
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Using SQS for job coordination and EC2 Auto Scaling for compute nodes provides a decoupled, resilient, and scalable architecture.
+      Incorrect: 
+        "***replace later***"
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q9
+    type: multiple_choice
+    question: |
+      A company is running an SMB file server in its data center. The file server stores large files that are accessed frequently for the first few days after the files are created. After 7 days the files are rarely accessed. The total data size is increasing and is close to the company's total storage capacity. A solutions architect must increase the company's available storage space without losing low-latency access to the most recently accessed files. The solutions architect must also provide file lifecycle management to avoid future storage issues.
+      Which solution will meet these requirements?
+    options:
+     - text: Create an Amazon S3 File Gateway to extend the company's storage space. Create an S3 Lifecycle policy to transition the data to S3 Glacier Deep Archive after 7 days.
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct: S3 File Gateway integrates on-premises storage with S3, and S3 Lifecycle policies automate transition to lower-cost storage for infrequently accessed files.
+      Incorrect: 
+        "***replace later***"
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q10
+    type: multiple_choice
+    question: |
+      A company is building an ecommerce web application on AWS. The application sends information about new orders to an Amazon API Gateway REST API to process. The company wants to ensure that orders are processed in the order that they are received.
+      Which solution will meet these requirements?
+    options:
+     - text: Use an API Gateway integration to send a message to an Amazon SQS FIFO queue when the application receives an order. Configure the SQS FIFO queue to invoke an AWS Lambda function for processing.
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct: SQS FIFO queues preserve message order, ensuring orders are processed in the order received. Lambda can process each order as it arrives.
+      Incorrect: 
+        "***replace later***"
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q11
+    type: multiple_choice
+    question: |
+      A company has an application that runs on Amazon EC2 instances and uses an Amazon Aurora database. The EC2 instances connect to the database by using user names and passwords that are stored locally in a file. The company wants to minimize the operational overhead of credential management.
+      What should a solutions architect do to accomplish this goal?
+    options:
+     - text: Use AWS Secrets Manager and attach an IAM role that grants access to that secret to the EC2 instances that need it. Turn on automatic rotation.
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct: AWS Secrets Manager is a secrets management service that helps you protect access to your applications, services, and IT resources. This service enables you to rotate, manage, and retrieve database credentials, API keys, and other secrets throughout their lifecycle.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q12
+    type: multiple_choice
+    question: |
+      A global company hosts its web application on Amazon EC2 instances behind an Application Load Balancer (ALB). The web application has static data and dynamic data. The company stores its static data in an Amazon S3 bucket. The company wants to improve performance and reduce latency for the static data and dynamic data. The company is using its own domain name registered with Amazon Route 53.
+      What should a solutions architect do to meet these requirements?
+    options:
+     - text: Create an Amazon CloudFront distribution that has the S3 bucket and the ALB as origins. Configure Route 53 to route traffic to the CloudFront distribution.
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct: CloudFront allows you to set up multiple origins for your distribution, so you can use both the ALB (for dynamic content) and the S3 bucket (for static content) as origins. Route 53 can be easily configured to route traffic for your domain to a CloudFront distribution, improving performance and reducing latency.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q13
+    type: multiple_choice
+    question: |
+      A company performs monthly maintenance on its AWS infrastructure. During these maintenance activities, the company needs to rotate the credentials for its Amazon RDS for MySQL databases across multiple AWS Regions.
+      Which solution will meet these requirements with the LEAST operational overhead?
+    options:
+     - text: Store the credentials as secrets in AWS Secrets Manager. Use multi-Region secret replication for the required Regions. Configure Secrets Manager to rotate the secrets on a schedule.
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct: AWS Secrets Manager allows you to store, manage, and rotate secrets, such as database credentials, across multiple AWS Regions. By enabling multi-Region secret replication and automatic rotation, you minimize operational overhead.
+      Incorrect: 
+        "***replace later***"
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q14
+    type: multiple_choice
+    question: |
+      A company runs an ecommerce application on Amazon EC2 instances behind an Application Load Balancer. The instances run in an Amazon EC2 Auto Scaling group across multiple Availability Zones. The Auto Scaling group scales based on CPU utilization metrics. The ecommerce application stores the transaction data in a MySQL 8.0 database that is hosted on a large EC2 instance.
+      The database's performance degrades quickly as application load increases. The application handles more read requests than write transactions. The company wants a solution that will automatically scale the database to meet the demand of unpredictable read workloads while maintaining high availability.
+      Which solution will meet these requirements?
+    options:
+     - text: Use Amazon Aurora with a Multi-AZ deployment. Configure Aurora Auto Scaling with Aurora Replicas.
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Amazon Aurora with Multi-AZ deployment and Aurora Auto Scaling with Aurora Replicas provides high availability and automatic scaling to handle unpredictable read workloads.
+      Incorrect: 
+        "***replace later***"
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q15
+    type: multiple_choice
+    question: |
+      A company recently migrated to AWS and wants to implement a solution to protect the traffic that flows in and out of the production VPC. The company had an inspection server in its on-premises data center. The inspection server performed specific operations such as traffic flow inspection and traffic filtering. The company wants to have the same functionalities in the AWS Cloud.
+      Which solution will meet these requirements?
+    options:
+     - text: Use AWS Network Firewall to create the required rules for traffic inspection and traffic filtering for the production VPC.
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct: AWS Network Firewall is a managed firewall service that provides filtering for both inbound and outbound network traffic. It allows you to create rules for traffic inspection and filtering, protecting your production VPC.
+      Incorrect: 
+        "***replace later***"
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q16
+    type: multiple_choice
+    question: |
+      A company hosts a data lake on AWS. The data lake consists of data in Amazon S3 and Amazon RDS for PostgreSQL. The company needs a reporting solution that provides data visualization and includes all the data sources within the data lake. Only the company's management team should have full access to all the visualizations. The rest of the company should have only limited access.
+      Which solution will meet these requirements?
+    options:
+     - text: Create an analysis in Amazon QuickSight. Connect all the data sources and create new datasets. Publish dashboards to visualize the data. Share the dashboards with the appropriate users and groups.
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Amazon QuickSight is a business intelligence tool for data visualization and reporting. You can connect all the data sources, create datasets, and control access to dashboards for different users and groups.
+      Incorrect: 
+        "***replace later***"
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q17
+    type: multiple_choice
+    question: |
+      A company is implementing a new business application. The application runs on two Amazon EC2 instances and uses an Amazon S3 bucket for document storage. A solutions architect needs to ensure that the EC2 instances can access the S3 bucket.
+      What should the solutions architect do to meet this requirement?
+    options:
+     - text: Create an IAM role that grants access to the S3 bucket. Attach the role to the EC2 instances.
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct: An IAM role can grant access to AWS resources and services. Attaching the role to the EC2 instances allows them to access the S3 bucket securely.
+      Incorrect: 
+        "***replace later***"
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q18
+    type: multiple_choice
+    question: |
+      An application development team is designing a microservice that will convert large images to smaller, compressed images. When a user uploads an image through the web interface, the microservice should store the image in an Amazon S3 bucket, process and compress the image with an AWS Lambda function, and store the image in its compressed form in a different S3 bucket.
+      A solutions architect needs to design a solution that uses durable, stateless components to process the images automatically.
+      Which combination of actions will meet these requirements? (Choose two.)
+    options:
+     - text: Create an Amazon Simple Queue Service (Amazon SQS) queue. Configure the S3 bucket to send a notification to the SQS queue when an image is uploaded to the S3 bucket.
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Using an SQS queue and configuring the S3 bucket to send notifications to the queue allows for durable and scalable image processing tasks.
+      Incorrect: 
+        "***replace later***"
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q19
+    type: multiple_choice
+    question: |
+      A company has a three-tier web application that is deployed on AWS. The web servers are deployed in a public subnet in a VPC. The application servers and database servers are deployed in private subnets in the same VPC. The company has deployed a third-party virtual firewall appliance from AWS Marketplace in an inspection VPC. The appliance is configured with an IP interface that can accept IP packets.
+      A solutions architect needs to integrate the web application with the appliance to inspect all traffic to the application before the traffic reaches the web server.
+      Which solution will meet these requirements with the LEAST operational overhead?
+    options:
+     - text: Deploy a Gateway Load Balancer in the inspection VPC. Create a Gateway Load Balancer endpoint to receive the incoming packets and forward the packets to the appliance.
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Gateway Load Balancer and its endpoints allow for inline inspection of traffic from multiple VPCs, centralizing virtual appliances with minimal operational overhead.
+      Incorrect: 
+        "***replace later***"
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q20
+    type: multiple_choice
+    question: |
+      A company wants to improve its ability to clone large amounts of production data into a test environment in the same AWS Region. The data is stored in Amazon EC2 instances on Amazon Elastic Block Store (Amazon EBS) volumes. Modifications to the cloned data must not affect the production environment. The software that accesses this data requires consistently high I/O performance.
+      A solutions architect needs to minimize the time that is required to clone the production data into the test environment.
+      Which solution will meet these requirements?
+    options:
+     - text: Take EBS snapshots of the production EBS volumes. Turn on the EBS fast snapshot restore feature on the EBS snapshots. Restore the snapshots into new EBS volumes. Attach the new EBS volumes to EC2 instances in the test environment.
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct: EBS fast snapshot restore enables you to create a volume from a snapshot that is fully initialized at creation, eliminating latency and providing instant performance.
+      Incorrect: 
+        "***replace later***"
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q21
+    type: multiple_choice
+    question: |
+      An ecommerce company wants to launch a one-deal-a-day website on AWS. Each day will feature exactly one product on sale for a period of 24 hours. The company wants to be able to handle millions of requests each hour with millisecond latency during peak hours.
+      Which solution will meet these requirements with the LEAST operational overhead?
+    options:
+     - text: Use an Amazon S3 bucket to host the website's static content. Deploy an Amazon CloudFront distribution. Set the S3 bucket as the origin. Use Amazon API Gateway and AWS Lambda functions for the backend APIs. Store the data in Amazon DynamoDB.
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct: S3 and CloudFront provide high performance and scale for static content. API Gateway, Lambda, and DynamoDB offer scalable, highly available backend APIs and data storage with minimal operational overhead.
+      Incorrect: 
+        "***replace later***"
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q22
+    type: multiple_choice
+    question: |
+      A solutions architect is using Amazon S3 to design the storage architecture of a new digital media application. The media files must be resilient to the loss of an Availability Zone. Some files are accessed frequently while other files are rarely accessed in an unpredictable pattern. The solutions architect must minimize the costs of storing and retrieving the media files.
+      Which storage option meets these requirements?
+    options:
+     - text: S3 Intelligent-Tiering
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct: S3 Intelligent-Tiering automatically moves data to the most cost-effective storage tier based on access patterns, minimizing storage and retrieval costs while providing resilience to AZ loss.
+      Incorrect: 
+        "***replace later***"
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q23
+    type: multiple_choice
+    question: |
+      A company is storing backup files by using Amazon S3 Standard storage. The files are accessed frequently for 1 month. However, the files are not accessed after 1 month. The company must keep the files indefinitely.
+      Which storage solution will meet these requirements MOST cost-effectively?
+    options:
+     - text: Create an S3 Lifecycle configuration to transition objects from S3 Standard to S3 Glacier Deep Archive after 1 month.
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct: S3 Glacier Deep Archive is the lowest-cost storage option for long-term retention of rarely accessed data. S3 Lifecycle configuration automates the transition, minimizing storage costs.
+      Incorrect: 
+        "***replace later***"
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q24
+    type: multiple_choice
+    question: |
+      A company observes an increase in Amazon EC2 costs in its most recent bill. The billing team notices unwanted vertical scaling of instance types for a couple of EC2 instances. A solutions architect needs to create a graph comparing the last 2 months of EC2 costs and perform an in-depth analysis to identify the root cause of the vertical scaling.
+      How should the solutions architect generate the information with the LEAST operational overhead?
+    options:
+     - text: Use Cost Explorer's granular filtering feature to perform an in-depth analysis of EC2 costs based on instance types.
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Cost Explorer's granular filtering allows for in-depth analysis of EC2 costs by instance type, providing insights with minimal operational overhead.
+      Incorrect: 
+        "***replace later***"
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q25
+    type: multiple_choice
+    question: |
+      A company is designing an application. The application uses an AWS Lambda function to receive information through Amazon API Gateway and to store the information in an Amazon Aurora PostgreSQL database.
+      During the proof-of-concept stage, the company has to increase the Lambda quotas significantly to handle the high volumes of data that the company needs to load into the database. A solutions architect must recommend a new design to improve scalability and minimize the configuration effort.
+      Which solution will meet these requirements?
+    options:
+     - text: Set up two Lambda functions. Configure one function to receive the information. Configure the other function to load the information into the database. Integrate the Lambda functions by using an Amazon Simple Queue Service (Amazon SQS) queue.
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Dividing the functionality into two Lambda functions, integrated by SQS, allows for independent scaling and efficient resource allocation, reducing the impact of high data volumes.
+      Incorrect: 
+        "***replace later***"
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q26
+    type: multiple_choice
+    question: |
+      A company needs to review its AWS Cloud deployment to ensure that its Amazon S3 buckets do not have unauthorized configuration changes.
+      What should a solutions architect do to accomplish this goal?
+    options:
+     - text: Turn on AWS Config with the appropriate rules.
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct: AWS Config enables you to assess, audit, and evaluate the configurations of your AWS resources, monitoring and recording changes to S3 bucket configurations.
+      Incorrect: 
+        "***replace later***"
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q27
+    type: multiple_choice
+    question: |
+      A company is launching a new application and will display application metrics on an Amazon CloudWatch dashboard. The company's product manager needs to access this dashboard periodically. The product manager does not have an AWS account. A solutions architect must provide access to the product manager by following the principle of least privilege.
+      Which solution will meet these requirements?
+    options:
+     - text: Share the dashboard from the CloudWatch console. Enter the product manager's email address, and complete the sharing steps. Provide a shareable link for the dashboard to the product manager.
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct: CloudWatch allows sharing dashboards with specific email addresses, enabling secure, least-privilege access for users without AWS accounts.
+      Incorrect: 
+        "***replace later***"
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q28
+    type: multiple_choice
+    question: |
+      A company is migrating applications to AWS. The applications are deployed in different accounts. The company manages the accounts centrally by using AWS Organizations. The company's security team needs a single sign-on (SSO) solution across all the company's accounts. The company must continue managing the users and groups in its on-premises self-managed Microsoft Active Directory.
+      Which solution will meet these requirements?
+    options:
+     - text: Enable AWS Single Sign-On (AWS SSO) from the AWS SSO console. Create a one-way forest trust or a one-way domain trust to connect the company's self-managed Microsoft Active Directory with AWS SSO by using AWS Directory Service for Microsoft Active Directory.
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct: AWS SSO with Directory Service and a trust to the on-premises Active Directory enables centralized SSO while maintaining on-premises user and group management.
+      Incorrect: 
+        "***replace later***"
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q29
+    type: multiple_choice
+    question: |
+      A company provides a Voice over Internet Protocol (VoIP) service that uses UDP connections. The service consists of Amazon EC2 instances that run in an Auto Scaling group. The company has deployments across multiple AWS Regions.
+      The company needs to route users to the Region with the lowest latency. The company also needs automated failover between Regions.
+      Which solution will meet these requirements?
+    options:
+     - text: Deploy a Network Load Balancer (NLB) and an associated target group. Associate the target group with the Auto Scaling group. Use the NLB as an AWS Global Accelerator endpoint in each Region.
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Using NLBs as Global Accelerator endpoints in each Region provides low-latency routing and automated failover for UDP-based VoIP services.
+      Incorrect: 
+        "***replace later***"
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q30
+    type: multiple_choice
+    question: |
+      A development team runs monthly resource-intensive tests on its general purpose Amazon RDS for MySQL DB instance with Performance Insights enabled. The testing lasts for 48 hours once a month and is the only process that uses the database. The team wants to reduce the cost of running the tests without reducing the compute and memory attributes of the DB instance.
+      Which solution meets these requirements MOST cost-effectively?
+    options:
+     - text: Create a snapshot when tests are completed. Terminate the DB instance and restore the snapshot when required.
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Creating a snapshot and terminating the DB instance saves costs when not in use. Restoring from the snapshot allows resuming tests as needed.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q31
+    type: multiple_choice
+    question: |
+      A company that hosts its web application on AWS wants to ensure all Amazon EC2 instances, Amazon RDS DB instances, and Amazon Redshift clusters are configured with tags. The company wants to minimize the effort of configuring and operating this check.
+      What should a solutions architect do to accomplish this?
+    options:
+     - text: Use AWS Config rules to define and detect resources that are not properly tagged.
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct: AWS Config allows you to define rules that automatically check if resources are properly tagged, minimizing operational effort for compliance.
+      Incorrect:
+        "***replace later***"
+
+  - id: q32
+    type: multiple_choice
+    question: |
+      A development team needs to host a website that will be accessed by other teams. The website contents consist of HTML, CSS, client-side JavaScript, and images.
+      Which method is the MOST cost-effective for hosting the website?
+    options:
+     - text: Create an Amazon S3 bucket and host the website there.
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Amazon S3 is a highly scalable and cost-effective object storage service, ideal for hosting static websites with HTML, CSS, JS, and images.
+      Incorrect:
+        "***replace later***"
+
+  - id: q33
+    type: multiple_choice
+    question: |
+      A company runs an online marketplace web application on AWS. The application serves hundreds of thousands of users during peak hours. The company needs a scalable, near-real-time solution to share the details of millions of financial transactions with several other internal applications. Transactions also need to be processed to remove sensitive data before being stored in a document database for low-latency retrieval.
+      What should a solutions architect recommend to meet these requirements?
+    options:
+     - text: Stream the transactions data into Amazon Kinesis Data Streams. Use AWS Lambda integration to remove sensitive data from every transaction and then store the transactions data in Amazon DynamoDB. Other applications can consume the transactions data off the Kinesis data stream.
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Kinesis Data Streams provides scalable, near-real-time streaming. Lambda can process and remove sensitive data before storing in DynamoDB for low-latency retrieval, while other apps can consume the stream.
+      Incorrect:
+        "***replace later***"
+
+  - id: q34
+    type: multiple_choice
+    question: |
+      A company hosts its multi-tier applications on AWS. For compliance, governance, auditing, and security, the company must track configuration changes on its AWS resources and record a history of API calls made to these resources.
+      What should a solutions architect do to meet these requirements?
+    options:
+     - text: Use AWS Config to track configuration changes and AWS CloudTrail to record API calls.
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct: AWS Config tracks resource configuration changes, and CloudTrail records API calls, providing full visibility for compliance and auditing.
+      Incorrect:
+        "***replace later***"
+
+  - id: q35
+    type: multiple_choice
+    question: |
+      A company is preparing to launch a public-facing web application in the AWS Cloud. The architecture consists of Amazon EC2 instances within a VPC behind an Elastic Load Balancer (ELB). A third-party service is used for the DNS. The company's solutions architect must recommend a solution to detect and protect against large-scale DDoS attacks.
+      Which solution meets these requirements?
+    options:
+     - text: Enable AWS Shield Advanced and assign the ELB to it.
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct: AWS Shield Advanced provides expanded DDoS protection for ELB and other AWS resources, helping detect and mitigate large-scale attacks.
+      Incorrect:
+        "***replace later***"
+
+  - id: q36
+    type: multiple_choice
+    question: |
+      (Questão não fornecida no arquivo saa.txt. Pulei para a próxima questão numerada.)
+    options:
+     - text: "***replace later***"
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct: "***replace later***"
+      Incorrect:
+        "***replace later***"
+
+  - id: q37
+    type: multiple_choice
+    question: |
+      A company recently launched a variety of new workloads on Amazon EC2 instances in its AWS account. The company needs to create a strategy to access and administer the instances remotely and securely. The company needs to implement a repeatable process that works with native AWS services and follows the AWS Well-Architected Framework.
+      Which solution will meet these requirements with the LEAST operational overhead?
+    options:
+     - text: Attach the appropriate IAM role to each existing instance and new instance. Use AWS Systems Manager Session Manager to establish a remote SSH session.
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Systems Manager Session Manager provides secure, auditable remote access to EC2 instances without open inbound ports or SSH keys, following AWS best practices.
+      Incorrect:
+        "***replace later***"
+
+  - id: q38
+    type: multiple_choice
+    question: |
+      A company is hosting a static website on Amazon S3 and is using Amazon Route 53 for DNS. The website is experiencing increased demand from around the world. The company must decrease latency for users who access the website.
+      Which solution meets these requirements MOST cost-effectively?
+    options:
+     - text: Add an Amazon CloudFront distribution in front of the S3 bucket. Edit the Route 53 entries to point to the CloudFront distribution.
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct: CloudFront caches and delivers content from edge locations worldwide, reducing latency and improving performance for global users.
+      Incorrect:
+        "***replace later***"
+
+  - id: q39
+    type: multiple_choice
+    question: |
+      A company maintains a searchable repository of items on its website. The data is stored in an Amazon RDS for MySQL database table that contains more than 10 million rows. The database has 2 TB of General Purpose SSD storage. There are millions of updates against this data every day through the company's website.
+      The company has noticed that some insert operations are taking 10 seconds or longer. The company has determined that the database storage performance is the problem.
+      Which solution addresses this performance issue?
+    options:
+     - text: Change the storage type to Provisioned IOPS SSD.
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Provisioned IOPS SSD provides consistent, high-performance storage for workloads with high I/O requirements, reducing insert latency.
+      Incorrect:
+        "***replace later***"
+
+  - id: q40
+    type: multiple_choice
+    question: |
+      A company has thousands of edge devices that collectively generate 1 TB of status alerts each day. Each alert is approximately 2 KB in size. A solutions architect needs to implement a solution to ingest and store the alerts for future analysis.
+      The company wants a highly available solution. However, the company needs to minimize costs and does not want to manage additional infrastructure. Additionally, the company wants to keep 14 days of data available for immediate analysis and archive any data older than 14 days.
+      What is the MOST operationally efficient solution that meets these requirements?
+    options:
+     - text: Create an Amazon Kinesis Data Firehose delivery stream to ingest the alerts. Configure the Kinesis Data Firehose stream to deliver the alerts to an Amazon S3 bucket. Set up an S3 Lifecycle configuration to transition data to Amazon S3 Glacier after 14 days.
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Kinesis Data Firehose is fully managed for ingesting and delivering streaming data to S3. S3 Lifecycle policies automate archival to Glacier, minimizing operational overhead.
+      Incorrect:
+        "***replace later***"
+
+  - id: q41
+    type: multiple_choice
+    question: |
+      A company's application integrates with multiple software-as-a-service (SaaS) sources for data collection. The company runs Amazon EC2 instances to receive the data and to upload the data to an Amazon S3 bucket for analysis. The same EC2 instance that receives and uploads the data also sends a notification to the user when an upload is complete. The company has noticed slow application performance and wants to improve the performance as much as possible.
+      Which solution will meet these requirements with the LEAST operational overhead?
+    options:
+     - text: Create an Amazon AppFlow flow to transfer data between each SaaS source and the S3 bucket. Configure an S3 event notification to send events to an Amazon Simple Notification Service (Amazon SNS) topic when the upload to the S3 bucket is complete.
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Amazon AppFlow automates data transfer from SaaS sources to S3, removing the EC2 bottleneck. S3 event notifications and SNS automate user notifications, reducing operational overhead.
+      Incorrect:
+        "***replace later***"
+
+  - id: q42
+    type: multiple_choice
+    question: |
+      A company runs a highly available image-processing application on Amazon EC2 instances in a single VPC. The EC2 instances run inside several subnets across multiple Availability Zones. The EC2 instances do not communicate with each other. However, the EC2 instances download images from Amazon S3 and upload images to Amazon S3 through a single NAT gateway. The company is concerned about data transfer charges.
+      What is the MOST cost-effective way for the company to avoid Regional data transfer charges?
+    options:
+     - text: Deploy a gateway VPC endpoint for Amazon S3.
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct: A gateway VPC endpoint enables private connectivity to S3, avoiding NAT gateway and Regional data transfer charges.
+      Incorrect:
+        "***replace later***"
+
+  - id: q43
+    type: multiple_choice
+    question: |
+      A company has an on-premises application that generates a large amount of time-sensitive data that is backed up to Amazon S3. The application has grown and there are user complaints about internet bandwidth limitations. A solutions architect needs to design a long-term solution that allows for both timely backups to Amazon S3 and with minimal impact on internet connectivity for internal users.
+      Which solution meets these requirements?
+    options:
+     - text: Establish a new AWS Direct Connect connection and direct backup traffic through this new connection.
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct: AWS Direct Connect provides a dedicated, high-bandwidth connection to AWS, enabling timely backups to S3 without impacting internet bandwidth for users.
+      Incorrect:
+        "***replace later***"
+
+  - id: q44
+    type: multiple_choice
+    question: |
+      A company has an Amazon S3 bucket that contains critical data. The company must protect the data from accidental deletion.
+      Which combination of steps should a solutions architect take to meet these requirements? (Choose two.)
+    options:
+     - text: Enable versioning on the S3 bucket
+       is_correct: true
+     - text: Enable MFA Delete on the S3 bucket
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Enabling versioning allows recovery of deleted objects. MFA Delete adds an extra layer of protection, requiring MFA for object deletions.
+      Incorrect:
+        "***replace later***"
+
+  - id: q45
+    type: multiple_choice
+    question: |
+      A company has a data ingestion workflow that consists of the following:
+      • An Amazon Simple Notification Service (Amazon SNS) topic for notifications about new data deliveries
+      • An AWS Lambda function to process the data and record metadata
+      The company observes that the ingestion workflow fails occasionally because of network connectivity issues. When such a failure occurs, the Lambda function does not ingest the corresponding data unless the company manually reruns the job.
+      Which combination of actions should a solutions architect take to ensure that the Lambda function ingests all data in the future? (Choose two.)
+    options:
+     - text: Create an Amazon Simple Queue Service (Amazon SQS) queue, and subscribe it to the SNS topic.
+       is_correct: true
+     - text: Modify the Lambda function to read from an Amazon Simple Queue Service (Amazon SQS) queue.
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct: SQS provides a durable buffer for messages, ensuring all data is eventually processed. Lambda can poll SQS to process messages reliably.
+      Incorrect:
+        "***replace later***"
+
+  - id: q46
+    type: multiple_choice
+    question: |
+      A company has an application that provides marketing services to stores. The services are based on previous purchases by store customers. The stores upload transaction data to the company through SFTP, and the data is processed and analyzed to generate new marketing offers. Some of the files can exceed 200 GB in size.
+      Recently, the company discovered that some of the stores have uploaded files that contain personally identifiable information (PII) that should not have been included. The company wants administrators to be alerted if PII is shared again. The company also wants to automate remediation.
+      What should a solutions architect do to meet these requirements with the LEAST development effort?
+    options:
+     - text: Use an Amazon S3 bucket as a secure transfer point. Use Amazon Macie to scan the objects in the bucket. If objects contain PII, use Amazon Simple Notification Service (Amazon SNS) to trigger a notification to the administrators to remove the objects that contain PII.
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Amazon Macie can automatically scan S3 for PII and trigger SNS notifications for alerting and remediation with minimal development effort.
+      Incorrect:
+        "***replace later***"
+
+  - id: q47
+    type: multiple_choice
+    question: |
+      A company needs guaranteed Amazon EC2 capacity in three specific Availability Zones in a specific AWS Region for an upcoming event that will last 1 week.
+      What should the company do to guarantee the EC2 capacity?
+    options:
+     - text: Create an On-Demand Capacity Reservation that specifies the Region and three Availability Zones needed.
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct: On-Demand Capacity Reservations guarantee EC2 capacity in specific Availability Zones for the required duration.
+      Incorrect:
+        "***replace later***"
+
+  - id: q48
+    type: multiple_choice
+    question: |
+      A company's website uses an Amazon EC2 instance store for its catalog of items. The company wants to make sure that the catalog is highly available and that the catalog is stored in a durable location.
+      What should a solutions architect do to meet these requirements?
+    options:
+     - text: Move the catalog to an Amazon Elastic File System (Amazon EFS) file system.
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Amazon EFS is a fully managed, durable, highly available, and shared file system, suitable for storing catalogs with high availability.
+      Incorrect:
+        "***replace later***"
+
+  - id: q49
+    type: multiple_choice
+    question: |
+      A company stores call transcript files on a monthly basis. Users access the files randomly within 1 year of the call, but users access the files infrequently after 1 year. The company wants to optimize its solution by giving users the ability to query and retrieve files that are less than 1-year-old as quickly as possible. A delay in retrieving older files is acceptable.
+      Which solution will meet these requirements MOST cost-effectively?
+    options:
+     - text: Store individual files in Amazon S3 Intelligent-Tiering. Use S3 Lifecycle policies to move the files to S3 Glacier Flexible Retrieval after 1 year. Query and retrieve the files that are in Amazon S3 by using Amazon Athena. Query and retrieve the files that are in S3 Glacier by using S3 Glacier Select.
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct: S3 Intelligent-Tiering provides fast access for recent files, and S3 Glacier Flexible Retrieval is cost-effective for older files. Athena and Glacier Select enable querying as needed.
+      Incorrect:
+        "***replace later***"
+
+  - id: q50
+    type: multiple_choice
+    question: |
+      A company has a production workload that runs on 1,000 Amazon EC2 Linux instances. The workload is powered by third-party software. The company needs to patch the third-party software on all EC2 instances as quickly as possible to remediate a critical security vulnerability.
+      What should a solutions architect do to meet these requirements?
+    options:
+     - text: Use AWS Systems Manager Run Command to run a custom command that applies the patch to all EC2 instances.
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Systems Manager Run Command allows you to quickly and securely run commands across a large fleet of EC2 instances for patching and remediation.
+      Incorrect:
+        "***replace later***"
