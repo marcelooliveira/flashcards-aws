@@ -1,0 +1,46 @@
+﻿questions:
+  - id: q1
+    type: multiple_choice
+    question: |
+      A company collects data for temperature, humidity, and atmospheric pressure in cities across multiple continents. The average volume of data that the company collects from each site daily is 500 GB. Each site has a high-speed Internet connection.
+      The company wants to aggregate the data from all these global sites as quickly as possible in a single Amazon S3 bucket. The solution must minimize operational complexity.
+      Which solution meets these requirements?
+    options:
+     - text: Turn on S3 Transfer Acceleration on the destination S3 bucket. Use multipart uploads to directly upload site data to the destination S3 bucket.
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct:
+        Turn on S3 Transfer Acceleration on the destination S3 bucket. Use multipart uploads to directly upload site data to the destination S3 bucket. 
+        General line- Collect huge amount of the files across multiple continents
+        Conditions- High speed Internet connectivity
+        Task- aggregate the data from all in a single S3 bucket
+        Requirements- as quick as possible, minimize operational complexity
+        S3 Transfer Acceleration because...
+        ...ideally works with objects for long-distance transfer (uses Edge Locations)
+        ...can speed up content transfers to and from S3 as much as 50-500%
+        ...use cases- mobile & web application uploads and downloads, distributed office transfers, data exchange with trusted partners. Generally for sharing of large data sets between companies, customers can set up special access to their S3 buckets with accelerated uploads to speed data exchanges and the pace of innovation.
+      Incorrect: 
+        "***replace later***"
+    tags: 
+    difficulty: 
+    points: 
+
+  - id: q2
+    type: multiple_choice
+    question: |
+      A company needs the ability to analyze the log files of its proprietary application. The logs are stored in JSON format in an Amazon S3 bucket. Queries will be simple and will run on-demand. A solutions architect needs to perform the analysis with minimal changes to the existing architecture.
+      What should the solutions architect do to meet these requirements with the LEAST amount of operational overhead?
+    options:
+     - text: Use Amazon Athena directly with Amazon S3 to run the queries as needed.
+       is_correct: true
+     - text: "***replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Amazon Athena is an interactive query service that makes it easy to analyze data directly in Amazon Simple Storage Service (Amazon S3) using standard SQL. With a few actions in the AWS Management Console, you can point Athena at your data stored in Amazon S3 and begin using standard SQL to run ad-hoc queries and get results in seconds.
+      Incorrect: 
+        "***replace later***"
+    tags: 
+    difficulty: 
+    points: 
