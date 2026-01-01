@@ -1,0 +1,705 @@
+questions:
+  - id: q501
+    type: multiple_choice
+    question: |
+      A company wants to ingest customer payment data into the company's data lake in Amazon S3. The company receives payment data every minute on average. The company wants to analyze the payment data in real time. Then the company wants to ingest the data into the data lake.
+    options:
+     - text: Use Amazon Kinesis Data Firehose to ingest data. Use Amazon Kinesis Data Analytics to analyze the data in real time.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Amazon Kinesis Data Firehose is a fully managed service that can reliably load streaming data into data lakes, data stores, and analytics tools. It can automatically scale to handle varying data throughput. Amazon Kinesis Data Analytics enables you to analyze streaming data in real-time with SQL queries.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q502
+    type: multiple_choice
+    question: |
+      A company runs a website that uses a content management system (CMS) on Amazon EC2. The CMS runs on a single EC2 instance and uses an Amazon Aurora MySQL Multi-AZ DB instance for the data tier. Website images are stored on an Amazon Elastic Block Store (Amazon EBS) volume that is mounted inside the EC2 instance.
+    options:
+     - text: Move the website images onto an Amazon Elastic File System (Amazon EFS) file system that is mounted on every EC2 instance.
+       is_correct: true
+     - text: Create an Amazon Machine Image (AMI) from the existing EC2 instance. Use the AMI to provision new instances behind an Application Load Balancer as part of an Auto Scaling group. Configure the Auto Scaling group to maintain a minimum of two instances. Configure an Amazon CloudFront distribution for the website.
+       is_correct: true
+    explanation: |
+      Correct: Amazon EFS provides a scalable and fully managed file storage solution that can be accessed concurrently from multiple EC2 instances. The Auto Scaling group maintains a minimum of two instances, ensuring resilience by automatically replacing any unhealthy instances. Additionally, configuring an Amazon CloudFront distribution for the website further improves performance.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q503
+    type: multiple_choice
+    question: |
+      A company runs an infrastructure monitoring service. The company is building a new feature that will enable the service to monitor data in customer AWS accounts. The new feature will call AWS APIs in customer accounts to describe Amazon EC2 instances and read Amazon CloudWatch metrics.
+    options:
+     - text: Ensure that the customers create an IAM role in their account with read-only EC2 and CloudWatch permissions and a trust policy to the company’s account.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Creating an IAM role with read-only permissions and a trust policy ensures secure access to customer accounts while adhering to the principle of least privilege.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q504
+    type: multiple_choice
+    question: |
+      A company needs to connect several VPCs in the us-east-1 Region that span hundreds of AWS accounts. The company's networking team has its own AWS account to manage the cloud network.
+    options:
+     - text: Create an AWS Transit Gateway in the networking team’s AWS account. Configure static routes from each VPC.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: AWS Transit Gateway simplifies the connectivity between multiple VPCs by acting as a central hub, reducing the complexity of managing peering connections individually.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q505
+    type: multiple_choice
+    question: |
+      A company has Amazon EC2 instances that run nightly batch jobs to process data. The EC2 instances run in an Auto Scaling group that uses On-Demand billing. If a job fails on one instance, another instance will reprocess the job. The batch jobs run between 12:00 AM and 06:00 AM local time every day.
+    options:
+     - text: Create a new launch template for the Auto Scaling group. Set the instances to Spot Instances. Set a policy to scale out based on CPU usage.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Spot Instances allow you to bid for unused EC2 capacity at a potentially lower cost than On-Demand pricing. Setting a policy to scale out based on CPU usage ensures that additional Spot Instances are launched when the demand for processing power increases during batch job execution.
+      Incorrect: 
+        "***replace later***"
+  - id: q506
+    type: multiple_choice
+    question: |
+      A social media company is building a feature for its website. The feature will give users the ability to upload photos. The company expects significant increases in demand during large events and must ensure that the website can handle the upload traffic from users.
+    options:
+     - text: Generate Amazon S3 presigned URLs in the application. Upload files directly from the user's browser into an S3 bucket.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Amazon S3 presigned URLs allow the client to directly upload files to Amazon S3, offloading the file transfer process from the application servers and enabling a direct upload to S3 from the client side.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q507
+    type: multiple_choice
+    question: |
+      A company has a web application for travel ticketing. The application is based on a database that runs in a single data center in North America. The company wants to expand the application to serve a global user base. The company needs to deploy the application to multiple AWS Regions. Average latency must be less than 1 second on updates to the reservation database.
+    options:
+     - text: Convert the application to use Amazon DynamoDB. Use a global table for the center reservation table. Use the correct Regional endpoint in each Regional deployment.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: DynamoDB's global tables feature provides a globally consistent reservation database with low latency on updates, making it suitable for serving a global user base.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q508
+    type: multiple_choice
+    question: |
+      A company has migrated multiple Microsoft Windows Server workloads to Amazon EC2 instances that run in the us-west-1 Region. The company manually backs up the workloads to create an image as needed.
+    options:
+     - text: Create an Amazon EC2-backed Amazon Machine Image (AMI) lifecycle policy to create a backup based on tags. Schedule the backup to run twice daily. Configure the copy to the us-west-2 Region.
+       is_correct: true
+     - text: Create a backup vault by using AWS Backup. Use AWS Backup to create a backup plan for the EC2 instances based on tag values. Define the destination for the copy as us-west-2. Specify the backup schedule to run twice daily.
+       is_correct: true
+    explanation: |
+      Correct: Both options automate the backup process and ensure that backups are copied to another Region for disaster recovery purposes.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q509
+    type: multiple_choice
+    question: |
+      A company operates a two-tier application for image processing. The application uses two Availability Zones, each with one public subnet and one private subnet. An Application Load Balancer (ALB) for the web tier uses the public subnets. Amazon EC2 instances for the application tier use the private subnets.
+    options:
+     - text: Modify the network ACL for the web tier subnets. Add an inbound deny rule for the IP addresses that are consuming resources.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Adding an inbound deny rule for the malicious IP addresses in the network ACL prevents illegitimate requests from consuming resources, improving application performance.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q510
+    type: multiple_choice
+    question: |
+      A global marketing company has applications that run in the ap-southeast-2 Region and the eu-west-1 Region. Applications that run in a VPC in eu-west-1 need to communicate securely with databases that run in a VPC in ap-southeast-2.
+    options:
+     - text: Configure a VPC peering connection between the ap-southeast-2 VPC and the eu-west-1 VPC. Update the subnet route tables. Create an inbound rule in the ap-southeast-2 database security group that allows traffic from the eu-west-1 application server IP addresses.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: VPC peering connections allow secure communication between VPCs in different AWS Regions. Updating the route tables and security group rules ensures proper connectivity.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q511
+    type: multiple_choice
+    question: |
+      A company is developing software that uses a PostgreSQL database schema. The company needs to configure multiple development environments and databases for the company's developers. On average, each development environment is used for half of the 8-hour workday.
+    options:
+     - text: Configure each development environment with its own Amazon Aurora On-Demand PostgreSQL-Compatible database.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Amazon Aurora On-Demand pricing allows the company to pay for database usage only when the development environments are active, making it cost-effective for intermittent workloads.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q512
+    type: multiple_choice
+    question: |
+      A company uses AWS Organizations with resources tagged by account. The company also uses AWS Backup to back up its AWS infrastructure resources. The company needs to back up all AWS resources.
+    options:
+     - text: Use AWS Config to identify all untagged resources. Tag the identified resources programmatically. Use tags in the backup plan.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: AWS Config can identify untagged resources, and AWS Backup supports the use of tags in backup plans to automate resource inclusion.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q513
+    type: multiple_choice
+    question: |
+      A social media company wants to allow its users to upload images in an application that is hosted in the AWS Cloud. The company needs a solution that automatically resizes the images so that the images can be displayed on multiple device types. The application experiences unpredictable traffic patterns throughout the day. The company is seeking a highly available solution that maximizes scalability.
+    options:
+     - text: Create a static website hosted in Amazon S3 that invokes AWS Lambda functions to resize the images and store the images in an Amazon S3 bucket.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Hosting a static website in Amazon S3 is cost-effective and highly available. Lambda functions can efficiently handle sporadic workloads to resize images.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q514
+    type: multiple_choice
+    question: |
+      A company is running a microservices application on Amazon EC2 instances. The company wants to migrate the application to an Amazon Elastic Kubernetes Service (Amazon EKS) cluster for scalability. The company must configure the Amazon EKS control plane with endpoint private access set to true and endpoint public access set to false to maintain security compliance. The company must also put the data plane in private subnets. However, the company has received error notifications because the node cannot join the cluster.
+    options:
+     - text: Create interface VPC endpoints to allow nodes to access the control plane.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Creating interface VPC endpoints ensures that nodes in private subnets can securely communicate with the EKS control plane without the need for public IP addresses.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q515
+    type: multiple_choice
+    question: |
+      A company is migrating an on-premises application to AWS. The company wants to use Amazon Redshift as a solution.
+    options:
+     - text: Supporting client-side and server-side encryption.
+       is_correct: true
+     - text: Building analytics workloads during specified hours and when the application is not active.
+       is_correct: true
+     - text: Scaling globally to support petabytes of data and tens of millions of requests per minute.
+       is_correct: true
+    explanation: |
+      Correct: Amazon Redshift supports encryption for data at rest and in transit, making it suitable for sensitive data. It is optimized for analytical queries and can scale to handle large datasets and high request volumes.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q516
+    type: multiple_choice
+    question: |
+      A company provides an API interface to customers so the customers can retrieve their financial information. The company expects a larger number of requests during peak usage times of the year.
+    options:
+     - text: Use Amazon API Gateway and AWS Lambda functions with provisioned concurrency.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Amazon API Gateway and AWS Lambda with provisioned concurrency ensure consistent low-latency responses during peak usage times.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q517
+    type: multiple_choice
+    question: |
+      A company wants to send all AWS Systems Manager Session Manager logs to an Amazon S3 bucket for archival purposes.
+    options:
+     - text: Enable S3 logging in the Systems Manager console. Choose an S3 bucket to send the session data to.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Enabling S3 logging in the Systems Manager console simplifies the process of archiving session logs to an S3 bucket.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q518
+    type: multiple_choice
+    question: |
+      An application uses an Amazon RDS MySQL DB instance. The RDS database is becoming low on disk space. A solutions architect wants to increase the disk space without downtime.
+    options:
+     - text: Enable storage autoscaling in RDS.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Enabling storage autoscaling allows Amazon RDS to automatically adjust the storage capacity of the database without requiring manual intervention.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q519
+    type: multiple_choice
+    question: |
+      A consulting company provides professional services to customers worldwide. The company provides solutions and tools for customers to expedite gathering and analyzing data on AWS. The company needs to centrally manage and deploy a common set of solutions and tools for customers to use for self-service purposes.
+    options:
+     - text: Create AWS Service Catalog products for the customers.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: AWS Service Catalog allows you to centrally manage and distribute standardized product portfolios for self-service use by customers.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q520
+    type: multiple_choice
+    question: |
+      A company is designing a new web application that will run on Amazon EC2 Instances. The application will use Amazon DynamoDB for backend data storage. The application traffic will be unpredictable. The company expects that the application read and write throughput to the database will be moderate to high. The company needs to scale in response to application traffic.
+    options:
+     - text: Configure DynamoDB in on-demand mode by using the DynamoDB Standard table class.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: On-demand capacity mode allows DynamoDB to automatically scale read and write capacity based on actual application traffic, making it cost-effective for unpredictable workloads.
+      Incorrect: 
+        "***replace later***"
+  - id: q521
+    type: multiple_choice
+    question: |
+      A retail company has several businesses. The IT team for each business manages its own AWS account. Each team account is part of an organization in AWS Organizations. Each team monitors its product inventory levels in an Amazon DynamoDB table in the team's own AWS account.
+      The company is deploying a central inventory reporting application into a shared AWS account. The application must be able to read items from all the teams' DynamoDB tables.
+    options:
+     - text: In every business account, create an IAM role named BU_ROLE with a policy that gives the role access to the DynamoDB table and a trust policy to trust a specific role in the inventory application account. In the inventory account, create a role named APP_ROLE that allows access to the STS AssumeRole API operation. Configure the application to use APP_ROLE and assume the crossaccount role BU_ROLE to read the DynamoDB table.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: This approach ensures secure cross-account access by using IAM roles and the STS AssumeRole API operation, adhering to the principle of least privilege.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q522
+    type: multiple_choice
+    question: |
+      A company runs container applications by using Amazon Elastic Kubernetes Service (Amazon EKS). The company's workload is not consistent throughout the day. The company wants Amazon EKS to scale in and out according to the workload.
+    options:
+     - text: Use the Kubernetes Metrics Server for Horizontal Pod Autoscaling.
+       is_correct: true
+     - text: Use the Kubernetes Cluster Autoscaler.
+       is_correct: true
+    explanation: |
+      Correct: The Kubernetes Metrics Server enables Horizontal Pod Autoscaling based on observed metrics, while the Kubernetes Cluster Autoscaler adjusts the size of the cluster based on resource utilization and pod scheduling requirements.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q523
+    type: multiple_choice
+    question: |
+      A company runs a microservice-based serverless web application. The application must be able to retrieve data from multiple Amazon DynamoDB tables. A solutions architect needs to give the application the ability to retrieve the data with no impact on the baseline performance of the application.
+    options:
+     - text: Amazon CloudFront with Lambda@Edge functions.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Amazon CloudFront with Lambda@Edge functions allows for efficient data retrieval and customization without impacting the baseline performance of the application.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q524
+    type: multiple_choice
+    question: |
+      A company wants to analyze and troubleshoot Access Denied errors and Unauthorized errors that are related to IAM permissions. The company has AWS CloudTrail turned on.
+    options:
+     - text: Search CloudTrail logs with Amazon Athena queries to identify the errors.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Amazon Athena allows you to query CloudTrail logs directly from S3 using SQL queries, making it easy to identify and analyze IAM-related errors.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q525
+    type: multiple_choice
+    question: |
+      A company wants to add its existing AWS usage cost to its operation cost dashboard. A solutions architect needs to recommend a solution that will give the company access to its usage cost programmatically. The company must be able to access cost data for the current year and forecast costs for the next 12 months.
+    options:
+     - text: Access usage cost-related data by using the AWS Cost Explorer API with pagination.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: The AWS Cost Explorer API provides programmatic access to usage cost data, including historical and forecasted costs, with support for pagination.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q526
+    type: multiple_choice
+    question: |
+      A solutions architect is reviewing the resilience of an application. The solutions architect notices that a database administrator recently failed over the application's Amazon Aurora PostgreSQL database writer instance as part of a scaling exercise. The failover resulted in 3 minutes of downtime for the application.
+    options:
+     - text: Set up an Amazon RDS proxy for the database. Update the application to use the proxy endpoint.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Amazon RDS Proxy provides connection pooling and automatic failover, reducing downtime during scaling exercises.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q527
+    type: multiple_choice
+    question: |
+      A company has a regional subscription-based streaming service that runs in a single AWS Region. The architecture consists of web servers and application servers on Amazon EC2 instances. The EC2 instances are in Auto Scaling groups behind Elastic Load Balancers. The architecture includes an Amazon Aurora global database cluster that extends across multiple Availability Zones.
+      The company wants to expand globally and to ensure that its application has minimal downtime.
+    options:
+     - text: Deploy the web tier and the application tier to a second Region. Use an Amazon Aurora global database to deploy the database in the primary Region and the second Region. Use Amazon Route 53 health checks with a failover routing policy to the second Region. Promote the secondary to primary as needed.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: An Aurora global database ensures low-latency access and high availability across Regions, while Route 53 health checks and failover routing minimize downtime.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q528
+    type: multiple_choice
+    question: |
+      A company is migrating its workloads to AWS. The company has transactional and sensitive data in its databases. The company wants to use AWS Cloud solutions to increase security and reduce operational overhead for the databases.
+    options:
+     - text: Migrate the databases to Amazon RDS. Configure encryption at rest.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Amazon RDS simplifies database management and supports encryption at rest, enhancing security and reducing operational overhead.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q529
+    type: multiple_choice
+    question: |
+      A company has an online gaming application that has TCP and UDP multiplayer gaming capabilities. The company uses Amazon Route 53 to point the application traffic to multiple Network Load Balancers (NLBs) in different AWS Regions. The company needs to improve application performance and decrease latency for the online game in preparation for user growth.
+    options:
+     - text: Add AWS Global Accelerator in front of the NLBs. Configure a Global Accelerator endpoint to use the correct listener ports.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: AWS Global Accelerator improves application performance and decreases latency by routing traffic over the AWS global network to optimal endpoints.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q530
+    type: multiple_choice
+    question: |
+      A company has separate AWS accounts for its finance, data analytics, and development departments. Because of costs and security concerns, the company wants to control which services each AWS account can use.
+    options:
+     - text: Create organization units (OUs) for each department in AWS Organizations. Attach service control policies (SCPs) to the OUs.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: AWS Organizations and SCPs allow centralized management of service access, ensuring cost control and security compliance.
+      Incorrect: 
+        "***replace later***"
+  - id: q531
+    type: multiple_choice
+    question: |
+      A company needs to integrate with a third-party data feed. The data feed sends a webhook to notify an external service when new data is ready for consumption. A developer wrote an AWS Lambda function to retrieve data when the company receives a webhook callback. The developer must make the Lambda function available for the third party to call.
+    options:
+     - text: Create a function URL for the Lambda function. Provide the Lambda function URL to the third party for the webhook.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Creating a function URL for the Lambda function provides a direct and efficient way for the third party to invoke the function when the webhook is triggered.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q532
+    type: multiple_choice
+    question: |
+      A company has a workload in an AWS Region. Customers connect to and access the workload by using an Amazon API Gateway REST API. The company uses Amazon Route 53 as its DNS provider. The company wants to provide individual and secure URLs for all customers.
+    options:
+     - text: Register the required domain in a registrar. Create a wildcard custom domain name in a Route 53 hosted zone and record in the zone that points to the API Gateway endpoint.
+       is_correct: true
+     - text: Request a wildcard certificate that matches the custom domain name in AWS Certificate Manager (ACM) in the same Region.
+       is_correct: true
+     - text: Create a custom domain name in API Gateway for the REST API. Import the certificate from AWS Certificate Manager (ACM).
+       is_correct: true
+    explanation: |
+      Correct: Registering a domain, creating a wildcard custom domain name, and using ACM for a wildcard certificate ensures secure and individual URLs for customers.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q533
+    type: multiple_choice
+    question: |
+      A company stores data in Amazon S3. According to regulations, the data must not contain personally identifiable information (PII). The company recently discovered that S3 buckets have some objects that contain PII. The company needs to automatically detect PII in S3 buckets and to notify the company’s security team.
+    options:
+     - text: Use Amazon Macie. Create an Amazon EventBridge rule to filter the SensitiveData event type from Macie findings and to send an Amazon Simple Notification Service (Amazon SNS) notification to the security team.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Amazon Macie can identify sensitive data, including PII, and EventBridge can filter findings to notify the security team via SNS.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q534
+    type: multiple_choice
+    question: |
+      A company wants to build a logging solution for its multiple AWS accounts. The company currently stores the logs from all accounts in a centralized account. The company has created an Amazon S3 bucket in the centralized account to store the VPC flow logs and AWS CloudTrail logs. All logs must be highly available for 30 days for frequent analysis, retained for an additional 60 days for backup purposes, and deleted 90 days after creation.
+    options:
+     - text: Transition objects to the S3 Standard-Infrequent Access (S3 Standard-IA) storage class 30 days after creation. Move all objects to the S3 Glacier Flexible Retrieval storage class after 90 days. Write an expiration action that directs Amazon S3 to delete objects after 90 days.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Transitioning objects to S3 Standard-IA and Glacier Flexible Retrieval storage classes optimizes costs while meeting retention requirements.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q535
+    type: multiple_choice
+    question: |
+      A company is building an Amazon Elastic Kubernetes Service (Amazon EKS) cluster for its workloads. All secrets that are stored in Amazon EKS must be encrypted in the Kubernetes etcd key-value store.
+    options:
+     - text: Create a new AWS Key Management Service (AWS KMS) key. Enable Amazon EKS KMS secrets encryption on the Amazon EKS cluster.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Amazon EKS KMS secrets encryption ensures that secrets in the Kubernetes etcd key-value store are encrypted at rest using a KMS key.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q536
+    type: multiple_choice
+    question: |
+      A company wants to provide data scientists with near real-time read-only access to the company's production Amazon RDS for PostgreSQL database. The database is currently configured as a Single-AZ database. The data scientists use complex queries that will not affect the production database. The company needs a solution that is highly available.
+    options:
+     - text: Change the setup from a Single-AZ to a Multi-AZ instance deployment. Provide two additional read replicas for the data scientists.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Multi-AZ deployment ensures high availability, and read replicas allow data scientists to run complex queries without impacting the production database.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q537
+    type: multiple_choice
+    question: |
+      A company runs a three-tier web application in the AWS Cloud that operates across three Availability Zones. The application architecture has an Application Load Balancer, an Amazon EC2 web server that hosts user session states, and a MySQL database that runs on an EC2 instance. The company expects sudden increases in application traffic. The company wants to be able to scale to meet future application capacity demands and to ensure high availability across all three Availability Zones.
+    options:
+     - text: Migrate the MySQL database to Amazon RDS for MySQL with a Multi-AZ DB cluster deployment. Use Amazon ElastiCache for Redis with high availability to store session data and to cache reads. Migrate the web server to an Auto Scaling group that is in three Availability Zones.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Amazon RDS Multi-AZ deployment ensures high availability for the database, while ElastiCache improves performance by caching session data and reads.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q538
+    type: multiple_choice
+    question: |
+      A global video streaming company uses Amazon CloudFront as a content distribution network (CDN). The company wants to roll out content in a phased manner across multiple countries. The company needs to ensure that viewers who are outside the countries to which the company rolls out content are not able to view the content.
+    options:
+     - text: Add geographic restrictions to the content in CloudFront by using an allow list. Set up a custom error message.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: CloudFront geographic restrictions with an allow list ensure that only viewers in specified countries can access the content.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q539
+    type: multiple_choice
+    question: |
+      A company wants to use the AWS Cloud to improve its on-premises disaster recovery (DR) configuration. The company's core production business application uses Microsoft SQL Server Standard, which runs on a virtual machine (VM). The application has a recovery point objective (RPO) of 30 seconds or fewer and a recovery time objective (RTO) of 60 minutes. The DR solution needs to minimize costs wherever possible.
+    options:
+     - text: Set up AWS Storage Gateway to connect with the backup applications using the iSCSI-virtual tape library (VTL) interface.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: AWS Storage Gateway with the iSCSI-VTL interface integrates with existing backup applications, providing a cost-effective DR solution.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q540
+    type: multiple_choice
+    question: |
+      A company has an on-premises server that uses an Oracle database to process and store customer information. The company wants to use an AWS database service to achieve higher availability and to improve application performance. The company also wants to offload reporting from its primary database system.
+    options:
+     - text: Use Amazon RDS deployed in a Multi-AZ instance deployment to create an Amazon Aurora database. Direct the reporting functions to the reader instances.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Amazon RDS Multi-AZ deployment ensures high availability, while Aurora reader instances offload reporting, improving performance.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q541
+    type: multiple_choice
+    question: |
+      A company wants to build a web application on AWS. Client access requests to the website are not predictable and can be idle for a long time. Only customers who have paid a subscription fee can have the ability to sign in and use the web application.
+    options:
+     - text: Create an AWS Lambda function to retrieve user information from Amazon DynamoDB. Create an Amazon API Gateway endpoint to accept RESTful APIs. Send the API calls to the Lambda function.
+       is_correct: true
+     - text: Create an Amazon Cognito user pool to authenticate users.
+       is_correct: true
+     - text: Use AWS Amplify to serve the frontend web content with HTML, CSS, and JS. Use an integrated Amazon CloudFront configuration.
+       is_correct: true
+    explanation: |
+      Correct: AWS Lambda and API Gateway provide a cost-effective backend for unpredictable workloads. Amazon Cognito handles user authentication, and AWS Amplify simplifies frontend hosting with CloudFront integration.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q542
+    type: multiple_choice
+    question: |
+      A media company uses an Amazon CloudFront distribution to deliver content over the internet. The company wants only premium customers to have access to the media streams and file content. The company stores all content in an Amazon S3 bucket. The company also delivers content on demand to customers for a specific purpose, such as movie rentals or music downloads.
+    options:
+     - text: Generate and provide CloudFront signed URLs to premium customers.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: CloudFront signed URLs restrict access to premium customers and can be customized for time-limited access or specific content.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q543
+    type: multiple_choice
+    question: |
+      A company runs Amazon EC2 instances in multiple AWS accounts that are individually billed. The company recently purchased a Savings Plan. Because of changes in the company’s business requirements, the company has decommissioned a large number of EC2 instances. The company wants to use its Savings Plan discounts on its other AWS accounts.
+    options:
+     - text: Enable consolidated billing in AWS Organizations to share the Savings Plan across accounts.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Consolidated billing in AWS Organizations allows the company to share Savings Plan discounts across multiple accounts.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q544
+    type: multiple_choice
+    question: |
+      A retail company uses a regional Amazon API Gateway API for its public REST APIs. The API Gateway endpoint is a custom domain name that points to an Amazon Route 53 alias record. A solutions architect needs to create a solution that has minimal effects on customers and minimal data loss to release the new version of APIs.
+    options:
+     - text: Create a canary release deployment stage for API Gateway. Deploy the latest API version. Point an appropriate percentage of traffic to the canary stage. After API verification, promote the canary stage to the production stage.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: A canary release deployment minimizes customer impact and data loss by gradually rolling out the new API version.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q545
+    type: multiple_choice
+    question: |
+      A company wants to direct its users to a backup static error page if the company's primary website is unavailable. The primary website's DNS records are hosted in Amazon Route 53. The domain is pointing to an Application Load Balancer (ALB). The company needs a solution that minimizes changes and infrastructure overhead.
+    options:
+     - text: Set up a Route 53 active-passive failover configuration. Direct traffic to a static error page that is hosted in an Amazon S3 bucket when Route 53 health checks determine that the ALB endpoint is unhealthy.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Route 53 active-passive failover with health checks ensures traffic is redirected to a static error page in an S3 bucket when the primary website is unavailable.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q546
+    type: multiple_choice
+    question: |
+      A recent analysis of a company's IT expenses highlights the need to reduce backup costs. The company's chief information officer wants to simplify the on-premises backup infrastructure and reduce costs by eliminating the use of physical backup tapes. The company must preserve the existing investment in the on-premises backup applications and workflows.
+    options:
+     - text: Set up AWS Storage Gateway to connect with the backup applications using the iSCSI-virtual tape library (VTL) interface.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: AWS Storage Gateway with the iSCSI-VTL interface integrates with existing backup applications, providing a cost-effective alternative to physical tapes.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q547
+    type: multiple_choice
+    question: |
+      A company has data collection sensors at different locations. The data collection sensors stream a high volume of data to the company. The company wants to design a platform on AWS to ingest and process high-volume streaming data. The solution must be scalable and support data collection in near real time. The company must store the data in Amazon S3 for future reporting.
+    options:
+     - text: Use Amazon Kinesis Data Firehose to deliver streaming data to Amazon S3.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Amazon Kinesis Data Firehose is a fully managed service that scales automatically and delivers streaming data to S3 for storage and analysis.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q548
+    type: multiple_choice
+    question: |
+      A company has separate AWS accounts for its finance, data analytics, and development departments. Because of costs and security concerns, the company wants to control which services each AWS account can use.
+    options:
+     - text: Create organization units (OUs) for each department in AWS Organizations. Attach service control policies (SCPs) to the OUs.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: AWS Organizations and SCPs allow centralized management of service access, ensuring cost control and security compliance.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q549
+    type: multiple_choice
+    question: |
+      A company has created a multi-tier application for its ecommerce website. The website uses an Application Load Balancer that resides in the public subnets, a web tier in the public subnets, and a MySQL cluster hosted on Amazon EC2 instances in the private subnets. The MySQL database needs to retrieve product catalog and pricing information that is hosted on the internet by a third-party provider. A solutions architect must devise a strategy that maximizes security without increasing operational overhead.
+    options:
+     - text: Deploy a NAT gateway in the public subnets. Modify the private subnet route table to direct all internet-bound traffic to the NAT gateway.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: A NAT gateway allows instances in private subnets to securely access the internet while preventing inbound traffic, ensuring security and simplicity.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q550
+    type: multiple_choice
+    question: |
+      A company is using AWS Key Management Service (AWS KMS) keys to encrypt AWS Lambda environment variables. A solutions architect needs to ensure that the required permissions are in place to decrypt and use the environment variables.
+    options:
+     - text: Add AWS KMS permissions in the Lambda execution role.
+       is_correct: true
+     - text: Allow the Lambda execution role in the AWS KMS key policy.
+       is_correct: true
+    explanation: |
+      Correct: The Lambda execution role needs kms:Decrypt permissions, and the KMS key policy must allow the Lambda execution role to perform decryption.
+      Incorrect: 
+        "***replace later***"

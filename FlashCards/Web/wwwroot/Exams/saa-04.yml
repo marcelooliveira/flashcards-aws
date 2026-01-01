@@ -1,0 +1,528 @@
+questions:
+  - id: q151
+    type: multiple_choice
+    question: |
+      A company wants to migrate its on-premises data center to AWS. According to the company's compliance requirements, the company can use only the ap-northeast-3 Region. Company administrators are not permitted to connect VPCs to the internet.
+      Which solutions will meet these requirements? (Choose two.)
+    options:
+     - text: Use AWS Organizations to configure service control policies (SCPS) that prevent VPCs from gaining internet access. Deny access to all AWS Regions except ap-northeast-3.
+       is_correct: true
+     - text: Create an outbound rule for the network ACL in each VPC to deny all traffic from 0.0.0.0/0. Create an IAM policy for each user to prevent the use of any AWS Region other than ap-northeast-3.
+       is_correct: true
+     - text: Use AWS Control Tower to implement data residency guardrails to deny internet access and deny access to all AWS Regions except ap-northeast-3.
+       is_correct: false
+     - text: Use rules in AWS WAF to prevent internet access. Deny access to all AWS Regions except ap-northeast-3 in the AWS account settings.
+       is_correct: false
+     - text: Use AWS Config to activate managed rules to detect and alert for internet gateways and to detect and alert for new resources deployed outside of ap-northeast-3.
+       is_correct: false
+    explanation: |
+      Correct: Use AWS Organizations to configure service control policies (SCPS) that prevent VPCs from gaining internet access. Deny access to all AWS Regions except ap-northeast-3. Create an outbound rule for the network ACL in each VPC to deny all traffic from 0.0.0.0/0. Create an IAM policy for each user to prevent the use of any AWS Region other than ap-northeast-3.
+      Incorrect: The other options do not fully meet the requirements or are not applicable.
+
+  - id: q152
+    type: multiple_choice
+    question: |
+      A company uses a three-tier web application to provide training to new employees. The application is accessed for only 12 hours every day. The company is using an Amazon RDS for MySQL DB instance to store information and wants to minimize costs.
+      What should a solutions architect do to meet these requirements?
+    options:
+     - text: Create AWS Lambda functions to start and stop the DB instance. Create an outbound rule for the network ACL in each VPC to deny all traffic from 0.0.0.0/0. Create an IAM policy for each user to prevent the use of any AWS Region other than ap-northeast-3.
+       is_correct: true
+    explanation: |
+      Correct: Create AWS Lambda functions to start and stop the DB instance. Create an outbound rule for the network ACL in each VPC to deny all traffic from 0.0.0.0/0. Create an IAM policy for each user to prevent the use of any AWS Region other than ap-northeast-3.
+      Incorrect: The other options do not minimize costs effectively.
+
+  - id: q153
+    type: multiple_choice
+    question: |
+      A company sells ringtones created from clips of popular songs. The files containing the ringtones are stored in Amazon S3 Standard and are at least 128 KB in size. The company has millions of files, but downloads are infrequent for ringtones older than 90 days. The company needs to save money on storage while keeping the most accessed files readily available for its users.
+      Which action should the company take to meet these requirements MOST cost-effectively?
+    options:
+     - text: Implement an S3 Lifecycle policy that moves the objects from S3 Standard to S3 Standard-Infrequent Access (S3 Standard-1A) after 90 days.
+       is_correct: true
+    explanation: |
+      Correct: Implement an S3 Lifecycle policy that moves the objects from S3 Standard to S3 Standard-Infrequent Access (S3 Standard-1A) after 90 days.
+      Incorrect: The other options do not provide the most cost-effective solution.
+
+  - id: q154
+    type: multiple_choice
+    question: |
+      A company needs to save the results from a medical trial to an Amazon S3 repository. The repository must allow a few scientists to add new files and must restrict all other users to read-only access. No users can have the ability to modify or delete any files in the repository. The company must keep every file in the repository for a minimum of 1 year after its creation date.
+      Which solution will meet these requirements?
+    options:
+     - text: Use S3 Object Lock in compliance mode with a retention period of 365 days.
+       is_correct: true
+    explanation: |
+      Correct: Use S3 Object Lock in compliance mode with a retention period of 365 days.
+      Incorrect: The other options do not meet the compliance and access requirements.
+
+  - id: q155
+    type: multiple_choice
+    question: |
+      A large media company hosts a web application on AWS. The company wants to start caching confidential media files so that users around the world will have reliable access to the files. The content is stored in Amazon S3 buckets. The company must deliver the content quickly, regardless of where the requests originate geographically.
+      Which solution will meet these requirements?
+    options:
+     - text: Deploy Amazon CloudFront to connect the S3 buckets to CloudFront edge servers.
+       is_correct: true
+    explanation: |
+      Correct: Deploy Amazon CloudFront to connect the S3 buckets to CloudFront edge servers.
+      Incorrect: The other options do not provide the required global delivery performance.
+
+  - id: q156
+    type: multiple_choice
+    question: |
+      A company produces batch data that comes from different databases. The company also produces live stream data from network sensors and application APIs. The company needs to consolidate all the data into one place for business analytics. The company needs to process the incoming data and then stage the data in different Amazon S3 buckets. Teams will later run one-time queries and import the data into a business intelligence tool to show key performance indicators (KPIs).
+      Which combination of steps will meet these requirements with the LEAST operational overhead? (Choose two.)
+    options:
+     - text: Use Amazon Athena for one-time queries. Use Amazon QuickSight to create dashboards for KPIs.
+       is_correct: true
+     - text: Create custom AWS Lambda functions to move the individual records from the databases to an Amazon Redshift cluster.
+       is_correct: true
+     - text: Use Amazon EMR to process the incoming data. Use Amazon Redshift to store the processed data.
+       is_correct: false
+     - text: Use AWS Glue to process the incoming data. Use Amazon S3 to store the processed data.
+       is_correct: false
+     - text: Use Amazon Kinesis Data Firehose to process the incoming data. Use Amazon S3 to store the processed data.
+       is_correct: false
+    explanation: |
+      Correct: Use Amazon Athena for one-time queries. Use Amazon QuickSight to create dashboards for KPIs. Create custom AWS Lambda functions to move the individual records from the databases to an Amazon Redshift cluster.
+      Incorrect: The other options involve higher operational overhead or do not meet the requirements.
+
+  - id: q157
+    type: multiple_choice
+    question: |
+      A company stores data in an Amazon Aurora PostgreSQL DB cluster. The company must store all the data for 5 years and must delete all the data after 5 years. The company also must indefinitely keep audit logs of actions that are performed within the database. Currently, the company has automated backups configured for Aurora.
+      Which combination of steps should a solutions architect take to meet these requirements? (Choose two.)
+    options:
+     - text: Take a manual snapshot of the DB cluster.
+       is_correct: true
+     - text: Configure an Amazon CloudWatch Logs export for the DB cluster.
+       is_correct: true
+     - text: Create a lifecycle policy for the automated backups.
+       is_correct: false
+     - text: Configure automated backup retention for 5 years.
+       is_correct: false
+     - text: Use AWS Backup to take the backups and to keep the backups for 5 years.
+       is_correct: false
+    explanation: |
+      Correct: Take a manual snapshot of the DB cluster. Configure an Amazon CloudWatch Logs export for the DB cluster.
+      Incorrect: The other options do not fully meet the requirements or involve unnecessary steps.
+
+  - id: q158
+    type: multiple_choice
+    question: |
+      A solutions architect is optimizing a website for an upcoming musical event. Videos of the performances will be streamed in real time and then will be available on demand. The event is expected to attract a global online audience.
+      Which service will improve the performance of both the real-time and on-demand streaming?
+    options:
+     - text: Amazon CloudFront
+       is_correct: true
+     - text: AWS Global Accelerator
+       is_correct: false
+    explanation: |
+      Correct: Amazon CloudFront improves the performance of both real-time and on-demand streaming by caching content at edge locations.
+      Incorrect: AWS Global Accelerator is not designed for streaming content.
+
+  - id: q159
+    type: multiple_choice
+    question: |
+      A company is running a publicly accessible serverless application that uses Amazon API Gateway and AWS Lambda. The application’s traffic recently spiked due to fraudulent requests from botnets.
+      Which steps should a solutions architect take to block requests from unauthorized users? (Choose two.)
+    options:
+     - text: Create a usage plan with an API key that is shared with genuine users only.
+       is_correct: true
+     - text: Implement an AWS WAF rule to target malicious requests and trigger actions to filter them out.
+       is_correct: true
+     - text: Integrate logic within the Lambda function to ignore the requests from fraudulent IP addresses.
+       is_correct: false
+     - text: Convert the existing public API to a private API. Update the DNS records to redirect users to the new API endpoint.
+       is_correct: false
+     - text: Create an IAM role for each user attempting to access the API. A user will assume the role when making the API call.
+       is_correct: false
+    explanation: |
+      Correct: Create a usage plan with an API key that is shared with genuine users only. Implement an AWS WAF rule to target malicious requests and trigger actions to filter them out.
+      Incorrect: The other options do not effectively address the issue of blocking unauthorized requests.
+
+  - id: q160
+    type: multiple_choice
+    question: |
+      An ecommerce company hosts its analytics application in the AWS Cloud. The application generates about 300 MB of data each month. The data is stored in JSON format. The company is evaluating a disaster recovery solution to back up the data. The data must be accessible in milliseconds if it is needed, and the data must be kept for 30 days.
+      Which solution meets these requirements MOST cost-effectively?
+    options:
+     - text: Amazon S3 Standard
+       is_correct: true
+     - text: Amazon OpenSearch Service (Amazon Elasticsearch Service)
+       is_correct: false
+     - text: Amazon S3 Glacier
+       is_correct: false
+     - text: Amazon RDS for PostgreSQL
+       is_correct: false
+    explanation: |
+      Correct: Amazon S3 Standard meets the requirements for accessibility and cost-effectiveness.
+      Incorrect: The other options either do not meet the accessibility requirement or are more expensive.
+
+  - id: q161
+    type: multiple_choice
+    question: |
+      A company has a small Python application that processes JSON documents and outputs the results to an on-premises SQL database. The application runs thousands of times each day. The company wants to move the application to the AWS Cloud. The company needs a highly available solution that maximizes scalability and minimizes operational overhead.
+      Which solution will meet these requirements?
+    options:
+     - text: Place the JSON documents in an Amazon S3 bucket. Create an AWS Lambda function that runs the Python code to process the documents as they arrive in the S3 bucket. Store the results in an Amazon Aurora DB cluster.
+       is_correct: true
+    explanation: |
+      Correct: Place the JSON documents in an Amazon S3 bucket. Create an AWS Lambda function that runs the Python code to process the documents as they arrive in the S3 bucket. Store the results in an Amazon Aurora DB cluster.
+      Incorrect: The other options do not minimize operational overhead or maximize scalability.
+
+  - id: q162
+    type: multiple_choice
+    question: |
+      A company wants to use high performance computing (HPC) infrastructure on AWS for financial risk modeling. The company’s HPC workloads run on Linux. Each HPC workflow runs on hundreds of Amazon EC2 Spot Instances, is short-lived, and generates thousands of output files that are ultimately stored in persistent storage for analytics and long-term future use.
+      The company seeks a cloud storage solution that permits the copying of on-premises data to long-term persistent storage to make data available for processing by all EC2 instances. The solution should also be a high performance file system that is integrated with persistent storage to read and write datasets and output files.
+      Which combination of AWS services meets these requirements?
+    options:
+     - text: Amazon FSx for Lustre integrated with Amazon S3
+       is_correct: true
+    explanation: |
+      Correct: Amazon FSx for Lustre integrated with Amazon S3 meets the requirements for high performance computing and persistent storage.
+      Incorrect: The other options do not provide the required integration or performance.
+
+  - id: q163
+    type: multiple_choice
+    question: |
+      A company is building a containerized application on premises and decides to move the application to AWS. The application will have thousands of users soon after it is deployed. The company is unsure how to manage the deployment of containers at scale. The company needs to deploy the containerized application in a highly available architecture that minimizes operational overhead.
+      Which solution will meet these requirements?
+    options:
+     - text: Store container images in an Amazon Elastic Container Registry (Amazon ECR) repository. Use an Amazon Elastic Container Service (Amazon ECS) cluster with the AWS Fargate launch type to run the containers. Use target tracking to scale automatically based on demand.
+       is_correct: true
+    explanation: |
+      Correct: Store container images in an Amazon Elastic Container Registry (Amazon ECR) repository. Use an Amazon Elastic Container Service (Amazon ECS) cluster with the AWS Fargate launch type to run the containers. Use target tracking to scale automatically based on demand.
+      Incorrect: The other options do not minimize operational overhead or provide high availability.
+
+  - id: q164
+    type: multiple_choice
+    question: |
+      A company has two applications: a sender application that sends messages with payloads to be processed and a processing application intended to receive the messages with payloads. The company wants to implement an AWS service to handle messages between the two applications. The sender application can send about 1,000 messages each hour. The messages may take up to 2 days to be processed: If the messages fail to process, they must be retained so that they do not impact the processing of any remaining messages.
+    options:
+     - text: Integrate the sender and processor applications with an Amazon Simple Queue Service (Amazon SQS) queue. Configure a dead-letter queue to collect the messages that failed to process.
+       is_correct: true
+    explanation: |
+      Correct: Integrate the sender and processor applications with an Amazon Simple Queue Service (Amazon SQS) queue. Configure a dead-letter queue to collect the messages that failed to process.
+      Incorrect: The other options do not meet the requirements for message retention and processing.
+
+  - id: q165
+    type: multiple_choice
+    question: |
+      A solutions architect must design a solution that uses Amazon CloudFront with an Amazon S3 origin to store a static website. The company’s security policy requires that all website traffic be inspected by AWS WAF.
+    options:
+     - text: Configure Amazon CloudFront and Amazon S3 to use an origin access identity (OAI) to restrict access to the S3 bucket. Enable AWS WAF on the distribution.
+       is_correct: true
+    explanation: |
+      Correct: Configure Amazon CloudFront and Amazon S3 to use an origin access identity (OAI) to restrict access to the S3 bucket. Enable AWS WAF on the distribution.
+      Incorrect: The other options do not meet the security policy requirements.
+
+  - id: q166
+    type: multiple_choice
+    question: |
+      Organizers for a global event want to put daily reports online as static HTML pages. The pages are expected to generate millions of views from users around the world. The files are stored in an Amazon S3 bucket. A solutions architect has been asked to design an efficient and effective solution.
+      Which action should the solutions architect take to accomplish this?
+    options:
+     - text: Use Amazon CloudFront with the S3 bucket as its origin.
+       is_correct: true
+    explanation: |
+      Correct: Use Amazon CloudFront with the S3 bucket as its origin.
+      Incorrect: The other options do not provide the required scalability and efficiency.
+
+  - id: q167
+    type: multiple_choice
+    question: |
+      A company runs a production application on a fleet of Amazon EC2 instances. The application reads the data from an Amazon SQS queue and processes the messages in parallel. The message volume is unpredictable and often has intermittent traffic. This application should continually process messages without any downtime.
+      Which solution meets these requirements MOST cost-effectively?
+    options:
+     - text: Use Reserved Instances for the baseline capacity and use Spot Instances to handle additional capacity.
+       is_correct: true
+    explanation: |
+      Correct: Use Reserved Instances for the baseline capacity and use Spot Instances to handle additional capacity.
+      Incorrect: The other options do not provide cost-effective scalability.
+
+  - id: q168
+    type: multiple_choice
+    question: |
+      A security team wants to limit access to specific services or actions in all of the team’s AWS accounts. All accounts belong to a large organization in AWS Organizations. The solution must be scalable and there must be a single point where permissions can be maintained.
+    options:
+     - text: Create a service control policy in the root organizational unit to deny access to the services or actions.
+       is_correct: true
+    explanation: |
+      Correct: Create a service control policy in the root organizational unit to deny access to the services or actions.
+      Incorrect: The other options do not provide a scalable solution with centralized management.
+
+  - id: q169
+    type: multiple_choice
+    question: |
+      A company is concerned about the security of its public web application due to recent web attacks. The application uses an Application Load Balancer (ALB). A solutions architect must reduce the risk of DDoS attacks against the application.
+      What should the solutions architect do to meet this requirement?
+    options:
+     - text: Enable AWS Shield Advanced to prevent attacks.
+       is_correct: true
+    explanation: |
+      Correct: Enable AWS Shield Advanced to prevent attacks.
+      Incorrect: The other options do not provide comprehensive DDoS protection.
+
+  - id: q170
+    type: multiple_choice
+    question: |
+      A company’s web application is running on Amazon EC2 instances behind an Application Load Balancer. The company recently changed its policy, which now requires the application to be accessed from one specific country only.
+    options:
+     - text: Configure AWS WAF on the Application Load Balancer in a VPC.
+       is_correct: true
+    explanation: |
+      Correct: Configure AWS WAF on the Application Load Balancer in a VPC.
+      Incorrect: The other options do not enforce geographic restrictions effectively.
+
+  - id: q171
+    type: multiple_choice
+    question: |
+      A company provides an API to its users that automates inquiries for tax computations based on item prices. The company experiences a larger number of inquiries during the holiday season only that cause slower response times. A solutions architect needs to design a solution that is scalable and elastic.
+      What should the solutions architect do to accomplish this?
+    options:
+     - text: Design a REST API using Amazon API Gateway that accepts the item names. API Gateway passes item names to AWS Lambda for tax computations.
+       is_correct: true
+    explanation: |
+      Correct: Design a REST API using Amazon API Gateway that accepts the item names. API Gateway passes item names to AWS Lambda for tax computations.
+      Incorrect: The other options do not provide scalability and elasticity.
+
+  - id: q172
+    type: multiple_choice
+    question: |
+      A solutions architect is creating a new Amazon CloudFront distribution for an application. Some of the information submitted by users is sensitive. The application uses HTTPS but needs another layer of security. The sensitive information should be protected throughout the entire application stack, and access to the information should be restricted to certain applications.
+      Which action should the solutions architect take?
+    options:
+     - text: Configure a CloudFront field-level encryption profile.
+       is_correct: true
+    explanation: |
+      Correct: Configure a CloudFront field-level encryption profile.
+      Incorrect: The other options do not provide the required level of security.
+
+  - id: q173
+    type: multiple_choice
+    question: |
+      A gaming company hosts a browser-based application on AWS. The users of the application consume a large number of videos and images that are stored in Amazon S3. This content is the same for all users.
+      The application has increased in popularity, and millions of users worldwide accessing these media files. The company wants to provide the files to the users while reducing the load on the origin.
+      Which solution meets these requirements MOST cost-effectively?
+    options:
+     - text: Deploy an Amazon CloudFront web distribution in front of the S3 bucket.
+       is_correct: true
+    explanation: |
+      Correct: Deploy an Amazon CloudFront web distribution in front of the S3 bucket.
+      Incorrect: The other options do not provide cost-effective scalability.
+
+  - id: q174
+    type: multiple_choice
+    question: |
+      A company has a multi-tier application that runs six front-end web servers in an Amazon EC2 Auto Scaling group in a single Availability Zone behind an Application Load Balancer (ALB). A solutions architect needs to modify the infrastructure to be highly available without modifying the application.
+      Which architecture should the solutions architect choose that provides high availability?
+    options:
+     - text: Modify the Auto Scaling group to use three instances across each of two Availability Zones.
+       is_correct: true
+    explanation: |
+      Correct: Modify the Auto Scaling group to use three instances across each of two Availability Zones.
+      Incorrect: The other options do not provide high availability.
+
+  - id: q175
+    type: multiple_choice
+    question: |
+      An ecommerce company has an order-processing application that uses Amazon API Gateway and an AWS Lambda function. The application stores data in an Amazon Aurora PostgreSQL database. During a recent sales event, a sudden surge in customer orders occurred. Some customers experienced timeouts, and the application did not process the orders of those customers.
+      A solutions architect determined that the CPU utilization and memory utilization were high on the database because of a large number of open connections. The solutions architect needs to prevent the timeout errors while making the least possible changes to the application.
+      Which solution will meet these requirements?
+    options:
+     - text: Use Amazon RDS Proxy to create a proxy for the database. Modify the Lambda function to use the RDS Proxy endpoint instead of the database endpoint.
+       is_correct: true
+    explanation: |
+      Correct: Use Amazon RDS Proxy to create a proxy for the database. Modify the Lambda function to use the RDS Proxy endpoint instead of the database endpoint.
+      Incorrect: The other options do not address the issue of high database utilization effectively.
+
+  - id: q176
+    type: multiple_choice
+    question: |
+      An application runs on Amazon EC2 instances in private subnets. The application needs to access an Amazon DynamoDB table.
+      What is the MOST secure way to access the table while ensuring that the traffic does not leave the AWS network?
+    options:
+     - text: Use a VPC endpoint for DynamoDB.
+       is_correct: true
+    explanation: |
+      Correct: Use a VPC endpoint for DynamoDB.
+      Incorrect: The other options do not ensure that the traffic remains within the AWS network.
+
+  - id: q177
+    type: multiple_choice
+    question: |
+      An entertainment company is using Amazon DynamoDB to store media metadata. The application is read intensive and experiencing delays. The company does not have staff to handle additional operational overhead and needs to improve the performance efficiency of DynamoDB without reconfiguring the application.
+      What should a solutions architect recommend to meet this requirement?
+    options:
+     - text: Use Amazon DynamoDB Accelerator (DAX).
+       is_correct: true
+    explanation: |
+      Correct: Use Amazon DynamoDB Accelerator (DAX).
+      Incorrect: The other options do not improve performance efficiency without additional operational overhead.
+
+  - id: q178
+    type: multiple_choice
+    question: |
+      A company’s infrastructure consists of Amazon EC2 instances and an Amazon RDS DB instance in a single AWS Region. The company wants to back up its data in a separate Region.
+      Which solution will meet these requirements with the LEAST operational overhead?
+    options:
+     - text: Use AWS Backup to copy EC2 backups and RDS backups to the separate Region.
+       is_correct: true
+    explanation: |
+      Correct: Use AWS Backup to copy EC2 backups and RDS backups to the separate Region.
+      Incorrect: The other options involve higher operational overhead.
+
+  - id: q179
+    type: multiple_choice
+    question: |
+      A solutions architect needs to securely store a database user name and password that an application uses to access an Amazon RDS DB instance. The application that accesses the database runs on an Amazon EC2 instance. The solutions architect wants to create a secure parameter in AWS Systems Manager Parameter Store.
+      What should the solutions architect do to meet this requirement?
+    options:
+     - text: Create an IAM role that has read access to the Parameter Store parameter. Allow Decrypt access to an AWS Key Management Service (AWS KMS) key that is used to encrypt the parameter. Assign this IAM role to the EC2 instance.
+       is_correct: true
+    explanation: |
+      Correct: Create an IAM role that has read access to the Parameter Store parameter. Allow Decrypt access to an AWS Key Management Service (AWS KMS) key that is used to encrypt the parameter. Assign this IAM role to the EC2 instance.
+      Incorrect: The other options do not provide the required security and access control.
+
+  - id: q180
+    type: multiple_choice
+    question: |
+      A company is designing a cloud communications platform that is driven by APIs. The application is hosted on Amazon EC2 instances behind a Network Load Balancer (NLB). The company uses Amazon API Gateway to provide external users with access to the application through APIs. The company wants to protect the platform against web exploits like SQL injection and also wants to detect and mitigate large, sophisticated DDoS attacks.
+      Which combination of solutions provides the MOST protection? (Choose two.)
+    options:
+     - text: Use AWS Shield Advanced with the NLB.
+       is_correct: true
+     - text: Use AWS WAF to protect Amazon API Gateway.
+       is_correct: true
+    explanation: |
+      Correct: Use AWS Shield Advanced with the NLB. Use AWS WAF to protect Amazon API Gateway.
+      Incorrect: The other options do not provide comprehensive protection against web exploits and DDoS attacks.
+
+  - id: q181
+    type: multiple_choice
+    question: |
+      A company has a legacy data processing application that runs on Amazon EC2 instances. Data is processed sequentially, but the order of results does not matter. The application uses a monolithic architecture. The only way that the company can scale the application to meet increased demand is to increase the size of the instances.
+      The company’s developers have decided to rewrite the application to use a microservices architecture on Amazon Elastic Container Service (Amazon ECS).
+      What should a solutions architect recommend for communication between the microservices?
+    options:
+     - text: Create an Amazon Simple Queue Service (Amazon SQS) queue. Add code to the data producers, and send data to the queue. Add code to the data consumers to process data from the queue.
+       is_correct: true
+    explanation: |
+      Correct: Create an Amazon Simple Queue Service (Amazon SQS) queue. Add code to the data producers, and send data to the queue. Add code to the data consumers to process data from the queue.
+      Incorrect: The other options do not provide the required scalability and decoupling.
+
+  - id: q182
+    type: multiple_choice
+    question: |
+      A company wants to migrate its MySQL database from on premises to AWS. The company recently experienced a database outage that significantly impacted the business. To ensure this does not happen again, the company wants a reliable database solution on AWS that minimizes data loss and stores every transaction on at least two nodes.
+      Which solution meets these requirements?
+    options:
+     - text: Create an Amazon RDS MySQL DB instance with Multi-AZ functionality enabled to synchronously replicate the data.
+       is_correct: true
+    explanation: |
+      Correct: Create an Amazon RDS MySQL DB instance with Multi-AZ functionality enabled to synchronously replicate the data.
+      Incorrect: The other options do not provide the required reliability and data replication.
+
+  - id: q183
+    type: multiple_choice
+    question: |
+      A company is building a new dynamic ordering website. The company wants to minimize server maintenance and patching. The website must be highly available and must scale read and write capacity as quickly as possible to meet changes in user demand.
+      Which solution will meet these requirements?
+    options:
+     - text: Host static content in Amazon S3. Host dynamic content by using Amazon API Gateway and AWS Lambda. Use Amazon DynamoDB with on-demand capacity for the database. Configure Amazon CloudFront to deliver the website content.
+       is_correct: true
+    explanation: |
+      Correct: Host static content in Amazon S3. Host dynamic content by using Amazon API Gateway and AWS Lambda. Use Amazon DynamoDB with on-demand capacity for the database. Configure Amazon CloudFront to deliver the website content.
+      Incorrect: The other options do not minimize server maintenance and patching.
+
+  - id: q184
+    type: multiple_choice
+    question: |
+      A company has an AWS account used for software engineering. The AWS account has access to the company’s on-premises data center through a pair of AWS Direct Connect connections. All non-VPC traffic routes to the virtual private gateway.
+      A development team recently created an AWS Lambda function through the console. The development team needs to allow the function to access a database that runs in a private subnet in the company’s data center.
+      Which solution will meet these requirements?
+    options:
+     - text: Configure the Lambda function to run in the VPC with the appropriate security group.
+       is_correct: true
+    explanation: |
+      Correct: Configure the Lambda function to run in the VPC with the appropriate security group.
+      Incorrect: The other options do not provide the required connectivity to the private subnet.
+
+  - id: q185
+    type: multiple_choice
+    question: |
+      A company runs an application using Amazon ECS. The application creates resized versions of an original image and then makes Amazon S3 API calls to store the resized images in Amazon S3.
+      How can a solutions architect ensure that the application has permission to access Amazon S3?
+    options:
+     - text: Create an IAM role with S3 permissions, and then specify that role as the taskRoleArn in the task definition.
+       is_correct: true
+    explanation: |
+      Correct: Create an IAM role with S3 permissions, and then specify that role as the taskRoleArn in the task definition.
+      Incorrect: The other options do not provide the required permissions for the ECS task.
+
+  - id: q186
+    type: multiple_choice
+    question: |
+      A company has a Windows-based application that must be migrated to AWS. The application requires the use of a shared Windows file system attached to multiple Amazon EC2 Windows instances that are deployed across multiple Availability Zones.
+      What should a solutions architect do to meet this requirement?
+    options:
+     - text: Configure Amazon FSx for Windows File Server. Mount the Amazon FSx file system to each Windows instance.
+       is_correct: true
+    explanation: |
+      Correct: Configure Amazon FSx for Windows File Server. Mount the Amazon FSx file system to each Windows instance.
+      Incorrect: The other options do not provide a shared Windows file system across multiple Availability Zones.
+
+  - id: q187
+    type: multiple_choice
+    question: |
+      A company is developing an ecommerce application that will consist of a load-balanced front end, a container-based application, and a relational database. A solutions architect needs to create a highly available solution that operates with as little manual intervention as possible.
+      Which solutions meet these requirements? (Choose two.)
+    options:
+     - text: Create an Amazon RDS DB instance in Multi-AZ mode.
+       is_correct: true
+     - text: Create an Amazon Elastic Container Service (Amazon ECS) cluster with a Fargate launch type to handle the dynamic application load.
+       is_correct: true
+    explanation: |
+      Correct: Create an Amazon RDS DB instance in Multi-AZ mode. Create an Amazon Elastic Container Service (Amazon ECS) cluster with a Fargate launch type to handle the dynamic application load.
+      Incorrect: The other options do not provide high availability or require more manual intervention.
+
+  - id: q188
+    type: multiple_choice
+    question: |
+      A company uses Amazon S3 as its data lake. The company has a new partner that must use SFTP to upload data files. A solutions architect needs to implement a highly available SFTP solution that minimizes operational overhead.
+      Which solution will meet these requirements?
+    options:
+     - text: Use AWS Transfer Family to configure an SFTP-enabled server with a publicly accessible endpoint. Choose the S3 data lake as the destination.
+       is_correct: true
+    explanation: |
+      Correct: Use AWS Transfer Family to configure an SFTP-enabled server with a publicly accessible endpoint. Choose the S3 data lake as the destination.
+      Incorrect: The other options do not minimize operational overhead or provide high availability.
+
+  - id: q189
+    type: multiple_choice
+    question: |
+      A company needs to store contract documents. A contract lasts for 5 years. During the 5-year period, the company must ensure that the documents cannot be overwritten or deleted. The company needs to encrypt the documents at rest and rotate the encryption keys automatically every year.
+      Which combination of steps should a solutions architect take to meet these requirements with the LEAST operational overhead? (Choose two.)
+    options:
+     - text: Store the documents in Amazon S3. Use S3 Object Lock in compliance mode.
+       is_correct: true
+     - text: Use server-side encryption with AWS Key Management Service (AWS KMS) customer managed keys. Configure key rotation.
+       is_correct: true
+    explanation: |
+      Correct: Store the documents in Amazon S3. Use S3 Object Lock in compliance mode. Use server-side encryption with AWS Key Management Service (AWS KMS) customer managed keys. Configure key rotation.
+      Incorrect: The other options do not meet the requirements or involve higher operational overhead.
+
+  - id: q190
+    type: multiple_choice
+    question: |
+      A company has a web application that is based on Java and PHP. The company plans to move the application from on premises to AWS. The company needs the ability to test new site features frequently. The company also needs a highly available and managed solution that requires minimum operational overhead.
+      Which solution will meet these requirements?
+    options:
+     - text: Deploy the web application to an AWS Elastic Beanstalk environment. Use URL swapping to switch between multiple Elastic Beanstalk environments for feature testing.
+       is_correct: true
+    explanation: |
+      Correct: Deploy the web application to an AWS Elastic Beanstalk environment. Use URL swapping to switch between multiple Elastic Beanstalk environments for feature testing.
+      Incorrect: The other options do not provide the required testing capability or involve higher operational overhead.
+

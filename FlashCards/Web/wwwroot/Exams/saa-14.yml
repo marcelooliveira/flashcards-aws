@@ -1,0 +1,476 @@
+questions:
+  - id: q651
+    type: multiple_choice
+    question:
+    options:
+     - text: Transition the objects to S3 Standard-Infrequent Access (S3 Standard-IA) after 180 days, S3 Glacier Instant Retrieval after 360 days, and S3 Glacier Deep Archive after 5 years.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: S3 Standard-IA (instead of One Zone-IA) ensures high durability across multiple AZs for infrequent access.
+Glacier Instant Retrieval meets the "instant availability" requirement after 360 days, while Glacier Deep Archive is cost-effective for audits after 5 years.
+(Option A/B use less durable One Zone-IA, and Option D uses slower Glacier Flexible Retrieval, which violates the "instant" requirement.)
+      Incorrect: 
+        "***replace later***"
+
+  - id: q652
+    type: multiple_choice
+    question:
+    options:
+     - text: Configure a transient cluster with primary/core nodes on On-Demand Instances and task nodes on Spot Instances.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Transient clusters are cost-effective for short workloads. Spot Instances reduce costs for non-critical task nodes.
+Long-running clusters (Options A/D) are unnecessary for a 6-hour workload.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q653
+    type: multiple_choice
+    question:
+    options:
+     - text: Create a Lambda function triggered by EventBridge (via CloudTrail) to tag resources based on the RDS cost center DB.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: EventBridge + Lambda automates real-time tagging without manual intervention.
+SCPs (Option A) cannot dynamically tag resources, and scheduled rules (Option C) are not event-driven.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q654
+    type: multiple_choice
+    question:
+    options:
+     - text: Use CloudFront + S3 for static content, ALB + ECS Fargate for PHP, and Multi-AZ ElastiCache for Redis.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Fully managed services (ECS, ElastiCache) ensure high availability. CloudFront improves static content delivery.
+Elastic Beanstalk (Option A) lacks decoupling, and Lambda (Option B) is unsuitable for PHP sessions.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q655
+    type: multiple_choice
+    question:
+    options:
+     - text: Create a public ALB + Associate a WAF web ACL with the endpoint.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: ALB supports sticky sessions (unlike NLB/GWLB). WAF provides security.
+Elastic IPs (Option D) are not scalable.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q656
+    type: multiple_choice
+    question:
+    options:
+     - text: Store images in S3 Standard-IA and deliver via static website.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Standard-IA is cost-effective for rarely accessed images. Static websites simplify delivery.
+EBS/EFS (Options A/B) are expensive and lack S3’s durability.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q657
+    type: multiple_choice
+    question:
+    options:
+     - text: Create a shared prefix list via AWS RAM and reference it in security groups.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Prefix lists centralize CIDR management. AWS RAM enables cross-account sharing.
+Firewall Manager (Option D) is overkill for CIDR updates.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q658
+    type: multiple_choice
+    question:
+    options:
+     - text: Deploy compute-optimized EC2 in a cluster placement group + Use FSx for NetApp ONTAP.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Cluster placement minimizes latency. FSx for ONTAP supports multi-protocol (NFS/SMB) access.
+Lustre (Option C) lacks SMB support.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q659
+    type: multiple_choice
+    question:
+    options:
+     - text: Use AWS Snowball Edge Storage Optimized.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Snowball Edge is ideal for large offline transfers (50 TB in 2 weeks) without VPN bottlenecks.
+DataSync (Option A) is for online transfers; Direct Connect (Option B) is too slow.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q660
+    type: multiple_choice
+    question:
+    options:
+     - text: Configure scheduled scaling to launch instances before peak hours.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Proactively scales instances to handle predictable traffic spikes.
+Dynamic scaling (Options B/C) reacts too slowly for known peaks.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q661
+    type: multiple_choice
+    question:
+    options:
+     - text: Use Amazon RDS Proxy for connection pooling.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: RDS Proxy manages scaling connections with minimal code changes.
+DynamoDB (Option A) is incompatible with RDS.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q662
+    type: multiple_choice
+    question:
+    options:
+     - text: Delete nonessential snapshots + use Data Lifecycle Manager.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Automates snapshot retention per policy, reducing costs.
+Manual resizing (Options A/B) adds overhead.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q663
+    type: multiple_choice
+    question:
+    options:
+     - text: Restrict S3/RDS access via VPC endpoints + security groups.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: VPC endpoints keep traffic private. Security groups limit access to ECS subnets.
+KMS (Options A/B) doesn’t restrict network access.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q664
+    type: multiple_choice
+    question:
+    options:
+     - text: Use Elastic Beanstalk with burstable instances (unlimited mode) + request-based scaling.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Burstable instances handle CPU spikes cost-effectively. Request-based scaling matches demand.
+Compute-optimized instances (Option B) are overprovisioned for intermittent spikes.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q665
+    type: multiple_choice
+    question:
+    options:
+     - text: Use AWS CloudFormation + AWS Config.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: CloudFormation automates infrastructure; Config tracks changes for auditing.
+Service Catalog (Options C/D) is for governance, not change tracking.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q666
+    type: multiple_choice
+    question:
+    options:
+     - text: Migrate DB to RDS Multi-AZ + Use ALB + Auto Scaling for EC2.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: RDS Multi-AZ ensures DB high availability. ALB + Auto Scaling distributes traffic across AZs.
+DynamoDB (Option C) requires code changes; DataSync (Option D) doesn’t solve HA.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q667
+    type: multiple_choice
+    question:
+    options:
+     - text: Create S3 gateway endpoints.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Gateway endpoints allow secure S3 access via Direct Connect/VPC without internet.
+Interface endpoints (Option C) are for private-link services, not S3.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q668
+    type: multiple_choice
+    question:
+    options:
+     - text: Create a tag policy in Organizations with allowed application names.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Tag policies enforce standardized tagging across accounts.
+IAM policies (Option A) cannot validate tag values.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q669
+    type: multiple_choice
+    question:
+    options:
+     - text: Use Secrets Manager with RDS for automated password rotation.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Secrets Manager automates rotation every 30 days with zero operational effort.
+Manual rotation (Option B) or Parameter Store (Option D) lacks automation.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q670
+    type: multiple_choice
+    question:
+    options:
+     - text: Choose provisioned mode with calculated RCU/WCU.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Provisioned mode is cost-effective for predictable weekly workloads.
+On-demand (Option A) is expensive for infrequent use.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q671
+    type: multiple_choice
+    question:
+    options:
+     - text: Create a Cost Anomaly Detection monitor.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Automatically detects and alerts on unusual spending.
+CloudWatch (Option D) lacks built-in anomaly detection.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q672
+    type: multiple_choice
+    question:
+    options:
+     - text: Use AWS Glue crawler + Athena for ad-hoc queries.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Glue catalogs data; Athena provides serverless SQL queries.
+EMR (Option C) adds operational overhead.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q673
+    type: multiple_choice
+    question:
+    options:
+     - text: Use S3 File Gateway + Lifecycle policy to Glacier Deep Archive.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: File Gateway extends on-prem storage; Glacier Deep Archive is cost-effective for archives.
+DataSync (Option A) doesn’t automate tiering.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q674
+    type: multiple_choice
+    question:
+    options:
+     - text: Create a read replica + Use ElastiCache for caching.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Read replicas offload read traffic. ElastiCache reduces DB load.
+Multi-AZ (Option C) doesn’t scale reads; auto scaling (Option A) isn’t for RDS.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q675
+    type: multiple_choice
+    question:
+    options:
+     - text: Lock the EBS snapshots.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Prevents accidental deletion without IAM changes.
+Recycle Bin (Option C) requires tagging; IAM (Option B) changes permissions.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q676
+    type: multiple_choice
+    question:
+    options:
+     - text: Use VPC Flow Logs ? CloudWatch ? Kinesis Firehose ? OpenSearch.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Flow Logs capture traffic; Firehose streams to OpenSearch.
+CloudTrail (Options C/D) logs API calls, not network traffic.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q677
+    type: multiple_choice
+    question:
+    options:
+     - text: Use mixed On-Demand + Spot Instances in managed node groups.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Balances cost (Spot) and reliability (On-Demand) for infrequent dev workloads.
+All-Spot (Option A) risks interruptions; self-managed ASG (Option C) adds overhead.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q678
+    type: multiple_choice
+    question:
+    options:
+     - text: Use customer-managed KMS keys (SSE-KMS).
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Grants full control over key rotation/access. SSE-S3 (Option A) lacks key management.
+Client-side encryption (Option D) is complex.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q679
+    type: multiple_choice
+    question:
+    options:
+     - text: Enable versioning + Set 30-day retention + Expire objects after 30 days.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Versioning + retention policies automate compliance. Lifecycle rules expire objects.
+Object Lock (Option A) prevents deletion; tagging (Option F) doesn’t enforce retention.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q680
+    type: multiple_choice
+    question:
+    options:
+     - text: Use DataSync with "changed data only" mode.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Continuously syncs only modified files to S3/EFS.
+Lambda (Option B) requires custom code; full syncs (Option C) are inefficient.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q681
+    type: multiple_choice
+    question:
+    options:
+     - text: Use customer-managed KMS keys for EBS encryption.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Allows control over key rotation. AWS-managed keys (Option B) limit rotation flexibility.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q682
+    type: multiple_choice
+    question:
+    options:
+     - text: Use IAM + AWS Config + Systems Manager for enforcement.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Config detects noncompliant volumes; Systems Manager automates remediation.
+Macie (Option C) is for data classification, not encryption.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q683
+    type: multiple_choice
+    question:
+    options:
+     - text: Migrate web tier to ALB + Auto Scaling + Migrate DB to RDS Multi-AZ.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Auto Scaling improves web tier resiliency; RDS Multi-AZ ensures DB HA.
+Lambda (Option D) requires code changes; DynamoDB (Option E) is incompatible.
+      Incorrect: 
+        "***replace later***"
+
+  - id: q684
+    type: multiple_choice
+    question:
+    options:
+     - text: Deploy in AWS Local Zones.
+       is_correct: true
+     - text: "***dont't touch, replace later***"
+       is_correct: false
+    explanation: |
+      Correct: Local Zones provide single-digit latency near eu-central-1 while complying with regulations.
+CloudFront (Option A) is for caching, not app hosting.
+      Incorrect: 
+        "***replace later***"

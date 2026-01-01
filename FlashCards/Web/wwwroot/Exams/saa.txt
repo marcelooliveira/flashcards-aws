@@ -673,7 +673,7 @@ D. Create read replicas for the database. Configure the read replicas with the s
 Which solution will satisfy these requirements?
 D. Create an Amazon FSx for Windows File Server file system on AWS and set the Active Directory domain for authentication.
 
-IMP>>>>>>98.An image-processing company has a web application that users use to upload images. The application uploads the images into an Amazon S3 bucket. The company has set up S3 event notifications to publish the object creation events to an Amazon Simple Queue Service (Amazon SQS) standard queue. The SQS queue serves as the event source for an AWS Lambda function that processes the images and sends the results to users through email.
+98.An image-processing company has a web application that users use to upload images. The application uploads the images into an Amazon S3 bucket. The company has set up S3 event notifications to publish the object creation events to an Amazon Simple Queue Service (Amazon SQS) standard queue. The SQS queue serves as the event source for an AWS Lambda function that processes the images and sends the results to users through email.
 Users report that they are receiving multiple email messages for every uploaded image. A solutions architect determines that SQS messages are invoking the Lambda function more than once, resulting in multiple email messages.
 What should the solutions architect do to resolve this issue with the LEAST operational overhead?
 C. Increase the visibility timeout in the SQS queue to a value that is greater than the total of the function timeout and the batch window
@@ -790,11 +790,11 @@ There has been an increase in traffic recently, and the operations team determin
 What should a solutions architect do to increase the application's performance?
 D. Import the SSL certificate into AWS Certificate Manager (ACM). Create an Application Load Balancer with an HTTPS listener that uses the SSL certificate from ACM.
 
-IMP>>>>>>124.A company has a highly dynamic batch processing job that uses many Amazon EC2 instances to complete it. The job is stateless in nature, can be started and stopped at any given time with no negative impact, and typically takes upwards of 60 minutes total to complete. The company has asked a solutions architect to design a scalable and cost-effective solution that meets the requirements of the job.
+124.A company has a highly dynamic batch processing job that uses many Amazon EC2 instances to complete it. The job is stateless in nature, can be started and stopped at any given time with no negative impact, and typically takes upwards of 60 minutes total to complete. The company has asked a solutions architect to design a scalable and cost-effective solution that meets the requirements of the job.
 What should the solutions architect recommend? 
 A. Implement EC2 Spot Instances.
 
-IMP>>>>>>>125.A company runs its two-tier ecommerce website on AWS. The web tier consists of a load balancer that sends traffic to Amazon EC2 instances. The database tier uses an Amazon RDS DB instance. The EC2 instances and the RDS DB instance should not be exposed to the public internet. The EC2 instances require internet access to complete payment processing of orders through a third-party web service. The application must be highly available.
+>125.A company runs its two-tier ecommerce website on AWS. The web tier consists of a load balancer that sends traffic to Amazon EC2 instances. The database tier uses an Amazon RDS DB instance. The EC2 instances and the RDS DB instance should not be exposed to the public internet. The EC2 instances require internet access to complete payment processing of orders through a third-party web service. The application must be highly available.
 Which combination of configuration options will meet these requirements? (Choose two.) 
  A. Use an Auto Scaling group to launch the EC2 instances in private subnets. Deploy an RDS Multi-AZ DB instance in private subnets.
 E. Configure a VPC with two public subnets, two private subnets, and two NAT gateways across two Availability Zones. Deploy an Application Load Balancer in the public subnets. 
@@ -842,7 +842,7 @@ A. Create a new S3 bucket. Load the data into the new S3 bucket. Use S3 Cross-Re
 Which solution will mast these requirements?
 D. Ask the provider to create a VPC endpoint for the target service. Use AWS PrivateLink to connect to the target service.
 
-IMP>>>>>>>>136.A company is migrating its on-premises PostgreSQL database to Amazon Aurora PostgreSQL. The on-premises database must remain online and accessible during the migration. The Aurora database must remain synchronized with the on-premises database.
+136.A company is migrating its on-premises PostgreSQL database to Amazon Aurora PostgreSQL. The on-premises database must remain online and accessible during the migration. The Aurora database must remain synchronized with the on-premises database.
 Which combination of actions must a solutions architect take to meet these requirements? (Choose two.) 
 A. Create an ongoing replication task.
 D. Convert the database schema by using the AWS Schema Conversion Tool (AWS SCT). 
@@ -861,7 +861,7 @@ The reporting team wants to move the files automatically analysis S3 bucket as t
 What should a solutions architect do to meet these requirements with the LEAST operational overhead?
 A. Create a Lambda function to copy the files to the analysis S3 bucket. Create an S3 event notification for the analysis S3 bucket. Configure Lambda and SageMaker Pipelines as destinations of the event notification. Configure s3:ObjectCreated:Put as the event type. 
 
-IMP>>>>>>>>>140.A solutions architect needs to help a company optimize the cost of running an application on AWS. The application will use Amazon EC2 instances, AWS Fargate, and AWS Lambda for compute within the architecture.
+140.A solutions architect needs to help a company optimize the cost of running an application on AWS. The application will use Amazon EC2 instances, AWS Fargate, and AWS Lambda for compute within the architecture.
 The EC2 instances will run the data ingestion layer of the application. EC2 usage will be sporadic and unpredictable. Workloads that run on EC2 instances can be interrupted at any time. The application front end will run on Fargate, and Lambda will serve the API layer. The front-end utilization and API layer utilization will be predictable over the course of the next year.
 Which combination of purchasing options will provide the MOST cost-effective solution for hosting this application? (Choose two.) 
 A. Use Spot Instances for the data ingestion layer
@@ -896,7 +896,7 @@ B. Use Reserved Instances for the baseline level of usage. Use Spot instances fo
 Which storage option meets these requirements MOST cost-effectively? 
 B. Store the logs in Amazon S3. Use S3 Lifecycle policies to move logs more than 1 month old to S3 Glacier Deep Archive. 
 
-IMP>>>>>>148. A company has a data ingestion workflow that includes the following components:
+148. A company has a data ingestion workflow that includes the following components:
 An Amazon Simple Notification Service (Amazon SNS) topic that receives notifications about new data deliveries
 An AWS Lambda function that processes and stores the data
 The ingestion workflow occasionally fails because of network connectivity issues. When failure occurs, the corresponding data is not ingested unless the company manually reruns the job.
@@ -911,7 +911,7 @@ A. Create an Amazon Simple Queue Service (Amazon SQS) FIFO queue to hold message
 What should the solutions architect do to meet these requirements? 
 A. Create Amazon CloudWatch composite alarms where possible.
 
-IMP>>>>>151.A company wants to migrate its on-premises data center to AWS. According to the company's compliance requirements, the company can use only the ap-northeast-3 Region. Company administrators are not permitted to connect VPCs to the internet.
+151.A company wants to migrate its on-premises data center to AWS. According to the company's compliance requirements, the company can use only the ap-northeast-3 Region. Company administrators are not permitted to connect VPCs to the internet.
 Which solutions will meet these requirements? (Choose two.) 
 
     A. Use AWS Control Tower to implement data residency guardrails to deny internet access and deny access to all AWS Regions except ap-northeast-3.
@@ -941,7 +941,7 @@ Which combination of steps will meet these requirements with the LEAST operation
 A. Use Amazon Athena for one-time queries. Use Amazon QuickSight to create dashboards for KPIs.
 C. Create custom AWS Lambda functions to move the individual records from the databases to an Amazon Redshift cluster.
 
-IMP>>>>>157.A company stores data in an Amazon Aurora PostgreSQL DB cluster. The company must store all the data for 5 years and must delete all the data after 5 years. The company also must indefinitely keep audit logs of actions that are performed within the database. Currently, the company has automated backups configured for Aurora.
+157.A company stores data in an Amazon Aurora PostgreSQL DB cluster. The company must store all the data for 5 years and must delete all the data after 5 years. The company also must indefinitely keep audit logs of actions that are performed within the database. Currently, the company has automated backups configured for Aurora.
 
 Which combination of steps should a solutions architect take to meet these requirements? (Choose two.) 
  A. Take a manual snapshot of the DB cluster.
@@ -950,13 +950,13 @@ C. Configure automated backup retention for 5 years.
 D. Configure an Amazon CloudWatch Logs export for the DB cluster.
 E. Use AWS Backup to take the backups and to keep the backups for 5 years.
 
-IMP>>>>>158.A solutions architect is optimizing a website for an upcoming musical event. Videos of the performances will be streamed in real time and then will be available on demand. The event is expected to attract a global online audience.
+158.A solutions architect is optimizing a website for an upcoming musical event. Videos of the performances will be streamed in real time and then will be available on demand. The event is expected to attract a global online audience.
 
 Which service will improve the performance of both the real-time and on-demand streaming?
  A. Amazon CloudFront
 B. AWS Global Accelerator 
 
-IMP>>>>>>>>159.A company is running a publicly accessible serverless application that uses Amazon API Gateway and AWS Lambda. The application’s traffic recently spiked due to fraudulent requests from botnets.
+>>159.A company is running a publicly accessible serverless application that uses Amazon API Gateway and AWS Lambda. The application’s traffic recently spiked due to fraudulent requests from botnets.
 
 Which steps should a solutions architect take to block requests from unauthorized users? (Choose two.) 
 
@@ -966,7 +966,7 @@ Which steps should a solutions architect take to block requests from unauthorize
     D. Convert the existing public API to a private API. Update the DNS records to redirect users to the new API endpoint.
     E. Create an IAM role for each user attempting to access the API. A user will assume the role when making the API call.
 
-IMP>>>>>160.An ecommerce company hosts its analytics application in the AWS Cloud. The application generates about 300 MB of data each month. The data is stored in JSON format. The company is evaluating a disaster recovery solution to back up the data. The data must be accessible in milliseconds if it is needed, and the data must be kept for 30 days.
+160.An ecommerce company hosts its analytics application in the AWS Cloud. The application generates about 300 MB of data each month. The data is stored in JSON format. The company is evaluating a disaster recovery solution to back up the data. The data must be accessible in milliseconds if it is needed, and the data must be kept for 30 days.
 
 Which solution meets these requirements MOST cost-effectively? 
 
@@ -1016,7 +1016,7 @@ C. Configure AWS WAF on the Application Load Balancer in a VPC.
 What should the solutions architect do to accomplish this? 
 B. Design a REST API using Amazon API Gateway that accepts the item names. API Gateway passes item names to AWS Lambda for tax computations.
 
-IMP>>>>>>172.A solutions architect is creating a new Amazon CloudFront distribution for an application. Some of the information submitted by users is sensitive. The application uses HTTPS but needs another layer of security. The sensitive information should.be protected throughout the entire application stack, and access to the information should be restricted to certain applications.
+172.A solutions architect is creating a new Amazon CloudFront distribution for an application. Some of the information submitted by users is sensitive. The application uses HTTPS but needs another layer of security. The sensitive information should.be protected throughout the entire application stack, and access to the information should be restricted to certain applications.
 Which action should the solutions architect take? 
 
     A. Configure a CloudFront signed URL.
@@ -1046,7 +1046,7 @@ A. Use a VPC endpoint for DynamoDB.
 What should a solutions architect recommend to meet this requirement? 
 B. Use Amazon DynamoDB Accelerator (DAX). 
 
-IMP>>>>>>178.A company’s infrastructure consists of Amazon EC2 instances and an Amazon RDS DB instance in a single AWS Region. The company wants to back up its data in a separate Region.
+178.A company’s infrastructure consists of Amazon EC2 instances and an Amazon RDS DB instance in a single AWS Region. The company wants to back up its data in a separate Region.
 Which solution will meet these requirements with the LEAST operational overhead? 
 
     A. Use AWS Backup to copy EC2 backups and RDS backups to the separate Region.
@@ -1054,7 +1054,7 @@ Which solution will meet these requirements with the LEAST operational overhead?
     C. Create Amazon Machine Images (AMIs) of the EC2 instances. Copy the AMIs to the separate Region. Create a read replica for the RDS DB instance in the separate Region.
     D. Create Amazon Elastic Block Store (Amazon EBS) snapshots. Copy the EBS snapshots to the separate Region. Create RDS snapshots. Export the RDS snapshots to Amazon S3. Configure S3 Cross-Region Replication (CRR) to the separate Region.
 
-IMP>>>>>179. A solutions architect needs to securely store a database user name and password that an application uses to access an Amazon RDS DB instance. The application that accesses the database runs on an Amazon EC2 instance. The solutions architect wants to create a secure parameter in AWS Systems Manager Parameter Store.
+179. A solutions architect needs to securely store a database user name and password that an application uses to access an Amazon RDS DB instance. The application that accesses the database runs on an Amazon EC2 instance. The solutions architect wants to create a secure parameter in AWS Systems Manager Parameter Store.
 
 What should the solutions architect do to meet this requirement?
 
@@ -1081,7 +1081,7 @@ B. Create an Amazon RDS MySQL DB instance with Multi-AZ functionality enabled to
 Which solution will meet these requirements?
 A. Host static content in Amazon S3. Host dynamic content by using Amazon API Gateway and AWS Lambda. Use Amazon DynamoDB with on-demand capacity for the database. Configure Amazon CloudFront to deliver the website content.
 
-IMP>>>>>>>184.A company has an AWS account used for software engineering. The AWS account has access to the company’s on-premises data center through a pair of AWS Direct Connect connections. All non-VPC traffic routes to the virtual private gateway.
+>184.A company has an AWS account used for software engineering. The AWS account has access to the company’s on-premises data center through a pair of AWS Direct Connect connections. All non-VPC traffic routes to the virtual private gateway.
 A development team recently created an AWS Lambda function through the console. The development team needs to allow the function to access a database that runs in a private subnet in the company’s data center.
 Which solution will meet these requirements?
 
