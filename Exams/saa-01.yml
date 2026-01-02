@@ -560,11 +560,11 @@
     options:
      - text: Use Cost Explorer's granular filtering feature to perform an in-depth analysis of EC2 costs based on instance types.
        is_correct: true
-     - text: Export the billing data to Amazon S3 and use Amazon Athena to query the data.
+     - text: Export the billing data to Amazon S3. Use Amazon Athena to query and analyze the data for cost trends and scaling patterns.
        is_correct: false
-     - text: Use AWS Budgets to create a budget report for EC2 costs.
+     - text: Use AWS Budgets to create a detailed budget report for EC2 costs and identify scaling anomalies.
        is_correct: false
-     - text: Enable detailed billing reports and analyze the data in a third-party tool.
+     - text: Enable detailed billing reports and integrate the data into a third-party analytics tool for advanced cost analysis.
        is_correct: false
     explanation: |
       Correct: Cost Explorer's granular filtering allows for in-depth analysis of EC2 costs by instance type, providing insights with minimal operational overhead.
@@ -572,9 +572,6 @@
         - Exporting billing data to S3 and querying with Athena requires additional setup and management, increasing operational overhead.
         - AWS Budgets is useful for tracking costs but does not provide detailed analysis capabilities.
         - Using a third-party tool adds complexity and operational overhead compared to native AWS tools.
-    tags: 
-    difficulty: 
-    points: 
 
   - id: q25
     type: multiple_choice
@@ -585,11 +582,11 @@
     options:
      - text: Set up two Lambda functions. Configure one function to receive the information. Configure the other function to load the information into the database. Integrate the Lambda functions by using an Amazon Simple Queue Service (Amazon SQS) queue.
        is_correct: true
-     - text: Increase the Lambda quotas further and use Amazon Kinesis Data Streams to buffer the data before loading it into the database.
+     - text: Increase the Lambda quotas further and integrate Amazon Kinesis Data Streams to buffer and process the data before loading it into the database.
        is_correct: false
-     - text: Use Amazon RDS Proxy to manage connections between the Lambda function and the database.
+     - text: Use Amazon RDS Proxy to optimize and manage database connections between the Lambda function and the database.
        is_correct: false
-     - text: Deploy the application on Amazon ECS with an Auto Scaling group to handle the high data volumes.
+     - text: Deploy the application on Amazon ECS with an Auto Scaling group to handle the high data volumes and database interactions.
        is_correct: false
     explanation: |
       Correct: Dividing the functionality into two Lambda functions, integrated by SQS, allows for independent scaling and efficient resource allocation, reducing the impact of high data volumes.
@@ -597,9 +594,6 @@
         - Increasing Lambda quotas and using Kinesis adds complexity and does not minimize configuration effort compared to the SQS-based solution.
         - RDS Proxy helps manage database connections but does not address the scalability of the Lambda function itself.
         - Deploying the application on ECS increases operational overhead compared to a serverless architecture.
-    tags: 
-    difficulty: 
-    points: 
 
   - id: q26
     type: multiple_choice
@@ -609,11 +603,11 @@
     options:
      - text: Turn on AWS Config with the appropriate rules.
        is_correct: true
-     - text: Use Amazon CloudWatch to monitor S3 bucket changes.
+     - text: Use Amazon CloudWatch to monitor and log S3 bucket configuration changes for review.
        is_correct: false
-     - text: Enable AWS Trusted Advisor to check for unauthorized changes.
+     - text: Enable AWS Trusted Advisor to generate reports on unauthorized changes in S3 bucket configurations.
        is_correct: false
-     - text: Use AWS CloudTrail to block unauthorized changes.
+     - text: Use AWS CloudTrail to track and log API calls related to S3 bucket configurations.
        is_correct: false
     explanation: |
       Correct: AWS Config enables you to assess, audit, and evaluate the configurations of your AWS resources, monitoring and recording changes to S3 bucket configurations.
@@ -630,11 +624,11 @@
     options:
      - text: Share the dashboard from the CloudWatch console. Enter the product manager's email address, and complete the sharing steps. Provide a shareable link for the dashboard to the product manager.
        is_correct: true
-     - text: Create an IAM user for the product manager and grant access to the dashboard.
+     - text: Create an IAM user for the product manager, assign the necessary permissions, and provide the credentials for dashboard access.
        is_correct: false
-     - text: Export the dashboard data to a CSV file and email it to the product manager.
+     - text: Export the dashboard data to a CSV file and email the file to the product manager after each update.
        is_correct: false
-     - text: Use AWS Organizations to grant the product manager access to the dashboard.
+     - text: Use AWS Organizations to create a new account for the product manager and grant access to the dashboard.
        is_correct: false
     explanation: |
       Correct: CloudWatch allows sharing dashboards with specific email addresses, enabling secure, least-privilege access for users without AWS accounts.
@@ -651,11 +645,11 @@
     options:
      - text: Enable AWS Single Sign-On (AWS SSO) from the AWS SSO console. Create a one-way forest trust or a one-way domain trust to connect the company's self-managed Microsoft Active Directory with AWS SSO by using AWS Directory Service for Microsoft Active Directory.
        is_correct: true
-     - text: Use AWS Identity and Access Management (IAM) roles to manage user access across accounts.
+     - text: Use AWS Identity and Access Management (IAM) roles to configure cross-account access and manage user permissions.
        is_correct: false
-     - text: Deploy a third-party SSO solution and integrate it with AWS Organizations.
+     - text: Deploy a third-party SSO solution and integrate it with AWS Organizations for centralized user management.
        is_correct: false
-     - text: Use AWS Cognito to manage user authentication and access.
+     - text: Use AWS Cognito to create and manage user pools for authentication and access control.
        is_correct: false
     explanation: |
       Correct: AWS SSO with Directory Service and a trust to the on-premises Active Directory enables centralized SSO while maintaining on-premises user and group management.
@@ -673,11 +667,11 @@
     options:
      - text: Deploy a Network Load Balancer (NLB) and an associated target group. Associate the target group with the Auto Scaling group. Use the NLB as an AWS Global Accelerator endpoint in each Region.
        is_correct: true
-     - text: Use Amazon Route 53 latency-based routing to direct traffic to the appropriate Region.
+     - text: Use Amazon Route 53 latency-based routing policies to direct traffic to the Region with the lowest latency.
        is_correct: false
-     - text: Deploy an Application Load Balancer (ALB) and use AWS Global Accelerator to route traffic.
+     - text: Deploy an Application Load Balancer (ALB) in each Region and use AWS Global Accelerator to route traffic between Regions.
        is_correct: false
-     - text: Use AWS Direct Connect to route traffic between Regions.
+     - text: Use AWS Direct Connect to establish private connections between Regions and route traffic accordingly.
        is_correct: false
     explanation: |
       Correct: Using NLBs as Global Accelerator endpoints in each Region provides low-latency routing and automated failover for UDP-based VoIP services.
@@ -694,11 +688,11 @@
     options:
      - text: Create a snapshot when tests are completed. Terminate the DB instance and restore the snapshot when required.
        is_correct: true
-     - text: Use an Amazon Aurora Serverless DB cluster to run the tests.
+     - text: Use an Amazon Aurora Serverless DB cluster to run the tests and scale resources dynamically during the testing period.
        is_correct: false
-     - text: Enable Multi-AZ deployment for the DB instance to improve availability.
+     - text: Enable Multi-AZ deployment for the DB instance to improve availability and reduce downtime during testing.
        is_correct: false
-     - text: Use Reserved Instances for the DB instance to reduce costs.
+     - text: Use Reserved Instances for the DB instance to reduce costs for the monthly testing workload.
        is_correct: false
     explanation: |
       Correct: Creating a snapshot and terminating the DB instance saves costs when not in use. Restoring from the snapshot allows resuming tests as needed.
@@ -715,11 +709,11 @@
     options:
      - text: Use AWS Config rules to define and detect resources that are not properly tagged.
        is_correct: true
-     - text: Use AWS Trusted Advisor to monitor and enforce tagging compliance.
+     - text: Use AWS Trusted Advisor to monitor tagging compliance and generate reports for untagged resources.
        is_correct: false
-     - text: Manually review resource tags using the AWS Management Console.
+     - text: Manually review resource tags using the AWS Management Console and update missing tags as needed.
        is_correct: false
-     - text: Use Amazon CloudWatch to create alarms for missing tags.
+     - text: Use Amazon CloudWatch to create alarms for resources that are missing required tags.
        is_correct: false
     explanation: |
       Correct: AWS Config allows you to define rules that automatically check if resources are properly tagged, minimizing operational effort for compliance.
@@ -736,11 +730,11 @@
     options:
      - text: Create an Amazon S3 bucket and host the website there.
        is_correct: true
-     - text: Deploy the website on Amazon EC2 instances with an Elastic Load Balancer.
+     - text: Deploy the website on Amazon EC2 instances with an Elastic Load Balancer and configure auto-scaling for traffic spikes.
        is_correct: false
-     - text: Use Amazon RDS to store the website files and serve them directly.
+     - text: Use Amazon RDS to store the website files and serve them directly to users.
        is_correct: false
-     - text: Host the website on AWS Lambda with API Gateway.
+     - text: Host the website on AWS Lambda with API Gateway to handle requests and serve static content.
        is_correct: false
     explanation: |
       Correct: Amazon S3 is a highly scalable and cost-effective object storage service, ideal for hosting static websites with HTML, CSS, JS, and images.
@@ -757,11 +751,11 @@
     options:
      - text: Stream the transactions data into Amazon Kinesis Data Streams. Use AWS Lambda integration to remove sensitive data from every transaction and then store the transactions data in Amazon DynamoDB. Other applications can consume the transactions data off the Kinesis data stream.
        is_correct: true
-     - text: Use Amazon SQS to queue transactions and process them with an EC2 instance.
+     - text: Use Amazon SQS to queue transactions and process them with an EC2 instance before storing the data in a relational database.
        is_correct: false
-     - text: Store the transactions in Amazon RDS and use triggers to remove sensitive data.
+     - text: Store the transactions in Amazon RDS and use database triggers to remove sensitive data before sharing the data with other applications.
        is_correct: false
-     - text: Use Amazon EMR to process transactions and store them in Amazon S3.
+     - text: Use Amazon EMR to process transactions in batches and store the processed data in Amazon S3 for retrieval.
        is_correct: false
     explanation: |
       Correct: Kinesis Data Streams provides scalable, near-real-time streaming. Lambda can process and remove sensitive data before storing in DynamoDB for low-latency retrieval, while other apps can consume the stream.
@@ -778,11 +772,11 @@
     options:
      - text: Use AWS Config to track configuration changes and AWS CloudTrail to record API calls.
        is_correct: true
-     - text: Use Amazon CloudWatch Logs to monitor API calls and resource changes.
+     - text: Use Amazon CloudWatch Logs to monitor API calls and resource changes and generate compliance reports.
        is_correct: false
-     - text: Enable AWS Trusted Advisor to track configuration changes and API calls.
+     - text: Enable AWS Trusted Advisor to track configuration changes and API calls for auditing purposes.
        is_correct: false
-     - text: Use AWS Systems Manager to log configuration changes and API calls.
+     - text: Use AWS Systems Manager to log configuration changes and API calls for compliance tracking.
        is_correct: false
     explanation: |
       Correct: AWS Config tracks resource configuration changes, and CloudTrail records API calls, providing full visibility for compliance and auditing.
@@ -799,11 +793,11 @@
     options:
      - text: Enable AWS Shield Advanced and assign the ELB to it.
        is_correct: true
-     - text: Use AWS WAF to block DDoS attacks.
+     - text: Use AWS WAF to create rules that block DDoS traffic based on patterns and thresholds.
        is_correct: false
-     - text: Deploy a third-party firewall appliance in the VPC.
+     - text: Deploy a third-party firewall appliance in the VPC and configure it to detect and mitigate DDoS attacks.
        is_correct: false
-     - text: Use Security Groups to block DDoS traffic.
+     - text: Use Security Groups to block traffic from suspicious IP addresses and mitigate DDoS attacks.
        is_correct: false
     explanation: |
       Correct: AWS Shield Advanced provides expanded DDoS protection for ELB and other AWS resources, helping detect and mitigate large-scale attacks.
@@ -817,13 +811,13 @@
     question: |
       (Questão não fornecida no arquivo saa.txt. Pulei para a próxima questão numerada.)
     options:
-     - text: Use AWS Config to monitor resources.
+     - text: Use AWS Config to monitor resources and track configuration changes for compliance.
        is_correct: true
-     - text: Use AWS Trusted Advisor for compliance checks.
+     - text: Use AWS Trusted Advisor to perform compliance checks and generate resource reports.
        is_correct: false
-     - text: Use Amazon CloudWatch for resource tracking.
+     - text: Use Amazon CloudWatch to monitor resource metrics and generate alerts for changes.
        is_correct: false
-     - text: Use AWS Systems Manager for auditing.
+     - text: Use AWS Systems Manager to audit resource configurations and ensure compliance.
        is_correct: false
     explanation: |
       Correct: AWS Config is designed to monitor and track resource configurations for compliance and auditing.
@@ -840,11 +834,11 @@
     options:
      - text: Attach the appropriate IAM role to each existing instance and new instance. Use AWS Systems Manager Session Manager to establish a remote SSH session.
        is_correct: true
-     - text: Use a bastion host to access the EC2 instances.
+     - text: Use a bastion host to access the EC2 instances and configure it to log all SSH sessions for auditing.
        is_correct: false
-     - text: Open SSH ports in the Security Groups and use key pairs for access.
+     - text: Open SSH ports in the Security Groups and use key pairs for access while ensuring proper key rotation policies.
        is_correct: false
-     - text: Use AWS VPN to connect to the VPC and access the instances.
+     - text: Use AWS VPN to connect to the VPC and access the instances through private IP addresses.
        is_correct: false
     explanation: |
       Correct: Systems Manager Session Manager provides secure, auditable remote access to EC2 instances without open inbound ports or SSH keys, following AWS best practices.
@@ -861,11 +855,11 @@
     options:
      - text: Add an Amazon CloudFront distribution in front of the S3 bucket. Edit the Route 53 entries to point to the CloudFront distribution.
        is_correct: true
-     - text: Use AWS Global Accelerator to improve website performance.
+     - text: Use AWS Global Accelerator to route traffic to the S3 bucket and improve website performance.
        is_correct: false
-     - text: Deploy the website on Amazon EC2 instances in multiple Regions.
+     - text: Deploy the website on Amazon EC2 instances in multiple Regions and use Route 53 latency-based routing.
        is_correct: false
-     - text: Use Amazon RDS to cache the website content.
+     - text: Use Amazon RDS to cache the website content and reduce latency for global users.
        is_correct: false
     explanation: |
       Correct: CloudFront caches and delivers content from edge locations worldwide, reducing latency and improving performance for global users.
@@ -883,11 +877,11 @@
     options:
      - text: Change the storage type to Provisioned IOPS SSD.
        is_correct: true
-     - text: Scale the database vertically by increasing the instance size.
+     - text: Scale the database vertically by increasing the instance size and memory allocation.
        is_correct: false
-     - text: Use Amazon ElastiCache to cache the database queries.
+     - text: Use Amazon ElastiCache to cache the database queries and reduce read latency.
        is_correct: false
-     - text: Enable Multi-AZ deployment for the database.
+     - text: Enable Multi-AZ deployment for the database to improve availability and performance.
        is_correct: false
     explanation: |
       Correct: Provisioned IOPS SSD provides consistent, high-performance storage for workloads with high I/O requirements, reducing insert latency.
@@ -905,11 +899,11 @@
     options:
      - text: Create an Amazon Kinesis Data Firehose delivery stream to ingest the alerts. Configure the Kinesis Data Firehose stream to deliver the alerts to an Amazon S3 bucket. Set up an S3 Lifecycle configuration to transition data to Amazon S3 Glacier after 14 days.
        is_correct: true
-     - text: Use Amazon SQS to queue the alerts and process them with an EC2 instance.
+     - text: Use Amazon SQS to queue the alerts and process them with an EC2 instance before storing the data in Amazon S3.
        is_correct: false
-     - text: Deploy an Amazon RDS database to store the alerts and use a backup policy to archive older data.
+     - text: Deploy an Amazon RDS database to store the alerts and configure a backup policy to archive older data.
        is_correct: false
-     - text: Use Amazon DynamoDB to store the alerts and enable TTL (time-to-live) for older data.
+     - text: Use Amazon DynamoDB to store the alerts and enable TTL (time-to-live) for automatic deletion of older data.
        is_correct: false
     explanation: |
       Correct: Kinesis Data Firehose is fully managed for ingesting and delivering streaming data to S3. S3 Lifecycle policies automate archival to Glacier, minimizing operational overhead.
@@ -926,11 +920,11 @@
     options:
      - text: Create an Amazon AppFlow flow to transfer data between each SaaS source and the S3 bucket. Configure an S3 event notification to send events to an Amazon Simple Notification Service (Amazon SNS) topic when the upload to the S3 bucket is complete.
        is_correct: true
-     - text: Use AWS DataSync to transfer data from SaaS sources to the S3 bucket.
+     - text: Use AWS DataSync to automate the transfer of data from SaaS sources to the S3 bucket, ensuring efficient and reliable uploads.
        is_correct: false
-     - text: Deploy additional EC2 instances to handle the data transfer and notifications.
+     - text: Deploy additional EC2 instances to distribute the workload for data transfer and notifications, improving performance.
        is_correct: false
-     - text: Use Amazon Kinesis Data Streams to process and transfer the data.
+     - text: Use Amazon Kinesis Data Streams to handle the processing and transfer of data from SaaS sources to the S3 bucket.
        is_correct: false
     explanation: |
       Correct: Amazon AppFlow automates data transfer from SaaS sources to S3, removing the EC2 bottleneck. S3 event notifications and SNS automate user notifications, reducing operational overhead.
@@ -947,11 +941,11 @@
     options:
      - text: Deploy a gateway VPC endpoint for Amazon S3.
        is_correct: true
-     - text: Use an internet gateway to route traffic directly to S3.
+     - text: Use an internet gateway to establish direct routing for traffic to S3, bypassing the NAT gateway.
        is_correct: false
-     - text: Deploy additional NAT gateways in each Availability Zone.
+     - text: Deploy additional NAT gateways in each Availability Zone to distribute the data transfer load.
        is_correct: false
-     - text: Use AWS Direct Connect to connect to S3.
+     - text: Use AWS Direct Connect to establish a dedicated connection to S3 for data transfers.
        is_correct: false
     explanation: |
       Correct: A gateway VPC endpoint enables private connectivity to S3, avoiding NAT gateway and Regional data transfer charges.
@@ -968,11 +962,11 @@
     options:
      - text: Establish a new AWS Direct Connect connection and direct backup traffic through this new connection.
        is_correct: true
-     - text: Use AWS Snowball to transfer the data to S3.
+     - text: Use AWS Snowball devices to periodically transfer large data sets to S3, reducing internet bandwidth usage.
        is_correct: false
-     - text: Use Amazon S3 Transfer Acceleration to speed up uploads.
+     - text: Use Amazon S3 Transfer Acceleration to optimize upload speeds for the backup process.
        is_correct: false
-     - text: Deploy an AWS Storage Gateway Volume Gateway.
+     - text: Deploy an AWS Storage Gateway Volume Gateway to facilitate efficient data transfer to S3.
        is_correct: false
     explanation: |
       Correct: AWS Direct Connect provides a dedicated, high-bandwidth connection to AWS, enabling timely backups to S3 without impacting internet bandwidth for users.
@@ -991,11 +985,11 @@
        is_correct: true
      - text: Enable MFA Delete on the S3 bucket.
        is_correct: true
-     - text: Use AWS Backup to create daily backups of the bucket.
+     - text: Use AWS Backup to schedule and maintain daily backups of the bucket's data.
        is_correct: false
-     - text: Enable default encryption on the S3 bucket.
+     - text: Enable default encryption on the S3 bucket to secure data at rest.
        is_correct: false
-     - text: Use an S3 Lifecycle policy to archive objects to S3 Glacier.
+     - text: Use an S3 Lifecycle policy to transition objects to S3 Glacier for long-term storage.
        is_correct: false
     explanation: |
       Correct: Enabling versioning allows recovery of deleted objects. MFA Delete adds an extra layer of protection, requiring MFA for object deletions.
@@ -1017,11 +1011,11 @@
        is_correct: true
      - text: Modify the Lambda function to read from an Amazon Simple Queue Service (Amazon SQS) queue.
        is_correct: true
-     - text: Use Amazon Kinesis Data Firehose to buffer messages before processing.
+     - text: Use Amazon Kinesis Data Firehose to buffer and batch messages before processing.
        is_correct: false
-     - text: Enable retries on the Lambda function.
+     - text: Enable automatic retries and exponential backoff on the Lambda function to handle transient failures.
        is_correct: false
-     - text: Use Amazon EventBridge to trigger the Lambda function.
+     - text: Use Amazon EventBridge to create a rule that triggers the Lambda function for each event.
        is_correct: false
     explanation: |
       Correct: SQS provides a durable buffer for messages, ensuring all data is eventually processed. Lambda can poll SQS to process messages reliably.
@@ -1039,11 +1033,11 @@
     options:
      - text: Use an Amazon S3 bucket as a secure transfer point. Use Amazon Macie to scan the objects in the bucket. If objects contain PII, use Amazon Simple Notification Service (Amazon SNS) to trigger a notification to the administrators to remove the objects that contain PII.
        is_correct: true
-     - text: Use AWS Glue to scan the data for PII and notify administrators.
+     - text: Use AWS Glue to scan and catalog the data for PII detection and notify administrators.
        is_correct: false
-     - text: Use Amazon Inspector to scan the files for PII and send alerts.
+     - text: Use Amazon Inspector to analyze the files for PII and generate alerts.
        is_correct: false
-     - text: Use AWS Lambda to manually parse and scan files for PII.
+     - text: Deploy an AWS Lambda function to parse and scan files for PII manually.
        is_correct: false
     explanation: |
       Correct: Amazon Macie can automatically scan S3 for PII and trigger SNS notifications for alerting and remediation with minimal development effort.
@@ -1060,11 +1054,11 @@
     options:
      - text: Create an On-Demand Capacity Reservation that specifies the Region and three Availability Zones needed.
        is_correct: true
-     - text: Use Spot Instances to reserve capacity in the required Availability Zones.
+     - text: Use Spot Instances to reserve capacity in the required Availability Zones, leveraging cost savings.
        is_correct: false
-     - text: Purchase Reserved Instances for the required Availability Zones.
+     - text: Purchase Reserved Instances for the required Availability Zones to ensure availability.
        is_correct: false
-     - text: Use Auto Scaling to ensure capacity in the required Availability Zones.
+     - text: Use Auto Scaling to dynamically adjust capacity in the required Availability Zones.
        is_correct: false
     explanation: |
       Correct: On-Demand Capacity Reservations guarantee EC2 capacity in specific Availability Zones for the required duration.
@@ -1081,11 +1075,11 @@
     options:
      - text: Move the catalog to an Amazon Elastic File System (Amazon EFS) file system.
        is_correct: true
-     - text: Use Amazon S3 to store the catalog and serve it directly to the website.
+     - text: Use Amazon S3 to store the catalog and serve it directly to the website, ensuring durability.
        is_correct: false
-     - text: Use Amazon RDS to store the catalog data.
+     - text: Use Amazon RDS to store the catalog data and enable high availability.
        is_correct: false
-     - text: Enable Multi-AZ deployment for the EC2 instance store.
+     - text: Enable Multi-AZ deployment for the EC2 instance store to improve durability.
        is_correct: false
     explanation: |
       Correct: Amazon EFS is a fully managed, durable, highly available, and shared file system, suitable for storing catalogs with high availability.
@@ -1102,11 +1096,11 @@
     options:
      - text: Store individual files in Amazon S3 Intelligent-Tiering. Use S3 Lifecycle policies to move the files to S3 Glacier Flexible Retrieval after 1 year. Query and retrieve the files that are in Amazon S3 by using Amazon Athena. Query and retrieve the files that are in S3 Glacier by using S3 Glacier Select.
        is_correct: true
-     - text: Store all files in Amazon S3 Standard and use S3 Select for querying.
+     - text: Store all files in Amazon S3 Standard and use S3 Select for querying, ensuring fast access for all files.
        is_correct: false
-     - text: Use Amazon RDS to store the files and query them directly.
+     - text: Use Amazon RDS to store the files and query them directly for immediate retrieval.
        is_correct: false
-     - text: Store files in Amazon S3 Glacier Deep Archive and retrieve them as needed.
+     - text: Store files in Amazon S3 Glacier Deep Archive and retrieve them as needed for long-term storage.
        is_correct: false
     explanation: |
       Correct: S3 Intelligent-Tiering provides fast access for recent files, and S3 Glacier Flexible Retrieval is cost-effective for older files. Athena and Glacier Select enable querying as needed.
@@ -1120,16 +1114,14 @@
     question: |
       A company has a production workload that runs on 1,000 Amazon EC2 Linux instances. The workload is powered by third-party software. The company needs to patch the third-party software on all EC2 instances as quickly as possible to remediate a critical security vulnerability.
       What should a solutions architect do to meet these requirements?
-      A company has a production workload that runs on 1,000 Amazon EC2 Linux instances. The workload is powered by third-party software. The company needs to patch the third-party software on all EC2 instances as quickly as possible to remediate a critical security vulnerability.
-      What should a solutions architect do to meet these requirements?
     options:
      - text: Use AWS Systems Manager Run Command to run a custom command that applies the patch to all EC2 instances.
        is_correct: true
-     - text: Manually SSH into each instance and apply the patch.
+     - text: Manually SSH into each instance and apply the patch, ensuring all instances are updated.
        is_correct: false
-     - text: Use AWS Elastic Beanstalk to redeploy the application with the patched software.
+     - text: Use AWS Elastic Beanstalk to redeploy the application with the patched software for consistency.
        is_correct: false
-     - text: Terminate all instances and relaunch them with the patched software.
+     - text: Terminate all instances and relaunch them with the patched software to ensure a clean deployment.
        is_correct: false
     explanation: |
       Correct: Systems Manager Run Command allows you to quickly and securely run commands across a large fleet of EC2 instances for patching and remediation.
