@@ -9,8 +9,8 @@ questions:
        is_correct: false
     explanation: |
       Correct: S3 Standard-IA (instead of One Zone-IA) ensures high durability across multiple AZs for infrequent access.
-Glacier Instant Retrieval meets the "instant availability" requirement after 360 days, while Glacier Deep Archive is cost-effective for audits after 5 years.
-(Option A/B use less durable One Zone-IA, and Option D uses slower Glacier Flexible Retrieval, which violates the "instant" requirement.)
+        Glacier Instant Retrieval meets the "instant availability" requirement after 360 days, while Glacier Deep Archive is cost-effective for audits after 5 years.
+        (Option A/B use less durable One Zone-IA, and Option D uses slower Glacier Flexible Retrieval, which violates the "instant" requirement.)
       Incorrect: 
         "***replace later***"
 
@@ -24,7 +24,7 @@ Glacier Instant Retrieval meets the "instant availability" requirement after 360
        is_correct: false
     explanation: |
       Correct: Transient clusters are cost-effective for short workloads. Spot Instances reduce costs for non-critical task nodes.
-Long-running clusters (Options A/D) are unnecessary for a 6-hour workload.
+        Long-running clusters (Options A/D) are unnecessary for a 6-hour workload.
       Incorrect: 
         "***replace later***"
 
@@ -38,7 +38,7 @@ Long-running clusters (Options A/D) are unnecessary for a 6-hour workload.
        is_correct: false
     explanation: |
       Correct: EventBridge + Lambda automates real-time tagging without manual intervention.
-SCPs (Option A) cannot dynamically tag resources, and scheduled rules (Option C) are not event-driven.
+        SCPs (Option A) cannot dynamically tag resources, and scheduled rules (Option C) are not event-driven.
       Incorrect: 
         "***replace later***"
 
@@ -52,7 +52,7 @@ SCPs (Option A) cannot dynamically tag resources, and scheduled rules (Option C)
        is_correct: false
     explanation: |
       Correct: Fully managed services (ECS, ElastiCache) ensure high availability. CloudFront improves static content delivery.
-Elastic Beanstalk (Option A) lacks decoupling, and Lambda (Option B) is unsuitable for PHP sessions.
+        Elastic Beanstalk (Option A) lacks decoupling, and Lambda (Option B) is unsuitable for PHP sessions.
       Incorrect: 
         "***replace later***"
 
@@ -66,7 +66,7 @@ Elastic Beanstalk (Option A) lacks decoupling, and Lambda (Option B) is unsuitab
        is_correct: false
     explanation: |
       Correct: ALB supports sticky sessions (unlike NLB/GWLB). WAF provides security.
-Elastic IPs (Option D) are not scalable.
+        Elastic IPs (Option D) are not scalable.
       Incorrect: 
         "***replace later***"
 
@@ -80,7 +80,7 @@ Elastic IPs (Option D) are not scalable.
        is_correct: false
     explanation: |
       Correct: Standard-IA is cost-effective for rarely accessed images. Static websites simplify delivery.
-EBS/EFS (Options A/B) are expensive and lack S3’s durability.
+        EBS/EFS (Options A/B) are expensive and lack S3’s durability.
       Incorrect: 
         "***replace later***"
 
@@ -94,7 +94,7 @@ EBS/EFS (Options A/B) are expensive and lack S3’s durability.
        is_correct: false
     explanation: |
       Correct: Prefix lists centralize CIDR management. AWS RAM enables cross-account sharing.
-Firewall Manager (Option D) is overkill for CIDR updates.
+        Firewall Manager (Option D) is overkill for CIDR updates.
       Incorrect: 
         "***replace later***"
 
@@ -108,7 +108,7 @@ Firewall Manager (Option D) is overkill for CIDR updates.
        is_correct: false
     explanation: |
       Correct: Cluster placement minimizes latency. FSx for ONTAP supports multi-protocol (NFS/SMB) access.
-Lustre (Option C) lacks SMB support.
+        Lustre (Option C) lacks SMB support.
       Incorrect: 
         "***replace later***"
 
@@ -122,7 +122,7 @@ Lustre (Option C) lacks SMB support.
        is_correct: false
     explanation: |
       Correct: Snowball Edge is ideal for large offline transfers (50 TB in 2 weeks) without VPN bottlenecks.
-DataSync (Option A) is for online transfers; Direct Connect (Option B) is too slow.
+        DataSync (Option A) is for online transfers; Direct Connect (Option B) is too slow.
       Incorrect: 
         "***replace later***"
 
@@ -136,7 +136,7 @@ DataSync (Option A) is for online transfers; Direct Connect (Option B) is too sl
        is_correct: false
     explanation: |
       Correct: Proactively scales instances to handle predictable traffic spikes.
-Dynamic scaling (Options B/C) reacts too slowly for known peaks.
+        Dynamic scaling (Options B/C) reacts too slowly for known peaks.
       Incorrect: 
         "***replace later***"
 
@@ -150,7 +150,7 @@ Dynamic scaling (Options B/C) reacts too slowly for known peaks.
        is_correct: false
     explanation: |
       Correct: RDS Proxy manages scaling connections with minimal code changes.
-DynamoDB (Option A) is incompatible with RDS.
+        DynamoDB (Option A) is incompatible with RDS.
       Incorrect: 
         "***replace later***"
 
@@ -164,7 +164,7 @@ DynamoDB (Option A) is incompatible with RDS.
        is_correct: false
     explanation: |
       Correct: Automates snapshot retention per policy, reducing costs.
-Manual resizing (Options A/B) adds overhead.
+        Manual resizing (Options A/B) adds overhead.
       Incorrect: 
         "***replace later***"
 
@@ -178,7 +178,7 @@ Manual resizing (Options A/B) adds overhead.
        is_correct: false
     explanation: |
       Correct: VPC endpoints keep traffic private. Security groups limit access to ECS subnets.
-KMS (Options A/B) doesn’t restrict network access.
+        KMS (Options A/B) doesn’t restrict network access.
       Incorrect: 
         "***replace later***"
 
@@ -192,7 +192,7 @@ KMS (Options A/B) doesn’t restrict network access.
        is_correct: false
     explanation: |
       Correct: Burstable instances handle CPU spikes cost-effectively. Request-based scaling matches demand.
-Compute-optimized instances (Option B) are overprovisioned for intermittent spikes.
+        Compute-optimized instances (Option B) are overprovisioned for intermittent spikes.
       Incorrect: 
         "***replace later***"
 
@@ -206,7 +206,7 @@ Compute-optimized instances (Option B) are overprovisioned for intermittent spik
        is_correct: false
     explanation: |
       Correct: CloudFormation automates infrastructure; Config tracks changes for auditing.
-Service Catalog (Options C/D) is for governance, not change tracking.
+        Service Catalog (Options C/D) is for governance, not change tracking.
       Incorrect: 
         "***replace later***"
 
@@ -220,7 +220,7 @@ Service Catalog (Options C/D) is for governance, not change tracking.
        is_correct: false
     explanation: |
       Correct: RDS Multi-AZ ensures DB high availability. ALB + Auto Scaling distributes traffic across AZs.
-DynamoDB (Option C) requires code changes; DataSync (Option D) doesn’t solve HA.
+        DynamoDB (Option C) requires code changes; DataSync (Option D) doesn’t solve HA.
       Incorrect: 
         "***replace later***"
 
@@ -234,7 +234,7 @@ DynamoDB (Option C) requires code changes; DataSync (Option D) doesn’t solve HA.
        is_correct: false
     explanation: |
       Correct: Gateway endpoints allow secure S3 access via Direct Connect/VPC without internet.
-Interface endpoints (Option C) are for private-link services, not S3.
+        Interface endpoints (Option C) are for private-link services, not S3.
       Incorrect: 
         "***replace later***"
 
@@ -248,7 +248,7 @@ Interface endpoints (Option C) are for private-link services, not S3.
        is_correct: false
     explanation: |
       Correct: Tag policies enforce standardized tagging across accounts.
-IAM policies (Option A) cannot validate tag values.
+        IAM policies (Option A) cannot validate tag values.
       Incorrect: 
         "***replace later***"
 
@@ -262,7 +262,7 @@ IAM policies (Option A) cannot validate tag values.
        is_correct: false
     explanation: |
       Correct: Secrets Manager automates rotation every 30 days with zero operational effort.
-Manual rotation (Option B) or Parameter Store (Option D) lacks automation.
+        Manual rotation (Option B) or Parameter Store (Option D) lacks automation.
       Incorrect: 
         "***replace later***"
 
@@ -276,7 +276,7 @@ Manual rotation (Option B) or Parameter Store (Option D) lacks automation.
        is_correct: false
     explanation: |
       Correct: Provisioned mode is cost-effective for predictable weekly workloads.
-On-demand (Option A) is expensive for infrequent use.
+        On-demand (Option A) is expensive for infrequent use.
       Incorrect: 
         "***replace later***"
 
@@ -290,7 +290,7 @@ On-demand (Option A) is expensive for infrequent use.
        is_correct: false
     explanation: |
       Correct: Automatically detects and alerts on unusual spending.
-CloudWatch (Option D) lacks built-in anomaly detection.
+        CloudWatch (Option D) lacks built-in anomaly detection.
       Incorrect: 
         "***replace later***"
 
@@ -304,7 +304,7 @@ CloudWatch (Option D) lacks built-in anomaly detection.
        is_correct: false
     explanation: |
       Correct: Glue catalogs data; Athena provides serverless SQL queries.
-EMR (Option C) adds operational overhead.
+        EMR (Option C) adds operational overhead.
       Incorrect: 
         "***replace later***"
 
@@ -318,7 +318,7 @@ EMR (Option C) adds operational overhead.
        is_correct: false
     explanation: |
       Correct: File Gateway extends on-prem storage; Glacier Deep Archive is cost-effective for archives.
-DataSync (Option A) doesn’t automate tiering.
+        DataSync (Option A) doesn’t automate tiering.
       Incorrect: 
         "***replace later***"
 
@@ -332,7 +332,7 @@ DataSync (Option A) doesn’t automate tiering.
        is_correct: false
     explanation: |
       Correct: Read replicas offload read traffic. ElastiCache reduces DB load.
-Multi-AZ (Option C) doesn’t scale reads; auto scaling (Option A) isn’t for RDS.
+        Multi-AZ (Option C) doesn’t scale reads; auto scaling (Option A) isn’t for RDS.
       Incorrect: 
         "***replace later***"
 
@@ -346,7 +346,7 @@ Multi-AZ (Option C) doesn’t scale reads; auto scaling (Option A) isn’t for RDS.
        is_correct: false
     explanation: |
       Correct: Prevents accidental deletion without IAM changes.
-Recycle Bin (Option C) requires tagging; IAM (Option B) changes permissions.
+        Recycle Bin (Option C) requires tagging; IAM (Option B) changes permissions.
       Incorrect: 
         "***replace later***"
 
@@ -360,7 +360,7 @@ Recycle Bin (Option C) requires tagging; IAM (Option B) changes permissions.
        is_correct: false
     explanation: |
       Correct: Flow Logs capture traffic; Firehose streams to OpenSearch.
-CloudTrail (Options C/D) logs API calls, not network traffic.
+        CloudTrail (Options C/D) logs API calls, not network traffic.
       Incorrect: 
         "***replace later***"
 
@@ -374,7 +374,7 @@ CloudTrail (Options C/D) logs API calls, not network traffic.
        is_correct: false
     explanation: |
       Correct: Balances cost (Spot) and reliability (On-Demand) for infrequent dev workloads.
-All-Spot (Option A) risks interruptions; self-managed ASG (Option C) adds overhead.
+        All-Spot (Option A) risks interruptions; self-managed ASG (Option C) adds overhead.
       Incorrect: 
         "***replace later***"
 
@@ -388,7 +388,7 @@ All-Spot (Option A) risks interruptions; self-managed ASG (Option C) adds overhe
        is_correct: false
     explanation: |
       Correct: Grants full control over key rotation/access. SSE-S3 (Option A) lacks key management.
-Client-side encryption (Option D) is complex.
+        Client-side encryption (Option D) is complex.
       Incorrect: 
         "***replace later***"
 
@@ -402,7 +402,7 @@ Client-side encryption (Option D) is complex.
        is_correct: false
     explanation: |
       Correct: Versioning + retention policies automate compliance. Lifecycle rules expire objects.
-Object Lock (Option A) prevents deletion; tagging (Option F) doesn’t enforce retention.
+        Object Lock (Option A) prevents deletion; tagging (Option F) doesn’t enforce retention.
       Incorrect: 
         "***replace later***"
 
@@ -416,7 +416,7 @@ Object Lock (Option A) prevents deletion; tagging (Option F) doesn’t enforce ret
        is_correct: false
     explanation: |
       Correct: Continuously syncs only modified files to S3/EFS.
-Lambda (Option B) requires custom code; full syncs (Option C) are inefficient.
+        Lambda (Option B) requires custom code; full syncs (Option C) are inefficient.
       Incorrect: 
         "***replace later***"
 
@@ -443,7 +443,7 @@ Lambda (Option B) requires custom code; full syncs (Option C) are inefficient.
        is_correct: false
     explanation: |
       Correct: Config detects noncompliant volumes; Systems Manager automates remediation.
-Macie (Option C) is for data classification, not encryption.
+        Macie (Option C) is for data classification, not encryption.
       Incorrect: 
         "***replace later***"
 
@@ -457,7 +457,7 @@ Macie (Option C) is for data classification, not encryption.
        is_correct: false
     explanation: |
       Correct: Auto Scaling improves web tier resiliency; RDS Multi-AZ ensures DB HA.
-Lambda (Option D) requires code changes; DynamoDB (Option E) is incompatible.
+        Lambda (Option D) requires code changes; DynamoDB (Option E) is incompatible.
       Incorrect: 
         "***replace later***"
 
@@ -471,6 +471,6 @@ Lambda (Option D) requires code changes; DynamoDB (Option E) is incompatible.
        is_correct: false
     explanation: |
       Correct: Local Zones provide single-digit latency near eu-central-1 while complying with regulations.
-CloudFront (Option A) is for caching, not app hosting.
+        CloudFront (Option A) is for caching, not app hosting.
       Incorrect: 
         "***replace later***"

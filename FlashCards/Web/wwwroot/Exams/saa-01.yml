@@ -8,8 +8,10 @@
     options:
      - text: Turn on S3 Transfer Acceleration on the destination S3 bucket. Use multipart uploads to directly upload site data to the destination S3 bucket.
        is_correct: true
-     - text: "***replace later***"
+     - text: Upload the data from each site to an S3 bucket in the closest Region. Use S3 Cross-Region Replication to copy objects to the destination S3 bucket. Then remove the data from the origin S3 bucket to save storage costs.
        is_correct: false
+     - text: Schedule AWS Snowball Edge Storage Optimized device jobs daily to transfer data from each site to the closest Region. Use AWS DataSync to automate the transfer to the destination S3 bucket.
+       is_correct: false  
     explanation: |
       Correct:
         Turn on S3 Transfer Acceleration on the destination S3 bucket. Use multipart uploads to directly upload site data to the destination S3 bucket. 
@@ -21,171 +23,214 @@
         ...ideally works with objects for long-distance transfer (uses Edge Locations)
         ...can speed up content transfers to and from S3 as much as 50-500%
         ...use cases- mobile & web application uploads and downloads, distributed office transfers, data exchange with trusted partners. Generally for sharing of large data sets between companies, customers can set up special access to their S3 buckets with accelerated uploads to speed data exchanges and the pace of innovation.
-      Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+      Incorrect:
+        Upload the data from each site to an S3 bucket in the closest Region. Use S3 Cross-Region Replication to copy objects to the destination S3 bucket. Then remove the data from the origin S3 bucket to save storage costs This approach introduces additional operational complexity and delays due to replication.
+        Schedule AWS Snowball Edge Storage Optimized device jobs daily to transfer data from each site to the closest Region. Use AWS DataSync to automate the transfer to the destination S3 bucket This solution is not suitable for high-speed internet connections and adds unnecessary steps.
 
   - id: q2
     type: multiple_choice
     question: |
-      A company needs the ability to analyze the log files of its proprietary application. The logs are stored in JSON format in an Amazon S3 bucket. Queries will be simple and will run on-demand. A solutions architect needs to perform the analysis with minimal changes to the existing architecture.
-      What should the solutions architect do to meet these requirements with the LEAST amount of operational overhead?
+      A company needs to analyze JSON log files stored in Amazon S3. Queries will be simple and on-demand. What is the solution with the least operational overhead?
     options:
-     - text: Use Amazon Athena directly with Amazon S3 to run the queries as needed.
-       is_correct: true
-     - text: "***replace later***"
-       is_correct: false
+      - text: Use Amazon Athena to query the data directly in Amazon S3.
+        is_correct: true
+      - text: Export the data to Amazon RDS and use SQL queries.
+        is_correct: false
+      - text: Use AWS Glue to transform the data and store it in Amazon Redshift.
+        is_correct: false
+      - text: Load the data into Amazon Elasticsearch Service and use Kibana.
+        is_correct: false
     explanation: |
-      Correct: Amazon Athena is an interactive query service that makes it easy to analyze data directly in Amazon Simple Storage Service (Amazon S3) using standard SQL. With a few actions in the AWS Management Console, you can point Athena at your data stored in Amazon S3 and begin using standard SQL to run ad-hoc queries and get results in seconds.
-      Incorrect: 
-        "***replace later***"
-    tags: 
+      Correct: Amazon Athena allows direct querying of data in S3 with minimal setup.
+      Incorrect:
+        - Exporting to RDS increases operational overhead.
+        - Using AWS Glue and Redshift adds complexity and cost.
+        - Elasticsearch and Kibana are not suited for simple queries.
+    tags: []
     difficulty: 
     points: 
 
   - id: q3
     type: multiple_choice
     question: |
-      A company uses AWS Organizations to manage multiple AWS accounts for different departments. The management account has an Amazon S3 bucket that contains project reports. The company wants to limit access to this S3 bucket to only users of accounts within the organization in AWS Organizations.
-      Which solution meets these requirements with the LEAST amount of operational overhead?
+      A company wants to limit access to an S3 bucket to users within its AWS Organization. What is the simplest solution?
     options:
-     - text: Add the aws:PrincipalOrgID global condition key with a reference to the organization ID to the S3 bucket policy.
-       is_correct: true
-     - text: "***replace later***"
-       is_correct: false
+      - text: Add the aws:PrincipalOrgID condition key to the bucket policy.
+        is_correct: true
+      - text: Use IAM roles to grant access to each account.
+        is_correct: false
+      - text: Create a bucket policy listing all account IDs.
+        is_correct: false
+      - text: Enable cross-account access for each account.
+        is_correct: false
     explanation: |
-      Correct: Adding the aws:PrincipalOrgID global condition key with a reference to the organization ID to the S3 bucket policy limits access to only users of accounts within the organization, simplifying management and reducing operational overhead compared to listing all account IDs.
-      Incorrect: 
-        "***replace later***"
-    tags: 
+      Correct: The aws:PrincipalOrgID condition key simplifies access management.
+      Incorrect:
+        - IAM roles require managing roles for each account.
+        - Listing account IDs in the policy is inefficient.
+        - Cross-account access adds complexity.
+    tags: []
     difficulty: 
     points: 
 
   - id: q4
     type: multiple_choice
     question: |
-      An application runs on an Amazon EC2 instance in a VPC. The application processes logs that are stored in an Amazon S3 bucket. The EC2 instance needs to access the S3 bucket without connectivity to the internet.
-      Which solution will provide private network connectivity to Amazon S3?
+      An EC2 instance needs private network connectivity to an S3 bucket. What is the best solution?
     options:
-     - text: Create a gateway VPC endpoint to the S3 bucket.
-       is_correct: true
-     - text: "***replace later***"
-       is_correct: false
+      - text: Create a gateway VPC endpoint for the S3 bucket.
+        is_correct: true
+      - text: Use a NAT gateway to route traffic to the S3 bucket.
+        is_correct: false
+      - text: Configure an internet gateway and route traffic through it.
+        is_correct: false
+      - text: Use a VPN connection to access the S3 bucket.
+        is_correct: false
     explanation: |
-      Correct: A gateway VPC endpoint allows private connectivity from the VPC to Amazon S3 without requiring internet access, NAT, or a public IP.
-      Incorrect: 
-        "***replace later***"
-    tags: 
+      Correct: A gateway VPC endpoint provides private connectivity to S3.
+      Incorrect:
+        - NAT gateways require internet connectivity.
+        - Internet gateways contradict the private connectivity requirement.
+        - VPNs add unnecessary complexity.
+    tags: []
     difficulty: 
     points: 
 
   - id: q5
     type: multiple_choice
     question: |
-      A company is hosting a web application on AWS using a single Amazon EC2 instance that stores user-uploaded documents in an Amazon EBS volume. For better scalability and availability, the company duplicated the architecture and created a second EC2 instance and EBS volume in another Availability Zone, placing both behind an Application Load Balancer. After completing this change, users reported that, each time they refreshed the website, they could see one subset of their documents or the other, but never all of the documents at the same time.
-      What should a solutions architect propose to ensure users see all of their documents at once?
+      A company needs to ensure users see all documents across two EC2 instances. What is the best solution?
     options:
-     - text: Copy the data from both EBS volumes to Amazon EFS. Modify the application to save new documents to Amazon EFS.
-       is_correct: true
-     - text: "***replace later***"
-       is_correct: false
+      - text: Copy data to Amazon EFS and modify the application to use it.
+        is_correct: true
+      - text: Store documents in Amazon S3 and modify the application.
+        is_correct: false
+      - text: Enable sticky sessions on the Application Load Balancer.
+        is_correct: false
+      - text: Set up replication between the two EBS volumes.
+        is_correct: false
     explanation: |
-      Correct: Amazon EFS provides a shared file system accessible by multiple EC2 instances across Availability Zones, ensuring all users see the same documents regardless of which instance serves their request.
-      Incorrect: 
-        "***replace later***"
-    tags: 
+      Correct: Amazon EFS provides a shared file system accessible by multiple instances.
+      Incorrect:
+        - S3 requires significant application changes.
+        - Sticky sessions do not solve data inconsistency.
+        - EBS replication is not natively supported.
+    tags: []
     difficulty: 
     points: 
 
   - id: q6
     type: multiple_choice
     question: |
-      A company uses NFS to store large video files in on-premises network attached storage. Each video file ranges in size from 1 MB to 500 GB. The total storage is 70 TB and is no longer growing. The company decides to migrate the video files to Amazon S3. The company must migrate the video files as soon as possible while using the least possible network bandwidth.
-      Which solution will meet these requirements?
+      A company needs to migrate 70 TB of video files to Amazon S3 with minimal network bandwidth. What is the best solution?
     options:
-     - text: Create an AWS Snowball Edge job. Receive a Snowball Edge device on premises. Use the Snowball Edge client to transfer data to the device. Return the device so that AWS can import the data into Amazon S3.
-       is_correct: true
-     - text: "***replace later***"
-       is_correct: false
+      - text: Use AWS Snowball Edge to transfer the data offline.
+        is_correct: true
+      - text: Use AWS DataSync to transfer the data over the internet.
+        is_correct: false
+      - text: Establish a Direct Connect connection to transfer the data.
+        is_correct: false
+      - text: Upload the data using the AWS CLI with multipart upload.
+        is_correct: false
     explanation: |
-      Correct: AWS Snowball Edge allows for fast, offline transfer of large datasets with zero network bandwidth usage, ideal for 70 TB of data.
-      Incorrect: 
-        "***replace later***"
-    tags: 
+      Correct: AWS Snowball Edge allows fast, offline data transfer.
+      Incorrect:
+        - DataSync uses network bandwidth.
+        - Direct Connect setup takes time.
+        - CLI upload is inefficient for large datasets.
+    tags: []
     difficulty: 
     points: 
 
   - id: q7
     type: multiple_choice
     question: |
-      A company has an application that ingests incoming messages. Dozens of other applications and microservices then quickly consume these messages. The number of messages varies drastically and sometimes increases suddenly to 100,000 each second. The company wants to decouple the solution and increase scalability.
-      Which solution meets these requirements?
+      A company needs to decouple message processing and handle sudden spikes of 100,000 messages per second. What is the best solution?
     options:
-     - text: Publish the messages to an Amazon SNS topic with multiple Amazon SQS subscriptions. Configure the consumer applications to process the messages from the queues.
-       is_correct: true
-     - text: "***replace later***"
-       is_correct: false
+      - text: Use Amazon SNS with SQS subscriptions for message processing.
+        is_correct: true
+      - text: Use Amazon Kinesis Data Streams to distribute messages.
+        is_correct: false
+      - text: Store messages in Amazon RDS and use triggers.
+        is_correct: false
+      - text: Deploy an Amazon MQ broker for message distribution.
+        is_correct: false
     explanation: |
-      Correct: SNS with SQS subscriptions allows for scalable, decoupled, and parallel message processing, supporting sudden spikes in message volume.
-      Incorrect: 
-        "***replace later***"
-    tags: 
+      Correct: SNS with SQS subscriptions supports scalable, decoupled processing.
+      Incorrect:
+        - Kinesis is better for real-time analytics.
+        - RDS introduces latency and lacks scalability.
+        - Amazon MQ is less scalable for this use case.
+    tags: []
     difficulty: 
     points: 
 
   - id: q8
     type: multiple_choice
     question: |
-      A company is migrating a distributed application to AWS. The application serves variable workloads. The legacy platform consists of a primary server that coordinates jobs across multiple compute nodes. The company wants to modernize the application with a solution that maximizes resiliency and scalability.
-      How should a solutions architect design the architecture to meet these requirements?
+      A company wants to modernize a distributed application for maximum resiliency and scalability. What is the best solution?
     options:
-     - text: Configure an Amazon SQS queue as a destination for the jobs. Implement the compute nodes with Amazon EC2 instances that are managed in an Auto Scaling group. Configure EC2 Auto Scaling based on the size of the queue.
-       is_correct: true
-     - text: "***replace later***"
-       is_correct: false
+      - text: Use Amazon SQS for job coordination and EC2 Auto Scaling for compute nodes.
+        is_correct: true
+      - text: Use AWS Lambda to process jobs directly from the primary server.
+        is_correct: false
+      - text: Deploy the application on Amazon ECS with a fixed number of tasks.
+        is_correct: false
+      - text: Use Amazon EMR to process the jobs in a Hadoop cluster.
+        is_correct: false
     explanation: |
-      Correct: Using SQS for job coordination and EC2 Auto Scaling for compute nodes provides a decoupled, resilient, and scalable architecture.
-      Incorrect: 
-        "***replace later***"
-    tags: 
+      Correct: SQS and EC2 Auto Scaling provide a decoupled, scalable architecture.
+      Incorrect:
+        - Lambda does not decouple the architecture.
+        - ECS with fixed tasks lacks scalability.
+        - EMR is not suitable for general-purpose job coordination.
+    tags: []
     difficulty: 
     points: 
 
   - id: q9
     type: multiple_choice
     question: |
-      A company is running an SMB file server in its data center. The file server stores large files that are accessed frequently for the first few days after the files are created. After 7 days the files are rarely accessed. The total data size is increasing and is close to the company's total storage capacity. A solutions architect must increase the company's available storage space without losing low-latency access to the most recently accessed files. The solutions architect must also provide file lifecycle management to avoid future storage issues.
-      Which solution will meet these requirements?
+      A company needs to manage growing SMB file server storage and automate file lifecycle management. What is the best solution?
     options:
-     - text: Create an Amazon S3 File Gateway to extend the company's storage space. Create an S3 Lifecycle policy to transition the data to S3 Glacier Deep Archive after 7 days.
-       is_correct: true
-     - text: "***replace later***"
-       is_correct: false
+      - text: Use Amazon S3 File Gateway with a lifecycle policy to transition data to Glacier Deep Archive.
+        is_correct: true
+      - text: Use Amazon EFS to store all files and enable lifecycle management.
+        is_correct: false
+      - text: Deploy Amazon FSx for Windows File Server with data deduplication.
+        is_correct: false
+      - text: Use AWS Storage Gateway Volume Gateway to back up files to S3.
+        is_correct: false
     explanation: |
-      Correct: S3 File Gateway integrates on-premises storage with S3, and S3 Lifecycle policies automate transition to lower-cost storage for infrequently accessed files.
-      Incorrect: 
-        "***replace later***"
-    tags: 
+      Correct: S3 File Gateway integrates on-premises storage with S3 and automates lifecycle management.
+      Incorrect:
+        - EFS is not optimized for rarely accessed files.
+        - FSx does not address lifecycle management.
+        - Volume Gateway lacks lifecycle management capabilities.
+    tags: []
     difficulty: 
     points: 
 
   - id: q10
     type: multiple_choice
     question: |
-      A company is building an ecommerce web application on AWS. The application sends information about new orders to an Amazon API Gateway REST API to process. The company wants to ensure that orders are processed in the order that they are received.
-      Which solution will meet these requirements?
+      A company needs to process ecommerce orders in the order they are received. What is the best solution?
     options:
-     - text: Use an API Gateway integration to send a message to an Amazon SQS FIFO queue when the application receives an order. Configure the SQS FIFO queue to invoke an AWS Lambda function for processing.
-       is_correct: true
-     - text: "***replace later***"
-       is_correct: false
+      - text: Use an SQS FIFO queue and Lambda for order processing.
+        is_correct: true
+      - text: Use an SNS topic and Lambda for order processing.
+        is_correct: false
+      - text: Store orders in DynamoDB and use Streams to trigger Lambda.
+        is_correct: false
+      - text: Use Kinesis Data Streams and Lambda for order processing.
+        is_correct: false
     explanation: |
-      Correct: SQS FIFO queues preserve message order, ensuring orders are processed in the order received. Lambda can process each order as it arrives.
-      Incorrect: 
-        "***replace later***"
-    tags: 
+      Correct: SQS FIFO queues preserve message order and integrate with Lambda.
+      Incorrect:
+        - SNS does not guarantee message order.
+        - DynamoDB Streams do not guarantee strict order.
+        - Kinesis does not guarantee strict order for all consumers.
+    tags: []
     difficulty: 
     points: 
 
@@ -197,12 +242,21 @@
     options:
      - text: Use AWS Secrets Manager and attach an IAM role that grants access to that secret to the EC2 instances that need it. Turn on automatic rotation.
        is_correct: true
-     - text: "***replace later***"
+     - text: Store the credentials in an encrypted file on Amazon S3 and grant the EC2 instances access to the file.
+       is_correct: false
+     - text: Use Systems Manager Parameter Store to store the credentials and grant the EC2 instances access to the parameters.
+       is_correct: false
+     - text: Embed the credentials in the EC2 instance user data script.
        is_correct: false
     explanation: |
       Correct: AWS Secrets Manager is a secrets management service that helps you protect access to your applications, services, and IT resources. This service enables you to rotate, manage, and retrieve database credentials, API keys, and other secrets throughout their lifecycle.
-      Incorrect: 
-        "***replace later***"
+      Incorrect:
+        Store the credentials in an encrypted file on Amazon S3 and grant the EC2 instances access to the file This approach does not provide automatic rotation of credentials, increasing operational overhead.
+        Use Systems Manager Parameter Store to store the credentials and grant the EC2 instances access to the parameters Parameter Store does not support automatic rotation of credentials, which is a key requirement.
+        Embed the credentials in the EC2 instance user data script This method is insecure and does not allow for credential rotation without redeploying the instances.
+    tags: 
+    difficulty: 
+    points: 
 
   - id: q12
     type: multiple_choice
@@ -212,12 +266,21 @@
     options:
      - text: Create an Amazon CloudFront distribution that has the S3 bucket and the ALB as origins. Configure Route 53 to route traffic to the CloudFront distribution.
        is_correct: true
-     - text: "***replace later***"
+     - text: Use an Amazon API Gateway to serve both static and dynamic content.
+       is_correct: false
+     - text: Deploy an Amazon ElastiCache cluster to cache the static data.
+       is_correct: false
+     - text: Configure the ALB to cache static content and serve dynamic content.
        is_correct: false
     explanation: |
       Correct: CloudFront allows you to set up multiple origins for your distribution, so you can use both the ALB (for dynamic content) and the S3 bucket (for static content) as origins. Route 53 can be easily configured to route traffic for your domain to a CloudFront distribution, improving performance and reducing latency.
-      Incorrect: 
-        "***replace later***"
+      Incorrect:
+        Use an Amazon API Gateway to serve both static and dynamic content API Gateway is not designed for serving static content and would increase complexity.
+        Deploy an Amazon ElastiCache cluster to cache the static data ElastiCache is not suitable for serving static web content directly to users.
+        Configure the ALB to cache static content and serve dynamic content ALB does not have built-in caching capabilities for static content.
+    tags: 
+    difficulty: 
+    points: 
 
   - id: q13
     type: multiple_choice
@@ -227,12 +290,18 @@
     options:
      - text: Store the credentials as secrets in AWS Secrets Manager. Use multi-Region secret replication for the required Regions. Configure Secrets Manager to rotate the secrets on a schedule.
        is_correct: true
-     - text: "***replace later***"
+     - text: Use Systems Manager Parameter Store to store the credentials and manually rotate them.
+       is_correct: false
+     - text: Create IAM users for each database and rotate their credentials manually.
+       is_correct: false
+     - text: Use a Lambda function to rotate the credentials and store them in an encrypted S3 bucket.
        is_correct: false
     explanation: |
       Correct: AWS Secrets Manager allows you to store, manage, and rotate secrets, such as database credentials, across multiple AWS Regions. By enabling multi-Region secret replication and automatic rotation, you minimize operational overhead.
-      Incorrect: 
-        "***replace later***"
+      Incorrect:
+        Use Systems Manager Parameter Store to store the credentials and manually rotate them This approach requires manual intervention, increasing operational overhead.
+        Create IAM users for each database and rotate their credentials manually Managing IAM users and manually rotating credentials is time-consuming and error-prone.
+        Use a Lambda function to rotate the credentials and store them in an encrypted S3 bucket This solution requires custom development and does not leverage AWS's built-in credential management features.
     tags: 
     difficulty: 
     points: 
@@ -246,12 +315,18 @@
     options:
      - text: Use Amazon Aurora with a Multi-AZ deployment. Configure Aurora Auto Scaling with Aurora Replicas.
        is_correct: true
-     - text: "***replace later***"
+     - text: Deploy the database on Amazon RDS and enable Multi-AZ.
+       is_correct: false
+     - text: Use Amazon DynamoDB to store the transaction data.
+       is_correct: false
+     - text: Configure read replicas for the existing database on EC2 instances.
        is_correct: false
     explanation: |
       Correct: Amazon Aurora with Multi-AZ deployment and Aurora Auto Scaling with Aurora Replicas provides high availability and automatic scaling to handle unpredictable read workloads.
-      Incorrect: 
-        "***replace later***"
+      Incorrect:
+        Deploy the database on Amazon RDS and enable Multi-AZ Multi-AZ improves availability but does not address the need for scaling read workloads.
+        Use Amazon DynamoDB to store the transaction data DynamoDB is a NoSQL database and would require significant changes to the application.
+        Configure read replicas for the existing database on EC2 instances Managing read replicas manually increases operational overhead and does not provide automatic scaling.
     tags: 
     difficulty: 
     points: 
@@ -264,12 +339,18 @@
     options:
      - text: Use AWS Network Firewall to create the required rules for traffic inspection and traffic filtering for the production VPC.
        is_correct: true
-     - text: "***replace later***"
+     - text: Deploy a third-party firewall appliance from the AWS Marketplace.
+       is_correct: false
+     - text: Use Security Groups and NACLs to perform traffic inspection and filtering.
+       is_correct: false
+     - text: Configure an AWS WAF to filter traffic based on rules.
        is_correct: false
     explanation: |
       Correct: AWS Network Firewall is a managed firewall service that provides filtering for both inbound and outbound network traffic. It allows you to create rules for traffic inspection and filtering, protecting your production VPC.
-      Incorrect: 
-        "***replace later***"
+      Incorrect:
+        Deploy a third-party firewall appliance from the AWS Marketplace Third-party appliances require additional management and may not integrate as seamlessly as AWS Network Firewall.
+        Use Security Groups and NACLs to perform traffic inspection and filtering Security Groups and NACLs are not designed for deep traffic inspection and advanced filtering.
+        Configure an AWS WAF to filter traffic based on rules AWS WAF is designed for web application protection and does not provide the same level of network traffic inspection.
     tags: 
     difficulty: 
     points: 
@@ -282,12 +363,18 @@
     options:
      - text: Create an analysis in Amazon QuickSight. Connect all the data sources and create new datasets. Publish dashboards to visualize the data. Share the dashboards with the appropriate users and groups.
        is_correct: true
-     - text: "***replace later***"
+     - text: Use Amazon Athena to query the data and generate reports.
+       is_correct: false
+     - text: Deploy a third-party business intelligence tool on Amazon EC2.
+       is_correct: false
+     - text: Use AWS Glue to transform the data and store it in Amazon Redshift for reporting.
        is_correct: false
     explanation: |
       Correct: Amazon QuickSight is a business intelligence tool for data visualization and reporting. You can connect all the data sources, create datasets, and control access to dashboards for different users and groups.
-      Incorrect: 
-        "***replace later***"
+      Incorrect:
+        Use Amazon Athena to query the data and generate reports Athena is a query service and does not provide visualization capabilities.
+        Deploy a third-party business intelligence tool on Amazon EC2 Third-party tools require additional management and may not integrate as seamlessly as QuickSight.
+        Use AWS Glue to transform the data and store it in Amazon Redshift for reporting This solution adds unnecessary complexity and cost for visualization purposes.
     tags: 
     difficulty: 
     points: 
@@ -300,12 +387,18 @@
     options:
      - text: Create an IAM role that grants access to the S3 bucket. Attach the role to the EC2 instances.
        is_correct: true
-     - text: "***replace later***"
+     - text: Store the S3 credentials in a configuration file on the EC2 instances.
+       is_correct: false
+     - text: Use an S3 bucket policy to allow access from the EC2 instance IDs.
+       is_correct: false
+     - text: Manually generate temporary credentials and configure them on the EC2 instances.
        is_correct: false
     explanation: |
       Correct: An IAM role can grant access to AWS resources and services. Attaching the role to the EC2 instances allows them to access the S3 bucket securely.
-      Incorrect: 
-        "***replace later***"
+      Incorrect:
+        Store the S3 credentials in a configuration file on the EC2 instances This approach is insecure and does not follow AWS best practices.
+        Use an S3 bucket policy to allow access from the EC2 instance IDs Bucket policies cannot directly reference EC2 instance IDs for access control.
+        Manually generate temporary credentials and configure them on the EC2 instances This method is operationally inefficient and prone to errors.
     tags: 
     difficulty: 
     points: 
@@ -319,12 +412,20 @@
     options:
      - text: Create an Amazon Simple Queue Service (Amazon SQS) queue. Configure the S3 bucket to send a notification to the SQS queue when an image is uploaded to the S3 bucket.
        is_correct: true
-     - text: "***replace later***"
+     - text: Use Amazon EventBridge to trigger the Lambda function when an image is uploaded.
+       is_correct: true
+     - text: Deploy an Amazon EC2 instance to process the images.
+       is_correct: false
+     - text: Use AWS Step Functions to orchestrate the image processing workflow.
+       is_correct: false
+     - text: Store the compressed images in the same S3 bucket as the original images.
        is_correct: false
     explanation: |
-      Correct: Using an SQS queue and configuring the S3 bucket to send notifications to the queue allows for durable and scalable image processing tasks.
-      Incorrect: 
-        "***replace later***"
+      Correct: Using an SQS queue and configuring the S3 bucket to send notifications to the queue allows for durable and scalable image processing tasks. EventBridge can trigger the Lambda function automatically, ensuring stateless processing.
+      Incorrect:
+        Deploy an Amazon EC2 instance to process the images EC2 instances are not stateless and require more management compared to Lambda.
+        Use AWS Step Functions to orchestrate the image processing workflow Step Functions add unnecessary complexity for this use case.
+        Store the compressed images in the same S3 bucket as the original images This approach does not separate the original and processed images, which can lead to confusion and management challenges.
     tags: 
     difficulty: 
     points: 
@@ -338,12 +439,18 @@
     options:
      - text: Deploy a Gateway Load Balancer in the inspection VPC. Create a Gateway Load Balancer endpoint to receive the incoming packets and forward the packets to the appliance.
        is_correct: true
-     - text: "***replace later***"
+     - text: Use an Application Load Balancer to route traffic to the inspection VPC.
+       is_correct: false
+     - text: Configure a NAT gateway to forward traffic to the inspection VPC.
+       is_correct: false
+     - text: Deploy an additional firewall appliance in the public subnet of the application VPC.
        is_correct: false
     explanation: |
       Correct: Gateway Load Balancer and its endpoints allow for inline inspection of traffic from multiple VPCs, centralizing virtual appliances with minimal operational overhead.
-      Incorrect: 
-        "***replace later***"
+      Incorrect:
+        Use an Application Load Balancer to route traffic to the inspection VPC ALB is not designed for traffic inspection and cannot integrate with third-party firewall appliances.
+        Configure a NAT gateway to forward traffic to the inspection VPC NAT gateways are not intended for traffic inspection and cannot enforce security rules.
+        Deploy an additional firewall appliance in the public subnet of the application VPC This approach increases operational overhead and does not centralize traffic inspection.
     tags: 
     difficulty: 
     points: 
@@ -357,12 +464,18 @@
     options:
      - text: Take EBS snapshots of the production EBS volumes. Turn on the EBS fast snapshot restore feature on the EBS snapshots. Restore the snapshots into new EBS volumes. Attach the new EBS volumes to EC2 instances in the test environment.
        is_correct: true
-     - text: "***replace later***"
+     - text: Use AWS DataSync to copy the data from the production environment to the test environment.
+       is_correct: false
+     - text: Create an Amazon S3 bucket and upload the data to the bucket. Download the data to new EBS volumes in the test environment.
+       is_correct: false
+     - text: Use AWS Backup to create backups of the production EBS volumes and restore them in the test environment.
        is_correct: false
     explanation: |
       Correct: EBS fast snapshot restore enables you to create a volume from a snapshot that is fully initialized at creation, eliminating latency and providing instant performance.
-      Incorrect: 
-        "***replace later***"
+      Incorrect:
+        Use AWS DataSync to copy the data from the production environment to the test environment DataSync is not optimized for cloning EBS volumes and may introduce additional latency.
+        Create an Amazon S3 bucket and upload the data to the bucket. Download the data to new EBS volumes in the test environment This approach is inefficient and does not provide the required high I/O performance.
+        Use AWS Backup to create backups of the production EBS volumes and restore them in the test environment AWS Backup does not offer the same speed and performance benefits as EBS fast snapshot restore.
     tags: 
     difficulty: 
     points: 
@@ -375,12 +488,18 @@
     options:
      - text: Use an Amazon S3 bucket to host the website's static content. Deploy an Amazon CloudFront distribution. Set the S3 bucket as the origin. Use Amazon API Gateway and AWS Lambda functions for the backend APIs. Store the data in Amazon DynamoDB.
        is_correct: true
-     - text: "***replace later***"
+     - text: Use Amazon EC2 instances to host the website and backend APIs. Deploy an Application Load Balancer in front of the EC2 instances. Store the data in an Amazon RDS database.
+       is_correct: false
+     - text: Use Amazon Lightsail to host the website and backend APIs. Store the data in Amazon Aurora.
+       is_correct: false
+     - text: Use AWS Elastic Beanstalk to deploy the website and backend APIs. Store the data in Amazon S3.
        is_correct: false
     explanation: |
       Correct: S3 and CloudFront provide high performance and scale for static content. API Gateway, Lambda, and DynamoDB offer scalable, highly available backend APIs and data storage with minimal operational overhead.
       Incorrect: 
-        "***replace later***"
+        - Using EC2 instances and RDS increases operational overhead due to the need for server management, scaling, and database maintenance.
+        - Amazon Lightsail is designed for simpler workloads and does not scale as effectively for high traffic scenarios.
+        - AWS Elastic Beanstalk simplifies deployment but does not minimize operational overhead as much as serverless solutions.
     tags: 
     difficulty: 
     points: 
@@ -393,12 +512,18 @@
     options:
      - text: S3 Intelligent-Tiering
        is_correct: true
-     - text: "***replace later***"
+     - text: S3 Standard
+       is_correct: false
+     - text: S3 Glacier
+       is_correct: false
+     - text: S3 One Zone-IA
        is_correct: false
     explanation: |
       Correct: S3 Intelligent-Tiering automatically moves data to the most cost-effective storage tier based on access patterns, minimizing storage and retrieval costs while providing resilience to AZ loss.
       Incorrect: 
-        "***replace later***"
+        - S3 Standard is more expensive for infrequently accessed data and does not optimize costs based on access patterns.
+        - S3 Glacier is designed for archival storage and is not suitable for frequently accessed data.
+        - S3 One Zone-IA does not provide resilience to the loss of an Availability Zone, which is a requirement.
     tags: 
     difficulty: 
     points: 
@@ -411,12 +536,18 @@
     options:
      - text: Create an S3 Lifecycle configuration to transition objects from S3 Standard to S3 Glacier Deep Archive after 1 month.
        is_correct: true
-     - text: "***replace later***"
+     - text: Store the files in S3 Standard-IA for 1 month and then transition them to S3 Glacier.
+       is_correct: false
+     - text: Store the files in S3 Standard for 1 month and then transition them to S3 Glacier Flexible Retrieval.
+       is_correct: false
+     - text: Use Amazon EBS volumes to store the files and take snapshots after 1 month.
        is_correct: false
     explanation: |
       Correct: S3 Glacier Deep Archive is the lowest-cost storage option for long-term retention of rarely accessed data. S3 Lifecycle configuration automates the transition, minimizing storage costs.
       Incorrect: 
-        "***replace later***"
+        - S3 Standard-IA is more expensive than S3 Glacier Deep Archive for long-term storage, making it less cost-effective.
+        - S3 Glacier Flexible Retrieval is more expensive than S3 Glacier Deep Archive for rarely accessed data.
+        - Amazon EBS volumes are not cost-effective for long-term storage compared to S3 storage classes.
     tags: 
     difficulty: 
     points: 
@@ -429,12 +560,18 @@
     options:
      - text: Use Cost Explorer's granular filtering feature to perform an in-depth analysis of EC2 costs based on instance types.
        is_correct: true
-     - text: "***replace later***"
+     - text: Export the billing data to Amazon S3 and use Amazon Athena to query the data.
+       is_correct: false
+     - text: Use AWS Budgets to create a budget report for EC2 costs.
+       is_correct: false
+     - text: Enable detailed billing reports and analyze the data in a third-party tool.
        is_correct: false
     explanation: |
       Correct: Cost Explorer's granular filtering allows for in-depth analysis of EC2 costs by instance type, providing insights with minimal operational overhead.
       Incorrect: 
-        "***replace later***"
+        - Exporting billing data to S3 and querying with Athena requires additional setup and management, increasing operational overhead.
+        - AWS Budgets is useful for tracking costs but does not provide detailed analysis capabilities.
+        - Using a third-party tool adds complexity and operational overhead compared to native AWS tools.
     tags: 
     difficulty: 
     points: 
@@ -448,12 +585,18 @@
     options:
      - text: Set up two Lambda functions. Configure one function to receive the information. Configure the other function to load the information into the database. Integrate the Lambda functions by using an Amazon Simple Queue Service (Amazon SQS) queue.
        is_correct: true
-     - text: "***replace later***"
+     - text: Increase the Lambda quotas further and use Amazon Kinesis Data Streams to buffer the data before loading it into the database.
+       is_correct: false
+     - text: Use Amazon RDS Proxy to manage connections between the Lambda function and the database.
+       is_correct: false
+     - text: Deploy the application on Amazon ECS with an Auto Scaling group to handle the high data volumes.
        is_correct: false
     explanation: |
       Correct: Dividing the functionality into two Lambda functions, integrated by SQS, allows for independent scaling and efficient resource allocation, reducing the impact of high data volumes.
       Incorrect: 
-        "***replace later***"
+        - Increasing Lambda quotas and using Kinesis adds complexity and does not minimize configuration effort compared to the SQS-based solution.
+        - RDS Proxy helps manage database connections but does not address the scalability of the Lambda function itself.
+        - Deploying the application on ECS increases operational overhead compared to a serverless architecture.
     tags: 
     difficulty: 
     points: 
@@ -466,15 +609,18 @@
     options:
      - text: Turn on AWS Config with the appropriate rules.
        is_correct: true
-     - text: "***replace later***"
+     - text: Use Amazon CloudWatch to monitor S3 bucket changes.
+       is_correct: false
+     - text: Enable AWS Trusted Advisor to check for unauthorized changes.
+       is_correct: false
+     - text: Use AWS CloudTrail to block unauthorized changes.
        is_correct: false
     explanation: |
       Correct: AWS Config enables you to assess, audit, and evaluate the configurations of your AWS resources, monitoring and recording changes to S3 bucket configurations.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - CloudWatch is used for monitoring metrics and logs, not for tracking configuration changes.
+        - Trusted Advisor provides recommendations but does not monitor or enforce configuration changes.
+        - CloudTrail records API calls but does not block unauthorized changes.
 
   - id: q27
     type: multiple_choice
@@ -484,15 +630,18 @@
     options:
      - text: Share the dashboard from the CloudWatch console. Enter the product manager's email address, and complete the sharing steps. Provide a shareable link for the dashboard to the product manager.
        is_correct: true
-     - text: "***replace later***"
+     - text: Create an IAM user for the product manager and grant access to the dashboard.
+       is_correct: false
+     - text: Export the dashboard data to a CSV file and email it to the product manager.
+       is_correct: false
+     - text: Use AWS Organizations to grant the product manager access to the dashboard.
        is_correct: false
     explanation: |
       Correct: CloudWatch allows sharing dashboards with specific email addresses, enabling secure, least-privilege access for users without AWS accounts.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - Creating an IAM user violates the principle of least privilege and requires unnecessary account management.
+        - Exporting data to a CSV file is manual and does not provide real-time access.
+        - AWS Organizations is used for account management, not for sharing dashboards.
 
   - id: q28
     type: multiple_choice
@@ -502,15 +651,18 @@
     options:
      - text: Enable AWS Single Sign-On (AWS SSO) from the AWS SSO console. Create a one-way forest trust or a one-way domain trust to connect the company's self-managed Microsoft Active Directory with AWS SSO by using AWS Directory Service for Microsoft Active Directory.
        is_correct: true
-     - text: "***replace later***"
+     - text: Use AWS Identity and Access Management (IAM) roles to manage user access across accounts.
+       is_correct: false
+     - text: Deploy a third-party SSO solution and integrate it with AWS Organizations.
+       is_correct: false
+     - text: Use AWS Cognito to manage user authentication and access.
        is_correct: false
     explanation: |
       Correct: AWS SSO with Directory Service and a trust to the on-premises Active Directory enables centralized SSO while maintaining on-premises user and group management.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - IAM roles are not designed for SSO and require manual setup for each account.
+        - Third-party SSO solutions increase complexity and operational overhead.
+        - AWS Cognito is designed for application authentication, not for enterprise SSO.
 
   - id: q29
     type: multiple_choice
@@ -521,15 +673,18 @@
     options:
      - text: Deploy a Network Load Balancer (NLB) and an associated target group. Associate the target group with the Auto Scaling group. Use the NLB as an AWS Global Accelerator endpoint in each Region.
        is_correct: true
-     - text: "***replace later***"
+     - text: Use Amazon Route 53 latency-based routing to direct traffic to the appropriate Region.
+       is_correct: false
+     - text: Deploy an Application Load Balancer (ALB) and use AWS Global Accelerator to route traffic.
+       is_correct: false
+     - text: Use AWS Direct Connect to route traffic between Regions.
        is_correct: false
     explanation: |
       Correct: Using NLBs as Global Accelerator endpoints in each Region provides low-latency routing and automated failover for UDP-based VoIP services.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - Route 53 latency-based routing does not provide automated failover.
+        - ALBs are not optimized for UDP traffic and are less suitable than NLBs for this use case.
+        - Direct Connect is for private connectivity, not for routing user traffic between Regions.
 
   - id: q30
     type: multiple_choice
@@ -539,12 +694,18 @@
     options:
      - text: Create a snapshot when tests are completed. Terminate the DB instance and restore the snapshot when required.
        is_correct: true
-     - text: "***replace later***"
+     - text: Use an Amazon Aurora Serverless DB cluster to run the tests.
+       is_correct: false
+     - text: Enable Multi-AZ deployment for the DB instance to improve availability.
+       is_correct: false
+     - text: Use Reserved Instances for the DB instance to reduce costs.
        is_correct: false
     explanation: |
       Correct: Creating a snapshot and terminating the DB instance saves costs when not in use. Restoring from the snapshot allows resuming tests as needed.
       Incorrect: 
-        "***replace later***"
+        - Using an Aurora Serverless DB cluster is not cost-effective for resource-intensive tests requiring consistent compute and memory attributes.
+        - Enabling Multi-AZ deployment increases costs and does not address the requirement to reduce costs for infrequent usage.
+        - Reserved Instances reduce costs for continuously running databases but are not suitable for a database used only 48 hours per month.
 
   - id: q31
     type: multiple_choice
@@ -554,12 +715,18 @@
     options:
      - text: Use AWS Config rules to define and detect resources that are not properly tagged.
        is_correct: true
-     - text: "***replace later***"
+     - text: Use AWS Trusted Advisor to monitor and enforce tagging compliance.
+       is_correct: false
+     - text: Manually review resource tags using the AWS Management Console.
+       is_correct: false
+     - text: Use Amazon CloudWatch to create alarms for missing tags.
        is_correct: false
     explanation: |
       Correct: AWS Config allows you to define rules that automatically check if resources are properly tagged, minimizing operational effort for compliance.
       Incorrect:
-        "***replace later***"
+        - Trusted Advisor provides recommendations but does not enforce tagging compliance automatically.
+        - Manually reviewing tags is time-consuming and prone to human error, making it inefficient.
+        - CloudWatch is designed for monitoring metrics and logs, not for enforcing tagging compliance.
 
   - id: q32
     type: multiple_choice
@@ -569,12 +736,18 @@
     options:
      - text: Create an Amazon S3 bucket and host the website there.
        is_correct: true
-     - text: "***replace later***"
+     - text: Deploy the website on Amazon EC2 instances with an Elastic Load Balancer.
+       is_correct: false
+     - text: Use Amazon RDS to store the website files and serve them directly.
+       is_correct: false
+     - text: Host the website on AWS Lambda with API Gateway.
        is_correct: false
     explanation: |
       Correct: Amazon S3 is a highly scalable and cost-effective object storage service, ideal for hosting static websites with HTML, CSS, JS, and images.
       Incorrect:
-        "***replace later***"
+        - Hosting on EC2 with a load balancer is more expensive and unnecessary for static content.
+        - RDS is a database service and not suitable for serving static website files.
+        - Lambda with API Gateway is designed for serverless applications, not static websites.
 
   - id: q33
     type: multiple_choice
@@ -584,12 +757,18 @@
     options:
      - text: Stream the transactions data into Amazon Kinesis Data Streams. Use AWS Lambda integration to remove sensitive data from every transaction and then store the transactions data in Amazon DynamoDB. Other applications can consume the transactions data off the Kinesis data stream.
        is_correct: true
-     - text: "***replace later***"
+     - text: Use Amazon SQS to queue transactions and process them with an EC2 instance.
+       is_correct: false
+     - text: Store the transactions in Amazon RDS and use triggers to remove sensitive data.
+       is_correct: false
+     - text: Use Amazon EMR to process transactions and store them in Amazon S3.
        is_correct: false
     explanation: |
       Correct: Kinesis Data Streams provides scalable, near-real-time streaming. Lambda can process and remove sensitive data before storing in DynamoDB for low-latency retrieval, while other apps can consume the stream.
       Incorrect:
-        "***replace later***"
+        - SQS is not designed for near-real-time streaming and would require more operational overhead.
+        - RDS triggers are not suitable for high-throughput, near-real-time processing.
+        - EMR is designed for big data processing, not for low-latency, near-real-time solutions.
 
   - id: q34
     type: multiple_choice
@@ -599,12 +778,18 @@
     options:
      - text: Use AWS Config to track configuration changes and AWS CloudTrail to record API calls.
        is_correct: true
-     - text: "***replace later***"
+     - text: Use Amazon CloudWatch Logs to monitor API calls and resource changes.
+       is_correct: false
+     - text: Enable AWS Trusted Advisor to track configuration changes and API calls.
+       is_correct: false
+     - text: Use AWS Systems Manager to log configuration changes and API calls.
        is_correct: false
     explanation: |
       Correct: AWS Config tracks resource configuration changes, and CloudTrail records API calls, providing full visibility for compliance and auditing.
       Incorrect:
-        "***replace later***"
+        - CloudWatch Logs is used for monitoring logs and metrics, not for tracking configuration changes or API call history.
+        - Trusted Advisor provides recommendations but does not track configuration changes or API calls.
+        - Systems Manager is used for operational management, not for tracking configuration changes or API calls.
 
   - id: q35
     type: multiple_choice
@@ -614,26 +799,38 @@
     options:
      - text: Enable AWS Shield Advanced and assign the ELB to it.
        is_correct: true
-     - text: "***replace later***"
+     - text: Use AWS WAF to block DDoS attacks.
+       is_correct: false
+     - text: Deploy a third-party firewall appliance in the VPC.
+       is_correct: false
+     - text: Use Security Groups to block DDoS traffic.
        is_correct: false
     explanation: |
       Correct: AWS Shield Advanced provides expanded DDoS protection for ELB and other AWS resources, helping detect and mitigate large-scale attacks.
       Incorrect:
-        "***replace later***"
+        - AWS WAF is designed for web application protection, not for mitigating large-scale DDoS attacks.
+        - Third-party firewall appliances require additional management and may not integrate seamlessly with AWS services.
+        - Security Groups are not designed to handle large-scale DDoS attacks.
 
   - id: q36
     type: multiple_choice
     question: |
       (Questão não fornecida no arquivo saa.txt. Pulei para a próxima questão numerada.)
     options:
-     - text: "***replace later***"
+     - text: Use AWS Config to monitor resources.
        is_correct: true
-     - text: "***replace later***"
+     - text: Use AWS Trusted Advisor for compliance checks.
+       is_correct: false
+     - text: Use Amazon CloudWatch for resource tracking.
+       is_correct: false
+     - text: Use AWS Systems Manager for auditing.
        is_correct: false
     explanation: |
-      Correct: "***replace later***"
+      Correct: AWS Config is designed to monitor and track resource configurations for compliance and auditing.
       Incorrect:
-        "***replace later***"
+        - Trusted Advisor provides recommendations but does not monitor resource configurations.
+        - CloudWatch is used for monitoring metrics and logs, not for compliance tracking.
+        - Systems Manager is used for operational management, not for compliance monitoring.
 
   - id: q37
     type: multiple_choice
@@ -643,12 +840,18 @@
     options:
      - text: Attach the appropriate IAM role to each existing instance and new instance. Use AWS Systems Manager Session Manager to establish a remote SSH session.
        is_correct: true
-     - text: "***replace later***"
+     - text: Use a bastion host to access the EC2 instances.
+       is_correct: false
+     - text: Open SSH ports in the Security Groups and use key pairs for access.
+       is_correct: false
+     - text: Use AWS VPN to connect to the VPC and access the instances.
        is_correct: false
     explanation: |
       Correct: Systems Manager Session Manager provides secure, auditable remote access to EC2 instances without open inbound ports or SSH keys, following AWS best practices.
       Incorrect:
-        "***replace later***"
+        - A bastion host increases operational overhead and requires additional management.
+        - Opening SSH ports increases the attack surface and is less secure.
+        - Using a VPN adds complexity and does not minimize operational overhead.
 
   - id: q38
     type: multiple_choice
@@ -658,12 +861,18 @@
     options:
      - text: Add an Amazon CloudFront distribution in front of the S3 bucket. Edit the Route 53 entries to point to the CloudFront distribution.
        is_correct: true
-     - text: "***replace later***"
+     - text: Use AWS Global Accelerator to improve website performance.
+       is_correct: false
+     - text: Deploy the website on Amazon EC2 instances in multiple Regions.
+       is_correct: false
+     - text: Use Amazon RDS to cache the website content.
        is_correct: false
     explanation: |
       Correct: CloudFront caches and delivers content from edge locations worldwide, reducing latency and improving performance for global users.
       Incorrect:
-        "***replace later***"
+        - Global Accelerator is more expensive and is designed for dynamic applications, not static websites.
+        - Deploying EC2 instances in multiple Regions increases cost and operational overhead.
+        - RDS is a database service and is not suitable for caching static website content.
 
   - id: q39
     type: multiple_choice
@@ -674,12 +883,18 @@
     options:
      - text: Change the storage type to Provisioned IOPS SSD.
        is_correct: true
-     - text: "***replace later***"
+     - text: Scale the database vertically by increasing the instance size.
+       is_correct: false
+     - text: Use Amazon ElastiCache to cache the database queries.
+       is_correct: false
+     - text: Enable Multi-AZ deployment for the database.
        is_correct: false
     explanation: |
       Correct: Provisioned IOPS SSD provides consistent, high-performance storage for workloads with high I/O requirements, reducing insert latency.
       Incorrect:
-        "***replace later***"
+        - Scaling the database vertically increases compute power but does not address the storage performance issue.
+        - ElastiCache improves read performance but does not help with write-intensive workloads like frequent inserts.
+        - Multi-AZ deployment improves availability but does not enhance storage performance.
 
   - id: q40
     type: multiple_choice
@@ -690,12 +905,18 @@
     options:
      - text: Create an Amazon Kinesis Data Firehose delivery stream to ingest the alerts. Configure the Kinesis Data Firehose stream to deliver the alerts to an Amazon S3 bucket. Set up an S3 Lifecycle configuration to transition data to Amazon S3 Glacier after 14 days.
        is_correct: true
-     - text: "***replace later***"
+     - text: Use Amazon SQS to queue the alerts and process them with an EC2 instance.
+       is_correct: false
+     - text: Deploy an Amazon RDS database to store the alerts and use a backup policy to archive older data.
+       is_correct: false
+     - text: Use Amazon DynamoDB to store the alerts and enable TTL (time-to-live) for older data.
        is_correct: false
     explanation: |
       Correct: Kinesis Data Firehose is fully managed for ingesting and delivering streaming data to S3. S3 Lifecycle policies automate archival to Glacier, minimizing operational overhead.
       Incorrect:
-        "***replace later***"
+        - SQS is not designed for long-term storage and requires additional infrastructure for processing.
+        - RDS is not cost-effective for storing large volumes of alerts and requires more management.
+        - DynamoDB with TTL is suitable for key-value data but is less cost-effective for large-scale archival needs.
 
   - id: q41
     type: multiple_choice
@@ -705,12 +926,18 @@
     options:
      - text: Create an Amazon AppFlow flow to transfer data between each SaaS source and the S3 bucket. Configure an S3 event notification to send events to an Amazon Simple Notification Service (Amazon SNS) topic when the upload to the S3 bucket is complete.
        is_correct: true
-     - text: "***replace later***"
+     - text: Use AWS DataSync to transfer data from SaaS sources to the S3 bucket.
+       is_correct: false
+     - text: Deploy additional EC2 instances to handle the data transfer and notifications.
+       is_correct: false
+     - text: Use Amazon Kinesis Data Streams to process and transfer the data.
        is_correct: false
     explanation: |
       Correct: Amazon AppFlow automates data transfer from SaaS sources to S3, removing the EC2 bottleneck. S3 event notifications and SNS automate user notifications, reducing operational overhead.
       Incorrect:
-        "***replace later***"
+        - DataSync is designed for batch transfers and is not optimized for real-time SaaS integrations.
+        - Deploying additional EC2 instances increases operational overhead and does not address the bottleneck effectively.
+        - Kinesis Data Streams is designed for real-time analytics and streaming, not for SaaS data transfer.
 
   - id: q42
     type: multiple_choice
@@ -720,12 +947,18 @@
     options:
      - text: Deploy a gateway VPC endpoint for Amazon S3.
        is_correct: true
-     - text: "***replace later***"
+     - text: Use an internet gateway to route traffic directly to S3.
+       is_correct: false
+     - text: Deploy additional NAT gateways in each Availability Zone.
+       is_correct: false
+     - text: Use AWS Direct Connect to connect to S3.
        is_correct: false
     explanation: |
       Correct: A gateway VPC endpoint enables private connectivity to S3, avoiding NAT gateway and Regional data transfer charges.
       Incorrect:
-        "***replace later***"
+        - An internet gateway incurs data transfer charges and does not provide private connectivity.
+        - Deploying additional NAT gateways increases costs without addressing the data transfer charges.
+        - Direct Connect is unnecessary for accessing S3 within the same Region and adds complexity.
 
   - id: q43
     type: multiple_choice
@@ -735,12 +968,18 @@
     options:
      - text: Establish a new AWS Direct Connect connection and direct backup traffic through this new connection.
        is_correct: true
-     - text: "***replace later***"
+     - text: Use AWS Snowball to transfer the data to S3.
+       is_correct: false
+     - text: Use Amazon S3 Transfer Acceleration to speed up uploads.
+       is_correct: false
+     - text: Deploy an AWS Storage Gateway Volume Gateway.
        is_correct: false
     explanation: |
       Correct: AWS Direct Connect provides a dedicated, high-bandwidth connection to AWS, enabling timely backups to S3 without impacting internet bandwidth for users.
       Incorrect:
-        "***replace later***"
+        - Snowball is designed for offline data transfer and is not suitable for ongoing backups.
+        - S3 Transfer Acceleration improves upload speeds but still relies on internet bandwidth.
+        - Storage Gateway Volume Gateway is not optimized for large-scale, time-sensitive backups.
 
   - id: q44
     type: multiple_choice
@@ -748,16 +987,22 @@
       A company has an Amazon S3 bucket that contains critical data. The company must protect the data from accidental deletion.
       Which combination of steps should a solutions architect take to meet these requirements? (Choose two.)
     options:
-     - text: Enable versioning on the S3 bucket
+     - text: Enable versioning on the S3 bucket.
        is_correct: true
-     - text: Enable MFA Delete on the S3 bucket
+     - text: Enable MFA Delete on the S3 bucket.
        is_correct: true
-     - text: "***replace later***"
+     - text: Use AWS Backup to create daily backups of the bucket.
+       is_correct: false
+     - text: Enable default encryption on the S3 bucket.
+       is_correct: false
+     - text: Use an S3 Lifecycle policy to archive objects to S3 Glacier.
        is_correct: false
     explanation: |
       Correct: Enabling versioning allows recovery of deleted objects. MFA Delete adds an extra layer of protection, requiring MFA for object deletions.
       Incorrect:
-        "***replace later***"
+        - AWS Backup creates backups but does not prevent accidental deletions.
+        - Default encryption protects data at rest but does not prevent deletions.
+        - Lifecycle policies manage storage costs but do not prevent accidental deletions.
 
   - id: q45
     type: multiple_choice
@@ -772,12 +1017,18 @@
        is_correct: true
      - text: Modify the Lambda function to read from an Amazon Simple Queue Service (Amazon SQS) queue.
        is_correct: true
-     - text: "***replace later***"
+     - text: Use Amazon Kinesis Data Firehose to buffer messages before processing.
+       is_correct: false
+     - text: Enable retries on the Lambda function.
+       is_correct: false
+     - text: Use Amazon EventBridge to trigger the Lambda function.
        is_correct: false
     explanation: |
       Correct: SQS provides a durable buffer for messages, ensuring all data is eventually processed. Lambda can poll SQS to process messages reliably.
       Incorrect:
-        "***replace later***"
+        - Kinesis Data Firehose is designed for streaming data delivery, not for buffering messages for Lambda.
+        - Enabling retries on the Lambda function does not address message durability.
+        - EventBridge is not designed for durable message storage and does not guarantee message delivery.
 
   - id: q46
     type: multiple_choice
@@ -788,12 +1039,18 @@
     options:
      - text: Use an Amazon S3 bucket as a secure transfer point. Use Amazon Macie to scan the objects in the bucket. If objects contain PII, use Amazon Simple Notification Service (Amazon SNS) to trigger a notification to the administrators to remove the objects that contain PII.
        is_correct: true
-     - text: "***replace later***"
+     - text: Use AWS Glue to scan the data for PII and notify administrators.
+       is_correct: false
+     - text: Use Amazon Inspector to scan the files for PII and send alerts.
+       is_correct: false
+     - text: Use AWS Lambda to manually parse and scan files for PII.
        is_correct: false
     explanation: |
       Correct: Amazon Macie can automatically scan S3 for PII and trigger SNS notifications for alerting and remediation with minimal development effort.
       Incorrect:
-        "***replace later***"
+        - AWS Glue is designed for ETL processes and does not specialize in PII detection.
+        - Amazon Inspector is used for security assessments, not for scanning files for PII.
+        - Using Lambda to manually parse files increases development effort and is less efficient.
 
   - id: q47
     type: multiple_choice
@@ -803,12 +1060,18 @@
     options:
      - text: Create an On-Demand Capacity Reservation that specifies the Region and three Availability Zones needed.
        is_correct: true
-     - text: "***replace later***"
+     - text: Use Spot Instances to reserve capacity in the required Availability Zones.
+       is_correct: false
+     - text: Purchase Reserved Instances for the required Availability Zones.
+       is_correct: false
+     - text: Use Auto Scaling to ensure capacity in the required Availability Zones.
        is_correct: false
     explanation: |
       Correct: On-Demand Capacity Reservations guarantee EC2 capacity in specific Availability Zones for the required duration.
       Incorrect:
-        "***replace later***"
+        - Spot Instances do not guarantee capacity and can be interrupted.
+        - Reserved Instances provide cost savings but do not guarantee capacity.
+        - Auto Scaling adjusts capacity dynamically but does not guarantee availability in specific zones.
 
   - id: q48
     type: multiple_choice
@@ -818,12 +1081,18 @@
     options:
      - text: Move the catalog to an Amazon Elastic File System (Amazon EFS) file system.
        is_correct: true
-     - text: "***replace later***"
+     - text: Use Amazon S3 to store the catalog and serve it directly to the website.
+       is_correct: false
+     - text: Use Amazon RDS to store the catalog data.
+       is_correct: false
+     - text: Enable Multi-AZ deployment for the EC2 instance store.
        is_correct: false
     explanation: |
       Correct: Amazon EFS is a fully managed, durable, highly available, and shared file system, suitable for storing catalogs with high availability.
       Incorrect:
-        "***replace later***"
+        - Amazon S3 is not suitable for serving dynamic catalogs directly to a website.
+        - Amazon RDS is a database service and is not designed for file storage.
+        - Multi-AZ deployment is not applicable to EC2 instance stores, which are ephemeral.
 
   - id: q49
     type: multiple_choice
@@ -833,24 +1102,38 @@
     options:
      - text: Store individual files in Amazon S3 Intelligent-Tiering. Use S3 Lifecycle policies to move the files to S3 Glacier Flexible Retrieval after 1 year. Query and retrieve the files that are in Amazon S3 by using Amazon Athena. Query and retrieve the files that are in S3 Glacier by using S3 Glacier Select.
        is_correct: true
-     - text: "***replace later***"
+     - text: Store all files in Amazon S3 Standard and use S3 Select for querying.
+       is_correct: false
+     - text: Use Amazon RDS to store the files and query them directly.
+       is_correct: false
+     - text: Store files in Amazon S3 Glacier Deep Archive and retrieve them as needed.
        is_correct: false
     explanation: |
       Correct: S3 Intelligent-Tiering provides fast access for recent files, and S3 Glacier Flexible Retrieval is cost-effective for older files. Athena and Glacier Select enable querying as needed.
       Incorrect:
-        "***replace later***"
+        - S3 Standard is more expensive for infrequently accessed files and does not optimize costs.
+        - RDS is not cost-effective for storing large volumes of files.
+        - Glacier Deep Archive has longer retrieval times, which is not suitable for files accessed within 1 year.
 
   - id: q50
     type: multiple_choice
     question: |
       A company has a production workload that runs on 1,000 Amazon EC2 Linux instances. The workload is powered by third-party software. The company needs to patch the third-party software on all EC2 instances as quickly as possible to remediate a critical security vulnerability.
       What should a solutions architect do to meet these requirements?
+      A company has a production workload that runs on 1,000 Amazon EC2 Linux instances. The workload is powered by third-party software. The company needs to patch the third-party software on all EC2 instances as quickly as possible to remediate a critical security vulnerability.
+      What should a solutions architect do to meet these requirements?
     options:
      - text: Use AWS Systems Manager Run Command to run a custom command that applies the patch to all EC2 instances.
        is_correct: true
-     - text: "***replace later***"
+     - text: Manually SSH into each instance and apply the patch.
+       is_correct: false
+     - text: Use AWS Elastic Beanstalk to redeploy the application with the patched software.
+       is_correct: false
+     - text: Terminate all instances and relaunch them with the patched software.
        is_correct: false
     explanation: |
       Correct: Systems Manager Run Command allows you to quickly and securely run commands across a large fleet of EC2 instances for patching and remediation.
       Incorrect:
-        "***replace later***"
+        - Manually SSHing into each instance is time-consuming and error-prone.
+        - Elastic Beanstalk is not suitable for patching third-party software on existing EC2 instances.
+        - Terminating and relaunching instances is disruptive and inefficient for applying patches.
