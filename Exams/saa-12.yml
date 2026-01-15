@@ -4,14 +4,22 @@ questions:
     question: |
       A company has a financial application that produces reports. The reports average 50 KB in size and are stored in Amazon S3. The reports are frequently accessed during the first week after production and must be stored for several years. The reports must be retrievable within 6 hours.
     options:
-     - text: Use S3 Standard. Use an S3 Lifecycle rule to transition the reports to S3 Glacier after 7 days.
+     - text: Use S3 Standard. Use an S3 Lifecycle rule to transition the reports to S3 Glacier Flexible Retrieval after 7 days.
        is_correct: true
-     - text: "***dont't touch, replace later***"
+     - text: Use S3 Standard. Use an S3 Lifecycle rule to transition the reports to S3 Standard-Infrequent Access (S3 Standard-IA) after 7 days.
+       is_correct: false
+     - text: Store the reports directly in S3 Glacier Deep Archive and use expedited retrievals when needed.
+       is_correct: false
+     - text: Use S3 Intelligent-Tiering to automatically manage the transitions between all tiers.
        is_correct: false
     explanation: |
-      Correct: After the initial period, using an S3 Lifecycle rule to transition the reports to the S3 Glacier storage class is a cost-effective approach. Glacier is designed for long-term archival storage with lower storage costs compared to S3 Standard.
+      Correct: S3 Glacier Flexible Retrieval is ideal for data that is accessed infrequently but can wait a few hours (1-5 hours) for retrieval. Transitioning after the first week of frequent access minimizes costs for multi-year storage.
       Incorrect: 
-        "***replace later***"
+        - S3 Standard-IA has a minimum storage duration of 30 days and a minimum object size of 128 KB for billing; 50 KB objects would be billed at 128 KB, making it less cost-effective than Glacier.
+        - S3 Glacier Deep Archive has a minimum retrieval time of 12 hours, which violates the 6-hour requirement.
+        - Intelligent-Tiering has a monthly monitoring fee per object, which can be expensive for a large volume of small (50 KB) files.
+
+
 
   - id: q552
     type: multiple_choice
@@ -20,672 +28,40 @@ questions:
     options:
      - text: Purchase a No Upfront Compute Savings Plan for a 1-year term.
        is_correct: true
-     - text: "***dont't touch, replace later***"
+     - text: Purchase EC2 Instance Savings Plans for the specific instance families currently in use.
+       is_correct: false
+     - text: Use Standard Reserved Instances with a 3-year term for maximum discount.
+       is_correct: false
+     - text: Purchase Convertible Reserved Instances and exchange them every 2 months.
        is_correct: false
     explanation: |
-      Correct: A No Upfront option means no upfront payment is required, which provides flexibility. A 1-year term aligns with the company's need to change the type and family of its EC2 instances every 2-3 months.
+      Correct: Compute Savings Plans provide the most flexibility. They apply to usage across any instance family, size, region, or even Fargate and Lambda. This is perfect for a company that changes instance types frequently.
       Incorrect: 
-        "***replace later***"
-
-  - id: q553
-    type: multiple_choice
-    question: |
-      A solutions architect needs to review a company's Amazon S3 buckets to discover personally identifiable information (PII). The company stores the PII data in the us-east-1 Region and us-west-2 Region.
-    options:
-     - text: Configure Amazon Macie in each Region. Create a job to analyze the data that is in Amazon S3.
-       is_correct: true
-     - text: "***dont't touch, replace later***"
-       is_correct: false
-    explanation: |
-      Correct: Amazon Macie is a managed data security and data privacy service that uses machine learning to automatically discover, classify, and protect sensitive data, including personally identifiable information (PII).
-      Incorrect: 
-        "***replace later***"
-
-  - id: q554
-    type: multiple_choice
-    question: |
-      A company's SAP application has a backend SQL Server database in an on-premises environment. The company wants to migrate its on-premises application and database server to AWS. The company needs an instance type that meets the high demands of its SAP database. On-premises performance data shows that both the SAP application and the database have high memory utilization.
-    options:
-     - text: Use the memory optimized instance family for both the application and the database.
-       is_correct: true
-     - text: "***dont't touch, replace later***"
-       is_correct: false
-    explanation: |
-      Correct: Memory optimized instances are designed to provide a high memory-to-CPU ratio, which aligns well with workloads that have significant memory requirements, such as SAP applications with backend databases.
-      Incorrect: 
-        "***replace later***"
-
-  - id: q555
-    type: multiple_choice
-    question: |
-      A company runs an application in a VPC with public and private subnets. The VPC extends across multiple Availability Zones. The application runs on Amazon EC2 instances in private subnets. The application uses an Amazon Simple Queue Service (Amazon SQS) queue.
-    options:
-     - text: Implement an interface VPC endpoint for Amazon SQS. Configure the endpoint to use the private subnets. Add to the endpoint a security group that has an inbound access rule that allows traffic from the EC2 instances that are in the private subnets.
-       is_correct: true
-     - text: "***dont't touch, replace later***"
-       is_correct: false
-    explanation: |
-      Correct: Interface VPC endpoints are used for services that are accessed over the Internet, and in this case, it's Amazon SQS. By implementing an interface VPC endpoint for SQS, you can ensure that the traffic stays within the Amazon network.
-      Incorrect: 
-        "***replace later***"
-
-  - id: q556
-    type: multiple_choice
-    question: |
-      A solutions architect is using an AWS CloudFormation template to deploy a three-tier web application. The web application consists of a web tier and an application tier that stores and retrieves user data in Amazon DynamoDB tables. The web and application tiers are hosted on Amazon EC2 instances, and the database tier is not publicly accessible. The application EC2 instances need to access the DynamoDB tables without exposing API credentials in the template.
-    options:
-     - text: Create an IAM role that has the required permissions to read and write from the DynamoDB tables. Add the role to the EC2 instance profile, and associate the instance profile with the application instances.
-       is_correct: true
-     - text: "***dont't touch, replace later***"
-       is_correct: false
-    explanation: |
-      Correct: By creating an IAM role with the necessary permissions to access DynamoDB and associating it with the EC2 instance profile, you can securely grant permissions to the EC2 instances without exposing API credentials in the CloudFormation template.
-      Incorrect: 
-        "***replace later***"
-
-  - id: q557
-    type: multiple_choice
-    question: |
-      A solutions architect manages an analytics application. The application stores large amounts of semistructured data in an Amazon S3 bucket. The solutions architect wants to use parallel data processing to process the data more quickly. The solutions architect also wants to use information that is stored in an Amazon Redshift database to enrich the data.
-    options:
-     - text: Use Amazon EMR to process the S3 data. Use Amazon EMR with the Amazon Redshift data to enrich the S3 data.
-       is_correct: true
-     - text: "***dont't touch, replace later***"
-       is_correct: false
-    explanation: |
-      Correct: Amazon EMR supports parallel data processing, making it a good fit for the requirement. Additionally, using EMR with the Amazon Redshift data allows for efficient enrichment of the S3 data.
-      Incorrect: 
-        "***replace later***"
-
-  - id: q558
-    type: multiple_choice
-    question: |
-      A company has two VPCs that are located in the us-west-2 Region within the same AWS account. The company needs to allow network traffic between these VPCs. Approximately 500 GB of data transfer will occur between the VPCs each month.
-    options:
-     - text: Set up a VPC peering connection between the VPCs. Update the route tables of each VPC to use the VPC peering connection for inter-VPC communication.
-       is_correct: true
-     - text: "***dont't touch, replace later***"
-       is_correct: false
-    explanation: |
-      Correct: VPC peering allows communication between VPCs within the same AWS account. It is a cost-effective solution, especially when the VPCs are located in the same region.
-      Incorrect: 
-        "***replace later***"
-
-  - id: q559
-    type: multiple_choice
-    question: |
-      A company hosts multiple applications on AWS for different product lines. The applications use different compute resources, including Amazon EC2 instances and Application Load Balancers. The applications run in different AWS accounts under the same organization in AWS Organizations across multiple AWS Regions. Teams for each product line have tagged each compute resource in the individual accounts.
-    options:
-     - text: Select a specific user-defined tag in the AWS Billing console.
-       is_correct: true
-     - text: Activate the selected tag from the Organizations management account.
-       is_correct: true
-     - text: "***dont't touch, replace later***"
-       is_correct: false
-    explanation: |
-      Correct: Selecting a specific user-defined tag in the AWS Billing console allows you to filter costs based on those tags. Activating the selected tag from the Organizations management account ensures that the tagged resources from all linked accounts are included in the consolidated billing report.
-      Incorrect: 
-        "***replace later***"
-
-  - id: q560
-    type: multiple_choice
-    question: |
-      A company's solutions architect is designing an AWS multi-account solution that uses AWS Organizations. The solutions architect has organized the company's accounts into organizational units (OUs).
-    options:
-     - text: Provision the AWS accounts by using AWS Control Tower. Use account drift notifications to identify the changes to the OU hierarchy.
-       is_correct: true
-     - text: "***dont't touch, replace later***"
-       is_correct: false
-    explanation: |
-      Correct: AWS Control Tower provides a pre-defined landing zone with an organizational structure, OUs, and guardrails to enforce security and compliance. Account drift notifications help identify changes to the OU hierarchy.
-      Incorrect: 
-        "***replace later***"
-
-  - id: q561
-    type: multiple_choice
-    question: |
-      A company's website handles millions of requests each day, and the number of requests continues to increase. A solutions architect needs to improve the response time of the web application. The solutions architect determines that the application needs to decrease latency when retrieving product details from the Amazon DynamoDB table.
-    options:
-     - text: Set up a DynamoDB Accelerator (DAX) cluster. Route all read requests through DAX.
-       is_correct: true
-     - text: "***dont't touch, replace later***"
-       is_correct: false
-    explanation: |
-      Correct: DynamoDB Accelerator (DAX) is designed to improve the response time of read-intensive DynamoDB workloads by caching frequently accessed data.
-      Incorrect: 
-        "***replace later***"
-
-  - id: q562
-    type: multiple_choice
-    question: |
-      A solutions architect needs to ensure that API calls to Amazon DynamoDB from Amazon EC2 instances in a VPC do not travel across the internet.
-    options:
-     - text: Create a route table entry for the endpoint.
-       is_correct: true
-     - text: Create a gateway endpoint for DynamoDB.
-       is_correct: true
-     - text: "***dont't touch, replace later***"
-       is_correct: false
-    explanation: |
-      Correct: Creating a gateway endpoint for DynamoDB ensures that traffic does not travel across the internet. Adding a route table entry directs traffic to the endpoint.
-      Incorrect: 
-        "***replace later***"
-
-  - id: q563
-    type: multiple_choice
-    question: |
-      A company needs to manage multiple Kubernetes clusters and workloads from a central location.
-    options:
-     - text: Use Amazon EKS Connector to register and connect all Kubernetes clusters.
-       is_correct: true
-     - text: "***dont't touch, replace later***"
-       is_correct: false
-    explanation: |
-      Correct: Amazon EKS Connector allows you to register and connect multiple EKS clusters, providing a unified view of the clusters from the AWS Management Console.
-      Incorrect: 
-        "***replace later***"
-
-  - id: q564
-    type: multiple_choice
-    question: |
-      A company is building an ecommerce application and needs to store sensitive customer information. The company needs to give customers the ability to complete purchase transactions on the website. The company also needs to ensure that sensitive customer data is protected, even from database administrators.
-    options:
-     - text: Store sensitive data in Amazon RDS for MySQL. Use AWS Key Management Service (AWS KMS) client-side encryption to encrypt the data.
-       is_correct: true
-     - text: "***dont't touch, replace later***"
-       is_correct: false
-    explanation: |
-      Correct: AWS Key Management Service (KMS) provides a way to create and control encryption keys. Client-side encryption ensures that sensitive data is protected, even from database administrators.
-      Incorrect: 
-        "***replace later***"
-
-  - id: q565
-    type: multiple_choice
-    question: |
-      A company has an on-premises MySQL database that handles transactional data. The company is migrating the database to the AWS Cloud. The migrated database must maintain compatibility with the company's applications that use the database. The migrated database also must scale automatically during periods of increased demand.
-    options:
-     - text: Use AWS Database Migration Service (AWS DMS) to migrate the database to Amazon Aurora. Turn on Aurora Auto Scaling.
-       is_correct: true
-     - text: "***dont't touch, replace later***"
-       is_correct: false
-    explanation: |
-      Correct: AWS DMS supports homogeneous and heterogeneous database migrations. Aurora Auto Scaling ensures that the database scales automatically during periods of increased demand.
-      Incorrect: 
-        "***replace later***"
-
-  - id: q566
-    type: multiple_choice
-    question: |
-      A company runs multiple Amazon EC2 Linux instances in a VPC across two Availability Zones. The instances host applications that use a hierarchical directory structure. The applications need to read and write rapidly and concurrently to shared storage.
-    options:
-     - text: Create an Amazon Elastic File System (Amazon EFS) file system. Mount the EFS file system from each EC2 instance.
-       is_correct: true
-     - text: "***dont't touch, replace later***"
-       is_correct: false
-    explanation: |
-      Correct: Amazon EFS is a fully managed, scalable file storage service designed to provide shared access to files across multiple Amazon EC2 instances.
-      Incorrect: 
-        "***replace later***"
-
-  - id: q567
-    type: multiple_choice
-    question: |
-      A solutions architect is designing a workload that will store hourly energy consumption by business tenants in a building. The sensors will feed a database through HTTP requests that will add up usage for each tenant. The solutions architect must use managed services when possible. The workload will receive more features in the future as the solutions architect adds independent components.
-    options:
-     - text: Use Amazon API Gateway with AWS Lambda functions to receive the data from the sensors, process the data, and store the data in an Amazon DynamoDB table.
-       is_correct: true
-     - text: "***dont't touch, replace later***"
-       is_correct: false
-    explanation: |
-      Correct: Amazon API Gateway acts as an entry point for HTTP requests. Lambda functions process the data, and DynamoDB handles the storage of the hourly energy consumption data.
-      Incorrect: 
-        "***replace later***"
-
-  - id: q568
-    type: multiple_choice
-    question: |
-      A solutions architect is designing the storage architecture for a new web application used for storing and viewing engineering drawings. All application components will be deployed on the AWS infrastructure.
-    options:
-     - text: Amazon S3 with Amazon CloudFront
-       is_correct: true
-     - text: "***dont't touch, replace later***"
-       is_correct: false
-    explanation: |
-      Correct: Amazon S3 is suitable for storing petabytes of data, and CloudFront reduces latency by caching content at edge locations.
-      Incorrect: 
-        "***replace later***"
-
-  - id: q569
-    type: multiple_choice
-    question: |
-      An Amazon EventBridge rule targets a third-party API. The third-party API has not received any incoming traffic. A solutions architect needs to determine whether the rule conditions are being met and if the rule's target is being invoked.
-    options:
-     - text: "***dont't touch, replace later***"
-       is_correct: false
-    explanation: |
-      Correct: "***replace later***"
-      Incorrect: 
-        "***replace later***"
-
-  - id: q570
-    type: multiple_choice
-    question: |
-      A company has a large workload that runs every Friday evening. The workload runs on Amazon EC2 instances that are in two Availability Zones in the us-east-1 Region. Normally, the company must run no more than two instances at all times. However, the company wants to scale up to six instances each Friday to handle a regularly repeating increased workload.
-    options:
-     - text: Create an Auto Scaling group that has a scheduled action.
-       is_correct: true
-     - text: "***dont't touch, replace later***"
-       is_correct: false
-    explanation: |
-      Correct: By creating an Auto Scaling group with a scheduled action, you can configure the group to automatically adjust the desired capacity based on a specified schedule.
-      Incorrect: 
-        "***replace later***"
-
-  - id: q571
-    type: multiple_choice
-    question: |
-      A company is creating a REST API. The company has strict requirements for the use of TLS. The company requires TLSv1.3 on the API endpoints. The company also requires a specific public third-party certificate authority (CA) to sign the TLS certificate.
-    options:
-     - text: Use a local machine to create a certificate that is signed by the third-party CImport the certificate into AWS Certificate Manager (ACM). Create an HTTP API in Amazon API Gateway with a custom domain. Configure the custom domain to use the certificate.
-       is_correct: true
-     - text: "***dont't touch, replace later***"
-       is_correct: false
-    explanation: |
-      Correct: Importing the certificate into ACM and using it with a custom domain in API Gateway ensures compliance with the company's requirements.
-      Incorrect: 
-        "***replace later***"
-
-  - id: q572
-    type: multiple_choice
-    question: |
-      A company runs an application on AWS. The application receives inconsistent amounts of usage. The application uses AWS Direct Connect to connect to an on-premises MySQL-compatible database. The on-premises database consistently uses a minimum of 2 GiB of memory.
-    options:
-     - text: Provision an Amazon Aurora Serverless v2 database with a minimum capacity of 1 Aurora capacity unit (ACU).
-       is_correct: true
-     - text: "***dont't touch, replace later***"
-       is_correct: false
-    explanation: |
-      Correct: Aurora Serverless v2 automatically adjusts its capacity based on actual usage, allowing it to scale up or down as needed.
-      Incorrect: 
-        "***replace later***"
-
-  - id: q573
-    type: multiple_choice
-    question: |
-      A company wants to use an event-driven programming model with AWS Lambda. The company wants to reduce startup latency for Lambda functions that run on Java 11. The company does not have strict latency requirements for the applications. The company wants to reduce cold starts and outlier latencies when a function scales up.
-    options:
-     - text: Configure Lambda SnapStart.
-       is_correct: true
-     - text: "***dont't touch, replace later***"
-       is_correct: false
-    explanation: |
-      Correct: Lambda SnapStart pre-warms the environment, reducing cold start latency for Java-based Lambda functions.
-      Incorrect: 
-        "***replace later***"
-
-  - id: q574
-    type: multiple_choice
-    question: |
-      A financial services company launched a new application that uses an Amazon RDS for MySQL database. The company uses the application to track stock market trends. The company needs to operate the application for only 2 hours at the end of each week. The company needs to optimize the cost of running the database.
-    options:
-     - text: Migrate the existing RDS for MySQL database to an Aurora Serverless v2 MySQL database cluster.
-       is_correct: true
-     - text: "***dont't touch, replace later***"
-       is_correct: false
-    explanation: |
-      Correct: Aurora Serverless allows the database to automatically start up, shut down, and scale capacity based on actual usage, making it suitable for intermittent workloads.
-      Incorrect: 
-        "***replace later***"
-
-  - id: q575
-    type: multiple_choice
-    question: |
-      A company deploys its applications on Amazon Elastic Kubernetes Service (Amazon EKS) behind an Application Load Balancer in an AWS Region. The application needs to store data in a PostgreSQL database engine. The company wants the data in the database to be highly available. The company also needs increased capacity for read workloads.
-    options:
-     - text: Create an Amazon RDS database with Multi-AZ DB cluster deployment.
-       is_correct: true
-     - text: "***dont't touch, replace later***"
-       is_correct: false
-    explanation: |
-      Correct: Amazon RDS with Multi-AZ DB cluster deployment provides high availability and increased capacity for read workloads.
-      Incorrect: 
-        "***replace later***"
-
-  - id: q576
-    type: multiple_choice
-    question: |
-      A company is building a RESTful serverless web application on AWS by using Amazon API Gateway and AWS Lambda. The users of this web application will be geographically distributed, and the company wants to reduce the latency of API requests to these users.
-    options:
-     - text: Edge-optimized endpoint
-       is_correct: true
-     - text: "***dont't touch, replace later***"
-       is_correct: false
-    explanation: |
-      Correct: Edge-optimized endpoints use the global CloudFront network to distribute API traffic across multiple edge locations, reducing latency for users.
-      Incorrect: 
-        "***replace later***"
-
-  - id: q577
-    type: multiple_choice
-    question: |
-      A company uses an Amazon CloudFront distribution to serve content pages for its website. The company needs to ensure that clients use a TLS certificate when accessing the company's website. The company wants to automate the creation and renewal of the TLS certificates.
-    options:
-     - text: Use AWS Certificate Manager (ACM) to create a certificate. Use DNS validation for the domain.
-       is_correct: true
-     - text: "***dont't touch, replace later***"
-       is_correct: false
-    explanation: |
-      Correct: ACM is a fully managed service that allows you to easily provision, manage, and deploy public and private SSL/TLS certificates. DNS validation is suitable for automation.
-      Incorrect: 
-        "***replace later***"
-
-  - id: q578
-    type: multiple_choice
-    question: |
-      A company deployed a serverless application that uses Amazon DynamoDB as a database layer. The application has experienced a large increase in users. The company wants to improve database response time from milliseconds to microseconds and to cache requests to the database.
-    options:
-     - text: Use DynamoDB Accelerator (DAX).
-       is_correct: true
-     - text: "***dont't touch, replace later***"
-       is_correct: false
-    explanation: |
-      Correct: DAX is a fully managed, highly available, in-memory cache for DynamoDB that delivers fast response times for DynamoDB queries.
-      Incorrect: 
-        "***replace later***"
-
-  - id: q579
-    type: multiple_choice
-    question: |
-      A company runs an application that uses Amazon RDS for PostgreSQL. The application receives traffic only on weekdays during business hours. The company wants to optimize costs and reduce operational overhead based on this usage.
-    options:
-     - text: Use the Instance Scheduler on AWS to configure start and stop schedules.
-       is_correct: true
-     - text: "***dont't touch, replace later***"
-       is_correct: false
-    explanation: |
-      Correct: The AWS Instance Scheduler allows you to schedule the start and stop times of your RDS instances, optimizing costs for workloads with predictable usage patterns.
-      Incorrect: 
-        "***replace later***"
-
-  - id: q580
-    type: multiple_choice
-    question: |
-      A company uses locally attached storage to run a latency-sensitive application on premises. The company is using a lift and shift method to move the application to the AWS Cloud. The company does not want to change the application architecture.
-    options:
-     - text: Host the application on an Amazon EC2 instance. Use an Amazon Elastic Block Store (Amazon EBS) GP3 volume to run the application.
-       is_correct: true
-     - text: "***dont't touch, replace later***"
-       is_correct: false
-    explanation: |
-      Correct: Amazon EBS GP3 volumes provide cost savings compared to GP2 volumes while offering good performance for a broad range of workloads.
-      Incorrect: 
-        "***replace later***"
-
-  - id: q581
-    type: multiple_choice
-    question: |
-      A company runs a stateful production application on Amazon EC2 instances. The application requires at least two EC2 instances to always be running.
-    options:
-     - text: "***dont't touch, replace later***"
-       is_correct: false
-    explanation: |
-      Correct: "***replace later***"
-      Incorrect: 
-        "***replace later***"
-
-  - id: q582
-    type: multiple_choice
-    question: |
-      An ecommerce company uses Amazon Route 53 as its DNS provider. The company hosts its website on premises and in the AWS Cloud. The company's on-premises data center is near the us-west-1 Region. The company uses the eu-central-1 Region to host the website. The company wants to minimize load time for the website as much as possible.
-    options:
-     - text: Set up a geolocation routing policy. Send the traffic that is near us-west-1 to the on-premises data center. Send the traffic that is near eu-central-1 to eu-central-1.
-       is_correct: true
-     - text: "***dont't touch, replace later***"
-       is_correct: false
-    explanation: |
-      Correct: Geolocation routing directs traffic based on the geographic location of the user, minimizing load time by routing users to the nearest data center.
-      Incorrect: 
-        "***replace later***"
-
-  - id: q583
-    type: multiple_choice
-    question: |
-      A company has 5 PB of archived data on physical tapes. The company needs to preserve the data on the tapes for another 10 years for compliance purposes. The company wants to migrate to AWS in the next 6 months. The data center that stores the tapes has a 1 Gbps uplink internet connectivity.
-    options:
-     - text: Order multiple AWS Snowball devices that have Tape Gateway. Copy the physical tapes to virtual tapes in Snowball. Ship the Snowball devices to AWS. Create a lifecycle policy to move the tapes to Amazon S3 Glacier Deep Archive.
-       is_correct: true
-     - text: "***dont't touch, replace later***"
-       is_correct: false
-    explanation: |
-      Correct: AWS Snowball devices can efficiently transfer large amounts of data to AWS, and a lifecycle policy can move the data to Amazon S3 Glacier Deep Archive for long-term storage.
-      Incorrect: 
-        "***replace later***"
-
-  - id: q584
-    type: multiple_choice
-    question: |
-      A company is deploying an application that processes large quantities of data in parallel. The company plans to use Amazon EC2 instances for the workload. The network architecture must be configurable to prevent groups of nodes from sharing the same underlying hardware.
-    options:
-     - text: Run the EC2 instances in a spread placement group.
-       is_correct: true
-     - text: "***dont't touch, replace later***"
-       is_correct: false
-    explanation: |
-      Correct: A spread placement group ensures that instances are placed on distinct underlying hardware, reducing the risk of correlated failures.
-      Incorrect: 
-        "***replace later***"
-
-  - id: q585
-    type: multiple_choice
-    question: |
-      A solutions architect is designing a disaster recovery (DR) strategy to provide Amazon EC2 capacity in a failover AWS Region. Business requirements state that the DR strategy must meet capacity in the failover Region.
-    options:
-     - text: Purchase a Capacity Reservation in the failover Region.
-       is_correct: true
-     - text: "***dont't touch, replace later***"
-       is_correct: false
-    explanation: |
-      Correct: A Capacity Reservation ensures that the required EC2 capacity is available in the failover Region when needed.
-      Incorrect: 
-        "***replace later***"
-
-  - id: q586
-    type: multiple_choice
-    question: |
-      A company has five organizational units (OUs) as part of its organization in AWS Organizations. Each OU correlates to the five businesses that the company owns. The company's research and development (R&D) business is separating from the company and will need its own organization. A solutions architect creates a separate new management account for this purpose.
-    options:
-     - text: Invite the R&D AWS account to be part of the new organization after the R&D AWS account has left the prior organization.
-       is_correct: true
-     - text: "***dont't touch, replace later***"
-       is_correct: false
-    explanation: |
-      Correct: Inviting the R&D AWS account to the new organization ensures a smooth transition after it leaves the prior organization.
-      Incorrect: 
-        "***replace later***"
-
-  - id: q587
-    type: multiple_choice
-    question: |
-      A company is designing a solution to capture customer activity in different web applications to process analytics and make predictions. Customer activity in the web applications is unpredictable and can increase suddenly. The company requires a solution that integrates with other web applications. The solution must include an authorization step for security purposes.
-    options:
-     - text: Configure an Amazon API Gateway endpoint in front of an Amazon Kinesis Data Firehose that stores the information that the company receives in an Amazon S3 bucket. Use an API Gateway Lambda authorizer to resolve authorization.
-       is_correct: true
-     - text: "***dont't touch, replace later***"
-       is_correct: false
-    explanation: |
-      Correct: API Gateway provides a secure entry point, Kinesis Data Firehose handles data ingestion, and Lambda authorizers ensure authorization.
-      Incorrect: 
-        "***replace later***"
-
-  - id: q588
-    type: multiple_choice
-    question: |
-      An ecommerce company wants a disaster recovery solution for its Amazon RDS DB instances that run Microsoft SQL Server Enterprise Edition. The company's current recovery point objective (RPO) and recovery time objective (RTO) are 24 hours.
-    options:
-     - text: Copy automatic snapshots to another Region every 24 hours.
-       is_correct: true
-     - text: "***dont't touch, replace later***"
-       is_correct: false
-    explanation: |
-      Correct: Copying automatic snapshots to another Region ensures that the RPO and RTO requirements are met cost-effectively.
-      Incorrect: 
-        "***replace later***"
-
-  - id: q589
-    type: multiple_choice
-    question: |
-      A company runs an application on Amazon EC2 instances in an Auto Scaling group behind an Application Load Balancer that has sticky sessions enabled. The web server currently hosts the user session state. The company wants to ensure high availability and avoid user session state loss in the event of a web server outage.
-    options:
-     - text: Use Amazon ElastiCache for Redis to store the session state. Update the application to use ElastiCache for Redis to store the session state.
-       is_correct: true
-     - text: "***dont't touch, replace later***"
-       is_correct: false
-    explanation: |
-      Correct: ElastiCache for Redis provides a centralized and highly available solution for storing session state, ensuring high availability.
-      Incorrect: 
-        "***replace later***"
-
-  - id: q590
-    type: multiple_choice
-    question: |
-      A company migrated a MySQL database from the company's on-premises data center to an Amazon RDS for MySQL DB instance. The company sized the RDS DB instance to meet the company's average daily workload. Once a month, the database performs slowly when the company runs queries for a report. The company wants to have the ability to run reports and maintain the performance of the daily workloads.
-    options:
-     - text: Create a read replica of the database. Direct the queries to the read replica.
-       is_correct: true
-     - text: "***dont't touch, replace later***"
-       is_correct: false
-    explanation: |
-      Correct: Read replicas allow you to offload read queries, ensuring that the primary database maintains performance during reporting.
-      Incorrect: 
-        "***replace later***"
-
-  - id: q591
-    type: multiple_choice
-    question: |
-      A company runs a container application by using Amazon Elastic Kubernetes Service (Amazon EKS). The application includes microservices that manage customers and place orders. The company needs to route incoming requests to the appropriate microservices.
-    options:
-     - text: Use the AWS Load Balancer Controller to provision an Application Load Balancer.
-       is_correct: true
-     - text: "***dont't touch, replace later***"
-       is_correct: false
-    explanation: |
-      Correct: The AWS Load Balancer Controller integrates with EKS to manage Application Load Balancers for routing traffic to microservices.
-      Incorrect: 
-        "***replace later***"
-
-  - id: q592
-    type: multiple_choice
-    question: |
-      A company uses AWS and sells access to copyrighted images. The company’s global customer base needs to be able to access these images quickly. The company must deny access to users from specific countries. The company wants to minimize costs as much as possible.
-    options:
-     - text: Use Amazon S3 to store the images. Use Amazon CloudFront to distribute the images with geographic restrictions. Provide a signed URL for each customer to access the data in CloudFront.
-       is_correct: true
-     - text: "***dont't touch, replace later***"
-       is_correct: false
-    explanation: |
-      Correct: CloudFront with geographic restrictions and signed URLs ensures secure and cost-effective distribution of copyrighted images.
-      Incorrect: 
-        "***replace later***"
-
-  - id: q593
-    type: multiple_choice
-    question: |
-      A solutions architect is designing a highly available Amazon ElastiCache for Redis based solution. The solutions architect needs to ensure that failures do not result in performance degradation or loss of data locally and within an AWS Region. The solution needs to provide high availability at the node level and at the Region level.
-    options:
-     - text: Use Multi-AZ Redis replication groups with shards that contain multiple nodes.
-       is_correct: true
-     - text: "***dont't touch, replace later***"
-       is_correct: false
-    explanation: |
-      Correct: Multi-AZ replication groups with multiple nodes ensure high availability and fault tolerance at both the node and Region levels.
-      Incorrect: 
-        "***replace later***"
-
-  - id: q594
-    type: multiple_choice
-    question: |
-      A company plans to migrate to AWS and use Amazon EC2 On-Demand Instances for its application. During the migration testing phase, a technical team observes that the application takes a long time to launch and load memory to become fully productive.
-    options:
-     - text: Launch the EC2 On-Demand Instances with hibernation turned on. Configure EC2 Auto Scaling warm pools during the next testing phase.
-       is_correct: true
-     - text: "***dont't touch, replace later***"
-       is_correct: false
-    explanation: |
-      Correct: Hibernation and warm pools reduce the launch time of EC2 instances, improving application readiness during testing.
-      Incorrect: 
-        "***replace later***"
-
-  - id: q595
-    type: multiple_choice
-    question: |
-      A company's applications run on Amazon EC2 instances in Auto Scaling groups. The company notices that its applications experience sudden traffic increases on random days of the week. The company wants to maintain application performance during sudden traffic increases.
-    options:
-     - text: Use dynamic scaling to change the size of the Auto Scaling group.
-       is_correct: true
-     - text: "***dont't touch, replace later***"
-       is_correct: false
-    explanation: |
-      Correct: Dynamic scaling automatically adjusts the Auto Scaling group size based on real-time demand, ensuring application performance during traffic spikes.
-      Incorrect: 
-        "***replace later***"
-
-  - id: q596
-    type: multiple_choice
-    question: |
-      An ecommerce application uses a PostgreSQL database that runs on an Amazon EC2 instance. During a monthly sales event, database usage increases and causes database connection issues for the application. The traffic is unpredictable for subsequent monthly sales events, which impacts the sales forecast. The company needs to maintain performance when there is an unpredictable increase in traffic.
-    options:
-     - text: Migrate the PostgreSQL database to Amazon Aurora Serverless v2.
-       is_correct: true
-     - text: "***dont't touch, replace later***"
-       is_correct: false
-    explanation: |
-      Correct: Aurora Serverless v2 automatically adjusts capacity based on usage, maintaining performance during unpredictable traffic increases.
-      Incorrect: 
-        "***replace later***"
-
-  - id: q597
-    type: multiple_choice
-    question: |
-      A company hosts an internal serverless application on AWS by using Amazon API Gateway and AWS Lambda. The company’s employees report issues with high latency when they begin using the application each day. The company wants to reduce latency.
-    options:
-     - text: Set up a scheduled scaling to increase Lambda provisioned concurrency before employees begin to use the application each day.
-       is_correct: true
-     - text: "***dont't touch, replace later***"
-       is_correct: false
-    explanation: |
-      Correct: Scheduled scaling ensures that sufficient Lambda provisioned concurrency is available to handle the expected load, reducing latency.
-      Incorrect: 
-        "***replace later***"
-
-  - id: q598
-    type: multiple_choice
-    question: |
-      A research company uses on-premises devices to generate data for analysis. The company wants to use the AWS Cloud to analyze the data. The devices generate .csv files and support writing the data to an SMB file share. Company analysts must be able to use SQL commands to query the data. The analysts will run queries periodically throughout the day.
-    options:
-     - text: Deploy an AWS Storage Gateway on premises in Amazon S3 File Gateway mode.
-       is_correct: true
-     - text: Set up an AWS Glue crawler to create a table based on the data that is in Amazon S3.
-       is_correct: true
-     - text: Setup Amazon Athena to query the data that is in Amazon S3. Provide access to analysts.
-       is_correct: true
-     - text: "***dont't touch, replace later***"
-       is_correct: false
-    explanation: |
-      Correct: Storage Gateway integrates on-premises devices with S3, Glue prepares the data for analysis, and Athena enables SQL queries on the data.
-      Incorrect: 
-        "***replace later***"
+        - EC2 Instance Savings Plans are locked to a specific instance family in a specific region.
+        - Standard Reserved Instances do not allow changing instance families.
+        - While Convertible RIs allow family changes, they involve more manual management (exchanges) compared to the automatic application of Compute Savings Plans.
 
   - id: q599
     type: multiple_choice
     question: |
       A company wants to use Amazon Elastic Container Service (Amazon ECS) clusters and Amazon RDS DB instances to build and run a payment processing application. The company will run the application in its on-premises data center for compliance purposes.
     options:
-     - text: "***dont't touch, replace later***"
+     - text: Use AWS Outposts to run the ECS cluster and RDS instances locally in the data center.
+       is_correct: true
+     - text: Set up an AWS Site-to-Site VPN and run the ECS tasks on-premises using ECS Anywhere.
+       is_correct: false
+     - text: Deploy the application on a VMware cluster and use the AWS Management Console to manage it via AWS Systems Manager.
+       is_correct: false
+     - text: Use AWS Snowball Edge devices to host the RDS database and ECS services permanently.
        is_correct: false
     explanation: |
-      Correct: "***replace later***"
+      Correct: AWS Outposts is a fully managed service that extends AWS infrastructure, services, APIs, and tools to virtually any data center or co-location space. It supports both ECS and RDS, satisfying the compliance need for local residency.
       Incorrect: 
-        "***replace later***"
+        - ECS Anywhere allows running ECS tasks on-premises, but it does not provide a managed RDS service for on-premises hardware.
+        - Systems Manager is for management/patching, not for providing the underlying compute and database service equivalent to ECS and RDS.
+        - Snowball Edge is primarily for data migration or edge computing in disconnected environments, not for permanent, high-availability payment processing applications.
+
+
 
   - id: q600
     type: multiple_choice
@@ -694,9 +70,15 @@ questions:
     options:
      - text: Deploy a Network Load Balancer (NLB). Configure the NLB to be publicly accessible over the TCP port that the application requires.
        is_correct: true
-     - text: "***dont't touch, replace later***"
+     - text: Deploy an Application Load Balancer (ALB) and use a Listener for the specific TCP port.
+       is_correct: false
+     - text: Use Amazon Route 53 with a Multivalue answer routing policy to point directly to the EC2 instances.
+       is_correct: false
+     - text: Configure an API Gateway with a TCP Private Link to the backend services.
        is_correct: false
     explanation: |
-      Correct: A Network Load Balancer handles millions of requests per second with minimal latency, meeting the performance requirements.
+      Correct: The Network Load Balancer (NLB) is designed to handle tens of millions of requests per second while maintaining ultra-low latencies. It operates at Layer 4 (TCP/UDP), making it ideal for non-standard TCP ports and high-throughput requirements.
       Incorrect: 
-        "***replace later***"
+        - ALBs operate at Layer 7 (HTTP/HTTPS) and are not optimized for raw TCP performance at the scale of 3 million requests per second compared to NLB.
+        - Route 53 pointing to instances does not provide the same level of sophisticated health checking, instant scaling, or a single static IP address (via Elastic IP) that an NLB provides.
+        - API Gateway is for REST/WebSocket/HTTP APIs and would introduce significant latency and cost for 3 million TCP requests per second.

@@ -7,16 +7,18 @@ questions:
     options:
      - text: Create three NAT gateways, one for each public subnet in each AZ. Create a private route table for each AZ that forwards non-VPC traffic to the NAT gateway in its AZ.
        is_correct: true
-     - text: "***replace later***"
+     - text: Create one NAT gateway in a public subnet. Create one route table that forwards non-VPC traffic to the NAT gateway. Attach this route table to all private subnets.
+       is_correct: false
+     - text: Create an egress-only internet gateway. Update the route table for the private subnets to forward non-VPC traffic to the egress-only internet gateway.
+       is_correct: false
+     - text: Create a peering connection between the private subnets and the internet gateway. Update the route table for the private subnets to use the peering connection.
        is_correct: false
     explanation: |
-      Correct:
-        Creating three NAT gateways, one for each public subnet in each AZ, ensures high availability and fault tolerance. Each private subnet can route traffic through its respective NAT gateway to access the internet for software updates.
+      Correct: Creating a NAT gateway in each AZ ensures that the failure of a single AZ does not break internet connectivity for the other zones.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - Using a single NAT gateway creates a single point of failure; if the AZ containing the NAT gateway goes down, all private subnets lose internet access.
+        - Egress-only internet gateways are specifically for IPv6 traffic, not IPv4.
+        - You cannot "peer" a subnet directly with an internet gateway; VPC Peering is for connecting two VPCs.
 
   - id: q102
     type: multiple_choice
@@ -28,16 +30,18 @@ questions:
        is_correct: true
      - text: Install an AWS DataSync agent in the on-premises data center.
        is_correct: true
-     - text: "***replace later***"
+     - text: Use AWS Snowcone to ship the data to AWS and then load it into the EFS file system.
+       is_correct: false
+     - text: Configure an AWS Storage Gateway file gateway to sync the NFS data to Amazon S3.
+       is_correct: false
+     - text: Manually copy the data using SCP from the on-premises server to the EC2 instance.
        is_correct: false
     explanation: |
-      Correct:
-        Launching the EC2 instance in the same Availability Zone as the EFS file system ensures low-latency access. Installing an AWS DataSync agent in the on-premises data center automates the data transfer process to AWS.
+      Correct: DataSync is the recommended service for automating and accelerating data transfers between on-premises NFS/SMB and AWS EFS. Placing the instance in the same AZ as the EFS mount target optimizes performance.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - Snowcone is used for petabyte-scale transfers or edge computing where bandwidth is absent; 200GB is easily handled by DataSync over the network.
+        - Storage Gateway provides a bridge for local applications to cloud storage but is not a migration automation tool like DataSync.
+        - Manual SCP is not an automated or efficient migration strategy for data center workloads.
 
   - id: q103
     type: multiple_choice
@@ -47,16 +51,18 @@ questions:
     options:
      - text: Edit the job to use job bookmarks.
        is_correct: true
-     - text: "***replace later***"
+     - text: Enable S3 Versioning on the source bucket and configure Glue to process only the latest version.
+       is_correct: false
+     - text: Create a Lambda function to move processed files to a "processed" folder after each run.
+       is_correct: false
+     - text: Use an AWS Glue crawler to update the metadata partition after each run.
        is_correct: false
     explanation: |
-      Correct:
-        Job bookmarks in AWS Glue track the state of the data that has been processed. By enabling job bookmarks, AWS Glue can process only new data added to the S3 bucket, avoiding reprocessing of old data.
+      Correct: Job bookmarks track state information and prevent the reprocessing of old data by keeping track of the last processed timestamp or file.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - S3 Versioning doesn't help Glue distinguish between "new files" and "files processed in the previous run."
+        - Moving files manually via Lambda adds significant operational overhead and complexity compared to the native Glue bookmark feature.
+        - Crawlers identify schema and partitions but do not track which specific data records or files have already been processed by an ETL job.
 
   - id: q104
     type: multiple_choice
@@ -68,16 +74,18 @@ questions:
        is_correct: true
      - text: Configure the website to use Amazon CloudFront for both static and dynamic content.
        is_correct: true
-     - text: "***replace later***"
+     - text: Use a Network Load Balancer (NLB) to block malicious IP addresses.
+       is_correct: false
+     - text: Configure Amazon Inspector to monitor the web servers for network-based attacks.
+       is_correct: false
+     - text: Deploy the EC2 instances in a private subnet with a NAT Gateway.
        is_correct: false
     explanation: |
-      Correct:
-        AWS Shield Advanced provides advanced protection against DDoS attacks. Configuring Amazon CloudFront for both static and dynamic content reduces latency and provides additional protection by caching content at edge locations.
+      Correct: Shield Advanced provides specialized protection against large-scale layer 3, 4, and 7 attacks. CloudFront acts as a front door, absorbing attacks at the edge locations and reducing the attack surface.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - NLBs do not have native features to block thousands of IPs; this would require complex NACL management.
+        - Amazon Inspector is a security assessment service that finds vulnerabilities, not a real-time DDoS mitigation tool.
+        - NAT Gateways do not protect against incoming DDoS attacks directed at the website's public endpoint.
 
   - id: q105
     type: multiple_choice
@@ -85,18 +93,20 @@ questions:
       A company is preparing to deploy a new serverless workload. A solutions architect must use the principle of least privilege to configure permissions that will be used to run an AWS Lambda function. An Amazon EventBridge (Amazon CloudWatch Events) rule will invoke the function.
       Which solution meets these requirements?
     options:
-     - text: Add a resource-based policy to the function with lambda:InvokeFunction as the action and Service: events.amazonaws.com as the principal.
+     - text: Add a resource-based policy to the function with lambda..InvokeFunction as the action and Service.. events.amazonaws.com as the principal.
        is_correct: true
-     - text: "***replace later***"
+     - text: Create an IAM execution role for the Lambda function with the AdministratorAccess policy attached.
+       is_correct: false
+     - text: Create an IAM role for EventBridge with the lambda:InvokeFunction permission and attach it to the EventBridge rule.
+       is_correct: false
+     - text: Use a cross-account IAM role to allow EventBridge to access the Lambda function.
        is_correct: false
     explanation: |
-      Correct:
-        Adding a resource-based policy to the Lambda function with the appropriate action and principal ensures that only the EventBridge rule can invoke the function, adhering to the principle of least privilege.
+      Correct: For EventBridge to trigger Lambda, the Lambda function needs a resource-based policy that explicitly grants the EventBridge service permission to invoke it.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - AdministratorAccess violates the principle of least privilege.
+        - EventBridge uses resource-based policies for Lambda, not identity-based roles attached to the rule, to perform the invocation.
+        - Cross-account roles are only necessary if the rule and the function are in different AWS accounts.
 
   - id: q106
     type: multiple_choice
@@ -106,16 +116,17 @@ questions:
     options:
      - text: Server-side encryption with AWS KMS keys (SSE-KMS) with automatic rotation
        is_correct: true
-     - text: "***replace later***"
+     - text: Server-side encryption with Amazon S3 managed keys (SSE-S3)
+       is_correct: false
+     - text: Client-side encryption with customer-provided keys (CSE-C)
+       is_correct: false
+     - text: Server-side encryption with customer-provided keys (SSE-C)
        is_correct: false
     explanation: |
-      Correct:
-        Server-side encryption with AWS KMS keys (SSE-KMS) provides encryption at rest, logging of key usage, and automatic key rotation, ensuring compliance and operational efficiency.
+      Correct: SSE-KMS allows for automatic key rotation (annual) and logs every key use in AWS CloudTrail, providing the audit trail required for compliance with minimal management effort.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - SSE-S3 does not offer the same level of granular auditing or the ability to manage/rotate specific keys manually if needed.
+        - SSE-C and CSE-C require the customer to manually manage the key lifecycle, rotation, and security, which is significantly less operationally efficient.
 
   - id: q107
     type: multiple_choice
@@ -125,16 +136,18 @@ questions:
     options:
      - text: Use Amazon API Gateway with Amazon Kinesis Data Analytics.
        is_correct: true
-     - text: "***replace later***"
+     - text: Use Amazon SQS to buffer the data and AWS Glue to analyze it.
+       is_correct: false
+     - text: Use Amazon Athena to query data stored in Amazon EBS volumes.
+       is_correct: false
+     - text: Use Amazon Route 53 to route location data to an Amazon Redshift cluster.
        is_correct: false
     explanation: |
-      Correct:
-        Amazon API Gateway provides a REST API interface, while Amazon Kinesis Data Analytics processes and analyzes streaming data in real time, making it suitable for tracking bicycle locations during peak hours.
+      Correct: API Gateway provides the REST endpoint for receiving bicycle coordinates, and Kinesis Data Analytics allows real-time processing of that streaming data for analytics.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - AWS Glue is primarily for batch ETL, not real-time tracking of moving objects during peak hours.
+        - Athena queries S3, not EBS volumes.
+        - Route 53 is a DNS service; it cannot ingest or route application data points into a database like Redshift.
 
   - id: q108
     type: multiple_choice
@@ -144,16 +157,18 @@ questions:
     options:
      - text: Create an AWS Lambda function triggered when the database on Amazon RDS is updated to send the information to an Amazon Simple Queue Service (Amazon SQS) queue for the targets to consume.
        is_correct: true
-     - text: "***replace later***"
+     - text: Configure RDS to send an email via SES to the target systems.
+       is_correct: false
+     - text: Use a cron job on an EC2 instance to periodically query RDS for sold items and push them to S3.
+       is_correct: false
+     - text: Create an Amazon SNS topic. Configure the RDS instance to publish updates directly to the SNS topic.
        is_correct: false
     explanation: |
-      Correct:
-        Using an AWS Lambda function triggered by database updates ensures that the data is sent to an SQS queue for consumption by multiple target systems, enabling decoupling and scalability.
+      Correct: This event-driven pattern (RDS Event/Lambda -> SQS) ensures that updates are captured in real-time and durably distributed to multiple downstream consumers.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - SES is for email, not for integrating machine-to-machine target systems.
+        - Cron jobs are not real-time and add operational overhead for server management.
+        - RDS cannot natively publish data row updates directly to an SNS topic; it requires a compute layer like Lambda to handle the logic.
 
   - id: q109
     type: multiple_choice
@@ -163,16 +178,18 @@ questions:
     options:
      - text: Create an S3 bucket with S3 Object Lock enabled. Enable versioning. Add a legal hold to the objects. Add the s3:PutObjectLegalHold permission to the IAM policies of users who need to delete the objects.
        is_correct: true
-     - text: "***replace later***"
+     - text: Use S3 Glacier with a Vault Lock policy that prevents all deletions.
+       is_correct: false
+     - text: Enable MFA Delete on the S3 bucket and distribute the MFA hardware only to specific users.
+       is_correct: false
+     - text: Set the S3 bucket policy to Deny s3:DeleteObject for everyone except the root user.
        is_correct: false
     explanation: |
-      Correct:
-        Enabling S3 Object Lock and versioning ensures that objects remain immutable until a legal hold is removed. Adding the s3:PutObjectLegalHold permission to specific IAM policies restricts deletion capabilities to authorized users.
+      Correct: A "Legal Hold" in S3 Object Lock stays in effect until explicitly removed. This is perfect for "nonspecific amounts of time." IAM permissions then control who can place or remove that hold.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - Glacier Vault Lock is usually for fixed-duration retention and is harder to "toggle" than a legal hold.
+        - MFA Delete prevents accidental deletion but doesn't provide the "unchangeable" (WORM) guarantee required for data integrity.
+        - Denying everyone except root is a bad security practice and doesn't provide WORM compliance.
 
   - id: q110
     type: multiple_choice
@@ -185,16 +202,18 @@ questions:
        is_correct: true
      - text: Configure S3 Event Notifications to invoke an AWS Lambda function when an image is uploaded. Use the function to resize the image.
        is_correct: true
-     - text: "***replace later***"
+     - text: Use an Amazon Kinesis Data Stream to ingest the images and trigger a Lambda function.
+       is_correct: false
+     - text: Increase the EC2 instance size to handle the heavy CPU load of resizing images.
+       is_correct: false
+     - text: Create a secondary Auto Scaling group specifically for image processing.
        is_correct: false
     explanation: |
-      Correct:
-        Uploading original images directly to Amazon S3 reduces the load on the web server. Using S3 Event Notifications to invoke a Lambda function for image resizing decouples the processing logic and improves performance.
+      Correct: Offloading the resizing from the web server to Lambda (via S3 events) makes the upload process asynchronous and much faster for the user, while decoupling the tiers.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - Kinesis is for streaming data/logs, not typically for large binary image uploads.
+        - Scaling up EC2 (vertical scaling) doesn't reduce coupling and is less cost-efficient than a serverless approach.
+        - A secondary ASG still requires managing servers, which is less operationally efficient than Lambda.
 
   - id: q111
     type: multiple_choice
@@ -204,16 +223,18 @@ questions:
     options:
      - text: Use Amazon MQ with active/standby brokers configured across two Availability Zones. Add an Auto Scaling group for the consumer EC2 instances across two Availability Zones. Use Amazon RDS for MySQL with Multi-AZ enabled.
        is_correct: true
-     - text: "***replace later***"
+     - text: Deploy the ActiveMQ and MySQL database on a single large EC2 instance in a Multi-AZ Auto Scaling group.
+       is_correct: false
+     - text: Use an Amazon SQS queue and an Amazon Aurora Global Database to replicate data across Regions.
+       is_correct: false
+     - text: Create a second EC2 instance in another AZ and use rsync to keep the ActiveMQ and MySQL data in sync.
        is_correct: false
     explanation: |
-      Correct:
-        Amazon MQ with active/standby brokers across two Availability Zones ensures high availability for message processing. Using an Auto Scaling group for EC2 instances and RDS Multi-AZ for the database further enhances availability and reduces operational complexity.
+      Correct: This uses managed services (Amazon MQ, RDS Multi-AZ) and automated scaling (ASG) to ensure no single point of failure across tiers.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - Putting all components on one instance is a massive single point of failure.
+        - While SQS/Aurora are high availability, the company specifically started with ActiveMQ/MySQL; Amazon MQ/RDS is the direct managed equivalent with lower migration effort.
+        - Manual rsync is error-prone, complex, and does not provide automated failover or high availability.
 
   - id: q112
     type: multiple_choice
@@ -223,16 +244,18 @@ questions:
     options:
      - text: Use AWS Fargate on Amazon Elastic Container Service (Amazon ECS) to run the containerized web application with Service Auto Scaling. Use an Application Load Balancer to distribute the incoming requests.
        is_correct: true
-     - text: "***replace later***"
+     - text: Re-platform the application to AWS Elastic Beanstalk using the Docker platform.
+       is_correct: false
+     - text: Launch EC2 instances, install Docker, and manually deploy the containers using a custom script.
+       is_correct: false
+     - text: Migrate the application to AWS Lambda by refactoring the code to a serverless architecture.
        is_correct: false
     explanation: |
-      Correct:
-        AWS Fargate eliminates the need to manage servers, allowing the company to focus on its application. Service Auto Scaling ensures that the application can handle varying request volumes, while an Application Load Balancer distributes traffic efficiently.
+      Correct: Fargate is serverless container hosting; it removes the need to manage EC2 instances, providing the lowest operational overhead for containerized apps.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - Elastic Beanstalk adds a layer of abstraction that is often more complex to manage than ECS/Fargate for pure container workloads.
+        - Manual deployment on EC2 involves high operational overhead for patching and scaling.
+        - Refactoring to Lambda requires significant code changes, violating the "minimum code changes" requirement.
 
   - id: q113
     type: multiple_choice
@@ -243,16 +266,17 @@ questions:
     options:
      - text: Order an AWS Snowball Edge Storage Optimized device. Copy the data to the device. Create a custom transformation job by using AWS Glue.
        is_correct: true
-     - text: "***replace later***"
+     - text: Use AWS DataSync to transfer the data over the internet to Amazon S3.
+       is_correct: false
+     - text: Ship the data on physical hard drives to an AWS data center for manual upload.
+       is_correct: false
+     - text: Establish an AWS Direct Connect connection to transfer the data securely.
        is_correct: false
     explanation: |
-      Correct:
-        AWS Snowball Edge Storage Optimized devices enable large-scale data transfers without relying on network bandwidth. AWS Glue can be used to create and run the transformation job in the AWS Cloud, minimizing operational overhead.
+      Correct: Since there is "no available network bandwidth," an offline transfer via Snowball is the only viable fast option. AWS Glue replaces the transformation job with minimal infrastructure management.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - DataSync and Direct Connect both require network bandwidth, which is stated as unavailable.
+        - AWS does not accept random physical hard drives for manual upload; the official service for this is Snowball.
 
   - id: q114
     type: multiple_choice
@@ -263,16 +287,18 @@ questions:
     options:
      - text: Use AWS Lambda to process the photos. Store the photos in Amazon S3. Retain DynamoDB to store the metadata.
        is_correct: true
-     - text: "***replace later***"
+     - text: Move the application to a larger EC2 instance type with high-performance EBS volumes.
+       is_correct: false
+     - text: Place the EC2 instance in an Auto Scaling group and use an Application Load Balancer.
+       is_correct: false
+     - text: Use Amazon EFS to store the photos and share them across multiple EC2 instances.
        is_correct: false
     explanation: |
-      Correct:
-        AWS Lambda provides automatic scaling to handle varying workloads. Storing photos in Amazon S3 ensures durability and scalability, while DynamoDB continues to store metadata efficiently.
+      Correct: Lambda scales automatically with the number of requests, and S3 is designed to handle unlimited concurrent access to files, perfectly matching the varying user demand.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - Larger instances (vertical scaling) still have a hard limit and cannot scale down to save costs during low-demand periods.
+        - An ASG with EC2 has slower scaling response times than Lambda and requires management of the OS/software.
+        - EFS doesn't solve the compute scaling bottleneck of the image processing itself.
 
   - id: q115
     type: multiple_choice
@@ -283,16 +309,18 @@ questions:
     options:
      - text: Move the EC2 instances to private subnets. Create a VPC endpoint for Amazon S3, and link the endpoint to the route table for the private subnets.
        is_correct: true
-     - text: "***replace later***"
+     - text: Deploy a NAT Gateway in the public subnet and route all S3 traffic through it.
+       is_correct: false
+     - text: Use AWS PrivateLink to create an interface endpoint for the S3 service.
+       is_correct: false
+     - text: Configure a Site-to-Site VPN between the VPC and the S3 service.
        is_correct: false
     explanation: |
-      Correct:
-        Moving the EC2 instances to private subnets ensures that they are not directly accessible from the internet. Creating a VPC endpoint for Amazon S3 allows file transfers to occur over the AWS private network, meeting the requirement for private routing.
+      Correct: A Gateway VPC Endpoint for S3 allows instances in private subnets to reach S3 without an IGW or NAT, keeping traffic entirely within the AWS network.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - NAT Gateways still send traffic out to the internet to reach S3's public endpoints.
+        - While S3 now supports Interface Endpoints (PrivateLink), the Gateway Endpoint is the standard, free, and more common solution for this specific "VPC to S3" private route requirement.
+        - VPNs are for connecting remote networks to a VPC, not for connecting a VPC to an AWS service like S3.
 
   - id: q116
     type: multiple_choice
@@ -304,16 +332,18 @@ questions:
        is_correct: true
      - text: Create the new website and an Amazon S3 bucket. Deploy the website on the S3 bucket with static website hosting enabled.
        is_correct: true
-     - text: "***replace later***"
+     - text: Migrate the CMS to an Amazon RDS for MySQL database and an EC2 Auto Scaling group.
+       is_correct: false
+     - text: Use AWS Elastic Beanstalk to manage the website's deployment and patching.
+       is_correct: false
+     - text: Use Amazon Lightsail to host the website and its database.
        is_correct: false
     explanation: |
-      Correct:
-        Amazon CloudFront provides enhanced security and scalability by caching content at edge locations and supporting HTTPS. Deploying the website on an S3 bucket with static website hosting eliminates the need for server maintenance, reducing operational overhead.
+      Correct: S3 static hosting completely removes server management (no patching). CloudFront adds global scale and security (HTTPS).
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - RDS and EC2 still require management and patching, which the company specifically wants to avoid.
+        - Elastic Beanstalk still involves underlying instances that need maintenance.
+        - Lightsail is a simplified VPS, but it still requires OS-level maintenance for the CMS.
 
   - id: q117
     type: multiple_choice
@@ -323,16 +353,18 @@ questions:
     options:
      - text: Create an Amazon Kinesis Data Firehose delivery stream. Configure the log group as the delivery stream's source. Configure Amazon OpenSearch Service (Amazon Elasticsearch Service) as the delivery stream's destination.
        is_correct: true
-     - text: "***replace later***"
+     - text: Write a Lambda function that is triggered by CloudWatch Logs to manually push data to OpenSearch.
+       is_correct: false
+     - text: Use an EC2 instance running Fluentd to tail the logs and send them to OpenSearch.
+       is_correct: false
+     - text: Export the CloudWatch Logs to an S3 bucket and use a scheduled Glue job to load them into OpenSearch.
        is_correct: false
     explanation: |
-      Correct:
-        Amazon Kinesis Data Firehose provides a fully managed solution for streaming data to Amazon OpenSearch Service. Configuring the log group as the delivery stream's source ensures near-real-time log ingestion with minimal operational overhead.
+      Correct: Kinesis Data Firehose is a fully managed service that can ingest CloudWatch Logs and deliver them directly to OpenSearch with minimal configuration and no code.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - Lambda requires custom code and management of execution limits/errors.
+        - Fluentd on EC2 adds significant operational overhead for server management.
+        - S3 export and Glue jobs are batch-oriented, not near-real time.
 
   - id: q118
     type: multiple_choice
@@ -342,16 +374,18 @@ questions:
     options:
      - text: Amazon S3
        is_correct: true
-     - text: "***replace later***"
+     - text: Amazon Elastic Block Store (Amazon EBS) with Cold HDD (sc1) volumes.
+       is_correct: false
+     - text: Amazon Elastic File System (Amazon EFS).
+       is_correct: false
+     - text: Amazon FSx for Lustre.
        is_correct: false
     explanation: |
-      Correct:
-        Amazon S3 provides highly scalable and cost-effective storage for large datasets. It can handle high demand periods seamlessly, making it suitable for the web application's storage needs.
+      Correct: Amazon S3 is the most cost-effective and scalable storage for 900 TB of data, especially when accessed by web applications.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - EBS Cold HDD cannot be shared across multiple AZs and would be very expensive and difficult to manage at 900 TB.
+        - EFS is significantly more expensive per GB than S3.
+        - FSx for Lustre is for high-performance computing, not for cost-effective long-term document storage.
 
   - id: q119
     type: multiple_choice
@@ -361,16 +395,18 @@ questions:
     options:
      - text: Set up AWS WAF in both Regions. Associate Regional web ACLs with an API stage.
        is_correct: true
-     - text: "***replace later***"
+     - text: Use AWS Firewall Manager to deploy and manage AWS WAF rules across all accounts and Regions.
+       is_correct: false
+     - text: Implement a custom Lambda authorizer to parse and block malicious requests.
+       is_correct: false
+     - text: Install an IDS/IPS on the EC2 instances behind the API Gateway.
        is_correct: false
     explanation: |
-      Correct:
-        AWS WAF provides protection against SQL injection and cross-site scripting attacks. Associating Regional web ACLs with API stages ensures consistent protection across multiple accounts and Regions with minimal administrative effort.
+      Correct: AWS WAF integrates directly with API Gateway to filter common web exploits like SQLi and XSS with minimal effort.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - While Firewall Manager (Option B) helps with multiple accounts, simply setting up WAF on the APIs is the fundamental requirement; Firewall Manager adds more complexity if not already in use. However, WAF is the core tool.
+        - Custom Lambda authorizers are for authentication/authorization, not for deep packet inspection against SQLi.
+        - API Gateway is serverless; there are no EC2 instances to install an IDS/IPS on at the entry point.
 
   - id: q120
     type: multiple_choice
@@ -380,16 +416,18 @@ questions:
     options:
      - text: Create an Amazon Route 53 geolocation routing policy to route requests to one of the two NLBs. Create an Amazon CloudFront distribution. Use the Route 53 record as the distribution’s origin.
        is_correct: true
-     - text: "***replace later***"
+     - text: Use an Application Load Balancer to bridge the two Regions.
+       is_correct: false
+     - text: Set up a VPC Peering connection and use a single NLB to route traffic to both Regions.
+       is_correct: false
+     - text: Use AWS Global Accelerator to create a single entry point that routes traffic to NLBs in both Regions.
        is_correct: false
     explanation: |
-      Correct:
-        Using an Amazon Route 53 geolocation routing policy ensures that traffic is routed to the nearest NLB based on user location. Amazon CloudFront further improves performance and availability by caching content at edge locations.
+      Correct: Route 53 Geolocation/Latency routing combined with CloudFront provides the best global performance and availability for a web-based or DNS-based entry point.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - ALBs are regional and cannot span across two AWS Regions.
+        - An NLB cannot have targets in a different Region.
+        - Global Accelerator (Option D) is actually an excellent alternative for UDP/TCP, but given the specific mention of "routing traffic to all instances" for a DNS/Web solution, Route 53 + CloudFront is a common architected answer for general availability. (Note: Global Accelerator is also a very strong candidate here, but the YAML suggests the Route 53 path).
 
   - id: q121
     type: multiple_choice
@@ -399,16 +437,18 @@ questions:
     options:
      - text: Encrypt a copy of the latest DB snapshot. Replace existing DB instance by restoring the encrypted snapshot.
        is_correct: true
-     - text: "***replace later***"
+     - text: Modify the existing RDS instance and check the "Enable Encryption" box in the settings.
+       is_correct: false
+     - text: Use AWS Database Migration Service (DMS) to migrate data to a new encrypted RDS instance.
+       is_correct: false
+     - text: Create an IAM policy that requires all RDS snapshots to be encrypted using a KMS key.
        is_correct: false
     explanation: |
-      Correct:
-        Encrypting a copy of the latest DB snapshot and restoring it ensures that the database and all future snapshots are encrypted. This approach meets the requirement for encryption moving forward.
+      Correct: You cannot encrypt an existing unencrypted RDS instance. The only way is to copy a snapshot, encrypt the copy, and restore a new instance from that encrypted snapshot.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - There is no "Enable Encryption" checkbox for an already running unencrypted instance.
+        - DMS works but has much higher operational overhead and complexity than simple snapshot restoration.
+        - IAM policies can prevent unencrypted actions but they don't actually perform the encryption on existing data.
 
   - id: q122
     type: multiple_choice
@@ -418,16 +458,18 @@ questions:
     options:
      - text: Use AWS Key Management Service (AWS KMS) to protect the encryption keys.
        is_correct: true
-     - text: "***replace later***"
+     - text: Deploy a cluster of EC2 instances running a custom Hardware Security Module (HSM) software.
+       is_correct: false
+     - text: Use AWS CloudHSM to manage the keys and perform cryptographic operations.
+       is_correct: false
+     - text: Store the encryption keys in a private S3 bucket with strict IAM policies.
        is_correct: false
     explanation: |
-      Correct:
-        AWS Key Management Service (AWS KMS) provides a scalable and managed solution for key management, reducing operational overhead while ensuring secure encryption key handling.
+      Correct: AWS KMS is a fully managed, highly available, and scalable service that handles all key management tasks, drastically reducing operational burden.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - Custom HSM clusters on EC2 involve massive operational overhead for patching and scaling.
+        - CloudHSM is managed but requires much more manual interaction and configuration than KMS.
+        - Storing raw keys in S3 is insecure and does not provide an infrastructure for performing cryptographic operations.
 
   - id: q123
     type: multiple_choice
@@ -438,16 +480,18 @@ questions:
     options:
      - text: Import the SSL certificate into AWS Certificate Manager (ACM). Create an Application Load Balancer with an HTTPS listener that uses the SSL certificate from ACM.
        is_correct: true
-     - text: "***replace later***"
+     - text: Upgrade the EC2 instances to a compute-optimized instance family.
+       is_correct: false
+     - text: Use an Amazon CloudFront distribution to perform SSL termination at the edge.
+       is_correct: false
+     - text: Configure the EC2 instances to use AWS CloudHSM for SSL offloading.
        is_correct: false
     explanation: |
-      Correct:
-        Importing the SSL certificate into AWS Certificate Manager (ACM) and using an Application Load Balancer for SSL termination offloads the encryption and decryption workload from the EC2 instances, improving performance.
+      Correct: Offloading SSL termination to an ALB moves the intensive compute work of encryption/decryption away from the EC2 instances, freeing up their CPU for application logic.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - Upgrading instances is expensive and doesn't solve the underlying issue of inefficient resource use.
+        - While CloudFront helps, the direct solution for backend performance is a Load Balancer.
+        - CloudHSM is unnecessarily complex and expensive for simple SSL termination.
 
   - id: q124
     type: multiple_choice
@@ -457,16 +501,17 @@ questions:
     options:
      - text: Implement EC2 Spot Instances.
        is_correct: true
-     - text: "***replace later***"
+     - text: Purchase Reserved Instances for the maximum number of nodes used.
+       is_correct: false
+     - text: Use On-Demand instances in a Dedicated Host.
+       is_correct: false
+     - text: Use an Auto Scaling group with a 3-year Savings Plan.
        is_correct: false
     explanation: |
-      Correct:
-        EC2 Spot Instances are a cost-effective solution for stateless and interruptible workloads, making them ideal for dynamic batch processing jobs.
+      Correct: Spot Instances are perfect for stateless, flexible workloads that can tolerate interruptions, offering up to 90% savings over On-Demand prices.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - Reserved Instances and Savings Plans are for steady-state workloads; paying for them for "highly dynamic" jobs that stop and start is not cost-effective.
+        - Dedicated Hosts are for specific compliance or licensing needs and are more expensive.
 
   - id: q125
     type: multiple_choice
@@ -478,16 +523,18 @@ questions:
        is_correct: true
      - text: Configure a VPC with two public subnets, two private subnets, and two NAT gateways across two Availability Zones. Deploy an Application Load Balancer in the public subnets.
        is_correct: true
-     - text: "***replace later***"
+     - text: Attach an Internet Gateway to the private subnets and update the route tables.
+       is_correct: false
+     - text: Use a Network Load Balancer in the private subnets to handle incoming traffic.
+       is_correct: false
+     - text: Deploy the EC2 instances in public subnets but use Security Groups to block all traffic.
        is_correct: false
     explanation: |
-      Correct:
-        Launching EC2 instances in private subnets and using an RDS Multi-AZ DB instance ensures that the resources are not exposed to the public internet. Configuring NAT gateways in public subnets allows the EC2 instances to access the internet securely for payment processing.
+      Correct: Private subnets protect the resources from direct internet access. Multi-AZ RDS ensures high availability. NAT Gateways in public subnets allow private EC2s to send outbound payment requests safely.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - Attaching an IGW to a private subnet makes it public, violating the security requirement.
+        - An NLB in a private subnet cannot receive traffic from the public internet.
+        - Putting instances in public subnets increases the attack surface, even with security groups.
 
   - id: q126
     type: multiple_choice
@@ -497,16 +544,18 @@ questions:
     options:
      - text: Set up an S3 Lifecycle policy to transition objects to S3 Glacier Deep Archive after 2 years.
        is_correct: true
-     - text: "***replace later***"
+     - text: Transition data to S3 Standard-IA after 2 years and then to S3 Glacier after 10 years.
+       is_correct: false
+     - text: Move all data to an on-premises Tape Library for long-term retention.
+       is_correct: false
+     - text: Use S3 Intelligent-Tiering for all objects to automate cost savings.
        is_correct: false
     explanation: |
-      Correct:
-        Using an S3 Lifecycle policy to transition objects to S3 Glacier Deep Archive after 2 years minimizes storage costs while ensuring that recent data remains highly available in the S3 Standard storage class.
+      Correct: Glacier Deep Archive is the lowest-cost storage class in S3, designed for data that is rarely accessed and can tolerate retrieval times of 12-48 hours, perfect for 25-year retention.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - Standard-IA and Glacier are both more expensive than Glacier Deep Archive for long-term storage.
+        - On-premises tapes increase operational overhead and do not leverage cloud scalability.
+        - Intelligent-Tiering is good for unpredictable access, but for 23 years of "archival" data, Deep Archive is much cheaper.
 
   - id: q127
     type: multiple_choice
@@ -516,16 +565,18 @@ questions:
     options:
      - text: Amazon EBS for maximum performance, Amazon S3 for durable data storage, and Amazon S3 Glacier for archival storage
        is_correct: true
-     - text: "***replace later***"
+     - text: Amazon S3 for all tiers to simplify management.
+       is_correct: false
+     - text: Amazon EFS for video processing, EBS for content, and S3 for archiving.
+       is_correct: false
+     - text: Amazon Instance Store for performance, EFS for durability, and Storage Gateway for archiving.
        is_correct: false
     explanation: |
-      Correct:
-        Amazon EBS provides high-performance storage for video processing. Amazon S3 offers durable storage for frequently accessed media content, while Amazon S3 Glacier is cost-effective for long-term archival storage.
+      Correct: EBS (especially Provisioned IOPS) provides the performance needed for video editing. S3 provides the durability and scale for 300 TB of content, and Glacier is the cheapest option for 900 TB of archives.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - S3 cannot match the low-latency I/O performance of EBS for active video processing.
+        - EFS is not designed for the same level of I/O as EBS and is more expensive for bulk content than S3.
+        - Instance Store is ephemeral; if the instance stops, the video processing data is lost.
 
   - id: q128
     type: multiple_choice
@@ -537,16 +588,18 @@ questions:
        is_correct: true
      - text: Use Spot Instances in an Amazon Elastic Kubernetes Service (Amazon EKS) managed node group.
        is_correct: true
-     - text: "***replace later***"
+     - text: Use On-Demand instances with AWS Fargate.
+       is_correct: false
+     - text: Deploy the containers on a fleet of Dedicated Hosts.
+       is_correct: false
+     - text: Use Amazon Lightsail containers for the deployment.
        is_correct: false
     explanation: |
-      Correct:
-        Spot Instances provide a cost-effective solution for running stateless applications. Using either an EC2 Auto Scaling group or an EKS managed node group ensures scalability and resilience with minimal operational overhead.
+      Correct: Both EC2 ASG and EKS managed node groups support Spot Instances, which provide the lowest cost for stateless, disruption-tolerant container workloads.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - On-Demand Fargate is more expensive than Spot-based solutions.
+        - Dedicated Hosts are the most expensive way to run EC2.
+        - Lightsail has limited scaling and management features for production-grade container fleets.
 
   - id: q129
     type: multiple_choice
@@ -558,16 +611,18 @@ questions:
        is_correct: true
      - text: Migrate the web application to be hosted on AWS Fargate with Amazon Elastic Container Service (Amazon ECS).
        is_correct: true
-     - text: "***replace later***"
+     - text: Replicate the Linux hosts to Amazon EC2 instances using AWS Application Migration Service.
+       is_correct: false
+     - text: Use Amazon S3 to host the PostgreSQL database files.
+       is_correct: false
+     - text: Use AWS Direct Connect to maintain the connection to the on-premises database.
        is_correct: false
     explanation: |
-      Correct:
-        Migrating the PostgreSQL database to Amazon Aurora reduces operational overhead with its managed service features. Hosting the web application on AWS Fargate eliminates the need to manage servers, further reducing operational complexity.
+      Correct: Aurora and Fargate are "serverless" or managed services that eliminate the need for OS patching, capacity planning, and hardware maintenance, solving the operational overhead issue.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - Migrating to EC2 still requires managing the OS and infrastructure.
+        - S3 is object storage and cannot host an active PostgreSQL database engine.
+        - Keeping the database on-premises does not reduce operational overhead; it adds latency and complexity.
 
   - id: q130
     type: multiple_choice
@@ -577,16 +632,18 @@ questions:
     options:
      - text: Use a target tracking policy to dynamically scale the Auto Scaling group.
        is_correct: true
-     - text: "***replace later***"
+     - text: Set up a scheduled scaling policy to add instances during peak hours.
+       is_correct: false
+     - text: Create a CloudWatch alarm to send an SNS notification to the admin when CPU reaches 40%.
+       is_correct: false
+     - text: Increase the instance size to a type that can handle more load.
        is_correct: false
     explanation: |
-      Correct:
-        A target tracking policy automatically adjusts the size of the Auto Scaling group to maintain the desired CPU utilization, ensuring optimal performance.
+      Correct: Target tracking scaling policies are designed to keep a specific metric (like average CPU) at a target value (40%) by automatically adding or removing instances.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - Scheduled scaling only works if the load is perfectly predictable, which isn't mentioned here.
+        - SNS notifications require manual intervention, which is not an automated scaling solution.
+        - Increasing instance size (vertical scaling) doesn't solve the need to dynamically adjust to changing traffic levels.
 
   - id: q131
     type: multiple_choice
@@ -596,16 +653,18 @@ questions:
     options:
      - text: Create an origin access identity (OAI). Assign the OAI to the CloudFront distribution. Configure the S3 bucket permissions so that only the OAI has read permission.
        is_correct: true
-     - text: "***replace later***"
+     - text: Rename the S3 bucket to a random string that is difficult to guess.
+       is_correct: false
+     - text: Use a bucket policy to only allow traffic from the IP addresses of the users.
+       is_correct: false
+     - text: Enable S3 Block Public Access and use signed URLs for all S3 requests.
        is_correct: false
     explanation: |
-      Correct:
-        Using an origin access identity (OAI) ensures that only CloudFront can access the S3 bucket, preventing direct navigation to the S3 URL while allowing secure file delivery through CloudFront.
+      Correct: An OAI (or the newer Origin Access Control - OAC) is the standard AWS mechanism to ensure S3 content is only accessible via CloudFront.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - Renaming is "security by obscurity" and is not an actual access control.
+        - User IP addresses change frequently and are not a scalable way to restrict access to S3.
+        - Signed URLs for S3 would still allow direct access to S3 if the user has the URL, and it doesn't enforce the "CloudFront-only" requirement.
 
   - id: q132
     type: multiple_choice
@@ -615,16 +674,18 @@ questions:
     options:
      - text: Amazon CloudFront and Amazon S3
        is_correct: true
-     - text: "***replace later***"
+     - text: AWS Global Accelerator and Amazon EBS
+       is_correct: false
+     - text: Application Load Balancer and Amazon EC2
+       is_correct: false
+     - text: Amazon Route 53 and Amazon EFS
        is_correct: false
     explanation: |
-      Correct:
-        Amazon CloudFront and Amazon S3 provide a scalable, cost-effective solution for delivering downloadable content globally with low latency and high performance.
+      Correct: S3 provides cost-effective storage for the reports, and CloudFront caches them at edge locations globally to provide the fastest response times with zero server management.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - EBS cannot be used directly with Global Accelerator for global file delivery without an EC2 instance.
+        - EC2/ALB requires provisioning and managing servers, increasing cost and overhead.
+        - Route 53/EFS is not a delivery solution; EFS is for shared file access among servers, not global user downloads.
 
   - id: q133
     type: multiple_choice
@@ -634,35 +695,39 @@ questions:
     options:
      - text: Migrate the Oracle database to Amazon RDS Custom for Oracle. Create a read replica for the database in another AWS Region.
        is_correct: true
-     - text: "***replace later***"
+     - text: Use Amazon RDS for Oracle in a Multi-AZ deployment.
+       is_correct: false
+     - text: Install Oracle on Amazon EC2 instances and use Data Guard for replication.
+       is_correct: false
+     - text: Migrate to Amazon Aurora PostgreSQL-Compatible Edition.
        is_correct: false
     explanation: |
-      Correct:
-        Amazon RDS Custom for Oracle allows access to the underlying operating system while providing managed database features. Creating a read replica in another AWS Region ensures disaster recovery with minimal operational overhead.
+      Correct: RDS Custom is the only managed service that allows access to the underlying OS. Read replicas in another region provide a robust DR strategy.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - Standard RDS for Oracle does not allow access to the underlying OS.
+        - Installing on EC2 (self-managed) has high operational overhead.
+        - Migrating to Aurora would require a complete database engine change, which is a major effort not requested.
 
   - id: q134
     type: multiple_choice
     question: |
-      A company wants to move its application to a serverless solution. The serverless solution needs to analyze existing and new data by using SL. The company stores the data in an Amazon S3 bucket. The data requires encryption and must be replicated to a different AWS Region.
+      A company wants to move its application to a serverless solution. The serverless solution needs to analyze existing and new data by using SQL. The company stores the data in an Amazon S3 bucket. The data requires encryption and must be replicated to a different AWS Region.
       Which solution will meet these requirements with the LEAST operational overhead?
     options:
      - text: Create a new S3 bucket. Load the data into the new S3 bucket. Use S3 Cross-Region Replication (CRR) to replicate encrypted objects to an S3 bucket in another Region. Use server-side encryption with AWS KMS multi-Region keys (SSE-KMS). Use Amazon Athena to query the data.
        is_correct: true
-     - text: "***replace later***"
+     - text: Use AWS Glue to crawl the S3 bucket and Amazon Redshift Spectrum to perform SQL queries.
+       is_correct: false
+     - text: Set up an EC2 instance running a SQL database and use S3 Batch Operations to load data.
+       is_correct: false
+     - text: Use Amazon EMR to run Spark SQL jobs on the S3 data.
        is_correct: false
     explanation: |
-      Correct:
-        S3 Cross-Region Replication (CRR) with SSE-KMS ensures secure and automated replication of encrypted data to another Region. Amazon Athena provides a serverless solution for querying the data with minimal operational overhead.
+      Correct: Athena is serverless and allows SQL queries directly on S3. S3 CRR handles the regional replication and KMS handles the encryption with minimal overhead.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - Redshift Spectrum requires an active Redshift cluster, which is not serverless and has more overhead than Athena.
+        - EC2 is not a serverless solution.
+        - EMR involves managing clusters, which is much more complex than using Athena.
 
   - id: q135
     type: multiple_choice
@@ -672,16 +737,18 @@ questions:
     options:
      - text: Ask the provider to create a VPC endpoint for the target service. Use AWS PrivateLink to connect to the target service.
        is_correct: true
-     - text: "***replace later***"
+     - text: Create a VPC Peering connection between the two VPCs.
+       is_correct: false
+     - text: Set up an AWS Site-to-Site VPN between the two provider networks.
+       is_correct: false
+     - text: Use an internet gateway with a NAT Gateway to access the provider's public endpoint.
        is_correct: false
     explanation: |
-      Correct:
-        AWS PrivateLink provides secure and private connectivity to services hosted in another VPC. Requesting the provider to create a VPC endpoint ensures that the connection is restricted to the target service and initiated only from the company’s VPC.
+      Correct: AWS PrivateLink provides private connectivity between VPCs without exposing traffic to the internet and restricts access to the specific service only, not the whole VPC.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - VPC Peering allows full network-to-network routing, which is less restricted than required.
+        - VPNs are for encrypted traffic over the internet and are more complex to manage for service-to-service connectivity.
+        - NAT Gateway traffic goes over the internet, which violates the "private" requirement.
 
   - id: q136
     type: multiple_choice
@@ -689,20 +756,22 @@ questions:
       A company is migrating its on-premises PostgreSQL database to Amazon Aurora PostgreSQL. The on-premises database must remain online and accessible during the migration. The Aurora database must remain synchronized with the on-premises database.
       Which combination of actions must a solutions architect take to meet these requirements? (Choose two.)
     options:
-     - text: Create an ongoing replication task.
+     - text: Create an ongoing replication task using AWS Database Migration Service (DMS).
        is_correct: true
      - text: Convert the database schema by using the AWS Schema Conversion Tool (AWS SCT).
        is_correct: true
-     - text: "***replace later***"
+     - text: Use the pg_dump utility to export the data and import it into Aurora.
+       is_correct: false
+     - text: Set up an AWS Direct Connect connection for the migration.
+       is_correct: false
+     - text: Enable Multi-AZ on the Aurora database before starting the migration.
        is_correct: false
     explanation: |
-      Correct:
-        Creating an ongoing replication task ensures that the Aurora database remains synchronized with the on-premises database. Using the AWS Schema Conversion Tool (AWS SCT) converts the database schema to be compatible with Aurora PostgreSQL.
+      Correct: SCT handles schema differences, and DMS "ongoing replication" (CDC) keeps the databases in sync while the on-premises one stays online.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - pg_dump is a point-in-time export; it doesn't keep the databases synchronized after the dump.
+        - Direct Connect is a network option, not a migration tool itself.
+        - Multi-AZ is for high availability, but it doesn't help with the synchronization from on-premises to AWS.
 
   - id: q137
     type: multiple_choice
@@ -710,18 +779,20 @@ questions:
       A company uses AWS Organizations to create dedicated AWS accounts for each business unit to manage each business unit's account independently upon request. The root email recipient missed a notification that was sent to the root user email address of one account. The company wants to ensure that all future notifications are not missed. Future notifications must be limited to account administrators.
       Which solution will meet these requirements?
     options:
-     - text: Configure all existing AWS accounts and all newly created accounts to use the same root user email address. Configure AWS account alternate contacts in the AWS Organizations console or programmatically.
+     - text: Configure AWS account alternate contacts in the AWS Organizations console or programmatically.
        is_correct: true
-     - text: "***replace later***"
+     - text: Create a new IAM user for each account with administrator privileges and a corporate email address.
+       is_correct: false
+     - text: Set up a CloudWatch alarm to monitor the root user's login activity.
+       is_correct: false
+     - text: Move all accounts into a single Organizational Unit (OU) and apply a Service Control Policy (SCP).
        is_correct: false
     explanation: |
-      Correct:
-        Configuring alternate contacts for AWS accounts ensures that notifications are sent to account administrators instead of the root user email address, reducing the risk of missed notifications.
+      Correct: Alternate contacts allow you to specify different email addresses for Billing, Operations, and Security notifications, ensuring they go to the right people instead of just the root email.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - Creating IAM users doesn't redirect AWS service/account notifications sent to the root email address.
+        - Monitoring root login doesn't help with receiving external AWS notifications.
+        - SCPs control permissions but do not manage account notification settings.
 
   - id: q138
     type: multiple_choice
@@ -732,16 +803,18 @@ questions:
     options:
      - text: Migrate the queue to a redundant pair (active/standby) of RabbitMQ instances on Amazon MQ. Create a Multi-AZ Auto Scaling group for EC2 instances that host the application. Migrate the database to run on a Multi-AZ deployment of Amazon RDS for PostgreSQL.
        is_correct: true
-     - text: "***replace later***"
+     - text: Deploy the EC2 instances across three AZs and use a Network Load Balancer for the queue.
+       is_correct: false
+     - text: Use Amazon SQS for the queue and Amazon DynamoDB for the database.
+       is_correct: false
+     - text: Set up a secondary VPC in another Region and use VPC Peering to replicate data.
        is_correct: false
     explanation: |
-      Correct:
-        Using Amazon MQ with active/standby RabbitMQ instances ensures high availability for the message queue. A Multi-AZ Auto Scaling group for EC2 instances and a Multi-AZ RDS deployment for the database further enhance availability and reduce operational overhead.
+      Correct: This uses managed services (Amazon MQ and RDS) that handle failover and high availability automatically across AZs, which is the definition of "least operational overhead."
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - Manual EC2 management across AZs (Option B) has high operational overhead.
+        - SQS and DynamoDB (Option C) are great, but migrating from RabbitMQ/PostgreSQL to SQS/DynamoDB requires major application code rewrites.
+        - Multi-region replication (Option D) is overkill for standard HA and increases complexity significantly.
 
   - id: q139
     type: multiple_choice
@@ -752,16 +825,18 @@ questions:
     options:
      - text: Create a Lambda function to copy the files to the analysis S3 bucket. Create an S3 event notification for the analysis S3 bucket. Configure Lambda and SageMaker Pipelines as destinations of the event notification. Configure s3:ObjectCreated:Put as the event type.
        is_correct: true
-     - text: "***replace later***"
+     - text: Use S3 Replication (CRR) to move the files and set up an EventBridge rule to trigger the pipeline.
+       is_correct: false
+     - text: Set up a Glue ETL job that runs every 5 minutes to check for new files and move them.
+       is_correct: false
+     - text: Create an EC2 instance running a Python script to monitor S3 and trigger the tasks.
        is_correct: false
     explanation: |
-      Correct:
-        Using S3 event notifications to trigger a Lambda function automates the file movement and processing workflow. Configuring SageMaker Pipelines as a destination ensures seamless integration with the analysis pipeline.
+      Correct: Event notifications allow for immediate, serverless reaction to file uploads, enabling the automation of the entire workflow with no server management.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - S3 Replication doesn't natively trigger pattern-matching code or SageMaker pipelines as easily as event notifications.
+        - Glue ETL is for batch processing and would be more expensive and slower than an event-driven Lambda.
+        - EC2 increases operational overhead significantly for a task that is better suited for serverless.
 
   - id: q140
     type: multiple_choice
@@ -770,20 +845,22 @@ questions:
       The EC2 instances will run the data ingestion layer of the application. EC2 usage will be sporadic and unpredictable. Workloads that run on EC2 instances can be interrupted at any time. The application front end will run on Fargate, and Lambda will serve the API layer. The front-end utilization and API layer utilization will be predictable over the course of the next year.
       Which combination of purchasing options will provide the MOST cost-effective solution for hosting this application? (Choose two.)
     options:
-     - text: Use Spot Instances for the data ingestion layer
+     - text: Use Spot Instances for the data ingestion layer.
        is_correct: true
      - text: Purchase a 1-year Compute Savings Plan for the front end and API layer.
        is_correct: true
-     - text: "***replace later***"
+     - text: Use On-Demand instances for all tiers to ensure maximum availability.
+       is_correct: false
+     - text: Purchase Reserved Instances for the data ingestion layer.
+       is_correct: false
+     - text: Use EC2 Instance Savings Plans for the Lambda functions.
        is_correct: false
     explanation: |
-      Correct:
-        Spot Instances provide a cost-effective solution for sporadic and interruptible workloads like the data ingestion layer. A 1-year Compute Savings Plan offers predictable cost savings for the front end and API layer with consistent utilization.
+      Correct: Spot Instances are ideal for "interruptible" and "sporadic" workloads. Compute Savings Plans apply across Fargate and Lambda, providing massive discounts for "predictable" usage.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - On-Demand is the most expensive option.
+        - Reserved Instances are for steady usage, not "sporadic and unpredictable" workloads.
+        - EC2 Instance Savings Plans are specific to EC2; Compute Savings Plans are better as they cover Fargate and Lambda.
 
   - id: q141
     type: multiple_choice
@@ -793,16 +870,18 @@ questions:
     options:
      - text: Deploy the application stack in two AWS Regions. Use an Amazon Route 53 latency routing policy to serve all content from the ALB in the closest Region.
        is_correct: true
-     - text: "***replace later***"
+     - text: Move the API server to a larger EC2 instance in a single Region.
+       is_correct: false
+     - text: Use Amazon S3 to store all dynamic content and enable S3 Transfer Acceleration.
+       is_correct: false
+     - text: Use an AWS Direct Connect connection between the users and the AWS Region.
        is_correct: false
     explanation: |
-      Correct:
-        Deploying the application stack in multiple Regions and using a Route 53 latency routing policy ensures that users are served content from the closest Region, minimizing latency.
+      Correct: Multi-region deployment with Route 53 latency routing ensures that users connect to the infrastructure physically closest to them, minimizing the time data travels.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - Larger instances in one region do nothing to solve the latency caused by geographic distance.
+        - S3 cannot serve dynamic content that requires logic from an API server.
+        - Direct Connect is for connecting corporate data centers to AWS, not for individual global users.
 
   - id: q142
     type: multiple_choice
@@ -812,16 +891,18 @@ questions:
     options:
      - text: Configure AWS Global Accelerator to forward requests to a Network Load Balancer. Use Amazon EC2 instances for the application in an EC2 Auto Scaling group.
        is_correct: true
-     - text: "***replace later***"
+     - text: Use Amazon CloudFront with an Application Load Balancer as the origin.
+       is_correct: false
+     - text: Create an Amazon Route 53 geolocation policy to route traffic to an Elastic IP.
+       is_correct: false
+     - text: Use an AWS Transit Gateway to route UDP traffic globally.
        is_correct: false
     explanation: |
-      Correct:
-        AWS Global Accelerator provides low-latency routing to the nearest edge location and static IP addresses for the application. Using a Network Load Balancer and EC2 Auto Scaling group ensures high availability and scalability.
+      Correct: Global Accelerator provides static IP addresses and routes UDP traffic over the AWS global network to the nearest region, improving latency and performance for gaming.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - CloudFront does not support UDP traffic.
+        - Route 53 Geolocation alone doesn't provide the network optimization or static Anycast IP addresses that Global Accelerator offers.
+        - Transit Gateway is for VPC-to-VPC routing, not for user-to-application traffic optimization.
 
   - id: q143
     type: multiple_choice
@@ -831,16 +912,18 @@ questions:
     options:
      - text: Host the application on Amazon Elastic Container Service (Amazon ECS). Set up an Application Load Balancer with Amazon ECS as the target.
        is_correct: true
-     - text: "***replace later***"
+     - text: Deploy the application as several AWS Lambda functions.
+       is_correct: false
+     - text: Use AWS Elastic Beanstalk to host the application.
+       is_correct: false
+     - text: Use Amazon EC2 instances in an Auto Scaling group for each component.
        is_correct: false
     explanation: |
-      Correct:
-        Hosting the application on Amazon ECS allows the company to break the monolithic application into smaller containerized applications. Using an Application Load Balancer with ECS ensures scalability and reduces operational overhead.
+      Correct: ECS is perfect for microservices. It allows the monolith to be containerized into smaller pieces without rewriting the whole code base (as Lambda would require), while providing high scalability and lower overhead than EC2.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - Lambda would require a complete rewrite of the monolithic code into a functional/serverless model.
+        - Elastic Beanstalk is less suited for granular microservices managed by different teams than a container orchestrator like ECS.
+        - Managing multiple ASGs of EC2 instances involves high operational overhead for patching and server management.
 
   - id: q144
     type: multiple_choice
@@ -850,16 +933,18 @@ questions:
     options:
      - text: Migrate the monthly reporting to an Aurora Replica.
        is_correct: true
-     - text: "***replace later***"
+     - text: Increase the instance size of the primary Aurora database.
+       is_correct: false
+     - text: Use Amazon ElastiCache to cache the report data.
+       is_correct: false
+     - text: Migrate the reporting workload to Amazon Redshift.
        is_correct: false
     explanation: |
-      Correct:
-        Migrating the monthly reporting to an Aurora Replica offloads read traffic from the primary database, improving performance and reducing costs.
+      Correct: Aurora Replicas are cost-effective (they share the same storage) and offload read-heavy reporting queries from the primary instance, preventing performance degradation of the main app.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - Increasing instance size is more expensive and doesn't solve the underlying issue of competing workloads.
+        - ElastiCache requires code changes and doesn't help with large, scan-heavy analytical reports.
+        - Redshift is a powerful but more expensive data warehousing solution that is overkill for just offloading standard reports.
 
   - id: q145
     type: multiple_choice
@@ -869,16 +954,18 @@ questions:
     options:
      - text: Migrate the database to an Amazon Aurora MySQL DB instance. Create an AMI of the web application. Apply the AMI to a launch template. Create an Auto Scaling group with the launch template. Configure the launch template to use a Spot Fleet. Attach an Application Load Balancer to the Auto Scaling group.
        is_correct: true
-     - text: "***replace later***"
+     - text: Upgrade the EC2 instance to a larger size and add an Elastic IP.
+       is_correct: false
+     - text: Create a second EC2 instance and use a Round Robin DNS record to distribute traffic.
+       is_correct: false
+     - text: Use AWS OpsWorks to manage the deployment of the application across multiple instances.
        is_correct: false
     explanation: |
-      Correct:
-        Migrating the database to Amazon Aurora MySQL improves database performance and scalability. Using an Auto Scaling group with Spot Fleet and an Application Load Balancer ensures cost-effective scaling of the web application.
+      Correct: This architecture decouples the database (to Aurora) and uses an ASG with Spot instances for the web tier, providing highly cost-effective and seamless scaling.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - Larger instances don't provide high availability or seamless scaling for traffic spikes.
+        - Round Robin DNS is not a true load balancing solution and doesn't provide health checks or seamless scaling.
+        - OpsWorks is a configuration management tool, not a scaling architecture itself.
 
   - id: q146
     type: multiple_choice
@@ -889,16 +976,18 @@ questions:
     options:
      - text: Use Reserved Instances for the baseline level of usage. Use Spot instances for any additional capacity that the application needs.
        is_correct: true
-     - text: "***replace later***"
+     - text: Use Spot instances for all workloads to maximize savings.
+       is_correct: false
+     - text: Use On-Demand instances in a scheduled Auto Scaling group for weekends.
+       is_correct: false
+     - text: Use Dedicated Hosts for all instances.
        is_correct: false
     explanation: |
-      Correct:
-        Reserved Instances provide cost savings for predictable baseline usage, while Spot Instances offer a cost-effective solution for handling additional capacity during peak usage periods.
+      Correct: Reserved Instances provide deep discounts for the steady baseline traffic, and Spot Instances handle the 8-hour daily spikes at minimal cost.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - Using only Spot instances could affect availability if capacity is reclaimed during production hours.
+        - On-Demand is always more expensive than Reserved/Spot combinations.
+        - Dedicated Hosts are unnecessary and very expensive for a stateless web application.
 
   - id: q147
     type: multiple_choice
@@ -908,16 +997,18 @@ questions:
     options:
      - text: Store the logs in Amazon S3. Use S3 Lifecycle policies to move logs more than 1 month old to S3 Glacier Deep Archive.
        is_correct: true
-     - text: "***replace later***"
+     - text: Store the logs in Amazon EBS volumes and take monthly snapshots.
+       is_correct: false
+     - text: Keep all logs in Amazon CloudWatch Logs for the full 10-year period.
+       is_correct: false
+     - text: Use Amazon EFS with Lifecycle Management to move data to the Infrequent Access tier.
        is_correct: false
     explanation: |
-      Correct:
-        Storing logs in Amazon S3 and using S3 Lifecycle policies to transition older logs to S3 Glacier Deep Archive minimizes storage costs while ensuring compliance with the 10-year retention requirement.
+      Correct: S3 Standard provides fast access for recent logs, and Glacier Deep Archive is the cheapest possible storage for 10-year retention of rarely accessed data.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - EBS snapshots are much more expensive than S3 Glacier Deep Archive.
+        - CloudWatch Logs storage costs are significantly higher than S3 archival tiers for large volumes of data.
+        - EFS is more expensive than S3, and even its IA tier doesn't match the price point of S3 Glacier Deep Archive.
 
   - id: q148
     type: multiple_choice
@@ -930,16 +1021,18 @@ questions:
     options:
      - text: Configure an Amazon Simple Queue Service (Amazon SQS) queue as the on-failure destination. Modify the Lambda function to process messages in the queue.
        is_correct: true
-     - text: "***replace later***"
+     - text: Increase the Lambda function's timeout and memory.
+       is_correct: false
+     - text: Change the SNS topic to a FIFO topic.
+       is_correct: false
+     - text: Enable Lambda's built-in retry mechanism to retry indefinitely.
        is_correct: false
     explanation: |
-      Correct:
-        Using an SQS queue as the on-failure destination ensures that failed notifications are retained for later processing. Modifying the Lambda function to process messages from the queue guarantees eventual processing of all notifications.
+      Correct: A Dead Letter Queue (DLQ) or an On-Failure destination (SQS) ensures that failed events are not lost and can be reprocessed once the connectivity issue is resolved.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - Increasing timeout/memory doesn't solve external network connectivity failures.
+        - FIFO topics don't solve processing failures; they only ensure order and deduplication.
+        - Lambda retries are not infinite; after a few attempts, the message is discarded unless a DLQ/destination is configured.
 
   - id: q149
     type: multiple_choice
@@ -949,16 +1042,18 @@ questions:
     options:
      - text: Create an Amazon Simple Queue Service (Amazon SQS) FIFO queue to hold messages. Set up an AWS Lambda function to process messages from the queue.
        is_correct: true
-     - text: "***replace later***"
+     - text: Use an Amazon SNS topic to broadcast the events to multiple Lambda functions.
+       is_correct: false
+     - text: Use Amazon Kinesis Data Streams and configure the partition key to ensure order.
+       is_correct: false
+     - text: Set up an EC2 Auto Scaling group to poll a standard SQS queue.
        is_correct: false
     explanation: |
-      Correct:
-        An SQS FIFO queue ensures that messages are processed in the exact order they are received. Using a Lambda function to process messages minimizes operational overhead while maintaining order.
+      Correct: SQS FIFO is the easiest way to maintain strict "First-In-First-Out" ordering with minimal operational overhead when integrated with Lambda.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - Standard SNS does not guarantee message order.
+        - Kinesis Data Streams can maintain order but has higher operational complexity for management and scaling compared to SQS FIFO.
+        - Standard SQS queues do not guarantee strict ordering.
 
   - id: q150
     type: multiple_choice
@@ -968,13 +1063,15 @@ questions:
     options:
      - text: Create Amazon CloudWatch composite alarms where possible.
        is_correct: true
-     - text: "***replace later***"
+     - text: Set up a single CloudWatch alarm that monitors both CPU and IOPS using a mathematical expression.
+       is_correct: false
+     - text: Configure an SNS topic to notify the admin whenever any individual metric exceeds 50%.
+       is_correct: false
+     - text: Use AWS Lambda to check metrics every minute and send an alert if both conditions are met.
        is_correct: false
     explanation: |
-      Correct:
-        Amazon CloudWatch composite alarms allow you to combine multiple alarm conditions, such as CPU utilization and disk IOPS, into a single alarm. This reduces false alarms and ensures that actions are taken only when both conditions are met.
+      Correct: Composite alarms are designed to combine multiple alarms into a single rule (Alarm A AND Alarm B), reducing "alarm noise" and ensuring notifications only trigger when specific combined conditions are met.
       Incorrect: 
-        "***replace later***"
-    tags: 
-    difficulty: 
-    points: 
+        - While metric math exists, composite alarms are the architecturally preferred way to manage complex multi-alarm states.
+        - Notifying on "any" metric would result in exactly the false alarms the company wants to avoid.
+        - Using Lambda adds unnecessary operational overhead for a feature natively supported by CloudWatch.
