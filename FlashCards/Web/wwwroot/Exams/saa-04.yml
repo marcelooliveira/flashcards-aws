@@ -16,8 +16,11 @@ questions:
      - text: Use AWS Config to activate managed rules to detect and alert for internet gateways and to detect and alert for new resources deployed outside of ap-northeast-3.
        is_correct: false
     explanation: |
-      Correct: Use AWS Organizations to configure service control policies (SCPS) that prevent VPCs from gaining internet access. Deny access to all AWS Regions except ap-northeast-3. Create an outbound rule for the network ACL in each VPC to deny all traffic from 0.0.0.0/0. Create an IAM policy for each user to prevent the use of any AWS Region other than ap-northeast-3.
-      Incorrect: The other options do not fully meet the requirements or are not applicable.
+      Correct: SCPs (Service Control Policies) em nível de Organization podem restringir o uso de regiões e a criação de recursos de gateway de internet. NACLs fornecem uma camada de segurança de rede adicional no nível da sub-rede para bloquear tráfego outbound.
+      Incorrect: 
+        - O AWS Control Tower pode aplicar guardrails, mas não é a ferramenta primária para bloqueio granular de conectividade de rede em VPCs legadas sem infraestrutura adicional.
+        - AWS WAF é um firewall de camada de aplicação para filtrar tráfego HTTP/HTTPS, não controla o acesso regional da conta ou a conectividade básica da VPC.
+        - AWS Config apenas detecta e alerta (monitoramento), ele não impede preventivamente que os administradores realizem as conexões proibidas.
 
   - id: q152
     type: multiple_choice
@@ -25,11 +28,20 @@ questions:
       A company uses a three-tier web application to provide training to new employees. The application is accessed for only 12 hours every day. The company is using an Amazon RDS for MySQL DB instance to store information and wants to minimize costs.
       What should a solutions architect do to meet these requirements?
     options:
-     - text: Create AWS Lambda functions to start and stop the DB instance. Create an outbound rule for the network ACL in each VPC to deny all traffic from 0.0.0.0/0. Create an IAM policy for each user to prevent the use of any AWS Region other than ap-northeast-3.
+     - text: Create AWS Lambda functions to start and stop the DB instance. Use Amazon EventBridge (CloudWatch Events) to trigger the functions based on the daily schedule.
        is_correct: true
+     - text: Convert the DB instance to an Amazon RDS Multi-AZ deployment.
+       is_correct: false
+     - text: Migrate the database to an Amazon Aurora Serverless cluster with a minimum capacity of zero.
+       is_correct: false
+     - text: Use an Amazon RDS Reserved Instance for a 3-year term.
+       is_correct: false
     explanation: |
-      Correct: Create AWS Lambda functions to start and stop the DB instance. Create an outbound rule for the network ACL in each VPC to deny all traffic from 0.0.0.0/0. Create an IAM policy for each user to prevent the use of any AWS Region other than ap-northeast-3.
-      Incorrect: The other options do not minimize costs effectively.
+      Correct: Automatizar a interrupção da instância RDS durante as 12 horas em que não é utilizada é a forma mais direta de economizar nos custos de computação da base de dados.
+      Incorrect: 
+        - Multi-AZ aumenta a disponibilidade, mas duplica o custo, o que é contrário ao objetivo de economia.
+        - Embora o Aurora Serverless escalasse para zero, a questão pede especificamente uma solução para a instância RDS MySQL existente.
+        - Reserved Instances são melhores para cargas de trabalho 24/7; para algo usado apenas 50% do tempo, o desligamento agendado costuma ser mais eficiente se o tempo de inicialização for aceitável.
 
   - id: q153
     type: multiple_choice
@@ -37,11 +49,20 @@ questions:
       A company sells ringtones created from clips of popular songs. The files containing the ringtones are stored in Amazon S3 Standard and are at least 128 KB in size. The company has millions of files, but downloads are infrequent for ringtones older than 90 days. The company needs to save money on storage while keeping the most accessed files readily available for its users.
       Which action should the company take to meet these requirements MOST cost-effectively?
     options:
-     - text: Implement an S3 Lifecycle policy that moves the objects from S3 Standard to S3 Standard-Infrequent Access (S3 Standard-1A) after 90 days.
+     - text: Implement an S3 Lifecycle policy that moves the objects from S3 Standard to S3 Standard-Infrequent Access (S3 Standard-IA) after 90 days.
        is_correct: true
+     - text: Move all files to S3 Glacier Deep Archive immediately to maximize savings.
+       is_correct: false
+     - text: Configure S3 Intelligent-Tiering for all objects in the bucket.
+       is_correct: false
+     - text: Create a Lambda function to delete files older than 90 days.
+       is_correct: false
     explanation: |
-      Correct: Implement an S3 Lifecycle policy that moves the objects from S3 Standard to S3 Standard-Infrequent Access (S3 Standard-1A) after 90 days.
-      Incorrect: The other options do not provide the most cost-effective solution.
+      Correct: S3 Standard-IA é ideal para dados que são acessados com menos frequência, mas exigem acesso em milissegundos quando solicitados, oferecendo um custo de armazenamento menor que o Standard.
+      Incorrect: 
+        - Glacier Deep Archive tem latência de recuperação de horas, o que impediria que os ringtones estivessem "prontamente disponíveis".
+        - Intelligent-Tiering tem uma taxa de monitoramento por objeto; para milhões de arquivos pequenos (embora >128KB), a taxa pode superar a economia se o padrão de acesso for previsível (90 dias).
+        - Deletar arquivos remove o produto da empresa, o que não atende ao requisito de manter o acesso, mesmo que infrequente.
 
   - id: q154
     type: multiple_choice
@@ -51,9 +72,18 @@ questions:
     options:
      - text: Use S3 Object Lock in compliance mode with a retention period of 365 days.
        is_correct: true
+     - text: Enable S3 Versioning and set a lifecycle policy to transition old versions to Glacier.
+       is_correct: false
+     - text: Use a bucket policy that denies the s3:DeleteObject action for everyone.
+       is_correct: false
+     - text: Use AWS Shield Advanced to protect the S3 bucket from modification.
+       is_correct: false
     explanation: |
-      Correct: Use S3 Object Lock in compliance mode with a retention period of 365 days.
-      Incorrect: The other options do not meet the compliance and access requirements.
+      Correct: O "Compliance Mode" do S3 Object Lock garante que nem mesmo o usuário root possa deletar ou sobrescrever os arquivos até que o período de retenção expire, atendendo a requisitos regulatórios rigorosos.
+      Incorrect: 
+        - Versionamento permite manter cópias, mas não impede que as versões atuais sejam deletadas ou que o versionamento seja desativado.
+        - Políticas de bucket podem ser alteradas por administradores, enquanto o Object Lock em modo de conformidade é imutável.
+        - AWS Shield é para mitigação de ataques DDoS, não para controle de retenção de arquivos.
 
   - id: q155
     type: multiple_choice
@@ -61,11 +91,20 @@ questions:
       A large media company hosts a web application on AWS. The company wants to start caching confidential media files so that users around the world will have reliable access to the files. The content is stored in Amazon S3 buckets. The company must deliver the content quickly, regardless of where the requests originate geographically.
       Which solution will meet these requirements?
     options:
-     - text: Deploy Amazon CloudFront to connect the S3 buckets to CloudFront edge servers.
+     - text: Deploy Amazon CloudFront to connect the S3 buckets to CloudFront edge servers. Use signed URLs or signed cookies for access control.
        is_correct: true
+     - text: Enable S3 Transfer Acceleration on the origin bucket.
+       is_correct: false
+     - text: Use AWS Global Accelerator to route traffic to the S3 bucket.
+       is_correct: false
+     - text: Replicate the S3 bucket to every AWS Region using Cross-Region Replication (CRR).
+       is_correct: false
     explanation: |
-      Correct: Deploy Amazon CloudFront to connect the S3 buckets to CloudFront edge servers.
-      Incorrect: The other options do not provide the required global delivery performance.
+      Correct: O CloudFront é a CDN da AWS que cacheia conteúdo em centenas de locais de borda (Edge Locations), reduzindo drasticamente a latência global.
+      Incorrect: 
+        - Transfer Acceleration melhora a velocidade de *upload* para o S3, não o download cacheado para usuários finais.
+        - Global Accelerator melhora a performance de rede via Anycast IP, mas não faz cache de conteúdo como o CloudFront.
+        - Replicar buckets para todas as regiões é extremamente caro, complexo de gerenciar e não resolve a latência do "último quilômetro" entre a região e o usuário final.
 
   - id: q156
     type: multiple_choice
@@ -75,17 +114,19 @@ questions:
     options:
      - text: Use Amazon Athena for one-time queries. Use Amazon QuickSight to create dashboards for KPIs.
        is_correct: true
-     - text: Create custom AWS Lambda functions to move the individual records from the databases to an Amazon Redshift cluster.
+     - text: Use Amazon Kinesis Data Firehose to ingest and process the live stream data directly into Amazon S3.
        is_correct: true
+     - text: Create custom AWS Lambda functions to move the individual records from the databases to an Amazon Redshift cluster.
+       is_correct: false
      - text: Use Amazon EMR to process the incoming data. Use Amazon Redshift to store the processed data.
        is_correct: false
      - text: Use AWS Glue to process the incoming data. Use Amazon S3 to store the processed data.
        is_correct: false
-     - text: Use Amazon Kinesis Data Firehose to process the incoming data. Use Amazon S3 to store the processed data.
-       is_correct: false
     explanation: |
-      Correct: Use Amazon Athena for one-time queries. Use Amazon QuickSight to create dashboards for KPIs. Create custom AWS Lambda functions to move the individual records from the databases to an Amazon Redshift cluster.
-      Incorrect: The other options involve higher operational overhead or do not meet the requirements.
+      Correct: Kinesis Data Firehose é a maneira mais simples (low overhead) de carregar streams no S3. Athena permite consultas SQL serverless diretamente no S3, e QuickSight é a ferramenta de BI nativa.
+      Incorrect: 
+        - Redshift e EMR exigem gerenciamento de clusters e infraestrutura, aumentando o overhead operacional em comparação com Athena e Firehose.
+        - Lambda para mover registros individuais é complexo de escalar para grandes volumes de dados de sensores e APIs em tempo real.
 
   - id: q157
     type: multiple_choice
@@ -93,19 +134,22 @@ questions:
       A company stores data in an Amazon Aurora PostgreSQL DB cluster. The company must store all the data for 5 years and must delete all the data after 5 years. The company also must indefinitely keep audit logs of actions that are performed within the database. Currently, the company has automated backups configured for Aurora.
       Which combination of steps should a solutions architect take to meet these requirements? (Choose two.)
     options:
+     - text: Use AWS Backup to manage the DB cluster snapshots and set a lifecycle policy to delete them after 5 years.
+       is_correct: true
+     - text: Configure an Amazon CloudWatch Logs export for the DB cluster to store audit logs in CloudWatch Logs with an indefinite retention period.
+       is_correct: true
      - text: Take a manual snapshot of the DB cluster.
-       is_correct: true
-     - text: Configure an Amazon CloudWatch Logs export for the DB cluster.
-       is_correct: true
+       is_correct: false
      - text: Create a lifecycle policy for the automated backups.
        is_correct: false
      - text: Configure automated backup retention for 5 years.
        is_correct: false
-     - text: Use AWS Backup to take the backups and to keep the backups for 5 years.
-       is_correct: false
     explanation: |
-      Correct: Take a manual snapshot of the DB cluster. Configure an Amazon CloudWatch Logs export for the DB cluster.
-      Incorrect: The other options do not fully meet the requirements or involve unnecessary steps.
+      Correct: AWS Backup centraliza a gestão de snapshots e permite definir políticas de expiração de 5 anos automaticamente. Exportar logs para o CloudWatch Logs garante a retenção indefinida de auditoria fora do banco.
+      Incorrect: 
+        - Snapshots manuais não expiram sozinhos; exigiriam um processo manual de deleção após 5 anos.
+        - Backups automatizados do Aurora têm um limite máximo de retenção de 35 dias, insuficiente para o requisito de 5 anos.
+        - Não existem "lifecycle policies" nativas para backups automatizados do RDS/Aurora além da janela de retenção de 35 dias.
 
   - id: q158
     type: multiple_choice
@@ -117,9 +161,16 @@ questions:
        is_correct: true
      - text: AWS Global Accelerator
        is_correct: false
+     - text: Amazon Route 53
+       is_correct: false
+     - text: Amazon ElastiCache
+       is_correct: false
     explanation: |
-      Correct: Amazon CloudFront improves the performance of both real-time and on-demand streaming by caching content at edge locations.
-      Incorrect: AWS Global Accelerator is not designed for streaming content.
+      Correct: CloudFront suporta protocolos de streaming (como HLS/DASH) e cacheia os fragmentos de vídeo nas bordas, o que é essencial para reduzir o buffer tanto em transmissões ao vivo quanto em VOD (Video on Demand).
+      Incorrect: 
+        - Global Accelerator otimiza a camada de rede (IP), mas não faz cache de conteúdo de mídia, sendo menos eficiente que uma CDN para streaming de vídeo.
+        - Route 53 é apenas DNS; ele direciona o usuário, mas não melhora a entrega dos dados do vídeo.
+        - ElastiCache é para cache de dados em memória (bancos de dados), não para entrega de arquivos de vídeo em larga escala para usuários finais.
 
   - id: q159
     type: multiple_choice
@@ -138,8 +189,11 @@ questions:
      - text: Create an IAM role for each user attempting to access the API. A user will assume the role when making the API call.
        is_correct: false
     explanation: |
-      Correct: Create a usage plan with an API key that is shared with genuine users only. Implement an AWS WAF rule to target malicious requests and trigger actions to filter them out.
-      Incorrect: The other options do not effectively address the issue of blocking unauthorized requests.
+      Correct: AWS WAF protege contra ataques comuns na web e botnets no nível da borda. Planos de uso com chaves de API permitem limitar quem pode chamar a API e em qual frequência (throttling).
+      Incorrect: 
+        - Filtrar IPs dentro da Lambda é ineficiente e caro, pois você paga pela execução da função mesmo para negar o tráfego.
+        - APIs privadas são apenas para acesso dentro de uma VPC (via Direct Connect/VPN), o que quebraria o acesso de usuários legítimos na internet pública.
+        - Criar roles do IAM para cada usuário público de um botnet é tecnicamente impossível e administrativamente inviável.
 
   - id: q160
     type: multiple_choice
@@ -151,13 +205,15 @@ questions:
        is_correct: true
      - text: Amazon OpenSearch Service (Amazon Elasticsearch Service)
        is_correct: false
-     - text: Amazon S3 Glacier
+     - text: Amazon S3 Glacier Flexible Retrieval
        is_correct: false
      - text: Amazon RDS for PostgreSQL
        is_correct: false
     explanation: |
-      Correct: Amazon S3 Standard meets the requirements for accessibility and cost-effectiveness.
-      Incorrect: The other options either do not meet the accessibility requirement or are more expensive.
+      Correct: Para apenas 300 MB por mês com necessidade de acesso em milissegundos, o S3 Standard é extremamente barato e atende perfeitamente ao requisito de performance.
+      Incorrect: 
+        - OpenSearch e RDS têm custos de instância contínuos que são ordens de magnitude maiores que o armazenamento simples no S3 para essa quantidade de dados.
+        - Glacier não oferece acesso em milissegundos (requer minutos ou horas para restauração).
 
   - id: q161
     type: multiple_choice
@@ -167,9 +223,17 @@ questions:
     options:
      - text: Place the JSON documents in an Amazon S3 bucket. Create an AWS Lambda function that runs the Python code to process the documents as they arrive in the S3 bucket. Store the results in an Amazon Aurora DB cluster.
        is_correct: true
+     - text: Deploy the Python application on a fleet of Amazon EC2 instances in an Auto Scaling group.
+       is_correct: false
+     - text: Use AWS Glue to process the documents in batch mode every hour.
+       is_correct: false
+     - text: Host the Python application on AWS Elastic Beanstalk with a Multi-AZ RDS MySQL database.
+       is_correct: false
     explanation: |
-      Correct: Place the JSON documents in an Amazon S3 bucket. Create an AWS Lambda function that runs the Python code to process the documents as they arrive in the S3 bucket. Store the results in an Amazon Aurora DB cluster.
-      Incorrect: The other options do not minimize operational overhead or maximize scalability.
+      Correct: Esta é uma arquitetura orientada a eventos e totalmente serverless. O S3 engatilha a Lambda (escala automaticamente) e o Aurora fornece alta disponibilidade para os dados, com o mínimo de gestão de servidores.
+      Incorrect: 
+        - EC2 e Elastic Beanstalk exigem gerenciamento de patches, sistemas operacionais e capacidade, aumentando o overhead operacional.
+        - AWS Glue é voltado para ETL de larga escala e batch; para processar documentos conforme chegam (milhares por dia), a Lambda é mais ágil e econômica.
 
   - id: q162
     type: multiple_choice
@@ -180,9 +244,18 @@ questions:
     options:
      - text: Amazon FSx for Lustre integrated with Amazon S3
        is_correct: true
+     - text: Amazon Elastic File System (EFS) with Provisioned Throughput.
+       is_correct: false
+     - text: Amazon S3 with S3 Transfer Acceleration.
+       is_correct: false
+     - text: Amazon EBS Multi-Attach with Provisioned IOPS SSD (io2) volumes.
+       is_correct: false
     explanation: |
-      Correct: Amazon FSx for Lustre integrated with Amazon S3 meets the requirements for high performance computing and persistent storage.
-      Incorrect: The other options do not provide the required integration or performance.
+      Correct: FSx for Lustre é projetado especificamente para HPC e oferece integração nativa com o S3, permitindo processar dados em um sistema de arquivos ultra-rápido e persistir os resultados no S3 automaticamente.
+      Incorrect: 
+        - EFS é um sistema de arquivos generalista; embora escalável, não atende às demandas de performance extrema de sub-milissegundos de workloads HPC Lustre.
+        - S3 sozinho não é um sistema de arquivos POSIX; aplicações Linux de HPC geralmente precisam montar um sistema de arquivos real.
+        - EBS Multi-Attach permite que apenas alguns tipos de instâncias acessem o volume e tem limites estritos de escala (dezenas de instâncias, não centenas).
 
   - id: q163
     type: multiple_choice
@@ -192,31 +265,58 @@ questions:
     options:
      - text: Store container images in an Amazon Elastic Container Registry (Amazon ECR) repository. Use an Amazon Elastic Container Service (Amazon ECS) cluster with the AWS Fargate launch type to run the containers. Use target tracking to scale automatically based on demand.
        is_correct: true
+     - text: Install and manage a Kubernetes cluster on Amazon EC2 instances.
+       is_correct: false
+     - text: Use AWS Elastic Beanstalk with the Docker platform to deploy the application.
+       is_correct: false
+     - text: Use Amazon Lightsail to run the containerized application.
+       is_correct: false
     explanation: |
-      Correct: Store container images in an Amazon Elastic Container Registry (Amazon ECR) repository. Use an Amazon Elastic Container Service (Amazon ECS) cluster with the AWS Fargate launch type to run the containers. Use target tracking to scale automatically based on demand.
-      Incorrect: The other options do not minimize operational overhead or provide high availability.
+      Correct: ECS com Fargate remove a necessidade de gerenciar instâncias EC2 subjacentes (patching, scaling de cluster), focando apenas na gestão do container, o que minimiza o overhead.
+      Incorrect: 
+        - Gerenciar Kubernetes no EC2 manualmente tem o maior overhead operacional possível.
+        - Elastic Beanstalk adiciona camadas de abstração que podem ser mais complexas de ajustar para milhares de usuários do que o ECS nativo.
+        - Lightsail é para projetos pequenos e simples; ele não oferece o mesmo nível de escalabilidade e alta disponibilidade corporativa que o ECS/Fargate.
 
   - id: q164
     type: multiple_choice
     question: |
-      A company has two applications: a sender application that sends messages with payloads to be processed and a processing application intended to receive the messages with payloads. The company wants to implement an AWS service to handle messages between the two applications. The sender application can send about 1,000 messages each hour. The messages may take up to 2 days to be processed: If the messages fail to process, they must be retained so that they do not impact the processing of any remaining messages.
+      A company has two applications: a sender application that sends messages with payloads to be processed and a processing application intended to receive the messages with payloads. The company wants to implement an AWS service to handle messages between the two applications. The sender application can send about 1,000 messages each hour. The messages may take up to 2 days to be processed. If the messages fail to process, they must be retained so that they do not impact the processing of any remaining messages.
     options:
-     - text: Integrate the sender and processor applications with an Amazon Simple Queue Service (Amazon SQS) queue. Configure a dead-letter queue to collect the messages that failed to process.
+     - text: Integrate the sender and processor applications with an Amazon Simple Queue Service (Amazon SQS) queue. Configure a dead-letter queue (DLQ) to collect the messages that failed to process.
        is_correct: true
+     - text: Use Amazon SNS to broadcast messages to the processor application.
+       is_correct: false
+     - text: Store the message payloads in an Amazon S3 bucket and use S3 Event Notifications.
+       is_correct: false
+     - text: Use Amazon Kinesis Data Streams to buffer the messages.
+       is_correct: false
     explanation: |
-      Correct: Integrate the sender and processor applications with an Amazon Simple Queue Service (Amazon SQS) queue. Configure a dead-letter queue to collect the messages that failed to process.
-      Incorrect: The other options do not meet the requirements for message retention and processing.
+      Correct: SQS fornece o desacoplamento necessário. O suporte a retenção de mensagens (até 14 dias) e a Dead Letter Queue para mensagens com falha garantem que o processamento continue para outras mensagens sem perda de dados.
+      Incorrect: 
+        - SNS é um modelo push; se o processador estiver offline ou falhar, a mensagem pode ser perdida se não houver um sistema de retentativa complexo.
+        - S3 não é um sistema de mensageria; gerenciar o estado de "processado" ou "falha" via arquivos no S3 teria um overhead operacional imenso.
+        - Kinesis é para ingestão de dados em larga escala (streaming); para 1.000 mensagens por hora, o SQS é muito mais simples e econômico.
 
   - id: q165
     type: multiple_choice
     question: |
       A solutions architect must design a solution that uses Amazon CloudFront with an Amazon S3 origin to store a static website. The company’s security policy requires that all website traffic be inspected by AWS WAF.
     options:
-     - text: Configure Amazon CloudFront and Amazon S3 to use an origin access identity (OAI) to restrict access to the S3 bucket. Enable AWS WAF on the distribution.
+     - text: Configure Amazon CloudFront and Amazon S3 to use an origin access identity (OAI) to restrict access to the S3 bucket. Enable AWS WAF on the CloudFront distribution.
        is_correct: true
+     - text: Enable AWS WAF directly on the Amazon S3 bucket.
+       is_correct: false
+     - text: Create a security group for the S3 bucket that only allows traffic from AWS WAF.
+       is_correct: false
+     - text: Use a Network Load Balancer in front of the S3 bucket to integrate with AWS WAF.
+       is_correct: false
     explanation: |
-      Correct: Configure Amazon CloudFront and Amazon S3 to use an origin access identity (OAI) to restrict access to the S3 bucket. Enable AWS WAF on the distribution.
-      Incorrect: The other options do not meet the security policy requirements.
+      Correct: Ao usar OAI/OAC, você garante que o S3 só aceite tráfego vindo do CloudFront. Ao associar o WAF ao CloudFront, todo o tráfego é inspecionado antes de chegar à origem.
+      Incorrect: 
+        - AWS WAF não pode ser habilitado diretamente em buckets S3.
+        - Buckets S3 não utilizam Security Groups; eles usam Bucket Policies e ACLs.
+        - NLBs não se integram nativamente com o S3 para servir sites estáticos dessa maneira, e o CloudFront é o serviço recomendado para essa função.
 
   - id: q166
     type: multiple_choice
@@ -226,9 +326,18 @@ questions:
     options:
      - text: Use Amazon CloudFront with the S3 bucket as its origin.
        is_correct: true
+     - text: Enable S3 Cross-Region Replication to all AWS Regions.
+       is_correct: false
+     - text: Use an Amazon API Gateway in front of the S3 bucket.
+       is_correct: false
+     - text: Place an Application Load Balancer in front of the S3 bucket.
+       is_correct: false
     explanation: |
-      Correct: Use Amazon CloudFront with the S3 bucket as its origin.
-      Incorrect: The other options do not provide the required scalability and efficiency.
+      Correct: CloudFront é a solução padrão para escala global de conteúdo estático, reduzindo custos de saída (egress) do S3 e melhorando drasticamente a velocidade para o usuário final.
+      Incorrect: 
+        - CRR não resolve o problema de performance para o usuário final sem um sistema de roteamento complexo e é muito mais caro que o CloudFront.
+        - API Gateway é para APIs REST/HTTP, não é a ferramenta correta para servir milhões de páginas HTML estáticas diretamente do S3.
+        - ALBs não podem usar um bucket S3 diretamente como um "target group" para servir arquivos estáticos.
 
   - id: q167
     type: multiple_choice
@@ -238,20 +347,38 @@ questions:
     options:
      - text: Use Reserved Instances for the baseline capacity and use Spot Instances to handle additional capacity.
        is_correct: true
+     - text: Use On-Demand instances for all capacity to ensure maximum uptime.
+       is_correct: false
+     - text: Use Spot Instances for all capacity to minimize costs.
+       is_correct: false
+     - text: Purchase Dedicated Hosts for the entire fleet.
+       is_correct: false
     explanation: |
-      Correct: Use Reserved Instances for the baseline capacity and use Spot Instances to handle additional capacity.
-      Incorrect: The other options do not provide cost-effective scalability.
+      Correct: Reserved Instances garantem a disponibilidade para a carga mínima constante ao menor preço, enquanto Spot Instances aproveitam o desconto de até 90% para as flutuações imprevisíveis de tráfego.
+      Incorrect: 
+        - On-Demand é a opção mais cara para carga constante.
+        - Usar apenas Spot pode causar downtime se a AWS precisar da capacidade de volta, violando o requisito de "sem downtime".
+        - Dedicated Hosts são extremamente caros e usados apenas para requisitos específicos de licenciamento ou conformidade.
 
   - id: q168
     type: multiple_choice
     question: |
       A security team wants to limit access to specific services or actions in all of the team’s AWS accounts. All accounts belong to a large organization in AWS Organizations. The solution must be scalable and there must be a single point where permissions can be maintained.
     options:
-     - text: Create a service control policy in the root organizational unit to deny access to the services or actions.
+     - text: Create a service control policy (SCP) in the root organizational unit to deny access to the services or actions.
        is_correct: true
+     - text: Create a common IAM Group in each account and attach a managed policy.
+       is_correct: false
+     - text: Use AWS Shield Advanced to block access to specific services.
+       is_correct: false
+     - text: Set up a VPC Peering connection and use Network ACLs to block service endpoints.
+       is_correct: false
     explanation: |
-      Correct: Create a service control policy in the root organizational unit to deny access to the services or actions.
-      Incorrect: The other options do not provide a scalable solution with centralized management.
+      Correct: SCPs permitem definir limites máximos de permissão em toda a organização de forma centralizada. Mesmo que um administrador local dê permissão total a um usuário, o SCP prevalecerá e bloqueará a ação.
+      Incorrect: 
+        - IAM Groups em cada conta não são escaláveis (exigem gestão em cada conta individualmente) e não impedem que administradores de conta criem novos usuários com outras permissões.
+        - AWS Shield é para proteção DDoS, não controle de permissões de API.
+        - NACLs bloqueiam tráfego de rede, mas não podem controlar ações granulares de serviços da AWS (como impedir a criação de um bucket S3).
 
   - id: q169
     type: multiple_choice
@@ -259,22 +386,40 @@ questions:
       A company is concerned about the security of its public web application due to recent web attacks. The application uses an Application Load Balancer (ALB). A solutions architect must reduce the risk of DDoS attacks against the application.
       What should the solutions architect do to meet this requirement?
     options:
-     - text: Enable AWS Shield Advanced to prevent attacks.
+     - text: Enable AWS Shield Advanced to provide enhanced protection and access to the DDoS Response Team (DRT).
        is_correct: true
+     - text: Configure an Amazon Inspector agent on the EC2 instances.
+       is_correct: false
+     - text: Use Amazon GuardDuty to automatically block malicious IP addresses.
+       is_correct: false
+     - text: Deploy the application in a private subnet with a NAT Gateway.
+       is_correct: false
     explanation: |
-      Correct: Enable AWS Shield Advanced to prevent attacks.
-      Incorrect: The other options do not provide comprehensive DDoS protection.
+      Correct: Shield Advanced oferece proteção contra ataques DDoS volumétricos nas camadas 3, 4 e 7, além de proteção financeira contra picos de custo causados por ataques.
+      Incorrect: 
+        - Amazon Inspector é para análise de vulnerabilidades em instâncias, não para bloqueio de ataques DDoS em tempo real.
+        - GuardDuty detecta ameaças, mas não bloqueia IPs automaticamente sem a implementação de automações customizadas com Lambda.
+        - NAT Gateways não protegem uma aplicação pública contra DDoS; elas apenas permitem que instâncias privadas acessem a internet.
 
   - id: q170
     type: multiple_choice
     question: |
       A company’s web application is running on Amazon EC2 instances behind an Application Load Balancer. The company recently changed its policy, which now requires the application to be accessed from one specific country only.
     options:
-     - text: Configure AWS WAF on the Application Load Balancer in a VPC.
+     - text: Configure AWS WAF on the Application Load Balancer and use a geo-match condition to allow traffic from the specific country.
        is_correct: true
+     - text: Use Route 53 with a Latency routing policy.
+       is_correct: false
+     - text: Block all IP ranges manually using Network ACLs.
+       is_correct: false
+     - text: Use AWS Firewall Manager to block all ports except 80 and 443.
+       is_correct: false
     explanation: |
-      Correct: Configure AWS WAF on the Application Load Balancer in a VPC.
-      Incorrect: The other options do not enforce geographic restrictions effectively.
+      Correct: O AWS WAF tem suporte nativo para filtragem geográfica (Geo-match), permitindo ou bloqueando tráfego com base no país de origem do IP de forma simples.
+      Incorrect: 
+        - Latency routing direciona para a região mais rápida, mas não impede que alguém de outro país acesse a aplicação.
+        - Gerenciar manualmente milhares de faixas de IP de países inteiros via NACLs é operacionalmente impossível e propenso a erros.
+        - Bloquear portas não resolve o problema de filtragem por localização geográfica.
 
   - id: q171
     type: multiple_choice
@@ -282,11 +427,20 @@ questions:
       A company provides an API to its users that automates inquiries for tax computations based on item prices. The company experiences a larger number of inquiries during the holiday season only that cause slower response times. A solutions architect needs to design a solution that is scalable and elastic.
       What should the solutions architect do to accomplish this?
     options:
-     - text: Design a REST API using Amazon API Gateway that accepts the item names. API Gateway passes item names to AWS Lambda for tax computations.
+     - text: Design a REST API using Amazon API Gateway that passes requests to AWS Lambda for tax computations.
        is_correct: true
+     - text: Deploy the API on a single large Amazon EC2 instance.
+       is_correct: false
+     - text: Use an Amazon SQS queue to buffer requests and an EC2 instance to process them.
+       is_correct: false
+     - text: Migrate the application to a legacy mainframe for high-performance processing.
+       is_correct: false
     explanation: |
-      Correct: Design a REST API using Amazon API Gateway that accepts the item names. API Gateway passes item names to AWS Lambda for tax computations.
-      Incorrect: The other options do not provide scalability and elasticity.
+      Correct: API Gateway + Lambda é a definição de escalabilidade e elasticidade serverless. O sistema escala de zero a milhares de execuções simultâneas instantaneamente durante os feriados sem intervenção manual.
+      Incorrect: 
+        - Uma única instância EC2 (mesmo grande) é um ponto único de falha e não tem elasticidade para lidar com picos sazonais extremos.
+        - SQS introduz latência (assíncrono), o que pode não ser aceitável para uma consulta de preço que o usuário espera uma resposta imediata (síncrona).
+        - Mainframes são o oposto de soluções elásticas e modernas de nuvem.
 
   - id: q172
     type: multiple_choice
@@ -294,11 +448,20 @@ questions:
       A solutions architect is creating a new Amazon CloudFront distribution for an application. Some of the information submitted by users is sensitive. The application uses HTTPS but needs another layer of security. The sensitive information should be protected throughout the entire application stack, and access to the information should be restricted to certain applications.
       Which action should the solutions architect take?
     options:
-     - text: Configure a CloudFront field-level encryption profile.
+     - text: Configure a CloudFront field-level encryption profile to encrypt sensitive data at the edge.
        is_correct: true
+     - text: Use AWS KMS to encrypt the entire S3 bucket.
+       is_correct: false
+     - text: Enable S3 Versioning to keep track of changes to sensitive data.
+       is_correct: false
+     - text: Use a signed cookie to restrict access to the entire website.
+       is_correct: false
     explanation: |
-      Correct: Configure a CloudFront field-level encryption profile.
-      Incorrect: The other options do not provide the required level of security.
+      Correct: Field-level encryption no CloudFront permite criptografar campos específicos (como números de cartão) na borda usando uma chave pública. Apenas aplicações com a chave privada correspondente podem descriptografar os dados, garantindo proteção ponta-a-ponta.
+      Incorrect: 
+        - Criptografar o bucket S3 protege os dados em repouso, mas não garante que o dado esteja criptografado durante todo o processamento na stack (ex: logs de aplicação).
+        - Versionamento não é uma medida de segurança ou criptografia para dados confidenciais.
+        - Cookies assinados controlam *quem* acessa o arquivo, mas não protegem o *conteúdo* sensível dentro do arquivo se ele for interceptado ou logado.
 
   - id: q173
     type: multiple_choice
@@ -309,9 +472,18 @@ questions:
     options:
      - text: Deploy an Amazon CloudFront web distribution in front of the S3 bucket.
        is_correct: true
+     - text: Increase the read capacity units (RCUs) on the S3 bucket.
+       is_correct: false
+     - text: Use S3 Transfer Acceleration for all user downloads.
+       is_correct: false
+     - text: Replicate the S3 bucket to 10 different regions.
+       is_correct: false
     explanation: |
-      Correct: Deploy an Amazon CloudFront web distribution in front of the S3 bucket.
-      Incorrect: The other options do not provide cost-effective scalability.
+      Correct: CloudFront reduz o custo de "Data Transfer Out" do S3 e elimina a carga repetitiva no bucket original, servindo as imagens e vídeos diretamente do cache da borda.
+      Incorrect: 
+        - O S3 não usa o conceito de "RCUs" (isso é do DynamoDB). O S3 escala automaticamente, mas você paga por cada requisição GET.
+        - Transfer Acceleration é para uploads rápidos, não para cache de download em massa.
+        - Multi-region replication é caro e não resolve o problema de carga na origem de forma tão eficiente quanto o cache de uma CDN.
 
   - id: q174
     type: multiple_choice
@@ -321,9 +493,18 @@ questions:
     options:
      - text: Modify the Auto Scaling group to use three instances across each of two Availability Zones.
        is_correct: true
+     - text: Increase the number of instances in the single Availability Zone to twelve.
+       is_correct: false
+     - text: Create a second ALB in a different region and use Route 53.
+       is_correct: false
+     - text: Move the instances to a Cluster Placement Group.
+       is_correct: false
     explanation: |
-      Correct: Modify the Auto Scaling group to use three instances across each of two Availability Zones.
-      Incorrect: The other options do not provide high availability.
+      Correct: Alta disponibilidade (HA) exige redundância geográfica. Ao distribuir as instâncias por pelo menos duas AZs, a aplicação sobrevive à falha total de um datacenter (AZ).
+      Incorrect: 
+        - Ter doze instâncias na mesma AZ não protege contra a falha daquela AZ específica.
+        - Uma arquitetura multi-região é para "Disaster Recovery", não HA básico, e é muito mais complexa e cara.
+        - Cluster Placement Groups colocam instâncias fisicamente próximas para baixa latência de rede, o que na verdade *aumenta* o risco de falha simultânea.
 
   - id: q175
     type: multiple_choice
@@ -332,11 +513,20 @@ questions:
       A solutions architect determined that the CPU utilization and memory utilization were high on the database because of a large number of open connections. The solutions architect needs to prevent the timeout errors while making the least possible changes to the application.
       Which solution will meet these requirements?
     options:
-     - text: Use Amazon RDS Proxy to create a proxy for the database. Modify the Lambda function to use the RDS Proxy endpoint instead of the database endpoint.
+     - text: Use Amazon RDS Proxy to create a proxy for the database and manage the connection pool.
        is_correct: true
+     - text: Scale up the Aurora database instance to a larger size.
+       is_correct: false
+     - text: Implement a retry logic in the Lambda function.
+       is_correct: false
+     - text: Convert the Aurora database to a Multi-AZ deployment.
+       is_correct: false
     explanation: |
-      Correct: Use Amazon RDS Proxy to create a proxy for the database. Modify the Lambda function to use the RDS Proxy endpoint instead of the database endpoint.
-      Incorrect: The other options do not address the issue of high database utilization effectively.
+      Correct: RDS Proxy gerencia um pool de conexões com o banco de dados. Como funções Lambda abrem e fecham conexões rapidamente, elas podem esgotar a memória do banco; o Proxy permite reutilizar conexões e protege o banco de picos.
+      Incorrect: 
+        - Escalar o banco (verticalmente) ajuda, mas não resolve a causa raiz de esgotamento de conexões de forma eficiente como o Proxy.
+        - Retentativas na Lambda sem resolver o problema do banco podem piorar a situação, criando uma "tempestade de conexões".
+        - Multi-AZ é para failover, não ajuda a gerenciar o número de conexões simultâneas na instância primária.
 
   - id: q176
     type: multiple_choice
@@ -344,11 +534,20 @@ questions:
       An application runs on Amazon EC2 instances in private subnets. The application needs to access an Amazon DynamoDB table.
       What is the MOST secure way to access the table while ensuring that the traffic does not leave the AWS network?
     options:
-     - text: Use a VPC endpoint for DynamoDB.
+     - text: Create a Gateway VPC Endpoint for DynamoDB and update the route tables.
        is_correct: true
+     - text: Use a NAT Gateway in a public subnet to route traffic to DynamoDB.
+       is_correct: false
+     - text: Set up an AWS Site-to-Site VPN to access the DynamoDB endpoint.
+       is_correct: false
+     - text: Assign a public IP address to each EC2 instance.
+       is_correct: false
     explanation: |
-      Correct: Use a VPC endpoint for DynamoDB.
-      Incorrect: The other options do not ensure that the traffic remains within the AWS network.
+      Correct: Gateway VPC Endpoints permitem que instâncias em subnets privadas alcancem o DynamoDB usando rotas internas da AWS, sem precisar de IGW, NAT ou atravessar a internet pública.
+      Incorrect: 
+        - NAT Gateways enviam o tráfego pela internet para alcançar os endpoints públicos do DynamoDB.
+        - VPNs são para conectar o on-premises à AWS, não para tráfego interno VPC-Serviço.
+        - IPs públicos em instâncias privadas quebram o isolamento de segurança e exigem um Internet Gateway.
 
   - id: q177
     type: multiple_choice
@@ -356,11 +555,20 @@ questions:
       An entertainment company is using Amazon DynamoDB to store media metadata. The application is read intensive and experiencing delays. The company does not have staff to handle additional operational overhead and needs to improve the performance efficiency of DynamoDB without reconfiguring the application.
       What should a solutions architect recommend to meet this requirement?
     options:
-     - text: Use Amazon DynamoDB Accelerator (DAX).
+     - text: Use Amazon DynamoDB Accelerator (DAX) to provide in-memory caching.
        is_correct: true
+     - text: Migrate the data to Amazon ElastiCache for Redis.
+       is_correct: false
+     - text: Increase the Provisioned Read Capacity Units (RCUs) on the table.
+       is_correct: false
+     - text: Use an Amazon CloudFront distribution in front of DynamoDB.
+       is_correct: false
     explanation: |
-      Correct: Use Amazon DynamoDB Accelerator (DAX).
-      Incorrect: The other options do not improve performance efficiency without additional operational overhead.
+      Correct: O DAX é um cache em memória totalmente gerenciado e compatível com a API do DynamoDB. Ele melhora os tempos de resposta de milissegundos para microssegundos sem exigir mudanças lógicas na aplicação.
+      Incorrect: 
+        - Migrar para ElastiCache exigiria reescrever o código da aplicação para lidar com um motor de banco de dados diferente (Redis).
+        - Aumentar RCUs ajuda na vazão, mas não reduz a latência inerente de disco como um cache em memória faz.
+        - CloudFront não é usado para cachear consultas diretas de banco de dados NoSQL.
 
   - id: q178
     type: multiple_choice
@@ -368,11 +576,20 @@ questions:
       A company’s infrastructure consists of Amazon EC2 instances and an Amazon RDS DB instance in a single AWS Region. The company wants to back up its data in a separate Region.
       Which solution will meet these requirements with the LEAST operational overhead?
     options:
-     - text: Use AWS Backup to copy EC2 backups and RDS backups to the separate Region.
+     - text: Use AWS Backup to create a backup plan with cross-region copy enabled for both EC2 and RDS.
        is_correct: true
+     - text: Write a custom script that takes snapshots and uses the AWS CLI to copy them to S3 in another region.
+       is_correct: false
+     - text: Enable RDS Multi-AZ replication to a different region.
+       is_correct: false
+     - text: Configure an AWS DataSync task to replicate EBS volumes and RDS snapshots.
+       is_correct: false
     explanation: |
-      Correct: Use AWS Backup to copy EC2 backups and RDS backups to the separate Region.
-      Incorrect: The other options involve higher operational overhead.
+      Correct: O AWS Backup é um serviço gerenciado que permite centralizar e automatizar backups de vários serviços AWS, incluindo a cópia automática para outras regiões com apenas alguns cliques.
+      Incorrect: 
+        - Scripts customizados aumentam o overhead operacional de manutenção e monitoramento.
+        - RDS Multi-AZ é intra-região (entre AZs); para regiões diferentes, seria Read Replicas, o que não é um backup simples.
+        - DataSync é para migração de arquivos e dados de sistemas de arquivos, não é a ferramenta nativa para gerenciar snapshots de instâncias e bancos de dados.
 
   - id: q179
     type: multiple_choice
@@ -380,11 +597,19 @@ questions:
       A solutions architect needs to securely store a database user name and password that an application uses to access an Amazon RDS DB instance. The application that accesses the database runs on an Amazon EC2 instance. The solutions architect wants to create a secure parameter in AWS Systems Manager Parameter Store.
       What should the solutions architect do to meet this requirement?
     options:
-     - text: Create an IAM role that has read access to the Parameter Store parameter. Allow Decrypt access to an AWS Key Management Service (AWS KMS) key that is used to encrypt the parameter. Assign this IAM role to the EC2 instance.
+     - text: Create an IAM role with read access to the Parameter Store. Allow Decrypt access to the KMS key used. Assign this role to the EC2 instance profile.
        is_correct: true
+     - text: Store the password in the EC2 User Data script as a plain text variable.
+       is_correct: false
+     - text: Hardcode the credentials in the application's configuration file.
+       is_correct: false
+     - text: Create a public S3 bucket and store the credentials in a JSON file.
+       is_correct: false
     explanation: |
-      Correct: Create an IAM role that has read access to the Parameter Store parameter. Allow Decrypt access to an AWS Key Management Service (AWS KMS) key that is used to encrypt the parameter. Assign this IAM role to the EC2 instance.
-      Incorrect: The other options do not provide the required security and access control.
+      Correct: Usar Parameter Store (SecureString) com IAM roles e chaves KMS é a prática recomendada para evitar o armazenamento de segredos no código ou em texto simples.
+      Incorrect: 
+        - User Data e hardcoding são vulnerabilidades graves de segurança.
+        - Buckets S3 públicos nunca devem ser usados para armazenar qualquer dado sensível.
 
   - id: q180
     type: multiple_choice
@@ -396,9 +621,17 @@ questions:
        is_correct: true
      - text: Use AWS WAF to protect Amazon API Gateway.
        is_correct: true
+     - text: Implement a VPC Peering connection with a security partner.
+       is_correct: false
+     - text: Use Amazon Inspector to block SQL injection attacks in real time.
+       is_correct: false
+     - text: Configure a NAT Gateway to hide the EC2 instances' IP addresses.
+       is_correct: false
     explanation: |
-      Correct: Use AWS Shield Advanced with the NLB. Use AWS WAF to protect Amazon API Gateway.
-      Incorrect: The other options do not provide comprehensive protection against web exploits and DDoS attacks.
+      Correct: Shield Advanced protege contra DDoS no nível do NLB. AWS WAF integra-se ao API Gateway para filtrar ataques de camada 7, como SQL Injection.
+      Incorrect: 
+        - Amazon Inspector não é um firewall; ele apenas escaneia vulnerabilidades de software.
+        - NAT Gateways não oferecem proteção contra ataques recebidos (inbound) na API.
 
   - id: q181
     type: multiple_choice
@@ -407,11 +640,19 @@ questions:
       The company’s developers have decided to rewrite the application to use a microservices architecture on Amazon Elastic Container Service (Amazon ECS).
       What should a solutions architect recommend for communication between the microservices?
     options:
-     - text: Create an Amazon Simple Queue Service (Amazon SQS) queue. Add code to the data producers, and send data to the queue. Add code to the data consumers to process data from the queue.
+     - text: Create an Amazon Simple Queue Service (Amazon SQS) queue to decouple the producer and consumer services.
        is_correct: true
+     - text: Use Amazon EBS Multi-Attach to share data between containers.
+       is_correct: false
+     - text: Implement a direct TCP connection between the container IP addresses.
+       is_correct: false
+     - text: Use an Amazon Route 53 private hosted zone for each service.
+       is_correct: false
     explanation: |
-      Correct: Create an Amazon Simple Queue Service (Amazon SQS) queue. Add code to the data producers, and send data to the queue. Add code to the data consumers to process data from the queue.
-      Incorrect: The other options do not provide the required scalability and decoupling.
+      Correct: Filas SQS permitem que microserviços se comuniquem de forma assíncrona e independente, permitindo que cada parte da aplicação escale conforme a demanda sem perda de dados.
+      Incorrect: 
+        - EBS Multi-Attach não é para comunicação de microserviços e tem limitações de performance e tipo de instância.
+        - Conexões TCP diretas criam acoplamento forte; se um serviço cair, o outro falha imediatamente, o que anula o benefício da arquitetura de microserviços.
 
   - id: q182
     type: multiple_choice
@@ -419,11 +660,20 @@ questions:
       A company wants to migrate its MySQL database from on premises to AWS. The company recently experienced a database outage that significantly impacted the business. To ensure this does not happen again, the company wants a reliable database solution on AWS that minimizes data loss and stores every transaction on at least two nodes.
       Which solution meets these requirements?
     options:
-     - text: Create an Amazon RDS MySQL DB instance with Multi-AZ functionality enabled to synchronously replicate the data.
+     - text: Create an Amazon RDS MySQL DB instance with Multi-AZ functionality enabled.
        is_correct: true
+     - text: Deploy a single RDS MySQL instance and take snapshots every hour.
+       is_correct: false
+     - text: Use an EC2 instance with an EBS Cold HDD volume for storage.
+       is_correct: false
+     - text: Create a Read Replica in the same availability zone.
+       is_correct: false
     explanation: |
-      Correct: Create an Amazon RDS MySQL DB instance with Multi-AZ functionality enabled to synchronously replicate the data.
-      Incorrect: The other options do not provide the required reliability and data replication.
+      Correct: O RDS Multi-AZ replica os dados de forma síncrona para uma instância standby em outra AZ, garantindo alta disponibilidade e durabilidade sem perda de dados em caso de falha da primária.
+      Incorrect: 
+        - Snapshots de hora em hora podem resultar em até 60 minutos de perda de dados.
+        - Instâncias EC2 simples não oferecem replicação automática em nível de banco de dados.
+        - Read Replicas na mesma AZ não protegem contra a falha do datacenter (AZ).
 
   - id: q183
     type: multiple_choice
@@ -431,11 +681,20 @@ questions:
       A company is building a new dynamic ordering website. The company wants to minimize server maintenance and patching. The website must be highly available and must scale read and write capacity as quickly as possible to meet changes in user demand.
       Which solution will meet these requirements?
     options:
-     - text: Host static content in Amazon S3. Host dynamic content by using Amazon API Gateway and AWS Lambda. Use Amazon DynamoDB with on-demand capacity for the database. Configure Amazon CloudFront to deliver the website content.
+     - text: Host static content in Amazon S3. Host dynamic content using API Gateway and AWS Lambda. Use Amazon DynamoDB with on-demand capacity. Configure Amazon CloudFront.
        is_correct: true
+     - text: Use an EC2 Auto Scaling group with an Application Load Balancer and RDS MySQL.
+       is_correct: false
+     - text: Deploy the website on AWS Elastic Beanstalk with an EFS file system.
+       is_correct: false
+     - text: Use Amazon Lightsail with a managed database.
+       is_correct: false
     explanation: |
-      Correct: Host static content in Amazon S3. Host dynamic content by using Amazon API Gateway and AWS Lambda. Use Amazon DynamoDB with on-demand capacity for the database. Configure Amazon CloudFront to deliver the website content.
-      Incorrect: The other options do not minimize server maintenance and patching.
+      Correct: Esta é uma "Serverless Stack" completa. S3/Lambda/DynamoDB eliminam o gerenciamento de servidores e patches, enquanto o modo "on-demand" do DynamoDB escala instantaneamente.
+      Incorrect: 
+        - EC2 exige gestão de OS e patches.
+        - RDS MySQL não escala escrita tão rápido quanto o DynamoDB On-Demand.
+        - Lightsail não é projetado para escala massiva e dinâmica de empresas.
 
   - id: q184
     type: multiple_choice
@@ -444,11 +703,19 @@ questions:
       A development team recently created an AWS Lambda function through the console. The development team needs to allow the function to access a database that runs in a private subnet in the company’s data center.
       Which solution will meet these requirements?
     options:
-     - text: Configure the Lambda function to run in the VPC with the appropriate security group.
+     - text: Configure the Lambda function to run in the VPC with the appropriate subnets and security group.
        is_correct: true
+     - text: Create a public endpoint for the on-premises database.
+       is_correct: false
+     - text: Use AWS AppSync to connect the Lambda to the data center.
+       is_correct: false
+     - text: Assign an Elastic IP to the Lambda function.
+       is_correct: false
     explanation: |
-      Correct: Configure the Lambda function to run in the VPC with the appropriate security group.
-      Incorrect: The other options do not provide the required connectivity to the private subnet.
+      Correct: Ao configurar a Lambda para rodar dentro da VPC, ela ganha acesso às rotas da VPC, incluindo a rota do Direct Connect para o datacenter on-premises.
+      Incorrect: 
+        - Expor um banco de dados privado na internet pública é um risco de segurança inaceitável.
+        - AppSync é para APIs GraphQL, não para conectividade de rede básica entre funções e bancos de dados privados.
 
   - id: q185
     type: multiple_choice
@@ -456,11 +723,19 @@ questions:
       A company runs an application using Amazon ECS. The application creates resized versions of an original image and then makes Amazon S3 API calls to store the resized images in Amazon S3.
       How can a solutions architect ensure that the application has permission to access Amazon S3?
     options:
-     - text: Create an IAM role with S3 permissions, and then specify that role as the taskRoleArn in the task definition.
+     - text: Create an IAM role with S3 permissions and specify it as the taskRoleArn in the ECS task definition.
        is_correct: true
+     - text: Store AWS Access Keys inside the container image.
+       is_correct: false
+     - text: Assign the S3 permission to the EC2 Instance Role where the ECS cluster is running.
+       is_correct: false
+     - text: Use a bucket policy that allows access to all IP addresses in the VPC.
+       is_correct: false
     explanation: |
-      Correct: Create an IAM role with S3 permissions, and then specify that role as the taskRoleArn in the task definition.
-      Incorrect: The other options do not provide the required permissions for the ECS task.
+      Correct: O "Task Role" é a forma recomendada de dar permissões granulares a containers no ECS, seguindo o princípio do privilégio mínimo para cada tarefa individual.
+      Incorrect: 
+        - Embutir chaves de acesso em imagens de container é uma prática de segurança péssima e difícil de rotacionar.
+        - O "Instance Role" daria permissão para *todos* os containers rodando naquela máquina, o que viola o isolamento de privilégios.
 
   - id: q186
     type: multiple_choice
@@ -468,11 +743,19 @@ questions:
       A company has a Windows-based application that must be migrated to AWS. The application requires the use of a shared Windows file system attached to multiple Amazon EC2 Windows instances that are deployed across multiple Availability Zones.
       What should a solutions architect do to meet this requirement?
     options:
-     - text: Configure Amazon FSx for Windows File Server. Mount the Amazon FSx file system to each Windows instance.
+     - text: Configure Amazon FSx for Windows File Server in Multi-AZ mode.
        is_correct: true
+     - text: Use Amazon EFS and mount it using the NFS client on Windows.
+       is_correct: false
+     - text: Create an Amazon S3 bucket and use a third-party tool to mount it as a drive.
+       is_correct: false
+     - text: Use an EBS Multi-Attach Provisioned IOPS volume.
+       is_correct: false
     explanation: |
-      Correct: Configure Amazon FSx for Windows File Server. Mount the Amazon FSx file system to each Windows instance.
-      Incorrect: The other options do not provide a shared Windows file system across multiple Availability Zones.
+      Correct: FSx for Windows File Server fornece um sistema de arquivos SMB nativo e totalmente gerenciado que suporta nativamente instâncias Windows em várias AZs.
+      Incorrect: 
+        - EFS é focado em Linux/NFS; o suporte para Windows via NFS é limitado e não performático para aplicações Windows nativas.
+        - S3 não é um sistema de arquivos real e não suporta bloqueio de arquivos (file locking) exigido por muitas aplicações Windows.
 
   - id: q187
     type: multiple_choice
@@ -482,11 +765,19 @@ questions:
     options:
      - text: Create an Amazon RDS DB instance in Multi-AZ mode.
        is_correct: true
-     - text: Create an Amazon Elastic Container Service (Amazon ECS) cluster with a Fargate launch type to handle the dynamic application load.
+     - text: Create an Amazon Elastic Container Service (Amazon ECS) cluster with a Fargate launch type.
        is_correct: true
+     - text: Use an Amazon EC2 Auto Scaling group with a single instance.
+       is_correct: false
+     - text: Set up a manual failover process using Route 53.
+       is_correct: false
+     - text: Host the database on an EC2 instance with daily snapshots.
+       is_correct: false
     explanation: |
-      Correct: Create an Amazon RDS DB instance in Multi-AZ mode. Create an Amazon Elastic Container Service (Amazon ECS) cluster with a Fargate launch type to handle the dynamic application load.
-      Incorrect: The other options do not provide high availability or require more manual intervention.
+      Correct: RDS Multi-AZ e ECS Fargate fornecem alta disponibilidade e automação de escala/failover, eliminando quase toda a intervenção manual na infraestrutura.
+      Incorrect: 
+        - Uma única instância em um ASG não é "altamente disponível".
+        - Failover manual é o oposto do requisito de "mínima intervenção manual".
 
   - id: q188
     type: multiple_choice
@@ -494,11 +785,19 @@ questions:
       A company uses Amazon S3 as its data lake. The company has a new partner that must use SFTP to upload data files. A solutions architect needs to implement a highly available SFTP solution that minimizes operational overhead.
       Which solution will meet these requirements?
     options:
-     - text: Use AWS Transfer Family to configure an SFTP-enabled server with a publicly accessible endpoint. Choose the S3 data lake as the destination.
+     - text: Use AWS Transfer Family to configure an SFTP-enabled server with Amazon S3 as the storage backend.
        is_correct: true
+     - text: Deploy an EC2 instance running a standard SFTP server and mount S3 using S3FS.
+       is_correct: false
+     - text: Use Amazon API Gateway to receive file uploads via HTTP.
+       is_correct: false
+     - text: Set up an AWS Storage Gateway File Gateway.
+       is_correct: false
     explanation: |
-      Correct: Use AWS Transfer Family to configure an SFTP-enabled server with a publicly accessible endpoint. Choose the S3 data lake as the destination.
-      Incorrect: The other options do not minimize operational overhead or provide high availability.
+      Correct: O AWS Transfer Family é um serviço totalmente gerenciado para SFTP/FTPS/FTP que escala automaticamente e se integra diretamente ao S3 sem necessidade de gerenciar servidores.
+      Incorrect: 
+        - Gerenciar servidores SFTP em EC2 aumenta significativamente o overhead operacional e a complexidade de alta disponibilidade.
+        - O parceiro especificamente exige o uso do protocolo SFTP, não HTTP/API.
 
   - id: q189
     type: multiple_choice
@@ -508,11 +807,19 @@ questions:
     options:
      - text: Store the documents in Amazon S3. Use S3 Object Lock in compliance mode.
        is_correct: true
-     - text: Use server-side encryption with AWS Key Management Service (AWS KMS) customer managed keys. Configure key rotation.
-       is_correct: true
+     - text: Use server-side encryption with AWS Key Management Service (AWS KMS) and enable automatic key rotation.
+       is_correct: false
+     - text: Use a customer-managed key in AWS KMS and configure annual manual rotation.
+       is_correct: false
+     - text: Enable MFA Delete on the S3 bucket.
+       is_correct: false
+     - text: Set up an IAM policy to prevent all deletions.
+       is_correct: false
     explanation: |
-      Correct: Store the documents in Amazon S3. Use S3 Object Lock in compliance mode. Use server-side encryption with AWS Key Management Service (AWS KMS) customer managed keys. Configure key rotation.
-      Incorrect: The other options do not meet the requirements or involve higher operational overhead.
+      Correct: S3 Object Lock em Compliance Mode garante a imutabilidade por 5 anos. KMS com rotação automática atende ao requisito de criptografia com o mínimo de esforço.
+      Incorrect: 
+        - MFA Delete impede deleção acidental, mas um administrador ainda pode deletar arquivos se tiver o dispositivo MFA, o que não garante a imutabilidade exigida.
+        - Rotação manual de chaves aumenta o overhead operacional.
 
   - id: q190
     type: multiple_choice
@@ -520,9 +827,17 @@ questions:
       A company has a web application that is based on Java and PHP. The company plans to move the application from on premises to AWS. The company needs the ability to test new site features frequently. The company also needs a highly available and managed solution that requires minimum operational overhead.
       Which solution will meet these requirements?
     options:
-     - text: Deploy the web application to an AWS Elastic Beanstalk environment. Use URL swapping to switch between multiple Elastic Beanstalk environments for feature testing.
+     - text: Deploy the web application to an AWS Elastic Beanstalk environment. Use Blue/Green deployments for feature testing.
        is_correct: true
+     - text: Use AWS CloudFormation to manually provision EC2 instances for every test.
+       is_correct: false
+     - text: Deploy the application on Amazon Lightsail.
+       is_correct: false
+     - text: Migrate the application to AWS Lambda using a custom runtime for PHP and Java.
+       is_correct: false
     explanation: |
-      Correct: Deploy the web application to an AWS Elastic Beanstalk environment. Use URL swapping to switch between multiple Elastic Beanstalk environments for feature testing.
-      Incorrect: The other options do not provide the required testing capability or involve higher operational overhead.
-
+      Correct: O Elastic Beanstalk é ideal para aplicações Java/PHP tradicionais e suporta nativamente estratégias de deploy como Blue/Green, facilitando testes frequentes com baixo overhead.
+      Incorrect: 
+        - CloudFormation é potente, mas gerenciar os deploys de código e testes manualmente nele gera muito overhead comparado ao Beanstalk.
+        - Lambda para uma aplicação web monolítica em Java/PHP exigiria refatoração massiva, violando o requisito de "migrar" de forma simples.
+ 
