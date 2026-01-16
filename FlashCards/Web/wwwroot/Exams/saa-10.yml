@@ -1,85 +1,1049 @@
 questions:
-  - id: q451
-    type: multiple_choice
-    question: |
-      A company is migrating its applications and databases to the AWS Cloud. The company will use Amazon Elastic Container Service (Amazon ECS), AWS Direct Connect, and Amazon RDS. Which activities will be managed by the company's operational team? (Choose three.)
-    options:
-     - text: Configuration of additional software components on Amazon ECS for monitoring, patch management, log management, and host intrusion detection
-       is_correct: true
-     - text: Creation of an Amazon RDS DB instance and configuring the scheduled maintenance window
-       is_correct: true
-     - text: Encryption of the data that moves in transit through Direct Connect
-       is_correct: true
-     - text: Patching the underlying operating system of the RDS database instances.
-       is_correct: false
-     - text: Managing physical security of the Direct Connect edge locations.
-       is_correct: false
-     - text: Provisioning the hardware and virtualization layer for ECS clusters.
-       is_correct: false
-    explanation: |
-      Correct: Under the Shared Responsibility Model, customers manage the configuration of software on top of ECS, the settings/maintenance windows of RDS, and the encryption of their data.
-      Incorrect: 
-        - AWS is responsible for patching the RDS OS, physical security of data centers/edge locations, and managing the underlying hardware and virtualization layers for ECS.
+- id: q451
+  type: multiple_choice
+  question: |
+    A company is migrating its applications and databases to the AWS Cloud. The company will use Amazon Elastic Container Service (Amazon ECS), AWS Direct Connect, and Amazon RDS.
+    Which activities will be managed by the company's operational team? (Choose three.)
+  options:
+    - text: Configuration of additional software components on Amazon ECS for monitoring, patch management, log management, and host intrusion detection.
+      is_correct: true
+    - text: Creation of an Amazon RDS DB instance and configuring the scheduled maintenance window.
+      is_correct: true
+    - text: Encryption of the data that moves in transit through Direct Connect.
+      is_correct: true
+    - text: Managing the physical security of the data centers where the ECS hosts are located.
+      is_correct: false
+    - text: Patching the underlying hypervisor for the Amazon RDS instances.
+      is_correct: false
+    - text: Maintenance of the physical Direct Connect hardware at the AWS Direct Connect location.
+      is_correct: false
+  explanation: |
+    Correct: 
+    - In the Shared Responsibility Model, customers are responsible for the configuration of software inside their containers (ECS), including monitoring and security agents.
+    - For RDS, while AWS manages the OS and hardware, the customer is responsible for managing the DB instance lifecycle, including maintenance window settings.
+    - Direct Connect provides a physical connection; however, customers are responsible for encrypting their data in transit (e.g., using IPsec VPN or TLS) to ensure end-to-end security.
+    Incorrect: AWS manages physical infrastructure, data center security, and the underlying hypervisors for managed services like RDS.
+
+- id: q452
+  type: multiple_choice
+  question: |
+    A company runs a Java-based job on an Amazon EC2 instance. The job runs every hour and takes 10 seconds to run. The job runs on a scheduled interval and consumes 1 GB of memory. The CPU utilization of the instance is low except for short surges during which the job uses the maximum CPU available. The company wants to optimize the costs to run the job.
+    Which solution will meet these requirements?
+  options:
+    - text: Copy the code into an AWS Lambda function that has 1 GB of memory. Create an Amazon EventBridge scheduled rule to run the code each hour.
+      is_correct: true
+    - text: Move the job to an Amazon EC2 T3 instance and use Unlimited mode to handle CPU surges.
+      is_correct: false
+    - text: Create an Amazon ECS cluster with Fargate launch type to run the job as a task once an hour.
+      is_correct: false
+    - text: Purchase a Reserved Instance for the existing EC2 instance to reduce hourly costs.
+      is_correct: false
+  explanation: |
+    Correct: AWS Lambda is ideal for short-lived, intermittent workloads. Charging is based on duration and memory allocated, making a 10-second hourly job extremely cheap. EventBridge provides the necessary scheduling.
+    Incorrect: 
+    - EC2 T3 instances would still charge for 24/7 uptime even if the job only runs for 10 seconds.
+    - ECS Fargate is also serverless, but the overhead of task startup for a 10-second job is less efficient than Lambda.
+    - Reserved Instances reduce costs for 24/7 workloads, but paying for a full hour when only 10 seconds are used is wasteful.
+
+- id: q453
+  type: multiple_choice
+  question: |
+    A company wants to implement a backup strategy for Amazon EC2 data and multiple Amazon S3 buckets. Because of regulatory requirements, the company must retain backup files for a specific time period. The company must not alter the files for the duration of the retention period.
+    Which solution will meet these requirements?
+  options:
+    - text: Use AWS Backup to create a backup vault that has a vault lock in compliance mode. Create the required backup plan.
+      is_correct: true
+    - text: Enable versioning on the S3 buckets and use a lifecycle policy to move data to S3 Glacier.
+      is_correct: false
+    - text: Use AWS DataSync to copy data to a secondary account and use IAM policies to restrict delete access.
+      is_correct: false
+    - text: Create a snapshot of the EC2 instances and the S3 buckets manually every month.
+      is_correct: false
+  explanation: |
+    Correct: AWS Backup Vault Lock in "compliance mode" ensures that backups cannot be deleted or altered by anyone (including the root user) until the retention period expires, meeting strict regulatory requirements.
+    Incorrect: 
+    - S3 Versioning/Glacier does not natively protect EC2 snapshots from deletion in the same way.
+    - IAM policies can be bypassed by users with administrative permissions; Vault Lock in compliance mode cannot.
+    - Manual snapshots are prone to human error and don't enforce immutability.
+
+- id: q454
+  type: multiple_choice
+  question: |
+    A company has resources across multiple AWS Regions and accounts. A newly hired solutions architect discovers a previous employee did not provide details about the resources inventory. The solutions architect needs to build and map the relationship details of the various workloads across all accounts.
+    Which solution will meet these requirements in the MOST operationally efficient way?
+  options:
+    - text: Use Workload Discovery on AWS to generate architecture diagrams of the workloads.
+      is_correct: true
+    - text: Use AWS Config to export a resource inventory to an Amazon S3 bucket for analysis.
+      is_correct: false
+    - text: Run a custom script using the AWS CLI to describe resources in every region and account.
+      is_correct: false
+    - text: Use AWS Systems Manager Inventory to collect metadata from all EC2 instances.
+      is_correct: false
+  explanation: |
+    Correct: Workload Discovery on AWS (formerly AWS Perspective) is a solution that visualizes AWS Cloud workloads. It automatically builds architecture diagrams and maps relationships between resources across regions and accounts.
+    Incorrect: 
+    - AWS Config provides a history of changes but doesn't natively generate visual relationship diagrams.
+    - Custom scripts are not operationally efficient and are difficult to maintain.
+    - Systems Manager Inventory focuses on the OS/software inside EC2, not the overall cloud infrastructure architecture.
+
+- id: q455
+  type: multiple_choice
+  question: |
+    A company uses AWS Organizations. The company wants to operate some of its AWS accounts with different budgets. The company wants to receive alerts and automatically prevent provisioning of additional resources on AWS accounts when the allocated budget threshold is met during a specific period.
+    Which combination of solutions will meet these requirements? (Choose three.)
+  options:
+    - text: Use AWS Budgets to create a budget. Set the budget amount under the Billing dashboards of the required AWS accounts.
+      is_correct: true
+    - text: Create an IAM role for AWS Budgets to run budget actions with the required permissions.
+      is_correct: true
+    - text: Add an alert to notify the company when each account meets its budget threshold. Add a budget action that selects the IAM identity created with the appropriate service control policy (SCP) to prevent provisioning of additional resources.
+      is_correct: true
+    - text: Use AWS Cost Explorer to automatically terminate instances when costs exceed a limit.
+      is_correct: false
+    - text: Use AWS Trusted Advisor to set up automated resource limits per account.
+      is_correct: false
+    - text: Use AWS Resource Access Manager (RAM) to share budget limits across the organization.
+      is_correct: false
+  explanation: |
+    Correct: AWS Budgets allows for "Budget Actions." By creating an IAM role that the Budgets service can assume, you can apply an SCP (Service Control Policy) to an account or OU when a threshold is hit, effectively blocking further resource provisioning.
+    Incorrect: 
+    - Cost Explorer is for analysis, not for automated enforcement.
+    - Trusted Advisor provides best practice recommendations but does not enforce budget limits.
+    - RAM is for sharing resources like subnets or License Manager configurations, not for budget management.
+
+- id: q456
+  type: multiple_choice
+  question: |
+    A company runs applications on Amazon EC2 instances in one AWS Region. The company wants to back up the EC2 instances to a second Region. The company also wants to provision EC2 resources in the second Region and manage the EC2 instances centrally from one AWS account.
+    Which solution will meet these requirements MOST cost-effectively?
+  options:
+    - text: Create a backup plan by using AWS Backup. Configure cross-Region backup to the second Region for the EC2 instances.
+      is_correct: true
+    - text: Use Amazon Data Lifecycle Manager (Amazon DLM) to create snapshots and copy them to the second Region.
+      is_correct: false
+    - text: Set up an EC2 Auto Scaling group in the second Region and use AWS CloudEndure for continuous replication.
+      is_correct: false
+    - text: Use AWS Systems Manager to trigger manual snapshots and move them via S3 Cross-Region Replication.
+      is_correct: false
+  explanation: |
+    Correct: AWS Backup is a fully managed service that centralizes and automates backups. Its built-in cross-region backup feature is the most cost-effective and operationally efficient way to replicate EC2 backups.
+    Incorrect: 
+    - DLM is useful but AWS Backup provides a more comprehensive centralized management for multiple resources.
+    - CloudEndure (now AWS Application Migration Service) is for migration/DR with higher costs due to continuous replication.
+    - Manual snapshots via Systems Manager and S3 are complex to manage and automate.
+
+- id: q457
+  type: multiple_choice
+  question: |
+    A company that uses AWS is building an application to transfer data to a product manufacturer. The company has its own identity provider (IdP). The company wants the IdP to authenticate application users while the users use the application to transfer data. The company must use Applicability Statement 2 (AS2) protocol.
+    Which solution will meet these requirements?
+  options:
+    - text: Use AWS Transfer Family to transfer the data. Create an AWS Lambda function for IdP authentication.
+      is_correct: true
+    - text: Set up an Amazon EC2 instance running an AS2 server and integrate it with the IdP using an IAM OIDC provider.
+      is_correct: false
+    - text: Use Amazon S3 with a custom bucket policy to allow AS2 traffic from the IdP.
+      is_correct: false
+    - text: Use AWS DataSync to move data and AWS Cognito for user authentication.
+      is_correct: false
+  explanation: |
+    Correct: AWS Transfer Family supports the AS2 protocol and allows for custom authentication using an AWS Lambda function, which can then talk to any external Identity Provider (IdP).
+    Incorrect: 
+    - Running a custom AS2 server on EC2 increases administrative overhead.
+    - S3 does not natively support the AS2 protocol.
+    - DataSync is for server-to-server data transfer, not for end-user application file transfers via AS2.
+
+- id: q458
+  type: multiple_choice
+  question: |
+    A solutions architect is designing a REST API in Amazon API Gateway for a cash payback service. The application requires 1 GB of memory and 2 GB of storage for its computation resources. The application will require that the data is in a relational format.
+    Which additional combination of AWS services will meet these requirements with the LEAST administrative effort? (Choose two.)
+  options:
+    - text: AWS Lambda
+      is_correct: true
+    - text: Amazon RDS
+      is_correct: true
+    - text: Amazon EC2
+      is_correct: false
+    - text: Amazon DynamoDB
+      is_correct: false
+    - text: Amazon Elastic Block Store (Amazon EBS)
+      is_correct: false
+  explanation: |
+    Correct: AWS Lambda is a serverless compute service that integrates natively with API Gateway, requiring minimal administration. Amazon RDS is a managed service for relational databases, handling patching and backups.
+    Incorrect: 
+    - EC2 requires manual management of the OS and scaling.
+    - DynamoDB is a NoSQL database, not relational.
+    - EBS is block storage for EC2, whereas Lambda handles its own ephemeral storage (now up to 10GB).
+
+- id: q459
+  type: multiple_choice
+  question: |
+    A company uses AWS Organizations to run workloads within multiple AWS accounts. A tagging policy adds department tags to AWS resources when the company creates tags. An accounting team needs to determine spending on Amazon EC2 consumption by department regardless of AWS account.
+    Which solution meets these requirements in the MOST operationally efficient way?
+  options:
+    - text: From the Organizations management account billing console, activate a user-defined cost allocation tag named department. Create one cost report in Cost Explorer grouping by tag name, and filter by EC2.
+      is_correct: true
+    - text: Create a custom script that aggregates billing data from all member accounts and parses the department tag.
+      is_correct: false
+    - text: Enable AWS Config in all accounts to track the department tag and use Athena to query the costs.
+      is_correct: false
+    - text: Use the AWS Resource Groups Tagging API to pull reports for each account and merge them in Excel.
+      is_correct: false
+  explanation: |
+    Correct: Activating a "Cost Allocation Tag" in the management account allows AWS to track costs associated with that tag. Once activated, Cost Explorer can natively group costs by that tag across the entire organization.
+    Incorrect: 
+    - Custom scripts and manual merges in Excel are not operationally efficient.
+    - AWS Config tracks resource state, not cost/billing data.
+
+- id: q460
+  type: multiple_choice
+  question: |
+    A company wants to securely exchange data between its SaaS Salesforce account and Amazon S3. The company must encrypt the data at rest by using AWS KMS customer managed keys (CMKs) and encrypt data in transit. 
+    What is the most efficient way to achieve this?
+  options:
+    - text: Create Amazon AppFlow flows to transfer the data securely from Salesforce to Amazon S3.
+      is_correct: true
+    - text: Develop a custom Java application on EC2 that uses the Salesforce API and S3 SDK.
+      is_correct: false
+    - text: Use AWS DataSync to connect to the Salesforce API endpoint.
+      is_correct: false
+    - text: Use an AWS Glue Python Shell job to extract data from Salesforce via JDBC.
+      is_correct: false
+  explanation: |
+    Correct: Amazon AppFlow is a managed integration service specifically designed to transfer data between SaaS apps (like Salesforce) and AWS services (like S3). It handles encryption in transit and at rest natively.
+    Incorrect: 
+    - Custom applications on EC2 increase management overhead.
+    - DataSync does not support SaaS API connectors like Salesforce.
+    - Glue is more complex to set up for a simple SaaS-to-S3 transfer compared to AppFlow.
+
+- id: q461
+  type: multiple_choice
+  question: |
+    A company is developing a mobile gaming app that uses TCP and UDP traffic. The app runs on EC2 instances in an Auto Scaling group in one region but will be used globally. The company wants to ensure the lowest possible latency for all users.
+    Which solution will meet these requirements?
+  options:
+    - text: Use AWS Global Accelerator to create an accelerator. Create a Network Load Balancer (NLB) behind an accelerator endpoint and update the Auto Scaling group to register instances on the NLB.
+      is_correct: true
+    - text: Deploy the application in all AWS Regions and use Route 53 latency-based routing.
+      is_correct: false
+    - text: Use CloudFront with an Application Load Balancer as the origin.
+      is_correct: false
+    - text: Use an Amazon S3 bucket to cache the TCP/UDP traffic at the edge.
+      is_correct: false
+  explanation: |
+    Correct: AWS Global Accelerator provides static IP addresses that act as a fixed entry point to your application. It uses the AWS global network to route TCP/UDP traffic to the nearest regional endpoint (NLB), minimizing latency.
+    Incorrect: 
+    - Deploying in all regions is expensive and complex.
+    - CloudFront is primarily for HTTP/HTTPS (not general UDP) and uses an ALB (which doesn't support UDP).
+    - S3 is for object storage, not for caching network traffic.
+
+- id: q462
+  type: multiple_choice
+  question: |
+    A company has an application on an EC2 instance that saves orders to an Amazon Aurora database. During high traffic, orders are not processed fast enough.
+    What should a solutions architect do to write the orders reliably to the database as quickly as possible?
+  options:
+    - text: Write orders to an Amazon Simple Queue Service (Amazon SQS) queue. Use EC2 instances in an Auto Scaling group to read from the SQS queue and process orders into the database.
+      is_correct: true
+    - text: Change the EC2 instance to a larger instance type with more CPU and memory.
+      is_correct: false
+    - text: Use Amazon ElastiCache in front of the Aurora database to cache the writes.
+      is_correct: false
+    - text: Increase the number of Read Replicas in the Aurora cluster.
+      is_correct: false
+  explanation: |
+    Correct: Using SQS decouples the application from the database. It allows the system to buffer spikes in traffic and process them at a steady rate using an Auto Scaling group, ensuring no orders are lost.
+    Incorrect: 
+    - Vertical scaling (larger instance) has limits and doesn't handle extreme spikes as well as horizontal scaling.
+    - ElastiCache is for read-heavy workloads; it doesn't solve write-bottleneck reliability on its own.
+    - Read Replicas do not help with write performance.
+
+- id: q463
+  type: multiple_choice
+  question: |
+    An IoT company collects 2 MB of sleep data per mattress nightly in S3. Data processing requires 1 GB of memory and finishes in 30 seconds. The results must be available as soon as possible.
+    Which solution will meet these requirements MOST cost-effectively?
+  options:
+    - text: Use AWS Lambda with a Python script.
+      is_correct: true
+    - text: Use an Amazon EMR cluster to process the data every night.
+      is_correct: false
+    - text: Use AWS Glue ETL jobs to process the files in S3.
+      is_correct: false
+    - text: Run a persistent Amazon EC2 instance that polls S3 for new files.
+      is_correct: false
+  explanation: |
+    Correct: Lambda is perfect for short (30s), event-driven tasks. You only pay for the 30 seconds of execution time, making it the most cost-effective for small per-device files.
+    Incorrect: 
+    - EMR is designed for big data (Terabytes/Petabytes) and has a high startup cost/time.
+    - AWS Glue has a minimum billing duration (usually 1 or 10 minutes) which is overkill for a 30-second task.
+    - A persistent EC2 instance costs money even when it's not processing data.
+
+- id: q464
+  type: multiple_choice
+  question: |
+    A company stores orders in an Amazon RDS for PostgreSQL Single-AZ DB instance. Management wants to eliminate single points of failure and minimize downtime without changing application code.
+    Which solution meets these requirements?
+  options:
+    - text: Convert the existing database instance to a Multi-AZ deployment by modifying the database instance and specifying the Multi-AZ option.
+      is_correct: true
+    - text: Create a Read Replica in a different Availability Zone and promote it manually during a failure.
+      is_correct: false
+    - text: Take daily snapshots and restore them to a new instance in a different region if the primary fails.
+      is_correct: false
+    - text: Use AWS Database Migration Service (DMS) to sync data to a secondary instance.
+      is_correct: false
+  explanation: |
+    Correct: Converting to Multi-AZ is a "one-click" operation in RDS. It provides synchronous replication and automatic failover. The application connection string (endpoint) remains the same, so no code changes are needed.
+    Incorrect: 
+    - Read Replicas require manual promotion and code changes to point to a new endpoint.
+    - Snapshots result in significant downtime and data loss (RTO/RPO).
+    - DMS is more complex than simply enabling the built-in Multi-AZ feature.
+
+- id: q465
+  type: multiple_choice
+  question: |
+    A company wants to deploy an application on multiple EC2 Nitro-based instances within the same AZ. The application needs to write to multiple block storage volumes simultaneously to achieve higher availability.
+    Which solution will meet these requirements?
+  options:
+    - text: Use Provisioned IOPS SSD (io2) EBS volumes with Amazon Elastic Block Store (Amazon EBS) Multi-Attach.
+      is_correct: true
+    - text: Use Amazon Elastic File System (Amazon EFS) with standard storage class.
+      is_correct: false
+    - text: Use Instance Store volumes on the Nitro instances.
+      is_correct: false
+    - text: Use General Purpose SSD (gp3) volumes with a shared mounting script.
+      is_correct: false
+  explanation: |
+    Correct: EBS Multi-Attach (supported on io1 and io2 volumes) allows a single EBS volume to be attached to up to 16 Nitro-based instances in the same AZ, allowing simultaneous read/write access.
+    Incorrect: 
+    - EFS is a file-level storage (NFS), not block storage.
+    - Instance Store is ephemeral and cannot be shared between instances.
+    - gp3 volumes do not support Multi-Attach.
+
+- id: q466
+  type: multiple_choice
+  question: |
+    A company designed a stateless two-tier application using Amazon EC2 in a single Availability Zone and an Amazon RDS Multi-AZ DB instance. New management wants to ensure the application is highly available.
+    What should a solutions architect do?
+  options:
+    - text: Configure the application to use Multi-AZ EC2 Auto Scaling and create an Application Load Balancer.
+      is_correct: true
+    - text: Create a second EC2 instance in the same Availability Zone and use a Network Load Balancer.
+      is_correct: false
+    - text: Use Amazon Route 53 to route traffic to a backup EC2 instance in another region.
+      is_correct: false
+    - text: Convert the EC2 instance to a Spot Instance to increase durability.
+      is_correct: false
+  explanation: |
+    Correct: Since the application is stateless, spreading EC2 instances across multiple AZs using an Auto Scaling group behind an ALB provides high availability and fault tolerance for the compute tier.
+    Incorrect: 
+    - Putting instances in the same AZ does not protect against AZ-level failure.
+    - Route 53 to another region is a DR strategy, but Multi-AZ within a region is the standard HA approach.
+    - Spot instances are for cost-saving and can be terminated by AWS, which reduces availability.
+
+- id: q467
+  type: multiple_choice
+  question: |
+    A company uses AWS Organizations. A member account purchased a Compute Savings Plan but no longer receives the full benefit because its workload decreased. The company uses less than 50% of the purchased commitment.
+    How can the company maximize the benefit of the Savings Plan?
+  options:
+    - text: Turn on discount sharing from the Billing Preferences section of the account console in the company's Organizations management account.
+      is_correct: true
+    - text: Request a refund for the unused portion of the Savings Plan from AWS Support.
+      is_correct: false
+    - text: Sell the remaining portion of the Savings Plan on the AWS EC2 Reserved Instance Marketplace.
+      is_correct: false
+    - text: Move the workloads from the member account to the management account.
+      is_correct: false
+  explanation: |
+    Correct: In AWS Organizations, Savings Plans and Reserved Instance discounts can be shared across all accounts in the family. Enabling "Discount Sharing" allows other accounts with high compute usage to benefit from the unused commitment.
+    Incorrect: 
+    - Savings Plans are non-refundable.
+    - Savings Plans cannot be sold on the Marketplace (only RIs can).
+    - Moving workloads is operationally complex compared to simply enabling sharing.
+
+- id: q468
+  type: multiple_choice
+  question: |
+    A company is developing microservices using REST APIs. The backend services are hosted in containers in private VPC subnets. The company needs to present the frontend via REST APIs.
+    Which solution will meet these requirements?
+  options:
+    - text: Design a REST API by using Amazon API Gateway. Host the application in Amazon Elastic Container Service (Amazon ECS) in a private subnet. Create a private VPC link for API Gateway to access Amazon ECS.
+      is_correct: true
+    - text: Use an Application Load Balancer (ALB) with a public IP address and point it to the private containers.
+      is_correct: false
+    - text: Use Amazon Route 53 to map a public domain directly to the private IP addresses of the containers.
+      is_correct: false
+    - text: Deploy the containers in a public subnet and use IAM roles to restrict access.
+      is_correct: false
+  explanation: |
+    Correct: API Gateway can access private backend resources (like ECS services behind an internal load balancer) using a VPC Link, keeping the backend isolated from the public internet.
+    Incorrect: 
+    - A public ALB exposes the backend more than necessary compared to API Gateway.
+    - Route 53 cannot resolve public traffic to private IP addresses over the internet.
+    - Deploying in a public subnet violates the requirement for private VPC subnets.
+
+- id: q469
+  type: multiple_choice
+  question: |
+    A company stores raw data in S3. The access patterns are unpredictable and vary based on customer requests. The company wants to reduce S3 costs.
+    Which solution will meet these requirements?
+  options:
+    - text: Use S3 Lifecycle rules to transition objects from S3 Standard to S3 Intelligent-Tiering.
+      is_correct: true
+    - text: Transition all data to S3 One Zone-Infrequent Access (S3 One Zone-IA) after 30 days.
+      is_correct: false
+    - text: Move the data to S3 Glacier Deep Archive immediately.
+      is_correct: false
+    - text: Use S3 Inventory to manually identify and move unused objects to S3 Standard-IA.
+      is_correct: false
+  explanation: |
+    Correct: S3 Intelligent-Tiering is specifically designed for data with unknown or changing access patterns. It automatically moves data between frequent and infrequent tiers based on usage without operational overhead.
+    Incorrect: 
+    - S3 One Zone-IA has retrieval fees and lower durability; if data is accessed frequently, costs could increase.
+    - Glacier Deep Archive has long retrieval times (hours), which may not suit analytical requests.
+    - Manual management with S3 Inventory is not operationally efficient.
+
+- id: q470
+  type: multiple_choice
+  question: |
+    A company has EC2 instances with IPv6 addresses. They must initiate outbound connections to the internet, but external services must not be able to initiate connections to the EC2 instances.
+    Which solution should be recommended?
+  options:
+    - text: Create an egress-only internet gateway and make it the destination of the subnet's route table.
+      is_correct: true
+    - text: Use a NAT gateway and configure the route table to point IPv6 traffic to it.
+      is_correct: false
+    - text: Create an internet gateway and use security groups to block all inbound traffic.
+      is_correct: false
+    - text: Use a Virtual Private Gateway with a VPN connection to the external services.
+      is_correct: false
+  explanation: |
+    Correct: An egress-only internet gateway is a stateful component for IPv6 that allows outbound-only communication. It prevents internet-based entities from initiating a connection to the instances.
+    Incorrect: 
+    - NAT Gateways are used for IPv4; IPv6 uses egress-only internet gateways (though NAT64 is possible, it's not the primary solution here).
+    - An internet gateway (IGW) with security groups is less secure by design for this specific "outbound-only" requirement, as IGW is fundamentally bidirectional.
+    - A Virtual Private Gateway is for private connections (VPN/Direct Connect), not general internet egress.
+
+- id: q471
+  type: multiple_choice
+  question: |
+    A company is creating an application that runs on containers in a VPC. The application stores and accesses data in an Amazon S3 bucket. During the development phase, the application will store and access 1 TB of data in Amazon S3 each day. The company wants to minimize costs and wants to prevent traffic from traversing the internet whenever possible.
+    Which solution will meet these requirements?
+  options:
+    - text: Create a gateway VPC endpoint for Amazon S3. Associate this endpoint with all route tables in the VPC.
+      is_correct: true
+    - text: Create an interface VPC endpoint for Amazon S3 and update the application to use the endpoint's DNS name.
+      is_correct: false
+    - text: Deploy a NAT Gateway in a public subnet and route all S3 traffic through it.
+      is_correct: false
+    - text: Configure a Site-to-Site VPN between the VPC and the S3 service endpoint.
+      is_correct: false
+  explanation: |
+    Correct: A Gateway VPC Endpoint for S3 allows private communication between your VPC and S3 without using an internet gateway or NAT device. Crucially, Gateway Endpoints are free of charge, making them the most cost-effective for high-volume data transfers (1 TB/day).
+    Incorrect: 
+    - Interface Endpoints have an hourly cost and a per-GB data processing charge, which would be expensive for 1 TB/day.
+    - NAT Gateways also charge per GB and require traffic to traverse the internet/AWS backbone via public endpoints.
+    - Site-to-Site VPN is for connecting on-premises networks to VPCs, not for internal VPC-to-S3 traffic.
+
+- id: q472
+  type: multiple_choice
+  question: |
+    A company has a mobile chat application with a data store based in Amazon DynamoDB. Users would like new messages to be read with as little latency as possible. A solutions architect needs to design an optimal solution that requires minimal application changes.
+    Which method should the solutions architect select?
+  options:
+    - text: Configure Amazon DynamoDB Accelerator (DAX) for the new messages table. Update the code to use the DAX endpoint.
+      is_correct: true
+    - text: Use Amazon ElastiCache for Redis as a side-cache for the DynamoDB table.
+      is_correct: false
+    - text: Increase the Read Capacity Units (RCUs) for the DynamoDB table to handle more requests.
+      is_correct: false
+    - text: Enable DynamoDB Global Tables to replicate data to the region closest to the users.
+      is_correct: false
+  explanation: |
+    Correct: DAX is an in-memory cache specifically for DynamoDB that reduces read latency from milliseconds to microseconds. It is API-compatible with DynamoDB, meaning it requires minimal changes to the application code (just changing the service endpoint).
+    Incorrect: 
+    - ElastiCache requires significant code changes to manage the "cache-aside" logic (checking the cache, then the DB, then updating the cache).
+    - Increasing RCUs improves throughput (total requests/second) but does not significantly reduce individual read latency.
+    - Global Tables reduce latency for users in different geographical regions, but the question implies optimizing the existing setup with minimal changes.
+
+- id: q473
+  type: multiple_choice
+  question: |
+    A company hosts a website on Amazon EC2 instances behind an Application Load Balancer (ALB). The website serves static content. Website traffic is increasing, and the company is concerned about a potential increase in cost.
+    Which solution will meet these requirements?
+  options:
+    - text: Create an Amazon CloudFront distribution to cache static files at edge locations.
+      is_correct: true
+    - text: Move the static content to an Amazon Elastic Block Store (EBS) Provisioned IOPS volume.
+      is_correct: false
+    - text: Replace the Application Load Balancer with a Network Load Balancer (NLB).
+      is_correct: false
+    - text: Use Amazon Aurora Serverless to host the static content.
+      is_correct: false
+  explanation: |
+    Correct: Amazon CloudFront is a Content Delivery Network (CDN) that caches static content at edge locations closer to users. This reduces the load on the ALB and EC2 instances, and typically reduces data transfer costs.
+    Incorrect: 
+    - EBS volumes don't reduce data transfer costs; they manage local storage performance.
+    - NLB handles Layer 4 traffic and won't help with caching or reducing static content delivery costs.
+    - Aurora is a database service and is not suitable for hosting static website files.
+
+- id: q474
+  type: multiple_choice
+  question: |
+    A company has multiple VPCs across AWS Regions to support and run workloads that are isolated from workloads in other Regions. Because of a recent application launch requirement, the company’s VPCs must communicate with all other VPCs across all Regions.
+    Which solution will meet these requirements with the LEAST amount of administrative effort?
+  options:
+    - text: Use AWS Transit Gateway to manage VPC communication in a single Region and Transit Gateway peering across Regions to manage VPC communications.
+      is_correct: true
+    - text: Create a full mesh of VPC peering connections between all VPCs in all Regions.
+      is_correct: false
+    - text: Connect all VPCs to each other using a Site-to-Site VPN mesh.
+      is_correct: false
+    - text: Use AWS Direct Connect Gateway to link all VPCs together.
+      is_correct: false
+  explanation: |
+    Correct: AWS Transit Gateway acts as a cloud router. Using one per region and peering them is much easier to manage than hundreds of individual VPC peering connections, especially as the number of VPCs grows (Hub-and-Spoke model).
+    Incorrect: 
+    - A full mesh of VPC peering is operationally complex (N*(N-1)/2 connections) and hard to maintain.
+    - VPN mesh is slow, expensive, and requires manual configuration of tunnels.
+    - Direct Connect Gateway is for connecting on-premises to AWS, not primarily for inter-region VPC communication.
 
 
 
-  - id: q452
-    type: multiple_choice
-    question: |
-      A company needs to implement a solution to monitor the cost of its AWS accounts. The company needs to be alerted when the costs for a specific service exceed a predefined threshold.
-    options:
-     - text: Create a budget in AWS Budgets and set an alert based on the actual or forecasted cost.
-       is_correct: true
-     - text: Use AWS Cost Explorer to manually export monthly reports and compare them to the budget.
-       is_correct: false
-     - text: Configure an Amazon CloudWatch alarm to monitor the "EstimatedCharges" metric for the specific service.
-       is_correct: false
-     - text: Use AWS Trusted Advisor to receive weekly notifications about cost optimization.
-       is_correct: false
-    explanation: |
-      Correct: AWS Budgets allows you to set custom budgets that track your cost or usage and provides alerts via SNS or email when thresholds are breached.
-      Incorrect: 
-        - Cost Explorer is for visualization and manual analysis, not proactive alerting.
-        - While CloudWatch can monitor total charges, it is less granular for service-specific thresholds compared to AWS Budgets.
-        - Trusted Advisor provides cost-saving recommendations but is not a primary alerting tool for specific budget thresholds.
+- id: q475
+  type: multiple_choice
+  question: |
+    A company is designing a containerized application that will use Amazon Elastic Container Service (Amazon ECS). The application needs to access a shared file system that is highly durable and can recover data to another AWS Region with a recovery point objective (RPO) of 8 hours. The file system needs to provide a mount target in each Availability Zone within a Region.
+    Which solution will meet these requirements?
+  options:
+    - text: Amazon Elastic File System (Amazon EFS) with the Standard storage class and AWS Backup for cross-region replication.
+      is_correct: true
+    - text: Amazon Elastic Block Store (EBS) with Multi-Attach enabled and snapshots copied to another region.
+      is_correct: false
+    - text: Amazon S3 bucket mounted as a local file system using S3 File Gateway.
+      is_correct: false
+    - text: Amazon FSx for Lustre with a scratch file system deployment.
+      is_correct: false
+  explanation: |
+    Correct: Amazon EFS is a managed shared file system that supports multiple mount targets per AZ. AWS Backup can be configured to replicate EFS data to another region automatically, meeting the 8-hour RPO requirement.
+    Incorrect: 
+    - EBS Multi-Attach is limited to a single AZ and cannot be shared across multiple AZs.
+    - S3 File Gateway is an appliance for on-premises access to S3; using it within ECS for shared storage is unnecessarily complex compared to EFS.
+    - FSx for Lustre is for high-performance computing, not general-purpose durable shared storage, and "scratch" volumes are not durable.
 
-  - id: q499
-    type: multiple_choice
-    question: |
-      A company is currently using a 10 Gbps AWS Direct Connect connection. The company’s average usage is 50 Mbps. The company wants to reduce its costs.
-    options:
-     - text: Work with an AWS Direct Connect Partner to order a smaller hosted connection.
-       is_correct: true
-     - text: Use an AWS Site-to-Site VPN over the public internet and cancel the Direct Connect.
-       is_correct: false
-     - text: Configure a Transit Gateway to aggregate multiple small connections.
-       is_correct: false
-     - text: Purchase a Savings Plan for Direct Connect data transfer.
-       is_correct: false
-    explanation: |
-      Correct: Moving from a dedicated 10 Gbps connection to a smaller "Hosted Connection" (e.g., 500 Mbps or 1 Gbps) through an AWS Partner significantly reduces the port hour costs.
-      Incorrect: 
-        - VPN may be cheaper, but it doesn't offer the consistent performance of Direct Connect if that is still a requirement.
-        - Transit Gateway is a routing hub and does not directly reduce the cost of the underlying physical connection capacity.
-        - Savings Plans do not apply to Direct Connect port hours or data transfer fees.
+- id: q476
+  type: multiple_choice
+  question: |
+    A company is expecting rapid growth. A solutions architect needs to configure existing users and grant permissions to new users on AWS using IAM groups based on department.
+    Which additional action is the MOST secure way to grant permissions to the new users?
+  options:
+    - text: Create an IAM policy that grants least privilege permission. Attach the policy to the IAM groups.
+      is_correct: true
+    - text: Assign the AdministratorAccess managed policy to all IAM groups to ensure no service interruptions.
+      is_correct: false
+    - text: Create inline policies for each individual user to ensure specific access control.
+      is_correct: false
+    - text: Use the root user to perform all administrative tasks to maintain centralized control.
+      is_correct: false
+  explanation: |
+    Correct: Granting "Least Privilege" (only the permissions needed for the job) and applying them via groups is a security best practice that simplifies management and reduces the attack surface.
+    Incorrect: 
+    - AdministratorAccess violates the principle of least privilege.
+    - Inline policies for individuals are difficult to audit and manage at scale compared to group-based policies.
+    - Using the root user for daily tasks is a high security risk.
 
-  - id: q500
-    type: multiple_choice
-    question: |
-      A company has multiple Windows file servers on premises. The company wants to migrate and consolidate its files into an Amazon FSx for Windows File Server file system. File permissions must be preserved to ensure that access rights do not change. Which solutions will meet these requirements? (Choose two.)
-    options:
-     - text: Deploy AWS DataSync agents on premises. Schedule DataSync tasks to transfer the data to the FSx for Windows File Server file system.
-       is_correct: true
-     - text: Order an AWS Snowcone device. Connect the device to the on-premises network. Launch AWS DataSync agents on the device. Schedule DataSync tasks to transfer the data to the FSx for Windows File Server file system.
-       is_correct: true
-     - text: Map the on-premises drives to an Amazon S3 bucket using the S3 File Gateway and then move the data to FSx.
-       is_correct: false
-     - text: Use the AWS CLI to copy files to S3, then use a Lambda function to move them to FSx.
-       is_correct: false
-     - text: Use AWS Migration Hub to replicate the virtual machine disks directly into EBS volumes and then attach them to FSx.
-       is_correct: false
-    explanation: |
-      Correct: AWS DataSync is specifically designed to preserve metadata such as NTFS permissions (ACLs) when moving data to FSx. Snowcone supports DataSync for environments with limited bandwidth.
-      Incorrect: 
-        - Moving data through S3 or using CLI copies often strips NTFS-specific permissions unless complex workarounds are used.
-        - Replicating disks (VM Import/Export) moves the whole OS, not just the files, and cannot be directly "attached" to an FSx managed service.
+- id: q478
+  type: multiple_choice
+  question: |
+    A law firm needs to share information with the public. The information includes hundreds of files that must be publicly readable. Modifications or deletions of the files by anyone before a designated future date are prohibited.
+    Which solution will meet these requirements in the MOST secure way?
+  options:
+    - text: Create a new Amazon S3 bucket with S3 Versioning enabled. Use S3 Object Lock with a retention period in accordance with the designated date. Configure the S3 bucket for static website hosting. Set an S3 bucket policy to allow read-only access to the objects.
+      is_correct: true
+    - text: Use an Amazon EBS volume with snapshots taken daily. Restrict delete permissions using IAM.
+      is_correct: false
+    - text: Store the files in Amazon EFS and use a cron job to check for file modifications.
+      is_correct: false
+    - text: Create a private S3 bucket and use pre-signed URLs with a long expiration date for public access.
+      is_correct: false
+  explanation: |
+    Correct: S3 Object Lock (with Versioning) provides WORM (Write Once, Read Many) protection. Combined with a public bucket policy and static website hosting, it ensures the files are readable by everyone but cannot be deleted or changed until the lock expires.
+    Incorrect: 
+    - EBS cannot be easily used for "public" file sharing.
+    - A cron job in EFS is reactive, not proactive; it won't prevent the deletion from happening.
+    - Pre-signed URLs do not prevent the source file from being deleted or modified by an authorized user.
+
+- id: q479
+  type: multiple_choice
+  question: |
+    A company is making a prototype of its website infrastructure manually (Auto Scaling group, ALB, RDS). Now they want to deploy it for development and production in two Availability Zones in an automated fashion.
+    What should a solutions architect recommend?
+  options:
+    - text: Define the infrastructure as a template by using the prototype infrastructure as a guide. Deploy the infrastructure with AWS CloudFormation.
+      is_correct: true
+    - text: Use AWS Systems Manager to take a snapshot of the instances and clone them in other regions.
+      is_correct: false
+    - text: Use the AWS Console to manually replicate the settings in the new accounts.
+      is_correct: false
+    - text: Create a backup of the RDS database and restore it to a new EC2 instance running MySQL.
+      is_correct: false
+  explanation: |
+    Correct: AWS CloudFormation allows you to treat "Infrastructure as Code." You can define your entire stack in a YAML/JSON template and deploy it consistently and automatically across multiple environments.
+    Incorrect: 
+    - Systems Manager doesn't automate the creation of ALBs or RDS clusters.
+    - Manual replication is prone to error and not "automated."
+    - Moving RDS to EC2 increases management overhead and doesn't solve the automation requirement.
+
+- id: q480
+  type: multiple_choice
+  question: |
+    A business application is hosted on Amazon EC2 and uses Amazon S3 for encrypted object storage. No application traffic between the two services should traverse the public internet.
+    Which capability should the solutions architect use to meet the compliance requirements?
+  options:
+    - text: VPC endpoint
+      is_correct: true
+    - text: NAT Gateway
+      is_correct: false
+    - text: Internet Gateway
+      is_correct: false
+    - text: AWS Direct Connect
+      is_correct: false
+  explanation: |
+    Correct: A VPC Endpoint (Gateway or Interface) allows resources in a VPC to talk to AWS services using the private AWS network, ensuring traffic never hits the public internet.
+    Incorrect: 
+    - NAT Gateway and Internet Gateway specifically route traffic to the public internet.
+    - Direct Connect is for on-premises to AWS connectivity.
+
+- id: q481
+  type: multiple_choice
+  question: |
+    A company hosts a web app with RDS MySQL and ElastiCache. They want a strategy that updates the cache whenever an item is added to the database, ensuring the cache always matches the database.
+    Which solution will meet these requirements?
+  options:
+    - text: Implement the write-through caching strategy.
+      is_correct: true
+    - text: Implement the lazy loading caching strategy.
+      is_correct: false
+    - text: Use a TTL (Time to Live) of 1 second for all cache keys.
+      is_correct: false
+    - text: Configure RDS to automatically push updates to ElastiCache via a plugin.
+      is_correct: false
+  explanation: |
+    Correct: In a "Write-Through" strategy, the application writes data to both the database and the cache simultaneously. This ensures the cache is never stale and always reflects the current database state.
+    Incorrect: 
+    - Lazy loading only updates the cache when a "miss" occurs, which can result in stale data if the DB changes.
+    - A 1-second TTL still allows for 1 second of stale data and increases DB load.
+    - RDS does not have a native feature to automatically push data to ElastiCache.
+
+- id: q482
+  type: multiple_choice
+  question: |
+    A company wants to migrate 100 GB of historical data from on-premises to S3. They have a 100 Mbps connection and need to encrypt data in transit with the LEAST operational overhead.
+    Which solution will meet these requirements?
+  options:
+    - text: Use AWS DataSync to migrate the data from the on-premises location to an S3 bucket.
+      is_correct: true
+    - text: Ship an AWS Snowball Edge device to the company's location.
+      is_correct: false
+    - text: Use the AWS CLI to run the `s3 cp` command recursively.
+      is_correct: false
+    - text: Set up an AWS Storage Gateway File Gateway to sync the data.
+      is_correct: false
+  explanation: |
+    Correct: AWS DataSync is designed for fast, automated data transfer. It handles encryption, validation, and network optimization natively, making it the lowest-overhead option for a 100 GB transfer over a 100 Mbps line.
+    Incorrect: 
+    - Snowball Edge is overkill for only 100 GB (which takes about 2-3 hours over 100 Mbps).
+    - AWS CLI requires manual management of failures and lacks the automation/verification features of DataSync.
+    - Storage Gateway is for ongoing hybrid storage, not a one-time migration.
+
+- id: q483
+  type: multiple_choice
+  question: |
+    A company containerized a Windows .NET 6 job. It runs every 10 minutes for 1-3 minutes.
+    Which solution will meet these requirements MOST cost-effectively?
+  options:
+    - text: Use Amazon Elastic Container Service (Amazon ECS) on AWS Fargate to run the job as a scheduled task.
+      is_correct: true
+    - text: Use AWS Lambda with a Windows-based container image.
+      is_correct: false
+    - text: Run the container on a persistent EC2 T3 instance.
+      is_correct: false
+    - text: Use Amazon Elastic Kubernetes Service (EKS) with managed node groups.
+      is_correct: false
+  explanation: |
+    Correct: ECS on Fargate is "serverless" for containers. You only pay for the vCPU and memory while the task is running (1-3 minutes every 10 mins). It supports Windows containers.
+    Incorrect: 
+    - AWS Lambda does not support Windows-based containers.
+    - A persistent EC2 instance would be paid for 24/7, even though the job only runs for ~20% of the time.
+    - EKS has a fixed hourly cluster management fee, making it more expensive for a single simple job.
+
+- id: q484
+  type: multiple_choice
+  question: |
+    A company wants to move to a consolidated multi-account architecture and authenticate access using a centralized corporate directory.
+    Which combination of actions should be recommended? (Choose two.)
+  options:
+    - text: Create a new organization in AWS Organizations with all features turned on.
+      is_correct: true
+    - text: Set up AWS IAM Identity Center (AWS SSO) and integrate it with the corporate directory.
+      is_correct: true
+    - text: Use IAM users with long-term credentials in each individual account.
+      is_correct: false
+    - text: Create a VPC Peering mesh between all accounts for authentication traffic.
+      is_correct: false
+    - text: Use AWS Directory Service for Microsoft AD in every single member account.
+      is_correct: false
+  explanation: |
+    Correct: AWS Organizations is required for multi-account management. IAM Identity Center (formerly SSO) is the standard service for centralizing authentication across those accounts using an external directory (like Active Directory or Okta).
+    Incorrect: 
+    - Long-term IAM credentials are a security risk and hard to manage at scale.
+    - VPC peering is not needed for authentication managed by IAM Identity Center.
+    - Managed AD in every account is redundant and expensive.
+
+- id: q485
+  type: multiple_choice
+  question: |
+    A company needs to store video archives that are rarely accessed. If needed, they must be available in a maximum of five minutes.
+    What is the MOST cost-effective solution?
+  options:
+    - text: Store the video archives in Amazon S3 Glacier Flexible Retrieval and use Expedited retrievals.
+      is_correct: true
+    - text: Store the video archives in S3 Standard-Infrequent Access (S3 Standard-IA).
+      is_correct: false
+    - text: Store the video archives in S3 Glacier Deep Archive.
+      is_correct: false
+    - text: Store the video archives in S3 Intelligent-Tiering.
+      is_correct: false
+  explanation: |
+    Correct: S3 Glacier Flexible Retrieval (formerly Glacier) offers "Expedited" retrievals which typically take 1-5 minutes. This is much cheaper for long-term storage than Standard-IA.
+    Incorrect: 
+    - Standard-IA is more expensive for archival storage.
+    - Glacier Deep Archive has a minimum retrieval time of 12 hours.
+    - Intelligent-Tiering is for unpredictable access, but for "rarely accessed" archives, Glacier is cheaper.
+
+- id: q486
+  type: multiple_choice
+  question: |
+    A company building a three-tier app (static website, containerized logic, relational DB) wants to simplify deployment and reduce operational costs.
+    Which solution will meet these requirements?
+  options:
+    - text: Use Amazon S3 for static content, ECS with AWS Fargate for logic, and Amazon RDS for the database.
+      is_correct: true
+    - text: Use EC2 instances for all three tiers to maintain full control.
+      is_correct: false
+    - text: Use CloudFront for the website, Lambda for logic, and DynamoDB for the database.
+      is_correct: false
+    - text: Use Elastic Beanstalk for the entire stack.
+      is_correct: false
+  explanation: |
+    Correct: This uses "Managed Services" for each tier. S3 (serverless storage), Fargate (serverless container compute), and RDS (managed database) significantly reduce the "undifferentiated heavy lifting" of server management.
+    Incorrect: 
+    - EC2 increases operational costs and complexity (patching, scaling, etc.).
+    - While the CloudFront/Lambda/DynamoDB stack is valid, the question specifically mentions a "containerized application" and "relational database."
+
+- id: q487
+  type: multiple_choice
+  question: |
+    A company needs a storage solution that is highly available, scalable, functions as a file system, mountable by multiple Linux instances (AWS and on-premises), and has no minimum size.
+    Which storage solution meets these requirements?
+  options:
+    - text: Amazon Elastic File System (Amazon EFS) with multiple mount targets.
+      is_correct: true
+    - text: Amazon EBS volumes with Multi-Attach.
+      is_correct: false
+    - text: Amazon S3 with the S3FS mount plugin.
+      is_correct: false
+    - text: Amazon FSx for Windows File Server.
+      is_correct: false
+  explanation: |
+    Correct: Amazon EFS is an NFS-based file system that can be mounted by multiple EC2 instances and on-premises servers (via VPN/Direct Connect). It scales automatically and has no minimum size.
+    Incorrect: 
+    - EBS Multi-Attach doesn't work for on-premises and is restricted to the same AZ.
+    - S3 is not a native file system; S3FS is a third-party tool that doesn't provide true POSIX file system behavior or high performance.
+    - FSx for Windows is for SMB protocols, not the native protocol (NFS) usually implied for Linux.
+
+- id: q488
+  type: multiple_choice
+  question: |
+    In an AWS Organization, billing information on member accounts must not be accessible to anyone, including the root user of those accounts.
+    Which solution will meet these requirements?
+  options:
+    - text: Create a service control policy (SCP) to deny access to the billing information. Attach the SCP to the root organizational unit (OU).
+      is_correct: true
+    - text: Use IAM policies in each member account to restrict access to the billing console.
+      is_correct: false
+    - text: Enable Consolidated Billing and disable billing access in the Billing Preferences of the management account.
+      is_correct: false
+    - text: Delete the root user's access keys in every member account.
+      is_correct: false
+  explanation: |
+    Correct: An SCP is the only way to restrict permissions for the "Root User" of a member account. By denying billing actions at the OU level, no one in those accounts can see that data.
+    Incorrect: 
+    - IAM policies do not apply to the root user.
+    - Billing Preferences settings don't block the root user's ability to see data if they have permission.
+    - The root user doesn't need "access keys" to log into the console.
+
+- id: q489
+  type: multiple_choice
+  question: |
+    An ecommerce company uses SNS to send order messages to an on-premises HTTPS endpoint. Some messages are being lost. They need to retain failed messages for 14 days for analysis with minimal effort.
+    Which solution will meet these requirements?
+  options:
+    - text: Configure an Amazon SNS dead letter queue (DLQ) that has an Amazon SQS target with a retention period of 14 days.
+      is_correct: true
+    - text: Create a Lambda function that triggers on SNS failure to write the message to DynamoDB.
+      is_correct: false
+    - text: Increase the SNS retry policy to 14 days.
+      is_correct: false
+    - text: Use Kinesis Data Firehose to stream all SNS messages to S3 for 14 days.
+      is_correct: false
+  explanation: |
+    Correct: SNS supports Dead Letter Queues (DLQs) using Amazon SQS. SQS allows for a message retention period of up to 14 days, which perfectly fits the requirement with almost no coding.
+    Incorrect: 
+    - Lambda/DynamoDB requires custom development effort.
+    - SNS retry policies have a maximum limit of hours/days, but not a 14-day storage buffer for analysis.
+    - Firehose for *all* messages is more expensive and complex than a simple DLQ for only *failed* messages.
+
+- id: q490
+  type: multiple_choice
+  question: |
+    A company needs continuous backups of a DynamoDB table to S3 with minimal coding. Backups must not affect application availability or the table's RCUs.
+    Which solution meets these requirements?
+  options:
+    - text: Turn on point-in-time recovery (PITR) for the table and use the DynamoDB export to S3 feature.
+      is_correct: true
+    - text: Write a Lambda function that performs a `Scan` on the table and writes to S3.
+      is_correct: false
+    - text: Enable DynamoDB Streams and use a Kinesis consumer to save data to S3.
+      is_correct: false
+    - text: Use AWS Data Pipeline to schedule a daily export of the table to S3.
+      is_correct: false
+  explanation: |
+    Correct: DynamoDB's native "Export to S3" feature uses PITR data, which means it does not consume the table's provisioned throughput (RCUs) and has no impact on performance or availability.
+    Incorrect: 
+    - A `Scan` operation consumes RCUs and can slow down the production application.
+    - Streams/Kinesis require custom code/configuration effort.
+    - Data Pipeline uses MapReduce/Scan, which consumes RCUs.
+
+- id: q491
+  type: multiple_choice
+  question: |
+    A solutions architect is designing an asynchronous application to process credit card data validation requests for a bank. The application must be secure and be able to process each request at least once. 
+    Which solution will meet these requirements MOST cost-effectively?
+  options:
+    - text: Use Amazon Simple Queue Service (Amazon SQS) to buffer requests. Use Amazon EC2 instances in an Auto Scaling group to process the messages.
+      is_correct: true
+    - text: Use Amazon SNS to broadcast requests to multiple AWS Lambda functions for processing.
+      is_correct: false
+    - text: Store the requests in an Amazon RDS database and use a cron job on an EC2 instance to poll the database.
+      is_correct: false
+    - text: Use an Amazon Kinesis Data Stream to capture the requests and process them with AWS Glue.
+      is_correct: false
+  explanation: |
+    Correct: Amazon SQS is a cost-effective, managed message queuing service that supports asynchronous processing. It ensures "at-least-once" delivery, which is a key requirement. Combining SQS with an EC2 Auto Scaling group allows the system to scale based on demand.
+    Incorrect: 
+    - SNS is a pub/sub service and doesn't natively provide the "buffering" and retry logic needed for reliable asynchronous processing as easily as SQS.
+    - Database polling (RDS/Cron) is not operationally efficient and doesn't scale well compared to SQS.
+    - Kinesis and Glue are typically used for streaming analytics and would be more expensive for simple validation requests.
+
+- id: q492
+  type: multiple_choice
+  question: |
+    A company has multiple AWS accounts for development work. Some staff consistently use oversized Amazon EC2 instances, which causes the company to exceed the yearly budget for the development accounts. The company wants to centrally restrict the creation of AWS resources in these accounts. 
+    Which solution will meet these requirements with the LEAST development effort?
+  options:
+    - text: Use AWS Organizations to organize the accounts into organizational units (OUs). Define and attach a service control policy (SCP) to control the usage of EC2 instance types.
+      is_correct: true
+    - text: Create a custom AWS Config rule in each account that terminates instances if they are not of an approved type.
+      is_correct: false
+    - text: Write a Lambda function that runs every hour to check for oversized instances and stop them.
+      is_correct: false
+    - text: Use IAM policies in each account to restrict the 'ec2:RunInstances' action for specific instance types.
+      is_correct: false
+  explanation: |
+    Correct: Service Control Policies (SCPs) in AWS Organizations offer central control over the maximum available permissions for all accounts in an OU. This is the most operationally efficient way to prevent (rather than react to) the launch of expensive instances.
+    Incorrect: 
+    - Custom Config rules or Lambda functions are "reactive" (the resource is already created and incurring cost) and require more development effort.
+    - Managing IAM policies in every individual account is difficult to scale and centralize.
+
+- id: q493
+  type: multiple_choice
+  question: |
+    A company wants to use artificial intelligence (AI) to determine the quality of its customer service calls in four different languages. They need written sentiment analysis reports in English. The company does not have resources to maintain machine learning models.
+    Which combination of steps will meet these requirements? (Choose three.)
+  options:
+    - text: Use Amazon Transcribe to convert the audio recordings in any language into text.
+      is_correct: true
+    - text: Use Amazon Translate to translate text in any language to English.
+      is_correct: true
+    - text: Use Amazon Comprehend to create the sentiment analysis reports.
+      is_correct: true
+    - text: Use Amazon Rekognition to identify the callers' emotions.
+      is_correct: false
+    - text: Use Amazon Polly to convert the translated text back into speech for analysis.
+      is_correct: false
+    - text: Use AWS SageMaker to build a custom sentiment analysis model.
+      is_correct: false
+  explanation: |
+    Correct: This is a classic AI pipeline. Transcribe converts speech to text; Translate converts that text to English; and Comprehend performs Natural Language Processing (NLP) to detect sentiment.
+    Incorrect: 
+    - Rekognition is for image and video analysis.
+    - Polly is for text-to-speech.
+    - SageMaker requires significant resources to build and maintain models, which the company explicitly wants to avoid.
+
+- id: q494
+  type: multiple_choice
+  question: |
+    A solutions architect is reviewing an IAM policy that is intended to allow the termination of an Amazon EC2 instance only if the request comes from specific source IP ranges.
+    Which condition in the IAM policy would correctly enforce this?
+  options:
+    - text: Deny the 'ec2:TerminateInstances' action if the 'aws:SourceIp' condition does not match the CIDR blocks 192.0.2.0/24 or 203.0.113.0/24.
+      is_correct: true
+    - text: Allow 'ec2:TerminateInstances' for all users but use an S3 bucket policy to restrict IP access.
+      is_correct: false
+    - text: Use a Security Group to block outbound traffic to the EC2 termination endpoint.
+      is_correct: false
+    - text: Create a VPC Endpoint and disable the 'ec2:TerminateInstances' action in the endpoint policy.
+      is_correct: false
+  explanation: |
+    Correct: Using a "Deny" effect with a "NotIpAddress" condition (or a StringNotLike on aws:SourceIp) is the most secure way to ensure that an action is blocked unless it originates from a trusted network.
+    Incorrect: 
+    - S3 bucket policies do not control EC2 termination actions.
+    - Security Groups control network traffic to/from instances, not API calls to the AWS control plane.
+    - A VPC endpoint policy can restrict access, but it doesn't solve the specific "Source IP" requirement as directly as an IAM condition.
+
+- id: q495
+  type: multiple_choice
+  question: |
+    A company wants to ensure that data in an S3 bucket associated with AWS Lake Formation does not contain sensitive personally identifiable information (PII) or financial information like passport or credit card numbers.
+    Which solution will meet these requirements?
+  options:
+    - text: Configure Amazon Macie to run a data discovery job that uses managed identifiers for the required data types.
+      is_correct: true
+    - text: Use Amazon GuardDuty to monitor S3 data access patterns for suspicious behavior.
+      is_correct: false
+    - text: Use Amazon Inspector to scan the S3 bucket for known vulnerabilities.
+      is_correct: false
+    - text: Enable S3 Event Notifications to trigger a Lambda function that calls the Amazon Rekognition API.
+      is_correct: false
+  explanation: |
+    Correct: Amazon Macie is specifically designed to discover and protect sensitive data in S3 using machine learning and pattern matching (managed identifiers).
+    Incorrect: 
+    - GuardDuty monitors for threats and malicious activity, not the content of the data itself.
+    - Amazon Inspector scans EC2 instances and container images for software vulnerabilities.
+    - Rekognition is for images/videos, not for finding text-based PII like passport numbers in files.
+
+- id: q496
+  type: multiple_choice
+  question: |
+    A company hosting on-premises applications is running out of storage. They use both block storage and NFS storage. They need a high-performing solution that supports local caching without re-architecting applications.
+    Which combination of actions should a solutions architect take? (Choose two.)
+  options:
+    - text: Deploy an AWS Storage Gateway File Gateway to replace NFS storage.
+      is_correct: true
+    - text: Deploy an AWS Storage Gateway Volume Gateway to replace the block storage.
+      is_correct: true
+    - text: Use Amazon S3 Transfer Acceleration to move data to S3.
+      is_correct: false
+    - text: Mount Amazon EFS volumes directly to the on-premises servers over the internet.
+      is_correct: false
+    - text: Use AWS Snowball Edge to provide local storage for the applications.
+      is_correct: false
+  explanation: |
+    Correct: AWS Storage Gateway is the ideal bridge. The File Gateway provides an NFS/SMB interface to S3 with local caching, and the Volume Gateway provides an iSCSI (block) interface to S3 with local caching.
+    Incorrect: 
+    - Transfer Acceleration is for faster S3 uploads, not for providing a mountable file system or block storage.
+    - EFS over the internet without a gateway lacks the "local caching" required for high performance in an on-premises setting.
+    - Snowball Edge is usually for data migration or edge computing, not for replacing standard enterprise storage long-term.
+
+- id: q497
+  type: multiple_choice
+  question: |
+    A service on EC2 instances in a private subnet communicates with S3 over a NAT gateway. The company wants to reduce data transfer (output) costs. 
+    Which solution will meet these requirements MOST cost-effectively?
+  options:
+    - text: Provision a VPC gateway endpoint. Configure the route table for the private subnet to use the gateway endpoint as the route for all S3 traffic.
+      is_correct: true
+    - text: Move the EC2 instances to a public subnet so they can use an Internet Gateway for free.
+      is_correct: false
+    - text: Use an S3 Interface Endpoint (PrivateLink) instead of the NAT Gateway.
+      is_correct: false
+    - text: Provision a dedicated 10 Gbps AWS Direct Connect connection.
+      is_correct: false
+  explanation: |
+    Correct: A VPC Gateway Endpoint for S3 is free and eliminates the data processing charges associated with a NAT Gateway. It also ensures traffic remains on the private AWS network.
+    Incorrect: 
+    - Moving instances to a public subnet is a security risk.
+    - Interface Endpoints have an hourly cost and data processing fees, whereas Gateway Endpoints are free.
+    - Direct Connect is far more expensive and meant for hybrid cloud connectivity.
+
+
+
+- id: q498
+  type: multiple_choice
+  question: |
+    A company uses S3 Versioning to store pictures and wants to retain only the two most recent versions to reduce costs with the LEAST operational overhead.
+    Which solution should they use?
+  options:
+    - text: Use S3 Lifecycle to delete expired object versions and retain the two most recent versions.
+      is_correct: true
+    - text: Write a Lambda function that runs daily to delete older versions of objects using the S3 API.
+      is_correct: false
+    - text: Disable S3 Versioning and use a custom naming convention to track versions.
+      is_correct: false
+    - text: Set a bucket policy that denies the storage of more than two versions per object.
+      is_correct: false
+  explanation: |
+    Correct: S3 Lifecycle rules can be configured specifically to manage noncurrent versions, including a setting to "Retain only the N most recent versions." This is a native, automated feature.
+    Incorrect: 
+    - A Lambda function adds operational overhead (maintenance and execution costs).
+    - Disabling versioning requires manual effort to track versions and changes the application's behavior.
+    - Bucket policies cannot count versions or limit the number of objects; they only control access.
+
+- id: q499
+  type: multiple_choice
+  question: |
+    A company needs to minimize the cost of its 1 Gbps AWS Direct Connect connection, which is utilized at less than 10%. 
+    Which solution will meet these requirements?
+  options:
+    - text: Contact an AWS Direct Connect Partner to order a 200 Mbps hosted connection for an existing AWS account.
+      is_correct: true
+    - text: Enable Direct Connect Gateway to share the connection with multiple VPCs.
+      is_correct: false
+    - text: Use a Site-to-Site VPN over the internet and cancel the Direct Connect connection.
+      is_correct: false
+    - text: Configure a Link Aggregation Group (LAG) to reduce the throughput.
+      is_correct: false
+  explanation: |
+    Correct: Since the company only uses 10% of their 1 Gbps (100 Mbps), switching to a smaller "hosted connection" (e.g., 200 Mbps) through an AWS Partner reduces the fixed monthly port cost.
+    Incorrect: 
+    - Sharing the connection (Direct Connect Gateway) doesn't reduce the base cost of the 1 Gbps port.
+    - A VPN might not provide the required consistent performance of Direct Connect.
+    - LAG is used to *increase* capacity by bundling multiple connections, not to reduce it or lower costs.
+
+- id: q500
+  type: multiple_choice
+  question: |
+    A company wants to migrate and consolidate multiple Windows file servers into Amazon FSx for Windows File Server while preserving file permissions.
+    Which solutions will meet these requirements? (Choose two.)
+  options:
+    - text: Deploy AWS DataSync agents on premises. Schedule DataSync tasks to transfer the data to the FSx for Windows File Server file system.
+      is_correct: true
+    - text: Order an AWS Snowcone device. Connect the device to the on-premises network. Launch AWS DataSync agents on the device. Schedule DataSync tasks to transfer the data to the FSx for Windows File Server file system.
+      is_correct: true
+    - text: Use the AWS CLI to copy files from on-premises to an S3 bucket, then use AWS Glue to move them to FSx.
+      is_correct: false
+    - text: Use the Windows Backup and Restore feature to create a backup file and upload it to Amazon S3.
+      is_correct: false
+    - text: Use AWS Migration Hub to automatically move the file servers to the cloud.
+      is_correct: false
+  explanation: |
+    Correct: AWS DataSync is designed to migrate file-based data and natively preserves metadata, including NTFS permissions (ACLs). It can run as an agent on-premises or on a Snowcone device for offline/low-bandwidth migrations.
+    Incorrect: 
+    - Copying to S3 via CLI doesn't easily preserve Windows ACLs when moving to FSx later.
+    - Backup and Restore is a manual, multi-step process that is less efficient than DataSync.
+    - Migration Hub tracks migrations but doesn't perform the file-level transfer and ACL preservation itself.

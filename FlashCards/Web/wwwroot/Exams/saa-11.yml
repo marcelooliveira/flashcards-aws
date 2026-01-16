@@ -1,86 +1,433 @@
 questions:
-  - id: q501
-    type: multiple_choice
-    question: |
-      A company wants to ingest customer payment data into the company's data lake in Amazon S3. The company receives payment data every minute on average. The company wants to analyze the payment data in real time. Then the company wants to ingest the data into the data lake.
-    options:
-     - text: Use Amazon Kinesis Data Firehose to ingest data. Use Amazon Kinesis Data Analytics to analyze the data in real time.
-       is_correct: true
-     - text: Create an AWS Lambda function to poll an SQS queue every minute and write the results to an S3 bucket for batch processing.
-       is_correct: false
-     - text: Use AWS DataSync to move payment data from on-premises servers to S3 and run Athena queries on a schedule.
-       is_correct: false
-     - text: Set up an Amazon EC2 instance running a custom Python script to intercept packets and store them in an Amazon EBS volume.
-       is_correct: false
-    explanation: |
-      Correct: Amazon Kinesis Data Firehose is the standard for loading streaming data into S3 (data lakes). Combined with Kinesis Data Analytics, it allows for real-time SQL-based analysis on the data as it flows through the pipeline.
-      Incorrect: 
-        - SQS and Lambda polling are better suited for task decoupling rather than real-time streaming analytics and ingestion into a data lake.
-        - AWS DataSync is for file/object migration, not for real-time streaming data ingestion.
-        - Custom scripts on EC2 involve high operational overhead and do not scale automatically like Kinesis.
+- id: q501
+  type: multiple_choice
+  question: |
+    A empresa recebe dados de pagamento a cada minuto e quer analisá-los em tempo real antes de ingeri-los em um data lake no S3.
+    Qual solução oferece a maior eficiência operacional?
+  options:
+    - text: Usar Amazon Kinesis Data Firehose para ingestão e Amazon Kinesis Data Analytics para análise em tempo real.
+      is_correct: true
+    - text: Criar uma aplicação no EC2 para ler os dados e gravar no S3.
+      is_correct: false
+    - text: Usar AWS DataSync para mover os dados para o S3.
+      is_correct: false
+    - text: Usar Amazon MSK para streaming e processar com AWS Lambda.
+      is_correct: false
+  explanation: |
+    Correto: O Kinesis Data Firehose é a forma mais simples de carregar dados no S3, e o Kinesis Data Analytics permite processar esses dados em trânsito usando SQL, sem gerenciar servidores.
+    Incorreto: Gerenciar EC2 ou MSK (Kafka) aumenta significativamente o overhead operacional comparado às opções serverless do Kinesis.
 
+- id: q502
+  type: multiple_choice
+  question: |
+    Um CMS roda em uma única instância EC2 com imagens em um volume EBS. 
+    Quais ações melhoram a performance e resiliência? (Escolha duas.)
+  options:
+    - text: Mover as imagens para um sistema de arquivos Amazon EFS montado em todas as instâncias.
+      is_correct: true
+    - text: Criar uma AMI e usar um Auto Scaling Group (min 2 instâncias) atrás de um ALB, com CloudFront para cache.
+      is_correct: true
+    - text: Migrar o banco de dados para uma instância EC2 separada.
+      is_correct: false
+    - text: Usar volumes EBS Provisioned IOPS para as imagens.
+      is_correct: false
+  explanation: |
+    Correto: O EFS permite que várias instâncias acessem as mesmas imagens simultaneamente (necessário para escalonamento). O ASG + ALB garante alta disponibilidade, e o CloudFront acelera a entrega global via cache.
+    Incorreto: EBS não pode ser montado simultaneamente em várias instâncias (exceto Multi-Attach, que tem restrições e não é ideal para CMS).
 
+- id: q503
+  type: multiple_choice
+  question: |
+    Uma empresa de monitoramento precisa acessar contas AWS de clientes para ler métricas do CloudWatch e descrever instâncias EC2.
+    Qual a forma MAIS segura de obter esse acesso?
+  options:
+    - text: Solicitar que o cliente crie uma IAM Role com permissões de leitura e uma política de confiança para a conta da empresa.
+      is_correct: true
+    - text: Solicitar as Access Keys do usuário Root do cliente.
+      is_correct: false
+    - text: Criar um usuário IAM na conta da empresa e pedir para o cliente adicioná-lo ao grupo de administradores.
+      is_correct: false
+    - text: Usar uma conexão VPN entre as contas.
+      is_correct: false
+  explanation: |
+    Correto: O uso de IAM Roles para acesso entre contas (Cross-account access) evita o compartilhamento de credenciais fixas e utiliza STS para gerar tokens temporários, sendo o padrão de segurança da AWS.
 
-  - id: q502
-    type: multiple_choice
-    question: |
-      A company runs a website that uses a content management system (CMS) on Amazon EC2. The CMS runs on a single EC2 instance and uses an Amazon Aurora MySQL Multi-AZ DB instance for the data tier. Website images are stored on an Amazon Elastic Block Store (Amazon EBS) volume that is mounted inside the EC2 instance.
-    options:
-     - text: Move the website images onto an Amazon Elastic File System (Amazon EFS) file system that is mounted on every EC2 instance.
-       is_correct: true
-     - text: Increase the size of the EBS volume and use EBS Multi-Attach to share the volume across multiple instances.
-       is_correct: false
-     - text: Use Amazon S3 Transfer Acceleration to move images to a global bucket and mount the bucket using S3fs.
-       is_correct: false
-     - text: Replicate the EBS volume across multiple Availability Zones using AWS Backup and mount them individually.
-       is_correct: false
-    explanation: |
-      Correct: Amazon EFS is a managed NFS file system that can be mounted simultaneously by multiple EC2 instances across different AZs. This is the recommended way to share a common media library for a CMS like WordPress or Drupal when scaling horizontally.
-      Incorrect: 
-        - EBS Multi-Attach is only supported for Provisioned IOPS (io1/io2) volumes and requires a cluster-aware file system; it is not a standard "shared folder" solution for web servers.
-        - Mounting S3 as a local file system (S3fs) is not recommended for production CMS workloads due to high latency and lack of full POSIX compliance.
-        - Replicating volumes provides a backup but doesn't allow real-time shared access to the same set of images across different servers.
+- id: q506
+  type: multiple_choice
+  question: |
+    Uma rede social precisa lidar com uploads massivos de fotos durante grandes eventos.
+    Qual solução oferece a maior escalabilidade?
+  options:
+    - text: Fazer o upload para os servidores EC2 e depois movê-los para o S3.
+      is_correct: false
+    - text: Usar o AWS Transfer Family para gerenciar os uploads.
+      is_correct: false
+    - text: Gerar S3 Presigned URLs e fazer o upload direto do navegador do usuário para o S3.
+      is_correct: true
+    - text: Usar um API Gateway com integração direta ao S3.
+      is_correct: false
+  explanation: |
+    Correto: Uploads diretos para o S3 via Presigned URLs removem o gargalo dos servidores de aplicação. O S3 escala quase infinitamente, permitindo que o tráfego de upload não afete a performance da aplicação.
 
+- id: q507
+  type: multiple_choice
+  question: |
+    Aplicação global de reservas precisa de um banco de dados primário único e consistente com latência de atualização < 1 segundo.
+    Qual solução recomendar?
+  options:
+    - text: Usar Amazon DynamoDB com Global Tables.
+      is_correct: true
+    - text: Usar Amazon RDS com Read Replicas em várias regiões.
+      is_correct: false
+    - text: Usar Amazon Aurora Global Database.
+      is_correct: false
+    - text: Implementar replicação manual de dados usando SQS.
+      is_correct: false
+  explanation: |
+    Correto: DynamoDB Global Tables oferece replicação multi-ativa e multi-regional com latência de milissegundos, garantindo que usuários em qualquer lugar acessem o endpoint regional com consistência global.
+    Nota: Aurora Global Database também é uma opção, mas o DynamoDB é frequentemente a resposta preferida em exames para latência ultra-baixa em escala global para dados NoSQL/Reservas.
 
+- id: q509
+  type: multiple_choice
+  question: |
+    Um site está sofrendo ataques de milhões de requisições ilegítimas vindas de um pequeno número de endereços IP.
+    Como resolver o problema de performance IMEDIATAMENTE?
+  options:
+    - text: Alterar os Security Groups para bloquear os IPs.
+      is_correct: false
+    - text: Modificar a Network ACL (NACL) das subnets para adicionar uma regra de DENY para os IPs.
+      is_correct: true
+    - text: Desligar o Load Balancer temporariamente.
+      is_correct: false
+    - text: Migrar a aplicação para outra região.
+      is_correct: false
+  explanation: |
+    Correto: Network ACLs são capazes de realizar regras de bloqueio (Deny) explícito de IPs. Security Groups não suportam regras de "Deny", apenas "Allow". Esta é a forma mais rápida de filtrar tráfego na camada de rede.
 
-  - id: q549
-    type: multiple_choice
-    question: |
-      A company is deploying a new web application in a VPC. The application will be hosted on EC2 instances across multiple Availability Zones. The instances are in the private subnets. The MySQL database needs to retrieve product catalog and pricing information that is hosted on the internet by a third-party provider. A solutions architect must devise a strategy that maximizes security without increasing operational overhead.
-    options:
-     - text: Deploy a NAT gateway in the public subnets. Modify the private subnet route table to direct all internet-bound traffic to the NAT gateway.
-       is_correct: true
-     - text: Assign a public IP address to each EC2 instance and configure the Security Groups to allow outbound traffic.
-       is_correct: false
-     - text: Deploy a NAT instance in a private subnet and manage the routing table manually for each AZ.
-       is_correct: false
-     - text: Create a Transit Gateway with a VPN connection to the third-party provider's network.
-       is_correct: false
-    explanation: |
-      Correct: A NAT gateway is a managed service that provides outbound-only internet access for instances in private subnets. It requires less operational overhead than a NAT instance and is highly available by design when deployed per AZ.
-      Incorrect: 
-        - Assigning public IPs to instances in a private subnet violates the "private" architecture and increases the attack surface.
-        - NAT instances are unmanaged, require manual patching, and do not scale automatically (higher operational overhead).
-        - A VPN via Transit Gateway is complex and only works if the third-party provider supports a Site-to-Site VPN, which is unlikely for general internet-hosted catalog data.
+- id: q514
+  type: multiple_choice
+  question: |
+    Um cluster EKS tem acesso público desativado e os nodes estão em subnets privadas. Os nodes não conseguem se juntar ao cluster.
+    Qual a solução?
+  options:
+    - text: Criar Interface VPC Endpoints para permitir que os nodes acessem o control plane.
+      is_correct: true
+    - text: Habilitar o Internet Gateway na subnet privada.
+      is_correct: false
+    - text: Usar uma NAT Gateway para os nodes acessarem o endpoint público.
+      is_correct: false
+    - text: Alterar o tipo de instância dos nodes.
+      is_correct: false
+  explanation: |
+    Correto: Se o acesso público ao endpoint do EKS está desligado, a comunicação deve ocorrer via rede privada. Interface VPC Endpoints (PrivateLink) permitem que os nodes alcancem a API do Kubernetes de forma privada dentro da VPC.
 
-  - id: q550
-    type: multiple_choice
-    question: |
-      A company is using AWS Key Management Service (AWS KMS) keys to encrypt AWS Lambda environment variables. A solutions architect needs to ensure that the required permissions are in place to decrypt and use the environment variables.
-    options:
-     - text: Add AWS KMS permissions in the Lambda execution role.
-       is_correct: true
-     - text: Allow the Lambda execution role in the AWS KMS key policy.
-       is_correct: true
-     - text: Create an IAM User policy for the Lambda function and attach it to the VPC.
-       is_correct: false
-     - text: Enable "Default Encryption" in the Lambda console and use the AWS managed key (aws/lambda).
-       is_correct: false
-     - text: Grant the `kms:Decrypt` permission to the S3 bucket where the Lambda code is stored.
-       is_correct: false
-    explanation: |
-      Correct: To use a Customer Managed Key (CMK) with Lambda, two permissions are required: the Lambda's IAM Execution Role must have the `kms:Decrypt` permission, and the KMS Key Policy itself must explicitly allow the Lambda role to use it.
-      Incorrect: 
-        - IAM policies are not attached to VPCs; they are attached to roles, users, or groups.
-        - While using the managed key (`aws/lambda`) simplifies things, the question specifies that the company is "using KMS keys" (implying customer-managed keys) and asks for the "required permissions" to make that specific setup work.
-        - Permitting the S3 bucket does not help the Lambda service decrypt environment variables at runtime.
+- id: q518
+  type: multiple_choice
+  question: |
+    Um RDS MySQL está ficando sem espaço em disco. É necessário aumentar o espaço sem downtime e com o menor esforço.
+    Qual a solução?
+  options:
+    - text: Habilitar o Storage Autoscaling no RDS.
+      is_correct: true
+    - text: Criar uma nova instância com mais disco e migrar os dados.
+      is_correct: false
+    - text: Modificar a instância manualmente e reiniciar.
+      is_correct: false
+    - text: Usar o AWS DMS para replicar para um banco maior.
+      is_correct: false
+  explanation: |
+    Correto: O RDS Storage Autoscaling monitora o consumo e aumenta o volume EBS automaticamente conforme necessário, sem intervenção manual e sem causar queda na aplicação.
+
+- id: q520
+  type: multiple_choice
+  question: |
+    Aplicação com tráfego imprevisível e throughput de moderado a alto no DynamoDB.
+    Qual configuração é a mais econômica?
+  options:
+    - text: Configurar DynamoDB em modo On-demand com classe Standard.
+      is_correct: true
+    - text: Usar Provisioned Capacity com Auto Scaling habilitado.
+      is_correct: false
+    - text: Comprar Reserved Capacity para o DynamoDB.
+      is_correct: false
+    - text: Usar a classe DynamoDB Standard-IA.
+      is_correct: false
+  explanation: |
+    Correto: Para cargas de trabalho **imprevisíveis**, o modo On-demand é o mais econômico pois você paga apenas pelo que consome, sem pagar por capacidade ociosa provisionada que não está sendo usada.
+
+- id: q521
+  type: multiple_choice
+  question: |
+    Várias unidades de negócio têm suas próprias contas AWS com tabelas DynamoDB. Uma aplicação central em uma conta compartilhada precisa ler dados de todas essas tabelas.
+    Qual opção de autenticação é a MAIS segura?
+  options:
+    - text: Criar um usuário IAM em cada conta de negócio e compartilhar as Access Keys com a conta central.
+      is_correct: false
+    - text: Usar uma política de bucket no DynamoDB para permitir acesso externo.
+      is_correct: false
+    - text: Em cada conta de negócio, criar uma IAM Role (BU_ROLE) com política de confiança para a conta da aplicação. A aplicação assume essa role via STS para ler as tabelas.
+      is_correct: true
+    - text: Mover todas as tabelas DynamoDB para a conta central da aplicação.
+      is_correct: false
+  explanation: |
+    Correto: O uso de Cross-account IAM Roles com STS AssumeRole é o padrão ouro de segurança na AWS. Ele elimina a necessidade de credenciais estáticas e segue o princípio do menor privilégio, permitindo que a conta central acesse recursos de forma temporária e auditável.
+
+- id: q522
+  type: multiple_choice
+  question: |
+    Uma empresa usa Amazon EKS e quer que o cluster escale conforme a carga de trabalho variável com o menor overhead operacional.
+    Quais passos atendem a isso? (Escolha dois.)
+  options:
+    - text: Usar o Kubernetes Metrics Server para Horizontal Pod Autoscaling (HPA).
+      is_correct: true
+    - text: Usar o Kubernetes Cluster Autoscaler.
+      is_correct: true
+    - text: Criar scripts personalizados para monitorar a CPU via CloudWatch.
+      is_correct: false
+    - text: Usar um AWS Transit Gateway para balancear a carga.
+      is_correct: false
+  explanation: |
+    Correto: O HPA escala o número de Pods (containers) dentro dos nós, enquanto o Cluster Autoscaler adiciona ou remove os próprios nós (instâncias EC2) quando não há espaço para novos pods. Juntos, eles fornecem escalabilidade total para o EKS.
+
+- id: q526
+  type: multiple_choice
+  question: |
+    Um failover manual em um banco Aurora PostgreSQL causou 3 minutos de downtime. 
+    Qual solução reduz o downtime em exercícios de escalonamento com o menor overhead?
+  options:
+    - text: Aumentar o tamanho da instância do banco de dados.
+      is_correct: false
+    - text: Usar uma Read Replica para todas as operações.
+      is_correct: false
+    - text: Configurar um Amazon RDS Proxy para o banco de dados.
+      is_correct: true
+    - text: Mover o banco para uma instância EC2 gerenciada manualmente.
+      is_correct: false
+  explanation: |
+    Correto: O RDS Proxy mantém as conexões da aplicação ativas durante um failover de banco de dados. Ele reduz o tempo de failover em até 66%, pois a aplicação não precisa restabelecer conexões TCP/TLS com a nova instância writer, diminuindo o downtime percebido para segundos.
+
+- id: q527
+  type: multiple_choice
+  question: |
+    Aplicação com Aurora Multi-AZ quer expandir globalmente e garantir tolerância a falhas regional.
+    Qual a solução com MAIOR tolerância a falhas?
+  options:
+    - text: Criar snapshots do banco e copiar para outra região diariamente.
+      is_correct: false
+    - text: Usar VPC Peering para conectar as regiões.
+      is_correct: false
+    - text: Implantar a aplicação em uma segunda região, usar Aurora Global Database e Route 53 com política de roteamento de failover.
+      is_correct: true
+    - text: Usar CloudFront para servir o banco de dados.
+      is_correct: false
+  explanation: |
+    Correto: O Aurora Global Database permite replicação física rápida (latência < 1s) entre regiões. O Route 53 com Health Checks automatiza o redirecionamento do tráfego para a região secundária caso a primária falhe.
+
+- id: q530
+  type: multiple_choice
+  question: |
+    App de jogos usa TCP/UDP com NLBs em várias regiões via Route 53. Como melhorar a performance e diminuir a latência para crescimento global?
+  options:
+    - text: Migrar para Application Load Balancers (ALB).
+      is_correct: false
+    - text: Usar Amazon CloudFront para todo o tráfego.
+      is_correct: false
+    - text: Adicionar o AWS Global Accelerator na frente dos NLBs.
+      is_correct: true
+    - text: Aumentar o TTL dos registros no Route 53.
+      is_correct: false
+  explanation: |
+    Correto: O Global Accelerator usa a rede edge da AWS para diminuir o "hop" de rede dos usuários, roteando pacotes TCP/UDP pelo caminho mais rápido até o NLB. Isso resolve problemas de latência e jitter comuns em jogos online que dependem de protocolos de baixa latência.
+
+- id: q531
+  type: multiple_choice
+  question: |
+    Um desenvolvedor precisa expor uma função Lambda para um webhook de terceiros da forma MAIS eficiente operacionalmente.
+    Qual a solução?
+  options:
+    - text: Criar uma Function URL para a função Lambda.
+      is_correct: true
+    - text: Configurar um Application Load Balancer na frente da Lambda.
+      is_correct: false
+    - text: Usar o Amazon API Gateway para expor a função.
+      is_correct: false
+    - text: Usar o AWS AppSync para criar um endpoint GraphQL.
+      is_correct: false
+  explanation: |
+    Correto: Lambda Function URLs são a forma mais simples e direta de expor um endpoint HTTPS para uma função única, sem o custo ou a complexidade de gerenciar um API Gateway ou ALB. Ideal para webhooks simples.
+
+- id: q537
+  type: multiple_choice
+  question: |
+    Aplicação 3-tier: ALB, EC2 com sessão local e banco MySQL em EC2. Precisa escalar para tráfego súbito e garantir alta disponibilidade em 3 AZs.
+    Qual a solução?
+  options:
+    - text: Migrar banco para RDS Multi-AZ, usar ElastiCache para sessões e colocar EC2s em um Auto Scaling Group em 3 AZs.
+      is_correct: true
+    - text: Aumentar o tamanho da instância EC2 atual.
+      is_correct: false
+    - text: Usar S3 para armazenar os estados de sessão.
+      is_correct: false
+    - text: Colocar o banco de dados atrás de um CloudFront.
+      is_correct: false
+  explanation: |
+    Correto: Esta arquitetura remove o estado das instâncias EC2 (tornando-as stateless via ElastiCache), remove o ponto único de falha do banco (via RDS Multi-AZ) e permite escalabilidade horizontal automática através do ASG em múltiplas AZs.
+
+- id: q538
+  type: multiple_choice
+  question: |
+    Empresa de vídeo quer restringir o acesso ao conteúdo por país usando o CloudFront.
+    Qual a solução?
+  options:
+    - text: Adicionar restrições geográficas (Geographic Restrictions) no CloudFront usando uma Allow List.
+      is_correct: true
+    - text: Usar o AWS WAF para bloquear IPs por país.
+      is_correct: false
+    - text: Configurar o Route 53 com roteamento por geolocalização.
+      is_correct: false
+    - text: Criptografar os vídeos com chaves KMS específicas por país.
+      is_correct: false
+  explanation: |
+    Correto: O CloudFront possui um recurso nativo de Geo-Blocking/Geo-Restriction que permite permitir ou bloquear o acesso com base no país de origem do usuário de forma simples e eficiente.
+
+- id: q541
+  type: multiple_choice
+  question: |
+    Uma empresa quer criar um app web onde o acesso é imprevisível e pode ficar ocioso por muito tempo. Apenas assinantes pagos podem fazer login. 
+    Qual combinação de passos é a mais econômica? (Escolha três.)
+  options:
+    - text: Criar uma função AWS Lambda para recuperar informações do DynamoDB. Criar um endpoint no API Gateway para aceitar APIs RESTful e enviá-las para o Lambda.
+      is_correct: true
+    - text: Criar um Amazon Cognito User Pool para autenticar os usuários.
+      is_correct: true
+    - text: Usar AWS Amplify para servir o conteúdo frontend (HTML/CSS/JS) com CloudFront integrado.
+      is_correct: true
+    - text: Provisionar instâncias EC2 em um Auto Scaling Group permanente.
+      is_correct: false
+    - text: Usar instâncias RDS reservadas para o banco de dados.
+      is_correct: false
+  explanation: |
+    Correto: Esta é a arquitetura "Serverless" clássica. Lambda e API Gateway cobram apenas por execução (ideal para tráfego imprevisível/ocioso). Cognito gerencia a autenticação de assinantes de forma escalável. Amplify/CloudFront entrega o frontend globalmente sem servidores fixos.
+    Incorreto: Instâncias fixas (EC2/RDS) gerariam custos mesmo quando a aplicação estivesse ociosa.
+
+- id: q542
+  type: multiple_choice
+  question: |
+    Uma empresa de mídia quer que apenas clientes premium tenham acesso a streams e arquivos no S3 via CloudFront. Eles também alugam filmes (acesso temporário). 
+    Qual solução atende a isso?
+  options:
+    - text: Usar OAI (Origin Access Identity) no bucket S3.
+      is_correct: false
+    - text: Gerar e fornecer CloudFront Signed URLs para os clientes premium.
+      is_correct: true
+    - text: Criar um Security Group que permita apenas IPs de clientes premium.
+      is_correct: false
+    - text: Usar criptografia KMS em todos os arquivos do S3.
+      is_correct: false
+  explanation: |
+    Correto: URLs assinadas (Signed URLs) permitem acesso temporário e controlado a objetos privados. É a solução padrão para sistemas de aluguel ou conteúdo pago, pois o link expira após o tempo definido.
+
+- id: q544
+  type: multiple_choice
+  question: |
+    Um arquiteto precisa lançar uma nova versão de uma API REST no API Gateway com efeito mínimo nos clientes e perda mínima de dados.
+    Qual solução recomendar?
+  options:
+    - text: Criar um estágio de implantação "Canary" no API Gateway. Direcionar uma porcentagem do tráfego e promover para produção após verificação.
+      is_correct: true
+    - text: Criar uma nova API e pedir para os usuários mudarem a URL.
+      is_correct: false
+    - text: Usar Route 53 com roteamento ponderado entre duas APIs diferentes.
+      is_correct: false
+    - text: Fazer o deploy diretamente no estágio de produção durante a madrugada.
+      is_correct: false
+  explanation: |
+    Correto: O Canary Release permite testar a nova versão com uma pequena fração dos usuários reais. Se houver erros, o impacto é limitado; se estiver tudo ok, o tráfego é migrado integralmente sem downtime.
+
+- id: q545
+  type: multiple_choice
+  question: |
+    Se o site principal (ALB + Route 53) ficar indisponível, os usuários devem ser direcionados para uma página de erro estática com o menor overhead possível.
+    Qual a solução?
+  options:
+    - text: Criar uma segunda instância EC2 com a página de erro.
+      is_correct: false
+    - text: Configurar o Route 53 em modo Active-Passive Failover, apontando para um bucket S3 (site estático) quando o ALB falhar no health check.
+      is_correct: true
+    - text: Usar um script Lambda para mudar os registros DNS manualmente.
+      is_correct: false
+    - text: Colocar o ALB atrás de um Global Accelerator.
+      is_correct: false
+  explanation: |
+    Correto: O failover de DNS do Route 53 é automático. Ao detectar que o ALB está "unhealthy", ele altera a resposta do DNS para o endpoint do S3. Hospedar o erro no S3 é extremamente barato e resiliente.
+    
+
+- id: q546
+  type: multiple_choice
+  question: |
+    Uma empresa quer eliminar fitas físicas de backup (tapes), mas manter seus softwares de backup on-premises atuais.
+    O que recomendar?
+  options:
+    - text: Migrar todos os dados para o S3 via AWS CLI.
+      is_correct: false
+    - text: Usar o AWS DataSync para sincronizar os volumes.
+      is_correct: false
+    - text: Configurar o AWS Storage Gateway com a interface iSCSI-VTL (Virtual Tape Library).
+      is_correct: true
+    - text: Usar o AWS Snowball para migrar as fitas.
+      is_correct: false
+  explanation: |
+    Correto: O Tape Gateway (VTL) emula uma biblioteca de fitas física. O software on-premises "pensa" que está gravando em fitas, mas os dados são enviados para o S3 (S3 Glacier para arquivamento), reduzindo custos e eliminando hardware físico.
+    
+
+- id: q547
+  type: multiple_choice
+  question: |
+    Sensores transmitem alto volume de dados em streaming para o S3 em tempo real com o MENOR overhead operacional.
+    Qual solução?
+  options:
+    - text: Usar Amazon Kinesis Data Firehose para entregar os dados ao S3.
+      is_correct: true
+    - text: Criar uma aplicação no EC2 para ler o stream e salvar no S3.
+      is_correct: false
+    - text: Usar o AWS Glue ETL para processar os dados.
+      is_correct: false
+    - text: Usar o Amazon SQS para bufferizar e Lambda para gravar no S3.
+      is_correct: false
+  explanation: |
+    Correto: O Firehose é um serviço totalmente gerenciado (zero administração de servidores) que ingere o streaming e o agrupa automaticamente para salvar no S3 em intervalos de tempo ou tamanho.
+    
+
+- id: q549
+  type: multiple_choice
+  question: |
+    Banco de dados MySQL em subnet privada precisa acessar um provedor externo na internet para atualizar catálogos. 
+    Como garantir segurança máxima sem aumentar o overhead operacional?
+  options:
+    - text: Atribuir um IP público às instâncias do banco de dados.
+      is_correct: false
+    - text: Implantar um NAT Gateway na subnet pública e atualizar a tabela de rotas da subnet privada.
+      is_correct: true
+    - text: Usar um VPC Peering com uma conta que tenha internet.
+      is_correct: false
+    - text: Criar um Proxy Reverso na subnet privada.
+      is_correct: false
+  explanation: |
+    Correto: O NAT Gateway permite que recursos privados iniciem conexões de saída (outbound) para a internet sem permitir que a internet inicie conexões de entrada (inbound). É um serviço gerenciado, altamente disponível e seguro.
+
+- id: q550
+  type: multiple_choice
+  question: |
+    Uma função Lambda usa chaves KMS para descriptografar variáveis de ambiente. 
+    Quais passos garantem as permissões corretas? (Escolha dois.)
+  options:
+    - text: Adicionar permissões de KMS (kms:Decrypt) na Execution Role da Lambda.
+      is_correct: true
+    - text: Permitir a Lambda Execution Role na política da chave KMS (Key Policy).
+      is_correct: true
+    - text: Criar uma política de bucket no S3.
+      is_correct: false
+    - text: Adicionar a permissão no Security Group da Lambda.
+      is_correct: false
+  explanation: |
+    Correto: Para que um recurso use o KMS, ele precisa de permissão no seu próprio IAM (Execution Role) E o KMS precisa permitir esse acesso em sua própria política de recurso (Key Policy).
