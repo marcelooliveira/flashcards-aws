@@ -3,164 +3,506 @@ questions:
     type: multiple_choice
     question: |
       An Amazon EC2 instance is located in a private subnet in a new VPC. This subnet does not have outbound internet access, but the EC2 instance needs the ability to download monthly security updates from an outside vendor.
+      What should a solutions architect do to meet these requirements?
     options:
-     - text: Create a NAT gateway, and place it in a public subnet. Configure the private subnet route table to use the NAT gateway as the default route.
-       is_correct: true
-     - text: Attach an Internet Gateway directly to the private subnet and assign a public IP to the instance.
-       is_correct: false
-     - text: Create a Gateway VPC Endpoint for the outside vendor's website.
-       is_correct: false
-     - text: Use an Egress-Only Internet Gateway to allow IPv4 traffic to the outside vendor.
-       is_correct: false
+      - text: Create a NAT gateway and place it in a public subnet. Configure the private subnet route table to use the NAT gateway as the default route.
+        is_correct: true
+      - text: Attach an internet gateway directly to the EC2 instance and assign a public IP address.
+        is_correct: false
+      - text: Create a VPC endpoint for the vendor's update service and associate it with the private subnet.
+        is_correct: false
+      - text: Use a peering connection to another VPC that has an existing internet gateway.
+        is_correct: false
     explanation: |
-      Correct: A NAT gateway allows instances in a private subnet to connect to services outside your VPC but prevents external services from initiating a connection with those instances. It must be placed in a public subnet with a route to an IGW.
+      Correct: NAT gateways are designed to provide outbound internet access for instances in private subnets while preventing the internet from initiating a connection with those instances.
       Incorrect: 
-        - Attaching an IGW to a private subnet effectively makes it public, and the instance would need a public IP, which violates the "private subnet" architecture.
-        - Gateway VPC Endpoints are only available for S3 and DynamoDB, not for arbitrary outside vendors.
-        - Egress-Only Internet Gateways are specifically for IPv6 traffic, not IPv4.
+        - Private subnets do not allow direct internet gateway attachment; this would require moving the instance to a public subnet.
+        - VPC endpoints are for AWS services (Interface or Gateway types), not for arbitrary outside vendors unless they provide a PrivateLink service.
+        - VPC Peering does not support edge to edge routing (transitive routing) to an IGW in another VPC.
 
   - id: q252
     type: multiple_choice
     question: |
       A solutions architect needs to design a system to store client case files. The files are core company assets and are important. The number of files will grow over time. The files must be simultaneously accessible from multiple application servers that run on Amazon EC2 instances. The solution must have built-in redundancy.
+      Which solution meets these requirements?
     options:
-     - text: Amazon Elastic File System (Amazon EFS)
-       is_correct: true
-     - text: Amazon Elastic Block Store (Amazon EBS) with Multi-Attach enabled.
-       is_correct: false
-     - text: Amazon S3 with S3 File Gateway.
-       is_correct: false
-     - text: An EC2 instance configured as a Windows File Server with an attached EBS volume.
-       is_correct: false
+      - text: Amazon Elastic File System (Amazon EFS)
+        is_correct: true
+      - text: Amazon Elastic Block Store (Amazon EBS) Multi-Attach
+        is_correct: false
+      - text: Amazon S3 Glacier Deep Archive
+        is_correct: false
+      - text: An EC2 instance configured as a File Server using Instance Store.
+        is_correct: false
     explanation: |
-      Correct: Amazon EFS provides a scalable, fully managed Network File System (NFS) that can be mounted by thousands of EC2 instances simultaneously across multiple Availability Zones, offering high durability and availability.
-      Incorrect: 
-        - EBS Multi-Attach is limited to specific instance types (Nitro) and a small number of instances (up to 16), making it less scalable than EFS for "growing files."
-        - S3 File Gateway is intended for hybrid cloud scenarios to bridge on-premises to S3; EFS is the native choice for multiple EC2 instances.
-        - A single EC2 file server is a single point of failure and does not have built-in redundancy like EFS.
-
-
+      Correct: Amazon EFS provides a managed, highly available, and scalable file system that can be mounted by multiple EC2 instances simultaneously across different Availability Zones.
+      Incorrect:
+        - EBS Multi-Attach is limited to specific volume types (io1/io2) and typically requires a cluster-aware file system, making it more complex than EFS for standard file sharing.
+        - Glacier is for long-term archival, not simultaneous application access.
+        - Instance Store is ephemeral and lacks built-in redundancy; data is lost if the instance stops.
 
   - id: q253
     type: multiple_choice
     question: |
-      A company is running a commercial Apache Hadoop cluster on Amazon EC2 instances. This cluster is being used to process large amounts of data every day. The data is stored in Amazon S3. The processing has been slow. A solutions architect needs to recommend a solution to improve the speed of the data processing.
+      A company is reviewing IAM policies. A specific policy contains the "ec2:TerminateInstances" action. To follow the principle of least privilege, the security team needs to identify what this action allows.
+      What does this action specifically enable?
     options:
-     - text: Use Amazon EMR to run the Hadoop cluster. Use the EMR File System (EMRFS) to access the data in Amazon S3.
-       is_correct: true
-     - text: Migrate the data from S3 to Amazon EBS Provisioned IOPS SSD (io2) volumes.
-       is_correct: false
-     - text: Increase the size of the EC2 instances to the largest available instance type.
-       is_correct: false
-     - text: Enable S3 Transfer Acceleration on the bucket where the data is stored.
-       is_correct: false
+      - text: Deleting Amazon EC2 instances.
+        is_correct: true
+      - text: Stopping an Amazon EC2 instance to save costs.
+        is_correct: false
+      - text: Rebooting an EC2 instance to apply patches.
+        is_correct: false
+      - text: Modifying the instance type of an existing EC2 instance.
+        is_correct: false
     explanation: |
-      Correct: Amazon EMR is a managed cluster platform that simplifies running big data frameworks. EMRFS is optimized for S3 and provides features like consistent view, significantly improving performance over a self-managed Hadoop on EC2.
-      Incorrect: 
-        - Moving petabytes of data from S3 to EBS is cost-prohibitive and lacks the durability and shared accessibility of S3.
-        - Scaling up EC2 instances (Vertical scaling) is expensive and doesn't solve the underlying bottleneck of data transfer and Hadoop management.
-        - S3 Transfer Acceleration speeds up data uploads over long distances; it does not improve the internal processing speed of a Hadoop cluster.
+      Correct: The "ec2:TerminateInstances" permission allows a user to permanently delete an EC2 instance.
+      Incorrect:
+        - Stopping an instance is governed by "ec2:StopInstances".
+        - Rebooting is governed by "ec2:RebootInstances".
+        - Modifying instance types requires "ec2:ModifyInstanceAttribute".
 
   - id: q254
     type: multiple_choice
     question: |
-      A company wants to build a business intelligence (BI) dashboard for its management. The company stores its data in an Amazon S3 bucket. The data is in CSV format. The company needs to query the data from the S3 bucket and use a BI tool to visualize the data.
+      A company is reviewing a recent migration of a three-tier application to a VPC. The security team discovers that the principle of least privilege is not being applied to Amazon EC2 security group ingress and egress rules between the application tiers.
+      What should a solutions architect do to correct this issue?
     options:
-     - text: Use Amazon Athena to query the data. Use Amazon QuickSight to create the dashboard.
-       is_correct: true
-     - text: Use Amazon Redshift Spectrum to query the data. Use AWS Glue to visualize the data.
-       is_correct: false
-     - text: Load the data into an Amazon RDS for MySQL database. Use Amazon CloudWatch to create the dashboard.
-       is_correct: false
-     - text: Use Amazon Kinesis Data Analytics to process the CSV and output to a Lambda-based dashboard.
-       is_correct: false
+      - text: Create security group rules using the security group ID as the source or destination.
+        is_correct: true
+      - text: Use Network ACLs to restrict traffic between subnets based on the specific IP addresses of the instances.
+        is_correct: false
+      - text: Configure all instances to use a single security group that allows all internal VPC traffic.
+        is_correct: false
+      - text: Assign a unique Elastic IP address to each instance and use those IPs in the security group rules.
+        is_correct: false
     explanation: |
-      Correct: Amazon Athena is a serverless query service that makes it easy to analyze data in S3 using standard SQL. Amazon QuickSight is the native AWS BI tool that integrates perfectly with Athena.
-      Incorrect: 
-        - AWS Glue is an ETL service, not a visualization/BI tool.
-        - CloudWatch is for infrastructure metrics, not for business intelligence dashboards based on CSV data.
-        - Kinesis Data Analytics is for streaming data; Athena is much more efficient and cost-effective for one-time or batch queries on static S3 data.
-
-
+      Correct: Referencing a security group ID in a rule allows instances to communicate based on their membership in a group rather than specific IP addresses. This is dynamic and follows the principle of least privilege.
+      Incorrect:
+        - Network ACLs are stateless and harder to manage for individual instance permissions.
+        - A single security group for all tiers violates the principle of least privilege.
+        - Using Elastic IPs for internal communication is inefficient and does not scale with Auto Scaling.
 
   - id: q255
     type: multiple_choice
     question: |
-      A company has a multi-tier web application that runs on Amazon EC2 instances in an Auto Scaling group. The application stores its data in an Amazon RDS for MySQL DB instance. The company wants to improve the performance of the application by reducing the load on the database.
+      A company has an ecommerce checkout workflow that writes an order to a database and calls a service to process the payment. Users are experiencing timeouts during the checkout process. When users resubmit the checkout form, multiple unique orders are created for the same desired transaction.
+      How should a solutions architect refactor this workflow to prevent the creation of multiple orders?
     options:
-     - text: Use Amazon ElastiCache to cache the database queries.
-       is_correct: true
-     - text: Enable Multi-AZ on the RDS DB instance to distribute the read load.
-       is_correct: false
-     - text: Create an Aurora Read Replica and point the application's write traffic to it.
-       is_correct: false
-     - text: Use Amazon S3 to store the database's frequently accessed tables.
-       is_correct: false
+      - text: Store the order in the database. Send a message that includes the order number to an Amazon Simple Queue Service (Amazon SQS) FIFO queue. Set the payment service to retrieve the message and process the order. Delete the message from the queue.
+        is_correct: true
+      - text: Use an Amazon SQS standard queue to trigger a Lambda function that processes payments.
+        is_correct: false
+      - text: Increase the timeout setting on the Application Load Balancer to allow more time for database writes.
+        is_correct: false
+      - text: Configure the application to use a dedicated EC2 instance for each transaction to ensure isolation.
+        is_correct: false
     explanation: |
-      Correct: Amazon ElastiCache (Redis or Memcached) is an in-memory data store that reduces database load by caching the results of frequent, read-heavy queries.
-      Incorrect: 
-        - Multi-AZ is for high availability and disaster recovery; the standby instance does not accept read or write traffic.
-        - Read Replicas are for read traffic; pointing write traffic to a replica is not supported and would not work.
-        - S3 is object storage and cannot be used to store active relational database tables for performance improvement.
+      Correct: SQS FIFO (First-In-First-Out) queues support message deduplication. Using the order number as a deduplication ID ensures that if the same order is sent again due to a retry, it won't be processed twice.
+      Incorrect:
+        - Standard queues do not guarantee exactly-once delivery and might result in duplicate processing.
+        - Increasing ALB timeouts doesn't solve the underlying idempotency issue.
+        - Dedicated instances per transaction is not a scalable or architectural solution for duplicate data entry.
 
   - id: q256
     type: multiple_choice
     question: |
-      A solutions architect is designing the storage for a new application. The application will store millions of small objects in Amazon S3. The objects will be accessed frequently for the first 30 days and then infrequently. The company wants to minimize the cost of storage while maintaining high availability.
+      A solutions architect is implementing a document review application using an Amazon S3 bucket for storage. The solution must prevent accidental deletion of the documents and ensure that all versions of the documents are available. Users must be able to download, modify, and upload documents.
+      Which combination of actions should be taken to meet these requirements? (Choose two.)
     options:
-     - text: Use an S3 Lifecycle policy to move the objects from S3 Standard to S3 Standard-Infrequent Access (S3 Standard-IA) after 30 days.
-       is_correct: true
-     - text: Use S3 Intelligent-Tiering to manage the objects automatically.
-       is_correct: false
-     - text: Store all objects in S3 One Zone-Infrequent Access (S3 One Zone-IA) to save costs.
-       is_correct: false
-     - text: Use S3 Glacier Instant Retrieval for all objects immediately upon upload.
-       is_correct: false
+      - text: Enable versioning on the bucket.
+        is_correct: true
+      - text: Enable MFA Delete on the bucket.
+        is_correct: true
+      - text: Use an S3 Lifecycle policy to move objects to S3 Glacier.
+        is_correct: false
+      - text: Encrypt the objects using AWS KMS.
+        is_correct: false
+      - text: Disable public access using S3 Block Public Access.
+        is_correct: false
     explanation: |
-      Correct: S3 Standard-IA is the most cost-effective tier for data that is infrequently accessed but requires millisecond access when needed. Moving data after 30 days aligns with the requirement.
-      Incorrect: 
-        - S3 Intelligent-Tiering has a monitoring and automation charge per object. For "millions of small objects," this fee can exceed the storage savings.
-        - S3 One Zone-IA does not meet the "high availability" requirement because it stores data in only one AZ.
-        - S3 Glacier Instant Retrieval is more expensive than S3 Standard for the first 30 days of frequent access.
+      Correct: S3 Versioning ensures that every update creates a new version instead of overwriting, allowing recovery from accidental deletes. MFA Delete adds a layer of security by requiring multi-factor authentication to permanently delete a version.
+      Incorrect:
+        - Lifecycle policies to Glacier help with costs but don't prevent deletion.
+        - Encryption provides security at rest but doesn't prevent deletion.
+        - Blocking public access is a security best practice but doesn't address versioning or accidental deletion by authorized users.
 
-  - id: q299
+  - id: q258
     type: multiple_choice
     question: |
-      A company is using a cluster of Amazon EC2 instances to run a high performance computing (HPC) workload. The workload requires low-latency, high-throughput network communication between the instances.
+      A company has an application that places hundreds of .csv files into an Amazon S3 bucket every hour. The files are 1 GB in size. Each time a file is uploaded, the company needs to convert the file to Apache Parquet format and place the output file into an S3 bucket.
+      Which solution will meet these requirements with the LEAST operational overhead?
     options:
-     - text: Use an Elastic Fabric Adapter (EFA) for each EC2 instance in the cluster. Place the instances in a cluster placement group.
-       is_correct: true
-     - text: Use a Transit Gateway to connect the instances across different VPCs.
-       is_correct: false
-     - text: Enable Enhanced Networking using an Elastic Network Adapter (ENA) and use a partition placement group.
-       is_correct: false
-     - text: Use Amazon Route 53 with a latency-based routing policy to direct traffic between instances.
-       is_correct: false
+      - text: Create an AWS Glue extract, transform, and load (ETL) job to convert the .csv files to Parquet format and place the output files into an S3 bucket. Create an AWS Lambda function for each S3 PUT event to invoke the ETL job.
+        is_correct: true
+      - text: Launch an Amazon EMR cluster that runs a continuous Spark job to monitor the S3 bucket for new files.
+        is_correct: false
+      - text: Use a fleet of EC2 instances with a cron job that checks for new files and runs a python script for conversion.
+        is_correct: false
+      - text: Use Amazon S3 Batch Operations to trigger a Lambda function for every upload to perform the conversion.
+        is_correct: false
     explanation: |
-      Correct: EFA is a network interface for Amazon EC2 instances that enables customers to run HPC applications requiring high levels of inter-node communication at scale. A Cluster Placement Group ensures the instances are physically close to minimize latency.
-      Incorrect: 
-        - Transit Gateway adds a hop and increase latency, which is unsuitable for HPC.
-        - Partition placement groups are for distributed workloads like Hadoop/HDFS to prevent correlated failures; they don't minimize latency as well as Cluster groups.
-        - Route 53 is for DNS; it does not improve the physical network performance between EC2 instances.
+      Correct: AWS Glue is a serverless ETL service that handles data format conversion efficiently. Triggering it via Lambda ensures automation with minimal infrastructure management.
+      Incorrect:
+        - EMR clusters require managing servers and are more expensive for intermittent tasks.
+        - EC2 fleets require high operational overhead for maintenance, scaling, and monitoring.
+        - S3 Batch Operations is typically for bulk actions on existing objects, while S3 Event Notifications (via Lambda) are better for real-time triggers on new uploads.
 
-
-
-  - id: q300
+  - id: q259
     type: multiple_choice
     question: |
-      A company needs to migrate a legacy application from an on-premises data center to the AWS Cloud because of hardware capacity constraints. The application runs 24 hours a day, 7 days a week. The application’s database storage continues to grow over time.
+      A company is implementing new data retention policies for all databases that run on Amazon RDS DB instances. The company must retain daily backups for a minimum period of 2 years. The backups must be consistent and restorable.
+      Which solution should a solutions architect recommend to meet these requirements?
     options:
-     - text: Migrate the application layer to Amazon EC2 Reserved Instances. Migrate the data storage layer to Amazon Aurora Reserved Instances.
-       is_correct: true
-     - text: Use On-Demand EC2 instances for the application and RDS for MySQL with magnetic storage.
-       is_correct: false
-     - text: Migrate to AWS Lambda to handle the application logic and use DynamoDB with Provisioned Capacity.
-       is_correct: false
-     - text: Use Amazon Lightsail to host both the application and the database to simplify management.
-       is_correct: false
+      - text: Create a backup vault in AWS Backup to retain RDS backups. Create a new backup plan with a daily schedule and an expiration period of 2 years after creation. Assign the RDS DB instances to the backup plan.
+        is_correct: true
+      - text: Use RDS automated backups and set the retention period to 730 days.
+        is_correct: false
+      - text: Export the RDS snapshots to Amazon S3 and set an S3 Lifecycle policy to delete objects after 2 years.
+        is_correct: false
+      - text: Create a cron job on an EC2 instance that takes a snapshot of the RDS instances daily.
+        is_correct: false
     explanation: |
-      Correct: Since the application runs 24/7, Reserved Instances (RI) provide significant cost savings (up to 72%) over On-Demand. Aurora is ideal for growing databases as it automatically scales storage up to 128TB.
-      Incorrect: 
-        - On-Demand instances are the most expensive way to run a 24/7 workload. Magnetic storage is legacy and has very poor performance.
-        - Lambda is better for intermittent or event-driven workloads; for a legacy app running 24/7, refactoring to serverless might be too complex and not necessarily cheaper.
-        - Lightsail is for simple, small-scale applications and does not offer the scaling or enterprise features of EC2 and Aurora for a growing database.
+      Correct: AWS Backup is a centralized service specifically designed to manage cross-service backups and long-term retention policies (up to many years).
+      Incorrect:
+        - RDS automated backups have a maximum retention period of 35 days.
+        - Exporting to S3 is manual/complex and doesn't provide the native "restorable" ease of AWS Backup.
+        - Manual cron jobs on EC2 increase operational overhead and are less reliable than managed services.
+
+  - id: q260
+    type: multiple_choice
+    question: |
+      A companyï¿½s compliance team needs to move its file shares to AWS. The shares run on a Windows Server SMB file share. A self-managed on-premises Active Directory controls access to the files and folders. The company wants to use Amazon FSx for Windows File Server. The company must ensure that the on-premises AD groups restrict access after the move.
+      Which solution will meet these requirements?
+    options:
+      - text: Join the FSx file system to the on-premises Active Directory to restrict access.
+        is_correct: true
+      - text: Use IAM roles to replicate the permissions found in the Active Directory.
+        is_correct: false
+      - text: Migrate the Active Directory to AWS Managed Microsoft AD and manually recreate all groups.
+        is_correct: false
+      - text: Use Amazon S3 with File Gateway and map AD groups to IAM policies.
+        is_correct: false
+    explanation: |
+      Correct: Amazon FSx for Windows File Server supports integration with self-managed Microsoft Active Directory, allowing the use of existing security groups and ACLs.
+      Incorrect:
+        - IAM roles do not provide the granular file-level NTFS permissions required by SMB shares.
+        - Recreating groups manually is high overhead and unnecessary if the file system can join the existing AD.
+        - S3 File Gateway does not support full NTFS permission parity as natively as FSx for Windows.
+
+  - id: q261
+    type: multiple_choice
+    question: |
+      A company wants to provide its customers with different versions of content based on the devices that the customers use to access the website (retail website on EC2/ALB).
+      Which combination of actions should a solutions architect take to meet these requirements? (Choose two.)
+    options:
+      - text: Configure Amazon CloudFront to cache multiple versions of the content.
+        is_correct: true
+      - text: Configure a Lambda@Edge function to send specific objects to users based on the User-Agent header.
+        is_correct: true
+      - text: Use Route 53 Geolocation routing to point to different ALBs.
+        is_correct: false
+      - text: Create multiple S3 buckets for each device type and use a WAF rule to redirect.
+        is_correct: false
+      - text: Use an Application Load Balancer rule to redirect traffic based on the device's MAC address.
+        is_correct: false
+    explanation: |
+      Correct: Lambda@Edge can inspect headers (like User-Agent) at the edge and change the request/response. CloudFront must be configured to cache based on these headers to serve the correct version.
+      Incorrect:
+        - Geolocation routing is based on the user's location, not their device type.
+        - Redirection via WAF or multiple buckets is more complex than edge processing with Lambda@Edge.
+        - MAC addresses are not transmitted in HTTP headers.
+
+  - id: q262
+    type: multiple_choice
+    question: |
+      A solutions architect needs to provide EC2 instances in an App VPC access to an ElastiCache cluster in a Cache VPC. Both VPCs are in the us-east-1 Region.
+      Which solution will meet these requirements MOST cost-effectively?
+    options:
+      - text: Create a peering connection between the VPCs. Add a route table entry for the peering connection in both VPCs. Configure an inbound rule for the ElastiCache clusterï¿½s security group to allow inbound connection from the applicationï¿½s security groups.
+        is_correct: true
+      - text: Set up a Transit Gateway to connect both VPCs and route traffic through it.
+        is_correct: false
+      - text: Use a NAT Gateway in the App VPC and a Client VPN in the Cache VPC.
+        is_correct: false
+      - text: Move the ElastiCache cluster to the App VPC to avoid cross-VPC charges.
+        is_correct: false
+    explanation: |
+      Correct: VPC Peering is the most cost-effective way to connect VPCs in the same region, as there are no hourly charges for the connection itself (unlike Transit Gateway).
+      Incorrect:
+        - Transit Gateway has an hourly cost per attachment, making it more expensive than peering for a simple two-VPC setup.
+        - VPN and NAT Gateway solutions introduce unnecessary latency and higher costs.
+        - Moving the cluster might not be feasible if the architecture requires separation of concerns or separate management accounts.
+
+  - id: q263
+    type: multiple_choice
+    question: |
+      A company needs a container solution that minimizes the amount of ongoing effort for maintenance and scaling. The company cannot manage additional infrastructure.
+      Which combination of actions should a solutions architect take to meet these requirements? (Choose two.)
+    options:
+      - text: Deploy an Amazon Elastic Container Service (Amazon ECS) cluster.
+        is_correct: true
+      - text: Deploy an Amazon Elastic Container Service (Amazon ECS) service with a Fargate launch type.
+        is_correct: true
+      - text: Provision Amazon EC2 instances with the Amazon ECS-optimized AMI.
+        is_correct: false
+      - text: Use Kubernetes on EC2 to manage the containers.
+        is_correct: false
+      - text: Install the Docker engine on a fleet of EC2 instances.
+        is_correct: false
+    explanation: |
+      Correct: AWS Fargate is the serverless compute engine for ECS. Using ECS with Fargate removes the need to manage, patch, or scale the underlying EC2 instances.
+      Incorrect:
+        - Provisioning EC2 instances (even ECS-optimized ones) requires infrastructure management.
+        - Kubernetes on EC2 or manual Docker installations require significant maintenance and infrastructure management.
+
+  - id: q264
+    type: multiple_choice
+    question: |
+      A company experiences timeout errors because Route 53 DNS queries return IP addresses of unhealthy EC2 instances.
+      What should a solutions architect implement to overcome these timeout errors?
+    options:
+      - text: Create an Application Load Balancer (ALB) with a health check in front of the EC2 instances. Route to the ALB from Route 53.
+        is_correct: true
+      - text: Set the TTL of the Route 53 records to 0 to ensure updates are immediate.
+        is_correct: false
+      - text: Implement a CloudFront distribution and set the EC2 instances as multiple origins.
+        is_correct: false
+      - text: Configure Route 53 with a latency-based routing policy to the instances.
+        is_correct: false
+    explanation: |
+      Correct: An ALB performs health checks and automatically stops sending traffic to unhealthy instances. Route 53 then points to the ALB, ensuring the client only reaches the load balancer, which manages the backend health.
+      Incorrect:
+        - TTL 0 reduces caching but doesn't stop Route 53 from returning unhealthy direct IP addresses unless health checks are also configured in Route 53.
+        - CloudFront origin failover is more complex and not as efficient as an ALB for simple instance health management.
+        - Latency-based routing doesn't solve the health issue; it only directs traffic to the "closest" instance, healthy or not.
+
+  - id: q265
+    type: multiple_choice
+    question: |
+      A solutions architect needs to design a highly available application (web, app, DB). HTTPS content delivery should be as close to the edge as possible, with the least delivery time.
+      Which solution meets these requirements and is MOST secure?
+    options:
+      - text: Configure a public Application Load Balancer (ALB) with multiple redundant Amazon EC2 instances in private subnets. Configure Amazon CloudFront to deliver HTTPS content using the public ALB as the origin.
+        is_correct: true
+      - text: Place the EC2 instances in a public subnet. Use Route 53 with Geolocation routing to point directly to the instances.
+        is_correct: false
+      - text: Use an Amazon S3 bucket to host the entire application and use CloudFront for delivery.
+        is_correct: false
+      - text: Use a Network Load Balancer (NLB) with an AWS Global Accelerator.
+        is_correct: false
+    explanation: |
+      Correct: CloudFront provides edge delivery (lowest latency). Using an ALB as the origin for EC2 instances in private subnets ensures the backend is secure while being highly available.
+      Incorrect:
+        - Public subnets for application instances are less secure.
+        - S3 can only host static websites; it cannot host the "application and database tiers" mentioned.
+        - NLB/Global Accelerator is good for TCP/UDP, but for HTTPS content delivery and edge caching, CloudFront is the standard and more feature-rich solution.
+
+  - id: q266
+    type: multiple_choice
+    question: |
+      A popular gaming platform is sensitive to latency. It runs on EC2/ALB in every Region. A solutions architect needs to monitor health and redirect traffic to healthy endpoints globally.
+      Which solution meets these requirements?
+    options:
+      - text: Configure an accelerator in AWS Global Accelerator. Add a listener for the application port and attach it to a Regional endpoint in each Region. Add the ALB as the endpoint.
+        is_correct: true
+      - text: Use Route 53 with a Multivalue Answer routing policy and health checks for each ALB.
+        is_correct: false
+      - text: Deploy a CloudFront distribution with a custom origin group for failover between Regions.
+        is_correct: false
+      - text: Use an Amazon SQS queue to buffer requests and a Lambda function to process them in the healthiest Region.
+        is_correct: false
+    explanation: |
+      Correct: AWS Global Accelerator uses the AWS global network to reduce latency and provides instant failover between Regions by monitoring the health of endpoints like ALBs.
+      Incorrect:
+        - Route 53 Multivalue routing is for DNS-level load balancing, but failover depends on DNS TTL and is not as fast as Global Accelerator.
+        - CloudFront is primarily for content delivery (caching); while it can do origin failover, Global Accelerator is specifically optimized for low-latency network performance for applications.
+        - SQS/Lambda introduces significant latency, which is unacceptable for a gaming platform.
+
+  - id: q267
+    type: multiple_choice
+    question: |
+      A company must analyze data usage from a mobile app in near-real time, encrypt it, and store it in Apache Parquet format in a centralized location.
+      Which solution will meet these requirements with the LEAST operational overhead?
+    options:
+      - text: Create an Amazon Kinesis Data Firehose delivery stream to store the data in Amazon S3. Create an Amazon Kinesis Data Analytics application to analyze the data.
+        is_correct: true
+      - text: Use an EC2 fleet to process the data stream and write it to EMR for Parquet conversion.
+        is_correct: false
+      - text: Use Amazon SQS to collect data and a Lambda function to convert it to Parquet and save to S3.
+        is_correct: false
+      - text: Send data to an RDS database and use an ETL job to move it to S3 in Parquet format.
+        is_correct: false
+    explanation: |
+      Correct: Kinesis Data Firehose can natively convert data to Parquet format before delivering it to S3. Kinesis Data Analytics provides the near-real-time analysis capability with minimal management.
+      Incorrect:
+        - EC2/EMR involves high operational overhead.
+        - SQS/Lambda is possible but requires manual coding for Parquet conversion and lacks the built-in streaming analysis of Kinesis.
+        - RDS is not suitable for high-volume streaming data ingestion and near-real-time analysis compared to Kinesis.
+
+  - id: q268
+    type: multiple_choice
+    question: |
+      A gaming company stores scores in Amazon RDS for MySQL. Users experience delays due to database read performance. The company wants to improve performance while minimizing architectural changes.
+      What should a solutions architect do to meet these requirements?
+    options:
+      - text: Use RDS Proxy between the application and the database.
+        is_correct: true
+      - text: Migrate the database to Amazon DynamoDB.
+        is_correct: false
+      - text: Implement an Amazon ElastiCache for Redis cluster in front of the database.
+        is_correct: false
+      - text: Increase the RDS instance size to a larger instance type.
+        is_correct: false
+    explanation: |
+      Correct: RDS Proxy pools and shares established database connections, which improves scalability and can reduce the overhead on the database for applications that frequently open/close connections.
+      Incorrect:
+        - Migrating to DynamoDB is a massive architectural change.
+        - ElastiCache requires significant application code changes to handle cache logic.
+        - Increasing instance size (Vertical Scaling) is a temporary fix and often less cost-effective than using a proxy or replicas.
+
+  - id: q269
+    type: multiple_choice
+    question: |
+      Performance degradation of an RDS-based web application is attributed to an increase in read-only SQL queries from business analysts.
+      What should the solutions architect recommend with minimal changes?
+    options:
+      - text: Create a read replica of the primary database and have the business analysts run their queries.
+        is_correct: true
+      - text: Implement Amazon ElastiCache to cache the results of the analysts' queries.
+        is_correct: false
+      - text: Enable Multi-AZ deployment for the RDS instance to handle the extra load.
+        is_correct: false
+      - text: Use Amazon Athena to query the RDS database directly.
+        is_correct: false
+    explanation: |
+      Correct: Read replicas are designed specifically to offload read-only workloads from the primary DB instance with minimal configuration.
+      Incorrect:
+        - ElastiCache requires code changes to integrate.
+        - Multi-AZ is for high availability and failover; the standby instance cannot be used for read/write traffic.
+        - Athena queries data in S3, not RDS instances directly (unless using Federated Query, which is more complex than a replica).
+
+  - id: q270
+    type: multiple_choice
+    question: |
+      A company needs to ensure that data is encrypted at rest before being uploaded to S3 buckets, and data must also be encrypted in transit.
+      Which solution meets these requirements?
+    options:
+      - text: Use client-side encryption to encrypt the data that is being uploaded to the S3 buckets.
+        is_correct: true
+      - text: Enable Server-Side Encryption (SSE-S3) on the bucket and use HTTPS.
+        is_correct: false
+      - text: Use an S3 Bucket Policy to deny any non-encrypted uploads.
+        is_correct: false
+      - text: Use AWS KMS with Server-Side Encryption (SSE-KMS).
+        is_correct: false
+    explanation: |
+      Correct: Client-side encryption ensures the data is encrypted *before* it leaves the client's environment (at rest before upload). Standard S3 interactions over HTTPS handle the transit encryption.
+      Incorrect:
+        - SSE-S3 and SSE-KMS encrypt the data *after* it reaches the S3 service, not before it is uploaded.
+        - Bucket policies can enforce encryption but don't perform the encryption themselves.
+
+  - id: q271
+    type: multiple_choice
+    question: |
+      A nightly batch job at 1 AM needs to reach EC2 capacity quickly. The job lasts 1 hour and peak capacity is the same every night.
+      What should the solutions architect do to meet these requirements cost-effectively?
+    options:
+      - text: Configure scheduled scaling to scale up to the desired compute level.
+        is_correct: true
+      - text: Use a dynamic scaling policy based on CPU utilization.
+        is_correct: false
+      - text: Purchase Reserved Instances to cover the peak capacity for that hour.
+        is_correct: false
+      - text: Use an SQS queue to trigger scaling based on the number of messages.
+        is_correct: false
+    explanation: |
+      Correct: Scheduled scaling is perfect for predictable workloads. It allows the ASG to start launching instances before the work begins so that capacity is ready exactly at 1 AM.
+      Incorrect:
+        - Dynamic scaling is reactive; there is a lag while waiting for metrics to trigger, meaning the first part of the job might run on insufficient capacity.
+        - Reserved Instances are for continuous usage (24/7); they aren't a scaling mechanism.
+        - SQS-based scaling is also reactive and wouldn't be as fast as pre-scheduling for a known start time.
+
+  - id: q272
+    type: multiple_choice
+    question: |
+      A website in us-west-1 has high latency for global users. The company needs to support multiple languages and serve requests efficiently without recreating the architecture in other regions.
+      What should a solutions architect do?
+    options:
+      - text: Configure an Amazon CloudFront distribution with the ALB as the origin. Set the cache behavior settings to cache based on the Accept-Language request header.
+        is_correct: true
+      - text: Use Route 53 Geoproximity routing to direct users to the us-west-1 Region.
+        is_correct: false
+      - text: Create a secondary ALB in us-east-1 and use VPC Peering.
+        is_correct: false
+      - text: Use AWS Global Accelerator to provide a static IP and route traffic to the ALB.
+        is_correct: false
+    explanation: |
+      Correct: CloudFront caches content at edge locations worldwide, reducing latency. Caching based on "Accept-Language" ensures that users get the correct language version from the cache.
+      Incorrect:
+        - Route 53 Geoproximity routing doesn't reduce latency if the actual content is still served only from us-west-1.
+        - Recreating an ALB in another region violates the "don't want to recreate architecture" requirement.
+        - Global Accelerator improves network routing but doesn't provide edge caching, which is better for web content.
+
+  - id: q273
+    type: multiple_choice
+    question: |
+      A company needs a DR strategy in a different region. The database must be up to date with least latency. Remaining infrastructure should run at reduced capacity but scale up if needed.
+      Which solution will meet these requirements with the LOWEST recovery time objective (RTO)?
+    options:
+      - text: Use an Amazon Aurora global database with a warm standby deployment.
+        is_correct: true
+      - text: Backup the database to S3 and use a Pilot Light strategy.
+        is_correct: false
+      - text: Create a Multi-AZ deployment across two different Regions.
+        is_correct: false
+      - text: Use AWS DataSync to replicate the database files every hour.
+        is_correct: false
+    explanation: |
+      Correct: Aurora Global Databases provide fast replication (latency < 1s) to a secondary region. A "Warm Standby" means instances are already running (at reduced capacity), allowing for a very low RTO.
+      Incorrect:
+        - Pilot Light has a higher RTO because you must start the database instances and scale them.
+        - Multi-AZ is a high-availability feature within a single region (standard RDS) or across regions (Aurora), but the terminology "Aurora Global" is the specific feature for cross-region.
+        - DataSync is not suitable for live database replication.
+
+  - id: q274
+    type: multiple_choice
+    question: |
+      A company needs a DR solution with an RTO of less than 4 hours using the fewest resources during normal operations.
+      Which solution will meet these requirements in the MOST operationally efficient way?
+    options:
+      - text: Create Amazon Machine Images (AMIs) to back up the EC2 instances. Copy the AMIs to a secondary AWS Region. Automate infrastructure deployment in the secondary Region by using AWS CloudFormation.
+        is_correct: true
+      - text: Run a small "Pilot Light" version of the application in the secondary region at all times.
+        is_correct: false
+      - text: Use AWS Direct Connect to sync data between the two regions in real-time.
+        is_correct: false
+      - text: Set up a site-to-site VPN and manually launch instances from snapshots during a disaster.
+        is_correct: false
+    explanation: |
+      Correct: This is a "Backup and Restore" strategy. It uses the fewest resources (only storage for AMIs) and CloudFormation ensures the recovery is fast enough to stay under the 4-hour RTO.
+      Incorrect:
+        - Pilot Light uses more resources because some infrastructure (like databases) is always running.
+        - Direct Connect is a networking service, not a DR backup strategy.
+        - Manual launching is prone to error and less operationally efficient than CloudFormation automation.
+
+  - id: q275
+    type: multiple_choice
+    question: |
+      An application scales up to 20 instances during work hours but is slow when the day begins because it takes time to scale.
+      How should the scaling be changed to address staff complaints and keep costs to a minimum?
+    options:
+      - text: Use scheduled scaling to increase the minimum and desired capacity of the Auto Scaling group before work hours begin.
+        is_correct: true
+      - text: Implement a target tracking action triggered at a lower CPU threshold, and decrease the cooldown period.
+        is_correct: false
+      - text: Change the instance type to one with more CPU and memory to handle the morning rush.
+        is_correct: false
+      - text: Disable the scale-down policy so that 20 instances run 24/7.
+        is_correct: false
+    explanation: |
+      Correct: Scheduled scaling allows the system to proactively scale up *before* the staff arrives, eliminating the delay caused by reactive scaling policies.
+      Incorrect:
+        - Target tracking is reactive; it still requires the CPU to spike before launching new instances, which causes the initial slowness.
+        - Changing instance types might increase costs unnecessarily without solving the capacity timing issue.
+        - Keeping 20 instances running 24/7 is not cost-effective.
