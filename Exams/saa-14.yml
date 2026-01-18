@@ -1,99 +1,611 @@
 questions:
-  - id: q651
-    type: multiple_choice
-    question: |
-      A company is designing a storage solution for a large volume of media files. The files are accessed frequently for the first 180 days. After that, they are accessed once or twice a year for auditing, but must be available instantly if requested. After 5 years, the files are only needed for long-term compliance and can have a retrieval time of several hours.
-    options:
-     - text: Transition the objects to S3 Standard-Infrequent Access (S3 Standard-IA) after 180 days, S3 Glacier Instant Retrieval after 360 days, and S3 Glacier Deep Archive after 5 years.
-       is_correct: true
-     - text: Transition the objects to S3 One Zone-IA after 180 days, S3 Glacier Flexible Retrieval after 360 days, and S3 Glacier Deep Archive after 5 years.
-       is_correct: false
-     - text: Use S3 Intelligent-Tiering to manage all transitions automatically over the 5-year period.
-       is_correct: false
-     - text: Transition the objects to S3 Standard-IA after 180 days and then directly to S3 Glacier Flexible Retrieval after 360 days.
-       is_correct: false
-    explanation: |
-      Correct: S3 Standard-IA provides high durability for infrequent access. S3 Glacier Instant Retrieval is the only archive tier that offers "instant" (millisecond) access for auditing needs. S3 Glacier Deep Archive is the most cost-effective tier for long-term compliance where hours of retrieval time are acceptable.
-      Incorrect: 
-        - S3 One Zone-IA lacks the multi-AZ durability typically required for "core company assets."
-        - S3 Glacier Flexible Retrieval takes minutes to hours to retrieve data, violating the "instant availability" requirement for audits.
-        - Intelligent-Tiering is effective but might not be as cost-optimized as a specific lifecycle policy for a known 5-year retention pattern.
+- id: q651
+  type: multiple_choice
+  question: |
+    A company needs an S3 storage strategy: 
+    - 0-180 days: Readily available.
+    - 180-360 days: Infrequently accessed.
+    - 360+ days: Archived but must be available INSTANTLY.
+    - 5+ years: Audits only (12-hour retrieval ok).
+    Which solution meets this?
+  options:
+    - text: S3 Standard -> S3 One Zone-IA -> S3 Glacier Instant Retrieval -> S3 Glacier Deep Archive.
+      is_correct: false
+    - text: S3 Standard -> S3 Standard-IA -> S3 Glacier Flexible Retrieval -> S3 Glacier Deep Archive.
+      is_correct: false
+    - text: S3 Standard -> S3 Standard-IA -> S3 Glacier Instant Retrieval -> S3 Glacier Deep Archive.
+      is_correct: true
+    - text: S3 Standard -> S3 Intelligent-Tiering -> S3 Glacier Deep Archive.
+      is_correct: false
+  explanation: |
+    Correct: S3 Standard-IA provides high durability across multiple AZs for the first transition. S3 Glacier Instant Retrieval is the ONLY archive tier that provides "instant" (millisecond) access. S3 Glacier Deep Archive is the cheapest tier for the final 5-year audit requirement where 12-hour retrieval is acceptable.
+    Incorrect: One Zone-IA lacks durability. Glacier Flexible Retrieval takes minutes to hours, failing the "instant" requirement.
 
-  - id: q652
-    type: multiple_choice
-    question: |
-      A data analytics company runs a daily 6-hour Apache Spark job on Amazon EMR. The workload is fault-tolerant and the company wants to minimize costs as much as possible while ensuring the job finishes within the 6-hour window.
-    options:
-     - text: Configure a transient cluster with primary and core nodes on On-Demand Instances and task nodes on Spot Instances.
-       is_correct: true
-     - text: Use a long-running cluster with all nodes on Reserved Instances to ensure 100% availability.
-       is_correct: false
-     - text: Run the entire cluster (primary, core, and task nodes) on Spot Instances to maximize savings.
-       is_correct: false
-     - text: Use a transient cluster with core nodes on Spot Instances and task nodes on On-Demand Instances.
-       is_correct: false
-    explanation: |
-      Correct: For a fault-tolerant Spark job, using a transient cluster (which shuts down after the job) is cost-effective. Placing the primary/core nodes on On-Demand ensures the cluster's stability (HDFS and cluster management), while Spot Instances for task nodes provide the 90% discount needed for the heavy lifting.
-      Incorrect: 
-        - Long-running clusters with Reserved Instances are more expensive for a job that only runs for 6 hours a day.
-        - Running primary nodes on Spot is risky; if the primary node is reclaimed, the entire cluster fails.
 
-  - id: q682
-    type: multiple_choice
-    question: |
-      A company must ensure that all Amazon EBS volumes in its AWS account are encrypted using a specific customer managed key (CMK). If a volume is found to be unencrypted or using the wrong key, it must be automatically identified and flagged for remediation.
-    options:
-     - text: Use AWS Config to detect noncompliant volumes and use AWS Systems Manager Automation to remediate or notify the team.
-       is_correct: true
-     - text: Enable Amazon GuardDuty to monitor EBS encryption events and trigger an AWS Lambda function to encrypt the volumes.
-       is_correct: false
-     - text: Use Amazon Macie to scan EBS volumes for encryption status and data classification.
-       is_correct: false
-     - text: Create an IAM policy that denies the 'ec2:CreateVolume' action unless the 'Encrypted' parameter is set to true.
-       is_correct: false
-    explanation: |
-      Correct: AWS Config is the standard service for auditing resource configurations. Combined with Systems Manager, it can automatically remediate non-compliant resources.
-      Incorrect: 
-        - GuardDuty is for threat detection (malicious activity), not configuration auditing.
-        - Macie is for discovering sensitive data (PII) within S3, not for managing EBS disk encryption.
-        - IAM policies can prevent future mistakes but cannot "identify and flag" existing non-compliant volumes.
 
-  - id: q683
-    type: multiple_choice
-    question: |
-      A company is migrating a legacy PHP application to AWS. The application currently runs on a single server with a local MySQL database. The company requires high availability and minimal manual intervention during scaling.
-    options:
-     - text: Migrate the web tier to an Application Load Balancer with an Auto Scaling group; migrate the database to Amazon RDS in a Multi-AZ deployment.
-       is_correct: true
-     - text: Re-host the application on a single large EC2 instance with an EBS Provisioned IOPS volume for the database.
-       is_correct: false
-     - text: Use AWS Lambda for the PHP application and Amazon DynamoDB for the data layer.
-       is_correct: false
-     - text: Deploy the application on Amazon LightSail with a managed database add-on.
-       is_correct: false
-    explanation: |
-      Correct: This follows the standard "High Availability" blueprint. ALB + Auto Scaling handles the web tier, while RDS Multi-AZ ensures the database can fail over automatically.
-      Incorrect: 
-        - A single large instance remains a single point of failure.
-        - Moving to Lambda and DynamoDB requires a complete code refactor, which contradicts a standard "migration" of a legacy PHP/MySQL app.
-        - LightSail is designed for simpler projects and lacks the enterprise scaling features of an ALB/ASG setup.
+- id: q652
+  type: multiple_choice
+  question: |
+    A company has a critical data workload running 6 hours daily on Amazon EMR. Data loss is not allowed. 
+    Which EMR configuration is most cost-effective?
+  options:
+    - text: Persistent cluster with all On-Demand Instances.
+      is_correct: false
+    - text: Transient cluster with primary/core nodes on On-Demand and task nodes on Spot Instances.
+      is_correct: true
+    - text: Transient cluster with all Spot Instances.
+      is_correct: false
+    - text: Persistent cluster using Reserved Instances.
+      is_correct: false
+  explanation: |
+    Correct: A "Transient" cluster shuts down after the job, saving money. Keeping Primary and Core nodes on On-Demand ensures the cluster doesn't fail (data integrity), while using Spot Instances for "Task" nodes (which don't store HDFS data) provides significant savings.
 
-  - id: q684
-    type: multiple_choice
-    question: |
-      A company located near the eu-central-1 Region wants to migrate its web applications to AWS. Due to strict data residency regulations, specific applications cannot be launched directly in eu-central-1, but they still require single-digit millisecond latency for local users.
-    options:
-     - text: Deploy the applications in AWS Local Zones by extending the company's VPC from eu-central-1 to the chosen Local Zone.
-       is_correct: true
-     - text: Use Amazon CloudFront with Lambda@Edge to process requests at the edge locations.
-       is_correct: false
-     - text: Deploy the applications in AWS Wavelength Zones to leverage 5G network speeds.
-       is_correct: false
-     - text: Create a VPC peering connection between eu-central-1 and another nearby region like eu-west-1.
-       is_correct: false
-    explanation: |
-      Correct: AWS Local Zones place compute and storage closer to specific geographic areas. They allow you to satisfy residency requirements while maintaining ultra-low (single-digit millisecond) latency.
-      Incorrect: 
-        - Lambda@Edge is for compute at the edge, but it doesn't provide a full application environment or persistent database storage for residency.
-        - Wavelength Zones are specifically for 5G mobile applications, not general web application residency.
-        - Multi-region peering does not solve the residency requirement if the data must stay near the company's specific local jurisdiction.
+- id: q653
+  type: multiple_choice
+  question: |
+    A company needs to automatically tag all resources in a specific account with a "Cost Center ID" based on an RDS database mapping of the user who created them.
+    Which solution meets this?
+  options:
+    - text: Use a Service Control Policy (SCP) to deny resource creation without tags.
+      is_correct: false
+    - text: Create a Lambda function triggered by EventBridge (via CloudTrail) to tag resources based on the RDS DB.
+      is_correct: true
+    - text: Use AWS Config rules to flag untagged resources.
+      is_correct: false
+    - text: Create an IAM policy that forces tagging.
+      is_correct: false
+  explanation: |
+    Correct: This is a classic automation pattern. CloudTrail captures the "Create" event, EventBridge triggers Lambda, and Lambda lookups the Cost Center in RDS and applies the tag to the resource ARN.
+
+- id: q654
+  type: multiple_choice
+  question: |
+    A PHP app uses Apache for static content and local Redis for sessions. 
+    How should the company redesign for high availability and managed services?
+  options:
+    - text: Use Elastic Beanstalk for the entire stack.
+      is_correct: false
+    - text: Migrate to Lambda and DynamoDB.
+      is_correct: false
+    - text: Use CloudFront + S3 for static content, ALB + ECS Fargate for PHP, and Multi-AZ ElastiCache for Redis.
+      is_correct: true
+    - text: Run everything on EC2 with a Load Balancer.
+      is_correct: false
+  explanation: |
+    Correct: This decouples the layers. S3/CloudFront handles static assets cheaply. ECS Fargate provides managed container orchestration for PHP. ElastiCache for Redis provides a managed, highly available session store.
+
+
+
+- id: q655
+  type: multiple_choice
+  question: |
+    A web app needs sticky sessions, public access, and WAF security. 
+    Which TWO steps meet these requirements? (Choose two.)
+  options:
+    - text: Create a Network Load Balancer (NLB).
+      is_correct: false
+    - text: Create a public Application Load Balancer (ALB).
+      is_correct: true
+    - text: Associate a WAF web ACL with the ALB.
+      is_correct: true
+    - text: Assign Elastic IP addresses to the EC2 instances.
+      is_correct: false
+    - text: Enable sticky sessions on the EC2 instances.
+      is_correct: false
+  explanation: |
+    Correct: ALBs natively support HTTP sticky sessions and integrate directly with AWS WAF. NLBs do not support WAF or standard HTTP cookie-based stickiness.
+
+- id: q656
+  type: multiple_choice
+  question: |
+    Historical images are accessed once or twice a year. The company needs a highly available, cost-effective storage/delivery solution.
+    Which solution is best?
+  options:
+    - text: Use Amazon EBS volumes attached to EC2.
+      is_correct: false
+    - text: Use Amazon EFS.
+      is_correct: false
+    - text: Store images in S3 Standard.
+      is_correct: false
+    - text: Store images in S3 Standard-IA and deliver via a static website.
+      is_correct: true
+  explanation: |
+    Correct: S3 Standard-Infrequent Access (IA) has a lower storage price, perfect for images accessed only twice a year. Delivering via "Static Website Hosting" removes the need for expensive compute (EC2).
+
+- id: q657
+  type: multiple_choice
+  question: |
+    A company needs to centralize management of security group CIDR ranges (office IPs) across multiple accounts.
+    Which solution is most efficient?
+  options:
+    - text: Use a Service Control Policy.
+      is_correct: false
+    - text: Create a managed prefix list and share it via AWS Resource Access Manager (RAM).
+      is_correct: true
+    - text: Manually update security groups in every account.
+      is_correct: false
+    - text: Use AWS Firewall Manager.
+      is_correct: false
+  explanation: |
+    Correct: Managed Prefix Lists allow you to group multiple CIDR blocks into a single object. By sharing this object via RAM, you can reference it in Security Groups in any account. When the list is updated once, all security groups are updated automatically.
+
+- id: q658
+  type: multiple_choice
+  question: |
+    An HPC workload requires NFS and SMB multi-protocol access with the LEAST latency. 
+    Which TWO steps should be taken? (Choose two.)
+  options:
+    - text: Use a cluster placement group for EC2 instances.
+      is_correct: true
+    - text: Use FSx for Lustre.
+      is_correct: false
+    - text: Use FSx for Windows File Server.
+      is_correct: false
+    - text: Use Amazon S3 with S3 File Gateway.
+      is_correct: false
+    - text: Use Amazon FSx for NetApp ONTAP.
+      is_correct: true
+  explanation: |
+    Correct: Cluster placement groups provide the lowest possible network latency between instances. FSx for ONTAP is the only managed service that supports both NFS and SMB protocols simultaneously on the same file system.
+
+- id: q659
+  type: multiple_choice
+  question: |
+    50 TB of data must be moved to AWS in 2 weeks. The VPN is 90% utilized. 
+    Which service should be used?
+  options:
+    - text: AWS DataSync.
+      is_correct: false
+    - text: AWS Direct Connect.
+      is_correct: false
+    - text: AWS Snowball Edge Storage Optimized.
+      is_correct: true
+    - text: S3 Transfer Acceleration.
+      is_correct: false
+  explanation: |
+    Correct: 50 TB over a nearly saturated VPN would take too long and impact production. Snowball Edge is a physical device that allows offline transfer of large data volumes within the 2-week window.
+
+- id: q660
+  type: multiple_choice
+  question: |
+    Application performance is slow exactly at the start of peak hours every day because scaling takes time. 
+    Which solution is best?
+  options:
+    - text: Use Target Tracking scaling.
+      is_correct: false
+    - text: Use Step Scaling.
+      is_correct: false
+    - text: Use Predictive Scaling.
+      is_correct: false
+    - text: Configure Scheduled Scaling to launch instances before peak hours.
+      is_correct: true
+  explanation: |
+    Correct: Since peak hours occur at the same time every day, "Scheduled Scaling" allows you to pre-provision capacity so it's ready before the rush begins, avoiding the "warm-up" delay.
+
+- id: q661
+  type: multiple_choice
+  question: |
+    A company needs to scale database connections effectively during peak times with LEAST operational overhead.
+    Which solution is best?
+  options:
+    - text: Migrate to DynamoDB.
+      is_correct: false
+    - text: Use Amazon RDS Proxy.
+      is_correct: true
+    - text: Increase the RDS instance size.
+      is_correct: false
+    - text: Use an ElastiCache cluster.
+      is_correct: false
+  explanation: |
+    Correct: RDS Proxy handles connection pooling, allowing many application connections to share a small number of database connections. This prevents "Too Many Connections" errors during traffic spikes.
+
+
+
+- id: q662
+  type: multiple_choice
+  question: |
+    EBS snapshot costs are increasing every month. The company wants to optimize costs with LEAST overhead. 
+    Which solution is best?
+  options:
+    - text: Manually delete snapshots every month.
+      is_correct: false
+    - text: Use S3 Lifecycle policies.
+      is_correct: false
+    - text: Use AWS Backup.
+      is_correct: false
+    - text: Use Amazon Data Lifecycle Manager (DLM) to manage snapshots.
+      is_correct: true
+  explanation: |
+    Correct: DLM allows you to create policies (e.g., "Keep only the last 7 daily snapshots") to automate the deletion of old EBS snapshots, ensuring costs don't grow infinitely.
+
+- id: q663
+  type: multiple_choice
+  question: |
+    An ECS cluster needs exclusive access to an S3 bucket and an RDS database. 
+    Which solution meets this?
+  options:
+    - text: Use IAM roles for the ECS tasks.
+      is_correct: false
+    - text: Use S3 and RDS encryption with KMS.
+      is_correct: false
+    - text: Use VPC endpoints for S3 and restrict RDS security groups to the ECS security group.
+      is_correct: true
+    - text: Place everything in a public subnet.
+      is_correct: false
+  explanation: |
+    Correct: Networking restrictions ensure that traffic stays private and originates only from the ECS cluster. VPC endpoints for S3 and SG-to-SG rules for RDS provide the required isolation.
+
+- id: q664
+  type: multiple_choice
+  question: |
+    An app has huge CPU spikes (10x) twice a month. The company uses Elastic Beanstalk and wants automatic scaling. 
+    Which solution is best?
+  options:
+    - text: Use burstable instances (T3) in unlimited mode with request-based scaling.
+      is_correct: true
+    - text: Use Compute Optimized (C5) instances.
+      is_correct: false
+    - text: Use Scheduled Scaling.
+      is_correct: false
+    - text: Use a Single Instance environment.
+      is_correct: false
+  explanation: |
+    Correct: Burstable instances (T-series) are cheaper for normal usage. "Unlimited mode" allows them to burst to handle the 10x spikes twice a month without performance degradation.
+
+- id: q665
+  type: multiple_choice
+  question: |
+    A global company needs to track and audit all incremental changes to infrastructure using automation.
+    Which solution is best?
+  options:
+    - text: Use AWS CloudTrail only.
+      is_correct: false
+    - text: Use AWS CloudFormation for deployment and AWS Config for change tracking.
+      is_correct: true
+    - text: Use AWS Service Catalog.
+      is_correct: false
+    - text: Use AWS Trusted Advisor.
+      is_correct: false
+  explanation: |
+    Correct: CloudFormation ensures "Infrastructure as Code" (automation), while AWS Config provides a detailed history of configuration changes for auditing purposes.
+
+- id: q666
+  type: multiple_choice
+  question: |
+    A stateless Python app and MySQL DB need high availability. The code cannot be modified. 
+    Which TWO actions are required? (Choose two.)
+  options:
+    - text: Migrate the database to DynamoDB.
+      is_correct: false
+    - text: Migrate the database to Amazon RDS with Multi-AZ.
+      is_correct: true
+    - text: Use AWS DataSync for the application files.
+      is_correct: false
+    - text: Deploy EC2 instances in an Auto Scaling group behind an Application Load Balancer.
+      is_correct: true
+  explanation: |
+    Correct: RDS Multi-AZ provides database HA without code changes. ALB + ASG ensures the application layer is highly available across multiple AZs.
+
+- id: q667
+  type: multiple_choice
+  question: |
+    A company needs to access S3 from on-premises (via Direct Connect) and VPC without traversing the internet. 
+    Which solution is best?
+  options:
+    - text: Create an S3 Gateway Endpoint.
+      is_correct: true
+    - text: Use a NAT Gateway.
+      is_correct: false
+    - text: Create an S3 Interface Endpoint.
+      is_correct: false
+    - text: Use a Public VIF on Direct Connect.
+      is_correct: false
+  explanation: |
+    Correct: S3 Gateway Endpoints are free and allow private communication. While Interface Endpoints also work for on-premises, Gateway Endpoints are the standard solution for routing internal S3 traffic within the AWS backbone.
+
+- id: q668
+  type: multiple_choice
+  question: |
+    Developers must use a predefined "Application Name" tag to create resources. 
+    Which solution enforces this value?
+  options:
+    - text: IAM policies with condition keys.
+      is_correct: false
+    - text: AWS Config.
+      is_correct: false
+    - text: Service Control Policies (SCPs).
+      is_correct: false
+    - text: Tag Policies in AWS Organizations.
+      is_correct: true
+  explanation: |
+    Correct: Tag Policies allow you to define allowed values for specific tags across an entire organization, ensuring standardization.
+
+- id: q669
+  type: multiple_choice
+  question: |
+    A company needs to rotate an RDS PostgreSQL master password every 30 days with LEAST effort. 
+    Which solution is best?
+  options:
+    - text: Use IAM Database Authentication.
+      is_correct: false
+    - text: Manually change the password in the RDS console.
+      is_correct: false
+    - text: Use AWS Secrets Manager with built-in rotation for RDS.
+      is_correct: true
+    - text: Use AWS Systems Manager Parameter Store.
+      is_correct: false
+  explanation: |
+    Correct: Secrets Manager has native integration with RDS to automate password rotation using a Lambda function that AWS provides and manages for you.
+
+- id: q670
+  type: multiple_choice
+  question: |
+    A DynamoDB table is used for 4 hours once a week with a known number of operations. 
+    How can costs be optimized?
+  options:
+    - text: Use On-Demand mode.
+      is_correct: false
+    - text: Use Provisioned mode with calculated RCU/WCU.
+      is_correct: true
+    - text: Use DynamoDB Accelerator (DAX).
+      is_correct: false
+    - text: Use Reserved Capacity with On-Demand mode.
+      is_correct: false
+  explanation: |
+    Correct: Since the workload is predictable and infrequent, Provisioned mode is cheaper than On-Demand (which charges more per request). You can even scale the provisioned capacity down to 1 when the tests aren't running.
+
+- id: q671
+  type: multiple_choice
+  question: |
+    A company needs to prevent unusual spending by monitoring costs and notifying stakeholders in the event of anomalies. 
+    Which solution meets this?
+  options:
+    - text: Create a Cost Explorer report and schedule an email.
+      is_correct: false
+    - text: Create a Cost Anomaly Detection monitor.
+      is_correct: true
+    - text: Use AWS Budgets to alert when costs exceed a threshold.
+      is_correct: false
+    - text: Set up a CloudWatch alarm on the EstimatedCharges metric.
+      is_correct: false
+  explanation: |
+    Correct: AWS Cost Anomaly Detection uses machine learning to identify spend that is outside of normal patterns, even if it hasn't hit a specific budget limit. It is the most precise tool for "unusual spending" versus "exceeding a limit."
+    Incorrect: Budgets are for fixed thresholds, not pattern-based anomalies.
+
+- id: q672
+  type: multiple_choice
+  question: |
+    A company needs to analyze large amounts of clickstream data in S3 quickly to determine if it should be processed further.
+    Which solution has the LEAST operational overhead?
+  options:
+    - text: Use Amazon EMR to run a Spark job.
+      is_correct: false
+    - text: Use an AWS Glue crawler to catalog the data and Amazon Athena for ad-hoc SQL queries.
+      is_correct: true
+    - text: Load the data into Amazon Redshift.
+      is_correct: false
+    - text: Use AWS Lambda to parse the files and store results in DynamoDB.
+      is_correct: false
+  explanation: |
+    Correct: This is a totally serverless "Data Lake" approach. Glue crawls the S3 bucket to infer the schema, and Athena allows you to run SQL immediately against the raw S3 data without moving it.
+
+- id: q673
+  type: multiple_choice
+  question: |
+    A company has an SMB file server. Files are frequent-access for 7 days, then must be archived with a maximum 24-hour retrieval time.
+    Which solution meets this?
+  options:
+    - text: Use AWS DataSync to move files to S3 Glacier.
+      is_correct: false
+    - text: Use AWS Storage Gateway (S3 File Gateway) with an S3 Lifecycle policy to move objects to S3 Glacier Deep Archive after 7 days.
+      is_correct: true
+    - text: Use Amazon FSx for Windows File Server.
+      is_correct: false
+    - text: Use AWS Snowball Edge.
+      is_correct: false
+  explanation: |
+    Correct: S3 File Gateway provides a local SMB mount point. The 7-day lifecycle policy manages the move to Glacier Deep Archive (which has a 12-48 hour retrieval window), satisfying the 24-hour requirement cost-effectively.
+
+
+
+- id: q674
+  type: multiple_choice
+  question: |
+    An RDS PostgreSQL database experiences a heavy read load during high traffic periods.
+    Which TWO actions resolve this? (Choose two.)
+  options:
+    - text: Configure RDS Auto Scaling.
+      is_correct: false
+    - text: Create an RDS Read Replica.
+      is_correct: true
+    - text: Enable Multi-AZ deployment.
+      is_correct: false
+    - text: Use Amazon ElastiCache to cache frequent queries.
+      is_correct: true
+    - text: Move the database to a larger EC2 instance.
+      is_correct: false
+  explanation: |
+    Correct: Read Replicas offload the read-only query volume from the primary instance. ElastiCache (Redis/Memcached) stores frequent query results in-memory, preventing the queries from hitting the database at all.
+
+- id: q675
+  type: multiple_choice
+  question: |
+    A company wants to prevent accidental deletion of EBS snapshots without changing administrative rights of the storage admin.
+    Which solution has the LEAST effort?
+  options:
+    - text: Use an SCP to deny ec2:DeleteSnapshot.
+      is_correct: false
+    - text: Use AWS Backup with a Vault Lock.
+      is_correct: false
+    - text: Configure the Recycle Bin for snapshots.
+      is_correct: false
+    - text: Use the Snapshot Lock feature.
+      is_correct: true
+  explanation: |
+    Correct: EBS Snapshot Lock allows you to lock snapshots to prevent deletion by anyone (including admins) for a specified period. This is a direct feature of EBS.
+    Incorrect: Recycle Bin allows recovery after deletion but doesn't "prevent" the deletion action itself in the same way.
+
+- id: q676
+  type: multiple_choice
+  question: |
+    A company needs to capture VPC traffic info in near real time and send it to Amazon OpenSearch for analysis.
+    Which solution meets this?
+  options:
+    - text: Enable CloudTrail and use a Lambda to parse logs.
+      is_correct: false
+    - text: Enable VPC Flow Logs, send them to CloudWatch Logs, and use a Kinesis Data Firehose to stream them to OpenSearch.
+      is_correct: true
+    - text: Use VPC Traffic Mirroring to a dedicated EC2 instance.
+      is_correct: false
+    - text: Export VPC Flow Logs to S3 and run a Glue job.
+      is_correct: false
+  explanation: |
+    Correct: VPC Flow Logs capture IP traffic. Sending them through CloudWatch and Firehose provides a managed, near real-time pipeline into OpenSearch (formerly Elasticsearch).
+
+
+
+- id: q677
+  type: multiple_choice
+  question: |
+    A company needs an infrequent EKS development cluster to test resiliency cost-effectively.
+    Which solution is best?
+  options:
+    - text: Use Fargate for all pods.
+      is_correct: false
+    - text: Use a managed node group with a mix of On-Demand and Spot Instances.
+      is_correct: true
+    - text: Use self-managed node groups with Reserved Instances.
+      is_correct: false
+    - text: Use a managed node group with only On-Demand Instances.
+      is_correct: false
+  explanation: |
+    Correct: Using Spot Instances in EKS managed node groups can save up to 90% in costs. Mixing them with On-Demand ensures the cluster remains functional for tests even if some Spot instances are reclaimed.
+
+- id: q678
+  type: multiple_choice
+  question: |
+    A company needs full control to create, rotate, and disable encryption keys for S3 data with minimal effort.
+    Which solution meets this?
+  options:
+    - text: Use SSE-S3 encryption.
+      is_correct: false
+    - text: Use customer-managed AWS KMS keys (SSE-KMS).
+      is_correct: true
+    - text: Use AWS-managed KMS keys.
+      is_correct: false
+    - text: Use client-side encryption with a local key manager.
+      is_correct: false
+  explanation: |
+    Correct: SSE-KMS with "Customer Managed Keys" (CMK) gives the user full administrative control over the lifecycle (rotation, disabling, policies) of the keys.
+    Incorrect: SSE-S3 is managed by AWS; you cannot rotate or disable those keys yourself.
+
+- id: q679
+  type: multiple_choice
+  question: |
+    VM backups are stored in S3. They must be retained for 30 days and automatically deleted after.
+    Which THREE steps are needed? (Choose three.)
+  options:
+    - text: Enable S3 Object Lock.
+      is_correct: false
+    - text: Enable S3 Versioning on the bucket.
+      is_correct: true
+    - text: Configure S3 Object Lock in Governance mode with a 30-day retention.
+      is_correct: true
+    - text: Use an S3 Lifecycle policy to transition to Glacier.
+      is_correct: false
+    - text: Use an S3 Lifecycle policy to expire current versions after 30 days.
+      is_correct: true
+    - text: Tag objects with a "DeleteAt" tag.
+      is_correct: false
+  explanation: |
+    Correct: Versioning allows Object Lock to work. Object Lock (Governance) ensures the data can't be deleted for 30 days. The Lifecycle policy (Expiration) ensures that once the 30 days are up, the objects are automatically removed.
+
+- id: q680
+  type: multiple_choice
+  question: |
+    Files must be copied continuously from one S3 bucket to EFS and another S3 bucket, only overwriting if source files change.
+    Which solution has the LEAST overhead?
+  options:
+    - text: Use AWS DataSync with a scheduled task in "changed data only" mode.
+      is_correct: true
+    - text: Use an S3 Event Notification to trigger a Lambda function.
+      is_correct: false
+    - text: Use the AWS CLI `s3 sync` command on a cron job.
+      is_correct: false
+    - text: Use S3 Replication.
+      is_correct: false
+  explanation: |
+    Correct: DataSync is designed for large-scale data movement and natively supports "changed data only" syncing between S3 and EFS.
+    Incorrect: S3 Replication doesn't support EFS as a target.
+
+- id: q681
+  type: multiple_choice
+  question: |
+    All EBS data must be encrypted with KMS, and the company must control the key rotation.
+    Which solution has the LEAST overhead?
+  options:
+    - text: Use customer-managed KMS keys for EBS encryption.
+      is_correct: true
+    - text: Use AWS-managed KMS keys (aws/ebs).
+      is_correct: false
+    - text: Encrypt data at the software level inside the OS.
+      is_correct: false
+    - text: Use SSE-C encryption.
+      is_correct: false
+  explanation: |
+    Correct: To "control" rotation (e.g., triggering it manually or setting a specific schedule), you must use Customer Managed Keys. AWS-managed keys rotate on a fixed 3-year schedule that you cannot change.
+
+- id: q682
+  type: multiple_choice
+  question: |
+    A solution must automatically identify non-encrypted EBS volumes and enforce compliance policies.
+    Which solution has the LEAST administrative overhead?
+  options:
+    - text: Use AWS Config rules to detect non-compliance and Systems Manager Automation for remediation.
+      is_correct: true
+    - text: Write a custom Python script to scan the account.
+      is_correct: false
+    - text: Use Amazon Macie.
+      is_correct: false
+    - text: Use AWS Trusted Advisor.
+      is_correct: false
+  explanation: |
+    Correct: AWS Config is the standard tool for auditing resource configurations. Coupled with Systems Manager (SSM) Automation, it can automatically remediate (e.g., stop the instance or alert) non-compliant resources.
+
+
+
+- id: q683
+  type: multiple_choice
+  question: |
+    A multi-tier app (single MySQL node, multi-node web tier) needs to migrate to AWS with minimal changes but improved resiliency.
+    Which TWO steps meet this? (Choose two.)
+  options:
+    - text: Migrate the web tier to an Auto Scaling group behind an ALB.
+      is_correct: true
+    - text: Migrate the web tier to AWS Lambda.
+      is_correct: false
+    - text: Migrate the MySQL database to an RDS Multi-AZ instance.
+      is_correct: true
+    - text: Use Amazon DynamoDB for the data tier.
+      is_correct: false
+    - text: Use an EC2 instance with a larger EBS volume for the database.
+      is_correct: false
+  explanation: |
+    Correct: Moving to ALB + ASG ensures the web tier is redundant and can scale. Moving MySQL to RDS Multi-AZ adds automated failover and backups with zero code changes, which satisfies the "minimal changes" requirement.
+
+- id: q684
+  type: multiple_choice
+  question: |
+    A company near eu-central-1 cannot use that region for some apps due to regulations, but needs single-digit millisecond latency.
+    Which solution meets this?
+  options:
+    - text: Use Amazon CloudFront.
+      is_correct: false
+    - text: Deploy the applications in AWS Local Zones.
+      is_correct: true
+    - text: Use AWS Outposts.
+      is_correct: false
+    - text: Use a Site-to-Site VPN.
+      is_correct: false
+  explanation: |
+    Correct: Local Zones place compute, storage, and database services close to large population/industry centers, providing the ultra-low latency required while staying within specific geographic boundaries.

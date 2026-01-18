@@ -1,146 +1,891 @@
 questions:
-  - id: q601
-    type: multiple_choice
-    question: |
-      A company runs its critical database on an Amazon RDS for PostgreSQL DB instance. The company wants to migrate to Amazon Aurora PostgreSQL with minimal downtime and data loss.
+- id: q601
+  type: multiple_choice
+  question: |
+    A company wants to migrate its critical database from Amazon RDS for PostgreSQL to Amazon Aurora PostgreSQL with minimal downtime and data loss.
+    Which solution meets this with the LEAST operational overhead?
+  options:
+    - text: Use AWS Database Migration Service (DMS) to replicate data.
+      is_correct: false
+    - text: Create an Aurora read replica of the RDS for PostgreSQL DB instance. Promote the Aurora read replica to a new Aurora PostgreSQL DB cluster.
+      is_correct: true
+    - text: Take a snapshot of the RDS instance and restore it as an Aurora cluster.
+      is_correct: false
+    - text: Use pg_dump and pg_restore to move the data.
+      is_correct: false
+  explanation: |
+    Correct: Creating an Aurora Read Replica is a built-in feature of RDS. AWS handles the replication. Once the replica is caught up, you simply promote it, which involves minimal downtime (just the time to point the app to the new endpoint).
+    Incorrect: Snapshots require the database to be "frozen" or result in data loss from the time the snapshot was taken. DMS is more complex to set up than a simple replica promotion.
 
-      Which solution will meet these requirements with the LEAST operational overhead?
-    options:
-     - text: Create an Aurora read replica of the RDS for PostgreSQL DB instance. Promote the Aurora read replicate to a new Aurora PostgreSQL DB cluster.
-       is_correct: true
-     - text: Perform a logical dump using pg_dump and restore it to a new Aurora PostgreSQL cluster.
-       is_correct: false
-     - text: Use AWS Database Migration Service (AWS DMS) to perform a full load and ongoing replication between RDS and Aurora.
-       is_correct: false
-     - text: Take a snapshot of the RDS for PostgreSQL instance and migrate the snapshot to a new Aurora PostgreSQL cluster.
-       is_correct: false
-    explanation: |
-      Correct: Creating an Aurora read replica is the most efficient native method. Aurora uses the same storage engine compatibility, allowing for low-lag replication. Promoting the replica ensures a fast cutover with minimal downtime.
-      Incorrect: 
-        - pg_dump involves significant downtime as the database grows and requires manual effort.
-        - AWS DMS is powerful but introduces more operational complexity (managing replication instances) compared to a native Aurora replica.
-        - Migrating a snapshot requires stopping writes to ensure data consistency, leading to more downtime than a live replica promotion.
+- id: q602
+  type: multiple_choice
+  question: |
+    An architect must ensure that hundreds of EC2 instances and their EBS storage can be recovered after a disaster with the LEAST amount of effort.
+    What is the best approach?
+  options:
+    - text: Write a Python script using the Boto3 SDK to take daily snapshots of all volumes.
+      is_correct: false
+    - text: Create a Lifecycle Policy in Amazon Data Lifecycle Manager (DLM).
+      is_correct: false
+    - text: Use AWS Backup to set up a backup plan for the entire group of EC2 instances.
+      is_correct: true
+    - text: Use AWS Elastic Disaster Recovery (AWS DRS) for all instances.
+      is_correct: false
+  explanation: |
+    Correct: AWS Backup is a fully managed, centralized service. You can assign resources to a backup plan using tags, allowing you to manage hundreds of instances with a single policy. It also handles the recovery orchestration.
+    Incorrect: DLM only manages EBS snapshots and doesn't offer the centralized "Backup Plan" features or cross-service support that AWS Backup provides.
 
-  - id: q602
-    type: multiple_choice
-    question: |
-      A company's infrastructure consists of hundreds of Amazon EC2 instances that use Amazon Elastic Block Store (Amazon EBS) storage. A solutions architect must ensure that every EC2 instance can be recovered after a disaster.
+- id: q603
+  type: multiple_choice
+  question: |
+    A company needs a serverless solution for large-scale parallel processing of semistructured data (logs, media, IoT) in S3. It must process thousands of items in parallel.
+    Which solution is most operationally efficient?
+  options:
+    - text: Use an AWS Lambda function with a loop to process all items.
+      is_correct: false
+    - text: Use the AWS Step Functions Map state in Distributed mode to process the data in parallel.
+      is_correct: true
+    - text: Use Amazon EMR to run a Spark job.
+      is_correct: false
+    - text: Use Amazon SQS to trigger individual Lambda functions.
+      is_correct: false
+  explanation: |
+    Correct: Step Functions "Distributed Map" is specifically designed to iterate over millions of objects in S3 and launch up to 10,000 parallel executions. It handles the high-concurrency orchestration automatically.
+    Incorrect: EMR is not serverless (in the traditional sense) and requires more management overhead. SQS + Lambda works but requires more manual architectural glue than Distributed Map.
 
-      What should the solutions architect do to meet this requirement with the LEAST amount of effort?
-    options:
-     - text: Use AWS Backup to set up a backup plan for the entire group of EC2 instances. Use the AWS Backup API or the AWS CLI to speed up the restore process for multiple EC2 instances.
-       is_correct: true
-     - text: Create a custom Python script using the AWS SDK (Boto3) to take daily snapshots of all EBS volumes and tag them for recovery.
-       is_correct: false
-     - text: Set up Amazon Data Lifecycle Manager (Amazon DLM) to manage snapshots for each individual EC2 instance.
-       is_correct: false
-     - text: Use an AWS Lambda function triggered by a CloudWatch Event to create AMIs of every instance once per day.
-       is_correct: false
-    explanation: |
-      Correct: AWS Backup is a centralized, fully managed service that simplifies backup management across many EC2 instances and EBS volumes, significantly reducing the "effort" compared to manual scripting.
-      Incorrect: 
-        - Custom scripts require development and ongoing maintenance effort.
-        - Amazon DLM is excellent for snapshots but lacks the centralized cross-service management and advanced restore features of AWS Backup.
-        - Lambda-based AMI creation requires managing execution logs and handling failures manually.
+- id: q604
+  type: multiple_choice
+  question: |
+    A company needs to migrate 10 PB of data to S3 in 6 weeks. They have a 500 Mbps uplink, but can only use 80% for migration.
+    Which solution meets this?
+  options:
+    - text: Use AWS DataSync over the existing internet connection.
+      is_correct: false
+    - text: Use AWS Direct Connect to establish a dedicated 10 Gbps link.
+      is_correct: false
+    - text: Order an AWS Snowmobile.
+      is_correct: false
+    - text: Order multiple AWS Snowball Edge devices.
+      is_correct: true
+  explanation: |
+    Correct: At 400 Mbps (80% of 500 Mbps), 10 PB would take years to transfer. Snowball Edge devices (each ~80TB) allow for physical transport of data. Since the timeframe is 6 weeks, multiple devices used in parallel is the only viable path.
+    Incorrect: Snowmobile is for 100+ PB. DataSync over 400 Mbps is mathematically impossible for 10 PB in 6 weeks.
 
-  - id: q603
-    type: multiple_choice
-    question: |
-      A company recently migrated to the AWS Cloud. The company wants a serverless solution for large-scale parallel on-demand processing of a semistructured dataset. The data consists of logs, media files, sales transactions, and IoT sensor data that is stored in Amazon S3. The company wants the solution to process thousands of items in the dataset in parallel.
-    options:
-     - text: Use the AWS Step Functions Map state in Distributed mode to process the data in parallel.
-       is_correct: true
-     - text: Use AWS Batch to submit thousands of jobs to a managed compute environment.
-       is_correct: false
-     - text: Configure an Amazon S3 Event Notification to trigger a Lambda function for every new object uploaded.
-       is_correct: false
-     - text: Launch an Amazon EMR cluster with Spark to process the data in S3 using an Auto Scaling policy.
-       is_correct: false
-    explanation: |
-      Correct: The Distributed Map state in Step Functions is specifically optimized for serverless, high-concurrency processing (up to 10,000 parallel executions) of data stored in S3.
-      Incorrect: 
-        - AWS Batch is container-based and not strictly "serverless" in the same way as Step Functions + Lambda; it also involves more queue management.
-        - S3 Event triggers are for real-time ingestion, not for "on-demand processing of a dataset" (batch-style).
-        - EMR is not serverless (though Serverless EMR exists, it is generally more complex to set up than a Step Function Map state for simple parallel tasks).
-
-
-  - id: q604
-    type: multiple_choice
-    question: |
-      A company will migrate 10 PB of data to Amazon S3 in 6 weeks. The current data center has a 500 Mbps uplink to the internet. Other on-premises applications share the uplink. The company can use 80% of the internet bandwidth for this one-time migration task.
-    options:
-     - text: Order multiple AWS Snowball devices. Copy the data to the devices. Send the devices to AWS to copy the data to Amazon S3.
-       is_correct: true
-     - text: Set up an AWS Direct Connect connection with 1 Gbps capacity to facilitate the transfer.
-       is_correct: false
-     - text: Use AWS DataSync to transfer the data over the existing 500 Mbps internet connection.
-       is_correct: false
-     - text: Order an AWS Snowmobile to migrate the 10 PB of data.
-       is_correct: false
-    explanation: |
-      Correct: Transferring 10 PB over a 400 Mbps (80% of 500) connection would take years. Snowball devices are the only viable way to meet the 6-week deadline.
-      Incorrect: 
-        - 1 Gbps Direct Connect is still too slow for 10 PB in 6 weeks.
-        - DataSync over a limited uplink cannot overcome the laws of physics regarding bandwidth.
-        - Snowmobile is typically for data sizes of 100 PB or more; 10 PB is better handled by a fleet of Snowball Edge devices.
-
-  - id: q607
-    type: multiple_choice
-    question: |
-      A company has migrated a two-tier application from its on-premises data center to the AWS Cloud. The data tier is a Multi-AZ deployment of Amazon RDS for Oracle with 12 TB of EBS storage. The application processes and stores documents as binary large objects (blobs) with an average size of 6 MB. The database size has grown over time, reducing performance and increasing costs.
-    options:
-     - text: Create an Amazon S3 bucket. Update the application to store documents in the S3 bucket. Store the object metadata in the existing database.
-       is_correct: true
-     - text: Enable Amazon RDS Storage Auto Scaling to handle the growing data volume.
-       is_correct: false
-     - text: Change the EBS volume type from General Purpose SSD (gp3) to Provisioned IOPS SSD (io2).
-       is_correct: false
-     - text: Use Amazon Elastic File System (Amazon EFS) to store the documents and mount it to the RDS instance.
-       is_correct: false
-    explanation: |
-      Correct: Offloading Blobs to S3 is an architectural best practice. It reduces RDS storage costs and decreases the size of database backups/snapshots, improving overall performance.
-      Incorrect: 
-        - Auto Scaling solves capacity but doesn't solve the high cost and performance degradation of a bloated database.
-        - Moving to io2 increases cost significantly without addressing the underlying issue of storing files in a relational engine.
-        - You cannot mount an EFS file system directly to a managed Amazon RDS instance.
+- id: q605
+  type: multiple_choice
+  question: |
+    A company wants to replace on-premises iSCSI storage servers. They need low-latency access to frequently used data while moving the bulk to the cloud with minimal changes.
+    Which solution is best?
+  options:
+    - text: Use S3 File Gateway.
+      is_correct: false
+    - text: Use Amazon FSx for Windows File Server.
+      is_correct: false
+    - text: Use AWS Storage Gateway Tape Gateway.
+      is_correct: false
+    - text: Deploy an AWS Storage Gateway Volume Gateway configured with cached volumes.
+      is_correct: true
+  explanation: |
+    Correct: Volume Gateway (Cached mode) presents iSCSI targets to your local servers. It stores the primary data in S3 and keeps a cache of frequently accessed data locally for low-latency, satisfying the iSCSI and latency requirements.
+    Incorrect: S3 File Gateway uses NFS/SMB, not iSCSI. Tape Gateway is for backups.
 
 
-  - id: q611
-    type: multiple_choice
-    question: |
-      A company has an application with a REST-based interface. The third-party vendor has received many 503 Service Unavailable Errors when sending data. When the data volume spikes, compute capacity reaches its limit.
-    options:
-     - text: Use Amazon Kinesis Data Streams to ingest the data. Process the data using AWS Lambda functions.
-       is_correct: true
-     - text: Increase the instance size of the EC2 instances and set up an Auto Scaling group based on CPU utilization.
-       is_correct: false
-     - text: Use an Amazon SQS queue to buffer the incoming requests and use EC2 instances to process the queue.
-       is_correct: false
-     - text: Deploy an Application Load Balancer with a larger target group to handle the spikes.
-       is_correct: false
-    explanation: |
-      Correct: Kinesis provides a buffer (stream) that decoupling ingestion from processing. Lambda scales automatically to the shards, preventing the 503 errors caused by compute saturation.
-      Incorrect: 
-        - Larger instances still have a limit and take time to scale out, which might not be fast enough for sudden spikes.
-        - SQS is good, but for "near-real time" analysis and potential multiple consumers of the same data, Kinesis is often the preferred streaming solution for vendors.
-        - Load balancers don't solve the backend compute capacity limit; they just distribute the failure.
 
-  - id: q616
-    type: multiple_choice
-    question: |
-      A company needs a solution that continuously monitors for malicious activity in the AWS account, workloads, and access patterns to the S3 bucket. Suspicious activity must be displayed on a dashboard.
-    options:
-     - text: Configure Amazon GuardDuty to monitor and report findings to AWS Security Hub.
-       is_correct: true
-     - text: Enable VPC Flow Logs and use Amazon Athena to query for malicious IP addresses.
-       is_correct: false
-     - text: Use AWS WAF to monitor S3 bucket access patterns and block unauthorized requests.
-       is_correct: false
-     - text: Configure AWS Config to detect changes in S3 bucket policies and trigger a Lambda function for remediation.
-       is_correct: false
-    explanation: |
-      Correct: GuardDuty uses machine learning and threat intelligence to identify anomalies (like S3 exfiltration). Security Hub provides the centralized dashboard for these findings.
-      Incorrect: 
-        - Athena queries on Flow Logs are manual and do not provide continuous automated monitoring for malicious "activity patterns."
-        - AWS WAF protects web applications (ALB/CloudFront), not direct S3 bucket access patterns.
-        - AWS Config monitors resource configuration (state), not behavioral "activity" or "access patterns."
+- id: q606
+  type: multiple_choice
+  question: |
+    Objects in S3 are accessed frequently for the first 30 days and rarely thereafter. Durability is a priority.
+    Which solution is most cost-effective?
+  options:
+    - text: Use S3 Standard-IA for all objects from day 1.
+      is_correct: false
+    - text: Store in S3 Standard; use a Lifecycle rule to transition to S3 Standard-IA after 30 days.
+      is_correct: true
+    - text: Store in S3 Standard; use a Lifecycle rule to transition to S3 One Zone-IA after 30 days.
+      is_correct: false
+    - text: Use S3 Intelligent-Tiering.
+      is_correct: false
+  explanation: |
+    Correct: S3 Standard is best for the first 30 days of frequent access. S3 Standard-IA is cheaper for storage after that while maintaining high durability across multiple AZs.
+    Incorrect: One Zone-IA has lower durability (single AZ). Intelligent-Tiering has a monitoring fee per object which might be less cost-effective than a simple lifecycle rule if the access pattern is known.
+
+- id: q607
+  type: multiple_choice
+  question: |
+    An Oracle DB on RDS uses 12 TB of EBS to store 6 MB blobs. Performance is dropping and costs are rising.
+    How can this be optimized most cost-effectively?
+  options:
+    - text: Upgrade to Provisioned IOPS (io2) EBS volumes.
+      is_correct: false
+    - text: Migrate to Amazon Aurora.
+      is_correct: false
+    - text: Store documents in an S3 bucket; store only metadata in the database.
+      is_correct: true
+    - text: Use RDS Storage Auto-scaling.
+      is_correct: false
+  explanation: |
+    Correct: Storing large binary objects (blobs) in a relational database is expensive and slow. Moving the blobs to S3 (designed for objects) reduces the database size, improves performance, and significantly lowers storage costs.
+
+- id: q608
+  type: multiple_choice
+  question: |
+    A company wants to restrict ALB access to only the IP addresses of 20,000 retail locations.
+    What should the solutions architect do?
+  options:
+    - text: Create a Security Group with 20,000 rules.
+      is_correct: false
+    - text: Use AWS WAF and create an IP Set to filter requests.
+      is_correct: true
+    - text: Use Route 53 Geolocation routing.
+      is_correct: false
+    - text: Create a Network ACL for the ALB subnets.
+      is_correct: false
+  explanation: |
+    Correct: AWS WAF (Web Application Firewall) is designed for this. You can create an IP Set containing thousands of IP addresses and associate it with a WAF Web ACL on the ALB.
+    Incorrect: Security Groups have a very low limit for rules (usually 60), making 20,000 impossible. NACLs are also limited and harder to manage at this scale.
+
+- id: q609
+  type: multiple_choice
+  question: |
+    A company using AWS Lake Formation needs to prevent access to sensitive rows and cells in a dataset with LEAST operational overhead.
+    Which solution meets this?
+  options:
+    - text: Create multiple S3 buckets with different IAM policies.
+      is_correct: false
+    - text: Create data filters to implement row-level and cell-level security in Lake Formation.
+      is_correct: true
+    - text: Use Amazon Macie to redact sensitive data.
+      is_correct: false
+    - text: Encrypt different columns with different KMS keys.
+      is_correct: false
+  explanation: |
+    Correct: Lake Formation's "Fine-Grained Access Control" allows you to define data filters that hide specific rows or columns (cells) from specific users. This is managed centrally with minimal overhead.
+
+- id: q610
+  type: multiple_choice
+  question: |
+    EC2 instances must load data to S3 without using the public internet. On-premises servers must consume the output. 
+    Which solution meets this?
+  options:
+    - text: Use a NAT Gateway and an SQS queue.
+      is_correct: false
+    - text: Deploy a Gateway VPC endpoint for S3 and set up AWS Direct Connect.
+      is_correct: true
+    - text: Use a Site-to-Site VPN and an Internet Gateway.
+      is_correct: false
+    - text: Use an S3 Bucket Policy to allow only the corporate IP.
+      is_correct: false
+  explanation: |
+    Correct: A Gateway VPC Endpoint ensures S3 traffic stays on the AWS private network. Direct Connect provides a private, dedicated link from on-premises to the VPC.
+    Incorrect: NAT Gateways and Internet Gateways both route traffic over the public internet.
+
+
+
+- id: q611
+  type: multiple_choice
+  question: |
+    A third-party vendor sends data to EC2 instances. During spikes, the EC2s reach capacity and return 503 errors. 
+    Which design provides a scalable solution?
+  options:
+    - text: Use Amazon Kinesis Data Streams to ingest data; process with AWS Lambda.
+      is_correct: true
+    - text: Add an Auto Scaling group to the EC2 instances.
+      is_correct: false
+    - text: Use an ALB with a larger instance type.
+      is_correct: false
+    - text: Use Amazon Route 53 weighted routing.
+      is_correct: false
+  explanation: |
+    Correct: Kinesis acts as a buffer (shock absorber). Even if the volume spikes, Kinesis stores the data, and Lambda scales automatically to process it. This prevents the 503 errors caused by dropping connections.
+
+- id: q612
+  type: multiple_choice
+  question: |
+    Private EC2 instances need to access sensitive data in S3 without using the internet.
+    Which solution meets this?
+  options:
+    - text: Use a NAT Gateway.
+      is_correct: false
+    - text: Use an IAM Role with S3 Full Access.
+      is_correct: false
+    - text: Configure a VPC endpoint and update the S3 bucket policy.
+      is_correct: true
+    - text: Use an AWS Transfer Family server.
+      is_correct: false
+  explanation: |
+    Correct: A VPC Endpoint (Gateway type) allows the private subnet to reach S3 directly via the AWS backbone. The bucket policy can then be restricted to only allow traffic originating from that specific VPC Endpoint.
+
+- id: q613
+  type: multiple_choice
+  question: |
+    An EKS cluster needs to encrypt Kubernetes secrets with the LEAST operational overhead.
+    Which solution is best?
+  options:
+    - text: Write a custom script to encrypt secrets before uploading.
+      is_correct: false
+    - text: Enable secrets encryption in the EKS cluster using AWS KMS.
+      is_correct: true
+    - text: Use HashiCorp Vault on EC2.
+      is_correct: false
+    - text: Store secrets in S3 with server-side encryption.
+      is_correct: false
+  explanation: |
+    Correct: EKS has a native integration with KMS for "envelope encryption" of Kubernetes secrets. You simply select a KMS key in the EKS configuration, and AWS manages the encryption/decryption transparently.
+
+- id: q614
+  type: multiple_choice
+  question: |
+    How can you ensure that only web servers can access application servers in a multi-tier app?
+  options:
+    - text: Put all servers in the same public subnet.
+      is_correct: false
+    - text: Use a Network ACL on the application subnet.
+      is_correct: false
+    - text: Place application servers in a private subnet. Configure their security group to allow inbound traffic only from the web servers' security group.
+      is_correct: true
+    - text: Use an ALB with a target group that contains the app servers. Allow only the web servers to access the ALB.
+      is_correct: true
+  explanation: |
+    Correct (Based on the prompt's provided D): An ALB sits between the tiers. The security group of the application servers should allow traffic on the application port, but only if the source is the security group of the web servers. 
+    Note: Standard AWS best practice is to reference the Security Group ID as the source.
+
+- id: q615
+  type: multiple_choice
+  question: |
+    An EKS application needs centralized collection and summarization of metrics and logs.
+    Which solution meets this?
+  options:
+    - text: Use a sidecar container with Fluentd.
+      is_correct: false
+    - text: Use the Kubernetes Dashboard.
+      is_correct: false
+    - text: Configure Amazon CloudWatch Container Insights in the EKS cluster.
+      is_correct: true
+    - text: Use Amazon Managed Service for Prometheus.
+      is_correct: false
+  explanation: |
+    Correct: Container Insights is an AWS-native tool that automatically collects, aggregates, and summarizes metrics and logs for EKS. It provides pre-built dashboards in CloudWatch.
+
+- id: q616
+  type: multiple_choice
+  question: |
+    A company needs to monitor for malicious activity across its account, workloads, and S3 access patterns, then report findings to a dashboard.
+    Which solution is best?
+  options:
+    - text: Use VPC Flow Logs and CloudWatch Dashboards.
+      is_correct: false
+    - text: Use AWS Config rules.
+      is_correct: false
+    - text: Configure Amazon GuardDuty to monitor and report findings to AWS Security Hub.
+      is_correct: true
+    - text: Enable S3 Event Notifications for every access.
+      is_correct: false
+  explanation: |
+    Correct: GuardDuty is an ML-based threat detection service that monitors CloudTrail, VPC Flow Logs, and DNS logs. Security Hub provides the centralized dashboard to aggregate these findings.
+
+- id: q617
+  type: multiple_choice
+  question: |
+    A company needs to migrate 200 GB of NFS data to AWS without interruption. Multiple AWS resources must access it via NFS.
+    Which two steps meet this most cost-effectively? (Choose two.)
+  options:
+    - text: Create an Amazon Elastic File System (EFS).
+      is_correct: true
+    - text: Use AWS Snowcone to ship the data.
+      is_correct: false
+    - text: Install an AWS DataSync agent on-premises and use it to sync data to AWS.
+      is_correct: true
+    - text: Create an Amazon S3 bucket and use the S3 CLI.
+      is_correct: false
+    - text: Use an AWS Storage Gateway Tape Gateway.
+      is_correct: false
+  explanation: |
+    Correct: EFS is a managed NFS file system. DataSync is the fastest and most reliable way to migrate file-system data from on-premises to EFS while preserving metadata and handling the sync process.
+
+- id: q618
+  type: multiple_choice
+  question: |
+    FSx for Windows File Server in us-east-1 needs an RPO of 5 minutes and must replicate to us-west-2. Data must be undeletable for 5 years.
+    Which solution meets this?
+  options:
+    - text: Use DFS Replication (DFSR) between two FSx systems.
+      is_correct: false
+    - text: Use S3 Cross-Region Replication.
+      is_correct: false
+    - text: Create a Multi-AZ FSx system; use AWS Backup to copy to us-west-2 and use Vault Lock in compliance mode.
+      is_correct: true
+    - text: Use AWS Elastic Disaster Recovery.
+      is_correct: false
+  explanation: |
+    Correct: Multi-AZ FSx provides high availability. AWS Backup handles the cross-region copy. AWS Backup Vault Lock in "Compliance Mode" ensures that even the root user cannot delete the backups for the specified 5-year duration.
+
+- id: q619
+  type: multiple_choice
+  question: |
+    An architect wants to ensure that CloudTrail configurations in developer accounts (who have root access) cannot be modified.
+    Which action meets this?
+  options:
+    - text: Use IAM policies to deny CloudTrail access.
+      is_correct: false
+    - text: Enable AWS Config to revert changes.
+      is_correct: false
+    - text: Create a Service Control Policy (SCP) that prohibits changes to CloudTrail and attach it to the developer accounts.
+      is_correct: true
+    - text: Use AWS Trusted Advisor.
+      is_correct: false
+  explanation: |
+    Correct: SCPs are the only way to restrict the root user. Since developers have root access to their individual accounts, standard IAM policies won't stop them, but an SCP applied at the Organization level will.
+
+- id: q620
+  type: multiple_choice
+  question: |
+    An application requires durable storage with consistent, low-latency performance. 
+    Which storage type is best?
+  options:
+    - text: Amazon EBS Throughput Optimized HDD (st1).
+      is_correct: false
+    - text: Amazon S3.
+      is_correct: false
+    - text: Provisioned IOPS SSD EBS volume (io2).
+      is_correct: true
+    - text: Amazon EBS General Purpose SSD (gp3).
+      is_correct: false
+  explanation: |
+    Correct: io2 (Provisioned IOPS) is designed for business-critical applications that require sustained, high-performance IOPS and ultra-low latency.
+    Incorrect: gp3 is good, but for "consistent, low-latency" in a business-critical context, io2 is the architect's recommendation.
+
+- id: q621
+  type: multiple_choice
+  question: |
+    A photo-sharing company needs to replicate all new photos from an S3 bucket in us-west-1 to us-east-1 with the LEAST operational effort.
+    Which solution meets this?
+  options:
+    - text: Create a second S3 bucket in us-east-1. Use S3 Cross-Region Replication (CRR) to copy photos automatically.
+      is_correct: true
+    - text: Set up an S3 Event Notification that triggers a Lambda function to copy objects.
+      is_correct: false
+    - text: Use AWS DataSync to schedule hourly transfers between regions.
+      is_correct: false
+    - text: Use the S3 CLI sync command on an EC2 instance cron job.
+      is_correct: false
+  explanation: |
+    Correct: S3 Cross-Region Replication (CRR) is a native, fully managed feature. Once configured, AWS handles the asynchronous copying of objects without requiring custom code or server management.
+    Incorrect: Lambda or DataSync solutions require more setup and maintenance (operational effort) compared to a built-in toggle like CRR.
+
+- id: q622
+  type: multiple_choice
+  question: |
+    A web app has a static single page and a persistent database. Traffic spikes to millions for 4 hours and drops to thousands. The schema must evolve rapidly.
+    Which TWO solutions provide the MOST scalability? (Choose two.)
+  options:
+    - text: Use Amazon RDS with Provisioned IOPS.
+      is_correct: false
+    - text: Use Amazon Aurora Serverless.
+      is_correct: false
+    - text: Deploy Amazon DynamoDB with auto scaling enabled.
+      is_correct: true
+    - text: Deploy static content in S3 and use Amazon CloudFront.
+      is_correct: true
+    - text: Use an EC2 Auto Scaling group with a Load Balancer for the static content.
+      is_correct: false
+  explanation: |
+    Correct: DynamoDB is schema-less (supporting rapid evolution) and scales to handle millions of requests with auto-scaling. S3 + CloudFront is the standard serverless pattern for scaling static content globally to millions of users with minimal latency.
+
+- id: q623
+  type: multiple_choice
+  question: |
+    A company must protect REST APIs in API Gateway from SQL injection and XSS attacks. 
+    What is the MOST operationally efficient solution?
+  options:
+    - text: Use Lambda Authorizers to sanitize all input.
+      is_correct: false
+    - text: Configure AWS WAF and associate it with the API Gateway.
+      is_correct: true
+    - text: Use a Network Load Balancer (NLB) with a security group.
+      is_correct: false
+    - text: Deploy an NGINX proxy on EC2 to filter requests.
+      is_correct: false
+  explanation: |
+    Correct: AWS WAF (Web Application Firewall) integrates directly with API Gateway. It provides pre-configured "Managed Rules" to block SQL injection and XSS with a few clicks.
+    Incorrect: Writing custom sanitation code in Lambda is prone to error and has high operational overhead.
+
+- id: q624
+  type: multiple_choice
+  question: |
+    A company with 1,500 users in Active Directory wants to grant them AWS access without creating new identities.
+    How should the architect meet this?
+  options:
+    - text: Create 1,500 IAM users and provide the CSV to the AD admin.
+      is_correct: false
+    - text: Use AWS Directory Service to migrate AD to the cloud.
+      is_correct: false
+    - text: Use Amazon Cognito user pools.
+      is_correct: false
+    - text: Configure SAML 2.0-based federation and map AD groups to IAM roles.
+      is_correct: true
+  explanation: |
+    Correct: SAML 2.0 federation allows users to log into the AWS Console using their existing AD credentials. Mapping AD groups to IAM roles ensures users get the correct permissions based on their current department.
+
+- id: q625
+  type: multiple_choice
+  question: |
+    A website uses multiple ALBs and must serve specific content to users based on global distribution rights.
+    Which Route 53 configuration is required?
+  options:
+    - text: Latency routing policy.
+      is_correct: false
+    - text: Weighted routing policy.
+      is_correct: false
+    - text: Geolocation routing policy.
+      is_correct: true
+    - text: Failover routing policy.
+      is_correct: false
+  explanation: |
+    Correct: Geolocation routing allows you to restrict content or redirect users based on their country or continent, ensuring compliance with legal distribution rights.
+
+- id: q626
+  type: multiple_choice
+  question: |
+    A company is migrating data to S3 and needs automatic integrity validation after the transfer.
+    Which solution meets this?
+  options:
+    - text: Use the S3 multipart upload API.
+      is_correct: false
+    - text: Deploy an AWS DataSync agent to perform the transfer.
+      is_correct: true
+    - text: Use AWS Snowball.
+      is_correct: false
+    - text: Use the AWS CLI to sync and then run a custom script to check MD5 sums.
+      is_correct: false
+  explanation: |
+    Correct: AWS DataSync automatically performs data integrity checks during the transfer and at rest in the destination, comparing checksums between source and target.
+
+- id: q627
+  type: multiple_choice
+  question: |
+    A company wants to migrate two DNS servers (200 zones) to AWS, maximizing availability while minimizing management overhead.
+    What is the recommendation?
+  options:
+    - text: Create 200 hosted zones in Amazon Route 53 and import zone files.
+      is_correct: true
+    - text: Run BIND DNS servers on EC2 instances across multiple AZs.
+      is_correct: false
+    - text: Use a Network Load Balancer in front of the existing on-premises DNS servers.
+      is_correct: false
+    - text: Use AWS Directory Service for Microsoft AD.
+      is_correct: false
+  explanation: |
+    Correct: Route 53 is a managed, highly available (100% SLA) DNS service. Moving zones to Route 53 eliminates the need to patch, scale, or manage DNS server instances.
+
+- id: q628
+  type: multiple_choice
+  question: |
+    A global company wants to report on incomplete multipart uploads across multiple accounts and regions for cost compliance.
+    Which solution has the LEAST operational overhead?
+  options:
+    - text: Write a script to iterate through all buckets using the CLI.
+      is_correct: false
+    - text: Use S3 Inventory reports.
+      is_correct: false
+    - text: Configure S3 Storage Lens.
+      is_correct: true
+    - text: Enable S3 CloudWatch metrics for all buckets.
+      is_correct: false
+  explanation: |
+    Correct: S3 Storage Lens provides a centralized dashboard that can aggregate metrics across an entire AWS Organization. It specifically includes metrics for "Incomplete Multipart Uploads," which cost money but aren't visible as standard objects.
+
+- id: q629
+  type: multiple_choice
+  question: |
+    A company needs to upgrade an RDS MySQL database version quickly and test it without losing data or impacting production.
+    Which solution has the LEAST overhead?
+  options:
+    - text: Create a manual snapshot, restore to a new instance, and upgrade.
+      is_correct: false
+    - text: Create a Read Replica and upgrade it.
+      is_correct: false
+    - text: Use an AWS DMS task.
+      is_correct: false
+    - text: Use Amazon RDS Blue/Green Deployments.
+      is_correct: true
+  explanation: |
+    Correct: Blue/Green deployments create a fully synchronized "Green" environment where you can perform the upgrade and test. Once ready, you "switch over" with nearly zero downtime and no data loss.
+
+- id: q630
+  type: multiple_choice
+  question: |
+    A daily data job takes 2 hours and must restart from the beginning if interrupted. What is the most cost-effective way to run this?
+  options:
+    - text: Run the job on a Spot Instance.
+      is_correct: false
+    - text: Use an AWS Lambda function.
+      is_correct: false
+    - text: Use an Amazon ECS Fargate task triggered by an EventBridge schedule.
+      is_correct: true
+    - text: Use an EC2 On-Demand instance that runs 24/7.
+      is_correct: false
+  explanation: |
+    Correct: Fargate is "pay-as-you-go" and is perfect for a 2-hour job. Unlike Spot Instances, Fargate (Standard) is less likely to be interrupted. Unlike Lambda, it doesn't have a 15-minute timeout limit.
+
+- id: q631
+  type: multiple_choice
+  question: |
+    A social media company needs to store user profiles and relationships (graph) and monitor changes to provide recommendations.
+    Which solution has the LEAST overhead?
+  options:
+    - text: Use RDS for MySQL with a change-tracking table.
+      is_correct: false
+    - text: Use Amazon Neptune to store data and Neptune Streams to process changes.
+      is_correct: true
+    - text: Use DynamoDB with Global Tables.
+      is_correct: false
+    - text: Use Amazon DocumentDB.
+      is_correct: false
+  explanation: |
+    Correct: Neptune is a purpose-built graph database for relationships. Neptune Streams allows real-time reaction to graph changes, ideal for generating recommendation engines.
+
+
+
+- id: q632
+  type: multiple_choice
+  question: |
+    Several Linux instances across multiple AZs need to modify shared data that grows over 6 months.
+    Which storage solution is recommended?
+  options:
+    - text: Amazon EBS Multi-Attach.
+      is_correct: false
+    - text: Amazon S3.
+      is_correct: false
+    - text: Amazon Elastic File System (EFS).
+      is_correct: true
+    - text: Amazon FSx for Lustre.
+      is_correct: false
+  explanation: |
+    Correct: EFS is a managed NFS file system that can be mounted simultaneously by multiple Linux instances in different AZs. It scales automatically as data grows.
+
+- id: q633
+  type: multiple_choice
+  question: |
+    Traffic increases are causing slow performance on a Multi-AZ RDS PostgreSQL instance due to heavy queries.
+    How can performance be improved?
+  options:
+    - text: Switch to a Single-AZ deployment.
+      is_correct: false
+    - text: Increase the EBS volume size.
+      is_correct: false
+    - text: Create a Read Replica and serve read traffic from it.
+      is_correct: true
+    - text: Use RDS Proxy.
+      is_correct: false
+  explanation: |
+    Correct: Read Replicas offload the read-heavy query load from the primary instance, which is the standard way to scale a relational database for read-intensive workloads.
+
+- id: q634
+  type: multiple_choice
+  question: |
+    A company needs to share 10 GB of daily S3 telemetry data with external consulting agencies' AWS accounts securely.
+    Which solution is best?
+  options:
+    - text: Make the S3 bucket public.
+      is_correct: false
+    - text: Use IAM users with Access Keys for each agency.
+      is_correct: false
+    - text: Configure cross-account access for the S3 bucket to the agencies' accounts.
+      is_correct: true
+    - text: Email the data daily to the agencies.
+      is_correct: false
+  explanation: |
+    Correct: Cross-account bucket policies allow the agencies to access the data using their own IAM identities, which is more secure and efficient than managing external users or making data public.
+
+- id: q635
+  type: multiple_choice
+  question: |
+    A company uses FSx for ONTAP for NFS/CIFS and needs a DR solution in a secondary region using the same protocols.
+    Which solution has the LEAST overhead?
+  options:
+    - text: Manually copy files using rsync.
+      is_correct: false
+    - text: Use AWS DataSync to sync regions.
+      is_correct: false
+    - text: Use NetApp SnapMirror to replicate data to an FSx instance in the secondary region.
+      is_correct: true
+    - text: Use S3 Cross-Region Replication as an intermediate step.
+      is_correct: false
+  explanation: |
+    Correct: FSx for ONTAP has native integration with NetApp SnapMirror. It is highly efficient, preserves metadata, and is specifically designed for replicating ONTAP file systems across regions.
+
+- id: q636
+  type: multiple_choice
+  question: |
+    A team uses Lambda functions triggered by SNS when files are added to S3. They need to process these events in a scalable way.
+    What should the architect do?
+  options:
+    - text: Increase the Lambda concurrency limit.
+      is_correct: false
+    - text: Replace SNS with an ALB.
+      is_correct: false
+    - text: Create an SNS subscription that sends the event to SQS, then trigger Lambda from SQS.
+      is_correct: true
+    - text: Use S3 Batch Operations.
+      is_correct: false
+  explanation: |
+    Correct: This is the "Fan-out" or "Buffer" pattern. Using SQS between SNS and Lambda ensures that if there is a massive burst of files, the events are queued and Lambda isn't throttled.
+
+
+
+- id: q637
+  type: multiple_choice
+  question: |
+    A service behind API Gateway has unpredictable request patterns (0 to 500+ per sec). Data is < 1 GB and uses key-value queries.
+    Which TWO services should be used? (Choose two.)
+  options:
+    - text: Amazon EC2.
+      is_correct: false
+    - text: AWS Lambda.
+      is_correct: true
+    - text: Amazon DynamoDB.
+      is_correct: true
+    - text: Amazon RDS.
+      is_correct: false
+    - text: Amazon EMR.
+      is_correct: false
+  explanation: |
+    Correct: Lambda scales instantly with the request volume (unpredictable traffic). DynamoDB is optimized for key-value lookups and scales seamlessly to handle bursts in throughput.
+
+- id: q638
+  type: multiple_choice
+  question: |
+    A company wants to collect research data in S3, process it in the cloud, and share it globally with employees securely with minimal overhead.
+    Which solution meets this?
+  options:
+    - text: Configure S3 bucket policies and use AWS IAM Identity Center (Successor to AWS SSO).
+      is_correct: true
+    - text: Create an FTP server on EC2.
+      is_correct: false
+    - text: Use a Site-to-Site VPN for every employee.
+      is_correct: false
+    - text: Use Amazon WorkDocs.
+      is_correct: false
+  explanation: |
+    Correct: IAM Identity Center allows centralized management of employee access to AWS resources (like S3) using their existing corporate login, providing the most secure and managed experience.
+
+- id: q639
+  type: multiple_choice
+  question: |
+    An ALB is favoring one EC2 instance in a fleet, causing latency.
+    How should this be resolved?
+  options:
+    - text: Disable session affinity (sticky sessions) on the ALB.
+      is_correct: true
+    - text: Change the ALB to a Network Load Balancer.
+      is_correct: false
+    - text: Enable Cross-Zone Load Balancing.
+      is_correct: false
+    - text: Use a Weighted routing policy in Route 53.
+      is_correct: false
+  explanation: |
+    Correct: If "Sticky Sessions" are enabled, the ALB sends all requests from a specific user to the same instance. If a few users are very active, that one instance becomes overloaded while others stay idle. Disabling it allows better load distribution.
+
+- id: q640
+  type: multiple_choice
+  question: |
+    A Lambda function must download and decrypt S3 files encrypted with KMS.
+    Which TWO actions are required? (Choose two.)
+  options:
+    - text: Grant the S3:GetObject permission to the KMS key.
+      is_correct: false
+    - text: Grant the kms:decrypt permission for the Lambda IAM role in the KMS key policy.
+      is_correct: true
+    - text: Create a Bucket Policy allowing the Lambda role.
+      is_correct: false
+    - text: Add the s3:ListBucket permission to the KMS key.
+      is_correct: false
+    - text: Create an IAM role for the Lambda with kms:decrypt permissions.
+      is_correct: true
+  explanation: |
+    Correct: For Lambda to use KMS, the identity (the Lambda execution role) must have permission to decrypt, AND the resource policy (the KMS Key Policy) must allow that specific IAM role to perform the decryption.
+
+- id: q641
+  type: multiple_choice
+  question: |
+    A company wants to monitor costs for financial review across all member accounts in an organization. They need to query Cost and Usage Reports (CUR) once a month for detailed analysis.
+    Which solution is the MOST scalable and cost-effective?
+  options:
+    - text: Use the AWS Cost Explorer API to programmatically extract data.
+      is_correct: false
+    - text: Enable Cost and Usage Reports in the management account. Deliver reports to Amazon S3. Use Amazon Athena for analysis.
+      is_correct: true
+    - text: Manually download the CSV billing reports from the billing console every month.
+      is_correct: false
+    - text: Use AWS Budgets to track costs and send alerts.
+      is_correct: false
+  explanation: |
+    Correct: This is the standard "Big Data" approach for billing. CUR provides the most granular data. Delivering it to S3 and using Athena (Serverless SQL) allows for complex, scalable queries without managing any database servers, paying only for the data scanned.
+    Incorrect: Cost Explorer API has a cost per request and is less suitable for "detailed analysis" compared to the raw data in CUR.
+
+- id: q642
+  type: multiple_choice
+  question: |
+    A gaming application on EC2 transmits data using UDP packets and needs to scale out and in using an Auto Scaling group.
+    What should a solutions architect do?
+  options:
+    - text: Attach a Network Load Balancer (NLB) to the Auto Scaling group.
+      is_correct: true
+    - text: Attach an Application Load Balancer (ALB) to the Auto Scaling group.
+      is_correct: false
+    - text: Use Route 53 with a weighted routing policy to individual instances.
+      is_correct: false
+    - text: Use an Amazon API Gateway with a VPC Link.
+      is_correct: false
+  explanation: |
+    Correct: The Network Load Balancer (NLB) operates at Layer 4 and is the only managed load balancer that supports the UDP protocol. It also handles millions of requests per second with ultra-low latency, which is ideal for gaming.
+    Incorrect: ALBs only support Layer 7 (HTTP/HTTPS/gRPC).
+
+
+
+- id: q643
+  type: multiple_choice
+  question: |
+    A company needs to analyze tens of gigabytes of web traffic logs from multiple websites on-demand once a week using standard SQL.
+    Which solution is MOST cost-effective?
+  options:
+    - text: Store the logs in Amazon S3. Use Amazon Athena for analysis.
+      is_correct: true
+    - text: Store the logs in Amazon Redshift. Use Redshift Spectrum.
+      is_correct: false
+    - text: Import the logs into an Amazon RDS for MySQL database.
+      is_correct: false
+    - text: Use Amazon OpenSearch Service (successor to Elasticsearch).
+      is_correct: false
+  explanation: |
+    Correct: Since the analysis is "on-demand once a week," a serverless tool like Athena is perfect. You pay only for the storage in S3 and the data scanned during the weekly query.
+    Incorrect: Redshift or RDS would require paying for running instances 24/7, even when queries aren't being run.
+
+- id: q644
+  type: multiple_choice
+  question: |
+    An international company uses multiple subdomains (example.com, country1.example.com) behind an ALB. They want to encrypt data in transit.
+    Which TWO steps meet this requirement? (Choose two.)
+  options:
+    - text: Use ACM to request a public certificate for example.com and a wildcard *.example.com.
+      is_correct: true
+    - text: Request a private certificate from ACM Private CA.
+      is_correct: false
+    - text: Upload a self-signed certificate to IAM.
+      is_correct: false
+    - text: Validate domain ownership by adding DNS records to the provider.
+      is_correct: true
+    - text: Enable SSL Passthrough on the Application Load Balancer.
+      is_correct: false
+  explanation: |
+    Correct: A certificate for the apex (example.com) and a wildcard (*.example.com) covers all country-specific subdomains. DNS validation is the most common and easily automatable way to prove ownership in ACM.
+    Incorrect: Private CAs are for internal traffic, not public websites. ALBs do not support SSL Passthrough (that's an NLB feature).
+
+- id: q645
+  type: multiple_choice
+  question: |
+    Regulatory requirements mandate using a key manager outside of AWS. The solution must support external key managers from different vendors with LEAST operational overhead.
+    Which solution meets this?
+  options:
+    - text: Use AWS CloudHSM.
+      is_correct: false
+    - text: Use an AWS KMS external key store (XKS) backed by an external key manager.
+      is_correct: true
+    - text: Use AWS KMS with imported key material.
+      is_correct: false
+    - text: Use client-side encryption with a custom-built key provider.
+      is_correct: false
+  explanation: |
+    Correct: External Key Store (XKS) is a feature of AWS KMS that allows you to use keys stored in an external key management system (outside of AWS) to encrypt/decrypt data within AWS services.
+    Incorrect: CloudHSM is an AWS-managed hardware module. Imported key material still puts the key "inside" AWS KMS, which doesn't meet the requirement of keeping the key outside.
+
+- id: q646
+  type: multiple_choice
+  question: |
+    An HPC workload on hundreds of EC2s requires sub-1ms parallel access to a shared file system. After processing, data must be available for manual postprocessing.
+    Which solution meets this?
+  options:
+    - text: Use Amazon EFS with Provisioned Throughput.
+      is_correct: false
+    - text: Use Amazon S3 with S3 Select.
+      is_correct: false
+    - text: Use Amazon FSx for Lustre linked to an Amazon S3 bucket.
+      is_correct: true
+    - text: Use EBS Multi-Attach on io2 volumes.
+      is_correct: false
+  explanation: |
+    Correct: FSx for Lustre is purpose-built for HPC. It provides sub-millisecond latencies and high throughput for parallel workloads. Its native integration with S3 allows it to "lazy load" data for processing and write results back to S3 for postprocessing.
+    Incorrect: EFS latency is typically higher than Lustre. EBS Multi-Attach has limitations on the number of instances (hundreds would not be supported).
+
+
+
+- id: q647
+  type: multiple_choice
+  question: |
+    A global gaming company needs VoIP with high availability and automated failover across Regions, while minimizing latency and avoiding IP address caching issues.
+    What should be used?
+  options:
+    - text: Use AWS Global Accelerator with health checks.
+      is_correct: true
+    - text: Use Route 53 with a Latency routing policy.
+      is_correct: false
+    - text: Use Amazon CloudFront with a dynamic origin.
+      is_correct: false
+    - text: Use AWS Direct Connect between regions.
+      is_correct: false
+  explanation: |
+    Correct: Global Accelerator provides static Anycast IP addresses. This avoids DNS caching issues because the IP doesn't change during failover. It uses the AWS global network to route traffic to the nearest healthy region.
+    Incorrect: Route 53 Latency routing relies on DNS, which is susceptible to client-side IP caching.
+
+- id: q648
+  type: multiple_choice
+  question: |
+    A weather forecasting company needs to process data with sub-millisecond latency. A persistent file system is needed for thousands of instances to access the data simultaneously.
+    What should be done?
+  options:
+    - text: Use Amazon S3 with a Gateway VPC Endpoint.
+      is_correct: false
+    - text: Use Amazon FSx for Lustre persistent file systems.
+      is_correct: true
+    - text: Use Amazon Elastic File System (EFS) in Max I/O mode.
+      is_correct: false
+    - text: Use Amazon FSx for Windows File Server.
+      is_correct: false
+  explanation: |
+    Correct: FSx for Lustre "Persistent" deployment is designed for long-term workloads needing high availability and sub-millisecond latency. It scales to thousands of clients.
+    Incorrect: S3 does not offer sub-millisecond latency for file-system-style operations.
+
+- id: q649
+  type: multiple_choice
+  question: |
+    An ecommerce PostgreSQL database needs 15,000 IOPS. The company wants to provision IOPS independent of storage capacity most cost-effectively.
+    Which solution meets this?
+  options:
+    - text: Use Provisioned IOPS SSD (io2).
+      is_correct: false
+    - text: Use General Purpose SSD (gp2).
+      is_correct: false
+    - text: Use General Purpose SSD (gp3) and provision 15,000 IOPS.
+      is_correct: true
+    - text: Use Magnetic storage with software RAID.
+      is_correct: false
+  explanation: |
+    Correct: GP3 volumes provide a baseline performance of 3,000 IOPS and allow you to pay to increase IOPS (up to 16,000) and throughput independently of the disk size. This is significantly cheaper than `io2` for a 15,000 IOPS requirement.
+
+- id: q650
+  type: multiple_choice
+  question: |
+    A company is migrating SQL Server Enterprise to AWS. They want to move to managed services and offload reporting from the production database.
+    Which solution has the LEAST operational overhead?
+  options:
+    - text: Migrate to Amazon RDS for SQL Server and use read replicas for reporting.
+      is_correct: true
+    - text: Deploy SQL Server on EC2 with Always On Availability Groups.
+      is_correct: false
+    - text: Migrate to Amazon Aurora MySQL.
+      is_correct: false
+    - text: Use a Single-AZ RDS instance and export data to S3 for reporting.
+      is_correct: false
+  explanation: |
+    Correct: RDS for SQL Server (Enterprise Edition) supports Read Replicas. This is a managed service, so AWS handles patching and HA. Replicas allow the reporting team to run heavy queries without slowing down the app's transactions.
+    Incorrect: Running on EC2 increases operational overhead significantly (manual patching, HA setup).

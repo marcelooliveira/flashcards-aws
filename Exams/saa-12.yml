@@ -1,84 +1,903 @@
 questions:
-  - id: q551
-    type: multiple_choice
-    question: |
-      A company has a financial application that produces reports. The reports average 50 KB in size and are stored in Amazon S3. The reports are frequently accessed during the first week after production and must be stored for several years. The reports must be retrievable within 6 hours.
-    options:
-     - text: Use S3 Standard. Use an S3 Lifecycle rule to transition the reports to S3 Glacier Flexible Retrieval after 7 days.
-       is_correct: true
-     - text: Use S3 Standard. Use an S3 Lifecycle rule to transition the reports to S3 Standard-Infrequent Access (S3 Standard-IA) after 7 days.
-       is_correct: false
-     - text: Store the reports directly in S3 Glacier Deep Archive and use expedited retrievals when needed.
-       is_correct: false
-     - text: Use S3 Intelligent-Tiering to automatically manage the transitions between all tiers.
-       is_correct: false
-    explanation: |
-      Correct: S3 Glacier Flexible Retrieval is ideal for data that is accessed infrequently but can wait a few hours (1-5 hours) for retrieval. Transitioning after the first week of frequent access minimizes costs for multi-year storage.
-      Incorrect: 
-        - S3 Standard-IA has a minimum storage duration of 30 days and a minimum object size of 128 KB for billing; 50 KB objects would be billed at 128 KB, making it less cost-effective than Glacier.
-        - S3 Glacier Deep Archive has a minimum retrieval time of 12 hours, which violates the 6-hour requirement.
-        - Intelligent-Tiering has a monthly monitoring fee per object, which can be expensive for a large volume of small (50 KB) files.
+- id: q551
+  type: multiple_choice
+  question: |
+    A company has a financial application that produces reports (avg 50 KB). Reports are frequently accessed during the first week and must be stored for several years. They must be retrievable within 6 hours. 
+    Which solution meets these requirements MOST cost-effectively?
+  options:
+    - text: Use S3 Standard. Use an S3 Lifecycle rule to transition the reports to S3 Glacier Flexible Retrieval after 7 days.
+      is_correct: true
+    - text: Use S3 Standard-IA for the entire duration of storage.
+      is_correct: false
+    - text: Use S3 Intelligent-Tiering to automate all transitions.
+      is_correct: false
+    - text: Use S3 Standard. Use a lifecycle rule to transition to S3 Glacier Deep Archive after 7 days.
+      is_correct: false
+  explanation: |
+    Correct: S3 Standard is best for the first week of frequent access. Transitioning to Glacier after 7 days minimizes costs for long-term storage. The 6-hour retrieval requirement is met by Glacier Flexible Retrieval (standard retrieval is 3-5 hours).
+    Incorrect: 
+    - Standard-IA has a minimum storage duration of 30 days and a minimum object size of 128KB; 50KB files would be billed at 128KB.
+    - Deep Archive retrieval takes 12-48 hours, failing the 6-hour requirement.
+
+- id: q552
+  type: multiple_choice
+  question: |
+    A company needs to optimize EC2 costs but also needs to change instance types and families every 2-3 months. 
+    What should the company do?
+  options:
+    - text: Purchase EC2 Instance Savings Plans for a 3-year term.
+      is_correct: false
+    - text: Purchase a No Upfront Compute Savings Plan for a 1-year term.
+      is_correct: true
+    - text: Purchase Convertible Reserved Instances for a 1-year term.
+      is_correct: false
+    - text: Use Spot Instances for all production workloads.
+      is_correct: false
+  explanation: |
+    Correct: Compute Savings Plans are the most flexible, as they apply regardless of instance family, size, AZ, Region, OS, or even compute type (EC2, Fargate, Lambda). This perfectly supports changing families every few months.
+    Incorrect: EC2 Instance Savings Plans are tied to a specific instance family in a region.
+
+- id: q553
+  type: multiple_choice
+  question: |
+    A solutions architect needs to review S3 buckets in us-east-1 and us-west-2 to discover PII with the LEAST operational overhead.
+    Which solution is best?
+  options:
+    - text: Configure Amazon Macie in each Region. Create a job to analyze the data in Amazon S3.
+      is_correct: true
+    - text: Use Amazon Athena to query the S3 buckets for patterns matching PII.
+      is_correct: false
+    - text: Create a Lambda function that uses Amazon Rekognition to find PII in images and text.
+      is_correct: false
+    - text: Use AWS Glue to crawl the buckets and identify PII using custom classifiers.
+      is_correct: false
+  explanation: |
+    Correct: Amazon Macie is a fully managed data security service that uses ML to automatically discover and protect sensitive data in S3. It is "least overhead" because PII detection is its native purpose.
+    Incorrect: Athena, Lambda, and Glue require manual query writing, coding, or schema management.
+
+- id: q554
+  type: multiple_choice
+  question: |
+    A company is migrating an SAP application and backend SQL Server. Both have high memory utilization. 
+    Which instance type should be used?
+  options:
+    - text: General purpose instance family (M series).
+      is_correct: false
+    - text: Compute optimized instance family (C series).
+      is_correct: false
+    - text: Memory optimized instance family (R or X series) for both the application and the database.
+      is_correct: true
+    - text: Storage optimized instance family (I series).
+      is_correct: false
+  explanation: |
+    Correct: Memory-optimized instances (R/X families) are designed to deliver fast performance for workloads that process large data sets in memory, which is a standard requirement for SAP and high-utilization SQL databases.
+
+- id: q555
+  type: multiple_choice
+  question: |
+    How can EC2 instances in private subnets securely connect to an Amazon SQS queue without using the public internet?
+  options:
+    - text: Implement an interface VPC endpoint for Amazon SQS.
+      is_correct: true
+    - text: Use a NAT Gateway in a public subnet.
+      is_correct: false
+    - text: Implement a Gateway VPC endpoint for Amazon SQS.
+      is_correct: false
+    - text: Use an Internet Gateway and assign public IPs to the instances.
+      is_correct: false
+  explanation: |
+    Correct: Interface VPC Endpoints (powered by AWS PrivateLink) allow private communication between your VPC and SQS.
+    Incorrect: 
+    - Gateway Endpoints are only available for S3 and DynamoDB. 
+    - NAT/Internet Gateways use the public internet.
 
 
 
-  - id: q552
-    type: multiple_choice
-    question: |
-      A company needs to optimize the cost of its Amazon EC2 instances. The company also needs to change the type and family of its EC2 instances every 2-3 months.
-    options:
-     - text: Purchase a No Upfront Compute Savings Plan for a 1-year term.
-       is_correct: true
-     - text: Purchase EC2 Instance Savings Plans for the specific instance families currently in use.
-       is_correct: false
-     - text: Use Standard Reserved Instances with a 3-year term for maximum discount.
-       is_correct: false
-     - text: Purchase Convertible Reserved Instances and exchange them every 2 months.
-       is_correct: false
-    explanation: |
-      Correct: Compute Savings Plans provide the most flexibility. They apply to usage across any instance family, size, region, or even Fargate and Lambda. This is perfect for a company that changes instance types frequently.
-      Incorrect: 
-        - EC2 Instance Savings Plans are locked to a specific instance family in a specific region.
-        - Standard Reserved Instances do not allow changing instance families.
-        - While Convertible RIs allow family changes, they involve more manual management (exchanges) compared to the automatic application of Compute Savings Plans.
+- id: q556
+  type: multiple_choice
+  question: |
+    How should EC2 instances access DynamoDB tables without exposing API credentials in a CloudFormation template?
+  options:
+    - text: Pass the credentials through CloudFormation Parameters with the NoEcho property.
+      is_correct: false
+    - text: Create an IAM role with required permissions. Add the role to an EC2 instance profile and associate it with the instances.
+      is_correct: true
+    - text: Store credentials in AWS Secrets Manager and hardcode the secret ARN in the template.
+      is_correct: false
+    - text: Use a VPC Gateway Endpoint for DynamoDB and trust the VPC ID in the table policy.
+      is_correct: false
+  explanation: |
+    Correct: IAM Roles for EC2 allow applications to securely make API calls without managing long-term credentials. The AWS SDK automatically retrieves temporary credentials from the instance metadata.
 
-  - id: q599
-    type: multiple_choice
-    question: |
-      A company wants to use Amazon Elastic Container Service (Amazon ECS) clusters and Amazon RDS DB instances to build and run a payment processing application. The company will run the application in its on-premises data center for compliance purposes.
-    options:
-     - text: Use AWS Outposts to run the ECS cluster and RDS instances locally in the data center.
-       is_correct: true
-     - text: Set up an AWS Site-to-Site VPN and run the ECS tasks on-premises using ECS Anywhere.
-       is_correct: false
-     - text: Deploy the application on a VMware cluster and use the AWS Management Console to manage it via AWS Systems Manager.
-       is_correct: false
-     - text: Use AWS Snowball Edge devices to host the RDS database and ECS services permanently.
-       is_correct: false
-    explanation: |
-      Correct: AWS Outposts is a fully managed service that extends AWS infrastructure, services, APIs, and tools to virtually any data center or co-location space. It supports both ECS and RDS, satisfying the compliance need for local residency.
-      Incorrect: 
-        - ECS Anywhere allows running ECS tasks on-premises, but it does not provide a managed RDS service for on-premises hardware.
-        - Systems Manager is for management/patching, not for providing the underlying compute and database service equivalent to ECS and RDS.
-        - Snowball Edge is primarily for data migration or edge computing in disconnected environments, not for permanent, high-availability payment processing applications.
+- id: q557
+  type: multiple_choice
+  question: |
+    An architect wants to use parallel processing for semistructured data in S3 and enrich it with data from Redshift. 
+    Which solution is best?
+  options:
+    - text: Use AWS Glue to process the data.
+      is_correct: false
+    - text: Use Amazon EMR to process the S3 data and enrich it with Redshift data.
+      is_correct: true
+    - text: Use Amazon Athena to join S3 and Redshift data.
+      is_correct: false
+    - text: Use Amazon Kinesis Data Analytics.
+      is_correct: false
+  explanation: |
+    Correct: Amazon EMR is the industry-standard for parallel processing of massive datasets using Hadoop/Spark. It can easily integrate with S3 and Redshift for complex data enrichment tasks.
+
+- id: q558
+  type: multiple_choice
+  question: |
+    Two VPCs in the same account and same Region need to transfer 500 GB of data monthly. 
+    What is the MOST cost-effective connection?
+  options:
+    - text: Use AWS Transit Gateway.
+      is_correct: false
+    - text: Use a Site-to-Site VPN between the VPCs.
+      is_correct: false
+    - text: Set up a VPC peering connection between the VPCs.
+      is_correct: true
+    - text: Use an AWS Direct Connect Gateway.
+      is_correct: false
+  explanation: |
+    Correct: VPC Peering is free to set up and has the lowest data transfer costs compared to Transit Gateway (which has an hourly fee and processing fee) or VPN.
+    Incorrect: Transit Gateway is better for connecting *many* VPCs, but for only two, Peering is cheaper.
+
+- id: q559
+  type: multiple_choice
+  question: |
+    A company wants cost details for product lines using tags in consolidated billing. 
+    Which two steps are required? (Choose two.)
+  options:
+    - text: Select a specific user-defined tag in the AWS Billing console.
+      is_correct: true
+    - text: Activate the selected tag from the Organizations management account.
+      is_correct: true
+    - text: Create a separate AWS account for every tag.
+      is_correct: false
+    - text: Use AWS Cost Explorer to create a new tag for every resource.
+      is_correct: false
+    - text: Use the AWS CLI to generate a report based on resource IDs.
+      is_correct: false
+  explanation: |
+    Correct: To use tags for billing, you must first define the tag on your resources, then select it in the Billing console, and finally **activate** it as a Cost Allocation Tag. This must be done in the management account for consolidated billing.
+
+- id: q560
+  type: multiple_choice
+  question: |
+    A solutions architect needs to identify and notify the team about changes to the OU hierarchy with LEAST operational overhead. 
+    Which solution fits?
+  options:
+    - text: Provision accounts using AWS Control Tower and use account drift notifications.
+      is_correct: true
+    - text: Use AWS Config to monitor AWS Organizations.
+      is_correct: false
+    - text: Write a Lambda function that polls the Organizations API every hour.
+      is_correct: false
+    - text: Enable CloudTrail and use an Athena query to find OU changes.
+      is_correct: false
+  explanation: |
+    Correct: AWS Control Tower provides "drift detection" out of the box. If the organization's structure deviates from the landing zone's governance (like OU changes), it sends a notification.
+
+- id: q561
+  type: multiple_choice
+  question: |
+    A web application needs to decrease latency when retrieving product details from DynamoDB with the LEAST operational overhead.
+    Which solution is best?
+  options:
+    - text: Set up a DynamoDB Accelerator (DAX) cluster.
+      is_correct: true
+    - text: Migrating the data to Amazon ElastiCache for Redis.
+      is_correct: false
+    - text: Increase the Read Capacity Units (RCUs) for the table.
+      is_correct: false
+    - text: Enable DynamoDB global replication.
+      is_correct: false
+  explanation: |
+    Correct: DAX is an in-memory cache specifically for DynamoDB that reduces response times from milliseconds to microseconds. It is API-compatible, requiring minimal code changes.
+    Incorrect: Redis requires significant application re-architecting compared to DAX.
+
+- id: q562
+  type: multiple_choice
+  question: |
+    EC2 instances need to call DynamoDB API without traveling across the internet. 
+    Which two steps are required? (Choose two.)
+  options:
+    - text: Create a route table entry for the endpoint.
+      is_correct: true
+    - text: Create a gateway endpoint for DynamoDB.
+      is_correct: true
+    - text: Create an interface endpoint for DynamoDB.
+      is_correct: false
+    - text: Enable public IP addresses for the EC2 instances.
+      is_correct: false
+    - text: Create a NAT Gateway.
+      is_correct: false
+  explanation: |
+    Correct: Gateway Endpoints (for S3 and DynamoDB) are added to the VPC's route table. They ensure traffic to the service stays within the AWS network.
 
 
 
-  - id: q600
-    type: multiple_choice
-    question: |
-      A company is planning to migrate a TCP-based application into the company's VPC. The application is publicly accessible on a nonstandard TCP port through a hardware appliance in the company's data center. This public endpoint can process up to 3 million requests per second with low latency. The company requires the same level of performance for the new public endpoint in AWS.
-    options:
-     - text: Deploy a Network Load Balancer (NLB). Configure the NLB to be publicly accessible over the TCP port that the application requires.
-       is_correct: true
-     - text: Deploy an Application Load Balancer (ALB) and use a Listener for the specific TCP port.
-       is_correct: false
-     - text: Use Amazon Route 53 with a Multivalue answer routing policy to point directly to the EC2 instances.
-       is_correct: false
-     - text: Configure an API Gateway with a TCP Private Link to the backend services.
-       is_correct: false
-    explanation: |
-      Correct: The Network Load Balancer (NLB) is designed to handle tens of millions of requests per second while maintaining ultra-low latencies. It operates at Layer 4 (TCP/UDP), making it ideal for non-standard TCP ports and high-throughput requirements.
-      Incorrect: 
-        - ALBs operate at Layer 7 (HTTP/HTTPS) and are not optimized for raw TCP performance at the scale of 3 million requests per second compared to NLB.
-        - Route 53 pointing to instances does not provide the same level of sophisticated health checking, instant scaling, or a single static IP address (via Elastic IP) that an NLB provides.
-        - API Gateway is for REST/WebSocket/HTTP APIs and would introduce significant latency and cost for 3 million TCP requests per second.
+- id: q563
+  type: multiple_choice
+  question: |
+    The company wants to manage Kubernetes clusters and workloads from a central location with the LEAST operational overhead.
+    Which solution is best?
+  options:
+    - text: Install a management EC2 instance in every cluster.
+      is_correct: false
+    - text: Use Amazon EKS Connector to register and connect all Kubernetes clusters.
+      is_correct: true
+    - text: Use AWS App Mesh to link the clusters.
+      is_correct: false
+    - text: Deploy a central Prometheus server.
+      is_correct: false
+  explanation: |
+    Correct: EKS Connector allows you to connect any conformant Kubernetes cluster (on-prem, EC2, or other clouds) to the EKS console for centralized visibility.
+
+- id: q564
+  type: multiple_choice
+  question: |
+    Sensitive data in RDS MySQL must be protected even from database administrators. 
+    Which solution meets this?
+  options:
+    - text: Enable RDS storage encryption at rest.
+      is_correct: false
+    - text: Store data in RDS and use AWS KMS client-side encryption.
+      is_correct: true
+    - text: Use an IAM policy to deny DBAs access to the RDS instance.
+      is_correct: false
+    - text: Enable SSL/TLS for connections to the database.
+      is_correct: false
+  explanation: |
+    Correct: Client-side encryption means the application encrypts the data *before* it reaches the database. The DBA can see the encrypted blobs but cannot read the plain text without the KMS key.
+    Incorrect: Storage encryption at rest only protects the physical disks; a DBA with query access can still see the decrypted data in the database engine.
+
+- id: q565
+  type: multiple_choice
+  question: |
+    Migrate a MySQL database to AWS. It must maintain compatibility and scale automatically during peaks. 
+    Which solution fits?
+  options:
+    - text: Use DMS to migrate to RDS MySQL.
+      is_correct: false
+    - text: Use DMS to migrate to Amazon Aurora and turn on Aurora Auto Scaling.
+      is_correct: true
+    - text: Copy snapshots to S3 and use Athena.
+      is_correct: false
+    - text: Use VM Import/Export to move the server to EC2.
+      is_correct: false
+  explanation: |
+    Correct: Aurora is MySQL-compatible and features "Aurora Auto Scaling," which adds or removes read replicas based on traffic, satisfying both requirements.
+
+- id: q566
+  type: multiple_choice
+  question: |
+    Linux instances need to read and write concurrently to shared storage with a hierarchical directory structure.
+    What should be used?
+  options:
+    - text: Amazon EBS Multi-Attach.
+      is_correct: false
+    - text: Amazon Elastic File System (Amazon EFS).
+      is_correct: true
+    - text: Amazon S3.
+      is_correct: false
+    - text: Amazon OpenSearch Service.
+      is_correct: false
+  explanation: |
+    Correct: EFS is a managed NFS file system that supports thousands of concurrent EC2 connections and provides a standard hierarchical directory structure.
+    Incorrect: EBS Multi-Attach is for block storage and requires a cluster-aware file system. S3 is object storage, not a hierarchical file system.
+
+- id: q567
+  type: multiple_choice
+  question: |
+    A workload receives sensor data via HTTP, processes it, and stores usage per tenant. The architecture must be modular and managed. 
+    Which solution is best?
+  options:
+    - text: Use Amazon API Gateway with AWS Lambda and Amazon DynamoDB.
+      is_correct: true
+    - text: Use an ALB with EC2 instances and RDS.
+      is_correct: false
+    - text: Use Kinesis Data Streams and AWS Glue.
+      is_correct: false
+    - text: Use Amazon SQS and Amazon Redshift.
+      is_correct: false
+  explanation: |
+    Correct: API Gateway (HTTP), Lambda (Processing), and DynamoDB (Storage) are all fully managed and serverless. This modular approach (microservices) has the lowest operational overhead.
+
+- id: q568
+  type: multiple_choice
+  question: |
+    A web app stores petabytes of engineering drawings. It needs global caching to minimize load times. 
+    Which combination is best?
+  options:
+    - text: Amazon S3 with Amazon CloudFront.
+      is_correct: true
+    - text: Amazon EBS with Amazon ElastiCache.
+      is_correct: false
+    - text: Amazon EFS with AWS Global Accelerator.
+      is_correct: false
+    - text: Amazon S3 with AWS Transfer Family.
+      is_correct: false
+  explanation: |
+    Correct: S3 provides virtually unlimited storage (petabytes) for drawings. CloudFront caches these drawings at edge locations worldwide to provide low-latency access to users.
+
+- id: q569
+  type: multiple_choice
+  question: |
+    A solutions architect needs to determine if an EventBridge rule condition is met and if the target is being invoked.
+    Which solution fits?
+  options:
+    - text: Check the Amazon CloudWatch metrics for the rule.
+      is_correct: true
+    - text: Review the S3 server access logs.
+      is_correct: false
+    - text: Use AWS X-Ray to trace the event.
+      is_correct: false
+    - text: Check the VPC Flow Logs.
+      is_correct: false
+  explanation: |
+    Correct: EventBridge publishes metrics to CloudWatch, such as `TriggeredRules`, `Invocations`, and `FailedInvocations`. This allows you to see if the rule matched and if the target was called.
+
+- id: q570
+  type: multiple_choice
+  question: |
+    A company needs to scale from 2 to 6 instances every Friday evening. 
+    Which solution has the LEAST operational overhead?
+  options:
+    - text: Manually change the Auto Scaling group capacity every Friday.
+      is_correct: false
+    - text: Create an Auto Scaling group with a scheduled action.
+      is_correct: true
+    - text: Use a dynamic scaling policy based on CPU usage.
+      is_correct: false
+    - text: Use a Lambda function to update the ASG.
+      is_correct: false
+  explanation: |
+    Correct: Scheduled scaling allows you to set a specific time (cron-like) to scale the capacity. Since the workload is "regularly repeating" every Friday, this is the most efficient method.
+
+- id: q571
+  type: multiple_choice
+  question: |
+    A company is creating a REST API with strict TLS requirements. It requires TLSv1.3 and a certificate signed by a specific third-party public Certificate Authority (CA).
+    Which solution will meet these requirements?
+  options:
+    - text: Generate a certificate using AWS Certificate Manager (ACM) and select the third-party CA as the provider.
+      is_correct: false
+    - text: Create a certificate signed by the third-party CA. Import it into ACM. Create an HTTP API in API Gateway with a custom domain using this certificate.
+      is_correct: true
+    - text: Use an Application Load Balancer (ALB) with a Passthrough termination policy to handle TLSv1.3.
+      is_correct: false
+    - text: Use Amazon Route 53 to sign the certificate and apply it to the API Gateway.
+      is_correct: false
+  explanation: |
+    Correct: ACM supports importing third-party certificates. While ACM provides its own free certificates via Amazon Trust Services, if a specific external CA is required, you must import it. API Gateway custom domains support TLS 1.3.
+    Incorrect: ACM does not act as a proxy to request certificates from other specific commercial CAs (like DigiCert or GoDaddy) directly; you must bring your own.
+
+- id: q572
+  type: multiple_choice
+  question: |
+    An application uses an on-premises MySQL-compatible database that requires a minimum of 2 GiB of memory. The workload is inconsistent.
+    Which solution migrates this to a managed service with auto-scaling and LEAST administrative overhead?
+  options:
+    - text: Migrate to Amazon RDS for MySQL with Multi-AZ.
+      is_correct: false
+    - text: Deploy MySQL on Amazon EC2 instances with Auto Scaling.
+      is_correct: false
+    - text: Provision an Amazon Aurora Serverless v2 database with a minimum capacity of 1 ACU.
+      is_correct: true
+    - text: Use Amazon ElastiCache for Redis to offload the database.
+      is_correct: false
+  explanation: |
+    Correct: Aurora Serverless v2 scales instantly and granularly based on demand. 1 ACU (Aurora Capacity Unit) provides approx 2 GiB of RAM, satisfying the minimum requirement while allowing for "unexpected workload increases."
+    Incorrect: Standard RDS doesn't scale "instantly" or automatically in the same serverless fashion without manual instance type changes.
+
+- id: q573
+  type: multiple_choice
+  question: |
+    A company wants to reduce startup latency (cold starts) for Java 11 Lambda functions as they scale up, specifically for outlier latencies.
+    Which solution is most cost-effective?
+  options:
+    - text: Increase the memory allocation for the Lambda function.
+      is_correct: false
+    - text: Use Provisioned Concurrency for all functions.
+      is_correct: false
+    - text: Rewrite the application in Python to avoid Java overhead.
+      is_correct: false
+    - text: Configure Lambda SnapStart.
+      is_correct: true
+  explanation: |
+    Correct: Lambda SnapStart for Java initializes the function, takes a snapshot of the memory and disk state, and caches it. On subsequent "cold" starts, it resumes from the snapshot, significantly reducing latency at no extra cost.
+    Incorrect: Provisioned Concurrency also solves cold starts but incurs a constant hourly cost.
+
+- id: q574
+  type: multiple_choice
+  question: |
+    A financial application tracks stock trends and runs for only 2 hours at the end of each week. 
+    How can the RDS MySQL database cost be optimized most effectively?
+  options:
+    - text: Migrate to an Aurora Serverless v2 MySQL database cluster.
+      is_correct: true
+    - text: Use RDS Reserved Instances.
+      is_correct: false
+    - text: Stop the RDS instance manually every week after use.
+      is_correct: false
+    - text: Use a smaller instance type and enable storage autoscaling.
+      is_correct: false
+  explanation: |
+    Correct: Aurora Serverless is ideal for intermittent workloads. It can scale down to a very low capacity (or even zero in v1) when not in use, making it more cost-effective for a 2-hour-per-week task than a 24/7 instance.
+    Incorrect: Reserved Instances are best for 24/7 steady-state workloads, not 2 hours a week.
+
+- id: q575
+  type: multiple_choice
+  question: |
+    An EKS application requires a PostgreSQL database that is highly available and has increased capacity for read workloads.
+    Which solution is most operationally efficient?
+  options:
+    - text: Deploy PostgreSQL containers within the EKS cluster using EBS volumes.
+      is_correct: false
+    - text: Use Amazon RDS with a Single-AZ deployment and manually add replicas.
+      is_correct: false
+    - text: Create an Amazon RDS database with Multi-AZ DB cluster deployment.
+      is_correct: true
+    - text: Use Amazon Aurora with a single writer and no readers.
+      is_correct: false
+  explanation: |
+    Correct: An RDS Multi-AZ **DB Cluster** (distinct from a standard Multi-AZ Instance) provides one primary and two readable standby instances. This provides both High Availability and read scaling in one managed setup.
+    Incorrect: Running DBs inside EKS increases operational overhead for backups and HA management.
+
+- id: q576
+  type: multiple_choice
+  question: |
+    A RESTful serverless application has geographically distributed users. 
+    Which API Gateway endpoint type reduces latency the most?
+  options:
+    - text: Private endpoint
+      is_correct: false
+    - text: Regional endpoint
+      is_correct: false
+    - text: Edge-optimized endpoint
+      is_correct: true
+    - text: Interface endpoint
+      is_correct: false
+  explanation: |
+    Correct: Edge-optimized endpoints route requests through Amazon CloudFront edge locations, reducing the "first-mile" latency for users distributed around the world.
+    Incorrect: Regional endpoints are best when the clients and the compute (Lambda) are in the same region.
+
+- id: q577
+  type: multiple_choice
+  question: |
+    A company wants to automate the creation and renewal of TLS certificates for a CloudFront distribution.
+    Which solution is most operationally efficient?
+  options:
+    - text: Use a third-party CA and a cron job to upload to IAM.
+      is_correct: false
+    - text: Use AWS Certificate Manager (ACM) with Email validation.
+      is_correct: false
+    - text: Use AWS Certificate Manager (ACM) with DNS validation.
+      is_correct: true
+    - text: Use Let's Encrypt with a Lambda function.
+      is_correct: false
+  explanation: |
+    Correct: ACM with DNS validation allows AWS to automatically renew certificates indefinitely as long as the DNS record exists. It is fully managed and integrated with CloudFront.
+    Incorrect: Email validation requires manual clicks on an email every year, which is less efficient.
+
+- id: q578
+  type: multiple_choice
+  question: |
+    A DynamoDB application needs to improve response times from milliseconds to microseconds.
+    Which solution has the LEAST operational overhead?
+  options:
+    - text: Use DynamoDB Accelerator (DAX).
+      is_correct: true
+    - text: Migrate data to Amazon ElastiCache.
+      is_correct: false
+    - text: Increase the Read Capacity Units (RCUs).
+      is_correct: false
+    - text: Use Global Tables.
+      is_correct: false
+  explanation: |
+    Correct: DAX is an API-compatible managed cache. You just point your application to the DAX endpoint instead of DynamoDB, and it handles microsecond-latency caching.
+    Incorrect: ElastiCache requires writing custom caching logic in the application code.
+
+- id: q579
+  type: multiple_choice
+  question: |
+    An RDS PostgreSQL database is only used during business hours on weekdays.
+    How can the company optimize costs with least overhead?
+  options:
+    - text: Use the Instance Scheduler on AWS to configure start and stop schedules.
+      is_correct: true
+    - text: Create a Lambda function to take a snapshot and delete the instance every evening.
+      is_correct: false
+    - text: Move the database to a Spot Instance.
+      is_correct: false
+    - text: Use RDS Proxy to manage connections.
+      is_correct: false
+  explanation: |
+    Correct: The AWS Instance Scheduler is a pre-built solution (CloudFormation/Lambda) that automates starting and stopping RDS and EC2 instances based on a schedule, saving money during nights and weekends.
+    Incorrect: RDS does not support Spot Instances.
+
+- id: q580
+  type: multiple_choice
+  question: |
+    A company is lifting and shifting a latency-sensitive application to AWS and wants to use locally attached-style storage without changing the architecture.
+    Which solution is most cost-effective?
+  options:
+    - text: Use an EC2 instance with an Instance Store volume.
+      is_correct: false
+    - text: Use an Amazon EBS Provisioned IOPS (io2) volume.
+      is_correct: false
+    - text: Use an EC2 instance with an EBS GP3 volume.
+      is_correct: true
+    - text: Use Amazon EFS.
+      is_correct: false
+  explanation: |
+    Correct: GP3 volumes provide a cost-effective way to provision performance (IOPS and Throughput) independently of storage size. It is the modern standard for general-purpose, low-latency workloads.
+    Incorrect: Instance Store is ephemeral (data lost on stop/start), which might require architectural changes for persistence.
+
+- id: q581
+  type: multiple_choice
+  question: |
+    A stateful application requires at least two EC2 instances to always be running. 
+    Which ASG configuration ensures high availability and fault tolerance?
+  options:
+    - text: Set the minimum and desired capacity of the ASG to 2. Spread instances across multiple Availability Zones.
+      is_correct: true
+    - text: Use a single Availability Zone to reduce latency between the two instances.
+      is_correct: false
+    - text: Set the maximum capacity to 2.
+      is_correct: false
+    - text: Use a Cluster Placement Group.
+      is_correct: false
+  explanation: |
+    Correct: Spreading instances across multiple AZs ensures that if one AZ fails, the application remains available. Setting the desired/min capacity to 2 ensures the ASG maintains that count.
+
+- id: q582
+  type: multiple_choice
+  question: |
+    An ecommerce site is hosted on-premises (near us-west-1) and in the cloud (eu-central-1). 
+    How can DNS minimize load times for global users?
+  options:
+    - text: Set up a Route 53 Geoproximity routing policy.
+      is_correct: false
+    - text: Set up a Route 53 Latency routing policy.
+      is_correct: true
+    - text: Use a Weighted routing policy.
+      is_correct: false
+    - text: Use a Geolocation routing policy.
+      is_correct: false
+  explanation: |
+    Correct: Latency routing directs users to the endpoint that provides the lowest round-trip time, which directly addresses the requirement to "minimize load time."
+    Incorrect: Geolocation routes based on the user's origin (e.g., all users in France), but the nearest server physically isn't always the fastest path over the internet.
+
+- id: q583
+  type: multiple_choice
+  question: |
+    A company has 5 PB of tape data and a 1 Gbps internet link. They must migrate to AWS within 6 months and keep data for 10 years.
+    Which solution is most cost-effective?
+  options:
+    - text: Transfer the data over the internet to S3 Standard.
+      is_correct: false
+    - text: Use AWS DataSync to move tapes to S3.
+      is_correct: false
+    - text: Use multiple AWS Snowball Edge devices with Tape Gateway. Move to S3 Glacier Deep Archive via lifecycle policy.
+      is_correct: true
+    - text: Ship the physical tapes to an AWS data center for manual upload.
+      is_correct: false
+  explanation: |
+    Correct: 5 PB would take over a year to upload on a 1 Gbps link (assuming 100% utilization). Snowball Edge with Tape Gateway allows for offline migration of bulk data. Glacier Deep Archive is the cheapest storage class for 10-year retention.
+
+- id: q584
+  type: multiple_choice
+  question: |
+    A company plans to run parallel data processing on EC2. Nodes must NOT share the same underlying hardware.
+    Which networking solution meets this?
+  options:
+    - text: Run the EC2 instances in a spread placement group.
+      is_correct: true
+    - text: Run the EC2 instances in a cluster placement group.
+      is_correct: false
+    - text: Use a Partition placement group.
+      is_correct: false
+    - text: Use a dedicated host for every instance.
+      is_correct: false
+  explanation: |
+    Correct: A Spread Placement Group ensures that each instance is placed on a distinct rack, each with its own network and power source.
+    Incorrect: Cluster placement groups do the opposite—they put instances close together on the same hardware to minimize latency.
+
+
+
+- id: q585
+  type: multiple_choice
+  question: |
+    A DR strategy requires guaranteed EC2 capacity in a failover Region.
+    Which solution meets this?
+  options:
+    - text: Use an ASG with a target tracking policy.
+      is_correct: false
+    - text: Purchase Scheduled Reserved Instances.
+      is_correct: false
+    - text: Purchase an On-Demand Capacity Reservation in the failover Region.
+      is_correct: true
+    - text: Rely on the failover Region's default capacity.
+      is_correct: false
+  explanation: |
+    Correct: Capacity Reservations ensure that you can launch the needed number of instances in a specific AZ, even during a large-scale regional outage where others might be competing for resources.
+
+- id: q586
+  type: multiple_choice
+  question: |
+    An R&D business is splitting from its parent company and needs its own organization. A new management account is created.
+    What is the next step?
+  options:
+    - text: Move the R&D OU directly to the new management account.
+      is_correct: false
+    - text: Invite the R&D account to the new organization after it has left the old one.
+      is_correct: true
+    - text: Use the AWS Resource Access Manager to share the accounts.
+      is_correct: false
+    - text: Delete the old organization and recreate it.
+      is_correct: false
+  explanation: |
+    Correct: An AWS account can only belong to one Organization at a time. The account must first be removed from the original organization (becoming a standalone account) before it can accept an invite to a new one.
+
+- id: q587
+  type: multiple_choice
+  question: |
+    A solution must capture unpredictable, high-volume web activity for analytics, include an authorization step, and integrate with other apps.
+    Which solution meets this?
+  options:
+    - text: S3 with Lambda triggers.
+      is_correct: false
+    - text: EC2 instances behind an NLB.
+      is_correct: false
+    - text: API Gateway with a Lambda authorizer, integrated with Kinesis Data Firehose, storing to S3.
+      is_correct: true
+    - text: CloudFront with a signed URL.
+      is_correct: false
+  explanation: |
+    Correct: API Gateway provides the managed endpoint and the "Lambda Authorizer" for security. Kinesis Firehose handles the "unpredictable/sudden" scale of streaming data and delivers it to S3 for processing.
+
+
+
+- id: q588
+  type: multiple_choice
+  question: |
+    An ecommerce company needs a DR solution for SQL Server with an RPO/RTO of 24 hours.
+    Which solution is most cost-effective?
+  options:
+    - text: Set up a Cross-Region Read Replica.
+      is_correct: false
+    - text: Use a Multi-AZ deployment.
+      is_correct: false
+    - text: Copy automatic snapshots to another Region every 24 hours.
+      is_correct: true
+    - text: Use AWS Elastic Disaster Recovery (AWS DRS).
+      is_correct: false
+  explanation: |
+    Correct: Since the RPO (data loss) allows for 24 hours, copying snapshots once a day is the cheapest option. It avoids the costs of running an active database or high-speed replication in another region.
+
+- id: q589
+  type: multiple_choice
+  question: |
+    A web app uses sticky sessions and hosts session state on the web server. 
+    How can high availability be ensured without losing session state during an outage?
+  options:
+    - text: Increase the session timeout on the ALB.
+      is_correct: false
+    - text: Use Amazon ElastiCache for Redis to store the session state.
+      is_correct: true
+    - text: Use EBS Provisioned IOPS for the web servers.
+      is_correct: false
+    - text: Use an SQS queue to buffer user requests.
+      is_correct: false
+  explanation: |
+    Correct: Offloading session state to an external cache (Redis) makes the web servers stateless. If one server fails, the user is routed to another server which can still retrieve the session from Redis.
+
+- id: q590
+  type: multiple_choice
+  question: |
+    An RDS MySQL instance performs slowly once a month during reporting queries.
+    How can reporting performance be improved without affecting daily workloads?
+  options:
+    - text: Create a read replica and direct reporting queries to it.
+      is_correct: true
+    - text: Vertically scale the instance size once a month.
+      is_correct: false
+    - text: Use Multi-AZ for the database.
+      is_correct: false
+    - text: Enable DynamoDB Accelerator.
+      is_correct: false
+  explanation: |
+    Correct: Read Replicas are designed exactly for this: offloading read-heavy reporting workloads from the primary database to ensure the primary's performance is not degraded.
+
+- id: q591
+  type: multiple_choice
+  question: |
+    A company runs a container application on Amazon EKS. The app includes microservices for customers and orders. They need to route incoming requests to the appropriate microservices most cost-effectively.
+    Which solution meets this?
+  options:
+    - text: Use a Network Load Balancer (NLB) for every microservice.
+      is_correct: false
+    - text: Use the AWS Load Balancer Controller to provision an Application Load Balancer (ALB).
+      is_correct: true
+    - text: Use an Amazon EC2 instance running NGINX as a proxy.
+      is_correct: false
+    - text: Use Amazon API Gateway to route traffic to the EKS nodes.
+      is_correct: false
+  explanation: |
+    Correct: The AWS Load Balancer Controller manages ALBs that can handle "Ingress" resources in Kubernetes. This allows a single ALB to route traffic to multiple microservices based on paths (e.g., /orders or /customers), which is much more cost-effective than a separate load balancer for every service.
+    Incorrect: NLBs are more expensive for path-based routing at scale, and a manual NGINX setup increases operational overhead.
+
+
+
+- id: q592
+  type: multiple_choice
+  question: |
+    A company sells access to copyrighted images globally. They need low-latency access, the ability to deny specific countries, and minimal costs.
+    Which solution meets these requirements?
+  options:
+    - text: Use S3 with Cross-Region Replication to all regions.
+      is_correct: false
+    - text: Use an EC2 Fleet with a custom Geo-IP database.
+      is_correct: false
+    - text: Use Amazon S3 to store images. Use Amazon CloudFront with geographic restrictions and signed URLs.
+      is_correct: true
+    - text: Use AWS Global Accelerator in front of an ALB.
+      is_correct: false
+  explanation: |
+    Correct: CloudFront caches images at edge locations for low latency. Geographic restrictions (Geo-blocking) allow blocking specific countries at the edge. Signed URLs ensure only paying customers access the content. This is the most cost-effective global delivery model.
+    Incorrect: Replicating S3 buckets globally is extremely expensive due to storage and transfer costs.
+
+- id: q593
+  type: multiple_choice
+  question: |
+    A solutions architect needs a highly available ElastiCache for Redis solution. It must provide high availability at the node and Region level, ensuring no data loss or performance degradation during failures.
+    Which solution meets this?
+  options:
+    - text: Use Multi-AZ Redis replication groups with shards that contain multiple nodes.
+      is_correct: true
+    - text: Use a single-node Redis cluster with daily snapshots to S3.
+      is_correct: false
+    - text: Use Global Datastore for Amazon ElastiCache for Redis.
+      is_correct: false
+    - text: Use Amazon Memcached with auto-discovery.
+      is_correct: false
+  explanation: |
+    Correct: Multi-AZ with Replication Groups provides automatic failover if a primary node fails. Using shards with multiple nodes ensures that even if a node in a shard fails, others are available, maintaining performance and data integrity.
+    Incorrect: Snapshots don't provide high availability. Global Datastore provides cross-region replication but is often used for Disaster Recovery rather than local Region HA.
+
+- id: q594
+  type: multiple_choice
+  question: |
+    An application takes a long time to launch and load memory. How can the company reduce launch time during the next testing phase?
+  options:
+    - text: Use a larger EC2 instance type.
+      is_correct: false
+    - text: Use Provisioned IOPS EBS volumes.
+      is_correct: false
+    - text: Launch instances with hibernation turned on and configure EC2 Auto Scaling warm pools.
+      is_correct: true
+    - text: Use Amazon CloudFront to cache the application code.
+      is_correct: false
+  explanation: |
+    Correct: Hibernation saves the RAM state to the EBS volume. Combined with "Warm Pools," which keep a set of instances in a "Stopped" or "Hibernated" state, the application can start significantly faster because the memory-intensive initialization is already done.
+    Incorrect: Larger instances or faster disks don't solve the "loading time" of the application software itself as effectively as resuming from a pre-initialized state.
+
+- id: q555
+  type: multiple_choice
+  question: |
+    An application experiences sudden traffic increases on random days. What is the most cost-effective way to maintain performance?
+  options:
+    - text: Provision the maximum capacity required to handle peaks at all times.
+      is_correct: false
+    - text: Use scheduled scaling to increase capacity every morning.
+      is_correct: false
+    - text: Use dynamic scaling to change the size of the Auto Scaling group.
+      is_correct: true
+    - text: Use a Compute Savings Plan.
+      is_correct: false
+  explanation: |
+    Correct: Dynamic scaling (Target Tracking or Step Scaling) reacts to real-time metrics (like CPU or request count). This ensures the company only pays for the capacity they need when the "random" spikes occur.
+    Incorrect: Since the spikes are on random days, scheduled scaling is not effective.
+
+- id: q596
+  type: multiple_choice
+  question: |
+    An ecommerce app uses PostgreSQL on EC2. Unpredictable monthly sales events cause connection issues.
+    Which is the most cost-effective way to maintain performance?
+  options:
+    - text: Migrate the PostgreSQL database to Amazon Aurora Serverless v2.
+      is_correct: true
+    - text: Use a larger EC2 instance for the database.
+      is_correct: false
+    - text: Add a Read Replica to the EC2 database.
+      is_correct: false
+    - text: Use ElastiCache in front of the EC2 instance.
+      is_correct: false
+  explanation: |
+    Correct: Aurora Serverless v2 scales capacity (ACUs) instantly and automatically in response to demand. For unpredictable sales events, it ensures the database doesn't crash from connections while minimizing costs during quiet periods.
+    Incorrect: Scaling an EC2 instance requires downtime and manual intervention.
+
+- id: q597
+  type: multiple_choice
+  question: |
+    A serverless application has high latency when employees start using it at the beginning of each day.
+    Which solution reduces this latency?
+  options:
+    - text: Increase the memory of the Lambda function to 10GB.
+      is_correct: false
+    - text: Set up scheduled scaling to increase Lambda Provisioned Concurrency before the work day begins.
+      is_correct: true
+    - text: Use an API Gateway Regional endpoint instead of Edge-optimized.
+      is_correct: false
+    - text: Migrate the Lambda function to an EC2 instance.
+      is_correct: false
+  explanation: |
+    Correct: High latency at the start of the day is a "cold start" issue. Provisioned Concurrency keeps a specified number of functions "warm" and ready. Scaling this up on a schedule (e.g., at 8:00 AM) ensures users have no latency when they start work.
+
+
+
+- id: q598
+  type: multiple_choice
+  question: |
+    Research devices generate .csv files on an SMB share. Analysts need to run SQL queries periodically throughout the day.
+    Which combination meets this cost-effectively? (Choose three.)
+  options:
+    - text: Deploy an AWS Storage Gateway on premises in Amazon S3 File Gateway mode.
+      is_correct: true
+    - text: Use Amazon Redshift to store and query the data.
+      is_correct: false
+    - text: Set up an AWS Glue crawler to create a table based on the S3 data.
+      is_correct: true
+    - text: Use Amazon RDS for MySQL to store the data.
+      is_correct: false
+    - text: Migrate all data to Amazon EFS.
+      is_correct: false
+    - text: Set up Amazon Athena to query the data in S3.
+      is_correct: true
+  explanation: |
+    Correct: S3 File Gateway allows local SMB devices to write directly to S3. Glue Crawlers define the schema for the CSV files. Athena allows the analysts to run SQL queries directly on S3 without the cost of a running database (pay-per-query).
+    Incorrect: Redshift and RDS would be much more expensive for "periodic" queries as they charge for hourly instance uptime.
+
+- id: q599
+  type: multiple_choice
+  question: |
+    A company uses ECS and RDS on AWS Outposts in their data center.
+    Which activities are the responsibility of the company's operational team? (Choose three.)
+  options:
+    - text: Providing power and cooling to the Outposts rack.
+      is_correct: true
+    - text: Patching the physical hypervisor of the Outposts hardware.
+      is_correct: false
+    - text: Providing physical security for the Outposts equipment.
+      is_correct: true
+    - text: Managing the S3 storage capacity on the Outposts.
+      is_correct: false
+    - text: Providing network connectivity between the Outposts and the AWS Region.
+      is_correct: true
+    - text: Replacing failed power supply units in the Outposts rack.
+      is_correct: false
+  explanation: |
+    Correct: Under the Shared Responsibility Model for AWS Outposts, the customer is responsible for the physical environment (Power, Cooling, Physical Security) and the network connection back to AWS.
+    Incorrect: AWS is responsible for managing the hardware, patching the hypervisor, and replacing failed physical components.
+
+- id: q600
+  type: multiple_choice
+  question: |
+    A TCP-based application needs to process 3 million requests per second with low latency on a nonstandard port in AWS.
+    Which solution meets this?
+  options:
+    - text: Deploy a Network Load Balancer (NLB) and configure it for the required TCP port.
+      is_correct: true
+    - text: Use an Application Load Balancer (ALB).
+      is_correct: false
+    - text: Use Amazon CloudFront to terminate the TCP connections.
+      is_correct: false
+    - text: Use Amazon API Gateway with a VPC Link.
+      is_correct: false
+  explanation: |
+    Correct: NLBs operate at Layer 4 (TCP/UDP) and are specifically built to handle tens of millions of requests per second with ultra-low latency. They support any TCP port.
+    Incorrect: ALBs are for Layer 7 (HTTP/HTTPS) and have higher latency/lower throughput compared to NLBs for raw TCP traffic.
