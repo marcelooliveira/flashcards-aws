@@ -2,432 +2,960 @@ questions:
 - id: q501
   type: multiple_choice
   question: |
-    A empresa recebe dados de pagamento a cada minuto e quer analisá-los em tempo real antes de ingeri-los em um data lake no S3.
-    Qual solução oferece a maior eficiência operacional?
+    A company wants to ingest customer payment data into the company's data lake in Amazon S3. The company receives payment data every minute on average. The company wants to analyze the payment data in real time. Then the company wants to ingest the data into the data lake.
+    Which solution will meet these requirements with the MOST operational efficiency?
   options:
-    - text: Usar Amazon Kinesis Data Firehose para ingestão e Amazon Kinesis Data Analytics para análise em tempo real.
+    - text: Use Amazon Kinesis Data Firehose to ingest data. Use Amazon Kinesis Data Analytics to analyze the data in real time.
       is_correct: true
-    - text: Criar uma aplicação no EC2 para ler os dados e gravar no S3.
+    - text: Use AWS Lambda to process the data and store it in an Amazon RDS database for real-time analysis.
       is_correct: false
-    - text: Usar AWS DataSync para mover os dados para o S3.
+    - text: Create a custom application on Amazon EC2 to ingest and analyze the data using a SQL database.
       is_correct: false
-    - text: Usar Amazon MSK para streaming e processar com AWS Lambda.
+    - text: Use Amazon Managed Streaming for Apache Kafka (Amazon MSK) to ingest and process the data.
       is_correct: false
   explanation: |
-    Correto: O Kinesis Data Firehose é a forma mais simples de carregar dados no S3, e o Kinesis Data Analytics permite processar esses dados em trânsito usando SQL, sem gerenciar servidores.
-    Incorreto: Gerenciar EC2 ou MSK (Kafka) aumenta significativamente o overhead operacional comparado às opções serverless do Kinesis.
+    Correct: Kinesis Data Firehose is a fully managed service that streams data directly to S3 (the data lake). Kinesis Data Analytics allows for real-time SQL-based analysis of that streaming data with zero infrastructure management, providing the highest operational efficiency.
+    Incorrect: 
+    - RDS is not a data lake (S3 is).
+    - EC2 increases operational overhead significantly.
+    - Amazon MSK requires more management and configuration compared to the serverless Kinesis suite.
 
 - id: q502
   type: multiple_choice
   question: |
-    Um CMS roda em uma única instância EC2 com imagens em um volume EBS. 
-    Quais ações melhoram a performance e resiliência? (Escolha duas.)
+    A company runs a website that uses a content management system (CMS) on Amazon EC2. The CMS runs on a single EC2 instance and uses an Amazon Aurora MySQL Multi-AZ DB instance. Website images are stored on an Amazon EBS volume mounted inside the EC2 instance.
+    Which combination of actions should a solutions architect take to improve the performance and resilience of the website? (Choose two.)
   options:
-    - text: Mover as imagens para um sistema de arquivos Amazon EFS montado em todas as instâncias.
+    - text: Move the website images onto an Amazon Elastic File System (Amazon EFS) file system that is mounted on every EC2 instance.
       is_correct: true
-    - text: Criar uma AMI e usar um Auto Scaling Group (min 2 instâncias) atrás de um ALB, com CloudFront para cache.
+    - text: Create an Amazon Machine Image (AMI) from the existing EC2 instance. Use the AMI to provision new instances behind an Application Load Balancer as part of an Auto Scaling group.
       is_correct: true
-    - text: Migrar o banco de dados para uma instância EC2 separada.
+    - text: Use Amazon EBS Multi-Attach to share the existing EBS volume across multiple EC2 instances.
       is_correct: false
-    - text: Usar volumes EBS Provisioned IOPS para as imagens.
+    - text: Move the images to an Amazon S3 bucket and use S3 Transfer Acceleration for all requests.
+      is_correct: false
+    - text: Restrict the Auto Scaling group to a single Availability Zone to reduce cross-AZ latency.
       is_correct: false
   explanation: |
-    Correto: O EFS permite que várias instâncias acessem as mesmas imagens simultaneamente (necessário para escalonamento). O ASG + ALB garante alta disponibilidade, e o CloudFront acelera a entrega global via cache.
-    Incorreto: EBS não pode ser montado simultaneamente em várias instâncias (exceto Multi-Attach, que tem restrições e não é ideal para CMS).
+    Correct: 
+    - EFS allows multiple instances to share the same file storage simultaneously, which is necessary for a horizontal scaling CMS.
+    - Using an AMI with an ALB and ASG ensures high availability and resilience by distributing traffic across multiple healthy instances.
+    Incorrect: 
+    - EBS Multi-Attach is for specific cluster-aware applications and doesn't support standard file sharing for web servers like EFS does.
+    - Restricting to a single AZ creates a single point of failure.
 
 - id: q503
   type: multiple_choice
   question: |
-    Uma empresa de monitoramento precisa acessar contas AWS de clientes para ler métricas do CloudWatch e descrever instâncias EC2.
-    Qual a forma MAIS segura de obter esse acesso?
+    A company is building a new feature to monitor data in customer AWS accounts. The feature will call AWS APIs in customer accounts to describe EC2 instances and read CloudWatch metrics.
+    What should the company do to obtain access to customer accounts in the MOST secure way?
   options:
-    - text: Solicitar que o cliente crie uma IAM Role com permissões de leitura e uma política de confiança para a conta da empresa.
+    - text: Ensure that the customers create an IAM role in their account with read-only EC2 and CloudWatch permissions and a trust policy to the companyâ€™s account.
       is_correct: true
-    - text: Solicitar as Access Keys do usuário Root do cliente.
+    - text: Ask customers to provide their AWS account root user credentials to the monitoring application.
       is_correct: false
-    - text: Criar um usuário IAM na conta da empresa e pedir para o cliente adicioná-lo ao grupo de administradores.
+    - text: Have customers create an IAM user with a permanent access key and secret key and share them with the company.
       is_correct: false
-    - text: Usar uma conexão VPN entre as contas.
+    - text: Use AWS Organizations to move the customer's account into the company's organization for direct access.
       is_correct: false
   explanation: |
-    Correto: O uso de IAM Roles para acesso entre contas (Cross-account access) evita o compartilhamento de credenciais fixas e utiliza STS para gerar tokens temporários, sendo o padrão de segurança da AWS.
+    Correct: Cross-account IAM roles are the industry standard for secure third-party access. They do not require sharing long-term credentials and rely on a trust relationship, which can be revoked at any time.
+    Incorrect: 
+    - Sharing root credentials or IAM access keys is a major security risk.
+    - Moving customer accounts into a company's organization is not feasible for a standard service provider model.
+
+- id: q504
+  type: multiple_choice
+  question: |
+    A company needs to connect several VPCs in the us-east-1 Region that span hundreds of AWS accounts. A dedicated networking team manages the cloud network.
+    What is the MOST operationally efficient solution to connect the VPCs?
+  options:
+    - text: Create an AWS Transit Gateway in the networking teamâ€™s AWS account. Share it using AWS RAM and attach the VPCs.
+      is_correct: true
+    - text: Establish a full mesh of VPC peering connections between all hundreds of VPCs.
+      is_correct: false
+    - text: Connect all VPCs to each other using a Site-to-Site VPN mesh.
+      is_correct: false
+    - text: Use a single public EC2 instance in each account to route traffic between VPCs over the internet.
+      is_correct: false
+  explanation: |
+    Correct: AWS Transit Gateway acts as a central hub for hundreds of VPCs. Using AWS Resource Access Manager (RAM) to share the gateway with other accounts in the organization is the most scalable and operationally efficient method.
+    Incorrect: 
+    - VPC peering doesn't scale well to hundreds of accounts (complex to manage).
+    - VPN mesh and public EC2 routing are slow, insecure, and operationally heavy.
+
+- id: q505
+  type: multiple_choice
+  question: |
+    A company runs nightly batch jobs on EC2 instances in an Auto Scaling group. If a job fails, another instance will reprocess it. The jobs run from 12:00 AM to 06:00 AM.
+    Which solution will meet these requirements MOST cost-effectively?
+  options:
+    - text: Create a new launch template for the Auto Scaling group. Set the instances to Spot Instances.
+      is_correct: true
+    - text: Purchase Reserved Instances for the maximum capacity used by the batch jobs.
+      is_correct: false
+    - text: Use On-Demand instances but use a "Scheduled Scaling" policy to shut them down at 6:00 AM.
+      is_correct: false
+    - text: Switch to a "Capacity Block" for ML workloads to reserve the specific 6-hour window.
+      is_correct: false
+  explanation: |
+    Correct: Spot Instances offer up to 90% discount compared to On-Demand. Since the workload is fault-tolerant (reprocesses failed jobs), the risk of Spot interruption is acceptable and makes this the most cost-effective choice.
+    Incorrect: 
+    - Reserved Instances are for 24/7 workloads; paying for 24 hours when you only need 6 is wasteful.
+    - Scheduled scaling with On-Demand is more expensive than using Spot.
 
 - id: q506
   type: multiple_choice
   question: |
-    Uma rede social precisa lidar com uploads massivos de fotos durante grandes eventos.
-    Qual solução oferece a maior escalabilidade?
+    A social media company expects significant increases in photo upload traffic. 
+    Which solution meets these requirements with the MOST scalability?
   options:
-    - text: Fazer o upload para os servidores EC2 e depois movê-los para o S3.
-      is_correct: false
-    - text: Usar o AWS Transfer Family para gerenciar os uploads.
-      is_correct: false
-    - text: Gerar S3 Presigned URLs e fazer o upload direto do navegador do usuário para o S3.
+    - text: Generate Amazon S3 presigned URLs in the application. Upload files directly from the user's browser into an S3 bucket.
       is_correct: true
-    - text: Usar um API Gateway com integração direta ao S3.
+    - text: Scale the application EC2 instances so they can receive the files and then upload them to S3.
+      is_correct: false
+    - text: Use an Application Load Balancer to distribute the upload traffic across a fleet of EC2 instances.
+      is_correct: false
+    - text: Store the images in an Amazon RDS database as Binary Large Objects (BLOBs).
       is_correct: false
   explanation: |
-    Correto: Uploads diretos para o S3 via Presigned URLs removem o gargalo dos servidores de aplicação. O S3 escala quase infinitamente, permitindo que o tráfego de upload não afete a performance da aplicação.
+    Correct: S3 presigned URLs offload the data transfer bottleneck from the application servers to S3's globally scalable infrastructure. The application only handles small URL requests, not large file uploads.
+    Incorrect: 
+    - Using EC2 as an intermediary limits scalability to the size of the instance fleet.
+    - RDS is not designed for efficient bulk image storage compared to S3.
 
 - id: q507
   type: multiple_choice
   question: |
-    Aplicação global de reservas precisa de um banco de dados primário único e consistente com latência de atualização < 1 segundo.
-    Qual solução recomendar?
+    A company needs to expand a travel ticketing app globally. They require a single primary reservation database that is globally consistent, with update latency under 1 second.
+    Which solution should a solutions architect recommend?
   options:
-    - text: Usar Amazon DynamoDB com Global Tables.
+    - text: Convert the application to use Amazon DynamoDB. Use a global table for the reservation table.
       is_correct: true
-    - text: Usar Amazon RDS com Read Replicas em várias regiões.
+    - text: Use Amazon RDS with cross-region read replicas.
       is_correct: false
-    - text: Usar Amazon Aurora Global Database.
+    - text: Use Amazon Aurora with a Global Database and promote a secondary cluster for every update.
       is_correct: false
-    - text: Implementar replicação manual de dados usando SQS.
+    - text: Store the reservation data in Amazon S3 and use Cross-Region Replication.
       is_correct: false
   explanation: |
-    Correto: DynamoDB Global Tables oferece replicação multi-ativa e multi-regional com latência de milissegundos, garantindo que usuários em qualquer lugar acessem o endpoint regional com consistência global.
-    Nota: Aurora Global Database também é uma opção, mas o DynamoDB é frequentemente a resposta preferida em exames para latência ultra-baixa em escala global para dados NoSQL/Reservas.
+    Correct: DynamoDB Global Tables provide multi-region, multi-active replication. This allows local read/write performance in any region with sub-second replication, ensuring global consistency for the reservation system.
+    Incorrect: 
+    - RDS cross-region replicas are for reads; writes must still go to the single primary region, increasing latency for global users.
+    - Aurora Global Database has a single primary region for writes; promoting a secondary is a failover process, not a standard update process.
+
+- id: q508
+  type: multiple_choice
+  question: |
+    A company wants to automate backups of Windows workloads in us-west-1 and ensure they can recover in us-west-2 with no more than 24 hours of data loss.
+    Which solutions will meet these requirements with the LEAST administrative effort? (Choose two.)
+  options:
+    - text: Create an Amazon EC2-backed AMI lifecycle policy (DLM) to create backups based on tags. Configure cross-region copy to us-west-2.
+      is_correct: true
+    - text: Create a backup plan by using AWS Backup based on tag values. Define the destination for the copy as us-west-2 and run twice daily.
+      is_correct: true
+    - text: Write a custom AWS Config rule to take snapshots and move them to S3.
+      is_correct: false
+    - text: Set up AWS DataSync to replicate the EC2 volumes to the second region every hour.
+      is_correct: false
+    - text: Manually create an AMI every night and copy it to the other region via the AWS Console.
+      is_correct: false
+  explanation: |
+    Correct: Both Amazon Data Lifecycle Manager (DLM) and AWS Backup are managed services that automate image/snapshot creation and handle cross-region replication based on tags with minimal setup.
+    Incorrect: 
+    - Custom scripts or manual processes increase administrative effort.
+    - DataSync is for file systems, not for creating bootable EC2 backups (AMIs).
 
 - id: q509
   type: multiple_choice
   question: |
-    Um site está sofrendo ataques de milhões de requisições ilegítimas vindas de um pequeno número de endereços IP.
-    Como resolver o problema de performance IMEDIATAMENTE?
+    An application is being slowed down by millions of illegitimate requests from a few IP addresses. 
+    What is the most immediate way to resolve the performance problem?
   options:
-    - text: Alterar os Security Groups para bloquear os IPs.
-      is_correct: false
-    - text: Modificar a Network ACL (NACL) das subnets para adicionar uma regra de DENY para os IPs.
+    - text: Modify the network ACL for the web tier subnets. Add an inbound deny rule for the IP addresses.
       is_correct: true
-    - text: Desligar o Load Balancer temporariamente.
+    - text: Change the Security Group rules to block the malicious IP addresses.
       is_correct: false
-    - text: Migrar a aplicação para outra região.
+    - text: Update the ALB to use a "Slow Start" mode for new instances.
+      is_correct: false
+    - text: Scale out the EC2 instance fleet to handle the extra traffic.
       is_correct: false
   explanation: |
-    Correto: Network ACLs são capazes de realizar regras de bloqueio (Deny) explícito de IPs. Security Groups não suportam regras de "Deny", apenas "Allow". Esta é a forma mais rápida de filtrar tráfego na camada de rede.
+    Correct: Network ACLs (NACLs) are the only way to explicitly "Deny" specific IP addresses at the subnet level. Security Groups are stateful and only support "Allow" rules.
+    Incorrect: 
+    - Scaling out is expensive and doesn't stop the attack.
+    - Slow start mode is for warming up new instances, not for mitigating DDoS or malicious traffic.
+
+- id: q510
+  type: multiple_choice
+  question: |
+    Applications in eu-west-1 need to communicate securely with databases in ap-southeast-2.
+    Which network design will meet these requirements?
+  options:
+    - text: Configure a VPC peering connection between the ap-southeast-2 VPC and the eu-west-1 VPC. Update the route tables and security groups.
+      is_correct: true
+    - text: Create an Internet Gateway in both VPCs and use public IP addresses for communication.
+      is_correct: false
+    - text: Use a NAT Gateway in the ap-southeast-2 region to receive requests from eu-west-1.
+      is_correct: false
+    - text: Establish a Client VPN connection between the two regions.
+      is_correct: false
+  explanation: |
+    Correct: Inter-Region VPC Peering allows private, encrypted communication between VPCs in different regions over the AWS backbone.
+    Incorrect: 
+    - Public IPs over the internet are not secure.
+    - NAT Gateway is for outbound internet traffic, not for inter-VPC database connectivity.
+
+- id: q511
+  type: multiple_choice
+  question: |
+    Each development environment for a PostgreSQL database is used for only 4 hours a day.
+    Which solution is MOST cost-effective?
+  options:
+    - text: Configure each development environment with Amazon Aurora Serverless.
+      is_correct: true
+    - text: Use an Amazon RDS for PostgreSQL Reserved Instance for each developer.
+      is_correct: false
+    - text: Run a Multi-AZ Amazon RDS cluster 24/7.
+      is_correct: false
+    - text: Use an Amazon EC2 instance with a high-performance SSD to host the database.
+      is_correct: false
+  explanation: |
+    Correct: Aurora Serverless (on-demand) automatically starts up, scales, and shuts down when not in use. Since environments are idle for 20 hours a day, paying only for usage is the most cost-effective.
+    Incorrect: 
+    - Reserved Instances and 24/7 clusters result in paying for 20 hours of idle time.
+    - EC2 hosting requires manual management and still incurs costs while idle unless manually stopped.
+
+- id: q512
+  type: multiple_choice
+  question: |
+    A company needs to back up all AWS resources in an organization. 
+    Which solution will meet this with the LEAST operational overhead?
+  options:
+    - text: Use AWS Backup to create an organization-wide backup policy based on tags. Use AWS Config to ensure resources are tagged.
+      is_correct: true
+    - text: Manually create a backup job for every single resource in every account.
+      is_correct: false
+    - text: Use a Lambda function to describe all resources and trigger snapshots.
+      is_correct: false
+    - text: Use the AWS CLI to export all data to S3 daily.
+      is_correct: false
+  explanation: |
+    Correct: AWS Backup integrates with AWS Organizations to apply backup policies across all accounts. Combining this with AWS Config to enforce tagging ensures new resources are automatically protected.
+    Incorrect: 
+    - Manual processes and custom scripts (Lambda/CLI) increase overhead compared to the managed AWS Backup service.
+
+- id: q513
+  type: multiple_choice
+  question: |
+    A company needs to automatically resize images uploaded by users. Traffic is unpredictable.
+    Which solution maximizes scalability and availability?
+  options:
+    - text: Use an S3 bucket to trigger an AWS Lambda function that resizes the image and saves it back to another S3 bucket.
+      is_correct: true
+    - text: Use an EC2 instance to poll an S3 bucket for new images.
+      is_correct: false
+    - text: Install a resizing software on the Application Load Balancer.
+      is_correct: false
+    - text: Use an RDS database to process the image data.
+      is_correct: false
+  explanation: |
+    Correct: This is a serverless, event-driven architecture. S3 triggers Lambda only when an image is uploaded. Lambda scales automatically to handle any volume of traffic and is highly available.
+    Incorrect: 
+    - EC2 polling is less responsive and harder to scale.
+    - ALBs and RDS are not designed for image processing.
 
 - id: q514
   type: multiple_choice
   question: |
-    Um cluster EKS tem acesso público desativado e os nodes estão em subnets privadas. Os nodes não conseguem se juntar ao cluster.
-    Qual a solução?
+    An Amazon EKS cluster has private access enabled and public access disabled. Nodes in private subnets cannot join the cluster.
+    Which solution will allow the node to join?
   options:
-    - text: Criar Interface VPC Endpoints para permitir que os nodes acessem o control plane.
+    - text: Create interface VPC endpoints to allow nodes to access the control plane.
       is_correct: true
-    - text: Habilitar o Internet Gateway na subnet privada.
+    - text: Enable public access for the EKS endpoint.
       is_correct: false
-    - text: Usar uma NAT Gateway para os nodes acessarem o endpoint público.
+    - text: Use a NAT Gateway to allow nodes to reach the EKS public endpoint.
       is_correct: false
-    - text: Alterar o tipo de instância dos nodes.
+    - text: Disable the VPC firewall for the EKS control plane.
       is_correct: false
   explanation: |
-    Correto: Se o acesso público ao endpoint do EKS está desligado, a comunicação deve ocorrer via rede privada. Interface VPC Endpoints (PrivateLink) permitem que os nodes alcancem a API do Kubernetes de forma privada dentro da VPC.
+    Correct: When the EKS public endpoint is disabled, nodes must reach the API server via a private endpoint. Interface VPC Endpoints (PrivateLink) allow this private communication within the VPC.
+    Incorrect: 
+    - Enabling public access violates the stated security compliance.
+    - NAT Gateway won't help if the public endpoint is disabled.
+
+- id: q515
+  type: multiple_choice
+  question: |
+    A company is migrating to AWS and wants to use Amazon Redshift.
+    Which use cases are suitable for Redshift? (Choose three.)
+  options:
+    - text: Supporting client-side and server-side encryption.
+      is_correct: true
+    - text: Building analytics workloads during specified hours when the application is not active.
+      is_correct: true
+    - text: Scaling to support petabytes of data for complex analytical queries.
+      is_correct: true
+    - text: Serving as a high-frequency transactional (OLTP) database.
+      is_correct: false
+    - text: Storing unstructured image data for a social media app.
+      is_correct: false
+    - text: Running a simple web server backend.
+      is_correct: false
+  explanation: |
+    Correct: Redshift is an OLAP (Online Analytical Processing) warehouse. It is perfect for large-scale analytics, supports encryption, and can handle petabytes of data.
+    Incorrect: 
+    - Redshift is not for OLTP (use RDS/Aurora).
+    - It is not for unstructured files (use S3) or web hosting.
+
+- id: q516
+  type: multiple_choice
+  question: |
+    A company provides a financial API. They expect peak usage and need low latency with LEAST operational overhead.
+    Which solution is best?
+  options:
+    - text: Use Amazon API Gateway and AWS Lambda functions with provisioned concurrency.
+      is_correct: true
+    - text: Deploy the API on a fleet of EC2 instances with an Auto Scaling group.
+      is_correct: false
+    - text: Use an AWS Fargate cluster with a minimum of 100 tasks running at all times.
+      is_correct: false
+    - text: Use a single high-performance EC2 Bare Metal instance.
+      is_correct: false
+  explanation: |
+    Correct: API Gateway and Lambda are serverless (low overhead). Provisioned Concurrency eliminates "cold starts," ensuring consistent low latency even during sudden peaks.
+    Incorrect: 
+    - EC2 and Fargate require more management (patching, scaling logic).
+    - 100 tasks running 24/7 is not cost-effective.
+
+- id: q517
+  type: multiple_choice
+  question: |
+    A company wants to send all AWS Systems Manager Session Manager logs to an Amazon S3 bucket for archival.
+    Which solution is most operationally efficient?
+  options:
+    - text: Enable S3 logging in the Systems Manager console settings and specify a target bucket.
+      is_correct: true
+    - text: Create a custom script on every EC2 instance to upload log files to S3.
+      is_correct: false
+    - text: Use CloudWatch Logs to stream the data to S3 via a Kinesis Firehose.
+      is_correct: false
+    - text: Use the AWS CLI to manually export logs every week.
+      is_correct: false
+  explanation: |
+    Correct: Session Manager has a native integration with S3. You can simply toggle the setting in the console to stream all session data directly to a bucket without any agents or scripts.
+    Incorrect: 
+    - Custom scripts and manual exports increase operational burden.
+    - CloudWatch/Firehose is a valid path but more complex than the native direct-to-S3 feature.
 
 - id: q518
   type: multiple_choice
   question: |
-    Um RDS MySQL está ficando sem espaço em disco. É necessário aumentar o espaço sem downtime e com o menor esforço.
-    Qual a solução?
+    An Amazon RDS MySQL instance is low on disk space. How can space be increased without downtime and with LEAST effort?
   options:
-    - text: Habilitar o Storage Autoscaling no RDS.
+    - text: Enable storage autoscaling in the RDS configuration.
       is_correct: true
-    - text: Criar uma nova instância com mais disco e migrar os dados.
+    - text: Create a new RDS instance with more space and migrate data using DMS.
       is_correct: false
-    - text: Modificar a instância manualmente e reiniciar.
+    - text: Shut down the instance, modify the size, and restart it.
       is_correct: false
-    - text: Usar o AWS DMS para replicar para um banco maior.
+    - text: Delete old logs manually to free up space.
       is_correct: false
   explanation: |
-    Correto: O RDS Storage Autoscaling monitora o consumo e aumenta o volume EBS automaticamente conforme necessário, sem intervenção manual e sem causar queda na aplicação.
+    Correct: RDS Storage Autoscaling automatically expands the backend volume as it reaches capacity without requiring manual intervention or causing downtime.
+    Incorrect: 
+    - Migration (DMS) and manual restarts involve significant effort and/or downtime.
+
+- id: q519
+  type: multiple_choice
+  question: |
+    A consulting company needs to centrally manage and deploy a common set of solutions for customers to use for self-service.
+    Which solution will meet these requirements?
+  options:
+    - text: Create AWS Service Catalog products for the customers.
+      is_correct: true
+    - text: Share a private S3 bucket containing CloudFormation templates.
+      is_correct: false
+    - text: Give customers access to the company's AWS Management Console.
+      is_correct: false
+    - text: Use AWS Direct Connect to link customer offices to the company's VPC.
+      is_correct: false
+  explanation: |
+    Correct: AWS Service Catalog allows organizations to create and manage catalogs of IT services that are approved for use on AWS, providing a governed self-service portal for users.
+    Incorrect: 
+    - Sharing S3 buckets is less structured and lacks the governance of Service Catalog.
+    - Sharing console access is a massive security risk.
 
 - id: q520
   type: multiple_choice
   question: |
-    Aplicação com tráfego imprevisível e throughput de moderado a alto no DynamoDB.
-    Qual configuração é a mais econômica?
+    A new web app uses DynamoDB with unpredictable traffic. Throughput will be moderate to high. 
+    Which DynamoDB configuration is MOST cost-effective?
   options:
-    - text: Configurar DynamoDB em modo On-demand com classe Standard.
+    - text: Configure DynamoDB in on-demand mode by using the DynamoDB Standard table class.
       is_correct: true
-    - text: Usar Provisioned Capacity com Auto Scaling habilitado.
+    - text: Use provisioned capacity with a very high limit to prevent throttling.
       is_correct: false
-    - text: Comprar Reserved Capacity para o DynamoDB.
+    - text: Use the DynamoDB Standard-IA (Infrequent Access) table class with provisioned capacity.
       is_correct: false
-    - text: Usar a classe DynamoDB Standard-IA.
+    - text: Deploy a DAX cluster to handle the unpredictable traffic.
       is_correct: false
   explanation: |
-    Correto: Para cargas de trabalho **imprevisíveis**, o modo On-demand é o mais econômico pois você paga apenas pelo que consome, sem pagar por capacidade ociosa provisionada que não está sendo usada.
+    Correct: On-demand mode is perfect for unpredictable traffic as you pay only for what you use, and it scales instantly. The Standard table class is best for frequent access (moderate to high throughput).
+    Incorrect: 
+    - Provisioned capacity with high limits leads to paying for unused resources.
+    - Standard-IA is for data that is rarely accessed; moderate to high throughput would be more expensive in this class due to higher request costs.
 
 - id: q521
   type: multiple_choice
   question: |
-    Várias unidades de negócio têm suas próprias contas AWS com tabelas DynamoDB. Uma aplicação central em uma conta compartilhada precisa ler dados de todas essas tabelas.
-    Qual opção de autenticação é a MAIS segura?
+    A retail company has several businesses, each with its own AWS account in an organization. Each monitors inventory in a local DynamoDB table. A central reporting application in a shared account needs to read from all these tables.
+    Which authentication option will meet these requirements MOST securely?
   options:
-    - text: Criar um usuário IAM em cada conta de negócio e compartilhar as Access Keys com a conta central.
+    - text: Create an IAM user in each business account with DynamoDB access. Store the credentials in the reporting application.
       is_correct: false
-    - text: Usar uma política de bucket no DynamoDB para permitir acesso externo.
+    - text: Use a bucket policy to grant cross-account access to the DynamoDB tables.
       is_correct: false
-    - text: Em cada conta de negócio, criar uma IAM Role (BU_ROLE) com política de confiança para a conta da aplicação. A aplicação assume essa role via STS para ler as tabelas.
+    - text: In every business account, create an IAM role named BU_ROLE with a policy for DynamoDB and a trust policy for the reporting account. In the reporting account, create a role named APP_ROLE that assumes BU_ROLE.
       is_correct: true
-    - text: Mover todas as tabelas DynamoDB para a conta central da aplicação.
+    - text: Use AWS Organizations to enable "All Features" and use the management account to read all tables directly.
       is_correct: false
   explanation: |
-    Correto: O uso de Cross-account IAM Roles com STS AssumeRole é o padrão ouro de segurança na AWS. Ele elimina a necessidade de credenciais estáticas e segue o princípio do menor privilégio, permitindo que a conta central acesse recursos de forma temporária e auditável.
+    Correct: Cross-account IAM roles are the most secure way to handle this. It avoids long-term credentials and uses the STS (Security Token Service) to assume roles based on a trust relationship.
+    Incorrect: 
+    - IAM users with stored credentials are a security risk.
+    - DynamoDB does not use "bucket policies" (that's S3).
+    - The management account doesn't automatically have access to data inside member account resources without roles.
 
 - id: q522
   type: multiple_choice
   question: |
-    Uma empresa usa Amazon EKS e quer que o cluster escale conforme a carga de trabalho variável com o menor overhead operacional.
-    Quais passos atendem a isso? (Escolha dois.)
+    A company uses Amazon EKS for container applications. The workload is inconsistent, and they want the cluster to scale in and out with LEAST operational overhead. 
+    Which combination of steps will meet these requirements? (Choose two.)
   options:
-    - text: Usar o Kubernetes Metrics Server para Horizontal Pod Autoscaling (HPA).
+    - text: Use the Kubernetes Metrics Server for Horizontal Pod Autoscaling (HPA).
       is_correct: true
-    - text: Usar o Kubernetes Cluster Autoscaler.
+    - text: Use the Kubernetes Cluster Autoscaler to adjust the size of the cluster.
       is_correct: true
-    - text: Criar scripts personalizados para monitorar a CPU via CloudWatch.
+    - text: Manually adjust the Auto Scaling group desired capacity based on CloudWatch alarms.
       is_correct: false
-    - text: Usar um AWS Transit Gateway para balancear a carga.
+    - text: Use Vertical Pod Autoscaler (VPA) to increase the size of existing pods.
+      is_correct: false
+    - text: Configure a Lambda function to restart EKS nodes every hour.
       is_correct: false
   explanation: |
-    Correto: O HPA escala o número de Pods (containers) dentro dos nós, enquanto o Cluster Autoscaler adiciona ou remove os próprios nós (instâncias EC2) quando não há espaço para novos pods. Juntos, eles fornecem escalabilidade total para o EKS.
+    Correct: 
+    - HPA scales the number of *pods* based on CPU/Memory usage.
+    - Cluster Autoscaler scales the number of *EC2 nodes* when pods cannot be scheduled due to lack of resources. 
+    Together, they provide full-stack scaling with minimal intervention.
+    Incorrect: Manual adjustment or VPA (which resizes pods rather than adding them) are either high overhead or less effective for horizontal scaling.
+
+- id: q523
+  type: multiple_choice
+  question: |
+    A serverless web application retrieves data from multiple DynamoDB tables. A solutions architect needs to ensure this data retrieval doesn't impact baseline performance in the most operationally efficient way.
+    Which solution is best?
+  options:
+    - text: Amazon DynamoDB Accelerator (DAX) cluster.
+      is_correct: false
+    - text: Amazon CloudFront with Lambda@Edge functions to cache or fetch data at the edge.
+      is_correct: true
+    - text: Create an SQS queue to buffer all database requests.
+      is_correct: false
+    - text: Use Amazon ElastiCache for Redis to store query results.
+      is_correct: false
+  explanation: |
+    Correct: Lambda@Edge allows the application to process logic and retrieve data closer to the user (at the edge location). This reduces latency and offloads the primary application's processing power.
+    Incorrect: 
+    - While DAX is great for DynamoDB caching, Lambda@Edge is often more efficient for "serverless web applications" to reduce latency across tiers.
+    - SQS adds latency (asynchronous), which might impact the user experience.
+
+- id: q524
+  type: multiple_choice
+  question: |
+    A company needs to troubleshoot "Access Denied" errors in IAM using CloudTrail logs with the LEAST effort. 
+    Which solution meets this?
+  options:
+    - text: Download CloudTrail logs and use a text editor to find errors.
+      is_correct: false
+    - text: Use Amazon CloudWatch Logs Insights to query the logs.
+      is_correct: false
+    - text: Search CloudTrail logs with Amazon Athena queries to identify the errors.
+      is_correct: true
+    - text: Send logs to Amazon QuickSight to visualize failures.
+      is_correct: false
+  explanation: |
+    Correct: Amazon Athena allows you to run SQL queries directly on top of the log files stored in S3. It is the standard, low-effort way to analyze large volumes of CloudTrail data.
+    Incorrect: 
+    - Manual searching is high effort. 
+    - QuickSight is for long-term visualization/BI, not quick troubleshooting.
+
+- id: q525
+  type: multiple_choice
+  question: |
+    A company needs to access its usage cost programmatically, including forecasts for the next 12 months, with the LEAST operational overhead.
+    Which solution is best?
+  options:
+    - text: Access usage data using the AWS Cost Explorer API with pagination.
+      is_correct: true
+    - text: Export Cost and Usage Reports (CUR) to S3 and query them with Athena.
+      is_correct: false
+    - text: Use the AWS Budgets API to create alerts for every service.
+      is_correct: false
+    - text: Use the AWS CLI to describe every resource and calculate costs manually.
+      is_correct: false
+  explanation: |
+    Correct: The Cost Explorer API is specifically designed to provide cost data and forecasting (prediction) programmatically with minimal setup.
+    Incorrect: 
+    - CUR + Athena is powerful but requires more setup (operational overhead).
+    - Budgets are for alerting, not detailed usage analysis or forecasting history.
 
 - id: q526
   type: multiple_choice
   question: |
-    Um failover manual em um banco Aurora PostgreSQL causou 3 minutos de downtime. 
-    Qual solução reduz o downtime em exercícios de escalonamento com o menor overhead?
+    A database failover caused 3 minutes of downtime. What reduces this downtime for scaling exercises with the LEAST operational overhead?
   options:
-    - text: Aumentar o tamanho da instância do banco de dados.
+    - text: Use an Aurora Multi-Master cluster.
       is_correct: false
-    - text: Usar uma Read Replica para todas as operações.
+    - text: Increase the number of Aurora Replicas.
       is_correct: false
-    - text: Configurar um Amazon RDS Proxy para o banco de dados.
+    - text: Create a custom script to detect failover and update DNS records.
+      is_correct: false
+    - text: Set up an Amazon RDS Proxy for the database.
       is_correct: true
-    - text: Mover o banco para uma instância EC2 gerenciada manualmente.
-      is_correct: false
   explanation: |
-    Correto: O RDS Proxy mantém as conexões da aplicação ativas durante um failover de banco de dados. Ele reduz o tempo de failover em até 66%, pois a aplicação não precisa restabelecer conexões TCP/TLS com a nova instância writer, diminuindo o downtime percebido para segundos.
+    Correct: RDS Proxy maintains established connections to the database. During a failover, it holds requests and redirects them to the new primary instance once available, reducing failover time by up to 66% and preventing application errors.
+    Incorrect: 
+    - Multi-master is complex and doesn't support all features.
+    - More replicas don't necessarily speed up the detection and reconnection time of the application.
+
+
 
 - id: q527
   type: multiple_choice
   question: |
-    Aplicação com Aurora Multi-AZ quer expandir globalmente e garantir tolerância a falhas regional.
-    Qual a solução com MAIOR tolerância a falhas?
+    A regional streaming service (EC2, ASG, Aurora) wants to expand globally and ensure minimal downtime/fault tolerance.
+    Which solution is best?
   options:
-    - text: Criar snapshots do banco e copiar para outra região diariamente.
-      is_correct: false
-    - text: Usar VPC Peering para conectar as regiões.
-      is_correct: false
-    - text: Implantar a aplicação em uma segunda região, usar Aurora Global Database e Route 53 com política de roteamento de failover.
+    - text: Deploy the app tier in a second region. Use Aurora Global Database. Use Route 53 with failover routing.
       is_correct: true
-    - text: Usar CloudFront para servir o banco de dados.
+    - text: Use VPC Peering between the primary and secondary regions.
+      is_correct: false
+    - text: Copy snapshots of the Aurora DB to the second region every hour.
+      is_correct: false
+    - text: Use CloudFront to cache all database queries globally.
       is_correct: false
   explanation: |
-    Correto: O Aurora Global Database permite replicação física rápida (latência < 1s) entre regiões. O Route 53 com Health Checks automatiza o redirecionamento do tráfego para a região secundária caso a primária falhe.
+    Correct: Aurora Global Database provides sub-second replication across regions. Route 53 failover ensures that if Region A fails, users are automatically directed to Region B.
+    Incorrect: 
+    - Snapshot copying has high RPO (data loss).
+    - CloudFront caches content, but cannot cache dynamic database writes.
+
+- id: q529
+  type: multiple_choice
+  question: |
+    A company wants to migrate transactional/sensitive data to AWS to increase security and reduce operational overhead. 
+    Which solution fits best?
+  options:
+    - text: Host databases on EC2 instances and manage them manually.
+      is_correct: false
+    - text: Migrate the databases to Amazon RDS and configure encryption at rest.
+      is_correct: true
+    - text: Use S3 to store all database records as CSV files.
+      is_correct: false
+    - text: Use AWS Snowball to store data in an offline vault.
+      is_correct: false
+  explanation: |
+    Correct: RDS is a managed service that handles patching, backups, and scaling (reducing overhead). Encryption at rest (using KMS) satisfies security requirements for sensitive data.
+    Incorrect: EC2 requires the company to manage the OS and DB engine themselves, increasing overhead.
 
 - id: q530
   type: multiple_choice
   question: |
-    App de jogos usa TCP/UDP com NLBs em várias regiões via Route 53. Como melhorar a performance e diminuir a latência para crescimento global?
+    A gaming app uses TCP/UDP. They want to improve performance and decrease latency for a global user base. 
+    What is the best solution?
   options:
-    - text: Migrar para Application Load Balancers (ALB).
+    - text: Use Amazon CloudFront for all traffic.
       is_correct: false
-    - text: Usar Amazon CloudFront para todo o tráfego.
+    - text: Use Route 53 Latency-based routing.
       is_correct: false
-    - text: Adicionar o AWS Global Accelerator na frente dos NLBs.
+    - text: Add AWS Global Accelerator in front of the NLBs.
       is_correct: true
-    - text: Aumentar o TTL dos registros no Route 53.
+    - text: Deploy the game on AWS Snowball Edge devices in user homes.
       is_correct: false
   explanation: |
-    Correto: O Global Accelerator usa a rede edge da AWS para diminuir o "hop" de rede dos usuários, roteando pacotes TCP/UDP pelo caminho mais rápido até o NLB. Isso resolve problemas de latência e jitter comuns em jogos online que dependem de protocolos de baixa latência.
+    Correct: Global Accelerator provides static IP addresses and uses the AWS global network to route traffic to the nearest healthy endpoint. It is ideal for non-HTTP protocols like TCP/UDP used in gaming.
+    Incorrect: CloudFront is optimized for HTTP/HTTPS, not raw TCP/UDP gaming traffic.
+
+
 
 - id: q531
   type: multiple_choice
   question: |
-    Um desenvolvedor precisa expor uma função Lambda para um webhook de terceiros da forma MAIS eficiente operacionalmente.
-    Qual a solução?
+    A developer needs to make a Lambda function available for a third-party webhook callback with the MOST operational efficiency.
+    Which solution is best?
   options:
-    - text: Criar uma Function URL para a função Lambda.
+    - text: Create a function URL for the Lambda function.
       is_correct: true
-    - text: Configurar um Application Load Balancer na frente da Lambda.
+    - text: Use an Application Load Balancer to trigger the Lambda function.
       is_correct: false
-    - text: Usar o Amazon API Gateway para expor a função.
+    - text: Create an API Gateway REST API to proxy to the Lambda function.
       is_correct: false
-    - text: Usar o AWS AppSync para criar um endpoint GraphQL.
+    - text: Use SQS to receive the webhook and trigger Lambda.
       is_correct: false
   explanation: |
-    Correto: Lambda Function URLs são a forma mais simples e direta de expor um endpoint HTTPS para uma função única, sem o custo ou a complexidade de gerenciar um API Gateway ou ALB. Ideal para webhooks simples.
+    Correct: Lambda Function URLs are the simplest way to provide an HTTPS endpoint for a single function without the cost or complexity of API Gateway or ALB.
+    Incorrect: ALB and API Gateway add more configuration and potential cost.
+
+- id: q532
+  type: multiple_choice
+  question: |
+    A company wants to provide individual secure URLs for customers using API Gateway and Route 53 with the MOST operational efficiency. 
+    Which steps are required? (Choose three.)
+  options:
+    - text: Create a wildcard custom domain name in Route 53 pointing to API Gateway.
+      is_correct: true
+    - text: Request a wildcard certificate in AWS Certificate Manager (ACM).
+      is_correct: true
+    - text: Create a custom domain name in API Gateway and import the ACM certificate.
+      is_correct: true
+    - text: Create a separate API Gateway for every individual customer.
+      is_correct: false
+    - text: Use a Network Load Balancer to terminate SSL.
+      is_correct: false
+    - text: Store customer certificates in an S3 bucket.
+      is_correct: false
+  explanation: |
+    Correct: Wildcard domains and certificates allow you to support an unlimited number of customer subdomains (e.g., cust1.example.com) with a single configuration in API Gateway and Route 53.
+
+- id: q533
+  type: multiple_choice
+  question: |
+    A company needs to automatically detect PII in S3 buckets and notify the security team.
+    Which solution is best?
+  options:
+    - text: Use Amazon Macie with EventBridge and SNS.
+      is_correct: true
+    - text: Use Amazon GuardDuty to scan S3 contents.
+      is_correct: false
+    - text: Use Amazon Inspector on the S3 bucket.
+      is_correct: false
+    - text: Write a Lambda function to scan every file in S3 using RegEx.
+      is_correct: false
+  explanation: |
+    Correct: Amazon Macie is the dedicated service for PII discovery in S3. It integrates with EventBridge to trigger notifications via SNS.
+    Incorrect: GuardDuty and Inspector do not scan S3 objects for PII content.
+
+- id: q534
+  type: multiple_choice
+  question: |
+    Logs must be available for 30 days (frequent analysis), retained for 60 more days (backup), and deleted after 90 days.
+    Which cost-effective solution fits?
+  options:
+    - text: Keep logs in S3 Standard for 90 days.
+      is_correct: false
+    - text: Transition to S3 Standard-IA after 30 days, then to Glacier after 90 days. Delete after 90 days.
+      is_correct: true
+    - text: Use S3 One Zone-IA for the first 30 days.
+      is_correct: false
+    - text: Store logs in EBS volumes and take snapshots.
+      is_correct: false
+  explanation: |
+    Correct: S3 Lifecycle policies allow transitioning data to cheaper storage classes (Standard-IA) after the frequent access period (30 days) and then automating deletion (Expiration) at the 90-day mark.
+    Incorrect: Moving to Glacier *at* 90 days is unnecessary if the requirement is to delete them at 90 days.
+
+- id: q535
+  type: multiple_choice
+  question: |
+    All secrets stored in Amazon EKS must be encrypted in the etcd key-value store.
+    Which solution is best?
+  options:
+    - text: Use a bitwise rotation script on etcd.
+      is_correct: false
+    - text: Create an AWS KMS key and enable EKS KMS secrets encryption.
+      is_correct: true
+    - text: Encrypt the EBS volumes of the EKS worker nodes.
+      is_correct: false
+    - text: Use Secrets Manager to replace the etcd store entirely.
+      is_correct: false
+  explanation: |
+    Correct: EKS has a native feature to use AWS KMS to encrypt Kubernetes Secrets. This ensures that the data is encrypted before it is written to etcd.
+    Incorrect: Worker node encryption doesn't protect the data within the Control Plane's etcd database.
+
+- id: q536
+  type: multiple_choice
+  question: |
+    Data scientists need near real-time read-only access to a Single-AZ RDS PostgreSQL database without affecting production.
+    Which cost-effective, highly available solution fits?
+  options:
+    - text: Export data to S3 every hour.
+      is_correct: false
+    - text: Use a custom script to copy the database to a new instance daily.
+      is_correct: false
+    - text: Change to Multi-AZ and add two read replicas.
+      is_correct: true
+    - text: Switch to DynamoDB for all workloads.
+      is_correct: false
+  explanation: |
+    Correct: Multi-AZ provides high availability for production. Read Replicas allow the data scientists to run heavy queries without consuming the resources of the primary writer instance.
+    Incorrect: Snapshot/Copy methods are not "near real-time."
 
 - id: q537
   type: multiple_choice
   question: |
-    Aplicação 3-tier: ALB, EC2 com sessão local e banco MySQL em EC2. Precisa escalar para tráfego súbito e garantir alta disponibilidade em 3 AZs.
-    Qual a solução?
+    A three-tier app (ALB, EC2, MySQL) needs to scale and ensure high availability across 3 AZs.
+    Which solution is best?
   options:
-    - text: Migrar banco para RDS Multi-AZ, usar ElastiCache para sessões e colocar EC2s em um Auto Scaling Group em 3 AZs.
+    - text: Migrate to RDS Multi-AZ, use ElastiCache for session data, and use an ASG across 3 AZs.
       is_correct: true
-    - text: Aumentar o tamanho da instância EC2 atual.
+    - text: Use a larger EC2 instance for the database.
       is_correct: false
-    - text: Usar S3 para armazenar os estados de sessão.
+    - text: Use a Network Load Balancer instead of an ALB.
       is_correct: false
-    - text: Colocar o banco de dados atrás de um CloudFront.
+    - text: Store session state in the EC2 instance's local EBS volume.
       is_correct: false
   explanation: |
-    Correto: Esta arquitetura remove o estado das instâncias EC2 (tornando-as stateless via ElastiCache), remove o ponto único de falha do banco (via RDS Multi-AZ) e permite escalabilidade horizontal automática através do ASG em múltiplas AZs.
+    Correct: To scale horizontally, the web tier must be stateless (moving session data to ElastiCache). RDS Multi-AZ ensures database availability, and the ASG handles traffic spikes across AZs.
+    Incorrect: Local session storage prevents scaling (sticky sessions fail if an instance is replaced).
 
 - id: q538
   type: multiple_choice
   question: |
-    Empresa de vídeo quer restringir o acesso ao conteúdo por país usando o CloudFront.
-    Qual a solução?
+    A company wants to roll out video content phased by country and block access to others.
+    Which CloudFront solution fits?
   options:
-    - text: Adicionar restrições geográficas (Geographic Restrictions) no CloudFront usando uma Allow List.
+    - text: Use geographic restrictions with an allow list.
       is_correct: true
-    - text: Usar o AWS WAF para bloquear IPs por país.
+    - text: Create a separate CloudFront distribution for every country.
       is_correct: false
-    - text: Configurar o Route 53 com roteamento por geolocalização.
+    - text: Use a Lambda@Edge function to check the user's passport.
       is_correct: false
-    - text: Criptografar os vídeos com chaves KMS específicas por país.
+    - text: Use a signed cookie that expires when the user leaves the country.
       is_correct: false
   explanation: |
-    Correto: O CloudFront possui um recurso nativo de Geo-Blocking/Geo-Restriction que permite permitir ou bloquear o acesso com base no país de origem do usuário de forma simples e eficiente.
+    Correct: CloudFront has a built-in Geo Restriction feature. You can define an "Allow List" of countries to control access at the edge locations based on the user's IP.
+    Incorrect: Creating hundreds of distributions is not manageable.
+
+- id: q540
+  type: multiple_choice
+  question: |
+    An on-premises Oracle database needs to move to AWS for higher availability and to offload reporting.
+    Which solution is most operationally efficient?
+  options:
+    - text: Migrate to Aurora MySQL and use reader instances for reporting.
+      is_correct: true
+    - text: Use EC2 instances with Oracle Data Guard.
+      is_correct: false
+    - text: Use RDS for Oracle in Single-AZ mode.
+      is_correct: false
+    - text: Use S3 to store the database and Athena for reporting.
+      is_correct: false
+  explanation: |
+    Correct: Amazon Aurora (PostgreSQL or MySQL compatible) is highly available by design (6 copies of data across 3 AZs). Its read replicas (reader instances) are perfect for offloading reporting tasks.
+    Incorrect: RDS Single-AZ is not highly available. EC2 Oracle requires significant management.
 
 - id: q541
   type: multiple_choice
   question: |
-    Uma empresa quer criar um app web onde o acesso é imprevisível e pode ficar ocioso por muito tempo. Apenas assinantes pagos podem fazer login. 
-    Qual combinação de passos é a mais econômica? (Escolha três.)
+    A company wants to build a web application on AWS. Client access requests are unpredictable and can be idle for long periods. Only paid subscribers can sign in.
+    Which combination of steps will meet these requirements MOST cost-effectively? (Choose three.)
   options:
-    - text: Criar uma função AWS Lambda para recuperar informações do DynamoDB. Criar um endpoint no API Gateway para aceitar APIs RESTful e enviá-las para o Lambda.
+    - text: Create an AWS Lambda function to retrieve user information from Amazon DynamoDB. Create an Amazon API Gateway endpoint and send API calls to the Lambda function.
       is_correct: true
-    - text: Criar um Amazon Cognito User Pool para autenticar os usuários.
+    - text: Create an Amazon Cognito user pool to authenticate users.
       is_correct: true
-    - text: Usar AWS Amplify para servir o conteúdo frontend (HTML/CSS/JS) com CloudFront integrado.
+    - text: Use AWS Amplify to serve frontend web content with HTML, CSS, and JS using an integrated Amazon CloudFront configuration.
       is_correct: true
-    - text: Provisionar instâncias EC2 em um Auto Scaling Group permanente.
+    - text: Deploy the application on Amazon EC2 instances in an Auto Scaling group to handle idle time.
       is_correct: false
-    - text: Usar instâncias RDS reservadas para o banco de dados.
+    - text: Use Amazon RDS for MySQL to store user information and use a NAT Gateway for internet access.
+      is_correct: false
+    - text: Use AWS Directory Service to manage user authentication.
       is_correct: false
   explanation: |
-    Correto: Esta é a arquitetura "Serverless" clássica. Lambda e API Gateway cobram apenas por execução (ideal para tráfego imprevisível/ocioso). Cognito gerencia a autenticação de assinantes de forma escalável. Amplify/CloudFront entrega o frontend globalmente sem servidores fixos.
-    Incorreto: Instâncias fixas (EC2/RDS) gerariam custos mesmo quando a aplicação estivesse ociosa.
+    Correct: 
+    - Lambda and API Gateway are serverless and use a pay-per-request model, which is ideal for unpredictable or idle workloads.
+    - Amazon Cognito handles user authentication and subscription-based sign-ins at scale without managing infrastructure.
+    - AWS Amplify/CloudFront provides a cost-effective way to serve static frontend assets globally.
+    Incorrect: EC2 and RDS incur costs even when idle. AWS Directory Service is more complex and expensive for simple web user management compared to Cognito.
 
 - id: q542
   type: multiple_choice
   question: |
-    Uma empresa de mídia quer que apenas clientes premium tenham acesso a streams e arquivos no S3 via CloudFront. Eles também alugam filmes (acesso temporário). 
-    Qual solução atende a isso?
+    A media company uses CloudFront to deliver content from S3. They want only premium customers to access media streams and specific on-demand downloads (rentals).
+    Which solution will meet these requirements?
   options:
-    - text: Usar OAI (Origin Access Identity) no bucket S3.
+    - text: Use S3 Block Public Access to prevent unauthorized users from viewing the content.
       is_correct: false
-    - text: Gerar e fornecer CloudFront Signed URLs para os clientes premium.
+    - text: Generate and provide CloudFront signed URLs to premium customers.
       is_correct: true
-    - text: Criar um Security Group que permita apenas IPs de clientes premium.
+    - text: Create a bucket policy that allows access only from the company's corporate IP range.
       is_correct: false
-    - text: Usar criptografia KMS em todos os arquivos do S3.
+    - text: Use AWS KMS to encrypt the files and share the key with premium users.
       is_correct: false
   explanation: |
-    Correto: URLs assinadas (Signed URLs) permitem acesso temporário e controlado a objetos privados. É a solução padrão para sistemas de aluguel ou conteúdo pago, pois o link expira após o tempo definido.
+    Correct: CloudFront signed URLs allow you to provide temporary access to private content. This is the standard method for protecting premium media streams and paid downloads.
+    Incorrect: 
+    - S3 Block Public Access is a security baseline but doesn't handle user-level authorization for CloudFront.
+    - IP-based policies don't work for a global customer base.
+    - KMS encryption is for data at rest and is not a practical way to manage web-tier content delivery permissions.
+
+- id: q543
+  type: multiple_choice
+  question: |
+    A company with multiple AWS accounts in an organization recently purchased a Savings Plan. They decommissioned many instances in the purchasing account and want to apply the Savings Plan discounts to other accounts.
+    Which combination of steps will meet these requirements? (Choose two.)
+  options:
+    - text: Enable "Discount Sharing" in the AWS Billing console for the organization.
+      is_correct: true
+    - text: Ensure all accounts are part of the same consolidated billing family in AWS Organizations.
+      is_correct: true
+    - text: Contact AWS Support to manually move the Savings Plan from one account to another.
+      is_correct: false
+    - text: Purchase a new Savings Plan for each individual account.
+      is_correct: false
+    - text: Use AWS Resource Access Manager (RAM) to share the Savings Plan.
+      is_correct: false
+  explanation: |
+    Correct: In AWS Organizations, Savings Plans (and RIs) are shared across all accounts in the consolidated billing family by default unless "Sharing" is explicitly disabled.
+    Incorrect: Savings Plans cannot be manually moved by support once purchased, and RAM is for sharing resources like subnets or License Manager configurations, not billing discounts.
 
 - id: q544
   type: multiple_choice
   question: |
-    Um arquiteto precisa lançar uma nova versão de uma API REST no API Gateway com efeito mínimo nos clientes e perda mínima de dados.
-    Qual solução recomendar?
+    A company uses a regional API Gateway with a custom domain and Route 53. They need to release a new API version with minimal data loss and minimal customer impact.
+    Which solution is best?
   options:
-    - text: Criar um estágio de implantação "Canary" no API Gateway. Direcionar uma porcentagem do tráfego e promover para produção após verificação.
+    - text: Create a canary release deployment stage for API Gateway. Point a percentage of traffic to the canary, then promote to production.
       is_correct: true
-    - text: Criar uma nova API e pedir para os usuários mudarem a URL.
+    - text: Create a second API Gateway and use Route 53 weighted routing to split traffic.
       is_correct: false
-    - text: Usar Route 53 com roteamento ponderado entre duas APIs diferentes.
+    - text: Update the existing production stage with the new code immediately during low-traffic hours.
       is_correct: false
-    - text: Fazer o deploy diretamente no estágio de produção durante a madrugada.
+    - text: Use an Application Load Balancer to perform blue/green deployments between two API Gateways.
       is_correct: false
   explanation: |
-    Correto: O Canary Release permite testar a nova versão com uma pequena fração dos usuários reais. Se houver erros, o impacto é limitado; se estiver tudo ok, o tráfego é migrado integralmente sem downtime.
+    Correct: API Gateway "Canary" deployments allow you to test the new version on a small percentage of real traffic. If successful, you can promote the canary to the full production stage with zero downtime.
+    Incorrect: 
+    - Route 53 weighted routing works but requires managing two separate API Gateways and custom domains, increasing overhead.
+    - Direct updates carry high risk if the new version has bugs.
 
 - id: q545
   type: multiple_choice
   question: |
-    Se o site principal (ALB + Route 53) ficar indisponível, os usuários devem ser direcionados para uma página de erro estática com o menor overhead possível.
-    Qual a solução?
+    A company needs to redirect users to a backup static error page in S3 if their primary ALB-based website is unavailable, with minimal infrastructure overhead.
+    Which solution is best?
   options:
-    - text: Criar uma segunda instância EC2 com a página de erro.
+    - text: Use an AWS Lambda function to monitor the ALB and update Route 53 records manually.
       is_correct: false
-    - text: Configurar o Route 53 em modo Active-Passive Failover, apontando para um bucket S3 (site estático) quando o ALB falhar no health check.
+    - text: Set up a Route 53 active-passive failover configuration pointing to an S3 bucket for the passive record.
       is_correct: true
-    - text: Usar um script Lambda para mudar os registros DNS manualmente.
+    - text: Deploy a second ALB in a different region to host the error page.
       is_correct: false
-    - text: Colocar o ALB atrás de um Global Accelerator.
+    - text: Use CloudFront with a custom error response to handle ALB 502/503 errors.
       is_correct: false
   explanation: |
-    Correto: O failover de DNS do Route 53 é automático. Ao detectar que o ALB está "unhealthy", ele altera a resposta do DNS para o endpoint do S3. Hospedar o erro no S3 é extremamente barato e resiliente.
-    
+    Correct: Route 53 Failover routing (active-passive) uses health checks to monitor the primary endpoint (ALB). If it fails, Route 53 automatically starts returning the record for the passive endpoint (S3 website).
+    Incorrect: 
+    - CloudFront custom error pages help for specific HTTP codes, but Route 53 failover is the standard way to handle a total site/ALB failure.
+    - Manual Lambda updates increase complexity and "time to recovery."
+
+
 
 - id: q546
   type: multiple_choice
   question: |
-    Uma empresa quer eliminar fitas físicas de backup (tapes), mas manter seus softwares de backup on-premises atuais.
-    O que recomendar?
+    A company wants to eliminate physical backup tapes while preserving their existing on-premises backup applications and workflows.
+    What should a solutions architect recommend?
   options:
-    - text: Migrar todos os dados para o S3 via AWS CLI.
+    - text: Use AWS DataSync to move all backup files to S3.
       is_correct: false
-    - text: Usar o AWS DataSync para sincronizar os volumes.
+    - text: Set up AWS Storage Gateway using the File Gateway interface.
       is_correct: false
-    - text: Configurar o AWS Storage Gateway com a interface iSCSI-VTL (Virtual Tape Library).
+    - text: Set up AWS Storage Gateway to connect using the iSCSI-virtual tape library (VTL) interface.
       is_correct: true
-    - text: Usar o AWS Snowball para migrar as fitas.
+    - text: Use AWS Snowball to migrate tape data to the cloud.
       is_correct: false
   explanation: |
-    Correto: O Tape Gateway (VTL) emula uma biblioteca de fitas física. O software on-premises "pensa" que está gravando em fitas, mas os dados são enviados para o S3 (S3 Glacier para arquivamento), reduzindo custos e eliminando hardware físico.
-    
+    Correct: Tape Gateway (a mode of Storage Gateway) emulates a physical tape library. This allows the company to keep their current backup software (like Veeam or Veritas) but store the "tapes" virtually in S3 or Glacier.
+    Incorrect: File Gateway provides a file-system interface (NFS/SMB), not a tape-library interface.
 
 - id: q547
   type: multiple_choice
   question: |
-    Sensores transmitem alto volume de dados em streaming para o S3 em tempo real com o MENOR overhead operacional.
-    Qual solução?
+    Data sensors stream high-volume data. The platform must be scalable, near real-time, and store data in S3 with the LEAST operational overhead.
+    Which solution is best?
   options:
-    - text: Usar Amazon Kinesis Data Firehose para entregar os dados ao S3.
+    - text: Use Amazon Kinesis Data Firehose to deliver streaming data to Amazon S3.
       is_correct: true
-    - text: Criar uma aplicação no EC2 para ler o stream e salvar no S3.
+    - text: Create a custom application on EC2 to receive and write data to S3.
       is_correct: false
-    - text: Usar o AWS Glue ETL para processar os dados.
+    - text: Use Amazon SQS to buffer the data and a Lambda function to write it to S3.
       is_correct: false
-    - text: Usar o Amazon SQS para bufferizar e Lambda para gravar no S3.
+    - text: Use Amazon Managed Streaming for Apache Kafka (Amazon MSK).
       is_correct: false
   explanation: |
-    Correto: O Firehose é um serviço totalmente gerenciado (zero administração de servidores) que ingere o streaming e o agrupa automaticamente para salvar no S3 em intervalos de tempo ou tamanho.
-    
+    Correct: Kinesis Data Firehose is "serverless" and fully managed. It automatically scales and buffers data before delivering it to S3, requiring the least effort.
+    Incorrect: 
+    - EC2 and MSK require infrastructure management (high overhead).
+    - SQS + Lambda is a valid pattern but requires more manual configuration and coding compared to the "plug-and-play" nature of Firehose.
+
+- id: q548
+  type: multiple_choice
+  question: |
+    A company wants to control which services each account (Finance, Analytics, Dev) can use with the LEAST operational overhead.
+    Which solution is best?
+  options:
+    - text: Apply IAM policies to every user in every account.
+      is_correct: false
+    - text: Create organizational units (OUs) in AWS Organizations and attach Service Control Policies (SCPs).
+      is_correct: true
+    - text: Use AWS Config to delete any unauthorized resources that are created.
+      is_correct: false
+    - text: Set up a separate VPN for each department to restrict access.
+      is_correct: false
+  explanation: |
+    Correct: SCPs provide central control over the maximum available permissions for all accounts in an OU. This is the most efficient way to restrict services (e.g., "Deny all except S3/EC2") at scale.
+    Incorrect: Managing individual IAM policies across many accounts is an operational nightmare. AWS Config is reactive, not preventative.
 
 - id: q549
   type: multiple_choice
   question: |
-    Banco de dados MySQL em subnet privada precisa acessar um provedor externo na internet para atualizar catálogos. 
-    Como garantir segurança máxima sem aumentar o overhead operacional?
+    A MySQL cluster in a private subnet needs to retrieve data from a third-party provider on the internet. 
+    How should this be achieved to maximize security without increasing overhead?
   options:
-    - text: Atribuir um IP público às instâncias do banco de dados.
+    - text: Assign a public IP address to the MySQL EC2 instances.
       is_correct: false
-    - text: Implantar um NAT Gateway na subnet pública e atualizar a tabela de rotas da subnet privada.
+    - text: Deploy a NAT gateway in the public subnets and update the private subnet route table.
       is_correct: true
-    - text: Usar um VPC Peering com uma conta que tenha internet.
+    - text: Use an AWS Direct Connect connection to the third-party provider.
       is_correct: false
-    - text: Criar um Proxy Reverso na subnet privada.
+    - text: Deploy a NAT instance in the private subnet.
       is_correct: false
   explanation: |
-    Correto: O NAT Gateway permite que recursos privados iniciem conexões de saída (outbound) para a internet sem permitir que a internet inicie conexões de entrada (inbound). É um serviço gerenciado, altamente disponível e seguro.
+    Correct: A NAT Gateway allows instances in private subnets to reach the internet (outbound) for updates or API calls, while preventing the internet from initiating connections (inbound) to the database.
+    Incorrect: 
+    - Public IPs on a database are a security risk.
+    - NAT instances require manual management (patching, scaling), increasing overhead compared to the managed NAT Gateway service.
+
+
 
 - id: q550
   type: multiple_choice
   question: |
-    Uma função Lambda usa chaves KMS para descriptografar variáveis de ambiente. 
-    Quais passos garantem as permissões corretas? (Escolha dois.)
+    A company uses AWS KMS to encrypt Lambda environment variables. Which steps ensure the correct permissions are in place for decryption? (Choose two.)
   options:
-    - text: Adicionar permissões de KMS (kms:Decrypt) na Execution Role da Lambda.
+    - text: Add AWS KMS permissions (kms:Decrypt) in the Lambda execution role.
       is_correct: true
-    - text: Permitir a Lambda Execution Role na política da chave KMS (Key Policy).
+    - text: Allow the Lambda execution role in the AWS KMS key policy.
       is_correct: true
-    - text: Criar uma política de bucket no S3.
+    - text: Create a VPC Endpoint for KMS and attach it to the Lambda function.
       is_correct: false
-    - text: Adicionar a permissão no Security Group da Lambda.
+    - text: Grant the 'iam:PassRole' permission to the KMS service.
+      is_correct: false
+    - text: Attach a resource-based policy to the Lambda function.
       is_correct: false
   explanation: |
-    Correto: Para que um recurso use o KMS, ele precisa de permissão no seu próprio IAM (Execution Role) E o KMS precisa permitir esse acesso em sua própria política de recurso (Key Policy).
+    Correct: To decrypt data with KMS, the caller (Lambda execution role) needs the IAM permission to call the `kms:Decrypt` API, AND the KMS key policy must explicitly allow that role to use the key.
+    Incorrect: VPC endpoints help with network connectivity but do not grant API permissions. `iam:PassRole` is used for passing roles to services, not for decrypting data.
