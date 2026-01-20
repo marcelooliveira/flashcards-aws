@@ -26,6 +26,10 @@
       Incorrect:
         Upload the data from each site to an S3 bucket in the closest Region. Use S3 Cross-Region Replication to copy objects to the destination S3 bucket. Then remove the data from the origin S3 bucket to save storage costs This approach introduces additional operational complexity and delays due to replication.
         Schedule AWS Snowball Edge Storage Optimized device jobs daily to transfer data from each site to the closest Region. Use AWS DataSync to automate the transfer to the destination S3 bucket This solution is not suitable for high-speed internet connections and adds unnecessary steps.
+    diagram: |
+      graph TD
+        A[Global Sites] -- High-Speed Internet --> B[S3 Bucket with Transfer Acceleration]
+        B -- Multipart Uploads --> C[Aggregated Data]
 
   - id: q2
     type: multiple_choice
@@ -46,6 +50,10 @@
         - Exporting to RDS increases operational overhead.
         - Using AWS Glue and Redshift adds complexity and cost.
         - Elasticsearch and Kibana are not suited for simple queries.
+    diagram: |
+      graph TD
+        A[S3 Bucket with JSON Logs] --> B[Amazon Athena]
+        B --> C[On-Demand Queries]
     tags: []
     difficulty: 
     points: 
@@ -69,6 +77,10 @@
         - IAM roles require managing roles for each account.
         - Listing account IDs in the policy is inefficient.
         - Cross-account access adds complexity.
+    diagram: |
+      graph TD
+        A[User in AWS Organization] -- Access --> B[S3 Bucket]
+        B -- Policy: aws:PrincipalOrgID --> A
     tags: []
     difficulty: 
     points: 
@@ -92,6 +104,10 @@
         - NAT gateways require internet connectivity.
         - Internet gateways contradict the private connectivity requirement.
         - VPNs add unnecessary complexity.
+    diagram: |
+      graph TD
+        A[EC2 Instance] -- Private Network --> B[Gateway VPC Endpoint]
+        B --> C[S3 Bucket]
     tags: []
     difficulty: 
     points: 
@@ -115,6 +131,11 @@
         - S3 requires significant application changes.
         - Sticky sessions do not solve data inconsistency.
         - EBS replication is not natively supported.
+    diagram: |
+      graph TD
+        A[EC2 Instance 1] -- Shared Access --> C[EFS]
+        B[EC2 Instance 2] -- Shared Access --> C[EFS]
+        C --> D[All Users See All Documents]
     tags: []
     difficulty: 
     points: 
@@ -138,6 +159,10 @@
         - DataSync uses network bandwidth.
         - Direct Connect setup takes time.
         - CLI upload is inefficient for large datasets.
+    diagram: |
+      graph TD
+        A[On-Premises Data Center] -- Snowball Edge --> B[Offline Transfer]
+        B --> C[Amazon S3]
     tags: []
     difficulty: 
     points: 
@@ -161,6 +186,11 @@
         - Kinesis is better for real-time analytics.
         - RDS introduces latency and lacks scalability.
         - Amazon MQ is less scalable for this use case.
+    diagram: |
+      graph TD
+        A[Producer] --> B[SNS Topic]
+        B --> C[SQS Queue]
+        C --> D[Consumers]
     tags: []
     difficulty: 
     points: 
@@ -184,6 +214,11 @@
         - Lambda does not decouple the architecture.
         - ECS with fixed tasks lacks scalability.
         - EMR is not suitable for general-purpose job coordination.
+    diagram: |
+      graph TD
+        A[Job Queue SQS] --> B[EC2 Auto Scaling Group]
+        B --> C[Compute Nodes]
+        C --> D[Process Jobs]
     tags: []
     difficulty: 
     points: 
@@ -207,6 +242,10 @@
         - EFS is not optimized for rarely accessed files.
         - FSx does not address lifecycle management.
         - Volume Gateway lacks lifecycle management capabilities.
+    diagram: |
+      graph TD
+        A[On-Premises SMB Server] -- S3 File Gateway --> B[Amazon S3]
+        B -- Lifecycle Policy --> C[Glacier Deep Archive]
     tags: []
     difficulty: 
     points: 
@@ -230,6 +269,11 @@
         - SNS does not guarantee message order.
         - DynamoDB Streams do not guarantee strict order.
         - Kinesis does not guarantee strict order for all consumers.
+    diagram: |
+      graph TD
+        A[Order Placed] --> B[SQS FIFO Queue]
+        B --> C[Lambda Function]
+        C --> D[Order Processing]
     tags: []
     difficulty: 
     points: 
@@ -254,6 +298,11 @@
         Store the credentials in an encrypted file on Amazon S3 and grant the EC2 instances access to the file This approach does not provide automatic rotation of credentials, increasing operational overhead.
         Use Systems Manager Parameter Store to store the credentials and grant the EC2 instances access to the parameters Parameter Store does not support automatic rotation of credentials, which is a key requirement.
         Embed the credentials in the EC2 instance user data script This method is insecure and does not allow for credential rotation without redeploying the instances.
+    diagram: |
+      graph TD
+        A[Secrets Manager] -- Credentials --> B[EC2 Instance]
+        B --> C[Aurora Database]
+        A -- Auto Rotation --> A
     tags: 
     difficulty: 
     points: 
@@ -278,6 +327,12 @@
         Use an Amazon API Gateway to serve both static and dynamic content API Gateway is not designed for serving static content and would increase complexity.
         Deploy an Amazon ElastiCache cluster to cache the static data ElastiCache is not suitable for serving static web content directly to users.
         Configure the ALB to cache static content and serve dynamic content ALB does not have built-in caching capabilities for static content.
+    diagram: |
+      graph TD
+        A[User] --> B[Route 53]
+        B --> C[CloudFront]
+        C --> D1[S3 Static Data]
+        C --> D2[ALB Dynamic Data]
     tags: 
     difficulty: 
     points: 
@@ -302,6 +357,10 @@
         Use Systems Manager Parameter Store to store the credentials and manually rotate them This approach requires manual intervention, increasing operational overhead.
         Create IAM users for each database and rotate their credentials manually Managing IAM users and manually rotating credentials is time-consuming and error-prone.
         Use a Lambda function to rotate the credentials and store them in an encrypted S3 bucket This solution requires custom development and does not leverage AWS's built-in credential management features.
+    diagram: |
+      graph TD
+        A[Secrets Manager] -- Multi-Region Replication --> B[RDS for MySQL All Regions]
+        A -- Auto Rotation --> B
     tags: 
     difficulty: 
     points: 
@@ -327,6 +386,11 @@
         Deploy the database on Amazon RDS and enable Multi-AZ Multi-AZ improves availability but does not address the need for scaling read workloads.
         Use Amazon DynamoDB to store the transaction data DynamoDB is a NoSQL database and would require significant changes to the application.
         Configure read replicas for the existing database on EC2 instances Managing read replicas manually increases operational overhead and does not provide automatic scaling.
+    diagram: |
+      graph TD
+        A[App Servers EC2] --> B[Aurora Cluster]
+        B -- Multi-AZ --> C[Aurora Replicas]
+        C -- Auto Scaling --> D[Read Workloads]
     tags: 
     difficulty: 
     points: 
@@ -351,6 +415,10 @@
         Deploy a third-party firewall appliance from the AWS Marketplace Third-party appliances require additional management and may not integrate as seamlessly as AWS Network Firewall.
         Use Security Groups and NACLs to perform traffic inspection and filtering Security Groups and NACLs are not designed for deep traffic inspection and advanced filtering.
         Configure an AWS WAF to filter traffic based on rules AWS WAF is designed for web application protection and does not provide the same level of network traffic inspection.
+    diagram: |
+      graph TD
+        A[Internet] --> B[AWS Network Firewall]
+        B --> C[Production VPC]
     tags: 
     difficulty: 
     points: 
@@ -375,6 +443,13 @@
         Use Amazon Athena to query the data and generate reports Athena is a query service and does not provide visualization capabilities.
         Deploy a third-party business intelligence tool on Amazon EC2 Third-party tools require additional management and may not integrate as seamlessly as QuickSight.
         Use AWS Glue to transform the data and store it in Amazon Redshift for reporting This solution adds unnecessary complexity and cost for visualization purposes.
+    diagram: |
+      graph TD
+        A[S3] --> C[QuickSight]
+        B[RDS PostgreSQL] --> C
+        C --> D[Dashboards]
+        D --> E[Management Full Access]
+        D --> F[Other Users Limited Access]
     tags: 
     difficulty: 
     points: 
@@ -399,6 +474,10 @@
         Store the S3 credentials in a configuration file on the EC2 instances This approach is insecure and does not follow AWS best practices.
         Use an S3 bucket policy to allow access from the EC2 instance IDs Bucket policies cannot directly reference EC2 instance IDs for access control.
         Manually generate temporary credentials and configure them on the EC2 instances This method is operationally inefficient and prone to errors.
+    diagram: |
+      graph TD
+        A[EC2 Instance] -- IAM Role --> B[S3 Bucket]
+        B --> C[Document Storage]
     tags: 
     difficulty: 
     points: 
@@ -426,6 +505,14 @@
         Deploy an Amazon EC2 instance to process the images EC2 instances are not stateless and require more management compared to Lambda.
         Use AWS Step Functions to orchestrate the image processing workflow Step Functions add unnecessary complexity for this use case.
         Store the compressed images in the same S3 bucket as the original images This approach does not separate the original and processed images, which can lead to confusion and management challenges.
+    diagram: |
+      graph TD
+        A[User Uploads Image] --> B[S3 Bucket Original]
+        B -- Notification --> C[SQS Queue]
+        C --> D[Lambda Compress Image]
+        D --> E[S3 Bucket Compressed]
+        B -- Event --> F[EventBridge]
+        F --> D
     tags: 
     difficulty: 
     points: 
@@ -476,6 +563,11 @@
         Use AWS DataSync to copy the data from the production environment to the test environment DataSync is not optimized for cloning EBS volumes and may introduce additional latency.
         Create an Amazon S3 bucket and upload the data to the bucket. Download the data to new EBS volumes in the test environment This approach is inefficient and does not provide the required high I/O performance.
         Use AWS Backup to create backups of the production EBS volumes and restore them in the test environment AWS Backup does not offer the same speed and performance benefits as EBS fast snapshot restore.
+    diagram: |
+      graph TD
+        A[Production EBS Volumes] -- Snapshot --> B[EBS Snapshot]
+        B -- Fast Snapshot Restore --> C[New EBS Volumes Test]
+        C --> D[Test EC2 Instances]
     tags: 
     difficulty: 
     points: 
@@ -500,6 +592,13 @@
         - Using EC2 instances and RDS increases operational overhead due to the need for server management, scaling, and database maintenance.
         - Amazon Lightsail is designed for simpler workloads and does not scale as effectively for high traffic scenarios.
         - AWS Elastic Beanstalk simplifies deployment but does not minimize operational overhead as much as serverless solutions.
+    diagram: |
+      graph TD
+        A[User] --> B[CloudFront]
+        B --> C[S3 Static Content]
+        B --> D[API Gateway]
+        D --> E[Lambda]
+        E --> F[DynamoDB]
     tags: 
     difficulty: 
     points: 
@@ -524,6 +623,11 @@
         - S3 Standard is more expensive for infrequently accessed data and does not optimize costs based on access patterns.
         - S3 Glacier is designed for archival storage and is not suitable for frequently accessed data.
         - S3 One Zone-IA does not provide resilience to the loss of an Availability Zone, which is a requirement.
+    diagram: |
+      graph TD
+        A[Media Files] --> B[S3 Intelligent-Tiering]
+        B -- Frequent Access --> C[Frequent Tier]
+        B -- Infrequent Access --> D[Infrequent Tier]
     tags: 
     difficulty: 
     points: 
@@ -548,6 +652,10 @@
         - S3 Standard-IA is more expensive than S3 Glacier Deep Archive for long-term storage, making it less cost-effective.
         - S3 Glacier Flexible Retrieval is more expensive than S3 Glacier Deep Archive for rarely accessed data.
         - Amazon EBS volumes are not cost-effective for long-term storage compared to S3 storage classes.
+    diagram: |
+      graph TD
+        A[S3 Standard] -- 1 Month --> B[S3 Glacier Deep Archive]
+        B -- Indefinite Storage --> C[Long-Term Retention]
     tags: 
     difficulty: 
     points: 
@@ -572,6 +680,11 @@
         - Exporting billing data to S3 and querying with Athena requires additional setup and management, increasing operational overhead.
         - AWS Budgets is useful for tracking costs but does not provide detailed analysis capabilities.
         - Using a third-party tool adds complexity and operational overhead compared to native AWS tools.
+    diagram: |
+      graph TD
+        A[EC2 Costs] --> B[Cost Explorer]
+        B -- Filter by Instance Type --> C[Cost Analysis]
+        C --> D[Root Cause: Vertical Scaling]
 
   - id: q25
     type: multiple_choice
@@ -594,6 +707,12 @@
         - Increasing Lambda quotas and using Kinesis adds complexity and does not minimize configuration effort compared to the SQS-based solution.
         - RDS Proxy helps manage database connections but does not address the scalability of the Lambda function itself.
         - Deploying the application on ECS increases operational overhead compared to a serverless architecture.
+    diagram: |
+      graph TD
+        A[API Gateway] --> B[Lambda Receive Data]
+        B --> C[SQS Queue]
+        C --> D[Lambda Load to Aurora]
+        D --> E[Aurora PostgreSQL]
 
   - id: q26
     type: multiple_choice
@@ -615,6 +734,10 @@
         - CloudWatch is used for monitoring metrics and logs, not for tracking configuration changes.
         - Trusted Advisor provides recommendations but does not monitor or enforce configuration changes.
         - CloudTrail records API calls but does not block unauthorized changes.
+    diagram: |
+      graph TD
+        A[S3 Buckets] --> B[AWS Config]
+        B -- Rules --> C[Detect Unauthorized Changes]
 
   - id: q27
     type: multiple_choice
@@ -636,6 +759,10 @@
         - Creating an IAM user violates the principle of least privilege and requires unnecessary account management.
         - Exporting data to a CSV file is manual and does not provide real-time access.
         - AWS Organizations is used for account management, not for sharing dashboards.
+    diagram: |
+      graph TD
+        A[CloudWatch Dashboard] -- Share Link --> B[Product Manager]
+        B -- View Access --> A
 
   - id: q28
     type: multiple_choice
@@ -657,6 +784,11 @@
         - IAM roles are not designed for SSO and require manual setup for each account.
         - Third-party SSO solutions increase complexity and operational overhead.
         - AWS Cognito is designed for application authentication, not for enterprise SSO.
+    diagram: |
+      graph TD
+        A[On-Prem AD] -- Trust --> B[AWS Directory Service]
+        B --> AWS SSO
+        C --> D[AWS Accounts]
 
   - id: q29
     type: multiple_choice
@@ -679,6 +811,12 @@
         - Route 53 latency-based routing does not provide automated failover.
         - ALBs are not optimized for UDP traffic and are less suitable than NLBs for this use case.
         - Direct Connect is for private connectivity, not for routing user traffic between Regions.
+    diagram: |
+      graph TD
+        A[User] --> B[Global Accelerator]
+        B --> C[NLB Region 1]
+        B --> D[NLB Region 2]
+        C & D --> E[EC2 Auto Scaling]
 
   - id: q30
     type: multiple_choice
@@ -700,6 +838,10 @@
         - Using an Aurora Serverless DB cluster is not cost-effective for resource-intensive tests requiring consistent compute and memory attributes.
         - Enabling Multi-AZ deployment increases costs and does not address the requirement to reduce costs for infrequent usage.
         - Reserved Instances reduce costs for continuously running databases but are not suitable for a database used only 48 hours per month.
+    diagram: |
+      graph TD
+        A[RDS DB Instance] -- Snapshot --> B[Snapshot Storage]
+        B -- Restore --> C[RDS DB Instance Test]
 
   - id: q31
     type: multiple_choice
@@ -721,6 +863,10 @@
         - Trusted Advisor provides recommendations but does not enforce tagging compliance automatically.
         - Manually reviewing tags is time-consuming and prone to human error, making it inefficient.
         - CloudWatch is designed for monitoring metrics and logs, not for enforcing tagging compliance.
+    diagram: |
+      graph TD
+        A[AWS Resources] --> B[AWS Config Rules]
+        B -- Check Tags --> C[Compliance Report]
 
   - id: q32
     type: multiple_choice
@@ -742,6 +888,10 @@
         - Hosting on EC2 with a load balancer is more expensive and unnecessary for static content.
         - RDS is a database service and not suitable for serving static website files.
         - Lambda with API Gateway is designed for serverless applications, not static websites.
+    diagram: |
+      graph TD
+        A[Website Files] --> B[S3 Bucket]
+        B --> C[Users]
 
   - id: q33
     type: multiple_choice
@@ -763,6 +913,12 @@
         - SQS is not designed for near-real-time streaming and would require more operational overhead.
         - RDS triggers are not suitable for high-throughput, near-real-time processing.
         - EMR is designed for big data processing, not for low-latency, near-real-time solutions.
+    diagram: |
+      graph TD
+        A[Transactions] --> B[Kinesis Data Streams]
+        B --> C[Lambda Remove Sensitive Data]
+        C --> D[DynamoDB]
+        B --> E[Other Applications]
 
   - id: q34
     type: multiple_choice
@@ -784,6 +940,11 @@
         - CloudWatch Logs is used for monitoring logs and metrics, not for tracking configuration changes or API call history.
         - Trusted Advisor provides recommendations but does not track configuration changes or API calls.
         - Systems Manager is used for operational management, not for tracking configuration changes or API calls.
+    diagram: |
+      graph TD
+        A[AWS Resources] --> B[AWS Config]
+        A --> C[CloudTrail]
+        B & C --> D[Compliance & Audit]
 
   - id: q35
     type: multiple_choice
@@ -805,6 +966,11 @@
         - AWS WAF is designed for web application protection, not for mitigating large-scale DDoS attacks.
         - Third-party firewall appliances require additional management and may not integrate seamlessly with AWS services.
         - Security Groups are not designed to handle large-scale DDoS attacks.
+    diagram: |
+      graph TD
+        A[Internet] --> B[ELB]
+        B --> C[EC2 Instances]
+        B -- Shield Advanced --> D[DDoS Protection]
 
   - id: q36
     type: multiple_choice
@@ -825,6 +991,10 @@
         - Trusted Advisor provides recommendations but does not monitor resource configurations.
         - CloudWatch is used for monitoring metrics and logs, not for compliance tracking.
         - Systems Manager is used for operational management, not for compliance monitoring.
+    diagram: |
+      graph TD
+        A[AWS Resources] --> B[AWS Config]
+        B --> C[Compliance Monitoring]
 
   - id: q37
     type: multiple_choice
@@ -846,6 +1016,11 @@
         - A bastion host increases operational overhead and requires additional management.
         - Opening SSH ports increases the attack surface and is less secure.
         - Using a VPN adds complexity and does not minimize operational overhead.
+    diagram: |
+      graph TD
+        A[Admin] --> B[Session Manager]
+        B --> C[EC2 Instances]
+        C --> D[No Open SSH Ports]
 
   - id: q38
     type: multiple_choice
@@ -867,6 +1042,11 @@
         - Global Accelerator is more expensive and is designed for dynamic applications, not static websites.
         - Deploying EC2 instances in multiple Regions increases cost and operational overhead.
         - RDS is a database service and is not suitable for caching static website content.
+    diagram: |
+      graph TD
+        A[User] --> B[Route 53]
+        B --> C[CloudFront]
+        C --> D[S3 Bucket]
 
   - id: q39
     type: multiple_choice
@@ -889,6 +1069,10 @@
         - Scaling the database vertically increases compute power but does not address the storage performance issue.
         - ElastiCache improves read performance but does not help with write-intensive workloads like frequent inserts.
         - Multi-AZ deployment improves availability but does not enhance storage performance.
+    diagram: |
+      graph TD
+        A[RDS MySQL] -- Provisioned IOPS SSD --> B[High Performance Storage]
+        B --> C[Fast Inserts]
 
   - id: q40
     type: multiple_choice
@@ -911,6 +1095,12 @@
         - SQS is not designed for long-term storage and requires additional infrastructure for processing.
         - RDS is not cost-effective for storing large volumes of alerts and requires more management.
         - DynamoDB with TTL is suitable for key-value data but is less cost-effective for large-scale archival needs.
+    diagram: |
+      graph TD
+        A[Edge Devices] --> B[Kinesis Data Firehose]
+        B --> C[S3 Bucket]
+        C -- 14 Days --> D[Immediate Analysis]
+        C -- >14 Days --> E[Glacier Archive]
 
   - id: q41
     type: multiple_choice
@@ -932,6 +1122,12 @@
         - DataSync is designed for batch transfers and is not optimized for real-time SaaS integrations.
         - Deploying additional EC2 instances increases operational overhead and does not address the bottleneck effectively.
         - Kinesis Data Streams is designed for real-time analytics and streaming, not for SaaS data transfer.
+    diagram: |
+      graph TD
+        A[SaaS Sources] --> B[AppFlow]
+        B --> C[S3 Bucket]
+        C -- Event --> D[SNS Notification]
+        D --> E[User]
 
   - id: q42
     type: multiple_choice
@@ -953,6 +1149,10 @@
         - An internet gateway incurs data transfer charges and does not provide private connectivity.
         - Deploying additional NAT gateways increases costs without addressing the data transfer charges.
         - Direct Connect is unnecessary for accessing S3 within the same Region and adds complexity.
+    diagram: |
+      graph TD
+        A[EC2 Instances] -- VPC Endpoint --> B[S3 Bucket]
+        A -- No NAT Gateway --> C[Cost Savings]
 
   - id: q43
     type: multiple_choice
@@ -974,6 +1174,11 @@
         - Snowball is designed for offline data transfer and is not suitable for ongoing backups.
         - S3 Transfer Acceleration improves upload speeds but still relies on internet bandwidth.
         - Storage Gateway Volume Gateway is not optimized for large-scale, time-sensitive backups.
+    diagram: |
+      graph TD
+        A[On-Premises App] -- Direct Connect --> B[AWS]
+        B --> C[S3 Bucket]
+        C --> D[Timely Backups]
 
   - id: q44
     type: multiple_choice
@@ -997,6 +1202,10 @@
         - AWS Backup creates backups but does not prevent accidental deletions.
         - Default encryption protects data at rest but does not prevent deletions.
         - Lifecycle policies manage storage costs but do not prevent accidental deletions.
+    diagram: |
+      graph TD
+        A[S3 Bucket] -- Versioning --> B[Object Recovery]
+        A -- MFA Delete --> C[Delete Protection]
 
   - id: q45
     type: multiple_choice
@@ -1023,6 +1232,11 @@
         - Kinesis Data Firehose is designed for streaming data delivery, not for buffering messages for Lambda.
         - Enabling retries on the Lambda function does not address message durability.
         - EventBridge is not designed for durable message storage and does not guarantee message delivery.
+    diagram: |
+      graph TD
+        A[SNS Topic] --> B[SQS Queue]
+        B --> C[Lambda Function]
+        C --> D[Data Ingestion]
 
   - id: q46
     type: multiple_choice
@@ -1045,6 +1259,12 @@
         - AWS Glue is designed for ETL processes and does not specialize in PII detection.
         - Amazon Inspector is used for security assessments, not for scanning files for PII.
         - Using Lambda to manually parse files increases development effort and is less efficient.
+    diagram: |
+      graph TD
+        A[Store Uploads File] --> B[S3 Bucket]
+        B -- Macie Scan --> C[PII Detected?]
+        C -- Yes --> D[SNS Alert]
+        D --> E[Admin Remediation]
 
   - id: q47
     type: multiple_choice
@@ -1066,6 +1286,10 @@
         - Spot Instances do not guarantee capacity and can be interrupted.
         - Reserved Instances provide cost savings but do not guarantee capacity.
         - Auto Scaling adjusts capacity dynamically but does not guarantee availability in specific zones.
+    diagram: |
+      graph TD
+        A[EC2 Capacity] -- On-Demand Capacity Reservation --> B[3 AZs]
+        B --> C[Guaranteed Availability]
 
   - id: q48
     type: multiple_choice
@@ -1087,6 +1311,11 @@
         - Amazon S3 is not suitable for serving dynamic catalogs directly to a website.
         - Amazon RDS is a database service and is not designed for file storage.
         - Multi-AZ deployment is not applicable to EC2 instance stores, which are ephemeral.
+    diagram: |
+      graph TD
+        A[Website Catalog] --> B[EFS]
+        B --> C[EC2 Instances]
+        B --> D[High Availability]
 
   - id: q49
     type: multiple_choice
@@ -1108,6 +1337,12 @@
         - S3 Standard is more expensive for infrequently accessed files and does not optimize costs.
         - RDS is not cost-effective for storing large volumes of files.
         - Glacier Deep Archive has longer retrieval times, which is not suitable for files accessed within 1 year.
+    diagram: |
+      graph TD
+        A[Call Transcripts] --> B[S3 Intelligent-Tiering]
+        B -- <1 Year --> C[Fast Access]
+        B -- >1 Year --> D[Glacier Flexible Retrieval]
+        C & D --> E[Query with Athena/Glacier Select]
 
   - id: q50
     type: multiple_choice
@@ -1129,3 +1364,8 @@
         - Manually SSHing into each instance is time-consuming and error-prone.
         - Elastic Beanstalk is not suitable for patching third-party software on existing EC2 instances.
         - Terminating and relaunching instances is disruptive and inefficient for applying patches.
+    diagram: |
+      graph TD
+        A[Patch Command] --> B[Systems Manager Run Command]
+        B --> C[All EC2 Instances]
+        C --> D[Patched Software]
