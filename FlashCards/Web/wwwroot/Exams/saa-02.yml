@@ -18,6 +18,12 @@
       Incorrect: 
         Creating an EC2 instance requires provisioning and managing infrastructure, increasing operational overhead compared to serverless options.
         Amazon SNS is designed for notifications and does not support formatting data into HTML reports or sending to multiple email addresses directly.
+    diagram: |
+      graph TD
+        A[EventBridge] --> B[Lambda]
+        B --> C[API]
+        B --> D[SES]
+        D --> E[Email Recipients]
     tags: 
     difficulty: 
     points: 
@@ -39,6 +45,10 @@
       Incorrect: 
         Amazon S3 is object storage, not a file system, and does not support standard file system structures or direct file access.
         Amazon EBS volumes are attached to individual EC2 instances and do not provide shared, scalable file storage across multiple instances.
+    diagram: |
+      graph TD
+        A[EC2 Instances] --> B[EFS]
+        B --> C[File System Storage]
     tags: 
     difficulty: 
     points: 
@@ -60,6 +70,11 @@
       Incorrect: 
         S3 Versioning allows deletions and overwrites, not preventing deletion as required.
         S3 Glacier does not provide immediate access, and governance mode allows privileged users to delete objects.
+    diagram: |
+      graph TD
+        A[S3 Standard] --1 year--> B[S3 Glacier Deep Archive]
+        B --9 years--> C[Archive]
+        A --Object Lock--> D[No Deletion]
     tags: 
     difficulty: 
     points: 
@@ -81,6 +96,11 @@
       Incorrect: 
         Amazon EFS is designed for Linux workloads and does not support Windows file shares or SMB protocol.
         Amazon S3 is object storage and requires a gateway or client to access as file shares, not preserving native Windows access.
+    diagram: |
+      graph TD
+        A[EC2] --> B[FSx for Windows File Server]
+        B --> C[Multi-AZ]
+        B --> D[Windows File Shares]
     tags: 
     difficulty: 
     points: 
@@ -102,6 +122,9 @@
       Incorrect: 
         Network ACLs are stateless and apply to entire subnets, not providing instance-level granularity.
         IAM roles are for AWS service permissions, not for controlling network traffic between instances and databases.
+    diagram: |
+      graph TD
+        A[EC2 Private Subnet] --Security Group--> B[RDS Database]
     tags: 
     difficulty: 
     points: 
@@ -123,6 +146,11 @@
       Incorrect: 
         Edge-optimized endpoints use CloudFront globally, but certificates must be in us-east-1 for global distribution, not matching the Regional requirement.
         CloudFront adds complexity and cost without need, as Regional API Gateway can handle custom domains directly.
+    diagram: |
+      graph TD
+        A[Route 53] --> B[API Gateway]
+        B --> C[Custom Domain]
+        C --> D[ACM Certificate]
     tags: 
     difficulty: 
     points: 
@@ -144,6 +172,12 @@
       Incorrect: 
         Manual moderation is labor-intensive, error-prone, and does not minimize development effort.
         Amazon Comprehend is for text analysis, not suitable for detecting inappropriate content in images.
+    diagram: |
+      graph TD
+        A[User Upload] --> B[Rekognition]
+        B --> C[Inappropriate Content?]
+        C --Yes--> D[Human Review]
+        C --No--> E[Approved]
     tags: 
     difficulty: 
     points: 
@@ -165,6 +199,11 @@
       Incorrect: 
         ECS on EC2 requires managing EC2 instances, increasing operational overhead.
         EKS with self-managed nodes involves provisioning and managing Kubernetes nodes, not minimizing infrastructure responsibility.
+    diagram: |
+      graph TD
+        A[Containers] --> B[ECS]
+        B --> C[Fargate]
+        C --> D[Run Application]
     tags: 
     difficulty: 
     points: 
@@ -186,6 +225,12 @@
       Incorrect: 
         Direct S3 upload lacks real-time processing and streaming capabilities for large-scale data ingestion.
         EMR is for big data processing but not optimized for real-time streaming and daily TB-scale ingestion.
+    diagram: |
+      graph TD
+        A[Websites] --> B[Kinesis Data Streams]
+        B --> C[Kinesis Firehose]
+        C --> D[S3 Data Lake]
+        D --> E[Redshift]
     tags: 
     difficulty: 
     points: 
@@ -207,6 +252,11 @@
       Incorrect: 
         NLB does not support HTTP redirection; it operates at layer 4.
         CloudFront adds unnecessary complexity and cost for simple redirection within the ALB.
+    diagram: |
+      graph TD
+        A[User HTTP] --> B[ALB]
+        B --Redirect--> C[HTTPS]
+        C --> D[Website]
     tags: 
     difficulty: 
     points: 
@@ -228,6 +278,10 @@
       Incorrect: 
         Hardcoding credentials violates security best practices and requires code changes for rotation.
         Parameter Store does not support automatic rotation, increasing operational overhead.
+    diagram: |
+      graph TD
+        A[Secrets Manager] --Credentials--> B[EC2 Instance]
+        B --> C[RDS Database]
     tags: 
     difficulty: 
     points: 
@@ -249,6 +303,12 @@
       Incorrect: 
         ACM-issued certificates are for AWS services and cannot be used for external CAs; rotation is not automatic for imported certs.
         Self-signed certificates are not trusted by browsers and do not meet encryption requirements.
+    diagram: |
+      graph TD
+        A[External CA] --> B[ACM Imported Cert]
+        B --> C[ALB]
+        C --> D[User]
+        B --> E[EventBridge Notification]
     tags: 
     difficulty: 
     points: 
@@ -270,6 +330,11 @@
       Incorrect: 
         EC2 instances require provisioning and management, increasing operational overhead.
         AWS Glue is for ETL on structured data, not suitable for simple file conversions.
+    diagram: |
+      graph TD
+        A[PDF Upload] --> B[S3]
+        B --PUT Event--> C[Lambda]
+        C --> D[JPG in S3]
     tags: 
     difficulty: 
     points: 
@@ -291,6 +356,12 @@
       Incorrect: 
         Direct Connect provides connectivity but does not offer file storage or synchronization.
         EFS does not support Windows file shares or native Active Directory integration.
+    diagram: |
+      graph TD
+        A[On-premises] --> B[FSx File Gateway]
+        B --> C[FSx for Windows File Server]
+        C --> D[Active Directory]
+        C --> E[AWS Workloads]
     tags: 
     difficulty: 
     points: 
@@ -312,6 +383,11 @@
       Incorrect: 
         Manual review is labor-intensive and does not minimize operational overhead.
         Rekognition is for general image analysis, not specialized for medical PHI detection.
+    diagram: |
+      graph TD
+        A[PDF/JPEG] --> B[Textract]
+        B --> C[Comprehend Medical]
+        C --> D[PHI Detection]
     tags: 
     difficulty: 
     points: 
@@ -333,6 +409,10 @@
       Incorrect: 
         Keeping files in S3 Standard increases costs unnecessarily for infrequently accessed data.
         S3 Glacier does not provide immediate access, violating the requirement for critical business data.
+    diagram: |
+      graph TD
+        A[S3 Standard] --30 days--> B[S3 Standard-IA]
+        B --4 years--> C[Delete]
     tags: 
     difficulty: 
     points: 
@@ -354,6 +434,10 @@
       Incorrect: 
         FIFO queues are for ordered, exactly-once processing, but the issue is with processing time, not queue type.
         Adding deduplication logic increases application complexity and does not address the root cause.
+    diagram: |
+      graph TD
+        A[SQS Queue] --Message--> B[EC2 App]
+        B --Visibility Timeout--> C[Process Once]
     tags: 
     difficulty: 
     points: 
@@ -442,6 +526,10 @@
         - Daily snapshots provide an RPO of 24 hours, which fails the 15-minute requirement.
         - Exporting via AWS Glue every 15 minutes is operationally complex and would likely exceed the 1-hour RTO for restoration.
         - DynamoDB Streams/Replication is for high availability and disaster recovery across regions, but it would replicate "corrupted" data instantly to the secondary table, not solving the corruption issue.
+    diagram: |
+      graph TD
+        A[DynamoDB] --PITR--> B[Restore Point]
+        B --> C[Recovery]
 
   - id: q72
     type: multiple_choice
@@ -463,6 +551,9 @@
         - Direct Connect is for on-premises to AWS connectivity, not for intra-region traffic cost reduction.
         - NAT gateways charge per GB processed, which would increase rather than decrease costs.
         - While PrivateLink (Interface Endpoints) works for S3, it has an hourly cost and a per-GB cost, whereas Gateway Endpoints are free of charge.
+    diagram: |
+      graph TD
+        A[VPC] --Gateway Endpoint--> B[S3]
 
   - id: q73
     type: multiple_choice
@@ -650,8 +741,8 @@
     - text: Use Amazon Route 53 to distribute jobs across a fixed fleet of EC2 instances using a weighted routing policy.
       is_correct: false
     explanation: |
-    Correct: Amazon SQS provides a durable, stateless, and loosely coupled way to store jobs. Scaling an Auto Scaling Group based on the SQS queue depth (backlog per instance) is a standard AWS best practice for parallel processing.
-    Incorrect: 
+      Correct: Amazon SQS provides a durable, stateless, and loosely coupled way to store jobs. Scaling an Auto Scaling Group based on the SQS queue depth (backlog per instance) is a standard AWS best practice for parallel processing.
+      Incorrect: 
         - SNS does not store jobs durably; if a subscriber is down, the message is lost.
         - EBS Multi-Attach is for shared block storage and does not provide a mechanism for job distribution or loose coupling.
         - Route 53 is a DNS service and cannot track the number of jobs to scale the fleet.
@@ -670,8 +761,8 @@
     - text: Create an Amazon CloudWatch alarm based on the "DaysToExpiry" metric for each certificate to trigger an SNS notification.
       is_correct: false
     explanation: |
-    Correct: ACM publishes events to EventBridge for certificate expiration. A rule can be filtered for a 30-day window and trigger a Lambda/SNS workflow for custom notifications.
-    Incorrect:
+      Correct: ACM publishes events to EventBridge for certificate expiration. A rule can be filtered for a 30-day window and trigger a Lambda/SNS workflow for custom notifications.
+      Incorrect:
         - ACM does not notify through the Billing dashboard.
         - Trusted Advisor can check for expiring certificates but cannot automatically renew imported certificates (only ACM-issued ones with DNS validation).
         - There is no native CloudWatch metric called "DaysToExpiry" that can be alarmed directly without a custom script.
@@ -690,11 +781,15 @@
     - text: Migrate the database to an Amazon Aurora Global Database with a read replica in Europe.
       is_correct: false
     explanation: |
-    Correct: CloudFront is a CDN that uses edge locations in Europe to cache content and optimize the path to the origin (on-premises US), providing the fastest immediate improvement for end-users.
-    Incorrect:
+      Correct: CloudFront is a CDN that uses edge locations in Europe to cache content and optimize the path to the origin (on-premises US), providing the fastest immediate improvement for end-users.
+      Incorrect:
         - Global Accelerator improves network routing but doesn't cache content at the edge like CloudFront.
         - Route 53 latency routing doesn't solve the physical distance latency if the content still has to travel from the US.
         - Moving the database is a complex migration and doesn't meet the "immediate solution" requirement for the frontend.
+    diagram: |
+      graph TD
+        A[User Europe] --> B[CloudFront Edge]
+        B --> C[On-premises US]
 
   - id: q84
     type: multiple_choice
@@ -710,11 +805,15 @@
     - text: Use On-Demand Instances for all environments to ensure maximum flexibility.
       is_correct: false
     explanation: |
-    Correct: Reserved Instances provide a significant discount for 24/7 workloads (Production). On-Demand is best for Dev/Test because they can be stopped, incurring no costs when inactive.
-    Incorrect:
+      Correct: Reserved Instances provide a significant discount for 24/7 workloads (Production). On-Demand is best for Dev/Test because they can be stopped, incurring no costs when inactive.
+      Incorrect:
         - Spot Instances can be terminated by AWS, making them unsuitable for Production.
         - Reserved Instances for Dev/Test would result in paying for 24 hours of capacity even if only used for 8.
         - Dedicated Hosts are much more expensive and not required for cost reduction.
+    diagram: |
+      graph TD
+        A[Production] --> B[Reserved Instances]
+        C[Dev/Test] --> D[On-Demand Instances]
 
   - id: q85
     type: multiple_choice
@@ -730,11 +829,15 @@
     - text: Store the documents in Amazon S3 Glacier and use a Vault Lock policy.
       is_correct: false
     explanation: |
-    Correct: S3 Object Lock provides WORM (Write Once, Read Many) protection. Combined with versioning, it ensures objects cannot be deleted or overwritten for a specific retention period.
-    Incorrect:
+      Correct: S3 Object Lock provides WORM (Write Once, Read Many) protection. Combined with versioning, it ensures objects cannot be deleted or overwritten for a specific retention period.
+      Incorrect:
         - Bucket policies can be modified by the root user or an administrator, so they aren't as robust as Object Lock for compliance.
         - EBS volumes don't offer native WORM compliance.
         - S3 Glacier Vault Lock is an option, but for a web application requiring immediate access to "uploaded documents," S3 Standard with Object Lock is more appropriate for active usage.
+    diagram: |
+      graph TD
+        A[User Upload] --> B[S3 Bucket]
+        B --Object Lock--> C[No Delete/Modify]
 
   - id: q86
     type: multiple_choice
@@ -750,11 +853,15 @@
     - text: Store credentials in a private S3 bucket and use S3 Event Notifications to trigger rotation.
       is_correct: false
     explanation: |
-    Correct: AWS Secrets Manager natively supports RDS credential rotation and integrates directly with IAM for secure access by application instances.
-    Incorrect:
+      Correct: AWS Secrets Manager natively supports RDS credential rotation and integrates directly with IAM for secure access by application instances.
+      Incorrect:
         - Parameter Store supports SecureStrings but does not have the built-in native rotation logic specifically designed for RDS that Secrets Manager has.
         - IAM DB Authentication is a valid method, but the question specifically asks for a method to rotate credentials (implying traditional password usage).
         - S3 is not a secure or efficient service for managing and rotating live database secrets.
+    diagram: |
+      graph TD
+        A[Secrets Manager] --> B[Web Servers]
+        B --> C[RDS MySQL]
 
   - id: q87
     type: multiple_choice
@@ -770,11 +877,17 @@
     - text: Use an Amazon RDS Proxy between the Lambda functions and the Aurora database.
       is_correct: false
     explanation: |
-    Correct: SQS acts as a buffer. If the database is unavailable, the messages remain in the queue. Once the DB is back online, the worker Lambda can process the messages without data loss.
-    Incorrect:
+      Correct: SQS acts as a buffer. If the database is unavailable, the messages remain in the queue. Once the DB is back online, the worker Lambda can process the messages without data loss.
+      Incorrect:
         - Auto-scaling doesn't help if the database engine is offline for an upgrade.
         - API Gateway caching is for GET responses, not for retrying failed POST/PUT requests to a backend.
         - RDS Proxy reduces connection overhead but cannot store data if the underlying database is down for maintenance.
+    diagram: |
+      graph TD
+        A[API Gateway] --> B[Lambda]
+        B --> C[SQS FIFO]
+        D[Worker Lambda] --> C
+        D --> E[Aurora]
 
   - id: q88
     type: multiple_choice
@@ -790,11 +903,14 @@
     - text: Use Amazon S3 Transfer Acceleration to speed up the downloads.
       is_correct: false
     explanation: |
-    Correct: When "Requester Pays" is enabled, the person downloading the data pays the cost of the data transfer out of AWS, not the owner of the bucket.
-    Incorrect:
+      Correct: When "Requester Pays" is enabled, the person downloading the data pays the cost of the data transfer out of AWS, not the owner of the bucket.
+      Incorrect:
         - Cross-Region Replication would charge the owner for the transfer between regions.
         - Direct Connect is an expensive infrastructure solution not suited for simply reducing S3 transfer costs.
         - Transfer Acceleration speeds up data transfer but increases costs for the bucket owner.
+    diagram: |
+      graph TD
+        A[US S3 Bucket] --Requester Pays--> B[Europe User]
 
   - id: q89
     type: multiple_choice
@@ -810,11 +926,15 @@
     - text: Configure an S3 Lifecycle policy to move objects to Glacier immediately after creation.
       is_correct: false
     explanation: |
-    Correct: MFA Delete requires a physical or virtual MFA device to permanently delete an object version, adding a significant layer of protection against accidental or malicious deletion.
-    Incorrect:
+      Correct: MFA Delete requires a physical or virtual MFA device to permanently delete an object version, adding a significant layer of protection against accidental or malicious deletion.
+      Incorrect:
         - Deny policies can be bypassed or accidentally removed by administrators.
         - Replication is a backup strategy but doesn't prevent deletion in the source bucket.
         - Moving to Glacier doesn't prevent deletion; it just changes the storage class.
+    diagram: |
+      graph TD
+        A[S3 Bucket] --Versioning--> B[Object Versions]
+        B --MFA Delete--> C[Protected]
 
   - id: q90
     type: multiple_choice
@@ -830,11 +950,15 @@
     - text: Migrate the database to Amazon ElastiCache for Redis to handle the script's queries.
       is_correct: false
     explanation: |
-    Correct: A Read Replica offloads read-only traffic from the primary instance, allowing the script to run without impacting the performance of the main database used by developers.
-    Incorrect:
+      Correct: A Read Replica offloads read-only traffic from the primary instance, allowing the script to run without impacting the performance of the main database used by developers.
+      Incorrect:
         - Multi-AZ is for high availability and failover, not for scaling read traffic (the standby cannot be queried).
         - Vertical scaling is more expensive and doesn't solve the contention issue between the script and developers.
         - ElastiCache is a caching layer, not a direct replacement for a SQL database, and would require significant operational overhead to sync data.
+    diagram: |
+      graph TD
+        A[Script] --> B[Read Replica]
+        C[Developers] --> D[Primary DB]
 
   - id: q91
     type: multiple_choice
@@ -850,11 +974,14 @@
     - text: Use an AWS Client VPN to establish a secure tunnel to the S3 API.
       is_correct: false
     explanation: |
-    Correct: A VPC gateway endpoint for S3 allows traffic to stay within the AWS network without traversing the public internet or requiring a NAT gateway/Proxy.
-    Incorrect: 
+      Correct: A VPC gateway endpoint for S3 allows traffic to stay within the AWS network without traversing the public internet or requiring a NAT gateway/Proxy.
+      Incorrect: 
         - A NAT gateway requires an Internet Gateway, which violates the "no internet" regulation.
         - Direct Connect is for on-premises to AWS connectivity.
         - VPNs are for remote access to a VPC, not for internal VPC-to-Service communication.
+    diagram: |
+      graph TD
+        A[EC2 in VPC] --Gateway Endpoint--> B[S3]
 
   - id: q92
     type: multiple_choice
@@ -872,11 +999,15 @@
     - text: Configure a peering connection between the VPC and the S3 service.
       is_correct: false
     explanation: |
-    Correct: A VPC gateway endpoint (A) provides the private network path, while a bucket policy (C) that references the 'aws:SourceVpce' or 'aws:SourceVpc' condition ensures that only traffic originating from that specific VPC can access the data.
-    Incorrect: 
+      Correct: A VPC gateway endpoint (A) provides the private network path, while a bucket policy (C) that references the 'aws:SourceVpce' or 'aws:SourceVpc' condition ensures that only traffic originating from that specific VPC can access the data.
+      Incorrect: 
         - Transfer Acceleration (C) uses the public internet.
         - Storing long-term keys (D) on instances is a security risk; IAM roles should be used.
         - VPC Peering (E) is for connecting two VPCs, not a VPC to a managed service like S3.
+    diagram: |
+      graph TD
+        A[EC2 App] --VPC Endpoint--> B[S3 Bucket]
+        B --Bucket Policy--> C[Restrict Access]
 
   - id: q93
     type: multiple_choice
@@ -892,11 +1023,14 @@
     - text: Set up AWS DataSync to move data from the production MySQL database to the staging database continuously.
       is_correct: false
     explanation: |
-    Correct: Aurora Database Cloning is fast and efficient. it uses a "copy-on-write" protocol that doesn't impact the performance of the source database and makes the staging environment available in minutes.
-    Incorrect:
+      Correct: Aurora Database Cloning is fast and efficient. it uses a "copy-on-write" protocol that doesn't impact the performance of the source database and makes the staging environment available in minutes.
+      Incorrect:
         - Read Replicas are for live read traffic and aren't ideal if the staging environment needs to perform write tests that shouldn't reflect in production.
         - Restoring snapshots (C) takes a long time for large databases and doesn't meet the "without delay" requirement.
         - DataSync is for file/object systems, not for database-level transactional consistency.
+    diagram: |
+      graph TD
+        A[Aurora Prod] --Clone--> B[Aurora Staging]
 
   - id: q94
     type: multiple_choice
@@ -912,11 +1046,16 @@
     - text: Use Amazon EMR to process the files in batches as they arrive in the S3 bucket.
       is_correct: false
     explanation: |
-    Correct: This is a classic serverless architecture. SQS decouples the upload from the processing, and Lambda scales automatically to handle the variable demand with zero server management.
-    Incorrect:
+      Correct: This is a classic serverless architecture. SQS decouples the upload from the processing, and Lambda scales automatically to handle the variable demand with zero server management.
+      Incorrect:
         - EC2 (B) requires managing patches and scaling logic (high overhead).
         - Glue (C) is better for heavy ETL, but for "one-time simple processing," it is slower and more expensive than Lambda.
         - EMR (D) is for big data processing and would be overkill and very expensive for small files.
+    diagram: |
+      graph TD
+        A[S3 Upload] --> B[SQS]
+        B --> C[Lambda]
+        C --> D[DynamoDB]
 
   - id: q95
     type: multiple_choice
@@ -932,11 +1071,14 @@
     - text: Migrate the database to Amazon DynamoDB to take advantage of its automatic scaling.
       is_correct: false
     explanation: |
-    Correct: Read Replicas are designed specifically to offload read traffic from the primary DB instance. Matching the resources ensures the replicas can handle the same load as the primary.
-    Incorrect:
+      Correct: Read Replicas are designed specifically to offload read traffic from the primary DB instance. Matching the resources ensures the replicas can handle the same load as the primary.
+      Incorrect:
         - Multi-AZ (B) is for high availability; the standby instance cannot be used for read traffic.
         - ElastiCache (C) requires application code changes and is not a "quick" way to separate traffic compared to using a replica endpoint.
         - Migrating to DynamoDB (D) is a complete re-platforming and is not a quick optimization.
+    diagram: |
+      graph TD
+        A[Primary DB] --> B[Read Replica]
 
   - id: q96
     type: multiple_choice
@@ -952,11 +1094,14 @@
     - text: Enable VPC Flow Logs and create a Lambda function to restart any instance terminated by another IP.
       is_correct: false
     explanation: |
-    Correct: IAM policies support conditions based on the requester's IP and the target region. This is the most direct and secure way to enforce administrative constraints.
-    Incorrect:
+      Correct: IAM policies support conditions based on the requester's IP and the target region. This is the most direct and secure way to enforce administrative constraints.
+      Incorrect:
         - Security Groups (B) control network traffic to the instance, not permissions to call the EC2 API.
         - Route 53 (C) does not provide IP-based authorization for API calls.
         - Flow Logs (D) are reactive, not preventive.
+    diagram: |
+      graph TD
+        A[User 10.100.100.254] --IAM Policy--> B[Terminate EC2 us-east-1]
 
   - id: q97
     type: multiple_choice
@@ -972,11 +1117,15 @@
     - text: Use an Amazon EBS volume with Multi-Attach enabled across multiple Windows EC2 instances.
       is_correct: false
     explanation: |
-    Correct: FSx for Windows File Server provides fully managed, highly available Windows storage that natively supports the SMB protocol and Active Directory integration.
-    Incorrect:
+      Correct: FSx for Windows File Server provides fully managed, highly available Windows storage that natively supports the SMB protocol and Active Directory integration.
+      Incorrect:
         - EFS (B) is a native Linux/NFS solution; while it supports Windows now, it doesn't offer the native SMB features SharePoint requires.
         - File Gateway (C) is more for hybrid cloud caching, not high-performance primary storage for SharePoint.
         - EBS Multi-Attach (D) does not support the NTFS cluster file system required for standard Windows sharing.
+    diagram: |
+      graph TD
+        A[SharePoint] --> B[FSx for Windows]
+        B --> C[Active Directory]
 
   - id: q98
     type: multiple_choice
@@ -992,11 +1141,16 @@
     - text: Decrease the Lambda function timeout to ensure it finishes before the SQS visibility timeout expires.
       is_correct: false
     explanation: |
-    Correct: If the Lambda function takes longer than the SQS visibility timeout, the message becomes visible again and another Lambda instance picks it up. Increasing the timeout ensures the first function can finish and delete the message.
-    Incorrect:
+      Correct: If the Lambda function takes longer than the SQS visibility timeout, the message becomes visible again and another Lambda instance picks it up. Increasing the timeout ensures the first function can finish and delete the message.
+      Incorrect:
         - FIFO (B) handles deduplication but is more complex and has lower throughput; it doesn't solve the timeout issue.
         - Manually deleting (C) is risky; if the function fails, the message is lost forever.
         - Decreasing timeout (D) might cause the function to fail before it finishes processing the image.
+    diagram: |
+      graph TD
+        A[S3] --> B[SQS]
+        B --> C[Lambda]
+        C --Visibility Timeout--> D[Single Email]
 
   - id: q99
     type: multiple_choice
@@ -1012,11 +1166,14 @@
     - text: Use Amazon S3 and mount it using the Lustre open-source driver.
       is_correct: false
     explanation: |
-    Correct: FSx for Lustre is a fully managed service designed for high-performance computing (HPC) and gaming workloads that require Lustre compatibility.
-    Incorrect:
+      Correct: FSx for Lustre is a fully managed service designed for high-performance computing (HPC) and gaming workloads that require Lustre compatibility.
+      Incorrect:
         - EBS-backed EC2 (B) is not "fully managed."
         - EFS (C) does not have a "Lustre mode"; it is a different file system type.
         - S3 (D) is object storage, not a managed Lustre file system.
+    diagram: |
+      graph TD
+        A[Game App] --> B[FSx for Lustre]
 
   - id: q100
     type: multiple_choice
@@ -1032,8 +1189,12 @@
     - text: Use AWS Secrets Manager to store the certificates and enable automatic rotation using a Lambda function.
       is_correct: false
     explanation: |
-    Correct: KMS is a managed service for encryption, and S3 provides the highly available storage. This combination requires the least amount of management.
-    Incorrect:
+      Correct: KMS is a managed service for encryption, and S3 provides the highly available storage. This combination requires the least amount of management.
+      Incorrect:
         - Custom PGP (B) has high operational overhead and local EBS is not "highly available" across instances.
         - CloudHSM (C) is much more expensive and requires significant management overhead compared to KMS.
         - While Secrets Manager (D) is great, the question specifically asks for an encryption/decryption solution for "certificates" to be stored in "storage" (often meaning the file level), and KMS + S3 is more cost-effective for simple encryption/storage of objects.
+    diagram: |
+      graph TD
+        A[App] --> B[KMS]
+        B --> C[S3 Storage]
