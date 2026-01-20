@@ -1,3 +1,4 @@
+  # Todos os diagramas já estão no mesmo nível de tag e não possuem parênteses nos colchetes.
 questions:
   - id: q251
     type: multiple_choice
@@ -15,10 +16,14 @@ questions:
         is_correct: false
     explanation: |
       Correct: NAT gateways are designed to provide outbound internet access for instances in private subnets while preventing the internet from initiating a connection with those instances.
-      Incorrect: 
+      Incorrect:
         - Private subnets do not allow direct internet gateway attachment; this would require moving the instance to a public subnet.
         - VPC endpoints are for AWS services (Interface or Gateway types), not for arbitrary outside vendors unless they provide a PrivateLink service.
         - VPC Peering does not support edge to edge routing (transitive routing) to an IGW in another VPC.
+
+    diagram: |
+      graph TD
+        A[EC2 Private Subnet] -->|NAT Gateway| B[Internet]
 
   - id: q252
     type: multiple_choice
@@ -41,6 +46,12 @@ questions:
         - Glacier is for long-term archival, not simultaneous application access.
         - Instance Store is ephemeral and lacks built-in redundancy; data is lost if the instance stops.
 
+    diagram: |
+      graph TD
+        A[EC2 App Server 1] --> B[EFS]
+        A2[EC2 App Server 2] --> B
+        B --> C[Redundant Storage]
+
   - id: q253
     type: multiple_choice
     question: |
@@ -61,6 +72,11 @@ questions:
         - Stopping an instance is governed by "ec2:StopInstances".
         - Rebooting is governed by "ec2:RebootInstances".
         - Modifying instance types requires "ec2:ModifyInstanceAttribute".
+
+    diagram: |
+      graph TD
+        A[User] -->|TerminateInstances| B[EC2 Instance]
+        B -.->|Deleted| C[None]
 
   - id: q254
     type: multiple_choice
@@ -83,6 +99,11 @@ questions:
         - A single security group for all tiers violates the principle of least privilege.
         - Using Elastic IPs for internal communication is inefficient and does not scale with Auto Scaling.
 
+    diagram: |
+      graph TD
+        A[App Tier SG] -->|SG ID| B[DB Tier SG]
+        B -->|SG ID| C[Web Tier SG]
+
   - id: q255
     type: multiple_choice
     question: |
@@ -103,6 +124,12 @@ questions:
         - Standard queues do not guarantee exactly-once delivery and might result in duplicate processing.
         - Increasing ALB timeouts doesn't solve the underlying idempotency issue.
         - Dedicated instances per transaction is not a scalable or architectural solution for duplicate data entry.
+
+    diagram: |
+      graph TD
+        A[Checkout] --> B[DB Order]
+        B --> C[SQS FIFO]
+        C --> D[Payment Service]
 
   - id: q256
     type: multiple_choice
@@ -127,6 +154,12 @@ questions:
         - Encryption provides security at rest but doesn't prevent deletion.
         - Blocking public access is a security best practice but doesn't address versioning or accidental deletion by authorized users.
 
+    diagram: |
+      graph TD
+        A[User] --> B[S3 Bucket]
+        B -->|Versioning| C[All Versions]
+        B -->|MFA Delete| D[Delete Protection]
+
   - id: q258
     type: multiple_choice
     question: |
@@ -147,6 +180,12 @@ questions:
         - EMR clusters require managing servers and are more expensive for intermittent tasks.
         - EC2 fleets require high operational overhead for maintenance, scaling, and monitoring.
         - S3 Batch Operations is typically for bulk actions on existing objects, while S3 Event Notifications (via Lambda) are better for real-time triggers on new uploads.
+
+    diagram: |
+      graph TD
+        A[S3 Upload] --> B[Lambda]
+        B --> C[Glue ETL]
+        C --> D[S3 Parquet]
 
   - id: q259
     type: multiple_choice
@@ -169,6 +208,11 @@ questions:
         - Exporting to S3 is manual/complex and doesn't provide the native "restorable" ease of AWS Backup.
         - Manual cron jobs on EC2 increase operational overhead and are less reliable than managed services.
 
+    diagram: |
+      graph TD
+        A[RDS] --> B[AWS Backup]
+        B -->|2 Years| C[Backup Vault]
+
   - id: q260
     type: multiple_choice
     question: |
@@ -189,6 +233,11 @@ questions:
         - IAM roles do not provide the granular file-level NTFS permissions required by SMB shares.
         - Recreating groups manually is high overhead and unnecessary if the file system can join the existing AD.
         - S3 File Gateway does not support full NTFS permission parity as natively as FSx for Windows.
+
+    diagram: |
+      graph TD
+        A[FSx Windows] -->|Join| B[On-premises AD]
+        B --> C[Access Control]
 
   - id: q261
     type: multiple_choice
@@ -213,6 +262,11 @@ questions:
         - Redirection via WAF or multiple buckets is more complex than edge processing with Lambda@Edge.
         - MAC addresses are not transmitted in HTTP headers.
 
+    diagram: |
+      graph TD
+        A[User] --> B[CloudFront]
+        B -->|Lambda@Edge| C[Device-specific Content]
+
   - id: q262
     type: multiple_choice
     question: |
@@ -233,6 +287,11 @@ questions:
         - Transit Gateway has an hourly cost per attachment, making it more expensive than peering for a simple two-VPC setup.
         - VPN and NAT Gateway solutions introduce unnecessary latency and higher costs.
         - Moving the cluster might not be feasible if the architecture requires separation of concerns or separate management accounts.
+
+    diagram: |
+      graph TD
+        A[App VPC] -->|Peering| B[Cache VPC]
+        B --> C[ElastiCache]
 
   - id: q263
     type: multiple_choice
@@ -256,6 +315,11 @@ questions:
         - Provisioning EC2 instances (even ECS-optimized ones) requires infrastructure management.
         - Kubernetes on EC2 or manual Docker installations require significant maintenance and infrastructure management.
 
+    diagram: |
+      graph TD
+        A[User] --> B[ECS]
+        B -->|Fargate| C[Containers]
+
   - id: q264
     type: multiple_choice
     question: |
@@ -276,6 +340,12 @@ questions:
         - TTL 0 reduces caching but doesn't stop Route 53 from returning unhealthy direct IP addresses unless health checks are also configured in Route 53.
         - CloudFront origin failover is more complex and not as efficient as an ALB for simple instance health management.
         - Latency-based routing doesn't solve the health issue; it only directs traffic to the "closest" instance, healthy or not.
+
+    diagram: |
+      graph TD
+        A[User] --> B[Route 53]
+        B --> C[ALB]
+        C --> D[EC2 Instances]
 
   - id: q265
     type: multiple_choice
@@ -298,6 +368,12 @@ questions:
         - S3 can only host static websites; it cannot host the "application and database tiers" mentioned.
         - NLB/Global Accelerator is good for TCP/UDP, but for HTTPS content delivery and edge caching, CloudFront is the standard and more feature-rich solution.
 
+    diagram: |
+      graph TD
+        A[User] --> B[CloudFront]
+        B --> C[ALB]
+        C --> D[EC2 Private]
+
   - id: q266
     type: multiple_choice
     question: |
@@ -318,6 +394,12 @@ questions:
         - Route 53 Multivalue routing is for DNS-level load balancing, but failover depends on DNS TTL and is not as fast as Global Accelerator.
         - CloudFront is primarily for content delivery (caching); while it can do origin failover, Global Accelerator is specifically optimized for low-latency network performance for applications.
         - SQS/Lambda introduces significant latency, which is unacceptable for a gaming platform.
+
+    diagram: |
+      graph TD
+        A[User] --> B[Global Accelerator]
+        B --> C[ALB Region 1]
+        B --> D[ALB Region 2]
 
   - id: q267
     type: multiple_choice
@@ -340,6 +422,12 @@ questions:
         - SQS/Lambda is possible but requires manual coding for Parquet conversion and lacks the built-in streaming analysis of Kinesis.
         - RDS is not suitable for high-volume streaming data ingestion and near-real-time analysis compared to Kinesis.
 
+    diagram: |
+      graph TD
+        A[Mobile App] --> B[Kinesis Firehose]
+        B -->|Parquet| C[S3]
+        B --> D[Kinesis Analytics]
+
   - id: q268
     type: multiple_choice
     question: |
@@ -360,6 +448,11 @@ questions:
         - Migrating to DynamoDB is a massive architectural change.
         - ElastiCache requires significant application code changes to handle cache logic.
         - Increasing instance size (Vertical Scaling) is a temporary fix and often less cost-effective than using a proxy or replicas.
+
+    diagram: |
+      graph TD
+        A[App] --> B[RDS Proxy]
+        B --> C[RDS MySQL]
 
   - id: q269
     type: multiple_choice
@@ -382,6 +475,11 @@ questions:
         - Multi-AZ is for high availability and failover; the standby instance cannot be used for read/write traffic.
         - Athena queries data in S3, not RDS instances directly (unless using Federated Query, which is more complex than a replica).
 
+    diagram: |
+      graph TD
+        A[Analyst] --> B[RDS Read Replica]
+        B --> C[Primary RDS]
+
   - id: q270
     type: multiple_choice
     question: |
@@ -401,6 +499,10 @@ questions:
       Incorrect:
         - SSE-S3 and SSE-KMS encrypt the data *after* it reaches the S3 service, not before it is uploaded.
         - Bucket policies can enforce encryption but don't perform the encryption themselves.
+
+    diagram: |
+      graph TD
+        A[Client] -->|Encrypt| B[S3 Bucket]
 
   - id: q271
     type: multiple_choice
@@ -423,6 +525,11 @@ questions:
         - Reserved Instances are for continuous usage (24/7); they aren't a scaling mechanism.
         - SQS-based scaling is also reactive and wouldn't be as fast as pre-scheduling for a known start time.
 
+    diagram: |
+      graph TD
+        A[Schedule] --> B[ASG Scale Up]
+        B --> C[EC2 Capacity]
+
   - id: q272
     type: multiple_choice
     question: |
@@ -443,6 +550,11 @@ questions:
         - Route 53 Geoproximity routing doesn't reduce latency if the actual content is still served only from us-west-1.
         - Recreating an ALB in another region violates the "don't want to recreate architecture" requirement.
         - Global Accelerator improves network routing but doesn't provide edge caching, which is better for web content.
+
+    diagram: |
+      graph TD
+        A[User] --> B[CloudFront]
+        B -->|Accept-Language| C[ALB]
 
   - id: q273
     type: multiple_choice
@@ -465,6 +577,11 @@ questions:
         - Multi-AZ is a high-availability feature within a single region (standard RDS) or across regions (Aurora), but the terminology "Aurora Global" is the specific feature for cross-region.
         - DataSync is not suitable for live database replication.
 
+    diagram: |
+      graph TD
+        A[Primary Aurora] -->|Global DB| B[Secondary Region]
+        B -->|Warm Standby| C[App]
+
   - id: q274
     type: multiple_choice
     question: |
@@ -486,6 +603,12 @@ questions:
         - Direct Connect is a networking service, not a DR backup strategy.
         - Manual launching is prone to error and less operationally efficient than CloudFormation automation.
 
+    diagram: |
+      graph TD
+        A[EC2] -->|AMI| B[S3]
+        B -->|Copy| C[Secondary Region]
+        C -->|CloudFormation| D[Infra Recovery]
+
   - id: q275
     type: multiple_choice
     question: |
@@ -506,3 +629,8 @@ questions:
         - Target tracking is reactive; it still requires the CPU to spike before launching new instances, which causes the initial slowness.
         - Changing instance types might increase costs unnecessarily without solving the capacity timing issue.
         - Keeping 20 instances running 24/7 is not cost-effective.
+
+    diagram: |
+      graph TD
+        A[Schedule] --> B[ASG 20 Instances]
+        B --> C[Work Hours]

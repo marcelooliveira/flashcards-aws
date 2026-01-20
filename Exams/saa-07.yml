@@ -16,7 +16,15 @@ questions:
        is_correct: false
      - text: AWS Snowball
        is_correct: false
+
+
+
+
     explanation: |
+      Correct: Using separate SQS queues for each quote type allows for efficient, organized processing and ensures that no messages are lost. AWS Lambda provides serverless, scalable processing with minimal maintenance, meeting the requirements for operational efficiency and reliability.
+      Correct: S3 Storage Lens provides advanced metrics and insights into S3 bucket usage, making it easy to identify buckets that are rarely accessed or unused. This solution is fully managed and requires minimal operational effort compared to manual log analysis or custom scripts.
+      Correct: Launching all EC2 instances in the same Availability Zone and using a placement group with the cluster strategy ensures low-latency, high-throughput communication between instances. This is ideal for workloads that require tightly-coupled node communication, such as HPC or distributed databases.
+      Correct: AWS Application Auto Scaling with target tracking policies allows ECS services to automatically scale based on CloudWatch metrics, ensuring the right number of tasks are running to meet demand. This is the most efficient and automated way to handle variable workloads in ECS.
       Correct: AWS DataSync is a fully managed data transfer service that can be used to simplify, automate, and accelerate copying large amounts of data between on-premises storage systems and Amazon S3, Amazon EFS, or Amazon FSx for Windows File Server.
       Incorrect: 
         AWS Direct Connect provides dedicated connectivity but does not offer bandwidth throttling or managed migration services.
@@ -40,7 +48,13 @@ questions:
        is_correct: false
      - text: Use AWS Elemental MediaStore for video streaming.
        is_correct: false
+
+
+
     explanation: |
+      Correct: Deploying CloudFront in front of the S3 bucket reduces data transfer costs and improves performance by caching content at edge locations closer to users. Using CloudFront signed URLs maintains secure access control for purchased datasets.
+      Correct: AWS Storage Gateway Volume Gateway cached volumes allow you to store your entire dataset in Amazon S3 while keeping frequently accessed data cached locally. This minimizes the need for on-premises storage expansion and provides efficient, scalable storage with disaster recovery capabilities.
+      Correct: AWS DataSync is a managed service designed for fast and secure data migration between on-premises storage and AWS. It is ideal for migrating databases with minimal downtime and without the need to select or manage specific instance types, making it suitable for future scalability.
       Correct: Amazon CloudFront is a content delivery network (CDN) that can distribute your video content globally, reducing latency and improving the speed of delivery. Elastic Transcoder can convert the raw video files into more appropriate formats suitable for streaming, reducing the size of the videos.
       Incorrect: 
         Amazon S3 Glacier is for long-term archival storage and does not support real-time streaming or fast retrieval.
@@ -49,7 +63,7 @@ questions:
   - id: q303
     type: multiple_choice
     question: |
-      A solutions architect is designing a company’s disaster recovery (DR) architecture. The company has a MySQL database that runs on an Amazon EC2 instance in a private subnet with scheduled backup. The DR design needs to include multiple AWS Regions.
+      A solutions architect is designing a companyï¿½s disaster recovery (DR) architecture. The company has a MySQL database that runs on an Amazon EC2 instance in a private subnet with scheduled backup. The DR design needs to include multiple AWS Regions.
 
       Which solution meets these requirements?
     options:
@@ -61,12 +75,16 @@ questions:
        is_correct: false
      - text: Use AWS Lambda for the application to handle variable load.
        is_correct: false
+
+
     explanation: |
-      Correct: AWS Application Auto Scaling is a service that can automatically adjust the number of running ECS tasks or services based on specified CloudWatch metrics. Target tracking policies allow you to set a target value for a specific metric, and AWS Application Auto Scaling automatically adjusts the desired task count to maintain the target.
-      Incorrect: 
-        Amazon EC2 Auto Scaling with fixed instances does not provide automatic scaling based on metrics.
-        ECS with EC2 launch type requires managing EC2 instances and does not offer serverless scaling.
-        AWS Lambda is for serverless functions, not for containerized applications with variable load.
+      Correct: Accessing AWS Trusted Advisor from the consolidated billing account provides a centralized view of cost optimization opportunities, including RDS Reserved Instance recommendations. Reviewing these recommendations helps reduce costs by identifying opportunities to switch from On-Demand to Reserved Instances for RDS.
+      Correct: Amazon FSx for Windows File Server is a fully managed service that provides native support for the SMB protocol, allowing Windows and other SMB clients to access shared storage easily. It is the best choice for managed, scalable, and compatible file storage in AWS for SMB workloads.
+
+    diagram: |
+      graph TD
+        A[ECS Service] -->|CloudWatch Metrics| B[Application Auto Scaling]
+        B -->|Adjusts| C[ECS Task Count]
 
   - id: q304
     type: multiple_choice
@@ -84,11 +102,10 @@ questions:
      - text: Use AWS Glue for ETL processing.
        is_correct: false
     explanation: |
-      Correct: If we want to transfer large amount of data we can used AWS Datasync.
-      Incorrect: 
-        AWS Direct Connect provides connectivity but not data transfer management for NFS file systems.
-        Amazon S3 and Athena are for data lakes, not for transferring NFS data between regions.
-        AWS Glue is for ETL, not for direct data transfer between file systems.
+
+    diagram: |
+      graph TD
+        A[On-premises MySQL] -->|Migrate| B[AWS DataSync] --> C[AWS Cloud]
 
   - id: q305
     type: multiple_choice
@@ -106,11 +123,10 @@ questions:
      - text: Use AWS Storage Gateway Volume Gateway.
        is_correct: false
     explanation: |
-      Correct: Amazon FSx for Windows File Server is a fully managed file storage service that is compatible with the Server Message Block (SMB) protocol, making it suitable for use with SMB clients, including Windows-based systems.
-      Incorrect: 
-        Amazon EFS is designed for Linux workloads and does not support SMB or Windows file shares.
-        Amazon S3 with Storage Gateway provides file gateway but not native SMB access.
-        AWS Storage Gateway Volume Gateway is for block storage, not file shares.
+
+    diagram: |
+      graph TD
+        A[FSx for Windows File Server] -->|SMB| B[SMB Clients]
 
   - id: q306
     type: multiple_choice
@@ -128,11 +144,10 @@ questions:
      - text: Use AWS Global Accelerator for network optimization.
        is_correct: false
     explanation: |
-      Correct: A placement group is a logical grouping of instances within a single Availability Zone. The "cluster" strategy for placement groups places instances in close proximity to each other, providing low-latency, high-throughput communication between instances.
-      Incorrect: 
-        Launching across multiple AZs increases latency and does not optimize for high throughput.
-        Amazon EBS is block storage, not relevant for network throughput between instances.
-        AWS Global Accelerator is for global traffic routing, not for intra-region instance communication.
+
+    diagram: |
+      graph TD
+        A[EC2 Instances] -->|Cluster Placement Group| B[Low Latency]
 
   - id: q307
     type: multiple_choice
@@ -150,16 +165,15 @@ questions:
      - text: Amazon S3 with Transfer Acceleration.
        is_correct: false
     explanation: |
-      Correct: In the cached volumes mode, the entire dataset is stored in Amazon S3, and the most frequently accessed data is cached on-premises. This allows the company to keep recently accessed data locally, minimizing the need for on-premises scaling.
-      Incorrect: 
-        AWS Storage Gateway File Gateway provides file-based access, not volume-based for iSCSI.
-        Amazon EFS requires internet or Direct Connect, not reducing on-premises storage needs.
-        Amazon S3 with Transfer Acceleration is for data transfer, not for local caching.
+
+    diagram: |
+      graph TD
+        A[On-premises] -->|iSCSI| B[Storage Gateway Cached Volumes] -->|Data| C[Amazon S3]
 
   - id: q308
     type: multiple_choice
     question: |
-      A company has multiple AWS accounts that use consolidated billing. The company runs several active high performance Amazon RDS for Oracle On-Demand DB instances for 90 days. The company’s finance team has access to AWS Trusted Advisor in the consolidated billing account and all other AWS accounts.
+      A company has multiple AWS accounts that use consolidated billing. The company runs several active high performance Amazon RDS for Oracle On-Demand DB instances for 90 days. The companyï¿½s finance team has access to AWS Trusted Advisor in the consolidated billing account and all other AWS accounts.
 
       The finance team needs to use the appropriate AWS account to access the Trusted Advisor check recommendations for RDS. The finance team must review the appropriate Trusted Advisor check to reduce RDS costs.
 
@@ -174,10 +188,10 @@ questions:
      - text: Review the Amazon EC2 Reserved Instance Optimization recommendations.
        is_correct: false
     explanation: |
-      Correct: Trusted Advisor checks for cost optimization are available in the consolidated billing account, and RDS Reserved Instance recommendations help reduce costs for On-Demand instances.
-      Incorrect: 
-        Accessing from individual accounts limits visibility to consolidated billing benefits.
-        EC2 recommendations are not relevant for RDS cost optimization.
+
+    diagram: |
+      graph TD
+        A[Consolidated Billing Account] -->|Trusted Advisor| B[RDS Reserved Instance Recommendations]
 
   - id: q309
     type: multiple_choice
@@ -195,11 +209,10 @@ questions:
      - text: Implement custom scripts to query S3 access metrics.
        is_correct: false
     explanation: |
-      Correct: The S3 Storage Lens dashboard provides advanced activity metrics, including insights into access patterns, data transfer, and other storage-related activities.
-      Incorrect: 
-        Manually checking logs is time-consuming and not scalable.
-        AWS Config monitors configuration changes, not access patterns.
-        Custom scripts require development and maintenance, increasing overhead.
+
+    diagram: |
+      graph TD
+        A[S3 Buckets] -->|Access Patterns| B[S3 Storage Lens]
 
   - id: q310
     type: multiple_choice
@@ -219,11 +232,10 @@ questions:
      - text: Use AWS Direct Connect for customers.
        is_correct: false
     explanation: |
-      Correct: CloudFront is a content delivery network (CDN) service that distributes content globally with low latency and high data transfer speeds. It helps reduce data transfer costs and improves performance by caching content at edge locations.
-      Incorrect: 
-        S3 Transfer Acceleration optimizes uploads, not downloads for global users.
-        Multi-region deployment increases costs without global caching.
-        Direct Connect is for dedicated connections, not for public customer access.
+
+    diagram: |
+      graph TD
+        A[S3 Bucket] -->|Origin| B[CloudFront] -->|Edge Locations| C[Customers]
 
   - id: q311
     type: multiple_choice
@@ -241,22 +253,21 @@ questions:
      - text: Use Amazon Kinesis for real-time processing.
        is_correct: false
     explanation: |
-      Correct: Separate SQS queues allow segregation by type, Lambda provides serverless processing with minimal maintenance, and SQS ensures messages are not lost.
-      Incorrect: 
-        A single queue requires application-level filtering, reducing efficiency.
-        DynamoDB with scheduled Lambda may not meet 24-hour response and increases complexity.
-        Kinesis is for streaming data, not for queued message processing.
+
+    diagram: |
+      graph TD
+        A[User] -->|Request| B[SQS Queue by Type] -->|Trigger| C[Lambda]
 
   - id: q312
     type: multiple_choice
     question: |
-      A company’s application runs on Amazon EC2 instances. A solutions architect has standardized the company on a particular instance family and various instance sizes based on the current needs of the company.
+      A companyï¿½s application runs on Amazon EC2 instances. A solutions architect has standardized the company on a particular instance family and various instance sizes based on the current needs of the company.
 
       The company wants to maximize cost savings for the application over the next 3 years. The company needs to be able to change the instance family and sizes in the next 6 months based on application popularity and usage.
 
       Which solution will meet these requirements MOST cost-effectively?
     options:
-     - text: Create a backup plan by using AWS Backup to perform nightly backups. Copy the backups to another Region. Add the application’s EBS volumes as resources.
+     - text: Create a backup plan by using AWS Backup to perform nightly backups. Copy the backups to another Region. Add the applicationï¿½s EBS volumes as resources.
        is_correct: true
      - text: Use manual snapshots for EBS volumes.
        is_correct: false
@@ -265,16 +276,15 @@ questions:
      - text: Use AWS Storage Gateway for backups.
        is_correct: false
     explanation: |
-      Correct: AWS Backup is a fully managed backup service that centralizes and automates the backup of data across AWS services. It provides a simple and efficient way to back up your EC2 instances and their associated EBS volumes.
-      Incorrect: 
-        Manual snapshots are not automated and require operational effort.
-        Data Lifecycle Manager automates snapshots but not cross-region copying or comprehensive backup plans.
-        Storage Gateway is for hybrid storage, not for EC2 instance backups.
+
+    diagram: |
+      graph TD
+        A[EC2 Instances] -->|Nightly Backup| B[AWS Backup] -->|Copy| C[Another Region]
 
   - id: q313
     type: multiple_choice
     question: |
-      A company is building a mobile app on AWS. The company wants to expand its reach to millions of users. The company needs to build a platform so that authorized users can watch the company’s content.
+      A company is building a mobile app on AWS. The company wants to expand its reach to millions of users. The company needs to build a platform so that authorized users can watch the companyï¿½s content.
 
       What should a solutions architect recommend to meet these requirements?
     options:
@@ -287,11 +297,10 @@ questions:
      - text: Use AWS Elemental MediaStore.
        is_correct: false
     explanation: |
-      Correct: CloudFront accelerates the delivery of content by caching it at edge locations globally, reducing latency for end-users. Signed URLs provide secure access to content.
-      Incorrect: 
-        Public S3 access lacks authorization controls.
-        EC2 hosting does not scale globally or provide caching.
-        MediaStore is for live streaming, not for on-demand content delivery.
+
+    diagram: |
+      graph TD
+        A[Content] -->|CloudFront| B[Edge Locations] -->|Signed URLs| C[Users]
 
   - id: q314
     type: multiple_choice
@@ -407,7 +416,7 @@ questions:
   - id: q319
     type: multiple_choice
     question: |
-      A company has hundreds of Amazon EC2 Linux-based instances in the AWS Cloud. Systems administrators have used shared SSH keys to manage the instances. After a recent audit, the company’s security team is mandating the removal of all shared keys. A solutions architect must design a solution that provides secure access to the EC2 instances.
+      A company has hundreds of Amazon EC2 Linux-based instances in the AWS Cloud. Systems administrators have used shared SSH keys to manage the instances. After a recent audit, the companyï¿½s security team is mandating the removal of all shared keys. A solutions architect must design a solution that provides secure access to the EC2 instances.
 
       Which solution will meet this requirement with the LEAST amount of administrative overhead?
     options:
@@ -429,7 +438,7 @@ questions:
   - id: q320
     type: multiple_choice
     question: |
-      A company is using a fleet of Amazon EC2 instances to ingest data from on-premises data sources. The data is in JSON format and ingestion rates can be as high as 1 MB/s. When an EC2 instance is rebooted, the data in-flight is lost. The company’s data science team wants to query ingested data in near-real time.
+      A company is using a fleet of Amazon EC2 instances to ingest data from on-premises data sources. The data is in JSON format and ingestion rates can be as high as 1 MB/s. When an EC2 instance is rebooted, the data in-flight is lost. The companyï¿½s data science team wants to query ingested data in near-real time.
 
       Which solution provides near-real-time data querying that is scalable with minimal data loss?
     options:
@@ -495,9 +504,9 @@ questions:
   - id: q323
     type: multiple_choice
     question: |
-      A company’s facility has badge readers at every entrance throughout the building. When badges are scanned, the readers send a message over HTTPS to indicate who attempted to access that particular entrance.
+      A companyï¿½s facility has badge readers at every entrance throughout the building. When badges are scanned, the readers send a message over HTTPS to indicate who attempted to access that particular entrance.
 
-      A solutions architect must design a system to process these messages from the sensors. The solution must be highly available, and the results must be made available for the company’s security team to analyze.
+      A solutions architect must design a system to process these messages from the sensors. The solution must be highly available, and the results must be made available for the companyï¿½s security team to analyze.
 
       Which system architecture should the solutions architect recommend?
     options:
@@ -591,7 +600,7 @@ questions:
   - id: q327
     type: multiple_choice
     question: |
-      A solutions architect must secure a VPC network that hosts Amazon EC2 instances. The EC2 instances contain highly sensitive data and run in a private subnet. According to company policy, the EC2 instances that run in the VPC can access only approved third-party software repositories on the internet for software product updates that use the third party’s URL. Other internet traffic must be blocked.
+      A solutions architect must secure a VPC network that hosts Amazon EC2 instances. The EC2 instances contain highly sensitive data and run in a private subnet. According to company policy, the EC2 instances that run in the VPC can access only approved third-party software repositories on the internet for software product updates that use the third partyï¿½s URL. Other internet traffic must be blocked.
 
       Which solution meets these requirements?
     options:
@@ -638,7 +647,7 @@ questions:
   - id: q329
     type: multiple_choice
     question: |
-      A security audit reveals that Amazon EC2 instances are not being patched regularly. A solutions architect needs to provide a solution that will run regular security scans across a large fleet of EC2 instances. The solution should also patch the EC2 instances on a regular schedule and provide a report of each instance’s patch status.
+      A security audit reveals that Amazon EC2 instances are not being patched regularly. A solutions architect needs to provide a solution that will run regular security scans across a large fleet of EC2 instances. The solution should also patch the EC2 instances on a regular schedule and provide a report of each instanceï¿½s patch status.
 
       Which solution will meet these requirements?
     options:
@@ -681,7 +690,7 @@ questions:
   - id: q331
     type: multiple_choice
     question: |
-      A company must migrate 20 TB of data from a data center to the AWS Cloud within 30 days. The company’s network bandwidth is limited to 15 Mbps and cannot exceed 70% utilization.
+      A company must migrate 20 TB of data from a data center to the AWS Cloud within 30 days. The companyï¿½s network bandwidth is limited to 15 Mbps and cannot exceed 70% utilization.
 
       What should a solutions architect do to meet these requirements?
     options:
@@ -702,7 +711,7 @@ questions:
   - id: q332
     type: multiple_choice
     question: |
-      A company needs to provide its employees with secure access to confidential and sensitive files. The company wants to ensure that the files can be accessed only by authorized users. The files must be downloaded securely to the employees’ devices.
+      A company needs to provide its employees with secure access to confidential and sensitive files. The company wants to ensure that the files can be accessed only by authorized users. The files must be downloaded securely to the employeesï¿½ devices.
 
       The files are stored in an on-premises Windows file server. However, due to an increase in remote usage, the file server is running out of capacity.
 
@@ -726,7 +735,7 @@ questions:
   - id: q333
     type: multiple_choice
     question: |
-      A company’s application runs on Amazon EC2 instances behind an Application Load Balancer (ALB). The instances run in an Amazon EC2 Auto Scaling group across multiple Availability Zones. On the first day of every month at midnight, the application becomes much slower when the month-end financial calculation batch runs. This causes the CPU utilization of the EC2 instances to immediately peak to 100%, which disrupts the application.
+      A companyï¿½s application runs on Amazon EC2 instances behind an Application Load Balancer (ALB). The instances run in an Amazon EC2 Auto Scaling group across multiple Availability Zones. On the first day of every month at midnight, the application becomes much slower when the month-end financial calculation batch runs. This causes the CPU utilization of the EC2 instances to immediately peak to 100%, which disrupts the application.
 
       What should a solutions architect recommend to ensure the application is able to handle the workload and avoid downtime?
     options:
@@ -747,9 +756,9 @@ questions:
   - id: q334
     type: multiple_choice
     question: |
-      A company wants to give a customer the ability to use on-premises Microsoft Active Directory to download files that are stored in Amazon S3. The customer’s application uses an SFTP client to download the files.
+      A company wants to give a customer the ability to use on-premises Microsoft Active Directory to download files that are stored in Amazon S3. The customerï¿½s application uses an SFTP client to download the files.
 
-      Which solution will meet these requirements with the LEAST operational overhead and no changes to the customer’s application?
+      Which solution will meet these requirements with the LEAST operational overhead and no changes to the customerï¿½s application?
     options:
      - text: Set up AWS Transfer Family with SFTP for Amazon S3. Configure integrated Active Directory authentication.
        is_correct: true
@@ -791,7 +800,7 @@ questions:
   - id: q336
     type: multiple_choice
     question: |
-      A company hosts a multi-tier web application that uses an Amazon Aurora MySQL DB cluster for storage. The application tier is hosted on Amazon EC2 instances. The company’s IT security guidelines mandate that the database credentials be encrypted and rotated every 14 days.
+      A company hosts a multi-tier web application that uses an Amazon Aurora MySQL DB cluster for storage. The application tier is hosted on Amazon EC2 instances. The companyï¿½s IT security guidelines mandate that the database credentials be encrypted and rotated every 14 days.
 
       What should a solutions architect do to meet this requirement with the LEAST operational effort?
     options:
@@ -885,7 +894,7 @@ questions:
   - id: q340
     type: multiple_choice
     question: |
-      A media company hosts its website on AWS. The website application’s architecture includes a fleet of Amazon EC2 instances behind an Application Load Balancer (ALB) and a database that is hosted on Amazon Aurora. The company’s cybersecurity team reports that the application is vulnerable to SQL injection.
+      A media company hosts its website on AWS. The website applicationï¿½s architecture includes a fleet of Amazon EC2 instances behind an Application Load Balancer (ALB) and a database that is hosted on Amazon Aurora. The companyï¿½s cybersecurity team reports that the application is vulnerable to SQL injection.
 
       How should the company resolve this issue?
     options:
@@ -907,7 +916,7 @@ questions:
   - id: q341
     type: multiple_choice
     question: |
-      A company has an Amazon S3 data lake that is governed by AWS Lake Formation. The company wants to create a visualization in Amazon QuickSight by joining the data in the data lake with operational data that is stored in an Amazon Aurora MySQL database. The company wants to enforce column-level authorization so that the company’s marketing team can access only a subset of columns in the database.
+      A company has an Amazon S3 data lake that is governed by AWS Lake Formation. The company wants to create a visualization in Amazon QuickSight by joining the data in the data lake with operational data that is stored in an Amazon Aurora MySQL database. The company wants to enforce column-level authorization so that the companyï¿½s marketing team can access only a subset of columns in the database.
 
       Which solution will meet these requirements with the LEAST operational overhead?
     options:
@@ -931,7 +940,7 @@ questions:
     question: |
       A transaction processing company has weekly scripted batch jobs that run on Amazon EC2 instances. The EC2 instances are in an Auto Scaling group. The number of transactions can vary, but the baseline CPU utilization that is noted on each run is at least 60%. The company needs to provision the capacity 30 minutes before the jobs run.
 
-      Currently, engineers complete this task by manually modifying the Auto Scaling group parameters. The company does not have the resources to analyze the required capacity trends for the Auto Scaling group counts. The company needs an automated way to modify the Auto Scaling group’s desired capacity.
+      Currently, engineers complete this task by manually modifying the Auto Scaling group parameters. The company does not have the resources to analyze the required capacity trends for the Auto Scaling group counts. The company needs an automated way to modify the Auto Scaling groupï¿½s desired capacity.
 
       Which solution will meet these requirements with the LEAST operational overhead?
     options:
@@ -953,7 +962,7 @@ questions:
   - id: q343
     type: multiple_choice
     question: |
-      A solutions architect is designing a company’s disaster recovery (DR) architecture. The company has a MySQL database that runs on an Amazon EC2 instance in a private subnet with scheduled backup. The DR design needs to include multiple AWS Regions.
+      A solutions architect is designing a companyï¿½s disaster recovery (DR) architecture. The company has a MySQL database that runs on an Amazon EC2 instance in a private subnet with scheduled backup. The DR design needs to include multiple AWS Regions.
 
       Which solution will meet these requirements with the LEAST operational overhead?
     options:
@@ -1019,7 +1028,7 @@ questions:
   - id: q346
     type: multiple_choice
     question: |
-      A company has an aging network-attached storage (NAS) array in its data center. The NAS array presents SMB shares and NFS shares to client workstations. The company does not want to purchase a new NAS array. The company also does not want to incur the cost of renewing the NAS array’s support contract. Some of the data is accessed frequently, but much of the data is inactive.
+      A company has an aging network-attached storage (NAS) array in its data center. The NAS array presents SMB shares and NFS shares to client workstations. The company does not want to purchase a new NAS array. The company also does not want to incur the cost of renewing the NAS arrayï¿½s support contract. Some of the data is accessed frequently, but much of the data is inactive.
 
       A solutions architect needs to implement a solution that migrates the data to Amazon S3, uses S3 Lifecycle policies, and maintains the same look and feel for the client workstations. The solutions architect has identified AWS Storage Gateway as part of the solution.
 
@@ -1091,11 +1100,11 @@ questions:
   - id: q349
     type: multiple_choice
     question: |
-      A company stores confidential data in an Amazon Aurora PostgreSQL database in the ap-southeast-3 Region. The database is encrypted with an AWS Key Management Service (AWS KMS) customer managed key. The company was recently acquired and must securely share a backup of the database with the acquiring company’s AWS account in ap-southeast-3.
+      A company stores confidential data in an Amazon Aurora PostgreSQL database in the ap-southeast-3 Region. The database is encrypted with an AWS Key Management Service (AWS KMS) customer managed key. The company was recently acquired and must securely share a backup of the database with the acquiring companyï¿½s AWS account in ap-southeast-3.
 
       What should a solutions architect do to meet these requirements?
     options:
-     - text: Create a database snapshot. Add the acquiring company’s AWS account to the KMS key policy. Share the snapshot with the acquiring company’s AWS account.
+     - text: Create a database snapshot. Add the acquiring companyï¿½s AWS account to the KMS key policy. Share the snapshot with the acquiring companyï¿½s AWS account.
        is_correct: true
      - text: Make the snapshot public and provide the acquiring company with the KMS key ID.
        is_correct: false
@@ -1115,7 +1124,7 @@ questions:
     question: |
       A company uses a 100 GB Amazon RDS for Microsoft SQL Server Single-AZ DB instance in the us-east-1 Region to store customer transactions. The company needs high availability and automatic recovery for the DB instance.
 
-      The company must also run reports on the RDS database several times a year. The report process causes transactions to take longer than usual to post to the customers’ accounts. The company needs a solution that will improve the performance of the report process.
+      The company must also run reports on the RDS database several times a year. The report process causes transactions to take longer than usual to post to the customersï¿½ accounts. The company needs a solution that will improve the performance of the report process.
 
       Which combination of steps will meet these requirements? (Choose two.)
     options:

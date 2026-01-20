@@ -1,3 +1,4 @@
+  # Todos os diagramas jÃ¡ estÃ£o no mesmo nÃ­vel de tag e nÃ£o possuem parÃªnteses nos colchetes.
 questions:
   - id: q201
     type: multiple_choice
@@ -14,17 +15,24 @@ questions:
        is_correct: false
     explanation: |
       Correct: Amazon Pinpoint is specifically designed for multi-step marketing journeys and natively supports two-way SMS. Streaming events to Kinesis allows for long-term archiving in S3 or Redshift.
-      Incorrect: 
+      Incorrect:
         - Amazon SNS is primarily for one-way push notifications; it does not support "replies" or conversational SMS flows as easily as Pinpoint.
         - Amazon Connect is a contact center service; while it handles chat, it is not the most efficient tool for mass marketing SMS campaigns.
         - Amazon SES is for email (Simple Email Service), not for SMS communication.
+
+    diagram: |
+      graph TD
+        A[User] -->|SMS| B[Pinpoint]
+        B -->|Reply| A
+        B --> C[Kinesis]
+        C --> D[S3/Redshift]
 
   - id: q202
     type: multiple_choice
     question: |
       A company is planning to move its data to an Amazon S3 bucket. The data must be encrypted when it is stored in the S3 bucket. Additionally, the encryption key must be automatically rotated every year.
     options:
-     - text: Create an AWS Key Management Service (AWS KMS) customer managed key. Enable automatic key rotation. Set the S3 bucket’s default encryption behavior to use the customer managed KMS key. Move the data to the S3 bucket.
+     - text: Create an AWS Key Management Service (AWS KMS) customer managed key. Enable automatic key rotation. Set the S3 bucketï¿½s default encryption behavior to use the customer managed KMS key. Move the data to the S3 bucket.
        is_correct: true
      - text: Use Amazon S3 managed keys (SSE-S3) and configure the S3 bucket to rotate the keys annually in the S3 console.
        is_correct: false
@@ -34,10 +42,15 @@ questions:
        is_correct: false
     explanation: |
       Correct: AWS KMS Customer Managed Keys (CMK) support annual automatic rotation. Setting this as the default S3 encryption ensures all new objects are encrypted automatically.
-      Incorrect: 
+      Incorrect:
         - SSE-S3 uses keys managed by S3; users cannot configure the rotation schedule for these keys.
         - Client-side encryption with manual PGP management involves high operational overhead and is not a managed AWS solution.
         - AWS Secrets Manager is for storing secrets (passwords, API keys), not for managing the underlying S3 server-side encryption process.
+
+    diagram: |
+      graph TD
+        A[Data] --> B[S3 Bucket]
+        B -->|KMS CMK| C[Key Rotation]
 
   - id: q203
     type: multiple_choice
@@ -54,10 +67,16 @@ questions:
        is_correct: false
     explanation: |
       Correct: Scaling based on the `ApproximateNumberOfMessagesVisible` metric (queue depth) ensures that as the backlog grows, more workers are added to process the invitations.
-      Incorrect: 
+      Incorrect:
         - FIFO queues ensure order and deduplication but often have lower throughput (300-3000 TPS) than standard queues, which would not solve a delay caused by volume.
         - Vertical scaling has a hard limit and does not provide the elasticity needed for fluctuating demand like Auto Scaling does.
         - DAX improves read performance; the bottleneck here is the processing time in the queue, not the database write speed.
+
+    diagram: |
+      graph TD
+        A[Customer] --> B[SQS Queue]
+        B --> C[Auto Scaling Group]
+        C --> D[Send Invitation]
 
   - id: q204
     type: multiple_choice
@@ -74,15 +93,22 @@ questions:
        is_correct: false
     explanation: |
       Correct: Lake Formation simplifies the creation of a data lake and provides centralized, fine-grained access control (down to the column level), which is easier than managing complex IAM policies or bucket policies.
-      Incorrect: 
+      Incorrect:
         - IAM roles for S3 prefixes are difficult to manage at scale for "fine-grained" access (like hiding specific columns).
         - Redshift is a powerful analytics tool, but setting it up involves higher operational overhead for management compared to Lake Formation.
         - AWS Shield is for DDoS protection and has no relevance to fine-grained data permissions for analytics.
 
+    diagram: |
+      graph TD
+        A[RDS] --> B[Glue Connection]
+        B --> C[S3 Bucket]
+        C --> D[Lake Formation]
+        D --> E[Teams]
+
   - id: q205
     type: multiple_choice
     question: |
-      The company’s solutions architect creates a CloudFront distribution. The solutions architect must design the most cost-effective and resilient architecture for website hosting to serve as the CloudFront origin.
+      The companyï¿½s solutions architect creates a CloudFront distribution. The solutions architect must design the most cost-effective and resilient architecture for website hosting to serve as the CloudFront origin.
     options:
      - text: Create a private Amazon S3 bucket. Use an S3 bucket policy to allow access from a CloudFront origin access identity (OAI). Upload website content by using the AWS CLI.
        is_correct: true
@@ -94,17 +120,22 @@ questions:
        is_correct: false
     explanation: |
       Correct: S3 is highly resilient (99.999999999% durability) and much more cost-effective than running a server. OAI ensures the bucket remains private while allowing CloudFront access.
-      Incorrect: 
+      Incorrect:
         - EC2 requires patching, management, and is less resilient than S3 unless configured in a complex Multi-AZ Auto Scaling group.
         - Storage Gateway is used for hybrid storage, not as a direct origin for CloudFront.
         - CloudFront cannot mount EFS volumes directly; it requires an HTTP/HTTPS endpoint as an origin.
+
+    diagram: |
+      graph TD
+        A[S3 Bucket] -->|OAI| B[CloudFront]
+        B --> C[User]
 
   - id: q208
     type: multiple_choice
     question: |
       A company needs to move data from an Amazon EC2 instance to an Amazon S3 bucket. The company must ensure that no API calls and no data are routed through public internet routes. Only the EC2 instance can have access to upload data to the S3 bucket.
     options:
-     - text: Create an interface VPC endpoint for Amazon S3 in the subnet where the EC2 instance is located. Attach a resource policy to the S3 bucket to only allow the EC2 instance’s IAM role for access.
+     - text: Create an interface VPC endpoint for Amazon S3 in the subnet where the EC2 instance is located. Attach a resource policy to the S3 bucket to only allow the EC2 instanceï¿½s IAM role for access.
        is_correct: true
      - text: Use a NAT Gateway in the public subnet to route the traffic to the S3 public endpoint.
        is_correct: false
@@ -114,10 +145,14 @@ questions:
        is_correct: false
     explanation: |
       Correct: VPC Endpoints (Interface or Gateway) keep traffic within the AWS network. An Interface endpoint provides a private IP, and the bucket policy ensures only the specific IAM role can perform the upload.
-      Incorrect: 
+      Incorrect:
         - NAT Gateways still route traffic over the public internet to reach the S3 service endpoint.
         - Direct Connect is for connecting on-premises data centers to AWS, not for traffic between an EC2 instance and S3 within the cloud.
         - VPN is for encrypted traffic over the internet; the requirement specifically asks that no data is routed through public internet routes.
+
+    diagram: |
+      graph TD
+        A[EC2 Instance] -->|VPC Endpoint| B[S3 Bucket]
 
   - id: q209
     type: multiple_choice
@@ -134,10 +169,16 @@ questions:
        is_correct: false
     explanation: |
       Correct: Moving session data to a centralized store like ElastiCache (Redis or Memcached) allows the EC2 instances to be truly stateless, enabling them to scale up and down without users losing their sessions.
-      Incorrect: 
+      Incorrect:
         - Sticky sessions keep a user on one specific instance, but if that instance scales down or fails, the session data is lost.
         - EBS volumes are attached to specific instances; session data wouldn't be accessible to other instances in the Auto Scaling group.
         - A mesh network for replication is extremely complex to manage and prone to synchronization issues compared to a managed cache.
+
+    diagram: |
+      graph TD
+        A[User] --> B[ALB]
+        B --> C[EC2 Instances]
+        C --> D[ElastiCache]
 
   - id: q211
     type: multiple_choice
@@ -154,10 +195,15 @@ questions:
        is_correct: false
     explanation: |
       Correct: Tag Editor is a global tool specifically designed to find and manage resources across regions based on their tags in a single view.
-      Incorrect: 
+      Incorrect:
         - Running CLI commands for every region is time-consuming and manual (not the "quickest").
         - AWS Config is for compliance monitoring, not for generating a quick report of existing resources.
         - Cost allocation tags show financial data, but they don't provide a comprehensive list of all technical resource components.
+
+    diagram: |
+      graph TD
+        A[Tag Editor] --> B[Resources]
+        B --> C[Application Tag]
 
   - id: q213
     type: multiple_choice
@@ -174,10 +220,15 @@ questions:
        is_correct: false
     explanation: |
       Correct: AWS WAF is the standard tool for filtering Layer 7 attacks (SQLi, XSS) and integrates directly with the ALB.
-      Incorrect: 
+      Incorrect:
         - GuardDuty is a threat detection service, not a prevention firewall; it doesn't block SQLi in real-time.
         - Network ACLs operate at Layer 4 (IP/Port) and cannot inspect the payload of a request to detect SQL injection.
         - Security groups on S3 don't protect an ALB/EC2-based application from web exploits.
+
+    diagram: |
+      graph TD
+        A[User] --> B[ALB]
+        B -->|WAF| C[App]
 
   - id: q220
     type: multiple_choice
@@ -194,7 +245,12 @@ questions:
        is_correct: false
     explanation: |
       Correct: Since the requests are infrequent (hours can pass without one), Lambda's pay-per-execution model is the cheapest. You pay $0 when the API is not being used.
-      Incorrect: 
+      Incorrect:
         - EC2 instances incur costs even when idle. Even a "T" instance type costs more over a month than a few Lambda executions.
         - Fargate has a minimum billing duration and is more expensive for truly "sporadic" workloads.
         - Spot instances can be interrupted and still require a baseline management/runtime cost that Lambda avoids.
+
+    diagram: |
+      graph TD
+        A[API] --> B[Lambda]
+        B --> C[Process]
