@@ -21,6 +21,12 @@ questions:
     Incorrect:
       - ElastiCache helps with frequent small reads, but reporting usually involves large, infrequent analytical queries where caching is less effective.
       - Scaling the instance vertically improves performance but doesn't solve the contention between transactions and reports as effectively as a replica.
+      - Multi-Region replication is more complex and expensive than needed for this scenario.
+  diagram: |
+    graph TD
+      A[RDS Primary Instance] -->|Writes| B[Multi-AZ Standby]
+      A -->|Reads| C[Read Replica]
+      C -->|Reports| D[Application]
 
 - id: q351
   type: multiple_choice
@@ -42,6 +48,11 @@ questions:
       - EC2 instances increase operational overhead for management and patching.
       - EMR is for big data processing, not general application workflow orchestration.
       - AWS Glue is an ETL service, not a general-purpose application event-driven orchestrator.
+  diagram: |
+    graph TD
+      A[Event] -->|Trigger| B[AWS Step Functions]
+      B -->|Invoke| C[AWS Lambda]
+      C -->|Process| D[Workflow Steps]
 
 - id: q352
   type: multiple_choice
@@ -63,6 +74,11 @@ questions:
       - CloudFront is primarily for HTTP/HTTPS content and does not support general UDP traffic.
       - Route 53 Latency routing still relies on the public internet for the actual packet transit.
       - Transit Gateway connects VPCs but does not provide an entry point for end-users over the internet.
+  diagram: |
+    graph TD
+      A[Global Users] -->|UDP| B[AWS Global Accelerator]
+      B -->|Route| C[Endpoint Groups in Regions]
+      C -->|Low Latency| D[Game Servers]
 
 - id: q353
   type: multiple_choice
@@ -84,6 +100,10 @@ questions:
       - Aurora is highly available but typically more expensive than RDS MySQL with gp2 for this specific scale.
       - Single-AZ does not meet the "highly available and fault tolerant" requirement.
       - Using io2 is unnecessary and more expensive since gp2 can handle the requested IOPS.
+  diagram: |
+    graph TD
+      A[Application] -->|Queries| B[RDS Multi-AZ MySQL]
+      B -->|gp2 Volume| C[High IOPS]
 
 - id: q354
   type: multiple_choice
@@ -105,6 +125,11 @@ questions:
       - Migrating to DynamoDB requires a complete rewrite of the application code.
       - Increasing Lambda memory doesn't solve the backend database connection limit.
       - A singleton pattern in Lambda is difficult to implement due to its stateless nature and doesn't solve the aggregate connection spike.
+  diagram: |
+    graph TD
+      A[API Gateway] -->|Invoke| B[Lambda]
+      B -->|Connect| C[RDS Proxy]
+      C -->|Pool| D[RDS PostgreSQL]
 
 - id: q355
   type: multiple_choice
@@ -126,6 +151,11 @@ questions:
       - Lambda has a maximum limit of 6 vCPUs and 10 GB of RAM, which is far below the 64 vCPU/512 GiB requirement.
       - A t3.large instance is too small and a persistent instance for a 15-minute job is not cost-effective.
       - EMR is designed for Hadoop/Spark workloads, not general-purpose CPU-intensive batch jobs.
+  diagram: |
+    graph TD
+      A[Batch Job] -->|Submit| B[AWS Batch]
+      B -->|Provision| C[EC2 Instances]
+      C -->|Run| D[CPU-Intensive Task]
 
 - id: q356
   type: multiple_choice
@@ -145,8 +175,12 @@ questions:
     Correct: S3 Standard-IA offers the same millisecond access as S3 Standard but at a lower storage price for data not accessed frequently, while maintaining high availability across multiple zones.
     Incorrect:
       - S3 Glacier does not provide "immediate" access (retrieval takes minutes to hours).
-      - One Zone-IA has lower resiliency (data is lost if the AZ fails).
+      - One Zone-IA has lower resiliency (data lost if AZ fails).
       - Intelligent-Tiering is good, but moving specifically to IA after a known 30-day threshold is the standard cost-optimization answer.
+  diagram: |
+    graph TD
+      A[S3 Standard] -->|30 Days| B[S3 Standard-IA]
+      B -->|Immediate Access| C[High Availability]
 
 - id: q357
   type: multiple_choice
@@ -170,6 +204,10 @@ questions:
       - EBS Multi-Attach is for specific cluster-aware applications on Linux/Windows and is complex.
       - EFS is a Linux-native file system (NFS), while the requirement is for Windows instances.
       - S3 static hosting cannot execute server-side code (Windows/dynamic code).
+  diagram: |
+    graph TD
+      A[EC2 Instances] -->|Static Files| B[S3 + CloudFront]
+      A -->|Server Code| C[FSx for Windows File Server]
 
 - id: q358
   type: multiple_choice
@@ -191,6 +229,11 @@ questions:
       - EC2 fleets increase operational overhead.
       - S3 Batch Operations would be extremely expensive for a billion images and would not be "dynamic" for new requests.
       - Step Functions is too slow for real-time image serving.
+  diagram: |
+    graph TD
+      A[User Request] -->|CloudFront| B[Lambda@Edge]
+      B -->|Resize| C[S3 Images]
+      C -->|Serve| D[Optimized Format]
 
 - id: q359
   type: multiple_choice
@@ -212,6 +255,10 @@ questions:
       - SSE-S3 means AWS manages the keys, not the hospital team.
       - Default KMS keys (aws/s3) are managed by AWS, not the customer.
       - Uploading over HTTP is insecure, even if the data is encrypted; the standard is to enforce TLS.
+  diagram: |
+    graph TD
+      A[Hospital] -->|HTTPS| B[S3 Bucket]
+      B -->|SSE-KMS| C[Customer Managed Key]
 
 - id: q360
   type: multiple_choice
@@ -232,27 +279,35 @@ questions:
       - NAT Gateway allows private instances to reach the internet, it doesn't keep traffic private if they are using public endpoints.
       - VPC Peering is for connecting two VPCs, not for connecting a VPC to a managed service.
       - API Gateway endpoints do not have fixed "private IPs" you can hardcode without an endpoint.
+  diagram: |
+    graph TD
+      A[VPC Instances] -->|PrivateLink| B[API Gateway Endpoint]
+      B -->|Private| C[API Gateway]
 
 - id: q361
   type: multiple_choice
   question: |
-    A company needs sub-millisecond read latency for gaming data and the ability to run one-time queries on historical data with LEAST operational overhead.
-    Which solution meets these requirements?
+    A company needs a highly available, POSIX-compliant storage layer that is shareable across multiple AZs. Data is frequent for 30 days, then infrequent.
+    Which solution is MOST cost-effective?
   options:
-    - text: Use Amazon DynamoDB with DAX for frequent access. Export data to S3 and use Amazon Athena for one-time queries.
+    - text: Use the Amazon Elastic File System (Amazon EFS) Standard storage class. Create a lifecycle management policy to move infrequently accessed data to EFS Standard-Infrequent Access (EFS Standard-IA).
       is_correct: true
-    - text: Use Amazon RDS for MySQL with Read Replicas.
+    - text: Use Amazon EBS volumes with Multi-Attach enabled across all instances.
       is_correct: false
-    - text: Use Amazon ElastiCache for Redis for all data and backup to S3.
+    - text: Use Amazon S3 with an S3 File Gateway to provide POSIX compatibility.
       is_correct: false
-    - text: Use Amazon Redshift for both real-time reads and historical analysis.
+    - text: Deploy a clustered file system like Lustre on EC2 instances using EBS.
       is_correct: false
   explanation: |
-    Correct: DAX provides the sub-millisecond latency for DynamoDB. Athena is serverless and perfect for ad-hoc (one-time) queries on data exported to S3.
+    Correct: EFS is natively POSIX-compliant, shareable across multiple instances/AZs, and its Lifecycle Management feature automatically optimizes costs for older data.
     Incorrect:
-      - RDS does not consistently provide sub-millisecond latency.
-      - Redis is great for latency but not designed for complex historical SQL queries on large datasets in S3.
-      - Redshift is for OLAP; it is not suitable for sub-millisecond real-time gaming reads.
+      - EBS Multi-Attach is limited to a single AZ and requires specific cluster-aware file systems.
+      - S3 File Gateway provides an interface but isn't as natively POSIX-compliant for complex application logic as EFS.
+      - Self-managed clusters on EC2 increase operational overhead significantly.
+  diagram: |
+    graph TD
+      A[Multi-AZ Instances] -->|POSIX| B[EFS Standard]
+      B -->|Lifecycle| C[EFS Standard-IA]
 
 - id: q362
   type: multiple_choice
@@ -275,6 +330,10 @@ questions:
     Incorrect:
       - Standard SNS/SQS does not guarantee ordering.
       - S3 sorting is a post-processing step and doesn't solve the real-time ingestion order requirement.
+    diagram: |
+      graph TD
+        A[Messages] -->|Partition Key| B[Kinesis Data Stream]
+        A -->|Group ID| C[SQS FIFO]
 
 - id: q363
   type: multiple_choice
@@ -296,6 +355,12 @@ questions:
       - Standard SQS does not guarantee order.
       - Kinesis Firehose is for loading data into S3/Redshift, not real-time event distribution to microservices.
       - Step Functions Parallel state doesn't natively guarantee the order of external events being ingested.
+    diagram: |
+      graph TD
+        A[Game Events] -->|FIFO| B[SNS FIFO Topic]
+        B -->|Fan-out| C[Leaderboard Service]
+        B -->|Fan-out| D[Matchmaking Service]
+        B -->|Fan-out| E[Authentication Service]
 
 - id: q364
   type: multiple_choice
@@ -318,6 +383,10 @@ questions:
     Incorrect:
       - AWS managed keys do not allow the customer to modify the key policy for specific personnel.
       - IAM policies on S3 are irrelevant for SQS/SNS infrastructure.
+    diagram: |
+      graph TD
+        A[Hospital] -->|TLS| B[SNS with SSE-KMS]
+        A -->|TLS| C[SQS with SSE-KMS]
 
 - id: q365
   type: multiple_choice
@@ -339,6 +408,9 @@ questions:
       - Read Replicas are for scaling reads, not for rolling back data changes.
       - Manual snapshots are point-in-time but only at the moment they were taken, not every 5 minutes.
       - Multi-AZ is for HA; the error (editing a table) would be replicated to the standby immediately.
+  diagram: |
+    graph TD
+      A[RDS Instance] -->|Automated Backups| B[Point-in-Time Restore]
 
 - id: q367
   type: multiple_choice
@@ -380,6 +452,10 @@ questions:
     Incorrect:
       - Groups cannot enforce password complexity; only the account-wide policy can.
       - AWS Config can detect issues but doesn't prevent them as natively as the password policy.
+    diagram: |
+      graph TD
+        A[IAM Users] -->|Enforce| B[Account Password Policy]
+        B -->|Strength| C[Password Policy Rules]
 
 - id: q369
   type: multiple_choice
@@ -398,9 +474,14 @@ questions:
   explanation: |
     Correct: AWS Batch is designed for exactly this: running various jobs in containers with different requirements, managing the scaling and scheduling automatically.
     Incorrect:
-      - Lambda has a 15-minute execution limit; these tasks take 1 hour.
+      - Lambda has a maximum limit of 6 vCPUs and 10 GB of RAM, which is far below the 64 vCPU/512 GiB requirement.
       - EKS with Fargate is more complex to manage than AWS Batch for simple scheduled tasks.
       - Larger instances don't solve the scalability or isolation concerns.
+  diagram: |
+    graph TD
+      A[Tasks] -->|Schedule| B[EventBridge]
+      B -->|Trigger| C[AWS Batch]
+      C -->|Run| D[EC2 Jobs]
 
 - id: q370
   type: multiple_choice
@@ -422,6 +503,10 @@ questions:
       - Assigning public IPs doesn't work in a private subnet (no route to IGW).
       - NAT instances are self-managed and require more maintenance than a NAT gateway.
       - VPC peering doesn't support transitive routing to an IGW.
+  diagram: |
+    graph TD
+      A[Private Subnet EC2] -->|NAT Gateway| B[Public Subnet]
+      B -->|Internet| C[License Server]
 
 - id: q371
   type: multiple_choice
@@ -444,6 +529,10 @@ questions:
     Incorrect:
       - Manual encryption is high overhead.
       - EKS nodes use EBS for the root volume and local storage, not S3.
+    diagram: |
+      graph TD
+        A[EKS Cluster] -->|IAM Role| B[KMS Customer Key]
+        B -->|Encrypt| C[EBS Volumes]
 
 - id: q372
   type: multiple_choice
@@ -464,6 +553,9 @@ questions:
     Incorrect:
       - BLOBs in a database increase storage costs and hurt performance.
       - DynamoDB has a 400KB item limit; high-res GIS images will exceed this.
+  diagram: |
+    graph TD
+      A[Oracle RDS] -->|Metadata| B[S3 Images]
 
 - id: q373
   type: multiple_choice
@@ -484,6 +576,10 @@ questions:
     Incorrect:
       - Intelligent-Tiering has a monitoring fee per object, which is expensive for "trillions" of objects.
       - One Zone-IA risks data loss, which is usually not acceptable for historical data.
+  diagram: |
+    graph TD
+      A[S3 Standard] -->|30 Days| B[S3 Standard-IA]
+      B -->|1 Year| C[S3 Glacier Deep Archive]
 
 - id: q374
   type: multiple_choice
@@ -504,6 +600,12 @@ questions:
     Incorrect:
       - VPN is over the public internet and not suitable for latency-sensitive, high-volume data (hundreds of GBs daily).
       - Multiple Direct Connects are more expensive than one connection used with a Transit Gateway.
+    diagram: |
+      graph TD
+        A[VPC1] -->|Transit Gateway| B[Direct Connect]
+        C[VPC2] -->|Transit Gateway| B
+        D[VPC3] -->|Transit Gateway| B
+        B -->|On-premises| E[Data Center]
 
 - id: q375
   type: multiple_choice
@@ -545,6 +647,10 @@ questions:
       - Scaling doesn't solve the connection limit efficiently.
       - ElastiCache doesn't solve the connection exhaustion during the initial login/connect phase.
       - Retry logic helps but doesn't prevent the errors from occurring under high load.
+    diagram: |
+      graph TD
+        A[Serverless Apps] -->|RDS Proxy| B[RDS MySQL]
+        B -->|Pool Connections| C[Stable Access]
 
 - id: q377
   type: multiple_choice
@@ -565,6 +671,11 @@ questions:
     Incorrect:
       - A cron job might miss the final seconds of an instance's life before termination.
       - EventBridge triggers *after* the state change, which might be too late to collect internal data from a terminated instance.
+    diagram: |
+      graph TD
+        A[ASG Launch] -->|Lifecycle Hook| B[Custom Script]
+        B -->|Send Report| C[Auditing System]
+        D[ASG Terminate] -->|Lifecycle Hook| B
 
 - id: q378
   type: multiple_choice
@@ -585,6 +696,10 @@ questions:
     Incorrect:
       - ALB does not support UDP.
       - Aurora/RDS are relational and require more scaling management compared to DynamoDB on-demand.
+  diagram: |
+    graph TD
+      A[UDP Traffic] -->|NLB| B[DynamoDB On-Demand]
+      B -->|Store Scores| C[Non-Relational Data]
 
 - id: q379
   type: multiple_choice
@@ -606,7 +721,11 @@ questions:
       - Rewriting code is a significant change.
       - Increasing timeout doesn't reduce latency.
       - Read Replicas help with query time but not with the initial connection/library loading time of the Lambda.
- 
+  diagram: |
+    graph TD
+      A[Lambda] -->|Provisioned Concurrency| B[Warm Instances]
+      B -->|Low Latency| C[RDS]
+
 - id: q380
   type: multiple_choice
   question: |
@@ -627,27 +746,36 @@ questions:
       - Running an EC2 instance for cron jobs adds unnecessary infrastructure maintenance and costs.
       - State Manager is better for configuration consistency, not for simple start/stop scheduling of RDS.
       - While AWS Instance Scheduler is a valid solution, creating a simple Lambda is often more direct and minimizes extra resource deployment for basic needs.
+  diagram: |
+    graph TD
+      A[EventBridge Schedule] -->|Invoke| B[Lambda Function]
+      B -->|Start/Stop| C[EC2 Instances]
+      B -->|Start/Stop| D[RDS Instances]
 
 - id: q381
   type: multiple_choice
   question: |
-    A company hosts a three-tier web application with a PostgreSQL database storing document metadata. Documents are in S3. The monthly reporting process takes hours and involves relational queries. The process must not prevent document modifications.
+    A three-tier web application with a PostgreSQL database storing document metadata. Documents are in S3. The monthly reporting process takes hours and involves relational queries. The process must not prevent document modifications.
     Which solution will speed up the reporting process with the LEAST amount of change to the application code?
   options:
-    - text: Set up a new Amazon Aurora PostgreSQL DB cluster that includes an Aurora Replica. Issue queries to the Aurora Replica to generate the reports.
-      is_correct: true
-    - text: Migrate the metadata to Amazon DynamoDB and use global secondary indexes for reporting.
-      is_correct: false
-    - text: Use Amazon Athena to query the metadata directly from the PostgreSQL database using Federated Query.
-      is_correct: false
-    - text: Increase the instance size of the existing PostgreSQL database during the reporting window.
-      is_correct: false
+     - text: Set up a new Amazon Aurora PostgreSQL DB cluster that includes an Aurora Replica. Issue queries to the Aurora Replica to generate the reports.
+       is_correct: true
+     - text: Migrate the metadata to Amazon DynamoDB and use global secondary indexes for reporting.
+       is_correct: false
+     - text: Use Amazon Athena to query the metadata directly from the PostgreSQL database using Federated Query.
+       is_correct: false
+     - text: Increase the instance size of the existing PostgreSQL database during the reporting window.
+       is_correct: false
   explanation: |
     Correct: Aurora Replicas allow offloading of complex read-only queries from the primary writer. Since Aurora is PostgreSQL-compatible, this requires minimal code changes (just changing the connection endpoint for reports).
     Incorrect:
       - Migrating to DynamoDB requires a complete rewrite of the application's data layer.
       - Athena Federated Query is useful but typically slower for complex relational reporting than a native RDS replica.
       - Scaling up the primary instance still risks contention between writes and long-running reporting queries.
+  diagram: |
+    graph TD
+      A[Application] -->|Writes| B[Aurora Primary]
+      C[Reporting] -->|Reads| D[Aurora Replica]
 
 - id: q382
   type: multiple_choice
@@ -669,27 +797,36 @@ questions:
       - EBS encryption protects data at rest, not in transit.
       - KMS is used to manage keys, but it doesn't natively encrypt "connections" without TLS implementation.
       - VPC Flow Logs are for monitoring and do not provide encryption.
+  diagram: |
+    graph TD
+      A[User] -->|TLS| B[NLB]
+      B -->|Internal| C[EC2 Web Tier]
+      C -->|Internal| D[EC2 App Tier]
+      D -->|Internal| E[Database]
 
 - id: q383
   type: multiple_choice
   question: |
-    A company is migrating a commercial application with a licensing model using sockets and cores. They want to use their existing licenses (BYOL) with predictable capacity and uptime.
-    Which Amazon EC2 pricing option is the MOST cost-effective?
+    A company is deploying a public web app (EC2) and database (RDS MySQL). It must be secure for global customers with dynamic IPs.
+    How should security groups be configured?
   options:
-    - text: Dedicated Reserved Hosts
+    - text: Configure the web server security group to allow inbound 443 from 0.0.0.0/0. Configure the DB security group to allow 3306 from the web server security group.
       is_correct: true
-    - text: Dedicated On-Demand Instances
+    - text: Allow 443 and 3306 from 0.0.0.0/0 on all security groups.
       is_correct: false
-    - text: Spot Instances
+    - text: Allow 443 from the customer's specific IP addresses and 3306 from 0.0.0.0/0.
       is_correct: false
-    - text: Reserved Instances
+    - text: Use a Network ACL to allow 3306 and 443 from the entire VPC CIDR.
       is_correct: false
   explanation: |
-    Correct: Dedicated Hosts allow you to use your own licenses tied to physical cores/sockets. Choosing the "Reserved" model provides a significant discount for predictable, long-term workloads.
+    Correct: Allowing public access (0.0.0.0/0) to the web server is necessary for global customers. Restricting the database to only the web servers follows the principle of least privilege.
     Incorrect:
-      - Dedicated Instances run on shared hardware and may not meet socket-based licensing requirements.
-      - Spot Instances are for interruptible workloads and do not offer the stability required for predictable uptime.
-      - Standard Reserved Instances do not guarantee physical host affinity required for some core-based licenses.
+      - Exposing the database (3306) to the whole world is a major security risk.
+      - Dynamic IPs mean you cannot restrict the web tier to specific customer IP addresses.
+  diagram: |
+    graph TD
+      A[Global Customers] -->|443| B[Web SG]
+      B -->|3306| C[DB SG]
 
 - id: q384
   type: multiple_choice
@@ -711,6 +848,10 @@ questions:
       - EBS Multi-Attach is limited to a single AZ and requires specific cluster-aware file systems.
       - S3 File Gateway provides an interface but isn't as natively POSIX-compliant for complex application logic as EFS.
       - Self-managed clusters on EC2 increase operational overhead significantly.
+  diagram: |
+    graph TD
+      A[Multi-AZ Instances] -->|POSIX| B[EFS Standard]
+      B -->|Lifecycle| C[EFS Standard-IA]
 
 - id: q385
   type: multiple_choice
@@ -730,8 +871,12 @@ questions:
     Correct: This "chaining" of security groups ensures that only the ALB can talk to the Web servers, and only the Web servers can talk to the Database.
     Incorrect:
       - Allowing 443 from 0.0.0.0/0 on the web servers bypasses the ALB's security layer.
-      - Allowing the ALB to talk directly to MySQL (3306) violates the 3-tier separation and least privilege.
+      - Allowing the ALB to talk directly to MySQL violates the 3-tier separation and least privilege.
       - Network ACLs are broad and should not replace security group rules for instance-level security.
+  diagram: |
+    graph TD
+      A[ALB SG] -->|443| B[Web SG]
+      B -->|3306| C[MySQL SG]
 
 - id: q386
   type: multiple_choice
@@ -753,6 +898,10 @@ questions:
       - Redshift is for OLAP/Analytical workloads, not for real-time application caching.
       - Read Replicas help with scaling read volume, but identical queries are still processed by the DB engine; a cache avoids the DB engine entirely.
       - Increasing IOPS doesn't solve the inefficiency of repeated identical queries.
+  diagram: |
+    graph TD
+      A[Backend Tier] -->|Cache| B[ElastiCache]
+      B -->|Fallback| C[RDS MySQL]
 
 - id: q387
   type: multiple_choice
@@ -776,6 +925,11 @@ questions:
       - AdministratorAccess is the opposite of least privilege.
       - SCPs are for account-level restrictions, not for granular job activities of a single user.
       - Root credentials should never be used for daily activities.
+    diagram: |
+      graph TD
+        A[IAM User] -->|CloudFormation Actions| B[IAM Group]
+        B -->|Assume| C[Service Role]
+        C -->|Create| D[Stack Resources]
 
 - id: q388
   type: multiple_choice
@@ -783,41 +937,49 @@ questions:
     A two-tier app (Web in public, RDS in private) cannot connect to the database. Configurations are default. The database is running.
     What should a solutions architect recommend?
   options:
-    - text: Add an inbound rule to the security group of the database tier’s RDS instance to allow traffic from the web tier's security group.
-      is_correct: true
-    - text: Modify the Route Table of the private subnet to include a route to the Internet Gateway.
-      is_correct: false
-    - text: Change the Web tier instances to be in the same private subnet as the database.
-      is_correct: false
-    - text: Attach an Elastic IP address to the RDS instance.
-      is_correct: false
+     - text: Add an inbound rule to the security group of the database tier’s RDS instance to allow traffic from the web tier's security group.
+       is_correct: true
+     - text: Modify the Route Table of the private subnet to include a route to the Internet Gateway.
+       is_correct: false
+     - text: Change the Web tier instances to be in the same private subnet as the database.
+       is_correct: false
+     - text: Attach an Elastic IP address to the RDS instance.
+       is_correct: false
   explanation: |
     Correct: By default, security groups deny all inbound traffic. The database security group must be explicitly told to allow traffic from the web tier on the database port (e.g., 3306).
     Incorrect:
       - Private subnets should not have a direct route to an Internet Gateway.
       - Moving Web instances to a private subnet doesn't fix the security group issue and might break public access to the web tier.
       - RDS instances in private subnets should not have public/Elastic IPs.
+  diagram: |
+    graph TD
+      A[Web Tier SG] -->|Allow| B[DB SG]
+      B -->|Inbound Rule| C[RDS Instance]
 
 - id: q389
   type: multiple_choice
   question: |
-    A company wants business reporting queries to run without impacting write operations on an RDS MySQL instance in a single AZ.
+    A company runs a business reporting queries to run without impacting write operations on an RDS MySQL instance in a single AZ.
     Which solution meets these requirements?
   options:
-    - text: Deploy RDS read replicas to process the business reporting queries.
-      is_correct: true
-    - text: Enable Multi-AZ on the existing RDS instance.
-      is_correct: false
-    - text: Use Amazon Athena to query the RDS database directly.
-      is_correct: false
-    - text: Move the database to an EC2 instance with high-performance EBS volumes.
-      is_correct: false
+     - text: Deploy RDS read replicas to process the business reporting queries.
+       is_correct: true
+     - text: Enable Multi-AZ on the existing RDS instance.
+       is_correct: false
+     - text: Use Amazon Athena to query the RDS database directly.
+       is_correct: false
+     - text: Move the database to an EC2 instance with high-performance EBS volumes.
+       is_correct: false
   explanation: |
     Correct: Read replicas are the standard solution for offloading read-only reporting traffic from the primary writer instance.
     Incorrect:
       - Multi-AZ is for high availability; the standby instance cannot be queried.
       - Athena queries data in S3, not RDS (unless using specialized connectors that are more complex than a replica).
       - Moving to EC2 increases operational overhead and doesn't solve the write-contention issue unless replicas are also used.
+  diagram: |
+    graph TD
+      A[Write Operations] -->|Primary| B[RDS Instance]
+      C[Reporting Queries] -->|Read Replica| D[RDS Replica]
 
 - id: q391
   type: multiple_choice
@@ -825,20 +987,24 @@ questions:
     A company needs a backup strategy for a stateless web application (EC2 ASG) and RDS PostgreSQL. RPO is 2 hours.
     Which solution maximizes scalability and optimizes resource utilization?
   options:
-    - text: Retain the latest Amazon Machine Images (AMIs) of the web and application tiers. Enable automated backups in Amazon RDS and use point-in-time recovery.
-      is_correct: true
-    - text: Take hourly snapshots of all EBS volumes.
-      is_correct: false
-    - text: Use AWS Backup to create a daily backup of all EC2 instances.
-      is_correct: false
-    - text: Replicate the EC2 instances to another region using AWS Elastic Disaster Recovery.
-      is_correct: false
+     - text: Retain the latest Amazon Machine Images (AMIs) of the web and application tiers. Enable automated backups in Amazon RDS and use point-in-time recovery.
+       is_correct: true
+     - text: Take hourly snapshots of all EBS volumes.
+       is_correct: false
+     - text: Use AWS Backup to create a daily backup of all EC2 instances.
+       is_correct: false
+     - text: Replicate the EC2 instances to another region using AWS Elastic Disaster Recovery.
+       is_correct: false
   explanation: |
     Correct: Since the web tier is stateless, an AMI is sufficient to redeploy the instances at any time. RDS automated backups provide the 2-hour RPO requirement via PITR.
     Incorrect:
       - Hourly snapshots of stateless instances are a waste of storage and resources.
       - Daily backups don't meet a 2-hour RPO if data were stored on the instances (though here they are stateless).
       - Cross-region replication is more expensive than needed for this specific RPO.
+  diagram: |
+    graph TD
+      A[EC2 ASG] -->|AMI Backup| B[Latest AMI]
+      C[RDS] -->|Automated Backups| D[PITR within 2h]
 
 - id: q392
   type: multiple_choice
@@ -859,6 +1025,10 @@ questions:
     Incorrect:
       - Exposing the database (3306) to the whole world is a major security risk.
       - Dynamic IPs mean you cannot restrict the web tier to specific customer IP addresses.
+  diagram: |
+    graph TD
+      A[Global Customers] -->|443| B[Web SG]
+      B -->|3306| C[DB SG]
 
 - id: q393
   type: multiple_choice
@@ -866,20 +1036,24 @@ questions:
     A company stores customer audio files in S3. They need to transcribe the audio and redact personally identifiable information (PII).
     What should a solutions architect do?
   options:
-    - text: Configure an Amazon Transcribe transcription job with PII redaction turned on. Invoke it via Lambda upon S3 upload.
-      is_correct: true
-    - text: Use Amazon Rekognition to identify the speakers and manually redact the text.
-      is_correct: false
-    - text: Use Amazon Comprehend to transcribe the audio files.
-      is_correct: false
-    - text: Send the audio to an Amazon EMR cluster for processing.
-      is_correct: false
+     - text: Configure an Amazon Transcribe transcription job with PII redaction turned on. Invoke it via Lambda upon S3 upload.
+       is_correct: true
+     - text: Use Amazon Rekognition to identify the speakers and manually redact the text.
+       is_correct: false
+     - text: Use Amazon Comprehend to transcribe the audio files.
+       is_correct: false
+     - text: Send the audio to an Amazon EMR cluster for processing.
+       is_correct: false
   explanation: |
     Correct: Amazon Transcribe has a built-in PII redaction feature specifically designed for this use case.
     Incorrect:
       - Rekognition is for image and video analysis, not audio-to-text.
       - Comprehend is for Natural Language Processing (NLP) on text, it does not perform transcription of audio.
       - EMR is overkill and requires manual implementation of ASR and redaction logic.
+  diagram: |
+    graph TD
+      A[S3 Upload] -->|Trigger| B[Lambda]
+      B -->|Transcribe with PII Redaction| C[Amazon Transcribe]
 
 - id: q394
   type: multiple_choice
@@ -887,20 +1061,24 @@ questions:
     An RDS MySQL instance uses a 2,000 GB gp3 volume. Performance degrades when IOPS exceed 20,000.
     What should a solutions architect do to improve performance?
   options:
-    - text: Replace the volume with a Provisioned IOPS SSD (io2) volume.
-      is_correct: true
-    - text: Increase the size of the gp3 volume to 4,000 GB.
-      is_correct: false
-    - text: Change the database to a Multi-AZ deployment.
-      is_correct: false
-    - text: Enable EBS optimization on the RDS instance.
-      is_correct: false
+     - text: Replace the volume with a Provisioned IOPS SSD (io2) volume.
+       is_correct: true
+     - text: Increase the size of the gp3 volume to 4,000 GB.
+       is_correct: false
+     - text: Change the database to a Multi-AZ deployment.
+       is_correct: false
+     - text: Enable EBS optimization on the RDS instance.
+       is_correct: false
   explanation: |
     Correct: io2 volumes are designed for workloads requiring more than 16,000 IOPS with consistent, high performance.
     Incorrect:
       - gp3 has a maximum of 16,000 IOPS regardless of size (though throughput can scale).
       - Multi-AZ improves availability but doesn't increase the IOPS capacity of the primary volume.
       - RDS instances are EBS-optimized by default for the latest generations.
+  diagram: |
+    graph TD
+      A[RDS Instance] -->|Replace| B[io2 Volume]
+      B -->|High IOPS| C[Improved Performance]
 
 - id: q395
   type: multiple_choice
@@ -908,40 +1086,47 @@ questions:
     A solutions architect needs to identify which IAM user made specific configuration changes to security groups last week.
     Which service should be used?
   options:
-    - text: AWS CloudTrail
-      is_correct: true
-    - text: Amazon Inspector
-      is_correct: false
-    - text: AWS Config
-      is_correct: false
-    - text: Amazon CloudWatch Logs
-      is_correct: false
+     - text: AWS CloudTrail
+       is_correct: true
+     - text: Amazon Inspector
+       is_correct: false
+     - text: AWS Config
+       is_correct: false
+     - text: Amazon CloudWatch Logs
+       is_correct: false
   explanation: |
     Correct: CloudTrail logs all API calls made in an AWS account, including who made the call, when, and from where.
     Incorrect:
       - Inspector is for vulnerability scanning on instances.
       - AWS Config tracks resource changes over time but CloudTrail is the primary tool for auditing "who" performed the action.
       - CloudWatch Logs tracks application logs, not account-level API activity.
+    diagram: |
+      graph TD
+        A[IAM User] -->|API Call| B[CloudTrail]
+        B -->|Log| C[Security Group Changes]
 
 - id: q396
   type: multiple_choice
   question: |
-    A company uses EC2 instances and AWS Global Accelerator for a DNS service and wants to protect against DDoS attacks.
+    An EC2 instance runs a DNS service and wants to protect against DDoS attacks.
     What should a solutions architect do?
   options:
-    - text: Subscribe to AWS Shield Advanced. Add the accelerator as a resource to protect.
-      is_correct: true
-    - text: Enable AWS WAF on the Global Accelerator.
-      is_correct: false
-    - text: Use an Amazon CloudFront distribution instead of Global Accelerator.
-      is_correct: false
-    - text: Configure a Security Group to block all traffic except from known users.
-      is_correct: false
+     - text: Subscribe to AWS Shield Advanced. Add the accelerator as a resource to protect.
+       is_correct: true
+     - text: Enable AWS WAF on the Global Accelerator.
+       is_correct: false
+     - text: Use an Amazon CloudFront distribution instead of Global Accelerator.
+       is_correct: false
+     - text: Configure a Security Group to block all traffic except from known users.
+       is_correct: false
   explanation: |
     Correct: AWS Shield Advanced provides enhanced DDoS protection for resources like Global Accelerator, including 24/7 access to the Shield Response Team.
     Incorrect:
       - WAF is for Layer 7 (HTTP/HTTPS) attacks; Global Accelerator is often used for Layer 4 (UDP/TCP) where Shield is more appropriate.
       - CloudFront doesn't support the raw UDP/TCP protocols often needed for a custom DNS service as well as Global Accelerator does.
+  diagram: |
+    graph TD
+      A[DNS Service] -->|Global Accelerator| B[AWS Shield Advanced]
 
 - id: q397
   type: multiple_choice
@@ -949,79 +1134,45 @@ questions:
     A daily job filters 10 GB S3 objects, taking up to an hour. CPU/Memory usage is constant and known. The goal is to minimize operational effort.
     Which solution meets this?
   options:
-    - text: Create an Amazon ECS cluster with an AWS Fargate launch type. Schedule the task using Amazon EventBridge.
-      is_correct: true
-    - text: Run the job as an AWS Lambda function triggered by S3.
-      is_correct: false
-    - text: Use an EC2 instance with a cron job.
-      is_correct: false
-    - text: Use an AWS Glue ETL job.
-      is_correct: false
+     - text: Create an Amazon ECS cluster with an AWS Fargate launch type. Schedule the task using Amazon EventBridge.
+       is_correct: true
+     - text: Run the job as an AWS Lambda function triggered by S3.
+       is_correct: false
+     - text: Use an EC2 instance with a cron job.
+       is_correct: false
+     - text: Use an AWS Glue ETL job.
+       is_correct: false
   explanation: |
     Correct: Fargate is serverless, eliminating infrastructure management. EventBridge handles the scheduling. Since the job takes an hour, a container is better than Lambda.
     Incorrect:
-      - Lambda has a 15-minute maximum execution time.
-      - EC2 requires manual maintenance/patching.
-      - AWS Glue is possible but typically involves more operational setup for custom filtering logic compared to a simple Docker container on Fargate.
+      - Lambda has a maximum execution time of 15 minutes, which is insufficient.
+      - EC2 requires manual maintenance, patching, and does not scale automatically.
+      - AWS Glue is more suited for ETL processes and may introduce unnecessary complexity and cost.
+  diagram: |
+    graph TD
+      A[Daily Job] -->|Trigger| B[ECS Fargate]
+      B -->|Filter| C[S3 Objects]
 
-- id: q398
+- id: q425
   type: multiple_choice
   question: |
-    A company needs to transfer 600 TB of sensitive data from on-premises NAS to AWS within 2 weeks. Internet speed is 100 Mbps.
-    Which solution is MOST cost-effective?
+    A company needs 15,000 IOPS and wants to provision disk performance independent of storage capacity.
+    Which EBS volume type is MOST cost-effective?
   options:
-    - text: Use the AWS Snow Family console to order several AWS Snowball Edge Storage Optimized devices.
-      is_correct: true
-    - text: Transfer the data over the internet using AWS DataSync.
-      is_correct: false
-    - text: Set up a 1 Gbps AWS Direct Connect connection.
-      is_correct: false
-    - text: Use S3 Multipart Uploads over a VPN.
-      is_correct: false
+     - text: gp3
+       is_correct: true
+     - text: gp2
+       is_correct: false
+     - text: io1
+       is_correct: false
+     - text: st1
+       is_correct: false
   explanation: |
-    Correct: 600 TB would take months to transfer over a 100 Mbps connection. Snowball Edge is designed for large-scale, offline data migration.
+    Correct: gp3 allows provisioning IOPS and Throughput independently of storage size, costing less than io1/io2 for up to 16,000 IOPS.
     Incorrect:
-      - 100 Mbps is too slow for 600 TB.
-      - Setting up Direct Connect takes longer than the 2-week requirement.
-
-- id: q399
-  type: multiple_choice
-  question: |
-    A financial web app uses API Gateway. The team is concerned about HTTP flood attacks taking the app offline.
-    Which solution has the LEAST operational overhead?
-  options:
-    - text: Create a Regional AWS WAF web ACL with a rate-based rule. Associate it with the API Gateway stage.
-      is_correct: true
-    - text: Implement logic in the Lambda function to track and block IP addresses.
-      is_correct: false
-    - text: Use an Amazon CloudFront distribution with a dedicated Shield Response Team.
-      is_correct: false
-    - text: Increase the throttling limits on the API Gateway.
-      is_correct: false
-  explanation: |
-    Correct: AWS WAF rate-based rules automatically block IPs that exceed a request threshold, requiring minimal management.
-    Incorrect:
-      - Coding protection into Lambda increases complexity and overhead.
-      - Increasing throttling limits might actually make the application more vulnerable to being overwhelmed.
-
-- id: q400
-  type: multiple_choice
-  question: |
-    A startup uses DynamoDB and wants to alert managers of four teams whenever a new weather event is recorded, without affecting current app performance.
-    What is the LEAST operational overhead solution?
-  options:
-    - text: Enable Amazon DynamoDB Streams on the table. Use triggers to write to a single Amazon Simple Notification Service (Amazon SNS) topic to which the teams can subscribe.
-      is_correct: true
-    - text: Create a Lambda function that polls the DynamoDB table every minute for new entries.
-      is_correct: false
-    - text: Use a DynamoDB Stream to trigger a separate Lambda function for each team.
-      is_correct: false
-    - text: Configure the web application to send an email to each manager whenever it writes to the database.
-      is_correct: false
-  explanation: |
-    Correct: DynamoDB Streams + Lambda trigger + SNS Fan-out is a serverless, decoupled architecture that doesn't impact the performance of the main database writes.
-    Incorrect:
-      - Polling is inefficient and adds latency.
-      - Using four separate Lambda functions increases management overhead compared to a single SNS topic.
-      - Modifying the application code to send emails increases coupling and latency of the write operation.
- 
+      - gp2 ties IOPS to storage size (3 IOPS/GB), requiring a huge disk for 15,000 IOPS.
+      - io1 is much more expensive per IOPS.
+      - st1 is HDD and doesn't achieve high IOPS.
+  diagram: |
+    graph TD
+      A[Application] -->|15,000 IOPS| B[gp3 Volume]
