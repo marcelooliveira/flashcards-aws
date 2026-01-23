@@ -130,7 +130,7 @@ graph LR
 5. Bancos: O cofre do conhecimento
 
 ```mermaid
-graph TD
+graph LR
     A[Onde salvar o dado?] --> B{Qual o formato?}
     B -- Relacional - SQL --> C{Qual escala?}
     C -- Padrão --> D[Amazon RDS]
@@ -158,7 +158,7 @@ graph TD
 6. Front e Mídia: A cara do sistema
 
 ```mermaid
-graph TD
+graph LR
     A[Front e Mídia] --> B{Qual a tarefa?}
     B -- Web/Mobile Completo --> C[AWS Amplify]
     C --> C1{Backend gerenciado?}
@@ -183,7 +183,7 @@ graph TD
 7. Machine Learning: O robô sabido
 
 ```mermaid
-graph TD
+graph LR
     A[Machine Learning] --> B{Precisa treinar o modelo?}
     B -- Sim - Do zero --> C[SageMaker]
     C --> C1{Tipo de instância?}
@@ -214,7 +214,7 @@ graph TD
 8. Gerenciamento e Migração: Ordem na casa
 
 ```mermaid
-graph TD
+graph LR
     A[Gestão e Migração] --> B{Qual o foco?}
     B -- Monitoria e Logs --> C[CloudWatch / CloudTrail]
     C --> C1{Tipo de monitoria?}
@@ -243,7 +243,7 @@ graph TD
 9. Redes e Segurança: O muro e a estrada
 
 ```mermaid
-graph TD
+graph LR
     A[Redes e Segurança] --> B{O que proteger/conectar?}
     B -- Sua rede privada --> C[VPC]
     C --> C1{Necessita NAT?}
@@ -275,7 +275,7 @@ graph TD
 10. Armazenamento e Serverless: O celeiro e a leveza
 
 ```mermaid
-graph TD
+graph LR
     A[Finalizando] --> B{Qual o destino?}
     B -- Arquivos/Objetos --> C[Amazon S3]
     C --> C1{Necessita versionamento?}
