@@ -825,8 +825,34 @@ questions:
       - Dynamic IPs mean you cannot restrict the web tier to specific customer IP addresses.
   diagram: |
     graph TD
-      A[Global Customers] -->|443| B[Web SG]
-      B -->|3306| C[DB SG]
+        subgraph "INTERNET"
+            USER((Usuário Global))
+        end
+
+        subgraph "VPC - AWS CLOUD"
+            subgraph "Public Subnet"
+                SG_WEB["Security Group: SG-Web-Server"]
+                EC2[Instância EC2 - Web App]
+            end
+
+            subgraph "Private Subnet"
+                SG_DB["Security Group: SG-Database"]
+                RDS[RDS MySQL]
+            end
+        end
+
+        %% Regras de Tráfego
+        USER -- "Porta: 443 (HTTPS)<br/>Origem: 0.0.0.0/0" --> SG_WEB
+        SG_WEB --> EC2
+        
+        EC2 -- "Porta: 3306 (MySQL)<br/>Origem: SG-Web-Server" --> SG_DB
+        SG_DB --> RDS
+
+        %% Estilos
+        style SG_WEB fill:#e1f5fe,stroke:#000,stroke-dasharray: 5 5
+        style SG_DB fill:#ffebee,stroke:#000,stroke-dasharray: 5 5
+        style RDS fill:#fff
+        style EC2 fill:#fff
 
 - id: q384
   type: multiple_choice

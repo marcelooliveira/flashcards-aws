@@ -19,6 +19,11 @@ questions:
     - RDS is not a data lake (S3 is).
     - EC2 increases operational overhead significantly.
     - Amazon MSK requires more management and configuration compared to the serverless Kinesis suite.
+  diagram: |
+    graph TD
+      A[Customer Payment Data] --> B[Kinesis Data Firehose]
+      B --> C[Kinesis Data Analytics]
+      C --> D[Amazon S3  Data Lake]
 
 - id: q502
   type: multiple_choice
@@ -43,6 +48,13 @@ questions:
     Incorrect: 
     - EBS Multi-Attach is for specific cluster-aware applications and doesn't support standard file sharing for web servers like EFS does.
     - Restricting to a single AZ creates a single point of failure.
+  diagram: |
+    graph TD
+      A[User Requests] --> B[ALB]
+      B --> C[Auto Scaling Group]
+      C --> D[EC2 Instances]
+      D --> E[EFS  Shared Images]
+      D --> F[Aurora MySQL DB]
 
 - id: q503
   type: multiple_choice
@@ -63,6 +75,10 @@ questions:
     Incorrect: 
     - Sharing root credentials or IAM access keys is a major security risk.
     - Moving customer accounts into a company's organization is not feasible for a standard service provider model.
+  diagram: |
+    graph TD
+      A[Company Account] -- Trust Policy --> B[Customer Account IAM Role]
+      B -- Read-Only Permissions --> C[EC2 & CloudWatch APIs]
 
 - id: q504
   type: multiple_choice
@@ -83,6 +99,12 @@ questions:
     Incorrect: 
     - VPC peering doesn't scale well to hundreds of accounts (complex to manage).
     - VPN mesh and public EC2 routing are slow, insecure, and operationally heavy.
+  diagram: |
+    graph TD
+      A[Transit Gateway] -- RAM Share --> B[VPC 1]
+      A -- RAM Share --> C[VPC 2]
+      A -- RAM Share --> D[VPC 3]
+      A -- RAM Share --> E[VPC N]
 
 - id: q505
   type: multiple_choice
@@ -103,6 +125,11 @@ questions:
     Incorrect: 
     - Reserved Instances are for 24/7 workloads; paying for 24 hours when you only need 6 is wasteful.
     - Scheduled scaling with On-Demand is more expensive than using Spot.
+  diagram: |
+    graph TD
+      A[Auto Scaling Group] -- Launches --> B[Spot EC2 Instances]
+      B -- Run Batch Jobs --> C[Job Processing]
+      C -- Results --> D[Output]
 
 - id: q506
   type: multiple_choice
@@ -123,6 +150,10 @@ questions:
     Incorrect: 
     - Using EC2 as an intermediary limits scalability to the size of the instance fleet.
     - RDS is not designed for efficient bulk image storage compared to S3.
+  diagram: |
+    graph TD
+      A[User Browser] -- Presigned URL --> B[S3 Bucket]
+      C[Application] -- Generates --> A
 
 - id: q507
   type: multiple_choice
@@ -143,6 +174,11 @@ questions:
     Incorrect: 
     - RDS cross-region replicas are for reads; writes must still go to the single primary region, increasing latency for global users.
     - Aurora Global Database has a single primary region for writes; promoting a secondary is a failover process, not a standard update process.
+  diagram: |
+    graph TD
+      A[App Region 1] -- Read/Write --> B[DynamoDB Global Table]
+      C[App Region 2] -- Read/Write --> B
+      D[App Region N] -- Read/Write --> B
 
 - id: q508
   type: multiple_choice
@@ -165,6 +201,12 @@ questions:
     Incorrect: 
     - Custom scripts or manual processes increase administrative effort.
     - DataSync is for file systems, not for creating bootable EC2 backups (AMIs).
+  diagram: |
+    graph TD
+      A[EC2 Instance] -- DLM Policy --> B[AMI Backup]
+      B -- Cross-Region Copy --> C[us-west-2]
+      A -- AWS Backup --> D[Backup Plan]
+      D -- Cross-Region Copy --> C
 
 - id: q509
   type: multiple_choice
@@ -185,6 +227,10 @@ questions:
     Incorrect: 
     - Scaling out is expensive and doesn't stop the attack.
     - Slow start mode is for warming up new instances, not for mitigating DDoS or malicious traffic.
+  diagram: |
+    graph TD
+      A[Malicious IPs] -- Blocked by --> B[Network ACL]
+      C[Web Tier Subnets] -- Protected by --> B
 
 - id: q510
   type: multiple_choice
@@ -205,6 +251,10 @@ questions:
     Incorrect: 
     - Public IPs over the internet are not secure.
     - NAT Gateway is for outbound internet traffic, not for inter-VPC database connectivity.
+  diagram: |
+    graph TD
+      A[App eu-west-1 VPC] -- VPC Peering --> B[DB ap-southeast-2 VPC]
+      A -- Secure Communication --> B
 
 - id: q511
   type: multiple_choice
@@ -225,6 +275,11 @@ questions:
     Incorrect: 
     - Reserved Instances and 24/7 clusters result in paying for 20 hours of idle time.
     - EC2 hosting requires manual management and still incurs costs while idle unless manually stopped.
+  diagram: |
+    graph TD
+      A[Dev Environment] -- Connects to --> B[Aurora Serverless]
+      B -- Scales Up/Down --> C[Usage Period]
+      B -- Shuts Down --> D[Idle Period]
 
 - id: q512
   type: multiple_choice
@@ -244,6 +299,11 @@ questions:
     Correct: AWS Backup integrates with AWS Organizations to apply backup policies across all accounts. Combining this with AWS Config to enforce tagging ensures new resources are automatically protected.
     Incorrect: 
     - Manual processes and custom scripts (Lambda/CLI) increase overhead compared to the managed AWS Backup service.
+  diagram: |
+    graph TD
+      A[AWS Resources] -- Tagged by --> B[AWS Config]
+      A -- Backed Up by --> C[AWS Backup]
+      C -- Organization Policy --> D[All Accounts]
 
 - id: q513
   type: multiple_choice
@@ -264,6 +324,10 @@ questions:
     Incorrect: 
     - EC2 polling is less responsive and harder to scale.
     - ALBs and RDS are not designed for image processing.
+  diagram: |
+    graph TD
+      A[S3 Bucket] -- Image Upload --> B[Lambda Function]
+      B -- Resize --> C[S3 Output Bucket]
 
 - id: q514
   type: multiple_choice
@@ -284,6 +348,10 @@ questions:
     Incorrect: 
     - Enabling public access violates the stated security compliance.
     - NAT Gateway won't help if the public endpoint is disabled.
+  diagram: |
+    graph TD
+      A[EKS Node  Private Subnet] -- Connects via --> B[Interface VPC Endpoint]
+      B -- Access --> C[EKS Control Plane]
 
 - id: q515
   type: multiple_choice
@@ -308,6 +376,11 @@ questions:
     Incorrect: 
     - Redshift is not for OLTP (use RDS/Aurora).
     - It is not for unstructured files (use S3) or web hosting.
+  diagram: |
+    graph TD
+      A[Analytics Workloads] --> B[Amazon Redshift]
+      C[Petabytes of Data] --> B
+      D[Encryption] --> B
 
 - id: q516
   type: multiple_choice
@@ -328,6 +401,11 @@ questions:
     Incorrect: 
     - EC2 and Fargate require more management (patching, scaling logic).
     - 100 tasks running 24/7 is not cost-effective.
+  diagram: |
+    graph TD
+      A[Client Request] --> B[API Gateway]
+      B --> C[Lambda  Provisioned Concurrency]
+      C --> D[Response]
 
 - id: q517
   type: multiple_choice
@@ -348,6 +426,9 @@ questions:
     Incorrect: 
     - Custom scripts and manual exports increase operational burden.
     - CloudWatch/Firehose is a valid path but more complex than the native direct-to-S3 feature.
+  diagram: |
+    graph TD
+      A[Session Manager] -- Logging Enabled --> B[S3 Bucket]
 
 - id: q518
   type: multiple_choice
@@ -366,6 +447,9 @@ questions:
     Correct: RDS Storage Autoscaling automatically expands the backend volume as it reaches capacity without requiring manual intervention or causing downtime.
     Incorrect: 
     - Migration (DMS) and manual restarts involve significant effort and/or downtime.
+  diagram: |
+    graph TD
+      A[RDS MySQL] -- Storage Autoscaling --> B[Expanded Volume]
 
 - id: q519
   type: multiple_choice
@@ -386,6 +470,10 @@ questions:
     Incorrect: 
     - Sharing S3 buckets is less structured and lacks the governance of Service Catalog.
     - Sharing console access is a massive security risk.
+  diagram: |
+    graph TD
+      A[Company] -- Creates --> B[Service Catalog]
+      B -- Products --> C[Customers]
 
 - id: q520
   type: multiple_choice
@@ -406,6 +494,10 @@ questions:
     Incorrect: 
     - Provisioned capacity with high limits leads to paying for unused resources.
     - Standard-IA is for data that is rarely accessed; moderate to high throughput would be more expensive in this class due to higher request costs.
+  diagram: |
+    graph TD
+      A[Web App] -- Accesses --> B[DynamoDB  On-Demand, Standard]
+      B -- Scales Instantly --> C[Moderate/High Throughput]
 
 - id: q521
   type: multiple_choice
@@ -427,6 +519,10 @@ questions:
     - IAM users with stored credentials are a security risk.
     - DynamoDB does not use "bucket policies" (that's S3).
     - The management account doesn't automatically have access to data inside member account resources without roles.
+  diagram: |
+    graph TD
+      A[Reporting App  Shared Account] -- Assume Role --> B[BU_ROLE  Business Account]
+      B -- DynamoDB Access --> C[Inventory Table]
 
 - id: q522
   type: multiple_choice
@@ -450,6 +546,11 @@ questions:
     - Cluster Autoscaler scales the number of *EC2 nodes* when pods cannot be scheduled due to lack of resources. 
     Together, they provide full-stack scaling with minimal intervention.
     Incorrect: Manual adjustment or VPA (which resizes pods rather than adding them) are either high overhead or less effective for horizontal scaling.
+  diagram: |
+    graph TD
+      A[Kubernetes Metrics Server] -- Triggers --> B[Horizontal Pod Autoscaler]
+      B -- Scales --> C[Pods]
+      D[Cluster Autoscaler] -- Scales --> E[EC2 Nodes]
 
 - id: q523
   type: multiple_choice
@@ -470,6 +571,11 @@ questions:
     Incorrect: 
     - While DAX is great for DynamoDB caching, Lambda@Edge is often more efficient for "serverless web applications" to reduce latency across tiers.
     - SQS adds latency (asynchronous), which might impact the user experience.
+  diagram: |
+    graph TD
+      A[User] --> B[CloudFront]
+      B -- Triggers --> C[Lambda@Edge]
+      C -- Retrieves --> D[DynamoDB Tables]
 
 - id: q524
   type: multiple_choice
@@ -490,6 +596,10 @@ questions:
     Incorrect: 
     - Manual searching is high effort. 
     - QuickSight is for long-term visualization/BI, not quick troubleshooting.
+  diagram: |
+    graph TD
+      A[CloudTrail Logs in S3] -- Query --> B[Amazon Athena]
+      B -- Finds --> C[Access Denied Errors]
 
 - id: q525
   type: multiple_choice
@@ -510,6 +620,10 @@ questions:
     Incorrect: 
     - CUR + Athena is powerful but requires more setup (operational overhead).
     - Budgets are for alerting, not detailed usage analysis or forecasting history.
+  diagram: |
+    graph TD
+      A[App] -- Requests --> B[Cost Explorer API]
+      B -- Returns --> C[Usage Data & Forecast]
 
 - id: q526
   type: multiple_choice
@@ -529,6 +643,11 @@ questions:
     Incorrect: 
     - Multi-master is complex and doesn't support all features.
     - More replicas don't necessarily speed up the detection and reconnection time of the application.
+  diagram: |
+    graph TD
+      A[App] -- Connects --> B[RDS Proxy]
+      B -- Redirects --> C[Primary DB]
+      B -- Redirects (Failover) --> D[New Primary DB]
 
 
 
@@ -551,6 +670,10 @@ questions:
     Incorrect: 
     - Snapshot copying has high RPO (data loss).
     - CloudFront caches content, but cannot cache dynamic database writes.
+  diagram: |
+    graph TD
+      A[Region A: Aurora Global DB] -- Replicates --> B[Region B: Aurora Global DB]
+      C[Route 53] -- Failover --> B
 
 - id: q529
   type: multiple_choice
@@ -569,6 +692,10 @@ questions:
   explanation: |
     Correct: RDS is a managed service that handles patching, backups, and scaling (reducing overhead). Encryption at rest (using KMS) satisfies security requirements for sensitive data.
     Incorrect: EC2 requires the company to manage the OS and DB engine themselves, increasing overhead.
+  diagram: |
+    graph TD
+      A[Transactional Data] --> B[Amazon RDS]
+      B -- Encryption at Rest --> C[KMS]
 
 - id: q530
   type: multiple_choice
@@ -587,6 +714,10 @@ questions:
   explanation: |
     Correct: Global Accelerator provides static IP addresses and uses the AWS global network to route traffic to the nearest healthy endpoint. It is ideal for non-HTTP protocols like TCP/UDP used in gaming.
     Incorrect: CloudFront is optimized for HTTP/HTTPS, not raw TCP/UDP gaming traffic.
+  diagram: |
+    graph TD
+      A[Global Users] -- TCP/UDP --> B[AWS Global Accelerator]
+      B -- Routes --> C[NLBs]
 
 
 
@@ -607,6 +738,10 @@ questions:
   explanation: |
     Correct: Lambda Function URLs are the simplest way to provide an HTTPS endpoint for a single function without the cost or complexity of API Gateway or ALB.
     Incorrect: ALB and API Gateway add more configuration and potential cost.
+  diagram: |
+    graph TD
+      A[Third-Party Webhook] -- HTTPS --> B[Lambda Function URL]
+      B -- Executes --> C[Lambda Function]
 
 - id: q532
   type: multiple_choice
@@ -628,6 +763,11 @@ questions:
       is_correct: false
   explanation: |
     Correct: Wildcard domains and certificates allow you to support an unlimited number of customer subdomains (e.g., cust1.example.com) with a single configuration in API Gateway and Route 53.
+  diagram: |
+    graph TD
+      A[Customer Subdomain] -- DNS --> B[Route 53]
+      B -- Points to --> C[API Gateway]
+      D[ACM Wildcard Certificate] -- Imported --> C
 
 - id: q533
   type: multiple_choice
@@ -646,6 +786,11 @@ questions:
   explanation: |
     Correct: Amazon Macie is the dedicated service for PII discovery in S3. It integrates with EventBridge to trigger notifications via SNS.
     Incorrect: GuardDuty and Inspector do not scan S3 objects for PII content.
+  diagram: |
+    graph TD
+      A[S3 Bucket] -- Scanned by --> B[Amazon Macie]
+      B -- Detects PII --> C[EventBridge]
+      C -- Notifies --> D[SNS]
 
 - id: q534
   type: multiple_choice
@@ -664,6 +809,11 @@ questions:
   explanation: |
     Correct: S3 Lifecycle policies allow transitioning data to cheaper storage classes (Standard-IA) after the frequent access period (30 days) and then automating deletion (Expiration) at the 90-day mark.
     Incorrect: Moving to Glacier *at* 90 days is unnecessary if the requirement is to delete them at 90 days.
+  diagram: |
+    graph TD
+      A[S3 Standard] -- 30 Days --> B[S3 Standard-IA]
+      B -- 60 Days --> C[S3 Glacier]
+      C -- 90 Days --> D[Delete]
 
 - id: q535
   type: multiple_choice
@@ -682,6 +832,10 @@ questions:
   explanation: |
     Correct: EKS has a native feature to use AWS KMS to encrypt Kubernetes Secrets. This ensures that the data is encrypted before it is written to etcd.
     Incorrect: Worker node encryption doesn't protect the data within the Control Plane's etcd database.
+  diagram: |
+    graph TD
+      A[EKS Secrets] -- Encrypted by --> B[AWS KMS]
+      B -- Stores --> C[etcd]
 
 - id: q536
   type: multiple_choice
@@ -700,6 +854,13 @@ questions:
   explanation: |
     Correct: Multi-AZ provides high availability for production. Read Replicas allow the data scientists to run heavy queries without consuming the resources of the primary writer instance.
     Incorrect: Snapshot/Copy methods are not "near real-time."
+  diagram: |
+    graph TD
+      A[Primary RDS PostgreSQL] -- Multi-AZ --> B[Standby]
+      A -- Read Replicas --> C[Replica 1]
+      A -- Read Replicas --> D[Replica 2]
+      E[Data Scientist] -- Queries --> C
+      E -- Queries --> D
 
 - id: q537
   type: multiple_choice
@@ -718,6 +879,11 @@ questions:
   explanation: |
     Correct: To scale horizontally, the web tier must be stateless (moving session data to ElastiCache). RDS Multi-AZ ensures database availability, and the ASG handles traffic spikes across AZs.
     Incorrect: Local session storage prevents scaling (sticky sessions fail if an instance is replaced).
+  diagram: |
+    graph TD
+      A[ALB] --> B[ASG  EC2 in 3 AZs]
+      B --> C[ElastiCache  Session Data]
+      B --> D[RDS Multi-AZ]
 
 - id: q538
   type: multiple_choice
@@ -736,6 +902,11 @@ questions:
   explanation: |
     Correct: CloudFront has a built-in Geo Restriction feature. You can define an "Allow List" of countries to control access at the edge locations based on the user's IP.
     Incorrect: Creating hundreds of distributions is not manageable.
+  diagram: |
+    graph TD
+      A[User Request] --> B[CloudFront]
+      B -- Geo Restriction (Allow List) --> C[Allowed Country]
+      B -- Blocked --> D[Other Countries]
 
 - id: q540
   type: multiple_choice
@@ -754,6 +925,11 @@ questions:
   explanation: |
     Correct: Amazon Aurora (PostgreSQL or MySQL compatible) is highly available by design (6 copies of data across 3 AZs). Its read replicas (reader instances) are perfect for offloading reporting tasks.
     Incorrect: RDS Single-AZ is not highly available. EC2 Oracle requires significant management.
+  diagram: |
+    graph TD
+      A[On-Premises Oracle] -- Migrate --> B[Aurora MySQL]
+      B -- Replicas --> C[Reporting]
+      B -- 6 Copies --> D[3 AZs]
 
 - id: q541
   type: multiple_choice
@@ -800,6 +976,11 @@ questions:
     - S3 Block Public Access is a security baseline but doesn't handle user-level authorization for CloudFront.
     - IP-based policies don't work for a global customer base.
     - KMS encryption is for data at rest and is not a practical way to manage web-tier content delivery permissions.
+  diagram: |
+    graph TD
+      A[S3 Bucket] -- Content --> B[CloudFront]
+      B -- Signed URLs --> C[Premium Customers]
+      B -- Blocked --> D[Unauthorized Users]
 
 - id: q543
   type: multiple_choice
@@ -820,6 +1001,12 @@ questions:
   explanation: |
     Correct: In AWS Organizations, Savings Plans (and RIs) are shared across all accounts in the consolidated billing family by default unless "Sharing" is explicitly disabled.
     Incorrect: Savings Plans cannot be manually moved by support once purchased, and RAM is for sharing resources like subnets or License Manager configurations, not billing discounts.
+  diagram: |
+    graph TD
+      A[Savings Plan] -- Shared --> B[Purchasing Account]
+      A -- Shared --> C[Other Accounts]
+      D[AWS Organizations] -- Consolidated Billing --> B
+      D -- Consolidated Billing --> C
 
 - id: q544
   type: multiple_choice
@@ -840,8 +1027,15 @@ questions:
     Incorrect: 
     - Route 53 weighted routing works but requires managing two separate API Gateways and custom domains, increasing overhead.
     - Direct updates carry high risk if the new version has bugs.
+  diagram: |
+    graph TD
+      A[Route 53] -- DNS --> B[API Gateway]
+      B -- Canary Stage --> C[New API Version]
+      B -- Production Stage --> D[Current API Version]
+      E[Traffic] -- % to Canary --> C
+      E -- % to Production --> D
 
-- id: q545
+- id: q544
   type: multiple_choice
   question: |
     A company needs to redirect users to a backup static error page in S3 if their primary ALB-based website is unavailable, with minimal infrastructure overhead.
@@ -860,10 +1054,14 @@ questions:
     Incorrect: 
     - CloudFront custom error pages help for specific HTTP codes, but Route 53 failover is the standard way to handle a total site/ALB failure.
     - Manual Lambda updates increase complexity and "time to recovery."
+  diagram: |
+    graph TD
+      A[User] -- DNS --> B[Route 53]
+      B -- Primary --> C[ALB Website]
+      B -- Passive (Failover) --> D[S3 Error Page]
+      E[Health Check] -- Monitors --> C
 
-
-
-- id: q546
+- id: q545
   type: multiple_choice
   question: |
     A company wants to eliminate physical backup tapes while preserving their existing on-premises backup applications and workflows.
@@ -880,8 +1078,12 @@ questions:
   explanation: |
     Correct: Tape Gateway (a mode of Storage Gateway) emulates a physical tape library. This allows the company to keep their current backup software (like Veeam or Veritas) but store the "tapes" virtually in S3 or Glacier.
     Incorrect: File Gateway provides a file-system interface (NFS/SMB), not a tape-library interface.
+  diagram: |
+    graph TD
+      A[On-Prem Backup App] -- Writes --> B[Tape Gateway  VTL]
+      B -- Virtual Tapes --> C[S3/Glacier]
 
-- id: q547
+- id: q546
   type: multiple_choice
   question: |
     Data sensors stream high-volume data. The platform must be scalable, near real-time, and store data in S3 with the LEAST operational overhead.
@@ -900,8 +1102,12 @@ questions:
     Incorrect: 
     - EC2 and MSK require infrastructure management (high overhead).
     - SQS + Lambda is a valid pattern but requires more manual configuration and coding compared to the "plug-and-play" nature of Firehose.
+  diagram: |
+    graph TD
+      A[Data Sensors] -- Streams --> B[Kinesis Data Firehose]
+      B -- Delivers --> C[S3]
 
-- id: q548
+- id: q547
   type: multiple_choice
   question: |
     A company wants to control which services each account (Finance, Analytics, Dev) can use with the LEAST operational overhead.
@@ -918,8 +1124,16 @@ questions:
   explanation: |
     Correct: SCPs provide central control over the maximum available permissions for all accounts in an OU. This is the most efficient way to restrict services (e.g., "Deny all except S3/EC2") at scale.
     Incorrect: Managing individual IAM policies across many accounts is an operational nightmare. AWS Config is reactive, not preventative.
+  diagram: |
+    graph TD
+      A[AWS Organizations] -- OUs --> B[Finance]
+      A -- OUs --> C[Analytics]
+      A -- OUs --> D[Dev]
+      E[SCPs] -- Attach --> B
+      E -- Attach --> C
+      E -- Attach --> D
 
-- id: q549
+- id: q548
   type: multiple_choice
   question: |
     A MySQL cluster in a private subnet needs to retrieve data from a third-party provider on the internet. 
@@ -938,10 +1152,12 @@ questions:
     Incorrect: 
     - Public IPs on a database are a security risk.
     - NAT instances require manual management (patching, scaling), increasing overhead compared to the managed NAT Gateway service.
+  diagram: |
+    graph TD
+      A[MySQL Cluster  Private Subnet] -- Outbound --> B[NAT Gateway  Public Subnet]
+      B -- Outbound --> C[Internet]
 
-
-
-- id: q550
+- id: q549
   type: multiple_choice
   question: |
     A company uses AWS KMS to encrypt Lambda environment variables. Which steps ensure the correct permissions are in place for decryption? (Choose two.)
@@ -959,3 +1175,9 @@ questions:
   explanation: |
     Correct: To decrypt data with KMS, the caller (Lambda execution role) needs the IAM permission to call the `kms:Decrypt` API, AND the KMS key policy must explicitly allow that role to use the key.
     Incorrect: VPC endpoints help with network connectivity but do not grant API permissions. `iam:PassRole` is used for passing roles to services, not for decrypting data.
+  diagram: |
+    graph TD
+      A[Lambda Function] -- Needs --> B[Decrypt Env Vars]
+      B -- Uses --> C[KMS Key]
+      D[Lambda Execution Role] -- Permission --> C
+      E[KMS Key Policy] -- Allows --> D
