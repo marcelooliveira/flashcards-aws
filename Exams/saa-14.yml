@@ -20,6 +20,11 @@ questions:
   explanation: |
     Correct: S3 Standard-IA provides high durability across multiple AZs for the first transition. S3 Glacier Instant Retrieval is the ONLY archive tier that provides "instant" (millisecond) access. S3 Glacier Deep Archive is the cheapest tier for the final 5-year audit requirement where 12-hour retrieval is acceptable.
     Incorrect: One Zone-IA lacks durability. Glacier Flexible Retrieval takes minutes to hours, failing the "instant" requirement.
+  diagram: |
+    graph TD
+      A[S3 Standard 0-180 days] --> B[S3 Standard-IA 180-360 days]
+      B --> C[S3 Glacier Instant Retrieval 360+ days]
+      C --> D[S3 Glacier Deep Archive 5+ years, audit]
 
 
 
@@ -39,6 +44,12 @@ questions:
       is_correct: false
   explanation: |
     Correct: A "Transient" cluster shuts down after the job, saving money. Keeping Primary and Core nodes on On-Demand ensures the cluster doesn't fail (data integrity), while using Spot Instances for "Task" nodes (which don't store HDFS data) provides significant savings.
+  diagram: |
+    graph TD
+      A[EMR Job Start] --> B[Transient Cluster]
+      B --> C[Primary/Core Nodes On-Demand]
+      B --> D[Task Nodes Spot Instances]
+      B --> E[Cluster Terminates After Job]
 
 - id: q653
   type: multiple_choice
@@ -56,6 +67,13 @@ questions:
       is_correct: false
   explanation: |
     Correct: This is a classic automation pattern. CloudTrail captures the "Create" event, EventBridge triggers Lambda, and Lambda lookups the Cost Center in RDS and applies the tag to the resource ARN.
+  diagram: |
+    graph TD
+      A[Resource Creation Event] --> B[CloudTrail]
+      B --> C[EventBridge Rule]
+      C --> D[Lambda Function]
+      D --> E[RDS Lookup - Cost Center]
+      D --> F[Tag Resource]
 
 - id: q654
   type: multiple_choice
@@ -73,6 +91,13 @@ questions:
       is_correct: false
   explanation: |
     Correct: This decouples the layers. S3/CloudFront handles static assets cheaply. ECS Fargate provides managed container orchestration for PHP. ElastiCache for Redis provides a managed, highly available session store.
+  diagram: |
+    graph TD
+      A[User] --> B[CloudFront]
+      B --> C[S3 Static Content]
+      B --> D[ALB]
+      D --> E[ECS Fargate PHP App]
+      E --> F[ElastiCache Redis - Sessions]
 
 
 
@@ -95,6 +120,12 @@ questions:
   explanation: |
     Correct: ALBs natively support HTTP sticky sessions and integrate directly with AWS WAF. NLBs do not support WAF or standard HTTP cookie-based stickiness.
 
+  diagram: |
+    graph TD
+      A[User] --accesses--> B[Public ALB]
+      B --routes to--> C[EC2 Instances with Sticky Sessions]
+      B --protected by--> D[AWS WAF Web ACL]
+
 - id: q656
   type: multiple_choice
   question: |
@@ -112,6 +143,11 @@ questions:
   explanation: |
     Correct: S3 Standard-Infrequent Access (IA) has a lower storage price, perfect for images accessed only twice a year. Delivering via "Static Website Hosting" removes the need for expensive compute (EC2).
 
+  diagram: |
+    graph TD
+      A[Historical Images] --stored in--> B[S3 Standard-IA]
+      B --delivered by--> C[Static Website Hosting]
+
 - id: q657
   type: multiple_choice
   question: |
@@ -128,6 +164,12 @@ questions:
       is_correct: false
   explanation: |
     Correct: Managed Prefix Lists allow you to group multiple CIDR blocks into a single object. By sharing this object via RAM, you can reference it in Security Groups in any account. When the list is updated once, all security groups are updated automatically.
+
+  diagram: |
+    graph TD
+      A[Office CIDR Ranges] --grouped in--> B[Managed Prefix List]
+      B --shared via--> C[AWS RAM]
+      C --referenced by--> D[Security Groups in Multiple Accounts]
 
 - id: q658
   type: multiple_choice
@@ -148,6 +190,12 @@ questions:
   explanation: |
     Correct: Cluster placement groups provide the lowest possible network latency between instances. FSx for ONTAP is the only managed service that supports both NFS and SMB protocols simultaneously on the same file system.
 
+  diagram: |
+    graph TD
+      A[EC2 Instances] --placed in--> B[Cluster Placement Group]
+      B --connects to--> C[FSx for NetApp ONTAP]
+      C --provides--> D[NFS & SMB Access]
+
 - id: q659
   type: multiple_choice
   question: |
@@ -164,6 +212,12 @@ questions:
       is_correct: false
   explanation: |
     Correct: 50 TB over a nearly saturated VPN would take too long and impact production. Snowball Edge is a physical device that allows offline transfer of large data volumes within the 2-week window.
+
+  diagram: |
+    graph TD
+      A[On-premises Data] --copied to--> B[AWS Snowball Edge]
+      B --shipped to--> C[AWS]
+      C --data imported to--> D[S3]
 
 - id: q660
   type: multiple_choice
@@ -182,6 +236,11 @@ questions:
   explanation: |
     Correct: Since peak hours occur at the same time every day, "Scheduled Scaling" allows you to pre-provision capacity so it's ready before the rush begins, avoiding the "warm-up" delay.
 
+  diagram: |
+    graph TD
+      A[Scheduled Scaling] --launches--> B[EC2 Instances]
+      B --ready for--> C[Peak Hours]
+
 - id: q661
   type: multiple_choice
   question: |
@@ -198,6 +257,11 @@ questions:
       is_correct: false
   explanation: |
     Correct: RDS Proxy handles connection pooling, allowing many application connections to share a small number of database connections. This prevents "Too Many Connections" errors during traffic spikes.
+
+  diagram: |
+    graph TD
+      A[App Connections] --connect via--> B[RDS Proxy]
+      B --pools connections to--> C[RDS Database]
 
 
 
@@ -218,6 +282,11 @@ questions:
   explanation: |
     Correct: DLM allows you to create policies (e.g., "Keep only the last 7 daily snapshots") to automate the deletion of old EBS snapshots, ensuring costs don't grow infinitely.
 
+  diagram: |
+    graph TD
+      A[EBS Snapshots] --managed by--> B[Data Lifecycle Manager]
+      B --automates--> C[Snapshot Deletion]
+
 - id: q663
   type: multiple_choice
   question: |
@@ -234,6 +303,11 @@ questions:
       is_correct: false
   explanation: |
     Correct: Networking restrictions ensure that traffic stays private and originates only from the ECS cluster. VPC endpoints for S3 and SG-to-SG rules for RDS provide the required isolation.
+
+  diagram: |
+    graph TD
+      A[ECS Cluster] --accesses--> B[S3 via VPC Endpoint]
+      A --connects to--> C[RDS (restricted by SG)]
 
 - id: q664
   type: multiple_choice
@@ -252,6 +326,11 @@ questions:
   explanation: |
     Correct: Burstable instances (T-series) are cheaper for normal usage. "Unlimited mode" allows them to burst to handle the 10x spikes twice a month without performance degradation.
 
+  diagram: |
+    graph TD
+      A[Elastic Beanstalk] --uses--> B[T3 Burstable Instances]
+      B --scales with--> C[Request-based Scaling]
+
 - id: q665
   type: multiple_choice
   question: |
@@ -268,6 +347,12 @@ questions:
       is_correct: false
   explanation: |
     Correct: CloudFormation ensures "Infrastructure as Code" (automation), while AWS Config provides a detailed history of configuration changes for auditing purposes.
+
+  diagram: |
+    graph TD
+      A[CloudFormation] --deploys--> B[AWS Resources]
+      B --tracked by--> C[AWS Config]
+      C --audits--> D[Configuration Changes]
 
 - id: q666
   type: multiple_choice
@@ -286,6 +371,12 @@ questions:
   explanation: |
     Correct: RDS Multi-AZ provides database HA without code changes. ALB + ASG ensures the application layer is highly available across multiple AZs.
 
+  diagram: |
+    graph TD
+      A[App EC2 Instances] --in--> B[Auto Scaling Group]
+      B --behind--> C[Application Load Balancer]
+      D[MySQL DB] --migrated to--> E[RDS Multi-AZ]
+
 - id: q667
   type: multiple_choice
   question: |
@@ -302,6 +393,11 @@ questions:
       is_correct: false
   explanation: |
     Correct: S3 Gateway Endpoints are free and allow private communication. While Interface Endpoints also work for on-premises, Gateway Endpoints are the standard solution for routing internal S3 traffic within the AWS backbone.
+
+  diagram: |
+    graph TD
+      A[On-premises & VPC] --connects via--> B[S3 Gateway Endpoint]
+      B --routes to--> C[S3 Bucket]
 
 - id: q668
   type: multiple_choice
@@ -320,6 +416,11 @@ questions:
   explanation: |
     Correct: Tag Policies allow you to define allowed values for specific tags across an entire organization, ensuring standardization.
 
+  diagram: |
+    graph TD
+      A[AWS Organizations] --enforces--> B[Tag Policy]
+      B --requires--> C[Application Name Tag]
+
 - id: q669
   type: multiple_choice
   question: |
@@ -337,6 +438,11 @@ questions:
   explanation: |
     Correct: Secrets Manager has native integration with RDS to automate password rotation using a Lambda function that AWS provides and manages for you.
 
+  diagram: |
+    graph TD
+      A[Secrets Manager] --rotates--> B[RDS PostgreSQL Password]
+      B --uses--> C[AWS Lambda Automation]
+
 - id: q670
   type: multiple_choice
   question: |
@@ -353,6 +459,11 @@ questions:
       is_correct: false
   explanation: |
     Correct: Since the workload is predictable and infrequent, Provisioned mode is cheaper than On-Demand (which charges more per request). You can even scale the provisioned capacity down to 1 when the tests aren't running.
+
+  diagram: |
+    graph TD
+      A[DynamoDB Table] --configured with--> B[Provisioned RCU/WCU]
+      B --scaled for--> C[Known Workload]
 
 - id: q671
   type: multiple_choice
@@ -372,6 +483,11 @@ questions:
     Correct: AWS Cost Anomaly Detection uses machine learning to identify spend that is outside of normal patterns, even if it hasn't hit a specific budget limit. It is the most precise tool for "unusual spending" versus "exceeding a limit."
     Incorrect: Budgets are for fixed thresholds, not pattern-based anomalies.
 
+  diagram: |
+    graph TD
+      A[AWS Costs] --monitored by--> B[Cost Anomaly Detection]
+      B --notifies--> C[Stakeholders]
+
 - id: q672
   type: multiple_choice
   question: |
@@ -389,6 +505,11 @@ questions:
   explanation: |
     Correct: This is a totally serverless "Data Lake" approach. Glue crawls the S3 bucket to infer the schema, and Athena allows you to run SQL immediately against the raw S3 data without moving it.
 
+  diagram: |
+    graph TD
+      A[S3 Clickstream Data] --cataloged by--> B[AWS Glue Crawler]
+      B --queried by--> C[Amazon Athena]
+
 - id: q673
   type: multiple_choice
   question: |
@@ -405,6 +526,12 @@ questions:
       is_correct: false
   explanation: |
     Correct: S3 File Gateway provides a local SMB mount point. The 7-day lifecycle policy manages the move to Glacier Deep Archive (which has a 12-48 hour retrieval window), satisfying the 24-hour requirement cost-effectively.
+
+  diagram: |
+    graph TD
+      A[SMB File Server] --mounted by--> B[S3 File Gateway]
+      B --stores files in--> C[S3 Bucket]
+      C --lifecycle moves to--> D[Glacier Deep Archive]
 
 
 
@@ -427,6 +554,11 @@ questions:
   explanation: |
     Correct: Read Replicas offload the read-only query volume from the primary instance. ElastiCache (Redis/Memcached) stores frequent query results in-memory, preventing the queries from hitting the database at all.
 
+  diagram: |
+    graph TD
+      A[RDS PostgreSQL] --replicates to--> B[RDS Read Replica]
+      A --frequent queries cached by--> C[ElastiCache]
+
 - id: q675
   type: multiple_choice
   question: |
@@ -445,6 +577,11 @@ questions:
     Correct: EBS Snapshot Lock allows you to lock snapshots to prevent deletion by anyone (including admins) for a specified period. This is a direct feature of EBS.
     Incorrect: Recycle Bin allows recovery after deletion but doesn't "prevent" the deletion action itself in the same way.
 
+  diagram: |
+    graph TD
+      A[EBS Snapshots] --protected by--> B[Snapshot Lock]
+      B --prevents--> C[Accidental Deletion]
+
 - id: q676
   type: multiple_choice
   question: |
@@ -461,6 +598,12 @@ questions:
       is_correct: false
   explanation: |
     Correct: VPC Flow Logs capture IP traffic. Sending them through CloudWatch and Firehose provides a managed, near real-time pipeline into OpenSearch (formerly Elasticsearch).
+
+  diagram: |
+    graph TD
+      A[VPC Flow Logs] --sent to--> B[CloudWatch Logs]
+      B --streamed by--> C[Kinesis Data Firehose]
+      C --delivers to--> D[Amazon OpenSearch]
 
 
 
@@ -481,6 +624,12 @@ questions:
   explanation: |
     Correct: Using Spot Instances in EKS managed node groups can save up to 90% in costs. Mixing them with On-Demand ensures the cluster remains functional for tests even if some Spot instances are reclaimed.
 
+  diagram: |
+    graph TD
+      A[EKS Cluster] --uses--> B[Managed Node Group]
+      B --mixes--> C[On-Demand Instances]
+      B --mixes--> D[Spot Instances]
+
 - id: q678
   type: multiple_choice
   question: |
@@ -498,6 +647,11 @@ questions:
   explanation: |
     Correct: SSE-KMS with "Customer Managed Keys" (CMK) gives the user full administrative control over the lifecycle (rotation, disabling, policies) of the keys.
     Incorrect: SSE-S3 is managed by AWS; you cannot rotate or disable those keys yourself.
+
+  diagram: |
+    graph TD
+      A[S3 Data] --encrypted by--> B[SSE-KMS]
+      B --controlled by--> C[Customer Managed Keys]
 
 - id: q679
   type: multiple_choice
@@ -520,6 +674,13 @@ questions:
   explanation: |
     Correct: Versioning allows Object Lock to work. Object Lock (Governance) ensures the data can't be deleted for 30 days. The Lifecycle policy (Expiration) ensures that once the 30 days are up, the objects are automatically removed.
 
+  diagram: |
+    graph TD
+      A[VM Backups] --stored in--> B[S3 Bucket]
+      B --versioning enables--> C[Object Lock Governance]
+      C --retains for--> D[30 Days]
+      D --expired by--> E[S3 Lifecycle Policy]
+
 - id: q680
   type: multiple_choice
   question: |
@@ -538,6 +699,12 @@ questions:
     Correct: DataSync is designed for large-scale data movement and natively supports "changed data only" syncing between S3 and EFS.
     Incorrect: S3 Replication doesn't support EFS as a target.
 
+  diagram: |
+    graph TD
+      A[S3 Bucket] --synced by--> B[AWS DataSync]
+      B --copies to--> C[EFS]
+      B --copies to--> D[Other S3 Bucket]
+
 - id: q681
   type: multiple_choice
   question: |
@@ -555,6 +722,12 @@ questions:
   explanation: |
     Correct: To "control" rotation (e.g., triggering it manually or setting a specific schedule), you must use Customer Managed Keys. AWS-managed keys rotate on a fixed 3-year schedule that you cannot change.
 
+  diagram: |
+    graph TD
+      A[EBS Data] --encrypted by--> B[KMS]
+      B --uses--> C[Customer Managed Keys]
+      C --rotation controlled by--> D[User]
+
 - id: q682
   type: multiple_choice
   question: |
@@ -571,6 +744,11 @@ questions:
       is_correct: false
   explanation: |
     Correct: AWS Config is the standard tool for auditing resource configurations. Coupled with Systems Manager (SSM) Automation, it can automatically remediate (e.g., stop the instance or alert) non-compliant resources.
+
+  diagram: |
+    graph TD
+      A[EBS Volumes] --audited by--> B[AWS Config Rules]
+      B --remediated by--> C[SSM Automation]
 
 
 
@@ -593,6 +771,12 @@ questions:
   explanation: |
     Correct: Moving to ALB + ASG ensures the web tier is redundant and can scale. Moving MySQL to RDS Multi-AZ adds automated failover and backups with zero code changes, which satisfies the "minimal changes" requirement.
 
+  diagram: |
+    graph TD
+      A[Web Tier] --migrated to--> B[Auto Scaling Group]
+      B --behind--> C[Application Load Balancer]
+      D[MySQL DB] --migrated to--> E[RDS Multi-AZ]
+
 - id: q684
   type: multiple_choice
   question: |
@@ -609,3 +793,8 @@ questions:
       is_correct: false
   explanation: |
     Correct: Local Zones place compute, storage, and database services close to large population/industry centers, providing the ultra-low latency required while staying within specific geographic boundaries.
+
+  diagram: |
+    graph TD
+      A[Applications] --deployed in--> B[AWS Local Zones]
+      B --provides--> C[Single-digit ms Latency]
