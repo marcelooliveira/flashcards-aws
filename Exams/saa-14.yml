@@ -316,15 +316,15 @@ questions:
     Which solution is best?
   options:
     - text: Use burstable instances (T3) in unlimited mode with request-based scaling.
-      is_correct: true
+      is_correct: false
     - text: Use Compute Optimized (C5) instances.
       is_correct: false
     - text: Use Scheduled Scaling.
-      is_correct: false
+      is_correct: true
     - text: Use a Single Instance environment.
       is_correct: false
   explanation: |
-    Correct: Burstable instances (T-series) are cheaper for normal usage. "Unlimited mode" allows them to burst to handle the 10x spikes twice a month without performance degradation.
+    Correct: Scheduled Scaling is the best solution for an app with predictable CPU spikes (10x) twice a month in AWS Elastic Beanstalk, as it allows configuring proactive scaling actions to increase instance count exactly at those known times, ensuring optimal performance without reactive delays or unnecessary costs. Compute Optimized (C5) instances optimize for sustained CPU workloads but don't address automatic scaling needs. Single Instance environments lack Auto Scaling entirely, making them unsuitable for handling spikes. Burstable T3 instances with unlimited mode and request-based scaling are reactive to metrics like CPU or requests, which may lag behind predictable events and aren't ideal for T3's credit-based bursting model.
 
   diagram: |
     graph TD
