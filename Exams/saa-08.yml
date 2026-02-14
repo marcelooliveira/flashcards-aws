@@ -733,24 +733,33 @@ questions:
     Which solution will meet these requirements?
   options:
     - text: Create an AWS Lambda function that will start and stop the EC2 instances and DB instances. Configure Amazon EventBridge to invoke the Lambda function on a schedule.
-      is_correct: true
+      is_correct: false
     - text: Use an EC2 instance running a cron job to execute AWS CLI commands to start and stop the instances.
       is_correct: false
     - text: Configure AWS Systems Manager State Manager to start and stop the instances based on a tag-based schedule.
       is_correct: false
     - text: Use the AWS Instance Scheduler on AWS Solutions to manage the start and stop operations.
-      is_correct: false
+      is_correct: true
   explanation: |
-    Correct: AWS Lambda combined with Amazon EventBridge provides a serverless, low-cost, and low-maintenance way to automate scheduled tasks without managing any underlying infrastructure.
+    Correct: While you can build a custom solution using Lambda and EventBridge, the AWS Instance Scheduler is a "ready-to-deploy" AWS Solution that provides a higher level of abstraction and automation with less manual coding and maintenance..
     Incorrect:
-      - Running an EC2 instance for cron jobs adds unnecessary infrastructure maintenance and costs.
-      - State Manager is better for configuration consistency, not for simple start/stop scheduling of RDS.
-      - While AWS Instance Scheduler is a valid solution, creating a simple Lambda is often more direct and minimizes extra resource deployment for basic needs.
   diagram: |
-    graph TD
-      A[EventBridge Schedule] -->|Invoke| B[Lambda Function]
-      B -->|Start/Stop| C[EC2 Instances]
-      B -->|Start/Stop| D[RDS Instances]
+    graph LR
+      subgraph "AWS Solution: Instance Scheduler"
+          EB[EventBridge Scheduler] -->|Triggers every N mins| LB[Lambda Function]
+          LB -->|Checks Schedules| DDB[DynamoDB Table]
+      end
+      subgraph "Your Workload"
+          LB -->|Start/Stop| EC2[EC2 Instances]
+          LB -->|Start/Stop| RDS[RDS Databases]
+          EC2 -.->|Identified by| Tags[Resource Tags]
+          RDS -.->|Identified by| Tags
+      end
+      style EB fill:#FF9900,stroke:#232F3E,color:white
+      style LB fill:#FF9900,stroke:#232F3E,color:white
+      style DDB fill:#402770,stroke:#232F3E,color:white
+      style EC2 fill:#F58536,stroke:#232F3E,color:white
+      style RDS fill:#3B48CC,stroke:#232F3E,color:white
 
 - id: q381
   type: multiple_choice

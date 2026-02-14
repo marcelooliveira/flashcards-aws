@@ -1,0 +1,1220 @@
+﻿questions:
+  - id: q1
+    type: multiple_choice
+    question: |
+      A data engineer is configuring an AWS Glue job to read data from an Amazon S3 bucket. The data engineer has set up the necessary AWS Glue connection details and an associated IAM role. However, when the data engineer attempts to run the AWS Glue job, the data engineer receives an error message that indicates that there are problems with the Amazon S3 VPC gateway endpoint. The data engineer must resolve the error and connect the AWS Glue job to the S3 bucket. Which solution will meet this requirement?
+    options:
+    - text: Update the AWS Glue security group to allow inbound traffic from the Amazon S3 VPC gateway endpoint.
+      is_correct: false
+    - text: Configure an $3 bucket policy to explicitly grant the AWS Glue job permissions to access the S3 bucket.
+      is_correct: false
+    - text: Review the AWS Glue job code to ensure that the AWS Glue connection details include a fully qualified domain name.
+      is_correct: false
+    - text: Verify that the VPC's route table includes inbound and outbound routes for the Amazon S3 VPC gateway endpoint.
+      is_correct: true
+    explanation: |
+      Correct: When an AWS Glue job runs inside a VPC to access S3 via a VPC Gateway Endpoint, it doesn't use the public internet. Instead, it relies on the VPC's Route Tables to direct traffic to the S3 service.
+      Incorrect: Gateway Endpoints for S3 do not use Security Groups. Security Groups are used for Interface Endpoints (PrivateLink), but S3 Gateway Endpoints are handled strictly through route tables. While permissions are necessary, the error specifically mentions problems with the VPC gateway endpoint, which indicates a networking/routing layer issue, not an IAM/Access Control issue. AWS Glue handles the resolution of S3 endpoints automatically. Manually changing the code to a fully qualified domain name won't fix a routing path that doesn't exist in the VPC.
+    diagram: |
+      graph TD
+        Glue[AWS Glue Job]
+        Table{Route Table}
+        Tunnel[S3 Gateway Endpoint]
+        S3[Amazon S3]
+        
+        Glue -->|Where is S3?| Table
+        Table -->|Go through here| Tunnel
+        Tunnel -->|Private Connection| S3        
+
+  - id: q2
+    type: multiple_choice
+    question: |
+      A retail company has a customer data hub in an Amazon S3 bucket. Employees from many countries use the data hub to support company-wide analytics. A governance team must ensure that the company's data analysts can access data only for customers who are within the same country as the analysts. Which solution will meet these requirements with the LEAST operational effort?
+    options:
+      - text: Create a separate table for each country's customer data. Provide access to each analyst based on the country that the analyst serves.
+        is_correct: false
+      - text: Register the S3 bucket as a data lake location in AWS Lake Formation. Use the Lake Formation row-level security features to enforce the company's access policies.
+        is_correct: true
+      - text: Move the data to AWS Regions that are close to the countries where the customers are. Provide access to each analyst based on the country that the analyst serves.
+        is_correct: false
+      - text: Load the data into Amazon Redshift. Create a view for each country. Create separate IAM roles for each country to provide access to data from each country. Assign the appropriate roles to the analysts.
+        is_correct: false
+    explanation: |
+      Correct: AWS Lake Formation provides row-level security, allowing fine-grained access control for data stored in S3. This enables analysts to access only the data for customers in their own country, with minimal operational effort.
+      Incorrect: Creating separate tables or moving data to different regions increases operational complexity. Redshift views and IAM roles also add unnecessary overhead compared to Lake Formation's built-in features.
+    diagram: |
+      graph TD
+      S3[(Amazon S3)]
+      LakeFormation[AWS Lake Formation]
+      Analyst1[Analyst - Country 1]
+      Analyst2[Analyst - Country 2]
+      S3 --> LakeFormation
+      LakeFormation --> Analyst1
+      LakeFormation --> Analyst2
+
+  - id: q3
+    type: multiple_choice
+    question: |
+      A media company wants to improve a system that recommends media content to customers based on user behavior and preferences. To improve the recommendation system, the company needs to incorporate insights from third-party datasets into the company's existing analytics platform. The company wants to minimize the effort and time required to incorporate third-party datasets. Which solution will meet these requirements with the LEAST operational overhead?
+    options:
+      - text: Use API calls to access and integrate third-party datasets from AWS Data Exchange.
+        is_correct: true
+      - text: Use API calls to access and integrate third-party datasets from AWS DataSync.
+        is_correct: false
+      - text: Use Amazon Kinesis Data Streams to access and integrate third-party datasets from AWS CodeCommit repositories.
+        is_correct: false
+      - text: Use Amazon Kinesis Data Streams to access and integrate third-party datasets from Amazon Elastic Container Registry (Amazon ECR).
+        is_correct: false
+    explanation: |
+      Correct: AWS Data Exchange is designed for easy access and integration of third-party datasets via API calls, minimizing operational overhead.
+      Incorrect: DataSync, Kinesis Data Streams, CodeCommit, and ECR are not intended for third-party dataset integration in this context and require more setup or are not suitable.
+    diagram: |
+      graph TD
+      DataExchange[AWS Data Exchange]
+      Analytics[Analytics Platform]
+      DataExchange --> Analytics
+      Analytics --> RecommendationSystem[Recommendation System]
+
+  - id: q4
+    type: multiple_choice
+    question: |
+      A financial company wants to implement a data mesh. The data mesh must support centralized data governance, data analysis, and data access control. The company has decided to use AWS Glue for data catalogs and extract, transform, and load (ETL) operations. Which combination of AWS services will implement a data mesh? (Choose two.)
+    options:
+      - text: Use Amazon Aurora for data storage. Use an Amazon Redshift provisioned cluster for data analysis.
+        is_correct: false
+      - text: Use Amazon S3 for data storage. Use Amazon Athena for data analysis.
+        is_correct: true
+      - text: Use AWS Glue DataBrew for centralized data governance and access control.
+        is_correct: false
+      - text: Use Amazon RDS for data storage. Use Amazon EMR for data analysis.
+        is_correct: false
+      - text: Use AWS Lake Formation for centralized data governance and access control.
+        is_correct: true
+    explanation: |
+      Correct: Amazon S3 + Athena and AWS Lake Formation are the recommended combination for a data mesh with centralized governance and analysis. S3 is scalable storage, Athena enables serverless analytics, and Lake Formation provides governance and access control.
+      Incorrect: Aurora, Redshift, RDS, EMR, and DataBrew do not provide the required mesh architecture or centralized governance as efficiently as S3, Athena, and Lake Formation.
+    diagram: |
+      graph TD
+      S3[(Amazon S3)]
+      Athena[Amazon Athena]
+      LakeFormation[AWS Lake Formation]
+      Glue[AWS Glue]
+      S3 --> Athena
+      S3 --> LakeFormation
+      LakeFormation --> Glue
+      Athena --> Glue
+
+  - id: q5
+    type: multiple_choice
+    question: |
+      A data engineer maintains custom Python scripts that perform a data formatting process that many AWS Lambda functions use. When the data engineer needs to modify the Python scripts, the data engineer must manually update all the Lambda functions. The data engineer requires a less manual way to update the Lambda functions. Which solution will meet this requirement?
+    options:
+      - text: Store a pointer to the custom Python scripts in the execution context object in a shared Amazon S3 bucket.
+        is_correct: false
+      - text: Package the custom Python scripts into Lambda layers. Apply the Lambda layers to the Lambda functions.
+        is_correct: true
+      - text: Store a pointer to the custom Python scripts in environment variables in a shared Amazon S3 bucket.
+        is_correct: false
+      - text: Assign the same alias to each Lambda function. Call each Lambda function by specifying the function's alias.
+        is_correct: false
+    explanation: |
+      Correct: Lambda layers allow you to package shared code and reuse it across multiple Lambda functions. Updating the layer updates all functions using it, reducing manual work.
+      Incorrect: Using pointers or aliases does not solve the update problem for shared code. Environment variables and execution context are not designed for code distribution.
+    diagram: |
+      graph TD
+      Layer[Lambda Layer]
+      Lambda1[AWS Lambda Function 1]
+      Lambda2[AWS Lambda Function 2]
+      Layer --> Lambda1
+      Layer --> Lambda2
+
+  - id: q6
+    type: multiple_choice
+    question: |
+      A company created an extract, transform, and load (ETL) data pipeline in AWS Glue. A data engineer must crawl a table that is in Microsoft SQL Server. The data engineer needs to extract, transform, and load the output of the crawl to an Amazon S3 bucket. The data engineer also must orchestrate the data pipeline. Which AWS service or feature will meet these requirements MOST cost-effectively?
+    options:
+      - text: AWS Step Functions
+        is_correct: false
+      - text: AWS Glue workflows
+        is_correct: true
+      - text: AWS Glue Studio
+        is_correct: false
+      - text: Amazon Managed Workflows for Apache Airflow (Amazon MWAA)
+        is_correct: false
+    explanation: |
+      Correct: AWS Glue workflows are designed to orchestrate ETL pipelines within AWS Glue, providing a cost-effective solution for managing jobs, crawlers, and triggers.
+      Incorrect: Step Functions and MWAA are more general-purpose and can be more expensive. Glue Studio is for visual job authoring, not orchestration.
+    diagram: |
+      graph TD
+      SQLServer[Microsoft SQL Server]
+      GlueCrawl[AWS Glue Crawler]
+      GlueWorkflow[AWS Glue Workflow]
+      S3[(Amazon S3)]
+      SQLServer --> GlueCrawl
+      GlueCrawl --> GlueWorkflow
+      GlueWorkflow --> S3
+
+  - id: q7
+    type: multiple_choice
+    question: |
+      A financial services company stores financial data in Amazon Redshift. A data engineer wants to run real-time queries on the financial data to support a web-based trading application. The data engineer wants to run the queries from within the trading application. Which solution will meet these requirements with the LEAST operational overhead?
+    options:
+      - text: Establish WebSocket connections to Amazon Redshift.
+        is_correct: false
+      - text: Use the Amazon Redshift Data API.
+        is_correct: true
+      - text: Set up Java Database Connectivity (JDBC) connections to Amazon Redshift.
+        is_correct: false
+      - text: Store frequently accessed data in Amazon S3. Use Amazon S3 Select to run the queries.
+        is_correct: false
+    explanation: |
+      Correct: The Amazon Redshift Data API allows applications to run queries directly without managing persistent connections, reducing operational overhead.
+      Incorrect: WebSocket and JDBC require connection management. S3 Select is not suitable for real-time Redshift queries.
+    diagram: |
+      graph TD
+      Redshift[Amazon Redshift]
+      DataAPI[Redshift Data API]
+      TradingApp[Trading Application]
+      Redshift --> DataAPI
+      DataAPI --> TradingApp
+
+  - id: q8
+    type: multiple_choice
+    question: |
+      A company uses Amazon Athena for one-time queries against data that is in Amazon S3. The company has several use cases. The company must implement permission controls to separate query processes and access to query history among users, teams, and applications that are in the same AWS account. Which solution will meet these requirements?
+    options:
+      - text: Create an S3 bucket for each use case. Create an S3 bucket policy that grants permissions to appropriate individual IAM users. Apply the S3 bucket policy to the S3 bucket.
+        is_correct: false
+      - text: Create an Athena workgroup for each use case. Apply tags to the workgroup. Create an IAM policy that uses the tags to apply appropriate permissions to the workgroup.
+        is_correct: true
+      - text: Create an IAM role for each use case. Assign appropriate permissions to the role for each use case. Associate the role with Athena.
+        is_correct: false
+      - text: Create an AWS Glue Data Catalog resource policy that grants permissions to appropriate individual IAM users for each use case. Apply the resource policy to the specific tables that Athena uses.
+        is_correct: false
+    explanation: |
+      Correct: Athena workgroups allow separation of query processes and access to query history. IAM policies using tags provide granular permission control.
+      Incorrect: S3 bucket policies, IAM roles, and Glue Data Catalog resource policies do not provide the required separation of query history and processes for Athena.
+    diagram: |
+      graph TD
+      Athena[Amazon Athena]
+      Workgroup1[Athena Workgroup 1]
+      Workgroup2[Athena Workgroup 2]
+      IAM[IAM Policy]
+      Athena --> Workgroup1
+      Athena --> Workgroup2
+      Workgroup1 --> IAM
+      Workgroup2 --> IAM
+
+  - id: q9
+    type: multiple_choice
+    question: |
+      A data engineer needs to schedule a workflow that runs a set of AWS Glue jobs every day. The data engineer does not require the Glue jobs to run or finish at a specific time. Which solution will run the Glue jobs in the MOST cost-effective way?
+    options:
+      - text: Choose the FLEX execution class in the Glue job properties.
+        is_correct: true
+      - text: Use the Spot Instance type in Glue job properties.
+        is_correct: false
+      - text: Choose the STANDARD execution class in the Glue job properties.
+        is_correct: false
+      - text: Choose the latest version in the GlueVersion field in the Glue job properties.
+        is_correct: false
+    explanation: |
+      Correct: The FLEX execution class is designed for cost-effective scheduling of Glue jobs that do not require fast completion, making it ideal for daily workflows without strict timing.
+      Incorrect: Spot Instance type is not a Glue job property. STANDARD execution class and GlueVersion do not optimize for cost in this scenario.
+    diagram: |
+      graph TD
+      Workflow[Workflow]
+      GlueJob[AWS Glue Job]
+      Flex[FLEX Execution Class]
+      Workflow --> GlueJob
+      GlueJob --> Flex
+
+  - id: q10
+    type: multiple_choice
+    question: |
+      A data engineer needs to create an AWS Lambda function that converts the format of data from .csv to Apache Parquet. The Lambda function must run only if a user uploads a .csv file to an Amazon S3 bucket. Which solution will meet these requirements with the LEAST operational overhead?
+    options:
+      - text: Create an S3 event notification that has an event type of s3:ObjectCreated:*. Use a filter rule to generate notifications only when the suffix includes .csv. Set the Amazon Resource Name (ARN) of the Lambda function as the destination for the event notification.
+        is_correct: true
+      - text: Create an S3 event notification that has an event type of s3:ObjectTagging:* for objects that have a tag set to .csv. Set the Amazon Resource Name (ARN) of the Lambda function as the destination for the event notification.
+        is_correct: false
+      - text: Create an S3 event notification that has an event type of s3:*. Use a filter rule to generate notifications only when the suffix includes .csv. Set the Amazon Resource Name (ARN) of the Lambda function as the destination for the event notification.
+        is_correct: false
+      - text: Create an S3 event notification that has an event type of s3:ObjectCreated:*. Use a filter rule to generate notifications only when the suffix includes .csv. Set an Amazon Simple Notification Service (Amazon SNS) topic as the destination for the event notification. Subscribe the Lambda function to the SNS topic.
+        is_correct: false
+    explanation: |
+      Correct: S3 event notifications with ObjectCreated and a .csv suffix filter directly trigger the Lambda function with minimal overhead.
+      Incorrect: Tagging events, generic event types, or using SNS add unnecessary complexity and do not guarantee the required trigger behavior.
+    diagram: |
+      graph TD
+      S3[(Amazon S3)]
+      Lambda[AWS Lambda Function]
+      CSV[.csv File Upload]
+      S3 --> CSV
+      CSV --> Lambda
+
+  - id: q11
+    type: multiple_choice
+    question: |
+      A data engineer needs Amazon Athena queries to finish faster. The data engineer notices that all the files the Athena queries use are currently stored in uncompressed .csv format. The data engineer also notices that users perform most queries by selecting a specific column. Which solution will MOST speed up the Athena query performance?
+    options:
+      - text: Change the data format from .csv to JSON format. Apply Snappy compression.
+        is_correct: false
+      - text: Compress the .csv files by using Snappy compression.
+        is_correct: false
+      - text: Change the data format from .csv to Apache Parquet. Apply Snappy compression.
+        is_correct: true
+      - text: Compress the .csv files by using gzip compression.
+        is_correct: false
+    explanation: |
+      Correct: Apache Parquet is a columnar storage format optimized for query performance, especially when selecting specific columns. Snappy compression further improves speed and reduces storage.
+      Incorrect: JSON and .csv formats are not optimized for columnar queries. Compression alone does not provide the performance benefits of Parquet.
+    diagram: |
+      graph TD
+      CSV[.csv File]
+      Parquet[Apache Parquet]
+      Snappy[Snappy Compression]
+      Athena[Amazon Athena]
+      CSV --> Parquet
+      Parquet --> Snappy
+      Snappy --> Athena
+
+  - id: q12
+    type: multiple_choice
+    question: |
+      A manufacturing company collects sensor data from its factory floor to monitor and enhance operational efficiency. The company uses Amazon Kinesis Data Streams to publish the data that the sensors collect to a data stream. Then Amazon Kinesis Data Firehose writes the data to an Amazon S3 bucket. The company needs to display a real-time view of operational efficiency on a large screen in the manufacturing facility. Which solution will meet these requirements with the LOWEST latency?
+    options:
+      - text: Use Amazon Managed Service for Apache Flink (previously known as Amazon Kinesis Data Analytics) to process the sensor data. Use a connector for Apache Flink to write data to an Amazon Timestream database. Use the Timestream database as a source to create a Grafana dashboard.
+        is_correct: true
+      - text: Configure the S3 bucket to send a notification to an AWS Lambda function when any new object is created. Use the Lambda function to publish the data to Amazon Aurora. Use Aurora as a source to create an Amazon QuickSight dashboard.
+        is_correct: false
+      - text: Use Amazon Managed Service for Apache Flink (previously known as Amazon Kinesis Data Analytics) to process the sensor data. Create a new Data Firehose delivery stream to publish data directly to an Amazon Timestream database. Use the Timestream database as a source to create an Amazon QuickSight dashboard.
+        is_correct: false
+      - text: Use AWS Glue bookmarks to read sensor data from the S3 bucket in real time. Publish the data to an Amazon Timestream database. Use the Timestream database as a source to create a Grafana dashboard.
+        is_correct: false
+    explanation: |
+      Correct: Apache Flink (Kinesis Data Analytics) provides real-time processing with lowest latency, and direct integration with Timestream and Grafana for live dashboards.
+      Incorrect: Lambda, Aurora, QuickSight, Glue bookmarks, and Firehose add latency or are not optimized for real-time streaming.
+    diagram: |
+      graph TD
+      Sensors[Factory Sensors]
+      Kinesis[Kinesis Data Streams]
+      Flink[Apache Flink]
+      Timestream[Amazon Timestream]
+      Grafana[Grafana Dashboard]
+      Sensors --> Kinesis
+      Kinesis --> Flink
+      Flink --> Timestream
+      Timestream --> Grafana
+
+  - id: q13
+    type: multiple_choice
+    question: |
+      A company stores daily records of the financial performance of investment portfolios in .csv format in an Amazon S3 bucket. A data engineer uses AWS Glue crawlers to crawl the S3 data. The data engineer must make the S3 data accessible daily in the AWS Glue Data Catalog. Which solution will meet these requirements?
+    options:
+      - text: Create an IAM role that includes the AmazonS3FullAccess policy. Associate the role with the crawler. Specify the S3 bucket path of the source data as the crawler's data store. Create a daily schedule to run the crawler. Configure the output destination to a new path in the existing S3 bucket.
+        is_correct: false
+      - text: Create an IAM role that includes the AWSGlueServiceRole policy. Associate the role with the crawler. Specify the S3 bucket path of the source data as the crawler's data store. Create a daily schedule to run the crawler. Specify a database name for the output.
+        is_correct: true
+      - text: Create an IAM role that includes the AmazonS3FullAccess policy. Associate the role with the crawler. Specify the S3 bucket path of the source data as the crawler's data store. Allocate data processing units (DPUs) to run the crawler every day. Specify a database name for the output.
+        is_correct: false
+      - text: Create an IAM role that includes the AWSGlueServiceRole policy. Associate the role with the crawler. Specify the S3 bucket path of the source data as the crawler's data store. Allocate data processing units (DPUs) to run the crawler every day. Configure the output destination to a new path in the existing S3 bucket.
+        is_correct: false
+    explanation: |
+      Correct: The AWSGlueServiceRole policy is required for Glue crawlers. Scheduling the crawler daily and specifying a database name ensures the data is cataloged and accessible.
+      Incorrect: AmazonS3FullAccess is excessive and not best practice. DPUs are not required for scheduling crawlers. Output destination in S3 is not relevant for cataloging.
+    diagram: |
+      graph TD
+      S3[(Amazon S3)]
+      Crawler[AWS Glue Crawler]
+      DataCatalog[AWS Glue Data Catalog]
+      S3 --> Crawler
+      Crawler --> DataCatalog
+
+  - id: q14
+    type: multiple_choice
+    question: |
+      A company loads transaction data for each day into Amazon Redshift tables at the end of each day. The company wants to have the ability to track which tables have been loaded and which tables still need to be loaded. A data engineer wants to store the load statuses of Redshift tables in an Amazon DynamoDB table. The data engineer creates an AWS Lambda function to publish the details of the load statuses to DynamoDB. How should the data engineer invoke the Lambda function to write load statuses to the DynamoDB table?
+    options:
+      - text: Use a second Lambda function to invoke the first Lambda function based on Amazon CloudWatch events.
+        is_correct: false
+      - text: Use the Amazon Redshift Data API to publish an event to Amazon EventBridge. Configure an EventBridge rule to invoke the Lambda function.
+        is_correct: true
+      - text: Use the Amazon Redshift Data API to publish a message to an Amazon Simple Queue Service (Amazon SQS) queue. Configure the SQS queue to invoke the Lambda function.
+        is_correct: false
+      - text: Use a second Lambda function to invoke the first Lambda function based on AWS CloudTrail events.
+        is_correct: false
+    explanation: |
+      Correct: EventBridge is designed for event-driven invocation of Lambda functions based on Redshift Data API events, providing a scalable and integrated solution.
+      Incorrect: Using a second Lambda or SQS adds unnecessary complexity. CloudWatch and CloudTrail are not optimal for this use case.
+    diagram: |
+      graph TD
+      Redshift[Amazon Redshift]
+      DataAPI[Redshift Data API]
+      EventBridge[Amazon EventBridge]
+      Lambda[AWS Lambda]
+      DynamoDB[Amazon DynamoDB]
+      Redshift --> DataAPI
+      DataAPI --> EventBridge
+      EventBridge --> Lambda
+      Lambda --> DynamoDB
+
+  - id: q15
+    type: multiple_choice
+    question: |
+      A data engineer needs to securely transfer 5 TB of data from an on-premises data center to an Amazon S3 bucket. Approximately 5% of the data changes every day. Updates to the data need to be regularly proliferated to the S3 bucket. The data includes files that are in multiple formats. The data engineer needs to automate the transfer process and must schedule the process to run periodically. Which AWS service should the data engineer use to transfer the data in the MOST operationally efficient way?
+    options:
+      - text: AWS DataSync
+        is_correct: true
+      - text: AWS Glue
+        is_correct: false
+      - text: AWS Direct Connect
+        is_correct: false
+      - text: Amazon S3 Transfer Acceleration
+        is_correct: false
+    explanation: |
+      Correct: AWS DataSync is designed for secure, automated, and scheduled data transfer from on-premises to S3, efficiently handling incremental changes.
+      Incorrect: Glue is for ETL, Direct Connect is for network connectivity, and S3 Transfer Acceleration is for faster uploads, not automation or scheduling.
+    diagram: |
+      graph TD
+      OnPrem[On-Premises Data Center]
+      DataSync[AWS DataSync]
+      S3[(Amazon S3)]
+      OnPrem --> DataSync
+      DataSync --> S3
+
+  - id: q16
+    type: multiple_choice
+    question: |
+      A company uses an on-premises Microsoft SQL Server database to store financial transaction data. The company migrates the transaction data from the on-premises database to AWS at the end of each month. The company has noticed that the cost to migrate data from the on-premises database to an Amazon RDS for SQL Server database has increased recently. The company requires a cost-effective solution to migrate the data to AWS. The solution must cause minimal downtime for the applications that access the database. Which AWS service should the company use to meet these requirements?
+    options:
+      - text: AWS Lambda
+        is_correct: false
+      - text: AWS Database Migration Service (AWS DMS)
+        is_correct: true
+      - text: AWS Direct Connect
+        is_correct: false
+      - text: AWS DataSync
+        is_correct: false
+    explanation: |
+      Correct: AWS DMS is designed for cost-effective, minimal-downtime database migration from on-premises SQL Server to Amazon RDS.
+      Incorrect: Lambda, Direct Connect, and DataSync are not suitable for database migration with minimal downtime.
+    diagram: |
+      graph TD
+      SQLServer[On-Premises SQL Server]
+      DMS[AWS DMS]
+      RDS[Amazon RDS for SQL Server]
+      SQLServer --> DMS
+      DMS --> RDS
+
+  - id: q17
+    type: multiple_choice
+    question: |
+      A data engineer is building a data pipeline on AWS by using AWS Glue extract, transform, and load (ETL) jobs. The data engineer needs to process data from Amazon RDS and MongoDB, perform transformations, and load the transformed data into Amazon Redshift for analytics. The data updates must occur every hour. Which combination of tasks will meet these requirements with the LEAST operational overhead? (Choose two.)
+    options:
+      - text: Configure AWS Glue triggers to run the ETL jobs every hour.
+        is_correct: true
+      - text: Use AWS Glue DataBrew to clean and prepare the data for analytics.
+        is_correct: false
+      - text: Use AWS Lambda functions to schedule and run the ETL jobs every hour.
+        is_correct: false
+      - text: Use AWS Glue connections to establish connectivity between the data sources and Amazon Redshift.
+        is_correct: true
+      - text: Use the Redshift Data API to load transformed data into Amazon Redshift.
+        is_correct: false
+    explanation: |
+      Correct: Glue triggers automate job scheduling, and Glue connections simplify connectivity between sources and Redshift, minimizing operational overhead.
+      Incorrect: DataBrew and Lambda add complexity. Redshift Data API is not required for Glue ETL loading.
+    diagram: |
+      graph TD
+      RDS[Amazon RDS]
+      MongoDB[MongoDB]
+      GlueConn[AWS Glue Connection]
+      GlueJob[AWS Glue ETL Job]
+      Redshift[Amazon Redshift]
+      RDS --> GlueConn
+      MongoDB --> GlueConn
+      GlueConn --> GlueJob
+      GlueJob --> Redshift
+
+  - id: q18
+    type: multiple_choice
+    question: |
+      A company uses an Amazon Redshift cluster that runs on RA3 nodes. The company wants to scale read and write capacity to meet demand. A data engineer needs to identify a solution that will turn on concurrency scaling. Which solution will meet this requirement?
+    options:
+      - text: Turn on concurrency scaling in workload management (WLM) for Redshift Serverless workgroups.
+        is_correct: false
+      - text: Turn on concurrency scaling at the workload management (WLM) queue level in the Redshift cluster.
+        is_correct: true
+      - text: Turn on concurrency scaling in the settings during the creation of any new Redshift cluster.
+        is_correct: false
+      - text: Turn on concurrency scaling for the daily usage quota for the Redshift cluster.
+        is_correct: false
+    explanation: |
+      Correct: Concurrency scaling is enabled at the WLM queue level in Redshift clusters to scale read/write capacity.
+      Incorrect: Serverless workgroups, cluster creation settings, and daily usage quota are not the correct configuration points.
+    diagram: |
+      graph TD
+      Redshift[Amazon Redshift Cluster]
+      WLM[Workload Management Queue]
+      Scaling[Concurrency Scaling]
+      Redshift --> WLM
+      WLM --> Scaling
+
+  - id: q19
+    type: multiple_choice
+    question: |
+      A data engineer must orchestrate a series of Amazon Athena queries that will run every day. Each query can run for more than 15 minutes. Which combination of steps will meet these requirements MOST cost-effectively? (Choose two.)
+    options:
+      - text: Use an AWS Lambda function and the Athena Boto3 client start_query_execution API call to invoke the Athena queries programmatically.
+        is_correct: true
+      - text: Create an AWS Step Functions workflow and add two states. Add the first state before the Lambda function. Configure the second state as a Wait state to periodically check whether the Athena query has finished using the Athena Boto3 get_query_execution API call. Configure the workflow to invoke the next query when the current query has finished running.
+        is_correct: true
+      - text: Use an AWS Glue Python shell job and the Athena Boto3 client start_query_execution API call to invoke the Athena queries programmatically.
+        is_correct: false
+      - text: Use an AWS Glue Python shell script to run a sleep timer that checks every 5 minutes to determine whether the current Athena query has finished running successfully. Configure the Python shell script to invoke the next query when the current query has finished running.
+        is_correct: false
+      - text: Use Amazon Managed Workflows for Apache Airflow (Amazon MWAA) to orchestrate the Athena queries in AWS Batch.
+        is_correct: false
+    explanation: |
+      Correct: Lambda and Step Functions together provide cost-effective orchestration for long-running Athena queries, with wait states and programmatic invocation.
+      Incorrect: Glue jobs and Airflow add unnecessary complexity and cost for this use case.
+    diagram: |
+      graph TD
+      Lambda[AWS Lambda]
+      StepFunctions[AWS Step Functions]
+      Athena[Amazon Athena]
+      Lambda --> Athena
+      StepFunctions --> Lambda
+      StepFunctions --> Athena
+
+  - id: q20
+    type: multiple_choice
+    question: |
+      A company is migrating on-premises workloads to AWS. The company wants to reduce overall operational overhead. The company also wants to explore serverless options. The company's current workloads use Apache Pig, Apache Oozie, Apache Spark, Apache Hbase, and Apache Flink. The on-premises workloads process petabytes of data in seconds. The company must maintain similar or better performance after the migration to AWS. Which extract, transform, and load (ETL) service will meet these requirements?
+    options:
+      - text: AWS Glue
+        is_correct: false
+      - text: Amazon EMR
+        is_correct: true
+      - text: AWS Lambda
+        is_correct: false
+      - text: Amazon Redshift
+        is_correct: false
+    explanation: |
+      Correct: Amazon EMR supports Apache Pig, Oozie, Spark, Hbase, and Flink, and is optimized for large-scale, high-performance ETL workloads with reduced operational overhead.
+      Incorrect: Glue and Lambda are not suitable for petabyte-scale, multi-framework ETL. Redshift is a data warehouse, not an ETL service.
+    diagram: |
+      graph TD
+      OnPrem[On-Premises Workloads]
+      EMR[Amazon EMR]
+      Pig[Apache Pig]
+      Oozie[Apache Oozie]
+      Spark[Apache Spark]
+      Hbase[Apache Hbase]
+      Flink[Apache Flink]
+      OnPrem --> EMR
+      EMR --> Pig
+      EMR --> Oozie
+      EMR --> Spark
+      EMR --> Hbase
+      EMR --> Flink
+
+  - id: q21
+    type: multiple_choice
+    question: |
+      A data engineer must use AWS services to ingest a dataset into an Amazon S3 data lake. The data engineer profiles the dataset and discovers that the dataset contains personally identifiable information (PII). The data engineer must implement a solution to profile the dataset and obfuscate the PII. Which solution will meet this requirement with the LEAST operational effort?
+    options:
+      - text: Use an Amazon Kinesis Data Firehose delivery stream to process the dataset. Create an AWS Lambda transform function to identify the PII. Use an AWS SDK to obfuscate the PII. Set the S3 data lake as the target for the delivery stream.
+        is_correct: false
+      - text: Use the Detect PII transform in AWS Glue Studio to identify the PII. Obfuscate the PII. Use an AWS Step Functions state machine to orchestrate a data pipeline to ingest the data into the S3 data lake.
+        is_correct: false
+      - text: Use the Detect PII transform in AWS Glue Studio to identify the PII. Create a rule in AWS Glue Data Quality to obfuscate the PII. Use an AWS Step Functions state machine to orchestrate a data pipeline to ingest the data into the S3 data lake.
+        is_correct: true
+      - text: Ingest the dataset into Amazon DynamoDB. Create an AWS Lambda function to identify and obfuscate the PII in the DynamoDB table and to transform the data. Use the same Lambda function to ingest the data into the S3 data lake.
+        is_correct: false
+    explanation: |
+      Correct: AWS Glue Studio's Detect PII transform and Data Quality rules provide built-in profiling and obfuscation, and Step Functions orchestrate the pipeline with minimal operational effort.
+      Incorrect: Kinesis/Lambda and DynamoDB/Lambda require custom code and more management. Glue Studio without Data Quality does not automate obfuscation.
+    diagram: |
+      graph TD
+      Dataset[Dataset]
+      GlueStudio[AWS Glue Studio]
+      DataQuality[Glue Data Quality]
+      StepFunctions[AWS Step Functions]
+      S3[(Amazon S3 Data Lake)]
+      Dataset --> GlueStudio
+      GlueStudio --> DataQuality
+      DataQuality --> StepFunctions
+      StepFunctions --> S3
+
+  - id: q22
+    type: multiple_choice
+    question: |
+      A company maintains multiple extract, transform, and load (ETL) workflows that ingest data from the company's operational databases into an Amazon S3 based data lake. The ETL workflows use AWS Glue and Amazon EMR to process data. The company wants to improve the existing architecture to provide automated orchestration and to require minimal manual effort. Which solution will meet these requirements with the LEAST operational overhead?
+    options:
+      - text: AWS Glue workflows
+        is_correct: true
+      - text: AWS Step Functions tasks
+        is_correct: false
+      - text: AWS Lambda functions
+        is_correct: false
+      - text: Amazon Managed Workflows for Apache Airflow (Amazon MWAA) workflows
+        is_correct: false
+    explanation: |
+      Correct: AWS Glue workflows provide built-in orchestration for ETL jobs with minimal manual effort and operational overhead.
+      Incorrect: Step Functions, Lambda, and MWAA require more setup and management for orchestration.
+    diagram: |
+      graph TD
+      Databases[Operational Databases]
+      Glue[AWS Glue]
+      EMR[Amazon EMR]
+      Workflow[Glue Workflow]
+      S3[(Amazon S3 Data Lake)]
+      Databases --> Glue
+      Databases --> EMR
+      Glue --> Workflow
+      EMR --> Workflow
+      Workflow --> S3
+
+  - id: q23
+    type: multiple_choice
+    question: |
+      A company currently stores all of its data in Amazon S3 by using the S3 Standard storage class. A data engineer examined data access patterns to identify trends. During the first 6 months, most data files are accessed several times each day. Between 6 months and 2 years, most data files are accessed once or twice each month. After 2 years, data files are accessed only once or twice each year. The data engineer needs to use an S3 Lifecycle policy to develop new data storage rules. The new storage solution must continue to provide high availability. Which solution will meet these requirements in the MOST cost-effective way?
+    options:
+      - text: Transition objects to S3 One Zone-Infrequent Access (S3 One Zone-IA) after 6 months. Transfer objects to S3 Glacier Flexible Retrieval after 2 years.
+        is_correct: false
+      - text: Transition objects to S3 Standard-Infrequent Access (S3 Standard-IA) after 6 months. Transfer objects to S3 Glacier Flexible Retrieval after 2 years.
+        is_correct: true
+      - text: Transition objects to S3 Standard-Infrequent Access (S3 Standard-IA) after 6 months. Transfer objects to S3 Glacier Deep Archive after 2 years.
+        is_correct: false
+      - text: Transition objects to S3 One Zone-Infrequent Access (S3 One Zone-IA) after 6 months. Transfer objects to S3 Glacier Deep Archive after 2 years.
+        is_correct: false
+    explanation: |
+      Correct: S3 Standard-IA maintains high availability and is cost-effective for infrequent access. Glacier Flexible Retrieval is suitable for long-term, rarely accessed data.
+      Incorrect: One Zone-IA does not provide high availability. Deep Archive is less flexible for retrieval.
+    diagram: |
+      graph TD
+      S3Standard[S3 Standard]
+      S3StandardIA[S3 Standard-IA]
+      Glacier[Glacier Flexible Retrieval]
+      S3Standard --> S3StandardIA
+      S3StandardIA --> Glacier
+
+  - id: q24
+    type: multiple_choice
+    question: |
+      A company maintains an Amazon Redshift provisioned cluster that the company uses for extract, transform, and load (ETL) operations to support critical analysis tasks. A sales team within the company maintains a Redshift cluster that the sales team uses for business intelligence (BI) tasks. The sales team recently requested access to the data that is in the ETL Redshift cluster so the team can perform weekly summary analysis tasks. The sales team needs to join data from the ETL cluster with data that is in the sales team's BI cluster. The company needs a solution that will share the ETL cluster data with the sales team without interrupting the critical analysis tasks. The solution must minimize usage of the computing resources of the ETL cluster. Which solution will meet these requirements?
+    options:
+      - text: Set up the sales team BI cluster as a consumer of the ETL cluster by using Redshift data sharing.
+        is_correct: true
+      - text: Create materialized views based on the sales team's requirements. Grant the sales team direct access to the ETL cluster.
+        is_correct: false
+      - text: Create database views based on the sales team's requirements. Grant the sales team direct access to the ETL cluster.
+        is_correct: false
+      - text: Unload a copy of the data from the ETL cluster to an Amazon S3 bucket every week. Create an Amazon Redshift Spectrum table based on the content of the ETL cluster.
+        is_correct: false
+    explanation: |
+      Correct: Redshift data sharing allows the BI cluster to access ETL cluster data without impacting ETL cluster resources or performance.
+      Incorrect: Direct access or unloading data increases resource usage and operational complexity.
+    diagram: |
+      graph TD
+      ETLCluster[ETL Redshift Cluster]
+      BICluster[BI Redshift Cluster]
+      DataSharing[Redshift Data Sharing]
+      ETLCluster --> DataSharing
+      DataSharing --> BICluster
+
+  - id: q25
+    type: multiple_choice
+    question: |
+      A data engineer needs to join data from multiple sources to perform a one-time analysis job. The data is stored in Amazon DynamoDB, Amazon RDS, Amazon Redshift, and Amazon S3. Which solution will meet this requirement MOST cost-effectively?
+    options:
+      - text: Use an Amazon EMR provisioned cluster to read from all sources. Use Apache Spark to join the data and perform the analysis.
+        is_correct: false
+      - text: Copy the data from DynamoDB, Amazon RDS, and Amazon Redshift into Amazon S3. Run Amazon Athena queries directly on the S3 files.
+        is_correct: false
+      - text: Use Amazon Athena Federated Query to join the data from all data sources.
+        is_correct: true
+      - text: Use Redshift Spectrum to query data from DynamoDB, Amazon RDS, and Amazon S3 directly from Redshift.
+        is_correct: false
+    explanation: |
+      Correct: Athena Federated Query allows cost-effective, ad-hoc joins across multiple AWS data sources without moving or copying data.
+      Incorrect: EMR and Redshift Spectrum are more complex and costly for one-time analysis. Copying data adds unnecessary steps.
+    diagram: |
+      graph TD
+      DynamoDB[Amazon DynamoDB]
+      RDS[Amazon RDS]
+      Redshift[Amazon Redshift]
+      S3[(Amazon S3)]
+      Athena[Athena Federated Query]
+      DynamoDB --> Athena
+      RDS --> Athena
+      Redshift --> Athena
+      S3 --> Athena
+
+  - id: q26
+    type: multiple_choice
+    question: |
+      A company is planning to use a provisioned Amazon EMR cluster that runs Apache Spark jobs to perform big data analysis. The company requires high reliability. A big data team must follow best practices for running cost-optimized and long-running workloads on Amazon EMR. The team must find a solution that will maintain the company's current level of performance. Which combination of resources will meet these requirements MOST cost-effectively? (Choose two.)
+    options:
+      - text: Use Hadoop Distributed File System (HDFS) as a persistent data store.
+        is_correct: false
+      - text: Use Amazon S3 as a persistent data store.
+        is_correct: true
+      - text: Use x86-based instances for core nodes and task nodes.
+        is_correct: false
+      - text: Use Graviton instances for core nodes and task nodes.
+        is_correct: true
+      - text: Use Spot Instances for all primary nodes.
+        is_correct: false
+    explanation: |
+      Correct: Amazon S3 is recommended for persistent storage in EMR, and Graviton instances offer cost-effective performance for core/task nodes.
+      Incorrect: HDFS is less reliable for persistence. x86 and Spot for primary nodes are not optimal for cost or reliability.
+    diagram: |
+      graph TD
+      EMR[Amazon EMR Cluster]
+      S3[(Amazon S3)]
+      Graviton[Graviton Instances]
+      EMR --> S3
+      EMR --> Graviton
+
+  - id: q27
+    type: multiple_choice
+    question: |
+      A company wants to implement real-time analytics capabilities. The company wants to use Amazon Kinesis Data Streams and Amazon Redshift to ingest and process streaming data at the rate of several gigabytes per second. The company wants to derive near real-time insights by using existing business intelligence (BI) and analytics tools. Which solution will meet these requirements with the LEAST operational overhead?
+    options:
+      - text: Use Kinesis Data Streams to stage data in Amazon S3. Use the COPY command to load data from Amazon S3 directly into Amazon Redshift to make the data immediately available for real-time analysis.
+        is_correct: false
+      - text: Access the data from Kinesis Data Streams by using SQL queries. Create materialized views directly on top of the stream. Refresh the materialized views regularly to query the most recent stream data.
+        is_correct: false
+      - text: Create an external schema in Amazon Redshift to map the data from Kinesis Data Streams to an Amazon Redshift object. Create a materialized view to read data from the stream. Set the materialized view to auto refresh.
+        is_correct: false
+      - text: Connect Kinesis Data Streams to Amazon Kinesis Data Firehose. Use Kinesis Data Firehose to stage the data in Amazon S3. Use the COPY command to load the data from Amazon S3 to a table in Amazon Redshift.
+        is_correct: true
+    explanation: |
+      Correct: Kinesis Data Firehose automates delivery to S3, and Redshift's COPY command efficiently loads data for near real-time analytics with minimal operational overhead.
+      Incorrect: Direct staging, SQL queries, and external schemas/materialized views add complexity or are not supported for this use case.
+    diagram: |
+      graph TD
+      Kinesis[Kinesis Data Streams]
+      Firehose[Kinesis Data Firehose]
+      S3[(Amazon S3)]
+      Redshift[Amazon Redshift]
+      Kinesis --> Firehose
+      Firehose --> S3
+      S3 --> Redshift
+
+  - id: q28
+    type: multiple_choice
+    question: |
+      A company uses an Amazon QuickSight dashboard to monitor usage of one of the company's applications. The company uses AWS Glue jobs to process data for the dashboard. The company stores the data in a single Amazon S3 bucket. The company adds new data every day. A data engineer discovers that dashboard queries are becoming slower over time. The data engineer determines that the root cause of the slowing queries is long-running AWS Glue jobs. Which actions should the data engineer take to improve the performance of the AWS Glue jobs? (Choose two.)
+    options:
+      - text: Partition the data that is in the S3 bucket. Organize the data by year, month, and day.
+        is_correct: true
+      - text: Increase the AWS Glue instance size by scaling up the worker type.
+        is_correct: true
+      - text: Convert the AWS Glue schema to the DynamicFrame schema class.
+        is_correct: false
+      - text: Adjust AWS Glue job scheduling frequency so the jobs run half as many times each day.
+        is_correct: false
+      - text: Modify the IAM role that grants access to AWS Glue to grant access to all S3 features.
+        is_correct: false
+    explanation: |
+      Correct: Partitioning S3 data and scaling up Glue worker types improve job performance and reduce query times.
+      Incorrect: DynamicFrame schema, job frequency, and IAM role changes do not address performance issues.
+    diagram: |
+      graph TD
+      S3[(Amazon S3)]
+      Partition[Partitioned Data]
+      Glue[AWS Glue Job]
+      Worker[Scaled Worker Type]
+      S3 --> Partition
+      Partition --> Glue
+      Glue --> Worker
+
+  - id: q29
+    type: multiple_choice
+    question: |
+      A data engineer needs to use AWS Step Functions to design an orchestration workflow. The workflow must parallel process a large collection of data files and apply a specific transformation to each file. Which Step Functions state should the data engineer use to meet these requirements?
+    options:
+      - text: Parallel state
+        is_correct: false
+      - text: Choice state
+        is_correct: false
+      - text: Map state
+        is_correct: true
+      - text: Wait state
+        is_correct: false
+    explanation: |
+      Correct: The Map state in Step Functions is designed for parallel processing of collections, applying transformations to each item.
+      Incorrect: Parallel, Choice, and Wait states do not provide item-level parallel processing.
+    diagram: |
+      graph TD
+      Files[Data Files]
+      MapState[Step Functions Map State]
+      Transform[Transformation]
+      Files --> MapState
+      MapState --> Transform
+
+  - id: q30
+    type: multiple_choice
+    question: |
+      A company is migrating a legacy application to an Amazon S3 based data lake. A data engineer reviewed data that is associated with the legacy application. The data engineer found that the legacy data contained some duplicate information. The data engineer must identify and remove duplicate information from the legacy application data. Which solution will meet these requirements with the LEAST operational overhead?
+    options:
+      - text: Write a custom extract, transform, and load (ETL) job in Python. Use the DataFrame.drop_duplicates() function by importing the Pandas library to perform data deduplication.
+        is_correct: false
+      - text: Write an AWS Glue extract, transform, and load (ETL) job. Use the FindMatches machine learning (ML) transform to transform the data to perform data deduplication.
+        is_correct: true
+      - text: Write a custom extract, transform, and load (ETL) job in Python. Import the Python dedupe library. Use the dedupe library to perform data deduplication.
+        is_correct: false
+      - text: Write an AWS Glue extract, transform, and load (ETL) job. Import the Python dedupe library. Use the dedupe library to perform data deduplication.
+        is_correct: false
+    explanation: |
+      Correct: AWS Glue's FindMatches ML transform automates deduplication with minimal operational overhead, ideal for S3 data lakes.
+      Incorrect: Custom ETL jobs and dedupe libraries require more manual effort and management.
+    diagram: |
+      graph TD
+      LegacyData[Legacy Application Data]
+      Glue[AWS Glue ETL Job]
+      FindMatches[FindMatches ML Transform]
+      S3[(Amazon S3 Data Lake)]
+      LegacyData --> Glue
+      Glue --> FindMatches
+      FindMatches --> S3
+
+  - id: q31
+    type: multiple_choice
+    question: |
+      A company is building an analytics solution. The solution uses Amazon S3 for data lake storage and Amazon Redshift for a data warehouse. The company wants to use Amazon Redshift Spectrum to query the data that is in Amazon S3. Which actions will provide the FASTEST queries? (Choose two.)
+    options:
+      - text: Use gzip compression to compress individual files to sizes that are between 1 GB and 5 GB.
+        is_correct: true
+      - text: Use a columnar storage file format.
+        is_correct: true
+      - text: Partition the data based on the most common query predicates.
+        is_correct: false
+      - text: Split the data into files that are less than 10 KB.
+        is_correct: false
+      - text: Use file formats that are not splittable.
+        is_correct: false
+    explanation: |
+      Correct: Gzip compression with optimal file sizes and columnar formats (like Parquet/ORC) maximize Redshift Spectrum query speed.
+      Incorrect: Small files and non-splittable formats slow down queries. Partitioning is useful but not the fastest for all cases.
+    diagram: |
+      graph TD
+      S3[(Amazon S3)]
+      Gzip[Gzip Compression]
+      Columnar[Columnar Format]
+      RedshiftSpectrum[Redshift Spectrum]
+      S3 --> Gzip
+      Gzip --> Columnar
+      Columnar --> RedshiftSpectrum
+
+  - id: q32
+    type: multiple_choice
+    question: |
+      A company uses Amazon RDS to store transactional data. The company runs an RDS DB instance in a private subnet. A developer wrote an AWS Lambda function with default settings to insert, update, or delete data in the DB instance. The developer needs to give the Lambda function the ability to connect to the DB instance privately without using the public internet. Which combination of steps will meet this requirement with the LEAST operational overhead? (Choose two.)
+    options:
+      - text: Turn on the public access setting for the DB instance.
+        is_correct: false
+      - text: Update the security group of the DB instance to allow only Lambda function invocations on the database port.
+        is_correct: true
+      - text: Configure the Lambda function to run in the same subnet that the DB instance uses.
+        is_correct: true
+      - text: Attach the same security group to the Lambda function and the DB instance. Include a self-referencing rule that allows access through the database port.
+        is_correct: false
+      - text: Update the network ACL of the private subnet to include a self-referencing rule that allows access through the database port.
+        is_correct: false
+    explanation: |
+      Correct: Running Lambda in the same subnet and updating the DB security group for Lambda access enables private connectivity with minimal overhead.
+      Incorrect: Public access, self-referencing rules, and network ACL changes are unnecessary or insecure.
+    diagram: |
+      graph TD
+      Lambda[AWS Lambda]
+      Subnet[Private Subnet]
+      RDS[Amazon RDS]
+      SecurityGroup[Security Group]
+      Lambda --> Subnet
+      Subnet --> RDS
+      Lambda --> SecurityGroup
+      SecurityGroup --> RDS
+
+  - id: q33
+    type: multiple_choice
+    question: |
+      A company has a frontend ReactJS website that uses Amazon API Gateway to invoke REST APIs. The APIs perform the functionality of the website. A data engineer needs to write a Python script that can be occasionally invoked through API Gateway. The code must return results to API Gateway. Which solution will meet these requirements with the LEAST operational overhead?
+    options:
+      - text: Deploy a custom Python script on an Amazon Elastic Container Service (Amazon ECS) cluster.
+        is_correct: false
+      - text: Create an AWS Lambda Python function with provisioned concurrency.
+        is_correct: false
+      - text: Deploy a custom Python script that can integrate with API Gateway on Amazon Elastic Kubernetes Service (Amazon EKS).
+        is_correct: false
+      - text: Create an AWS Lambda function. Ensure that the function is warm by scheduling an Amazon EventBridge rule to invoke the Lambda function every 5 minutes by using mock events.
+        is_correct: true
+    explanation: |
+      Correct: Lambda with EventBridge scheduled invocations keeps the function warm and minimizes operational overhead for occasional API Gateway calls.
+      Incorrect: ECS, EKS, and provisioned concurrency add complexity and cost for infrequent invocations.
+    diagram: |
+      graph TD
+      React[ReactJS Website]
+      APIGateway[API Gateway]
+      Lambda[AWS Lambda]
+      EventBridge[Amazon EventBridge]
+      React --> APIGateway
+      APIGateway --> Lambda
+      EventBridge --> Lambda
+
+  - id: q34
+    type: multiple_choice
+    question: |
+      A company has a production AWS account that runs company workloads. The company's security team created a security AWS account to store and analyze security logs from the production AWS account. The security logs in the production AWS account are stored in Amazon CloudWatch Logs. The company needs to use Amazon Kinesis Data Streams to deliver the security logs to the security AWS account. Which solution will meet these requirements?
+    options:
+      - text: "Create a destination data stream in the production AWS account. In the security AWS account, create an IAM role that has cross-account permissions to Kinesis Data Streams in the production AWS account."
+        is_correct: false
+      - text: "Create a destination data stream in the security AWS account. Create an IAM role and a trust policy to grant CloudWatch Logs the permission to put data into the stream. Create a subscription filter in the security AWS account."
+        is_correct: true
+      - text: "Create a destination data stream in the production AWS account. In the production AWS account, create an IAM role that has cross-account permissions to Kinesis Data Streams in the security AWS account."
+        is_correct: false
+      - text: "Create a destination data stream in the security AWS account. Create an IAM role and a trust policy to grant CloudWatch Logs the permission to put data into the stream. Create a subscription filter in the production AWS account."
+        is_correct: false
+    explanation: |
+      The correct solution is to create a destination data stream in the security AWS account, grant CloudWatch Logs permission to put data into the stream, and create a subscription filter in the security AWS account. This ensures logs are delivered securely and directly to the security account for analysis.
+    diagram: |
+      graph TD
+        A[Production AWS Account] -->|CloudWatch Logs| B[Kinesis Data Streams]
+        B --> C[Security AWS Account]
+        C --> D[Analyze Security Logs]
+
+  - id: q35
+    type: multiple_choice
+    question: |
+      A company uses Amazon S3 to store semi-structured data in a transactional data lake. Some of the data files are small, but other data files are tens of terabytes. A data engineer must perform a change data capture (CDC) operation to identify changed data from the data source. The data source sends a full snapshot as a JSON file every day and ingests the changed data into the data lake. Which solution will capture the changed data MOST cost-effectively?
+    options:
+      - text: "Create an AWS Lambda function to identify the changes between the previous data and the current data. Configure the Lambda function to ingest the changes into the data lake."
+        is_correct: false
+      - text: "Ingest the data into Amazon RDS for MySQL. Use AWS Database Migration Service (AWS DMS) to write the changed data to the data lake."
+        is_correct: false
+      - text: "Use an open source data lake format to merge the data source with the S3 data lake to insert the new data and update the existing data."
+        is_correct: true
+      - text: "Ingest the data into an Amazon Aurora MySQL DB instance that runs Aurora Serverless. Use AWS Database Migration Service (AWS DMS) to write the changed data to the data lake."
+        is_correct: false
+    explanation: |
+      Using an open source data lake format (such as Apache Hudi, Delta Lake, or Iceberg) allows efficient merging and updating of large datasets in S3, minimizing compute and storage costs compared to database-based CDC solutions.
+    diagram: |
+      graph TD
+        A[Data Source] -->|Daily JSON Snapshot| B[S3 Data Lake]
+        B --> C[Open Source Data Lake Format]
+        C --> D[CDC Operation]
+        D --> E[Changed Data Ingested]
+
+  - id: q36
+    type: multiple_choice
+    question: |
+      A data engineer runs Amazon Athena queries on data that is in an Amazon S3 bucket. The Athena queries use AWS Glue Data Catalog as a metadata table. The data engineer notices that the Athena query plans are experiencing a performance bottleneck. The data engineer determines that the cause of the performance bottleneck is the large number of partitions that are in the S3 bucket. The data engineer must resolve the performance bottleneck and reduce Athena query planning time. Which solutions will meet these requirements? (Choose two.)
+    options:
+      - text: "Create an AWS Glue partition index. Enable partition filtering."
+        is_correct: true
+      - text: "Bucket the data based on a column that the data have in common in a WHERE clause of the user query."
+        is_correct: false
+      - text: "Use Athena partition projection based on the S3 bucket prefix."
+        is_correct: true
+      - text: "Transform the data that is in the S3 bucket to Apache Parquet format."
+        is_correct: false
+      - text: "Use the Amazon EMR S3DistCP utility to combine smaller objects in the S3 bucket into larger objects."
+        is_correct: false
+    explanation: |
+      Creating a Glue partition index with partition filtering and using Athena partition projection both help reduce query planning time by minimizing the number of partitions scanned and optimizing metadata handling.
+    diagram: |
+      graph TD
+        A[Athena Query] --> B[Glue Data Catalog]
+        B --> C[S3 Bucket]
+        C --> D[Partition Index & Projection]
+        D --> E[Improved Query Planning]
+
+  - id: q37
+    type: multiple_choice
+    question: |
+      A data engineer must manage the ingestion of real-time streaming data into AWS. The data engineer wants to perform real-time analytics on the incoming streaming data by using time-based aggregations over a window of up to 30 minutes. The data engineer needs a solution that is highly fault tolerant. Which solution will meet these requirements with the LEAST operational overhead?
+    options:
+      - text: "Use an AWS Lambda function that includes both the business and the analytics logic to perform time-based aggregations over a window of up to 30 minutes for the data in Amazon Kinesis Data Streams."
+        is_correct: false
+      - text: "Use Amazon Managed Service for Apache Flink (previously known as Amazon Kinesis Data Analytics) to analyze the data that might occasionally contain duplicates by using multiple types of aggregations."
+        is_correct: true
+      - text: "Use an AWS Lambda function that includes both the business and the analytics logic to perform aggregations for a tumbling window of up to 30 minutes, based on the event timestamp."
+        is_correct: false
+      - text: "Use Amazon Managed Service for Apache Flink (previously known as Amazon Kinesis Data Analytics) to analyze the data by using multiple types of aggregations to perform time-based analytics over a window of up to 30 minutes."
+        is_correct: true
+    explanation: |
+      Amazon Managed Service for Apache Flink provides a highly fault-tolerant, scalable, and managed solution for real-time analytics with time-based windowing, minimizing operational overhead compared to Lambda-based approaches.
+    diagram: |
+      graph TD
+        A[Streaming Data] --> B[Kinesis Data Streams]
+        B --> C[Apache Flink]
+        C --> D[Time-based Aggregations]
+        D --> E[Real-time Analytics]
+
+  - id: q38
+    type: multiple_choice
+    question: |
+      A company is planning to upgrade its Amazon Elastic Block Store (Amazon EBS) General Purpose SSD storage from gp2 to gp3. The company wants to prevent any interruptions in its Amazon EC2 instances that will cause data loss during the migration to the upgraded storage. Which solution will meet these requirements with the LEAST operational overhead?
+    options:
+      - text: "Create snapshots of the gp2 volumes. Create new gp3 volumes from the snapshots. Attach the new gp3 volumes to the EC2 instances."
+        is_correct: false
+      - text: "Create new gp3 volumes. Gradually transfer the data to the new gp3 volumes. When the transfer is complete, mount the new gp3 volumes to the EC2 instances to replace the gp2 volumes."
+        is_correct: false
+      - text: "Change the volume type of the existing gp2 volumes to gp3. Enter new values for volume size, IOPS, and throughput."
+        is_correct: true
+      - text: "Use AWS DataSync to create new gp3 volumes. Transfer the data from the original gp2 volumes to the new gp3 volumes."
+        is_correct: false
+    explanation: |
+      Changing the volume type directly from gp2 to gp3 is the simplest and least disruptive method, as it does not require detaching volumes or transferring data, minimizing operational overhead and risk of data loss.
+    diagram: |
+      graph TD
+        A[EC2 Instance] --> B[EBS gp2 Volume]
+        B --> C[Change Volume Type]
+        C --> D[EBS gp3 Volume]
+
+  - id: q39
+    type: multiple_choice
+    question: |
+      A company is migrating its database servers from Amazon EC2 instances that run Microsoft SQL Server to Amazon RDS for Microsoft SQL Server DB instances. The company's analytics team must export large data elements every day until the migration is complete. The data elements are the result of SQL joins across multiple tables. The data must be in Apache Parquet format. The analytics team must store the data in Amazon S3. Which solution will meet these requirements in the MOST operationally efficient way?
+    options:
+      - text: "Create a view in the EC2 instance-based SQL Server databases that contains the required data elements. Create an AWS Glue job that selects the data directly from the view and transfers the data in Parquet format to an S3 bucket. Schedule the AWS Glue job to run every day."
+        is_correct: true
+      - text: "Schedule SQL Server Agent to run a daily SQL query that selects the desired data elements from the EC2 instance-based SQL Server databases. Configure the query to direct the output .csv objects to an S3 bucket. Create an S3 event that invokes an AWS Lambda function to transform the output format from .csv to Parquet."
+        is_correct: false
+      - text: "Use a SQL query to create a view in the EC2 instance-based SQL Server databases that contains the required data elements. Create and run an AWS Glue crawler to read the view. Create an AWS Glue job that retrieves the data and transfers the data in Parquet format to an S3 bucket. Schedule the AWS Glue job to run every day."
+        is_correct: false
+      - text: "Create an AWS Lambda function that queries the EC2 instance-based databases by using Java Database Connectivity (JDBC). Configure the Lambda function to retrieve the required data, transform the data into Parquet format, and transfer the data into an S3 bucket. Use Amazon EventBridge to schedule the Lambda function to run every day."
+        is_correct: false
+    explanation: |
+      Using AWS Glue to select data directly from a view and transfer it in Parquet format to S3 is the most operationally efficient solution, as it automates the process and minimizes manual intervention.
+    diagram: |
+      graph TD
+        A[EC2 SQL Server] --> B[SQL View]
+        B --> C[AWS Glue Job]
+        C --> D[Parquet Data]
+        D --> E[S3 Bucket]
+
+  - id: q40
+    type: multiple_choice
+    question: |
+      A data engineering team is using an Amazon Redshift data warehouse for operational reporting. The team wants to prevent performance issues that might result from long-running queries. A data engineer must choose a system table in Amazon Redshift to record anomalies when a query optimizer identifies conditions that might indicate performance issues. Which table views should the data engineer use to meet this requirement?
+    options:
+      - text: "STL_USAGE_CONTROL"
+        is_correct: false
+      - text: "STL_ALERT_EVENT_LOG"
+        is_correct: true
+      - text: "STL_QUERY_METRICS"
+        is_correct: false
+      - text: "STL_PLAN_INFO"
+        is_correct: false
+    explanation: |
+      STL_ALERT_EVENT_LOG records anomalies and alerts identified by the query optimizer in Amazon Redshift, making it the correct table for monitoring potential performance issues.
+    diagram: |
+      graph TD
+        A[Redshift Query] --> B[Query Optimizer]
+        B --> C[STL_ALERT_EVENT_LOG]
+        C --> D[Record Anomalies]
+
+  - id: q41
+    type: multiple_choice
+    question: |
+      A data engineer must ingest a source of structured data that is in .csv format into an Amazon S3 data lake. The .csv files contain 15 columns. Data analysts need to run Amazon Athena queries on one or two columns of the dataset. The data analysts rarely query the entire file. Which solution will meet these requirements MOST cost-effectively?
+    options:
+      - text: "Use an AWS Glue PySpark job to ingest the source data into the data lake in .csv format."
+        is_correct: false
+      - text: "Create an AWS Glue extract, transform, and load (ETL) job to read from the .csv structured data source. Configure the job to ingest the data into the data lake in JSON format."
+        is_correct: false
+      - text: "Use an AWS Glue PySpark job to ingest the source data into the data lake in Apache Avro format."
+        is_correct: false
+      - text: "Create an AWS Glue extract, transform, and load (ETL) job to read from the .csv structured data source. Configure the job to write the data into the data lake in Apache Parquet format."
+        is_correct: true
+    explanation: |
+      Apache Parquet is a columnar storage format that is highly efficient for queries on specific columns, reducing scan costs and improving performance in Athena compared to row-based formats like CSV or JSON.
+    diagram: |
+      graph TD
+        A[CSV Source] --> B[AWS Glue ETL Job]
+        B --> C[Parquet Data in S3]
+        C --> D[Athena Query]
+        D --> E[Cost-effective Column Scan]
+
+  - id: q42
+    type: multiple_choice
+    question: |
+      A company has five offices in different AWS Regions. Each office has its own human resources (HR) department that uses a unique IAM role. The company stores employee records in a data lake that is based on Amazon S3 storage. A data engineering team needs to limit access to the records. Each HR department should be able to access records for only employees who are within the HR department's Region. Which combination of steps should the data engineering team take to meet this requirement with the LEAST operational overhead? (Choose two.)
+    options:
+      - text: "Use data filters for each Region to register the S3 paths as data locations."
+        is_correct: true
+      - text: "Register the S3 path as an AWS Lake Formation location."
+        is_correct: true
+      - text: "Modify the IAM roles of the HR departments to add a data filter for each department's Region."
+        is_correct: false
+      - text: "Enable fine-grained access control in AWS Lake Formation. Add a data filter for each Region."
+        is_correct: false
+      - text: "Create a separate S3 bucket for each Region. Configure an IAM policy to allow S3 access. Restrict access based on Region."
+        is_correct: false
+    explanation: |
+      Registering the S3 path as a Lake Formation location and using data filters for each Region allows for centralized, fine-grained access control with minimal operational overhead, avoiding the need for multiple buckets or complex IAM policies.
+    diagram: |
+      graph TD
+        A[S3 Data Lake] --> B[Lake Formation Location]
+        B --> C[Data Filters by Region]
+        C --> D[HR IAM Roles]
+        D --> E[Region-based Access]
+
+  - id: q43
+    type: multiple_choice
+    question: |
+      A company uses AWS Step Functions to orchestrate a data pipeline. The pipeline consists of Amazon EMR jobs that ingest data from data sources and store the data in an Amazon S3 bucket. The pipeline also includes EMR jobs that load the data to Amazon Redshift. The company's cloud infrastructure team manually built a Step Functions state machine. The cloud infrastructure team launched an EMR cluster into a VPC to support the EMR jobs. However, the deployed Step Functions state machine is not able to run the EMR jobs. Which combination of steps should the company take to identify the reason the Step Functions state machine is not able to run the EMR jobs? (Choose two.)
+    options:
+      - text: "Use AWS CloudFormation to automate the Step Functions state machine deployment. Create a step to pause the state machine during the EMR jobs that fail. Configure the step to wait for a human user to send approval through an email message. Include details of the EMR task in the email message for further analysis."
+        is_correct: false
+      - text: "Verify that the Step Functions state machine code has all IAM permissions that are necessary to create and run the EMR jobs. Verify that the Step Functions state machine code also includes IAM permissions to access the Amazon S3 buckets that the EMR jobs use. Use Access Analyzer for S3 to check the S3 access properties."
+        is_correct: true
+      - text: "Check for entries in Amazon CloudWatch for the newly created EMR cluster. Change the AWS Step Functions state machine code to use Amazon EMR on EKS. Change the IAM access policies and the security group configuration for the Step Functions state machine code to reflect inclusion of Amazon Elastic Kubernetes Service (Amazon EKS)."
+        is_correct: false
+      - text: "Query the flow logs for the VPC. Determine whether the traffic that originates from the EMR cluster can successfully reach the data providers. Determine whether any security group that might be attached to the Amazon EMR cluster allows connections to the data source servers on the informed ports."
+        is_correct: true
+      - text: "Check the retry scenarios that the company configured for the EMR jobs. Increase the number of seconds in the interval between each EMR task. Validate that each fallback state has the appropriate catch for each decision state. Configure an Amazon Simple Notification Service (Amazon SNS) topic to store the error messages."
+        is_correct: false
+    explanation: |
+      Verifying IAM permissions and checking VPC flow logs/security groups are key steps to diagnose why Step Functions cannot run EMR jobs, as these are common sources of orchestration failures.
+    diagram: |
+      graph TD
+        A[Step Functions State Machine] --> B[EMR Cluster in VPC]
+        B --> C[S3 Bucket]
+        B --> D[Redshift]
+        A --> E[IAM Permissions]
+        B --> F[VPC Flow Logs]
+
+  - id: q44
+    type: multiple_choice
+    question: |
+      A company is developing an application that runs on Amazon EC2 instances. Currently, the data that the application generates is temporary. However, the company needs to persist the data, even if the EC2 instances are terminated. A data engineer must launch new EC2 instances from an Amazon Machine Image (AMI) and configure the instances to preserve the data. Which solution will meet this requirement?
+    options:
+      - text: "Launch new EC2 instances by using an AMI that is backed by an EC2 instance store volume that contains the application data. Apply the default settings to the EC2 instances."
+        is_correct: false
+      - text: "Launch new EC2 instances by using an AMI that is backed by a root Amazon Elastic Block Store (Amazon EBS) volume that contains the application data. Apply the default settings to the EC2 instances."
+        is_correct: true
+      - text: "Launch new EC2 instances by using an AMI that is backed by an EC2 instance store volume. Attach an Amazon Elastic Block Store (Amazon EBS) volume to contain the application data. Apply the default settings to the EC2 instances."
+        is_correct: false
+      - text: "Launch new EC2 instances by using an AMI that is backed by an Amazon Elastic Block Store (Amazon EBS) volume. Attach an additional EC2 instance store volume to contain the application data. Apply the default settings to the EC2 instances."
+        is_correct: false
+    explanation: |
+      Amazon EBS volumes persist data even after EC2 instance termination, while instance store volumes are ephemeral and lose data when the instance stops or terminates.
+    diagram: |
+      graph TD
+        A[EC2 Instance] --> B[Root EBS Volume]
+        B --> C[Persistent Data]
+        A --> D[AMI]
+        D --> B
+
+  - id: q45
+    type: multiple_choice
+    question: |
+      A company uses Amazon Athena to run SQL queries for extract, transform, and load (ETL) tasks by using Create Table As Select (CTAS). The company must use Apache Spark instead of SQL to generate analytics. Which solution will give the company the ability to use Spark to access Athena?
+    options:
+      - text: "Athena query settings"
+        is_correct: false
+      - text: "Athena workgroup"
+        is_correct: false
+      - text: "Athena data source"
+        is_correct: true
+      - text: "Athena query editor"
+        is_correct: false
+    explanation: |
+      Athena data source enables Spark integration, allowing users to run Spark analytics on data accessible via Athena.
+    diagram: |
+      graph TD
+        A[Athena] --> B[Data Source]
+        B --> C[Spark Analytics]
+        C --> D[ETL Tasks]
+
+  - id: q46
+    type: multiple_choice
+    question: |
+      A company needs to partition the Amazon S3 storage that the company uses for a data lake. The partitioning will use a path of the S3 object keys in the following format: s3://bucket/prefix/year=2023/month=01/day=01. A data engineer must ensure that the AWS Glue Data Catalog synchronizes with the S3 storage when the company adds new partitions to the bucket. Which solution will meet these requirements with the LEAST latency?
+    options:
+      - text: "Schedule an AWS Glue crawler to run every morning."
+        is_correct: false
+      - text: "Manually run the AWS Glue CreatePartition API twice each day."
+        is_correct: false
+      - text: "Use code that writes data to Amazon S3 to invoke the Boto3 AWS Glue create_partition API call."
+        is_correct: true
+      - text: "Run the MSCK REPAIR TABLE command from the AWS Glue console."
+        is_correct: false
+    explanation: |
+      Invoking the create_partition API immediately after writing data ensures the Glue Data Catalog is updated with minimal latency, compared to scheduled crawlers or manual operations.
+    diagram: |
+      graph TD
+        A[S3 Data Write] --> B[Invoke create_partition API]
+        B --> C[Glue Data Catalog]
+        C --> D[Partition Synced]
+
+  - id: q47
+    type: multiple_choice
+    question: |
+      A media company uses software as a service (SaaS) applications to gather data by using third-party tools. The company needs to store the data in an Amazon S3 bucket. The company will use Amazon Redshift to perform analytics based on the data. Which AWS service or feature will meet these requirements with the LEAST operational overhead?
+    options:
+      - text: "Amazon Managed Streaming for Apache Kafka (Amazon MSK)"
+        is_correct: false
+      - text: "Amazon AppFlow"
+        is_correct: true
+      - text: "AWS Glue Data Catalog"
+        is_correct: false
+      - text: "Amazon Kinesis"
+        is_correct: false
+    explanation: |
+      Amazon AppFlow is designed for easy integration between SaaS applications and AWS services, enabling direct data transfer to S3 with minimal setup and operational overhead.
+    diagram: |
+      graph TD
+        A[SaaS Application] --> B[Amazon AppFlow]
+        B --> C[S3 Bucket]
+        C --> D[Redshift Analytics]
+
+  - id: q48
+    type: multiple_choice
+    question: |
+      A data engineer is using Amazon Athena to analyze sales data that is in Amazon S3. The data engineer writes a query to retrieve sales amounts for 2023 for several products from a table named sales_data. However, the query does not return results for all of the products that are in the sales_data table. The data engineer needs to troubleshoot the query to resolve the issue. The data engineer's original query is as follows:
+      SELECT product_name, sum(sales_amount) FROM sales_data WHERE year = 2023 GROUP BY product_name
+      How should the data engineer modify the Athena query to meet these requirements?
+    options:
+      - text: "Replace sum(sales_amount) with count(*) for the aggregation."
+        is_correct: false
+      - text: "Change WHERE year = 2023 to WHERE extract(year FROM sales_data) = 2023."
+        is_correct: true
+      - text: "Add HAVING sum(sales_amount) > 0 after the GROUP BY clause."
+        is_correct: false
+      - text: "Remove the GROUP BY clause."
+        is_correct: false
+    explanation: |
+      Using extract(year FROM sales_data) ensures the query correctly filters by year, especially if the year is embedded in a timestamp or date column, resolving missing results.
+    diagram: |
+      graph TD
+        A[Athena Query] --> B[Sales Data Table]
+        B --> C[Extract Year]
+        C --> D[Correct Results]
+
+  - id: q49
+    type: multiple_choice
+    question: |
+      A data engineer has a one-time task to read data from objects that are in Apache Parquet format in an Amazon S3 bucket. The data engineer needs to query only one column of the data. Which solution will meet these requirements with the LEAST operational overhead?
+    options:
+      - text: "Configure an AWS Lambda function to load data from the S3 bucket into a pandas dataframe. Write a SQL SELECT statement on the dataframe to query the required column."
+        is_correct: false
+      - text: "Use S3 Select to write a SQL SELECT statement to retrieve the required column from the S3 objects."
+        is_correct: true
+      - text: "Prepare an AWS Glue DataBrew project to consume the S3 objects and to query the required column."
+        is_correct: false
+      - text: "Run an AWS Glue crawler on the S3 objects. Use a SQL SELECT statement in Amazon Athena to query the required column."
+        is_correct: false
+    explanation: |
+      S3 Select allows direct querying of specific columns from S3 objects in Parquet format, minimizing operational overhead for one-time tasks.
+    diagram: |
+      graph TD
+        A[S3 Parquet Objects] --> B[S3 Select]
+        B --> C[Query Column]
+        C --> D[Minimal Overhead]
