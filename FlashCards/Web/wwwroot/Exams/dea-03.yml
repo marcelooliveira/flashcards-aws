@@ -1,0 +1,485 @@
+﻿questions:
+  - id: q1
+    type: multiple_choice
+    question: |
+      NebulaStream Systems has set up a fresh account to run an AWS Glue ETL pipeline. The workflow needs to pull raw info from a source S3 bucket and save the processed results into a destination S3 bucket within the same account. The engineer has drafted an IAM policy covering these S3 permissions but needs to apply them so Glue can execute the pipeline. Which strategy fulfills these needs?
+    options:
+      - text: Generate a new IAM user with access keys. Attach the policy to this user and input the credentials into the Glue job settings.
+        is_correct: false
+      - text: Split the current policy into two.. one for the source and one for the destination. Link both directly when setting up the Glue jobs.
+        is_correct: false
+      - text: Create a dedicated IAM service role for AWS Glue, attach the existing policy to it, and assign this role to the Glue jobs.
+        is_correct: true
+      - text: Convert the IAM policy into two S3 bucket resource policies. Apply them to the respective S3 buckets.
+        is_correct: false
+    explanation: |
+      Correct: AWS Glue uses a Service Role to assume permissions. This is the standard security best practice for service-to-service authorization.
+    diagram: |
+      graph LR
+        Glue[AWS Glue Job]
+        Role[IAM Service Role]
+        S3[S3 Buckets]
+        Role -- Permissions --> S3
+        Glue -- Assumes --> Role
+
+  - id: q2
+    type: multiple_choice
+    question: |
+      NebulaStream Systems uses an AWS Glue pipeline. Some records include JSON and base64-encoded images. The job is set for 10 DPUs but often scales to hundreds and runs for a long time. A data engineer needs to track the pipeline to find the ideal DPU limit. Which solution meets these requirements?
+    options:
+      - text: Check the "job run monitoring" section in the Glue console, analyze previous runs, and use profiled metrics.
+        is_correct: true
+      - text: Open the Glue visual ETL editor, review the job flow details, and visualize selected job details.
+        is_correct: false
+      - text: Use the CloudWatch console's metrics section and filter by searching for AWS Glue.
+        is_correct: false
+      - text: Go to CloudWatch Logs Insights and query logs for "DPU".
+        is_correct: false
+    explanation: |
+      Correct: AWS Glue job run monitoring provides specific profiling metrics (like glue.driver.aggregate.pushed_records) to help determine if a job is over or under-provisioned.
+    diagram: |
+      graph TD
+        Console[Glue Console]
+        Monitor[Job Run Monitoring]
+        Metrics[Profiled Metrics]
+        DPU[DPU Recommendation]
+        Console --> Monitor
+        Monitor --> Metrics
+        Metrics --> DPU
+
+  - id: q3
+    type: multiple_choice
+    question: |
+      NebulaStream Systems has hundreds of thousands of scanned documents in S3. Metadata (names, dates, text) is extracted via ML. The company wants to allow data analysts to search this data with high performance. Which solution is best?
+    options:
+      - text: Tag each S3 image with metadata and use Presto on Amazon EMR.
+        is_correct: false
+      - text: Use Amazon OpenSearch Service to index the metadata and S3 paths, then use OpenSearch Dashboards.
+        is_correct: true
+      - text: Insert metadata and S3 links into Amazon Redshift.
+        is_correct: false
+      - text: Save metadata as Parquet on S3 and query via Amazon Athena.
+        is_correct: false
+    explanation: |
+      Correct: Amazon OpenSearch is optimized for full-text search and metadata indexing, providing the best performance for the "search" use case described.
+    diagram: |
+      graph LR
+        S3[(S3 Images)]
+        OS[OpenSearch Service]
+        Dash[Dashboards]
+        S3 -- Links --> OS
+        OS --> Dash
+        Dash -->|Search| Analyst
+
+  - id: q4
+    type: multi_select
+    question: |
+      NebulaStream Systems tracks employee hours via REST API. They use an on-premises cron job to run a Python script that uploads data to S3. They want to move to AWS with minimal effort. Which TWO steps should they take?
+    options:
+      - text: Use AWS CloudShell to manage the cron schedule.
+        is_correct: false
+      - text: Deploy the Python script using AWS Lambda functions.
+        is_correct: true
+      - text: Set up an EC2 instance with Python and Boto3.
+        is_correct: false
+      - text: Use Amazon EventBridge Scheduler to trigger the task on a cron schedule.
+        is_correct: true
+      - text: Host the code on an EC2 instance running an IDE environment.
+        is_correct: false
+    explanation: |
+      Correct: Lambda runs code without servers, and EventBridge Scheduler replaces the on-prem cron with zero infrastructure management.
+    diagram: |
+      graph TD
+        EB[EventBridge Scheduler]
+        Lambda[AWS Lambda]
+        S3[(S3 Data Lake)]
+        EB -->|Cron Trigger| Lambda
+        Lambda -->|Upload CSV| S3
+
+  - id: q5
+    type: multiple_choice
+    question: |
+      NebulaStream Systems needs an automated solution to identify PII in an S3 data lake and trigger a masking app immediately with the least overhead. Which solution fits?
+    options:
+      - text: Use S3 notifications to invoke a Lambda function for analysis.
+        is_correct: false
+      - text: Use S3 notifications to trigger an EventBridge rule for the masking app.
+        is_correct: false
+      - text: Enable Amazon Macie and poll findings via a scheduled Lambda.
+        is_correct: false
+      - text: Enable Amazon Macie and use an EventBridge rule for findings to target the masking app.
+        is_correct: true
+    explanation: |
+      Correct: Macie automatically discovers PII. Using EventBridge to catch Macie findings is a serverless, event-driven approach with minimal overhead.
+    diagram: |
+      graph LR
+        S3[(S3)]
+        Macie[Amazon Macie]
+        EB[EventBridge]
+        App[Masking App]
+        S3 --> Macie
+        Macie -->|Finding| EB
+        EB --> App
+
+  - id: q6
+    type: multiple_choice
+    question: |
+      NebulaStream Systems must encrypt S3 data while allowing the Amazon Redshift COPY command to access it. Which solution works?
+    options:
+      - text: Use server-side encryption with AWS KMS keys (SSE-KMS).
+        is_correct: true
+      - text: Use server-side encryption with customer-provided keys (SSE-C).
+        is_correct: false
+      - text: Use client-side encryption with AWS KMS keys.
+        is_correct: false
+      - text: Use client-side encryption with asymmetric root keys.
+        is_correct: false
+    explanation: |
+      Correct: SSE-KMS is natively supported by Redshift's COPY command, provided the Redshift role has permissions to use the KMS key.
+    diagram: |
+      graph LR
+        S3[(S3 Encrypted)]
+        KMS[AWS KMS]
+        RS[Redshift]
+        RS -->|COPY| S3
+        S3 -.->|Decrypts with| KMS
+
+  - id: q7
+    type: multiple_choice
+    question: |
+      NebulaStream Systems needs a scalable metadata solution with fine-grained (row/cell) access control and least overhead. Which solution fits?
+    options:
+      - text: AWS Glue Data Catalog with resource-level policies.
+        is_correct: false
+      - text: Amazon Aurora database with SQL GRANTs.
+        is_correct: false
+      - text: AWS Lake Formation with data filters.
+        is_correct: true
+      - text: Amazon EMR Hive metastore with HiveQL.
+        is_correct: false
+    explanation: |
+      Correct: Lake Formation is built on top of Glue to provide row, column, and cell-level security with much less overhead than managing DB grants or EMR.
+    diagram: |
+      graph TD
+        S3[(S3)]
+        LF[Lake Formation]
+        Filters[Row/Cell Filters]
+        User[Data Analyst]
+        S3 --> LF
+        LF --> Filters
+        Filters --> User
+
+  - id: q8
+    type: multiple_choice
+    question: |
+      NebulaStream Systems (an ISP) needs to query nested JSON customer data alongside Redshift warehouse data daily while maintaining table integrity. Which solution is best?
+    options:
+      - text: Use Amazon Redshift Spectrum to join S3 JSON data with Redshift.
+        is_correct: true
+      - text: Load data as a SUPER type column into Redshift.
+        is_correct: false
+      - text: Use AWS Glue to parse into tabular format and load into Redshift.
+        is_correct: false
+      - text: Unload Redshift data to S3 and use Glue Studio.
+        is_correct: false
+    explanation: |
+      Correct: Redshift Spectrum allows querying nested data in S3 directly, keeping the main Redshift cluster's local storage clean and highly available.
+    diagram: |
+      graph TD
+        RS[Redshift Cluster]
+        Spec[Redshift Spectrum]
+        S3[(S3 Nested JSON)]
+        RS --- Spec
+        Spec -->|Query| S3
+
+  - id: q9
+    type: multiple_choice
+    question: |
+      NebulaStream Systems needs to centralize streaming logs, convert them to Parquet, and store them in S3 in near real-time with least overhead. Which solution fits?
+    options:
+      - text: S3 uploads triggering AWS Glue ETL workflows.
+        is_correct: false
+      - text: Stream to Amazon Data Firehose with Lambda transformation to Parquet.
+        is_correct: true
+      - text: Stream to Kinesis Data Streams with KCL on EC2 instances.
+        is_correct: false
+      - text: Send to EMR cluster with Hive scheduled UNLOADs.
+        is_correct: false
+    explanation: |
+      Correct: Firehose is a managed service that handles scaling and real-time delivery; the Lambda transformation is a standard way to convert formats like Parquet.
+    diagram: |
+      graph LR
+        Logs[Log Stream]
+        Firehose[Amazon Data Firehose]
+        Lambda[Lambda Parquet Conv]
+        S3[(S3)]
+        Logs --> Firehose
+        Firehose <--> Lambda
+        Firehose --> S3
+
+  - id: q10
+    type: multiple_choice
+    question: |
+      NebulaStream Systems data retention: New data SQL-searchable. 3+ years: archived (12-hour retrieval). 10+ years: deleted. Which is most cost-effective?
+    options:
+      - text: S3 Standard-IA (Athena query), move to Glacier Flexible Retrieval at 3 years, delete at 10.
+        is_correct: true
+      - text: S3 Intelligent-Tiering with Deep Archive, delete at 10.
+        is_correct: false
+      - text: Redshift for new, move to S3 Standard, then Glacier Deep Archive at 3.
+        is_correct: false
+      - text: RDS database with S3 snapshots, move to Glacier Flexible at 3.
+        is_correct: false
+    explanation: |
+      Correct: S3 Standard-IA is cheaper for infrequent SQL queries via Athena. Glacier Flexible Retrieval meets the 12-hour retrieval requirement.
+    diagram: |
+      graph TD
+        S3IA[S3 Standard-IA] -->|3yr| GFR[Glacier Flexible Retrieval]
+        GFR -->|10yr| Trash[Delete]
+        Athena[Athena] -.->|SQL| S3IA
+
+  - id: q11
+    type: multi_select
+    question: |
+      NebulaStream Systems app experiences downtime causing SQS messages to expire after 1 day. Which TWO solutions minimize data loss?
+    options:
+      - text: Increase the message retention period.
+        is_correct: true
+      - text: Increase the visibility timeout.
+        is_correct: false
+      - text: Attach a dead-letter queue (DLQ) to the SQS queue.
+        is_correct: true
+      - text: Use a delay queue.
+        is_correct: false
+      - text: Reduce message processing time.
+        is_correct: false
+    explanation: |
+      Correct: Increasing retention gives the app more time to recover. A DLQ captures messages that fail repeatedly rather than letting them disappear.
+    diagram: |
+      graph LR
+        SQS[SQS Queue]
+        App[Application]
+        DLQ[Dead-Letter Queue]
+        SQS -->|Process| App
+        App -- Fail/Expire --> DLQ
+        SQS -- Keep longer --> SQS
+
+  - id: q12
+    type: multiple_choice
+    question: |
+      NebulaStream Systems wants to continuously send SaaS sales data to Redshift with least overhead. Which solution fits?
+    options:
+      - text: Create an Amazon AppFlow flow to run on event.
+        is_correct: true
+      - text: Use an EventBridge rule to send events to Redshift.
+        is_correct: false
+      - text: Use a Lambda UDF within Redshift.
+        is_correct: false
+      - text: Deploy Amazon MWAA with JDBC connectors.
+        is_correct: false
+    explanation: |
+      Correct: AppFlow is a managed service designed specifically to ingest data from SaaS applications into AWS services like Redshift.
+    diagram: |
+      graph LR
+        SaaS[SaaS Sales App]
+        AppFlow[Amazon AppFlow]
+        RS[Redshift]
+        SaaS --> AppFlow
+        AppFlow --> RS
+
+  - id: q13
+    type: multiple_choice
+    question: |
+      NebulaStream Systems Lambda function has s3:* on all resources. To follow best practices, which change is best?
+    options:
+      - text: Append "s3:GetObject" to Action and Resource to "arn:aws:s3:::bucket_name/prefix/*".
+        is_correct: false
+      - text: Modify Action to "s3:GetObjectAttributes" and Resource to "arn:aws:s3:::bucket_name".
+        is_correct: false
+      - text: Append "s3:GetObject" to Action and Resource to "arn:aws:s3:::bucket_name".
+        is_correct: false
+      - text: Modify Action to "s3:GetObject" and Resource to "arn:aws:s3:::bucket_name/prefix/*".
+        is_correct: true
+    explanation: |
+      Correct: This follows the Principle of Least Privilege by restricting the action to read-only (GetObject) and limiting the resource to a specific path.
+    diagram: |
+      graph TD
+        Lambda[Lambda Function]
+        Policy[IAM Policy]
+        S3[(S3 Bucket/Path)]
+        Lambda --> Policy
+        Policy -->|Allow GetObject| S3
+
+  - id: q14
+    type: multi_select
+    question: |
+      Which THREE events can remove messages from an Amazon SQS queue?
+    options:
+      - text: An application makes a DeleteMessage API call.
+        is_correct: true
+      - text: The maxReceiveCount has been reached.
+        is_correct: true
+      - text: The queue is purged.
+        is_correct: true
+      - text: An application makes a ReceiveMessage API call.
+        is_correct: false
+      - text: The visibility timeout expires.
+        is_correct: false
+      - text: The configuration for a queue is edited.
+        is_correct: false
+    explanation: |
+      Correct: Deletion is explicit, purging clears the queue, and reaching maxReceiveCount moves/removes the message to a DLQ.
+    diagram: |
+      graph TD
+        SQS[SQS Queue]
+        Del[DeleteMessage]
+        Purge[Purge Queue]
+        Max[MaxReceiveCount Hit]
+        Del --> SQS
+        Purge --> SQS
+        Max --> SQS
+
+  - id: q15
+    type: multiple_choice
+    question: |
+      NebulaStream Systems EKS containers on EC2 nodes transform datasets and save to a data lake. Which temporary storage has the LOWEST latency?
+    options:
+      - text: Ephemeral volume provided by node's RAM.
+        is_correct: true
+      - text: Amazon DynamoDB Accelerator (DAX).
+        is_correct: false
+      - text: PersistentVolume via NFS.
+        is_correct: false
+      - text: Amazon MemoryDB connection.
+        is_correct: false
+    explanation: |
+      Correct: RAM-based storage (tmpfs) is significantly faster than any network-based storage (DAX/NFS/MemoryDB) because it avoids the network stack entirely.
+    diagram: |
+      graph LR
+        Node[EC2 Node]
+        RAM[RAM/tmpfs]
+        Pod[EKS Pod]
+        Pod <--> RAM
+
+  - id: q16
+    type: multiple_choice
+    question: |
+      NebulaStream Systems needs a Redshift test environment for 2 hours every 2 weeks using production data. Which is most cost-effective?
+    options:
+      - text: Unload prod data to S3 and use Glue to load test cluster.
+        is_correct: false
+      - text: Create a data share from prod to a Redshift Serverless test environment.
+        is_correct: true
+      - text: Use Redshift Spectrum to access prod S3 unloads.
+        is_correct: false
+      - text: Restore a manual snapshot to a new test cluster every 2 weeks.
+        is_correct: false
+    explanation: |
+      Correct: Data Sharing avoids moving data, and Redshift Serverless ensures you only pay for the 2 hours of compute used during the test.
+    diagram: |
+      graph LR
+        Prod[Prod Redshift]
+        Share[Data Sharing]
+        Test[Redshift Serverless]
+        Prod --> Share
+        Share --> Test
+
+  - id: q17
+    type: multiple_choice
+    question: |
+      NebulaStream Systems: 3 months data in Redshift. Yearly: 12 months analysis. 12+ months: Compliance only. Most cost-effective solution?
+    options:
+      - text: 12 months in Redshift, then move to S3 Glacier Deep Archive.
+        is_correct: false
+      - text: 3 months in Redshift, move older to Glacier Deep Archive, use Spectrum for yearly.
+        is_correct: false
+      - text: 3 months in Redshift, move older to S3, use Spectrum for yearly, move to Deep Archive after 12 months.
+        is_correct: true
+      - text: 3 months in Redshift, move older to S3 Glacier Instant Retrieval.
+        is_correct: false
+    explanation: |
+      Correct: Keeping 3 months in Redshift covers daily needs; S3 Standard allows Spectrum to query the 12-month window yearly; Deep Archive handles the compliance phase cheaply.
+    diagram: |
+      graph TD
+        RS[Redshift - 3mo]
+        S3[S3 Standard - 12mo]
+        GDA[Glacier Deep Archive]
+        RS -->|After 3mo| S3
+        S3 -->|After 12mo| GDA
+        RS -.->|Spectrum Query| S3
+
+  - id: q18
+    type: multiple_choice
+    question: |
+      NebulaStream Systems needs to store RDS SQL Server credentials with automatic 30-day rotation. Which service meets this?
+    options:
+      - text: IAM database authentication.
+        is_correct: false
+      - text: AWS Systems Manager Parameter Store.
+        is_correct: false
+      - text: AWS Security Token Service (STS).
+        is_correct: false
+      - text: AWS Secrets Manager.
+        is_correct: true
+    explanation: |
+      Correct: Secrets Manager has native, built-in support for rotating RDS credentials automatically.
+    diagram: |
+      graph LR
+        App[App on EC2]
+        SM[Secrets Manager]
+        RDS[RDS SQL Server]
+        SM -->|Rotates| RDS
+        App -->|Fetches| SM
+
+  - id: q19
+    type: multi_select
+    question: |
+      NebulaStream Systems Kinesis/Lambda performance: IteratorAgeMilliseconds is high at peaks. Which THREE increase performance?
+    options:
+      - text: Increase the number of shards for the Kinesis data stream.
+        is_correct: true
+      - text: Test different parallelization factor settings.
+        is_correct: true
+      - text: Configure the Kinesis data stream to use provisioned capacity mode.
+        is_correct: false
+      - text: Register the Lambda function as a consumer with enhanced fan-out.
+        is_correct: true
+      - text: Increase the reserved concurrency.
+        is_correct: false
+      - text: Increase the provisioned concurrency.
+        is_correct: false
+    explanation: |
+      Correct: More shards allow more Lambda instances; parallelization factor lets one shard trigger multiple Lambdas; enhanced fan-out reduces latency.
+    diagram: |
+      graph LR
+        K[Kinesis Stream]
+        S1[Shard 1]
+        S2[Shard 2]
+        L1[Lambda 1]
+        L2[Lambda 2]
+        K --> S1 & S2
+        S1 --> L1
+        S2 --> L2
+
+  - id: q20
+    type: multiple_choice
+    question: |
+      NebulaStream Systems migrating on-prem NFS to AWS for Lambda access. Data must be shared across concurrent Lambdas. Which solution?
+    options:
+      - text: Local storage for each Lambda function.
+        is_correct: false
+      - text: Amazon EBS volumes.
+        is_correct: false
+      - text: Amazon DynamoDB.
+        is_correct: false
+      - text: Amazon Elastic File System (EFS).
+        is_correct: true
+    explanation: |
+      Correct: EFS is the AWS managed NFS service that can be natively mounted by Lambda, allowing shared file access across concurrent executions.
+    diagram: |
+      graph LR
+        L1[Lambda 1]
+        L2[Lambda 2]
+        EFS[Amazon EFS]
+        L1 -->|Mount| EFS
+        L2 -->|Mount| EFS
