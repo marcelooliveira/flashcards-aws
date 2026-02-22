@@ -1,0 +1,583 @@
+questions:
+  - id: q1
+    type: multiple_choice
+    question: |
+      A data engineering team is tasked with making data discoverable and accessible for analytics. What is the first step in creating a data catalog in AWS?
+    options:
+      - text: Use AWS Glue to define a data catalog, register data sources, and organize metadata for discovery and access.
+        is_correct: true
+      - text: Store all datasets in Amazon S3 buckets without implementing a metadata layer or structural organization.
+        is_correct: false
+      - text: Develop custom application code to track all data locations and schema formats manually across the environment.
+        is_correct: false
+      - text: Implement granular IAM policies to control resource access without defining a centralized metadata catalog.
+        is_correct: false
+    explanation: |
+      Correct: Creating a data catalog with AWS Glue is the foundational step for data discovery and management.
+    diagram: |
+      graph TD
+        Data[Data Sources] --> Glue[Create Glue Catalog]
+        Glue --> Discovery[Data Discovery]
+
+  - id: q2
+    type: multiple_choice
+    question: |
+      A healthcare company needs to organize its data catalog to meet compliance and business needs. What is the best practice for classifying data in AWS Glue?
+    options:
+      - text: Classify data in the Glue Data Catalog based on sensitivity, usage, and compliance requirements.
+        is_correct: true
+      - text: Apply a standardized classification tier to all data assets to maintain a simplified administrative model.
+        is_correct: false
+      - text: Bypass formal data classification processes and manage assets based primarily on their physical storage location.
+        is_correct: false
+      - text: Assign arbitrary tags to various data assets without aligning them to specific business or regulatory needs.
+        is_correct: false
+    explanation: |
+      Correct: Data classification in the catalog supports compliance and business requirements.
+    diagram: |
+      graph TD
+        Data[Data] --> Classify[Classify in Catalog]
+        Classify --> Compliance[Compliance]
+
+  - id: q3
+    type: multiple_choice
+    question: |
+      A data architect is designing a metadata strategy for a large enterprise. What are the key components of a data catalog in AWS?
+    options:
+      - text: Tables, databases, columns, partitions, and metadata such as data types, descriptions, and classifications.
+        is_correct: true
+      - text: File naming conventions, folder hierarchies, and physical storage pathing locations within Amazon S3 buckets.
+        is_correct: false
+      - text: Identity and Access Management (IAM) roles and permission sets used to authorize access to underlying data.
+        is_correct: false
+      - text: Active user sessions, access logs, and the total count of distinct users interacting with the data platform.
+        is_correct: false
+    explanation: |
+      Correct: A data catalog includes metadata about tables, columns, partitions, and more.
+    diagram: |
+      graph TD
+        Catalog[Data Catalog] --> Tables[Tables]
+        Catalog --> Metadata[Metadata]
+
+  - id: q4
+    type: multiple_choice
+    question: |
+      A data analyst needs to access data from multiple sources for reporting. What is the best way to use data catalogs for this purpose in AWS?
+    options:
+      - text: Use the Glue Data Catalog to discover and consume data from registered sources, enabling unified access for analytics.
+        is_correct: true
+      - text: Execute direct queries against each individual data source independently without utilizing a centralized catalog layer.
+        is_correct: false
+      - text: Consolidate all raw data into a single S3 bucket and perform manual file exploration to identify relevant datasets.
+        is_correct: false
+      - text: Migrate all disparate data into Amazon Redshift and perform all analytical queries regardless of the data origin.
+        is_correct: false
+    explanation: |
+      Correct: The Glue Data Catalog enables unified data discovery and access.
+    diagram: |
+      graph TD
+        Sources[Data Sources] --> Catalog[Glue Catalog]
+        Catalog --> Analytics[Analytics]
+
+  - id: q5
+    type: multiple_choice
+    question: |
+      A data engineering team is building a new data lake. What is the best practice for building and referencing a data catalog using AWS Glue Data Catalog?
+    options:
+      - text: Register data sources, define tables and databases, and use the Glue Data Catalog as the central metadata store for the data lake.
+        is_correct: true
+      - text: Document all metadata and schema definitions in external spreadsheets hosted outside of the AWS cloud environment.
+        is_correct: false
+      - text: Utilize S3 bucket names and object prefixes as the primary metadata reference for all analytical processing jobs.
+        is_correct: false
+      - text: Prioritize the ingestion of raw data files and bypass the creation of metadata schemas to accelerate initial delivery.
+        is_correct: false
+    explanation: |
+      Correct: The Glue Data Catalog is the central metadata repository for AWS data lakes.
+    diagram: |
+      graph TD
+        DataLake[Data Lake] --> Glue[Glue Data Catalog]
+        Glue --> Reference[Reference Metadata]
+
+  - id: q6
+    type: multiple_choice
+    question: |
+      A company uses Apache Hive for on-premises analytics and is migrating to AWS. What is the best way to build and reference a data catalog using Apache Hive metastore in AWS?
+    options:
+      - text: Migrate the Hive metastore to AWS and integrate it with EMR or Glue for metadata management.
+        is_correct: true
+      - text: Decommission the existing Hive metastore and manually recreate all metadata definitions within the new environment.
+        is_correct: false
+      - text: Leverage S3 object tags to store metadata information instead of maintaining a dedicated Hive metastore database.
+        is_correct: false
+      - text: Embed metadata definitions and schema logic directly into application code comments for developer-led documentation.
+        is_correct: false
+    explanation: |
+      Correct: Migrating and integrating the Hive metastore preserves metadata and enables analytics in AWS.
+    diagram: |
+      graph TD
+        Hive[Hive Metastore] --> AWS[Integrate with AWS]
+        AWS --> Analytics[Analytics]
+
+  - id: q7
+    type: multiple_choice
+    question: |
+      A data engineering team needs to automate schema discovery for new data sources. What is the best practice using AWS Glue?
+    options:
+      - text: Use AWS Glue crawlers to automatically discover schemas and populate the Glue Data Catalog.
+        is_correct: true
+      - text: Require data engineers to manually define and update all table schemas within the centralized data catalog.
+        is_correct: false
+      - text: Infer data schemas based solely on file extensions and naming patterns without inspecting the underlying data.
+        is_correct: false
+      - text: Disable schema discovery processes and treat all ingested data as unstructured blobs for downstream processing.
+        is_correct: false
+    explanation: |
+      Correct: Glue crawlers automate schema discovery and catalog population.
+    diagram: |
+      graph TD
+        Sources[Data Sources] --> Crawler[Glue Crawler]
+        Crawler --> Catalog[Glue Catalog]
+
+  - id: q8
+    type: multiple_choice
+    question: |
+      A data lake administrator needs to keep the data catalog in sync with new and updated partitions in S3. What is the best approach?
+    options:
+      - text: Use Glue crawlers or partition synchronization jobs to update the catalog as new partitions are added.
+        is_correct: true
+      - text: Perform manual catalog updates and partition registrations every time a new data partition is written to S3.
+        is_correct: false
+      - text: Maintain static metadata definitions and ignore partition changes to ensure stability within the catalog environment.
+        is_correct: false
+      - text: Rely exclusively on S3 event notifications to manage partition updates without integrating with Glue native features.
+        is_correct: false
+    explanation: |
+      Correct: Automated partition synchronization keeps the catalog accurate and up to date.
+    diagram: |
+      graph TD
+        S3[S3 Partitions] --> Sync[Sync Job]
+        Sync --> Catalog[Glue Catalog]
+
+  - id: q9
+    type: multiple_choice
+    question: |
+      A data engineer needs to connect a new SaaS data source to the AWS Glue Data Catalog. What is the best practice for creating new source or target connections for cataloging?
+    options:
+      - text: Use AWS Glue connections to securely connect to new data sources and register them in the catalog.
+        is_correct: true
+      - text: Document connection string details and credentials in a centralized spreadsheet for manual reference by the team.
+        is_correct: false
+      - text: Configure all data sources to use public endpoints to simplify the connection process regardless of security posture.
+        is_correct: false
+      - text: Focus primarily on data ingestion throughput and bypass connection security protocols during the cataloging phase.
+        is_correct: false
+    explanation: |
+      Correct: Glue connections enable secure, managed integration of new sources into the catalog.
+    diagram: |
+      graph TD
+        Source[New Source] --> Connection[Glue Connection]
+        Connection --> Catalog[Glue Catalog]
+
+  - id: q10
+    type: multiple_choice
+    question: |
+      A data architect must design a storage solution for both frequently accessed (hot) and infrequently accessed (cold) data. What is the best AWS approach?
+    options:
+      - text: Use S3 Standard for hot data and S3 Glacier or S3 Glacier Deep Archive for cold data, applying lifecycle policies to transition data as it ages.
+        is_correct: true
+      - text: Consolidate all data assets within the S3 Standard storage class to minimize the complexity of managing different tiers.
+        is_correct: false
+      - text: Deploy all data into S3 Glacier archives regardless of access frequency to achieve the lowest possible storage costs.
+        is_correct: false
+      - text: Provision Amazon EBS volumes for all datasets to ensure consistent performance for long-term data storage needs.
+        is_correct: false
+    explanation: |
+      Correct: Using different S3 storage classes and lifecycle policies optimizes cost and access for hot and cold data.
+    diagram: |
+      graph TD
+        Hot[Hot Data] --> S3Standard[S3 Standard]
+        Cold[Cold Data] --> Glacier[S3 Glacier]
+
+  - id: q11
+    type: multiple_choice
+    question: |
+      A financial analyst needs to minimize storage costs as data ages. What is the best way to optimize storage cost based on the data lifecycle in AWS?
+    options:
+      - text: Implement S3 Lifecycle policies to automatically transition data to lower-cost storage classes as it becomes less frequently accessed.
+        is_correct: true
+      - text: Maintain all historical data in the S3 Standard tier to ensure immediate availability for any potential future queries.
+        is_correct: false
+      - text: Execute a hard deletion of all datasets after a 30-day period without evaluating specific business or regulatory needs.
+        is_correct: false
+      - text: Mandate the use of S3 Intelligent-Tiering for every data object regardless of known access patterns or file sizes.
+        is_correct: false
+    explanation: |
+      Correct: Lifecycle policies automate cost optimization as data ages.
+    diagram: |
+      graph TD
+        Data[Data] --> Lifecycle[Lifecycle Policy]
+        Lifecycle --> Cost[Lower Cost]
+
+  - id: q12
+    type: multiple_choice
+    question: |
+      A compliance officer must ensure that data is deleted from AWS storage to meet business and legal requirements. What is the best practice?
+    options:
+      - text: Use S3 Lifecycle policies and DynamoDB TTL to automatically delete data when it reaches the required retention period.
+        is_correct: true
+      - text: Schedule manual deletion tasks to remove expired data from S3 buckets and DynamoDB tables on a periodic basis.
+        is_correct: false
+      - text: Persist all data indefinitely to prevent the risk of accidental deletion before a legal review can be conducted.
+        is_correct: false
+      - text: Enable S3 versioning as the primary mechanism for managing the deletion of data objects at the end of their lifecycle.
+        is_correct: false
+    explanation: |
+      Correct: Automated deletion policies ensure compliance with retention requirements.
+    diagram: |
+      graph TD
+        Data[Data] --> Policy[Retention Policy]
+        Policy --> Deletion[Automated Deletion]
+
+  - id: q13
+    type: multiple_choice
+    question: |
+      A data governance team is developing a retention and archiving strategy for regulatory compliance. What is the best AWS approach?
+    options:
+      - text: Define S3 Lifecycle policies and use Glacier for long-term archiving, ensuring data is retained and deleted according to policy.
+        is_correct: true
+      - text: Store all archive data in the S3 Standard class to ensure the durability and availability of historical records.
+        is_correct: false
+      - text: Implement a global deletion policy for all data assets once they exceed 1 year of age regardless of regulatory rules.
+        is_correct: false
+      - text: Use DynamoDB Time to Live (TTL) as the exclusive tool for managing retention across all diverse data storage types.
+        is_correct: false
+    explanation: |
+      Correct: Lifecycle and archiving policies support compliance and cost efficiency.
+    diagram: |
+      graph TD
+        Data[Data] --> Policy[Lifecycle Policy]
+        Policy --> Archive[Glacier Archive]
+
+  - id: q14
+    type: multiple_choice
+    question: |
+      A cloud architect must ensure that critical business data is protected against loss and remains available. What is the best AWS practice for resiliency and availability?
+    options:
+      - text: Use S3 versioning, cross-region replication, and multi-AZ deployments to protect data and ensure high availability.
+        is_correct: true
+      - text: Host all datasets within a single S3 bucket and disable versioning to maximize the storage efficiency of the platform.
+        is_correct: false
+      - text: Standardize on the S3 Standard storage class and avoid cross-region replication to simplify the data management architecture.
+        is_correct: false
+      - text: Rely on periodic manual snapshots and custom backup scripts as the primary strategy for ensuring data resiliency.
+        is_correct: false
+    explanation: |
+      Correct: Versioning, replication, and multi-AZ improve data resiliency and availability.
+    diagram: |
+      graph TD
+        Data[Data] --> Versioning[S3 Versioning]
+        Data --> Replication[Cross-Region Replication]
+
+  - id: q15
+    type: multiple_choice
+    question: |
+      A data engineer needs to move large datasets between Amazon S3 and Amazon Redshift for analytics. What is the best practice for load and unload operations?
+    options:
+      - text: Use Redshift's COPY command to load data from S3 and UNLOAD command to export data back to S3 efficiently.
+        is_correct: true
+      - text: Perform data transfers by manually uploading and downloading files through the AWS Management Console interface.
+        is_correct: false
+      - text: Utilize standard SQL INSERT statements to populate Redshift tables from S3 data files for all data loading tasks.
+        is_correct: false
+      - text: Maintain all analytical data exclusively within Redshift clusters and avoid exporting results back to S3.
+        is_correct: false
+    explanation: |
+      Correct: COPY and UNLOAD are optimized for efficient data transfer between S3 and Redshift.
+    diagram: |
+      graph TD
+        S3[S3] --> Copy[COPY to Redshift]
+        Redshift[Redshift] --> Unload[UNLOAD to S3]
+
+  - id: q16
+    type: multiple_choice
+    question: |
+      A storage administrator wants to automatically move infrequently accessed S3 data to a lower-cost tier. What is the best AWS solution?
+    options:
+      - text: Configure S3 Lifecycle policies to transition objects to S3 Standard-IA, S3 Glacier, or S3 Glacier Deep Archive based on access patterns.
+        is_correct: true
+      - text: Execute manual object moves between storage classes based on periodic reviews of access logs and data age.
+        is_correct: false
+      - text: Retain all data objects in the S3 Standard tier to minimize the overhead associated with managing multiple storage classes.
+        is_correct: false
+      - text: Apply S3 Intelligent-Tiering to every object in the bucket regardless of individual file characteristics or access needs.
+        is_correct: false
+    explanation: |
+      Correct: Lifecycle policies automate storage tier transitions for cost savings.
+    diagram: |
+      graph TD
+        S3[S3] --> Lifecycle[Lifecycle Policy]
+        Lifecycle --> Tier[Lower-Cost Tier]
+
+  - id: q17
+    type: multiple_choice
+    question: |
+      A compliance manager needs to ensure that S3 data is deleted after a specific retention period. What is the best AWS approach?
+    options:
+      - text: Set up S3 Lifecycle expiration policies to automatically delete objects when they reach the specified age.
+        is_correct: true
+      - text: Require administrators to manually identify and delete S3 objects after performing an age-based audit of the bucket.
+        is_correct: false
+      - text: Use S3 versioning as the primary tool to handle data expiration and manage the lifecycle of object delete markers.
+        is_correct: false
+      - text: Prevent the deletion of any data by retaining all objects indefinitely to ensure no legal records are ever lost.
+        is_correct: false
+    explanation: |
+      Correct: Expiration policies automate compliance with retention requirements.
+    diagram: |
+      graph TD
+        S3[S3] --> Expire[Expiration Policy]
+        Expire --> Deletion[Automated Deletion]
+
+  - id: q18
+    type: multiple_choice
+    question: |
+      A database administrator wants to manage data retention and recovery for both S3 and DynamoDB. What is the best AWS practice?
+    options:
+      - text: Enable S3 versioning for object recovery and configure DynamoDB TTL to automatically expire items based on retention policies.
+        is_correct: true
+      - text: Rely on manual backup processes and periodic exports to manage the long-term retention of data for S3 and DynamoDB.
+        is_correct: false
+      - text: Adopt S3 Standard as the universal storage class for all data assets and bypass automated recovery configurations.
+        is_correct: false
+      - text: Maintain all DynamoDB table items indefinitely to ensure that historical records are always available for recovery.
+        is_correct: false
+    explanation: |
+      Correct: S3 versioning and DynamoDB TTL automate retention and recovery.
+    diagram: |
+      graph TD
+        S3[S3] --> Versioning[Enable Versioning]
+        DynamoDB[DynamoDB] --> TTL[Configure TTL]
+
+  - id: q19
+    type: multiple_choice
+    question: |
+      A data architect is designing a new analytics platform. What is the primary goal of data modeling in AWS data solutions?
+    options:
+      - text: To structure data for efficient storage, retrieval, and analysis based on business requirements.
+        is_correct: true
+      - text: To consolidate all disparate data sources into a single monolithic table to simplify the schema design.
+        is_correct: false
+      - text: To prioritize the minimization of raw storage costs above all other considerations including data access patterns.
+        is_correct: false
+      - text: To implement a strategy that uses only unstructured data formats for every analytical workload in the platform.
+        is_correct: false
+    explanation: |
+      Correct: Data modeling ensures data is structured for performance and business needs.
+    diagram: |
+      graph TD
+        Requirements[Requirements] --> Model[Data Model]
+        Model --> Analytics[Analytics]
+
+  - id: q20
+    type: multiple_choice
+    question: |
+      A compliance team needs to ensure the accuracy and trustworthiness of analytics data. What AWS feature helps establish data lineage?
+    options:
+      - text: Use Amazon SageMaker ML Lineage Tracking to trace data origins, transformations, and usage.
+        is_correct: true
+      - text: Persist all datasets in Amazon S3 without implementing any mechanisms to track historical changes or data flow.
+        is_correct: false
+      - text: Configure strict IAM policies to restrict resource access without capturing the metadata associated with data movement.
+        is_correct: false
+      - text: Maintain manual documentation and developer logs to record the movement of data between different system components.
+        is_correct: false
+    explanation: |
+      Correct: Data lineage tools like SageMaker ML Lineage Tracking provide traceability and trust.
+    diagram: |
+      graph TD
+        Source[Source Data] --> Lineage[Lineage Tracking]
+        Lineage --> Trust[Trustworthiness]
+
+  - id: q21
+    type: multiple_choice
+    question: |
+      A database administrator wants to optimize query performance in a large AWS data warehouse. What are best practices for indexing, partitioning, and compression?
+    options:
+      - text: Use appropriate indexes, partition keys, and compression settings to improve query speed and reduce storage costs.
+        is_correct: true
+      - text: Discontinue the use of indexes and partitions to maintain a simplified schema that is easier for users to navigate.
+        is_correct: false
+      - text: Apply the default compression settings to all warehouse tables regardless of the specific data types or access patterns.
+        is_correct: false
+      - text: Consolidate all historical and current data into a single partition to reduce the administrative overhead of management.
+        is_correct: false
+    explanation: |
+      Correct: Indexing, partitioning, and compression are key for performance and cost.
+    diagram: |
+      graph TD
+        Table[Table] --> Index[Index]
+        Table --> Partition[Partition]
+        Table --> Compression[Compression]
+
+  - id: q22
+    type: multiple_choice
+    question: |
+      A data engineer is tasked with modeling structured, semi-structured, and unstructured data in AWS. What is the best approach?
+    options:
+      - text: Use Redshift for structured data, DynamoDB for semi-structured, and S3 for unstructured data, applying the right schema and access patterns for each.
+        is_correct: true
+      - text: Centralize all diverse data types into a single Amazon DynamoDB table to create a unified storage environment.
+        is_correct: false
+      - text: Leverage Amazon S3 as the exclusive storage layer for all data assets regardless of their underlying structure or format.
+        is_correct: false
+      - text: Focus primarily on data ingestion speed and ignore schema design considerations for the different types of data.
+        is_correct: false
+    explanation: |
+      Correct: Matching storage and schema to data type optimizes performance and flexibility.
+    diagram: |
+      graph TD
+        Structured[Structured] --> Redshift[Redshift]
+        Semi[Semi-Structured] --> DynamoDB[DynamoDB]
+        Unstructured[Unstructured] --> S3[S3]
+
+  - id: q23
+    type: multiple_choice
+    question: |
+      A data platform team needs to support evolving data requirements. What is a best practice for schema evolution in AWS data solutions?
+    options:
+      - text: Use tools and features that allow adding, removing, or modifying schema elements without disrupting existing workloads.
+        is_correct: true
+      - text: Enforce a strict schema lock policy to prevent any modifications once the initial database deployment is complete.
+        is_correct: false
+      - text: Mandate a comprehensive data migration and system downtime for every requested change to the existing schema.
+        is_correct: false
+      - text: Disregard new data requirements and continue using the original schema to maintain backward compatibility.
+        is_correct: false
+    explanation: |
+      Correct: Schema evolution features enable flexibility and minimize disruption.
+    diagram: |
+      graph TD
+        Schema[Schema] --> Evolution[Schema Evolution]
+        Evolution --> Flexibility[Flexibility]
+
+  - id: q24
+    type: multiple_choice
+    question: |
+      A data warehouse architect is designing a new analytics schema in Amazon Redshift. What is the best practice?
+    options:
+      - text: Design tables, keys, and distribution styles based on query patterns and data volume for optimal performance.
+        is_correct: true
+      - text: Implement default table configuration settings for all workloads to ensure a consistent administrative experience.
+        is_correct: false
+      - text: Store all analytical data within a single wide table to eliminate the need for complex relational joins.
+        is_correct: false
+      - text: Build the schema without defining distribution or sort keys to simplify the initial data loading process.
+        is_correct: false
+    explanation: |
+      Correct: Schema design in Redshift should match workload and query needs.
+    diagram: |
+      graph TD
+        Workload[Workload] --> Schema[Redshift Schema]
+        Schema --> Performance[Performance]
+
+  - id: q25
+    type: multiple_choice
+    question: |
+      A NoSQL architect is designing a DynamoDB schema for a new application. What is the best approach?
+    options:
+      - text: Define partition keys, sort keys, and indexes based on access patterns and query requirements.
+        is_correct: true
+      - text: Use a single attribute as the primary key for all tables to maintain a highly simplified data model.
+        is_correct: false
+      - text: Co-locate all application data within one table regardless of the varying access patterns or entity types.
+        is_correct: false
+      - text: Develop the database schema without implementing secondary indexes to reduce the cost of storage and writes.
+        is_correct: false
+    explanation: |
+      Correct: DynamoDB schema should be designed for access patterns and scalability.
+    diagram: |
+      graph TD
+        App[App] --> Schema[DynamoDB Schema]
+        Schema --> Access[Access Patterns]
+
+  - id: q26
+    type: multiple_choice
+    question: |
+      A data lake administrator is designing a schema in AWS Lake Formation. What is the best practice?
+    options:
+      - text: Define tables, columns, and partitions in the Lake Formation catalog to support analytics and access control.
+        is_correct: true
+      - text: Store all datasets in a single S3 bucket and bypass the creation of metadata definitions in the catalog.
+        is_correct: false
+      - text: Apply the same default table settings and schemas to all data assets to ensure administrative uniformity.
+        is_correct: false
+      - text: Focus on data storage volume and ignore the implementation of partitioning or granular access control.
+        is_correct: false
+    explanation: |
+      Correct: Lake Formation schemas should support analytics and security.
+    diagram: |
+      graph TD
+        DataLake[Data Lake] --> Schema[Lake Formation Schema]
+        Schema --> Analytics[Analytics]
+
+  - id: q27
+    type: multiple_choice
+    question: |
+      A data engineer needs to update a schema to accommodate new data attributes. What is the best AWS practice for addressing changes to data characteristics?
+    options:
+      - text: Use schema evolution features to add or modify attributes without disrupting existing data or workloads.
+        is_correct: true
+      - text: Perform a complete reload of all historical data whenever a new attribute is added to the system schema.
+        is_correct: false
+      - text: Discard the new data attributes and maintain the current schema to prevent potential downstream compatibility issues.
+        is_correct: false
+      - text: Implement a permanent schema lock to ensure that the data structure remains unchanged throughout its lifecycle.
+        is_correct: false
+    explanation: |
+      Correct: Schema evolution enables flexibility and minimizes disruption.
+    diagram: |
+      graph TD
+        Data[Data] --> Schema[Schema Evolution]
+        Schema --> Flexibility[Flexibility]
+
+  - id: q28
+    type: multiple_choice
+    question: |
+      A migration team is moving data from an on-premises database to AWS. What is the best practice for schema conversion?
+    options:
+      - text: Use AWS Schema Conversion Tool (SCT) and AWS DMS to automate schema and data migration to AWS services.
+        is_correct: true
+      - text: Redesign all database schemas and perform manual data migration tasks without using automated cloud tools.
+        is_correct: false
+      - text: Rely on basic CSV export and import utilities as the primary method for migrating complex database schemas.
+        is_correct: false
+      - text: Ignore the structural differences between source and target and attempt to load the data into AWS as-is.
+        is_correct: false
+    explanation: |
+      Correct: SCT and DMS automate and simplify schema conversion and migration.
+    diagram: |
+      graph TD
+        Source[Source DB] --> SCT[SCT]
+        SCT --> DMS[DMS]
+        DMS --> Target[Target DB]
+
+  - id: q29
+    type: multiple_choice
+    question: |
+      A data scientist needs to track the lineage of data used in machine learning models. What is the best AWS tool for establishing data lineage?
+    options:
+      - text: Use Amazon SageMaker ML Lineage Tracking to record data sources, transformations, and model usage.
+        is_correct: true
+      - text: Store all experimental data in S3 buckets without implementing a system to track lineage or metadata flow.
+        is_correct: false
+      - text: Maintain manual documentation and local spreadsheets to track how data moves through the ML training pipeline.
+        is_correct: false
+      - text: Utilize IAM permission logs as the primary source of information for reconstructing the lineage of data assets.
+        is_correct: false
+    explanation: |
+      Correct: SageMaker ML Lineage Tracking provides automated, reliable data lineage.
+    diagram: |
+      graph TD
+        Data[Data] --> Lineage[Lineage Tracking]
+        Lineage --> Models[ML Models]
