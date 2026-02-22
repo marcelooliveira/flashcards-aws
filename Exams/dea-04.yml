@@ -1,0 +1,631 @@
+questions:
+  - id: q1
+    type: multiple_choice
+    question: |
+      A data engineering team is designing a new AWS data pipeline to ingest both real-time sensor data and daily batch uploads from partners. The pipeline must handle high-throughput streaming data with low latency, support scheduled batch ingestion, and allow for replaying missed data. Some transactions require maintaining state, while others are stateless. Which combination of AWS services and design choices best meets all these requirements?
+    options:
+      - text: Use Amazon Kinesis Data Streams for streaming, AWS Glue for batch ingestion, enable Kinesis data retention for replayability, and design Lambda consumers to be stateful or stateless as needed.
+        is_correct: true
+      - text: Use Amazon S3 as a landing zone for both streaming and batch ingestion, rely on S3 event notifications to trigger all processing, and utilize S3 Versioning to handle data replayability and state management.
+        is_correct: false
+      - text: Use Amazon DynamoDB Streams for all real-time and batch ingestion, process data using only stateless Lambda functions, and rely on DynamoDB's internal replication for all data replay requirements.
+        is_correct: false
+      - text: Use Amazon Redshift for direct ingestion of both streaming and batch data, utilize Redshift Spectrum for replayability, and implement all stateful transaction logic within stored procedures.
+        is_correct: false
+    explanation: |
+      Correct: Kinesis Data Streams is designed for high-throughput, low-latency streaming ingestion and supports data retention for replayability. AWS Glue is suitable for scheduled batch ingestion. Lambda consumers can be implemented as stateful or stateless depending on the transaction requirements.
+    diagram: |
+      graph TD
+        Sensors[Real-time Sensors] --> Kinesis[Kinesis Data Streams]
+        Partners[Batch Partners] --> Glue[AWS Glue Batch]
+        Kinesis --> Lambda1[Stateful Lambda]
+        Kinesis --> Lambda2[Stateless Lambda]
+        Glue --> Lambda2
+        Kinesis -.->|Replay| Lambda1
+
+  - id: q2
+    type: multiple_choice
+    question: |
+      A company needs to design a data ingestion pipeline that must support both frequent, low-latency streaming data from IoT devices and periodic, high-volume batch uploads from external partners. The pipeline should allow for historical data reprocessing and must support both stateful and stateless processing. Which AWS architecture best addresses these requirements?
+    options:
+      - text: Use Amazon Kinesis Data Streams for streaming, AWS Glue for batch ingestion, enable Kinesis extended retention for replay, and use Step Functions to coordinate stateful and stateless Lambda processing.
+        is_correct: true
+      - text: Use Amazon S3 for all ingestion, process all incoming data with a single monolithic Lambda function, and utilize S3 Glacier for long-term storage and manual historical data reprocessing.
+        is_correct: false
+      - text: Use Amazon DynamoDB Streams for both streaming and batch sources, process data with stateless Lambda functions, and use DynamoDB Time-to-Live (TTL) to manage historical data availability.
+        is_correct: false
+      - text: Use Amazon Redshift for direct ingestion of all data types, rely on Redshift snapshots for historical replay, and implement processing logic using Amazon Redshift ML for stateful analysis.
+        is_correct: false
+    explanation: |
+      Correct: Kinesis Data Streams is ideal for low-latency streaming, Glue for batch, and Kinesis extended retention enables replay. Step Functions can coordinate both stateful and stateless Lambda processing.
+    diagram: |
+      graph TD
+        IoT[IoT Devices] --> Kinesis[Kinesis Data Streams]
+        Partners[Batch Partners] --> Glue[AWS Glue]
+        Kinesis --> Step[Step Functions]
+        Glue --> Step
+        Step --> Lambda1[Stateful Lambda]
+        Step --> Lambda2[Stateless Lambda]
+        Kinesis -.->|Replay| Step
+
+  - id: q3
+    type: multiple_choice
+    question: |
+      An analytics team is building a pipeline to ingest data from multiple sources. Some sources send data continuously, while others send large files at scheduled intervals. The team needs to ensure the pipeline can handle different ingestion frequencies, maintain low latency for real-time data, and support replaying data in case of failures. Which AWS services and features should they use?
+    options:
+      - text: Use Amazon Kinesis Data Streams for continuous data, AWS Glue for scheduled batch ingestion, enable Kinesis data retention for replay, and design the pipeline to support both stateful and stateless processing as needed.
+        is_correct: true
+      - text: Use Amazon S3 for all incoming data sources, process information using a single high-compute EC2 instance, and rely on EBS snapshots to facilitate data replay in the event of a system failure.
+        is_correct: false
+      - text: Use Amazon DynamoDB Streams for all ingestion sources, process data using AWS Lambda functions, and utilize DynamoDB Global Tables to ensure data replayability and high availability across regions.
+        is_correct: false
+      - text: Use Amazon Redshift for direct ingestion of all data frequencies, rely on Redshift automated backups for data replay, and use Redshift Spectrum to handle the different ingestion intervals.
+        is_correct: false
+    explanation: |
+      Correct: Kinesis Data Streams is suitable for continuous, low-latency ingestion and supports replay. AWS Glue is designed for batch ingestion. The pipeline can be designed to support both stateful and stateless processing.
+    diagram: |
+      graph TD
+        Source1[Continuous Source] --> Kinesis[Kinesis Data Streams]
+        Source2[Batch Source] --> Glue[AWS Glue]
+        Kinesis --> Proc1[Stateful Processor]
+        Kinesis --> Proc2[Stateless Processor]
+        Glue --> Proc2
+        Kinesis -.->|Replay| Proc1
+
+  - id: q4
+    type: multiple_choice
+    question: |
+      A global e-commerce company needs to build a real-time analytics platform that ingests streaming data from multiple sources, including website clickstreams, order events, and database changes. The solution must use Amazon Kinesis, Amazon MSK, DynamoDB Streams, AWS DMS, AWS Glue streaming, and Amazon Redshift streaming ingestion. Which approach best meets these requirements?
+    options:
+      - text: Integrate each streaming source (Kinesis, MSK, DynamoDB Streams, DMS, Glue streaming) with Amazon Redshift streaming ingestion to enable scalable, near real-time analytics.
+        is_correct: true
+      - text: Use Amazon S3 as the central ingestion point for all sources, and utilize a single AWS Lambda function to transform and load the data into the Redshift cluster for downstream analytics.
+        is_correct: false
+      - text: Use Amazon EMR to poll each streaming source individually, write the results to a centralized S3 bucket, and use Glue Crawlers to update the metadata for Redshift Spectrum queries.
+        is_correct: false
+      - text: Use AWS AppFlow to create direct connections between all streaming sources and Redshift, relying on AppFlow's managed transfer capabilities for all real-time data transformations.
+        is_correct: false
+    explanation: |
+      Correct: Each streaming service (Kinesis, MSK, DynamoDB Streams, DMS, Glue streaming) can natively deliver or integrate with Redshift streaming ingestion, supporting scalable, near real-time analytics.
+    diagram: |
+      graph TD
+        Clicks[Clickstreams] --> Kinesis[Kinesis]
+        Orders[Order Events] --> MSK[MSK]
+        DB[DB Changes] --> DDBS[DynamoDB Streams]
+        DB --> DMS[AWS DMS]
+        Kinesis --> Redshift[Redshift Streaming]
+        MSK --> Redshift
+        DDBS --> Redshift
+        DMS --> Redshift
+        Glue[Glue Streaming] --> Redshift
+
+  - id: q5
+    type: multiple_choice
+    question: |
+      A healthcare analytics provider needs to process daily patient records, periodic insurance claim files, and large research datasets. The solution must support batch ingestion from Amazon S3, AWS Glue, Amazon EMR, AWS DMS, Amazon Redshift, AWS Lambda, and Amazon AppFlow. Which AWS architecture best addresses these requirements?
+    options:
+      - text: Use S3 for file uploads, schedule AWS Glue and EMR jobs for batch processing, use DMS for database migrations, Redshift for direct batch loads, Lambda for event-driven batch tasks, and AppFlow for SaaS integrations.
+        is_correct: true
+      - text: Use Amazon Kinesis Data Streams for all batch ingestion tasks, process all records using AWS Lambda, and utilize Kinesis Data Firehose to deliver the final outputs into a centralized S3 bucket.
+        is_correct: false
+      - text: Use Amazon DynamoDB Streams to capture all incoming batch and streaming data, and utilize DynamoDB Global Tables to synchronize records across regions for healthcare compliance.
+        is_correct: false
+      - text: Use Amazon S3 as the primary storage layer and process all incoming data types with a single high-availability EC2 instance running custom data processing scripts.
+        is_correct: false
+    explanation: |
+      Correct: S3, Glue, EMR, DMS, Redshift, Lambda, and AppFlow each support batch ingestion for different data types and sources, providing a flexible and scalable batch processing architecture.
+    diagram: |
+      graph TD
+        Patients[Patient Records] --> S3[S3]
+        Claims[Insurance Claims] --> Glue[Glue]
+        Research[Research Data] --> EMR[EMR]
+        S3 --> Glue
+        Glue --> Redshift[Redshift]
+        EMR --> Redshift
+        DMS[DMS] --> Redshift
+        Lambda[Lambda] --> Redshift
+        AppFlow[AppFlow] --> Redshift
+
+  - id: q6
+    type: multiple_choice
+    question: |
+      A logistics company needs to ingest real-time vehicle telemetry data for analytics and alerting. Which AWS service is best suited for handling high-throughput, low-latency streaming ingestion and why?
+    options:
+      - text: Amazon Kinesis Data Streams, because it is designed for scalable, real-time streaming data ingestion and processing with millisecond latencies.
+        is_correct: true
+      - text: Amazon S3, because it provides a highly durable and scalable storage solution that can store large telemetry files for later asynchronous processing.
+        is_correct: false
+      - text: AWS Lambda, because it provides a serverless compute environment that can run custom code in direct response to incoming telemetry events.
+        is_correct: false
+      - text: Amazon Redshift, because it is a high-performance data warehouse capable of performing complex analytical queries on large volumes of historical data.
+        is_correct: false
+    explanation: |
+      Correct: Kinesis Data Streams is purpose-built for high-throughput, low-latency streaming ingestion and is ideal for real-time analytics use cases.
+    diagram: |
+      graph TD
+        Telemetry[Vehicle Telemetry] --> Kinesis[Kinesis Data Streams]
+        Kinesis --> Analytics[Analytics]
+
+  - id: q7
+    type: multiple_choice
+    question: |
+      A media company wants to process and analyze streaming video logs from multiple producers in real time. Which AWS service should they use to ingest and distribute these logs with high durability and support for multiple consumer applications?
+    options:
+      - text: Amazon Managed Streaming for Apache Kafka (MSK), because it provides a managed, durable, and scalable streaming platform with support for multiple consumers.
+        is_correct: true
+      - text: Amazon S3, because it can store and organize log files in a hierarchical structure for later retrieval and analysis by multiple downstream applications.
+        is_correct: false
+      - text: AWS Glue, because it provides a managed environment for running complex ETL jobs that can transform video logs into structured formats for querying.
+        is_correct: false
+      - text: Amazon Redshift, because it offers a massively parallel processing architecture designed for high-performance analytics on structured data logs.
+        is_correct: false
+    explanation: |
+      Correct: MSK is a managed Kafka service that supports high-throughput, durable streaming and multiple consumer groups for real-time log processing.
+    diagram: |
+      graph TD
+        Producers[Video Producers] --> MSK[MSK]
+        MSK --> Consumer1[Consumer App 1]
+        MSK --> Consumer2[Consumer App 2]
+
+  - id: q8
+    type: multiple_choice
+    question: |
+      A retail company needs to capture and process changes to their product catalog stored in DynamoDB in near real time. Which AWS service enables this by providing a stream of item-level changes?
+    options:
+      - text: Amazon DynamoDB Streams, because it captures table updates and delivers them in near real time for downstream processing.
+        is_correct: true
+      - text: Amazon S3, because it can be configured to store versioned objects that represent the different states of the product catalog over time.
+        is_correct: false
+      - text: Amazon Kinesis Data Streams, because it provides a general-purpose ingestion service that can collect high-volume data from various web applications.
+        is_correct: false
+      - text: AWS Lambda, because it can be integrated with various AWS services to run serverless compute tasks in response to changes in data state.
+        is_correct: false
+    explanation: |
+      Correct: DynamoDB Streams provides a time-ordered sequence of item-level changes in a DynamoDB table, enabling real-time processing.
+    diagram: |
+      graph TD
+        Catalog[DynamoDB Table] --> Stream[DynamoDB Streams]
+        Stream --> Processing[Processing App]
+
+  - id: q9
+    type: multiple_choice
+    question: |
+      A financial institution is migrating data from an on-premises database to AWS and needs to capture ongoing changes for real-time analytics. Which AWS service should they use to continuously replicate and stream changes to AWS targets?
+    options:
+      - text: AWS Database Migration Service (DMS), because it supports ongoing replication and streaming of database changes to AWS services.
+        is_correct: true
+      - text: Amazon S3, because it can be used as a central repository to store periodic snapshots of the on-premises database for historical analysis.
+        is_correct: false
+      - text: Amazon Kinesis Data Streams, because it can ingest and store high-throughput streaming data from various application-level event sources.
+        is_correct: false
+      - text: Amazon Redshift, because it provides a scalable data warehouse environment for performing complex analytical queries on migrated financial data.
+        is_correct: false
+    explanation: |
+      Correct: DMS supports both full load and ongoing change data capture (CDC) for continuous replication and streaming to AWS targets.
+    diagram: |
+      graph TD
+        OnPrem[On-Prem DB] --> DMS[DMS]
+        DMS --> Redshift[Redshift]
+        DMS --> S3[S3]
+
+  - id: q10
+    type: multiple_choice
+    question: |
+      A SaaS provider needs to process streaming data in real time and perform ETL transformations before loading it into a data lake. Which AWS service can run serverless streaming ETL jobs and integrate with other AWS analytics services?
+    options:
+      - text: AWS Glue Streaming, because it provides serverless ETL for streaming data and integrates with S3, Redshift, and other analytics services.
+        is_correct: true
+      - text: Amazon S3, because it provides a scalable storage foundation for a data lake and can store raw streaming data for later batch transformation.
+        is_correct: false
+      - text: Amazon Kinesis Data Streams, because it can ingest high-throughput streaming data and provide a buffer for real-time processing applications.
+        is_correct: false
+      - text: Amazon Redshift, because it is a data warehouse that can ingest streaming data and provide a platform for running SQL-based analytical queries.
+        is_correct: false
+    explanation: |
+      Correct: AWS Glue Streaming can process streaming data in real time, perform ETL, and write results to S3, Redshift, and more.
+    diagram: |
+      graph TD
+        Stream[Streaming Data] --> Glue[Glue Streaming]
+        Glue --> S3[S3]
+        Glue --> Redshift[Redshift]
+
+  - id: q11
+    type: multiple_choice
+    question: |
+      A business intelligence team wants to ingest streaming data directly into their data warehouse for near real-time analytics. Which AWS service allows direct streaming ingestion into the data warehouse?
+    options:
+      - text: Amazon Redshift Streaming Ingestion, because it enables direct ingestion of streaming data from Kinesis, MSK, and other sources into Redshift.
+        is_correct: true
+      - text: Amazon S3, because it can store streaming data that is periodically loaded into the data warehouse using standard batch processing tools.
+        is_correct: false
+      - text: AWS Lambda, because it can be triggered by streaming data events to transform records before writing them to the data warehouse manually.
+        is_correct: false
+      - text: Amazon EMR, because it can process large datasets from streaming sources and write the resulting output into the data warehouse for analysis.
+        is_correct: false
+    explanation: |
+      Correct: Redshift Streaming Ingestion allows direct, low-latency ingestion of streaming data into Redshift for analytics.
+    diagram: |
+      graph TD
+        Stream[Streaming Source] --> Redshift[Redshift Streaming Ingestion]
+        Redshift --> BI[BI Analytics]
+
+  - id: q12
+    type: multiple_choice
+    question: |
+      A genomics research lab needs to ingest and process large batch files of DNA sequence data for analysis. Which AWS service is best suited for storing and managing these files before processing?
+    options:
+      - text: Amazon S3, because it provides durable, scalable object storage for large files and integrates with many AWS analytics services.
+        is_correct: true
+      - text: Amazon Kinesis Data Streams, because it provides a managed service for ingesting high-throughput streaming data from real-time sequencing devices.
+        is_correct: false
+      - text: AWS Lambda, because it offers a serverless compute environment that can be triggered to run processing code whenever new sequence data is uploaded.
+        is_correct: false
+      - text: Amazon Redshift, because it provides a high-performance data warehouse for storing and querying the final results of DNA sequence analysis.
+        is_correct: false
+    explanation: |
+      Correct: S3 is the primary storage service for large batch files and integrates with Glue, EMR, Redshift, and more for analytics.
+    diagram: |
+      graph TD
+        DNA[DNA Files] --> S3[S3]
+        S3 --> Processing[Processing]
+
+  - id: q13
+    type: multiple_choice
+    question: |
+      A marketing analytics team needs to run scheduled ETL jobs to process daily campaign data and load it into a data warehouse. Which AWS service provides managed, serverless ETL for batch data and integrates with S3 and Redshift?
+    options:
+      - text: AWS Glue, because it provides managed, serverless ETL for batch data and integrates with S3, Redshift, and other services.
+        is_correct: true
+      - text: Amazon Kinesis Data Streams, because it can ingest and buffer streaming data from various marketing platforms for real-time processing.
+        is_correct: false
+      - text: Amazon S3, because it provides a scalable storage platform that can host daily campaign data files until they are ready for processing.
+        is_correct: false
+      - text: Amazon Redshift, because it is a massively parallel processing data warehouse designed for running analytical queries on large marketing datasets.
+        is_correct: false
+    explanation: |
+      Correct: AWS Glue is designed for batch ETL and integrates with S3, Redshift, and more.
+    diagram: |
+      graph TD
+        Campaign[Campaign Data] --> Glue[Glue]
+        Glue --> Redshift[Redshift]
+
+  - id: q14
+    type: multiple_choice
+    question: |
+      A financial services company needs to process large volumes of historical transaction data in batch for compliance reporting. Which AWS service provides a managed big data platform for large-scale batch processing?
+    options:
+      - text: Amazon EMR, because it provides a managed Hadoop/Spark platform for large-scale batch data processing and analysis.
+        is_correct: true
+      - text: Amazon Kinesis Data Streams, because it provides a highly scalable service for ingesting and storing high-throughput streaming transaction data.
+        is_correct: false
+      - text: Amazon S3, because it provides a cost-effective and durable object storage solution for archiving historical transaction data for long-term retention.
+        is_correct: false
+      - text: Amazon Redshift, because it provides a high-performance data warehouse environment for running complex SQL queries on compliance-related datasets.
+        is_correct: false
+    explanation: |
+      Correct: EMR is a managed big data platform for batch processing using Hadoop, Spark, and other frameworks.
+    diagram: |
+      graph TD
+        Transactions[Transactions] --> EMR[EMR]
+        EMR --> Reports[Compliance Reports]
+
+  - id: q15
+    type: multiple_choice
+    question: |
+      A multinational enterprise is migrating multiple databases to AWS and needs to perform one-time and ongoing batch data migrations to AWS targets. Which AWS service supports both full and incremental batch migrations?
+    options:
+      - text: AWS Database Migration Service (DMS), because it supports both full and ongoing batch migrations to various AWS targets.
+        is_correct: true
+      - text: Amazon Kinesis Data Streams, because it provides a managed platform for ingesting real-time data from various application and system sources.
+        is_correct: false
+      - text: Amazon S3, because it provides a scalable and durable storage environment for holding database backups and snapshots during the migration process.
+        is_correct: false
+      - text: Amazon Redshift, because it is a specialized data warehouse that can perform high-speed analytical processing on migrated enterprise data.
+        is_correct: false
+    explanation: |
+      Correct: DMS supports both full and incremental batch migrations for databases to AWS targets.
+    diagram: |
+      graph TD
+        DBs[Databases] --> DMS[DMS]
+        DMS --> Redshift[Redshift]
+        DMS --> S3[S3]
+
+  - id: q16
+    type: multiple_choice
+    question: |
+      A retail analytics team needs to load large CSV files into their data warehouse for monthly sales analysis. Which AWS service provides high-performance batch loading and supports direct integration with S3?
+    options:
+      - text: Amazon Redshift, because it supports high-performance batch loading from S3 and other sources and is optimized for analytics.
+        is_correct: true
+      - text: Amazon Kinesis Data Streams, because it allows for the ingestion of high-throughput streaming data which can then be processed in real time.
+        is_correct: false
+      - text: AWS Lambda, because it provides a serverless compute platform that can be triggered to run custom logic when files are uploaded to storage.
+        is_correct: false
+      - text: Amazon EMR, because it provides a managed big data framework that can process and transform large CSV datasets using Spark or Hadoop.
+        is_correct: false
+    explanation: |
+      Correct: Redshift supports high-performance batch loading from S3 and is optimized for analytics workloads.
+    diagram: |
+      graph TD
+        CSV[CSV Files] --> S3[S3]
+        S3 --> Redshift[Redshift]
+
+  - id: q17
+    type: multiple_choice
+    question: |
+      A startup wants to trigger batch processing of uploaded images as soon as they arrive in S3, without managing servers. Which AWS service enables event-driven batch processing in response to S3 uploads?
+    options:
+      - text: AWS Lambda, because it can be triggered by S3 events to run serverless batch processing code without managing any infrastructure.
+        is_correct: true
+      - text: Amazon Kinesis Data Streams, because it can ingest high-velocity data and provide a buffer for processing streaming events as they occur.
+        is_correct: false
+      - text: Amazon S3, because it provides a durable storage layer that can store large amounts of image data until a manual batch process is initiated.
+        is_correct: false
+      - text: Amazon Redshift, because it is a powerful data warehouse that can store metadata about images and perform complex SQL-based image analytics.
+        is_correct: false
+    explanation: |
+      Correct: Lambda can be triggered by S3 event notifications to run code for batch processing without server management.
+    diagram: |
+      graph TD
+        Images[Images in S3] --> Lambda[Lambda]
+        Lambda --> Processed[Processed Images]
+
+  - id: q18
+    type: multiple_choice
+    question: |
+      A SaaS company needs to ingest customer data from Salesforce and other SaaS applications into AWS for analytics. Which AWS service provides managed, no-code batch data integration from SaaS apps to AWS services like S3 and Redshift?
+    options:
+      - text: Amazon AppFlow, because it provides managed, no-code batch data integration from SaaS applications to various AWS services.
+        is_correct: true
+      - text: Amazon Kinesis Data Streams, because it provides a platform for ingesting and processing high-throughput streaming data from real-time sources.
+        is_correct: false
+      - text: Amazon S3, because it offers a scalable object storage solution that can hold large amounts of SaaS data once it has been exported manually.
+        is_correct: false
+      - text: Amazon Redshift, because it is a data warehouse that can perform high-speed analytical processing on data once it has been loaded into the cluster.
+        is_correct: false
+    explanation: |
+      Correct: AppFlow provides managed, no-code batch data integration from SaaS apps to AWS services like S3 and Redshift.
+    diagram: |
+      graph TD
+        SaaS[SaaS Apps] --> AppFlow[AppFlow]
+        AppFlow --> S3[S3]
+        AppFlow --> Redshift[Redshift]
+
+  - id: q19
+    type: multiple_choice
+    question: |
+      A data engineering team needs to optimize their batch ingestion jobs to minimize cost and maximize throughput. Which configuration option is most important to consider for efficient batch ingestion in AWS Glue?
+    options:
+      - text: Tuning the number of DPUs and partitioning strategy to match the specific data volume and complexity of the transformation job.
+        is_correct: true
+      - text: Increasing the S3 bucket versioning depth to ensure that all historical versions of the data are available for recovery during the ingestion process.
+        is_correct: false
+      - text: Using DynamoDB Streams to capture all incoming batch data and rely on internal DynamoDB triggers to initiate the transformation logic.
+        is_correct: false
+      - text: Disabling job retries in the Glue environment to ensure that the system does not consume extra DPUs when processing failures occur.
+        is_correct: false
+    explanation: |
+      Correct: Adjusting DPUs and partitioning ensures Glue jobs are cost-effective and performant for batch ingestion.
+    diagram: |
+      graph TD
+        Data[Batch Data] --> Glue[Glue Job]
+        Glue --> S3[S3]
+
+  - id: q20
+    type: multiple_choice
+    question: |
+      A fintech company needs to integrate with a third-party service to retrieve real-time exchange rates for analytics. Which AWS approach is best for consuming external data APIs securely and reliably?
+    options:
+      - text: Use AWS Lambda with VPC endpoints and API Gateway to securely call the external API and process the incoming exchange rate data.
+        is_correct: true
+      - text: Use Amazon S3 to store pre-fetched API responses and utilize S3 event notifications to trigger downstream processing of the exchange rates.
+        is_correct: false
+      - text: Use Amazon Kinesis Data Streams to establish a direct connection to the external API and ingest the streaming exchange data into a buffer.
+        is_correct: false
+      - text: Use Amazon Redshift to execute direct SQL queries against the external API endpoint and store the resulting data into a specialized warehouse table.
+        is_correct: false
+    explanation: |
+      Correct: Lambda with API Gateway and VPC endpoints provides secure, scalable API consumption and processing.
+    diagram: |
+      graph TD
+        API[External API] --> APIGW[API Gateway] --> Lambda[Lambda]
+        Lambda --> Analytics[Analytics]
+
+  - id: q21
+    type: multiple_choice
+    question: |
+      A logistics company wants to run ETL jobs every hour without manual intervention. Which AWS service is best for setting up serverless, event-driven scheduling of these jobs?
+    options:
+      - text: Amazon EventBridge Scheduler, because it can trigger jobs on a precise cron or rate schedule without the need to manage servers.
+        is_correct: true
+      - text: Amazon S3 Event Notifications, because it can trigger processing tasks automatically whenever a new object is uploaded to a specific bucket.
+        is_correct: false
+      - text: Amazon Redshift, because it provides a scheduled query feature that can perform basic data transformations within the data warehouse environment.
+        is_correct: false
+      - text: AWS Lambda, because it can be programmed to run custom code that checks the current time and executes downstream ETL logic accordingly.
+        is_correct: false
+    explanation: |
+      Correct: EventBridge Scheduler is designed for time-based, serverless job scheduling.
+    diagram: |
+      graph TD
+        Schedule[Hourly Schedule] --> EventBridge[EventBridge Scheduler]
+        EventBridge --> ETL[ETL Job]
+
+  - id: q22
+    type: multiple_choice
+    question: |
+      A data science team needs to orchestrate complex, multi-step data pipelines with dependencies and retries. Which AWS service is best for workflow scheduling and management using Python code?
+    options:
+      - text: Amazon Managed Workflows for Apache Airflow (MWAA), because it provides managed Apache Airflow for complex workflow orchestration.
+        is_correct: true
+      - text: Amazon EventBridge, because it provides a simple event-driven mechanism to schedule individual tasks based on a specific time or system state.
+        is_correct: false
+      - text: AWS Lambda, because it can run individual serverless functions that can be linked together manually to form a data processing pipeline.
+        is_correct: false
+      - text: Amazon S3, because it can act as a central storage repository for data files that trigger different stages of a pipeline via event notifications.
+        is_correct: false
+    explanation: |
+      Correct: MWAA is a managed Airflow service for complex workflow orchestration using Python DAGs.
+    diagram: |
+      graph TD
+        Steps[Pipeline Steps] --> Airflow[Airflow DAG]
+        Airflow --> Jobs[Jobs]
+
+  - id: q23
+    type: multiple_choice
+    question: |
+      A retail company wants to run daily data crawlers and ETL jobs at specific times. Which AWS feature allows them to set up time-based schedules for these jobs?
+    options:
+      - text: Use cron or rate expressions in EventBridge Scheduler or Glue triggers to schedule the execution of jobs and crawlers at specific times.
+        is_correct: true
+      - text: Use S3 Event Notifications to trigger a Lambda function that monitors a schedule and initiates the Glue crawler based on a specific file timestamp.
+        is_correct: false
+      - text: Use DynamoDB Streams to track the passage of time by writing dummy records and using the stream to trigger the execution of scheduled ETL tasks.
+        is_correct: false
+      - text: Use Redshift Spectrum to define a schedule within the external table metadata that dictates when the underlying data should be scanned and crawled.
+        is_correct: false
+    explanation: |
+      Correct: EventBridge Scheduler and Glue triggers support cron/rate expressions for time-based job and crawler scheduling.
+    diagram: |
+      graph TD
+        Time[Time-based Schedule] --> EventBridge[EventBridge]
+        EventBridge --> Glue[Glue Crawler]
+
+  - id: q24
+    type: multiple_choice
+    question: |
+      A media company wants to process images as soon as they are uploaded to S3. Which AWS feature enables event-driven processing in response to S3 object creation?
+    options:
+      - text: Amazon S3 Event Notifications, because they can trigger automated actions like AWS Lambda functions in response to specific object events.
+        is_correct: true
+      - text: Amazon EventBridge Scheduler, because it can be configured to poll the S3 bucket on a high-frequency schedule to detect new object creation.
+        is_correct: false
+      - text: Amazon Redshift, because it provides an Auto-Copy feature that can automatically ingest files from S3 and trigger a stored procedure for processing.
+        is_correct: false
+      - text: AWS Glue, because it can be configured with a crawler that runs on a continuous schedule to detect new image files and perform ETL operations.
+        is_correct: false
+    explanation: |
+      Correct: S3 Event Notifications can trigger Lambda or other services on object creation events.
+    diagram: |
+      graph TD
+        Upload[Image Upload] --> S3[S3]
+        S3 --> Lambda[Lambda]
+
+  - id: q25
+    type: multiple_choice
+    question: |
+      A SaaS provider wants to trigger ETL jobs in response to business events, such as new customer signups, across multiple AWS services. Which AWS service enables event-driven orchestration for these scenarios?
+    options:
+      - text: Amazon EventBridge, because it can route events from many AWS services to various targets like Lambda, Step Functions, and Glue.
+        is_correct: true
+      - text: Amazon S3 Event Notifications, because it provides a reliable way to trigger processing logic specifically when a signup file is stored in a bucket.
+        is_correct: false
+      - text: Amazon Redshift, because it can act as a central event log that stores business records and uses SQL triggers to initiate downstream data processing.
+        is_correct: false
+      - text: AWS Lambda, because it provides the serverless compute capability required to write custom logic that responds to various application-level events.
+        is_correct: false
+    explanation: |
+      Correct: EventBridge enables event-driven orchestration across AWS services for a wide range of business events.
+    diagram: |
+      graph TD
+        Event[Business Event] --> EventBridge[EventBridge]
+        EventBridge --> Glue[Glue Job]
+        EventBridge --> Lambda[Lambda]
+
+  - id: q26
+    type: multiple_choice
+    question: |
+      A streaming analytics team wants to process data in real time as it arrives in Kinesis. Which AWS feature allows them to trigger Lambda functions directly from Kinesis streams?
+    options:
+      - text: Configure Kinesis as an event source for Lambda to process records in real time using the Lambda event source mapping feature.
+        is_correct: true
+      - text: Use S3 Event Notifications to trigger a Lambda function whenever Kinesis Data Firehose writes a batch of streaming data into an S3 bucket.
+        is_correct: false
+      - text: Use Redshift Spectrum to create a view over the Kinesis stream and utilize a Redshift trigger to invoke a Lambda function for each new record.
+        is_correct: false
+      - text: Use Glue triggers to monitor the Kinesis stream metadata and invoke a Lambda function whenever the data volume reaches a certain threshold.
+        is_correct: false
+    explanation: |
+      Correct: Lambda can be directly triggered by Kinesis streams for real-time processing.
+    diagram: |
+      graph TD
+        Stream[Kinesis Stream] --> Lambda[Lambda]
+        Lambda --> Processed[Processed Data]
+
+  - id: q27
+    type: multiple_choice
+    question: |
+      A financial services company needs to restrict access to sensitive data sources to a specific set of IP addresses. Which AWS security feature should they use to allowlist IPs for data source connections?
+    options:
+      - text: Configure security groups or network ACLs to allow only specific IP addresses to access the data sources at the network layer.
+        is_correct: true
+      - text: Use IAM roles and policies to define a Condition element that restricts access based on the source IP address of the requester.
+        is_correct: false
+      - text: Use S3 bucket policies exclusively to manage the access control lists and define the allowable IP ranges for all incoming data traffic.
+        is_correct: false
+      - text: Use Lambda environment variables to store a list of authorized IP addresses and check the source IP in the application code.
+        is_correct: false
+    explanation: |
+      Correct: Security groups and network ACLs are used to allowlist IPs for network access to AWS resources.
+    diagram: |
+      graph TD
+        User[User] --> SG[Security Group]
+        SG --> Data[Data Source]
+
+  - id: q28
+    type: multiple_choice
+    question: |
+      A gaming company experiences throttling errors when writing high volumes of data to DynamoDB during peak hours. What is the best way to overcome rate limits and ensure reliable ingestion?
+    options:
+      - text: Enable DynamoDB auto scaling and implement exponential backoff with retries in the application to handle transient throughput capacity issues.
+        is_correct: true
+      - text: Increase the S3 bucket size and utilize S3 Transfer Acceleration to bypass the network bottlenecks causing the DynamoDB write delays.
+        is_correct: false
+      - text: Use Redshift Spectrum as an intermediate ingestion layer to buffer the data before performing a bulk load into the DynamoDB tables.
+        is_correct: false
+      - text: Use Lambda to batch multiple write requests into a single operation while disabling application-level retries to maximize throughput.
+        is_correct: false
+    explanation: |
+      Correct: Auto scaling and exponential backoff help manage throughput and avoid throttling in DynamoDB.
+    diagram: |
+      graph TD
+        App[App] --> DynamoDB[DynamoDB]
+        DynamoDB -.->|Throttling| App
+        App -.->|Backoff/Retry| DynamoDB
+
+  - id: q29
+    type: multiple_choice
+    question: |
+      A SaaS provider's application is hitting connection limits and experiencing throttling on its Amazon RDS database during traffic spikes. What is the best way to overcome these rate limits?
+    options:
+      - text: Use RDS Proxy to pool database connections and implement retry logic with exponential backoff in the application layer.
+        is_correct: true
+      - text: Increase the S3 bucket storage class to Intelligent-Tiering to ensure that database logs are handled more efficiently during high-traffic periods.
+        is_correct: false
+      - text: Use DynamoDB Streams to offload all incoming database writes to a NoSQL table during peak spikes and then migrate them back to RDS later.
+        is_correct: false
+      - text: Use AWS Lambda to batch database write operations into larger transactions without implementing any custom retry or backoff logic.
+        is_correct: false
+    explanation: |
+      Correct: RDS Proxy pools connections and retry logic helps manage rate limits and throttling.
+    diagram: |
+      graph TD
+        App[App] --> RDS[RDS]
+        RDS -.->|Throttling| App
+        App -.->|Backoff/Retry| RDS
+
+  - id: q30
+    type: multiple_choice
+    question: |
+      A social media analytics platform is experiencing throttling when ingesting large volumes of streaming data into Kinesis. What is the best way to overcome Kinesis rate limits and ensure smooth data flow?
+    options:
+      - text: Increase the number of Kinesis shards and implement retry logic with exponential backoff in the producer application to handle high throughput.
+        is_correct: true
+      - text: Use S3 Event Notifications to trigger a secondary ingestion process that bypasses Kinesis and writes data directly to a processing cluster.
+        is_correct: false
+      - text: Utilize DynamoDB Streams to replicate the incoming data across multiple tables to distribute the write load more effectively across the account.
+        is_correct: false
+      - text: Design a Lambda function that automatically scales the Kinesis stream based on the current CPU utilization of the producer EC2 instances.
+        is_correct: false
+    explanation: |
+      Correct: Increasing shards and using retries with backoff handles Kinesis limits effectively.

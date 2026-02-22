@@ -1,0 +1,193 @@
+questions:
+  - id: q1
+    type: multiple_choice
+    question: |
+      A retail company needs to design an ETL pipeline to process sales and inventory data according to business requirements. What is the first step in creating an effective ETL pipeline?
+    options:
+      - text: Gather business requirements and define the data transformation logic and workflow.
+        is_correct: true
+      - text: Provision an EMR cluster with Spark to ensure high-performance processing capabilities.
+        is_correct: false
+      - text: Implement a visualization layer using Amazon QuickSight to map out the desired end-state.
+        is_correct: false
+      - text: Configure S3 bucket policies and lifecycle rules to manage the primary data lake storage.
+        is_correct: false
+    explanation: |
+      Correct: Understanding business requirements is essential for designing the ETL pipeline logic and workflow.
+    diagram: |
+      graph TD
+        Requirements[Business Requirements] --> Design[ETL Pipeline Design]
+  - id: q2
+    type: multiple_choice
+    question: |
+      A genomics research lab processes both structured patient records and unstructured DNA sequence files. Which concept is most important for designing a pipeline that handles these data types efficiently?
+    options:
+      - text: Consider the volume, velocity, and variety of data to choose appropriate storage and processing solutions.
+        is_correct: true
+      - text: Standardize all incoming data into a strictly relational schema using AWS DMS for consistency.
+        is_correct: false
+      - text: Implement a schema-on-write approach to filter out unstructured files during the ingestion phase.
+        is_correct: false
+      - text: Deploy a high-memory EC2 instance to centralize all sequence processing and record management.
+        is_correct: false
+    explanation: |
+      Correct: Volume, velocity, and variety are key factors in big data pipeline design.
+    diagram: |
+      graph TD
+        Structured[Structured Data] --> Pipeline[Pipeline]
+        Unstructured[Unstructured Data] --> Pipeline
+  - id: q3
+    type: multiple_choice
+    question: |
+      A startup wants to scale its data processing workloads dynamically and cost-effectively. Which approach leverages cloud computing and distributed computing principles?
+    options:
+      - text: Use managed distributed services like Amazon EMR or AWS Glue to process data in parallel across multiple nodes.
+        is_correct: true
+      - text: Consolidate workloads onto a high-performance on-premises server to reduce cloud egress latency.
+        is_correct: false
+      - text: Develop custom Python scripts to be executed sequentially via cron jobs on a persistent instance.
+        is_correct: false
+      - text: Store all active datasets in local block storage to maximize I/O performance during peak usage.
+        is_correct: false
+    explanation: |
+      Correct: Cloud and distributed computing enable scalable, parallel data processing.
+    diagram: |
+      graph TD
+        Data[Data] --> EMR[EMR Cluster]
+        Data --> Glue[Glue]
+  - id: q4
+    type: multiple_choice
+    question: |
+      A financial analytics team needs to process large datasets using Apache Spark. Which AWS service provides a managed Spark environment for scalable data processing?
+    options:
+      - text: Amazon EMR, because it provides a managed Apache Spark environment for big data processing.
+        is_correct: true
+      - text: Amazon S3, because its intelligent tiering optimizes data retrieval for Spark applications.
+        is_correct: false
+      - text: AWS Lambda, because its event-driven model can trigger Spark jobs via the Boto3 SDK.
+        is_correct: false
+      - text: Amazon Redshift, because its columnar storage architecture is designed for high-concurrency SQL.
+        is_correct: false
+    explanation: |
+      Correct: EMR provides a managed Spark environment for scalable analytics.
+    diagram: |
+      graph TD
+        Data[Large Data] --> EMR[EMR Spark]
+        EMR --> Results[Results]
+  - id: q5
+    type: multiple_choice
+    question: |
+      A data engineering team needs to temporarily store intermediate results between ETL steps. What is the best practice for handling intermediate data staging in AWS?
+    options:
+      - text: Use Amazon S3 or Amazon Redshift staging tables for intermediate data storage.
+        is_correct: true
+      - text: Store the intermediate state within Lambda environment variables to minimize external I/O.
+        is_correct: false
+      - text: Utilize the ephemeral local instance store on EC2 workers to minimize storage costs.
+        is_correct: false
+      - text: Stream data directly between pipeline stages without persisting intermediate results to disk.
+        is_correct: false
+    explanation: |
+      Correct: S3 and Redshift staging tables are commonly used for intermediate data in ETL pipelines.
+    diagram: |
+      graph TD
+        Step1[ETL Step 1] --> S3[S3 Staging]
+        S3 --> Step2[ETL Step 2]
+  - id: q6
+    type: multiple_choice
+    question: |
+      A video streaming company runs analytics workloads in containers on Amazon EKS. What is a key strategy for optimizing container usage for performance?
+    options:
+      - text: Right-size EKS pods and nodes, and use auto scaling to match workload demand.
+        is_correct: true
+      - text: Consolidate all containerized microservices onto a single high-capacity bare metal node.
+        is_correct: false
+      - text: Remove all resource requests and limits to allow containers to consume available host memory.
+        is_correct: false
+      - text: Restrict node selection to on-demand EC2 instances to prevent interruptions during processing.
+        is_correct: false
+    explanation: |
+      Correct: Right-sizing and auto scaling optimize EKS performance and cost.
+    diagram: |
+      graph TD
+        Workload[Workload] --> EKS[EKS Cluster]
+        EKS --> Results[Results]
+  - id: q7
+    type: multiple_choice
+    question: |
+      A SaaS provider runs containerized ETL jobs on Amazon ECS. What is a best practice for optimizing container usage for performance and cost?
+    options:
+      - text: Use ECS Service Auto Scaling and tune task CPU/memory settings to match job requirements.
+        is_correct: true
+      - text: Implement a monolithic task definition to run all sequential ETL steps in a single container.
+        is_correct: false
+      - text: Deactivate resource constraints to allow the scheduler to oversubscribe the underlying cluster.
+        is_correct: false
+      - text: Rely exclusively on Fargate Spot instances for time-critical production data transformations.
+        is_correct: false
+    explanation: |
+      Correct: ECS Service Auto Scaling and tuning resource settings optimize performance and cost.
+    diagram: |
+      graph TD
+        ETL[ETL Job] --> ECS[ECS Cluster]
+        ECS --> Results[Results]
+  - id: q8
+    type: multiple_choice
+    question: |
+      A data integration team needs to connect to multiple relational databases from their ETL pipeline. Which approach enables secure, scalable connectivity to different data sources?
+    options:
+      - text: Use JDBC or ODBC connectors in Glue, EMR, or Redshift to connect to external databases.
+        is_correct: true
+      - text: Centralize all source data into a single S3 bucket using a flat-file replication strategy.
+        is_correct: false
+      - text: Manage database credentials and connection strings via Lambda environment variables.
+        is_correct: false
+      - text: Utilize Redshift Spectrum to create external schemas for all remote relational data sources.
+        is_correct: false
+    explanation: |
+      Correct: JDBC/ODBC connectors are standard for connecting to external databases in AWS ETL services.
+    diagram: |
+      graph TD
+        ETL[ETL Pipeline] --> JDBC[JDBC/ODBC]
+        JDBC --> DB[Database]
+  - id: q9
+    type: multiple_choice
+    question: |
+      A logistics company needs to combine shipment data from S3, RDS, and a partner API for unified analytics. What is the best practice for integrating data from multiple sources?
+    options:
+      - text: Use ETL jobs in Glue or EMR to extract, join, and transform data from all sources before loading to analytics.
+        is_correct: true
+      - text: Migrate all datasets to a unified S3 data lake using a one-size-fits-all ingestion script.
+        is_correct: false
+      - text: Focus analytics exclusively on internal RDS and S3 data to maintain strict security compliance.
+        is_correct: false
+      - text: Orchestrate the entire integration logic within a single AWS Lambda function to simplify the architecture.
+        is_correct: false
+    explanation: |
+      Correct: Glue and EMR can integrate and transform data from multiple sources for analytics.
+    diagram: |
+      graph TD
+        S3[S3] --> ETL[ETL Job]
+        RDS[RDS] --> ETL
+        API[Partner API] --> ETL
+        ETL --> Analytics[Analytics]
+  - id: q10
+    type: multiple_choice
+    question: |
+      A startup wants to minimize costs while processing large volumes of data for analytics. Which strategy is most effective for optimizing costs in AWS data processing?
+    options:
+      - text: Use spot instances, auto scaling, and serverless services like Glue and Lambda to match resources to workload demand.
+        is_correct: true
+      - text: Utilize on-demand EC2 instances exclusively to ensure 100% availability for all jobs.
+        is_correct: false
+      - text: Overprovision cluster resources based on peak loads to prevent job failures during spikes.
+        is_correct: false
+      - text: Adopt a fixed-capacity infrastructure model to maintain a predictable monthly billing cycle.
+        is_correct: false
+    explanation: |
+      Correct: Spot, auto scaling, and serverless services optimize cost and resource usage.
+    diagram: |
+      graph TD
+        Data[Data] --> Glue[Glue]
+        Data --> Lambda[Lambda]
+        Data --> EMR[EMR]

@@ -1,0 +1,778 @@
+questions:
+  - id: q1
+    type: multiple_choice
+    question: |
+      A data engineering team needs to ensure their AWS data processing workflows produce consistent, repeatable business outcomes. What is a best practice for maintaining and troubleshooting these workflows?
+    options:
+      - text: Implement monitoring, logging, and automated alerts using CloudWatch and review workflow execution history for failures.
+        is_correct: true
+      - text: Utilize manual status checks through the AWS Management Console only when business stakeholders report data discrepancies.
+        is_correct: false
+      - text: Rely on default service-level configurations and minimize custom instrumentation to reduce architectural and operational complexity.
+        is_correct: false
+      - text: Deactivate automated error notifications and log streams to optimize system performance and prevent operational alert fatigue.
+        is_correct: false
+    explanation: |
+      Correct: Monitoring, logging, and automated alerts help maintain repeatable outcomes and simplify troubleshooting.
+    diagram: |
+      graph TD
+        Workflow[Workflow] --> Monitoring[Monitoring]
+        Monitoring --> Alerts[Alerts]
+
+  - id: q2
+    type: multiple_choice
+    question: |
+      A developer needs to automate data processing tasks in AWS. Which approach allows programmatic control over AWS data services?
+    options:
+      - text: Use AWS SDKs to make API calls to services like Glue, Redshift, and EMR for data processing operations.
+        is_correct: true
+      - text: Leverage the AWS Management Console exclusively for all administrative and operational data processing execution tasks.
+        is_correct: false
+      - text: Restrict service interactions to internal network triggers and avoid public API endpoints to minimize potential security risks.
+        is_correct: false
+      - text: Execute localized shell scripts that bypass standard authentication protocols to accelerate automation and deployment cycles.
+        is_correct: false
+    explanation: |
+      Correct: AWS SDKs and APIs enable automation and integration for data processing.
+    diagram: |
+      graph TD
+        Code[Code] --> API[API Calls]
+        API --> Service[AWS Service]
+
+  - id: q3
+    type: multiple_choice
+    question: |
+      Which AWS services support scripting for custom data processing logic?
+    options:
+      - text: Amazon EMR, AWS Glue, and Amazon Redshift all support scripting for data processing.
+        is_correct: true
+      - text: Amazon S3 serves as the primary and exclusive service for implementing custom scripting and data processing logic.
+        is_correct: false
+      - text: Custom scripting and procedural logic are not supported natively within any managed AWS data or storage service.
+        is_correct: false
+      - text: AWS Lambda is the only service in the AWS ecosystem that allows for the execution of custom scripts for data tasks.
+        is_correct: false
+    explanation: |
+      Correct: EMR, Glue, and Redshift all allow scripting for custom data processing.
+    diagram: |
+      graph TD
+        EMR[EMR] --> Script[Scripting]
+        Glue[Glue] --> Script
+        Redshift[Redshift] --> Script
+
+  - id: q4
+    type: multiple_choice
+    question: |
+      A data engineer needs to orchestrate complex data pipelines in AWS. Which services are best suited for this task?
+    options:
+      - text: Use Amazon MWAA and AWS Step Functions to coordinate and automate data pipeline workflows.
+        is_correct: true
+      - text: Implement manual invocation triggers for each individual pipeline stage to ensure human oversight of the workflow.
+        is_correct: false
+      - text: Utilize Amazon S3 event notifications as the sole mechanism for orchestrating complex, multi-stage data pipelines.
+        is_correct: false
+      - text: Deploy AWS CloudFormation templates to manage the direct execution and sequencing of analytical data processing.
+        is_correct: false
+    explanation: |
+      Correct: MWAA and Step Functions are designed for orchestrating complex workflows.
+    diagram: |
+      graph TD
+        Pipeline[Pipeline] --> MWAA[MWAA]
+        Pipeline --> Step[Step Functions]
+
+  - id: q5
+    type: multiple_choice
+    question: |
+      An operations team is troubleshooting a failed AWS Glue workflow. What is the best first step?
+    options:
+      - text: Review the workflow's run history and logs in the AWS Glue console to identify errors.
+        is_correct: true
+      - text: Perform an immediate redeployment of the workflow assets to production without performing a root cause analysis.
+        is_correct: false
+      - text: Terminate the existing workflow and recreate the entire metadata catalog and job script from the original source code.
+        is_correct: false
+      - text: Suspend further investigation and allow the system to attempt recovery during the next scheduled execution window.
+        is_correct: false
+    explanation: |
+      Correct: Reviewing logs and run history is essential for troubleshooting managed workflows.
+    diagram: |
+      graph TD
+        Workflow[Workflow] --> Logs[Logs]
+        Logs --> Troubleshoot[Troubleshoot]
+
+  - id: q6
+    type: multiple_choice
+    question: |
+      A developer wants to access AWS features from their application code. What is the recommended approach?
+    options:
+      - text: Use AWS SDKs to call AWS service APIs directly from the application code.
+        is_correct: true
+      - text: Execute AWS CLI commands through system-level subroutines for all necessary application integrations and data flows.
+        is_correct: false
+      - text: Store static access credentials directly within the application source files to facilitate rapid API authentication.
+        is_correct: false
+      - text: Design the application architecture to avoid any programmatic calls to AWS SDKs or managed service API endpoints.
+        is_correct: false
+    explanation: |
+      Correct: AWS SDKs provide secure, programmatic access to AWS features from code.
+    diagram: |
+      graph TD
+        App[App] --> SDK[SDK]
+        SDK --> AWS[AWS Service]
+
+  - id: q7
+    type: multiple_choice
+    question: |
+      A data analyst needs to process and transform data using AWS managed services. Which services can be used for this purpose?
+    options:
+      - text: Amazon EMR, Amazon Redshift, and AWS Glue all provide features for data processing and transformation.
+        is_correct: true
+      - text: Amazon S3 is the primary managed service designed specifically to process and transform complex data structures.
+        is_correct: false
+      - text: Deploy AWS Lambda functions as the exclusive mechanism for handling all enterprise-level data processing workloads.
+        is_correct: false
+      - text: Utilize unmanaged EC2 instances only and avoid AWS managed services for executing data transformation logic.
+        is_correct: false
+    explanation: |
+      Correct: EMR, Redshift, and Glue are designed for data processing and transformation.
+    diagram: |
+      graph TD
+        Data[Data] --> EMR[EMR]
+        Data --> Redshift[Redshift]
+        Data --> Glue[Glue]
+
+  - id: q8
+    type: multiple_choice
+    question: |
+      A team needs to make data available to other systems via APIs. What is the best AWS approach?
+    options:
+      - text: Build and maintain data APIs using AWS API Gateway and Lambda to expose data securely.
+        is_correct: true
+      - text: Configure public Amazon S3 buckets to host raw data files for direct access by all external system integrations.
+        is_correct: false
+      - text: Leverage SMTP services and email distribution lists to transmit processed data files to downstream consumer systems.
+        is_correct: false
+      - text: Implement a policy to avoid API-based data sharing and rely solely on direct database connections for third parties.
+        is_correct: false
+    explanation: |
+      Correct: API Gateway and Lambda enable secure, scalable data APIs.
+    diagram: |
+      graph TD
+        Data[Data] --> API[API Gateway]
+        API --> Lambda[Lambda]
+
+  - id: q9
+    type: multiple_choice
+    question: |
+      A data engineer needs to prepare data for analytics using a visual, no-code tool. Which AWS service is best suited for this task?
+    options:
+      - text: Use AWS Glue DataBrew to visually transform and prepare data for analytics.
+        is_correct: true
+      - text: Implement AWS CLI scripts to handle the end-to-end data preparation and cleaning workflow via the command line.
+        is_correct: false
+      - text: Utilize local spreadsheet software for manual data cleaning before performing an upload to the AWS environment.
+        is_correct: false
+      - text: Bypass the data preparation stage entirely and perform analytical queries on raw, unformatted data sources.
+        is_correct: false
+    explanation: |
+      Correct: Glue DataBrew provides a visual, no-code interface for data preparation.
+    diagram: |
+      graph TD
+        Data[Data] --> DataBrew[DataBrew]
+
+  - id: q10
+    type: multiple_choice
+    question: |
+      A business analyst needs to run ad-hoc queries on large datasets stored in S3. Which AWS service is best for this purpose?
+    options:
+      - text: Use Amazon Athena to query data directly in S3 using standard SQL.
+        is_correct: true
+      - text: Provision a full Amazon Redshift cluster for every ad-hoc query executed against data stored in S3 buckets.
+        is_correct: false
+      - text: Transfer all data to a local workstation and utilize desktop-based spreadsheet tools for the required analysis.
+        is_correct: false
+      - text: Implement a strategy that forbids direct querying of S3 data to maintain strict storage layer isolation.
+        is_correct: false
+    explanation: |
+      Correct: Athena enables direct SQL queries on S3 data.
+    diagram: |
+      graph TD
+        S3[S3] --> Athena[Athena]
+
+  - id: q11
+    type: multiple_choice
+    question: |
+      A developer wants to automate data processing tasks in AWS. Which service is best for running code in response to events without managing servers?
+    options:
+      - text: Use AWS Lambda to run code in response to events and automate data processing.
+        is_correct: true
+      - text: Deploy and manage Amazon EC2 instances to host persistent automation scripts and scheduled processing tasks.
+        is_correct: false
+      - text: Perform all data processing operations manually through the console to ensure data accuracy and operational control.
+        is_correct: false
+      - text: Utilize S3 event notifications as the standalone execution engine for all necessary data processing and automation logic.
+        is_correct: false
+    explanation: |
+      Correct: Lambda is serverless and ideal for event-driven automation.
+    diagram: |
+      graph TD
+        Event[Event] --> Lambda[Lambda]
+
+  - id: q12
+    type: multiple_choice
+    question: |
+      A data engineering team needs to schedule and manage recurring data processing jobs in AWS. Which service is best suited for this purpose?
+    options:
+      - text: Use Amazon EventBridge to manage events and schedules for data processing workflows.
+        is_correct: true
+      - text: Implement manual execution protocols where administrators trigger each individual job at the required interval.
+        is_correct: false
+      - text: Avoid the use of scheduling tools and execute data processing jobs only upon receiving an ad-hoc request.
+        is_correct: false
+      - text: Deploy AWS CloudFormation stack updates as the primary mechanism for triggering recurring data processing tasks.
+        is_correct: false
+    explanation: |
+      Correct: EventBridge provides event-driven scheduling for AWS workflows.
+    diagram: |
+      graph TD
+        Schedule[Schedule] --> EventBridge[EventBridge]
+
+  - id: q13
+    type: multiple_choice
+    question: |
+      A data architect must choose between provisioned and serverless AWS analytics services for a new project. What is a key tradeoff to consider?
+    options:
+      - text: Provisioned services offer more control and predictable performance, while serverless services provide automatic scaling and lower operational overhead.
+        is_correct: true
+      - text: Serverless architectures consistently result in higher total cost of ownership compared to provisioned clusters for all analytics workloads.
+        is_correct: false
+      - text: Provisioned services are static resources that do not allow for performance monitoring or manual scaling adjustments by the user.
+        is_correct: false
+      - text: Serverless services require significant manual effort to manage underlying compute resources, network capacity, and storage allocation.
+        is_correct: false
+    explanation: |
+      Correct: Provisioned services give control, serverless offers flexibility and less management.
+    diagram: |
+      graph TD
+        Provisioned[Provisioned] --> Control[Control]
+        Serverless[Serverless] --> Scaling[Auto Scaling]
+
+  - id: q14
+    type: multiple_choice
+    question: |
+      A business analyst needs to run complex SQL queries with multiple JOINs and filters on AWS data. Which service and feature should they use?
+    options:
+      - text: Use Amazon Athena to run SQL queries with multiple qualifiers and JOIN clauses directly on S3 data.
+        is_correct: true
+      - text: Execute custom AWS Lambda functions to programmatically parse S3 objects and perform complex SQL-like operations.
+        is_correct: false
+      - text: Leverage Amazon S3 Select for all advanced analytical queries involving complex table JOINs and multi-level data filters.
+        is_correct: false
+      - text: Utilize Amazon QuickSight as a database engine to write and execute SQL queries directly against raw S3 data files.
+        is_correct: false
+    explanation: |
+      Correct: Athena supports complex SQL queries on S3 data.
+    diagram: |
+      graph TD
+        S3[S3] --> Athena[Athena]
+
+  - id: q15
+    type: multiple_choice
+    question: |
+      A data scientist wants to visualize data for analysis in AWS. Which service is best suited for creating interactive dashboards and reports?
+    options:
+      - text: Use Amazon QuickSight to build interactive dashboards and visualizations.
+        is_correct: true
+      - text: Implement AWS Glue DataBrew to serve as the primary platform for generating executive dashboards and analytical reports.
+        is_correct: false
+      - text: Deploy custom AWS Lambda functions to generate static image files of charts and graphs for data visualization needs.
+        is_correct: false
+      - text: Utilize the Amazon S3 console interface to natively render interactive charts and graphs from stored JSON data files.
+        is_correct: false
+    explanation: |
+      Correct: QuickSight is AWS's primary service for data visualization.
+    diagram: |
+      graph TD
+        Data[Data] --> QuickSight[QuickSight]
+
+  - id: q16
+    type: multiple_choice
+    question: |
+      A data engineer needs to clean and prepare data before analysis. When should data cleansing techniques be applied?
+    options:
+      - text: Apply cleansing techniques before analysis to ensure data quality and accuracy.
+        is_correct: true
+      - text: Postpone all data cleansing activities until after the final analytical reports have been generated and reviewed.
+        is_correct: false
+      - text: Bypass the data cleansing stage if the original data source is managed by a trusted internal business department.
+        is_correct: false
+      - text: Implement data cleansing logic only if end-users identify visual errors or outliers during the dashboarding phase.
+        is_correct: false
+    explanation: |
+      Correct: Cleansing before analysis ensures reliable results.
+    diagram: |
+      graph TD
+        Raw[Raw Data] --> Clean[Clean Data]
+        Clean --> Analysis[Analysis]
+
+  - id: q17
+    type: multiple_choice
+    question: |
+      A business analyst needs to calculate rolling averages and group data for reporting. Which AWS service and features should they use?
+    options:
+      - text: Use Athena's SQL aggregation, grouping, and window functions to calculate rolling averages and pivots.
+        is_correct: true
+      - text: Leverage Amazon S3 object metadata to perform complex data aggregation, rolling calculations, and field grouping.
+        is_correct: false
+      - text: Develop AWS Lambda scripts to manually iterate through large datasets and compute rolling averages for each record.
+        is_correct: false
+      - text: Utilize Amazon QuickSight exclusively to display raw, granular data without applying any built-in aggregation or grouping.
+        is_correct: false
+    explanation: |
+      Correct: Athena supports SQL aggregation, grouping, and window functions.
+    diagram: |
+      graph TD
+        Data[Data] --> Athena[Athena]
+        Athena --> Aggregation[Aggregation]
+
+  - id: q18
+    type: multiple_choice
+    question: |
+      A data analyst wants to visually explore and transform data without writing code. Which AWS service is best for this task?
+    options:
+      - text: Use AWS Glue DataBrew for visual, no-code data preparation and exploration.
+        is_correct: true
+      - text: Deploy AWS Lambda functions to provide a graphical user interface for visual data exploration and transformation.
+        is_correct: false
+      - text: Utilize Amazon Athena as the exclusive tool for visual, drag-and-drop data transformation and schema modification.
+        is_correct: false
+      - text: Implement Amazon QuickSight to transform and clean underlying data sources before they are made available for analysis.
+        is_correct: false
+    explanation: |
+      Correct: DataBrew is designed for visual, no-code data preparation.
+    diagram: |
+      graph TD
+        Data[Data] --> DataBrew[DataBrew]
+
+  - id: q19
+    type: multiple_choice
+    question: |
+      A data engineer needs to verify and clean data using AWS managed services. Which services can be used for this purpose?
+    options:
+      - text: Lambda, Athena, QuickSight, Jupyter Notebooks, and SageMaker Data Wrangler all support data verification and cleaning.
+        is_correct: true
+      - text: AWS Lambda is the only managed service in the AWS ecosystem capable of performing data verification and cleansing tasks.
+        is_correct: false
+      - text: Use Amazon S3 as the primary execution engine for all data verification, cleansing, and validation workflows.
+        is_correct: false
+      - text: Rely exclusively on Amazon QuickSight features to verify the integrity and accuracy of raw data sources.
+        is_correct: false
+    explanation: |
+      Correct: Multiple AWS services support data verification and cleaning.
+    diagram: |
+      graph TD
+        Data[Data] --> Lambda[Lambda]
+        Data --> Athena[Athena]
+        Data --> QuickSight[QuickSight]
+        Data --> Jupyter[Jupyter Notebooks]
+        Data --> Wrangler[SageMaker Data Wrangler]
+
+  - id: q20
+    type: multiple_choice
+    question: |
+      A data analyst needs to create a view and run ad-hoc queries on S3 data using SQL. Which AWS service should they use?
+    options:
+      - text: Use Amazon Athena to create views and run SQL queries directly on S3 data.
+        is_correct: true
+      - text: Implement AWS Lambda functions to generate virtual SQL views and execute queries against objects stored in S3.
+        is_correct: false
+      - text: Utilize Amazon QuickSight to manage the creation of SQL views and facilitate ad-hoc querying of S3 data sources.
+        is_correct: false
+      - text: Deploy AWS Glue DataBrew for all SQL-based query operations and the management of virtual views on S3 data.
+        is_correct: false
+    explanation: |
+      Correct: Athena enables SQL queries and view creation on S3 data.
+    diagram: |
+      graph TD
+        S3[S3] --> Athena[Athena]
+        Athena --> View[View]
+
+  - id: q21
+    type: multiple_choice
+    question: |
+      A data scientist wants to explore data interactively using Apache Spark in AWS. Which service provides this capability?
+    options:
+      - text: Use Athena notebooks with Apache Spark to interactively explore and analyze data.
+        is_correct: true
+      - text: Deploy AWS Lambda functions to run interactive Apache Spark code for data exploration and complex analysis.
+        is_correct: false
+      - text: Leverage Amazon QuickSight dashboards as the primary interface for running and monitoring interactive Apache Spark jobs.
+        is_correct: false
+      - text: Utilize Amazon S3 to execute Apache Spark queries directly against data files without using compute services.
+        is_correct: false
+    explanation: |
+      Correct: Athena notebooks support interactive Spark exploration.
+    diagram: |
+      graph TD
+        Data[Data] --> Athena[Athena]
+        Athena --> Spark[Spark Notebook]
+
+  - id: q22
+    type: multiple_choice
+    question: |
+      A DevOps engineer needs to log application data from an AWS data pipeline. What is the best AWS service for this purpose?
+    options:
+      - text: Use Amazon CloudWatch Logs to collect and store application logs from AWS data pipelines.
+        is_correct: true
+      - text: Implement S3 event notifications as the central repository for collecting and managing all application pipeline logs.
+        is_correct: false
+      - text: Utilize AWS Lambda environment variables as a storage mechanism for persistent application logging data.
+        is_correct: false
+      - text: Use Amazon QuickSight to store, manage, and analyze raw application logs generated by data pipelines.
+        is_correct: false
+    explanation: |
+      Correct: CloudWatch Logs is the standard service for application logging in AWS.
+    diagram: |
+      graph TD
+        Pipeline[Pipeline] --> CloudWatch[CloudWatch Logs]
+
+  - id: q23
+    type: multiple_choice
+    question: |
+      A data engineer wants to optimize the performance of an AWS Glue ETL job. What is a best practice for performance tuning?
+    options:
+      - text: Monitor job metrics, adjust DPU allocation, and optimize transformations for efficient resource usage.
+        is_correct: true
+      - text: Mandate the use of maximum Data Processing Units (DPUs) for every job regardless of the actual dataset volume.
+        is_correct: false
+      - text: Avoid the analysis of job performance metrics to minimize the operational overhead on the processing cluster.
+        is_correct: false
+      - text: Implement default service configurations for all ETL jobs and bypass manual tuning or resource adjustments.
+        is_correct: false
+    explanation: |
+      Correct: Monitoring and tuning resources improves performance and cost efficiency.
+    diagram: |
+      graph TD
+        Glue[Glue Job] --> Metrics[Metrics]
+        Metrics --> Tuning[Tuning]
+
+  - id: q24
+    type: multiple_choice
+    question: |
+      A security team needs to log and audit access to AWS services. Which services are best suited for this task?
+    options:
+      - text: Use AWS CloudTrail to track API calls and Amazon Macie to monitor sensitive data access.
+        is_correct: true
+      - text: Utilize Amazon CloudWatch exclusively for all access logging and sensitive data discovery within the account.
+        is_correct: false
+      - text: Develop AWS Lambda functions to capture and store all service access logs in a centralized metadata database.
+        is_correct: false
+      - text: Leverage S3 event notifications as the primary mechanism for auditing API calls and monitoring data access.
+        is_correct: false
+    explanation: |
+      Correct: CloudTrail and Macie are designed for access logging and sensitive data monitoring.
+    diagram: |
+      graph TD
+        API[API Calls] --> CloudTrail[CloudTrail]
+        Data[Data] --> Macie[Macie]
+
+  - id: q25
+    type: multiple_choice
+    question: |
+      A compliance officer needs to extract logs for an audit from AWS data pipelines. What is the best approach?
+    options:
+      - text: Use CloudWatch Logs Insights or Athena to query and extract logs for audits.
+        is_correct: true
+      - text: Perform manual log downloads from each individual Amazon EC2 instance involved in the data pipeline.
+        is_correct: false
+      - text: Store all audit-critical logs within AWS Lambda environment variables to facilitate rapid extraction.
+        is_correct: false
+      - text: Leverage Amazon QuickSight to query and extract raw log data for compliance and auditing purposes.
+        is_correct: false
+    explanation: |
+      Correct: CloudWatch Logs Insights and Athena enable efficient log extraction for audits.
+    diagram: |
+      graph TD
+        Logs[Logs] --> Insights[Logs Insights]
+        Logs --> Athena[Athena]
+
+  - id: q26
+    type: multiple_choice
+    question: |
+      A cloud architect needs to deploy a logging and monitoring solution for traceability in AWS data pipelines. What is a recommended approach?
+    options:
+      - text: Use CloudWatch Logs, CloudTrail, and set up alerts to monitor and trace pipeline activity.
+        is_correct: true
+      - text: Utilize Amazon S3 as the sole service for implementing logging, monitoring, and traceability for all data pipelines.
+        is_correct: false
+      - text: Avoid the implementation of automated alerts to minimize system noise and reduce operational monitoring costs.
+        is_correct: false
+      - text: Deploy AWS Lambda functions to serve as the primary storage layer for all pipeline monitoring and traceability data.
+        is_correct: false
+    explanation: |
+      Correct: CloudWatch Logs, CloudTrail, and alerts provide comprehensive monitoring and traceability.
+    diagram: |
+      graph TD
+        Pipeline[Pipeline] --> CloudWatch[CloudWatch Logs]
+        Pipeline --> CloudTrail[CloudTrail]
+        CloudWatch --> Alerts[Alerts]
+
+  - id: q27
+    type: multiple_choice
+    question: |
+      An operations team wants to receive notifications when issues are detected in AWS data pipelines. What is the best AWS solution?
+    options:
+      - text: Use CloudWatch Alarms and SNS to send notifications based on monitoring metrics and logs.
+        is_correct: true
+      - text: Implement a standalone email alerting system that operates independently of AWS monitoring and logging services.
+        is_correct: false
+      - text: Utilize AWS Lambda functions to manually trigger notifications for every event occurring within the data pipeline.
+        is_correct: false
+      - text: Configure S3 event notifications as the primary engine for generating alerts and notifications for all pipeline issues.
+        is_correct: false
+    explanation: |
+      Correct: CloudWatch Alarms and SNS provide automated, integrated notifications.
+    diagram: |
+      graph TD
+        Monitoring[Monitoring] --> Alarm[CloudWatch Alarm]
+        Alarm --> SNS[SNS Notification]
+
+  - id: q28
+    type: multiple_choice
+    question: |
+      A data engineer is troubleshooting performance issues in an Amazon EMR pipeline. What is a best practice?
+    options:
+      - text: Analyze job logs, monitor cluster metrics, and adjust resources as needed to resolve performance issues.
+        is_correct: true
+      - text: Disregard individual job logs and focus exclusively on the high-level operational status of the EMR cluster.
+        is_correct: false
+      - text: Implement a policy to always use the largest available instance types regardless of the specific job workload.
+        is_correct: false
+      - text: Utilize default cluster configurations for all jobs and avoid proactive monitoring of resource utilization.
+        is_correct: false
+    explanation: |
+      Correct: Analyzing logs and metrics helps identify and resolve performance bottlenecks.
+    diagram: |
+      graph TD
+        EMR[EMR Job] --> Logs[Logs]
+        EMR --> Metrics[Metrics]
+
+  - id: q29
+    type: multiple_choice
+    question: |
+      A security analyst needs to track API calls made to AWS services for compliance. Which AWS service should they use?
+    options:
+      - text: Use AWS CloudTrail to track and log all API calls for compliance and auditing.
+        is_correct: true
+      - text: Leverage Amazon CloudWatch Logs for the comprehensive tracking and auditing of all AWS service API calls.
+        is_correct: false
+      - text: Deploy AWS Lambda functions to intercept and store logs of all API interactions within the AWS environment.
+        is_correct: false
+      - text: Use Amazon S3 event notifications as the primary mechanism for tracking and logging API calls for compliance.
+        is_correct: false
+    explanation: |
+      Correct: CloudTrail is the standard for API call tracking and auditing.
+    diagram: |
+      graph TD
+        API[API Calls] --> CloudTrail[CloudTrail]
+
+  - id: q30
+    type: multiple_choice
+    question: |
+      A data engineer needs to troubleshoot and maintain AWS Glue and EMR pipelines. What is a recommended approach?
+    options:
+      - text: Review job logs, monitor metrics, and use CloudWatch Logs for troubleshooting and maintenance.
+        is_correct: true
+      - text: Perform a high-level check of the job status without investigating the detailed execution logs or metrics.
+        is_correct: false
+      - text: Utilize AWS Lambda as the primary tool for maintaining and repairing failed data processing pipelines.
+        is_correct: false
+      - text: Leverage S3 event notifications as the exclusive source of information for troubleshooting pipeline failures.
+        is_correct: false
+    explanation: |
+      Correct: Logs and metrics are essential for troubleshooting and maintaining pipelines.
+    diagram: |
+      graph TD
+        Glue[Glue Job] --> Logs[Logs]
+        EMR[EMR Job] --> Metrics[Metrics]
+
+  - id: q31
+    type: multiple_choice
+    question: |
+      A data engineer needs to log application data from AWS pipelines with a focus on configuration and automation. Which service should they use?
+    options:
+      - text: Use Amazon CloudWatch Logs for automated, configurable application logging.
+        is_correct: true
+      - text: Utilize AWS Lambda environment variables as the primary repository for all application-level logging data.
+        is_correct: false
+      - text: Implement Amazon S3 as the exclusive storage solution for managing and automating application pipeline logs.
+        is_correct: false
+      - text: Leverage Amazon QuickSight to capture and store application logs for configuration and automation purposes.
+        is_correct: false
+    explanation: |
+      Correct: CloudWatch Logs supports configuration and automation for logging.
+    diagram: |
+      graph TD
+        Pipeline[Pipeline] --> CloudWatch[CloudWatch Logs]
+
+  - id: q32
+    type: multiple_choice
+    question: |
+      A data analyst needs to analyze logs from AWS data pipelines for trends and anomalies. Which AWS services can be used for log analysis?
+    options:
+      - text: Use Athena, EMR, OpenSearch Service, and CloudWatch Logs Insights to analyze logs and big data application logs.
+        is_correct: true
+      - text: Deploy AWS Lambda as the exclusive service for performing trend and anomaly analysis on pipeline log data.
+        is_correct: false
+      - text: Utilize Amazon S3 as the standalone analytics engine for identifying trends and anomalies in stored log files.
+        is_correct: false
+      - text: Leverage Amazon QuickSight dashboards as the primary tool for performing deep analysis on raw application logs.
+        is_correct: false
+    explanation: |
+      Correct: Multiple AWS services support log analysis for trends and anomalies.
+    diagram: |
+      graph TD
+        Logs[Logs] --> Athena[Athena]
+        Logs --> EMR[EMR]
+        Logs --> OpenSearch[OpenSearch]
+        Logs --> Insights[CloudWatch Logs Insights]
+
+  - id: q33
+    type: multiple_choice
+    question: |
+      A data engineer needs to ensure a representative subset of a large dataset is used for quality checks. Which technique is most appropriate?
+    options:
+      - text: Use data sampling techniques to select a subset of records for validation and analysis.
+        is_correct: true
+      - text: Process the entire dataset for every individual quality check regardless of the total record volume or cost.
+        is_correct: false
+      - text: Select the first 10 records of the file as the definitive validation set for all data quality assessments.
+        is_correct: false
+      - text: Postpone all data validation and sampling activities until the final analytical processing phase is complete.
+        is_correct: false
+    explanation: |
+      Correct: Data sampling enables efficient and representative quality checks.
+    diagram: |
+      graph TD
+        Data[Data] --> Sample[Sample]
+        Sample --> Validation[Validation]
+
+  - id: q34
+    type: multiple_choice
+    question: |
+      A data scientist notices that query results are skewed due to uneven data distribution. What is a recommended approach to address this?
+    options:
+      - text: Implement data skew mechanisms such as partitioning or salting keys to balance data distribution.
+        is_correct: true
+      - text: Ignore the presence of data skew and continue with the analytical processing using original data distributions.
+        is_correct: false
+      - text: Limit the scope of analysis to the largest data partition to save processing time and cluster resources.
+        is_correct: false
+      - text: Utilize default service settings for all data processing tasks and avoid custom skew handling techniques.
+        is_correct: false
+    explanation: |
+      Correct: Addressing data skew improves performance and accuracy.
+    diagram: |
+      graph TD
+        Data[Data] --> Skew[Skew Handling]
+        Skew --> Balance[Balanced Distribution]
+
+  - id: q35
+    type: multiple_choice
+    question: |
+      A business analyst needs to verify that a dataset is complete, consistent, accurate, and maintains integrity. What is this process called?
+    options:
+      - text: Data validation, which checks completeness, consistency, accuracy, and integrity of data.
+        is_correct: true
+      - text: Data encryption, which focuses on protecting the dataset from unauthorized access through cryptographic methods.
+        is_correct: false
+      - text: Data migration, which involves the physical movement of data between disparate storage systems or environments.
+        is_correct: false
+      - text: Data archiving, which manages the long-term storage and retention of infrequently accessed historical datasets.
+        is_correct: false
+    explanation: |
+      Correct: Data validation ensures data quality and reliability.
+    diagram: |
+      graph TD
+        Data[Data] --> Validation[Validation]
+        Validation --> Quality[Quality]
+
+  - id: q36
+    type: multiple_choice
+    question: |
+      A data engineer wants to understand the structure, distribution, and quality of a dataset before analysis. Which process should they use?
+    options:
+      - text: Perform data profiling to examine structure, distribution, and quality of the dataset.
+        is_correct: true
+      - text: Limit the investigation to a schema review without inspecting the actual data values stored in the fields.
+        is_correct: false
+      - text: Bypass the preliminary profiling stage and proceed directly to performing complex analytical queries on the data.
+        is_correct: false
+      - text: Implement high-level data encryption as a method for understanding the profile and structure of the dataset.
+        is_correct: false
+    explanation: |
+      Correct: Data profiling provides insights into data quality and structure.
+    diagram: |
+      graph TD
+        Data[Data] --> Profiling[Profiling]
+        Profiling --> Insights[Insights]
+
+  - id: q37
+    type: multiple_choice
+    question: |
+      A data pipeline must check for empty fields during processing to ensure data quality. What is the best approach?
+    options:
+      - text: Run data quality checks during processing to identify and handle empty fields.
+        is_correct: true
+      - text: Disregard empty fields in the dataset and process all incoming records in their original raw state.
+        is_correct: false
+      - text: Postpone the identification of empty fields until after the data has been successfully loaded into the warehouse.
+        is_correct: false
+      - text: Utilize default service configurations and avoid the implementation of custom data quality validation logic.
+        is_correct: false
+    explanation: |
+      Correct: Checking for empty fields during processing helps maintain data quality.
+    diagram: |
+      graph TD
+        Pipeline[Pipeline] --> QualityCheck[Quality Check]
+        QualityCheck --> EmptyFields[Empty Fields]
+
+  - id: q38
+    type: multiple_choice
+    question: |
+      A data engineer needs to define and enforce data quality rules in an AWS ETL pipeline. Which service is best suited for this task?
+    options:
+      - text: Use AWS Glue DataBrew to define, enforce, and monitor data quality rules.
+        is_correct: true
+      - text: Utilize Amazon S3 event notifications as the primary mechanism for enforcing all data quality rules in the account.
+        is_correct: false
+      - text: Leverage AWS Lambda environment variables as a repository for storing and enforcing complex data quality rules.
+        is_correct: false
+      - text: Use Amazon QuickSight to define the business logic and rules required for maintaining high data quality standards.
+        is_correct: false
+    explanation: |
+      Correct: Glue DataBrew is designed for data quality rule management.
+    diagram: |
+      graph TD
+        Data[Data] --> DataBrew[DataBrew]
+        DataBrew --> Rules[Quality Rules]
+
+  - id: q39
+    type: multiple_choice
+    question: |
+      A data analyst suspects inconsistencies in a dataset processed by an AWS ETL pipeline. What is a recommended approach to investigate?
+    options:
+      - text: Use AWS Glue DataBrew to profile and investigate data consistency issues.
+        is_correct: true
+      - text: Disregard potential inconsistencies and proceed with the data analysis using the existing processed records.
+        is_correct: false
+      - text: Defer the investigation of data consistency until after the final business reporting cycle has been completed.
+        is_correct: false
+      - text: Implement Amazon S3 event notifications as the primary tool for detecting and investigating data inconsistency issues.
+        is_correct: false
+    explanation: |
+      Correct: DataBrew provides tools for profiling and investigating data consistency.
+    diagram: |
+      graph TD
+        Data[Data] --> DataBrew[DataBrew]
+        DataBrew --> Consistency[Consistency]

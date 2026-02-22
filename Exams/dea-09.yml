@@ -1,0 +1,764 @@
+questions:
+  - id: q1
+    type: multiple_choice
+    question: |
+      A network engineer is designing a secure AWS environment. What is the primary purpose of VPC security networking concepts?
+    options:
+      - text: To control inbound and outbound traffic to AWS resources using security groups and network ACLs.
+        is_correct: true
+      - text: To manage billing and cost allocation for AWS accounts across multiple regions and subnets.
+        is_correct: false
+      - text: To automate application deployments using CloudFormation templates and resource provider frameworks.
+        is_correct: false
+      - text: To monitor application logs in real time using automated dashboards and metric filter alerts.
+        is_correct: false
+    explanation: |
+      Correct: VPC security controls network access to AWS resources.
+    diagram: |
+      graph TD
+        VPC[VPC] --> Security[Security Groups]
+        VPC --> ACLs[Network ACLs]
+
+  - id: q2
+    type: multiple_choice
+    question: |
+      A cloud architect must choose between managed and unmanaged AWS services for a new application. What is a key difference?
+    options:
+      - text: Managed services handle infrastructure and security patches, while unmanaged services require manual management.
+        is_correct: true
+      - text: Unmanaged services always provide a lower total cost of ownership compared to enterprise managed services.
+        is_correct: false
+      - text: Managed services cannot be integrated with IAM roles or resource-based policies for access control.
+        is_correct: false
+      - text: Unmanaged services provide automatic scaling and high availability by default without manual configuration.
+        is_correct: false
+    explanation: |
+      Correct: Managed services reduce operational overhead.
+    diagram: |
+      graph TD
+        Managed[Managed Service] --> Patching[Patching]
+        Unmanaged[Unmanaged Service] --> Manual[Manual Management]
+
+  - id: q3
+    type: multiple_choice
+    question: |
+      A developer needs to implement password-based authentication for an AWS application. Which approach is recommended?
+    options:
+      - text: Use AWS IAM or Cognito to manage password-based authentication securely.
+        is_correct: true
+      - text: Store passwords in plain text within application code to simplify the authentication and login process.
+        is_correct: false
+      - text: Use S3 bucket policies to enforce password requirements and complexity rules for application users.
+        is_correct: false
+      - text: Rely on EC2 instance metadata for password storage and retrieval during the application boot sequence.
+        is_correct: false
+    explanation: |
+      Correct: IAM and Cognito provide secure password-based authentication.
+    diagram: |
+      graph TD
+        App[App] --> IAM[IAM]
+        App --> Cognito[Cognito]
+
+  - id: q4
+    type: multiple_choice
+    question: |
+      A security team wants to use certificate-based authentication for an internal AWS API. What is a best practice?
+    options:
+      - text: Use AWS Certificate Manager (ACM) to provision and manage SSL/TLS certificates for authentication.
+        is_correct: true
+      - text: Store certificates in public S3 buckets to ensure high availability and easy access for API clients.
+        is_correct: false
+      - text: Use Lambda environment variables to store and rotate certificates used for internal API communication.
+        is_correct: false
+      - text: Use CloudWatch Logs to manage and distribute SSL/TLS certificates across different AWS regions.
+        is_correct: false
+    explanation: |
+      Correct: ACM securely manages SSL/TLS certificates for authentication.
+    diagram: |
+      graph TD
+        API[API] --> ACM[Certificate Manager]
+
+  - id: q5
+    type: multiple_choice
+    question: |
+      An application uses IAM roles to grant access to AWS resources. What is a key benefit of role-based authentication?
+    options:
+      - text: IAM roles provide temporary credentials and fine-grained access control without hardcoding secrets.
+        is_correct: true
+      - text: Roles require users to share passwords and access keys to facilitate collaboration across development teams.
+        is_correct: false
+      - text: IAM roles are only available for EC2 instances and cannot be assumed by other AWS services or resources.
+        is_correct: false
+      - text: Role-based authentication disables logging for security events to improve the overall performance of the application.
+        is_correct: false
+    explanation: |
+      Correct: IAM roles enable secure, temporary access to AWS resources.
+    diagram: |
+      graph TD
+        App[App] --> Role[Role-Based Auth]
+        Role --> AWS[AWS Resource]
+
+  - id: q6
+    type: multiple_choice
+    question: |
+      A security engineer is reviewing AWS policies. What is a key difference between AWS managed policies and customer managed policies?
+    options:
+      - text: AWS managed policies are created and maintained by AWS, while customer managed policies are created and managed by the user.
+        is_correct: true
+      - text: Customer managed policies cannot be attached to IAM roles or users within the same AWS account.
+        is_correct: false
+      - text: AWS managed policies are always more restrictive and secure than custom-tailored customer managed policies.
+        is_correct: false
+      - text: Customer managed policies are only available for S3 buckets and cannot be used for other services.
+        is_correct: false
+    explanation: |
+      Correct: AWS managed policies are AWS-provided; customer managed policies are user-defined.
+    diagram: |
+      graph TD
+        AWS[AWS Managed] --> AWSControl[AWS Control]
+        Customer[Customer Managed] --> UserControl[User Control]
+
+  - id: q7
+    type: multiple_choice
+    question: |
+      A network administrator needs to update VPC security groups to allow access to a new application. What is the best practice?
+    options:
+      - text: Update security group rules to allow only required traffic and regularly review permissions.
+        is_correct: true
+      - text: Allow all inbound and outbound traffic for convenience during the initial development and testing phases.
+        is_correct: false
+      - text: Use default security group settings for all applications to maintain a consistent network environment.
+        is_correct: false
+      - text: Disable security groups and network ACLs to simplify troubleshooting of connectivity issues.
+        is_correct: false
+    explanation: |
+      Correct: Restricting security group rules improves security.
+    diagram: |
+      graph TD
+        App[App] --> SG[Security Group]
+
+  - id: q8
+    type: multiple_choice
+    question: |
+      An AWS administrator needs to create and update IAM groups, roles, endpoints, and services. Which AWS service is used for this purpose?
+    options:
+      - text: Use AWS IAM to manage groups, roles, endpoints, and service permissions.
+        is_correct: true
+      - text: Use S3 bucket policies to manage IAM groups and define hierarchy for administrative users.
+        is_correct: false
+      - text: Use CloudWatch Logs to create IAM roles and automate the assignment of service permissions.
+        is_correct: false
+      - text: Use Lambda environment variables to store IAM management configuration and user metadata.
+        is_correct: false
+    explanation: |
+      Correct: IAM is the central service for identity and access management.
+    diagram: |
+      graph TD
+        Admin[Admin] --> IAM[IAM]
+
+  - id: q9
+    type: multiple_choice
+    question: |
+      A DevOps engineer needs to rotate credentials for password management in AWS. What is a recommended solution?
+    options:
+      - text: Use AWS Secrets Manager to automate credential rotation and secure storage.
+        is_correct: true
+      - text: Store credentials in plain text in application code and update them manually during each deployment cycle.
+        is_correct: false
+      - text: Use S3 to store and rotate credentials by updating object metadata every 90 days.
+        is_correct: false
+      - text: Use CloudWatch to manage password rotation and trigger alerts when credentials expire.
+        is_correct: false
+    explanation: |
+      Correct: Secrets Manager automates and secures credential rotation.
+    diagram: |
+      graph TD
+        App[App] --> Secrets[Secrets Manager]
+
+  - id: q10
+    type: multiple_choice
+    question: |
+      A developer is setting up IAM roles for Lambda, API Gateway, AWS CLI, and CloudFormation. What is a best practice?
+    options:
+      - text: Assign least-privilege IAM roles to each service, granting only the permissions required for their tasks.
+        is_correct: true
+      - text: Use a single admin role for all services to simplify management and reduce configuration overhead.
+        is_correct: false
+      - text: Allow all actions on all resources for every role to ensure that services have sufficient access.
+        is_correct: false
+      - text: Avoid using IAM roles for automation and instead use permanent access keys for service authentication.
+        is_correct: false
+    explanation: |
+      Correct: Least-privilege roles improve security and reduce risk.
+    diagram: |
+      graph TD
+        Lambda[Lambda] --> Role[Role]
+        APIGW[API Gateway] --> Role
+        CLI[CLI] --> Role
+        CFN[CloudFormation] --> Role
+
+  - id: q11
+    type: multiple_choice
+    question: |
+      A security engineer needs to apply IAM policies to S3 Access Points and AWS PrivateLink endpoints. What is the correct approach?
+    options:
+      - text: Attach IAM policies to the relevant roles, endpoints, and services to control access.
+        is_correct: true
+      - text: Use only bucket policies for all access control to ensure a unified storage security model.
+        is_correct: false
+      - text: Avoid using IAM policies for endpoints and rely strictly on security group rules for isolation.
+        is_correct: false
+      - text: Allow unrestricted access to all endpoints for convenience and to facilitate rapid cross-account communication.
+        is_correct: false
+    explanation: |
+      Correct: IAM policies provide fine-grained access control for endpoints and services.
+    diagram: |
+      graph TD
+        IAM[IAM Policy] --> S3AP[S3 Access Point]
+        IAM --> PrivateLink[PrivateLink]
+
+  - id: q12
+    type: multiple_choice
+    question: |
+      A security architect is designing access controls for an AWS environment. Which authorization methods can be used to control access to resources?
+    options:
+      - text: Role-based, policy-based, tag-based, and attribute-based authorization methods are all available in AWS.
+        is_correct: true
+      - text: Only policy-based authorization is supported in AWS to maintain compliance with standard security protocols.
+        is_correct: false
+      - text: Tag-based authorization is only for billing purposes and cannot be used to restrict access to resources.
+        is_correct: false
+      - text: Attribute-based authorization is used only for S3 buckets and does not apply to EC2 or RDS services.
+        is_correct: false
+    explanation: |
+      Correct: AWS supports multiple authorization methods for flexible access control.
+    diagram: |
+      graph TD
+        User[User] --> Role[Role-Based]
+        User --> Policy[Policy-Based]
+        User --> Tag[Tag-Based]
+        User --> Attribute[Attribute-Based]
+
+  - id: q13
+    type: multiple_choice
+    question: |
+      A DevOps engineer is reviewing IAM policies. What is the principle of least privilege in AWS security?
+    options:
+      - text: Granting users and roles only the permissions they need to perform their required tasks, and nothing more.
+        is_correct: true
+      - text: Assigning full admin access to all users for convenience and to prevent permission-related errors.
+        is_correct: false
+      - text: Allowing all actions on all resources by default to simplify the initial onboarding of new developers.
+        is_correct: false
+      - text: Using only managed policies for all access control regardless of the specific requirements of the application.
+        is_correct: false
+    explanation: |
+      Correct: Least privilege reduces risk by limiting permissions.
+    diagram: |
+      graph TD
+        User[User] --> LeastPrivilege[Least Privilege]
+        LeastPrivilege --> Secure[Secure Access]
+
+  - id: q14
+    type: multiple_choice
+    question: |
+      A database administrator is setting up access control for Amazon Redshift. What is a best practice for role-based access control?
+    options:
+      - text: Define roles and grant permissions based on expected access patterns and job functions.
+        is_correct: true
+      - text: Assign all users to a single admin role for simplicity and to avoid managing complex permission hierarchies.
+        is_correct: false
+      - text: Allow all users to access all data by default to ensure transparency across different departments.
+        is_correct: false
+      - text: Use only default roles for all users to minimize the impact on Redshift performance during peak hours.
+        is_correct: false
+    explanation: |
+      Correct: Role-based access should match job functions and access needs.
+    diagram: |
+      graph TD
+        Redshift[Redshift] --> Roles[Roles]
+        Roles --> Access[Access Patterns]
+
+  - id: q15
+    type: multiple_choice
+    question: |
+      A security engineer needs to protect data from unauthorized access across AWS services. What is a recommended approach?
+    options:
+      - text: Use IAM policies, resource policies, and encryption to restrict access and protect data.
+        is_correct: true
+      - text: Allow all users to access all resources for easier management and to facilitate debugging of service issues.
+        is_correct: false
+      - text: Use only S3 bucket policies for all services to consolidate the management of access control lists.
+        is_correct: false
+      - text: Disable encryption to simplify access control and improve the speed of data retrieval for analytic queries.
+        is_correct: false
+    explanation: |
+      Correct: Multiple controls are needed to protect data across services.
+    diagram: |
+      graph TD
+        Data[Data] --> IAM[IAM Policy]
+        Data --> Resource[Resource Policy]
+        Data --> Encryption[Encryption]
+
+  - id: q16
+    type: multiple_choice
+    question: |
+      A cloud engineer needs to create a custom IAM policy because a managed policy does not meet requirements. What is the best practice?
+    options:
+      - text: Write a custom IAM policy that grants only the specific permissions needed for the use case.
+        is_correct: true
+      - text: Copy an existing managed policy and add all possible permissions to ensure no resource access is blocked.
+        is_correct: false
+      - text: Use a managed policy even if it does not fit the requirements to maintain alignment with AWS standards.
+        is_correct: false
+      - text: Allow all actions on all resources for convenience and to bypass potential permission conflicts.
+        is_correct: false
+    explanation: |
+      Correct: Custom policies should be as restrictive as possible.
+    diagram: |
+      graph TD
+        Engineer[Engineer] --> CustomPolicy[Custom Policy]
+
+  - id: q17
+    type: multiple_choice
+    question: |
+      A developer needs to securely store application and database credentials in AWS. Which services are recommended?
+    options:
+      - text: Use AWS Secrets Manager or Systems Manager Parameter Store to securely store and manage credentials.
+        is_correct: true
+      - text: Store credentials in plain text in application code to reduce the latency of external API calls.
+        is_correct: false
+      - text: Use S3 to store credentials for all applications by using standard object versioning for security.
+        is_correct: false
+      - text: Use CloudWatch Logs to store sensitive credentials and track usage through automated metric filters.
+        is_correct: false
+    explanation: |
+      Correct: Secrets Manager and Parameter Store are designed for secure credential storage.
+    diagram: |
+      graph TD
+        App[App] --> Secrets[Secrets Manager]
+        App --> ParamStore[Parameter Store]
+
+  - id: q18
+    type: multiple_choice
+    question: |
+      A database administrator needs to provide users, groups, and roles with access and authority in Amazon Redshift. What is a best practice?
+    options:
+      - text: Assign permissions based on job roles and use Redshift's access control features to manage authority.
+        is_correct: true
+      - text: Grant all users full admin access for convenience and to minimize support tickets related to access.
+        is_correct: false
+      - text: Use only default user roles for all access to ensure compatibility with third-party business intelligence tools.
+        is_correct: false
+      - text: Avoid using groups for access control and assign permissions directly to individual database users instead.
+        is_correct: false
+    explanation: |
+      Correct: Role-based access and groups help manage permissions securely.
+    diagram: |
+      graph TD
+        Redshift[Redshift] --> Users[Users]
+        Users --> Groups[Groups]
+        Groups --> Roles[Roles]
+
+  - id: q19
+    type: multiple_choice
+    question: |
+      A data lake administrator needs to manage permissions for Redshift, EMR, Athena, and S3. What is a recommended AWS service for this purpose?
+    options:
+      - text: Use Lake Formation to centrally manage permissions for analytics services and data lakes.
+        is_correct: true
+      - text: Use only IAM policies for all analytics permissions to maintain a decentralized access control environment.
+        is_correct: false
+      - text: Use S3 bucket policies for all services to simplify the management of cross-account data access.
+        is_correct: false
+      - text: Allow all users access to all data for convenience and to encourage data-driven decision making.
+        is_correct: false
+    explanation: |
+      Correct: Lake Formation provides fine-grained, centralized permission management.
+    diagram: |
+      graph TD
+        LakeFormation[Lake Formation] --> Redshift[Redshift]
+        LakeFormation --> EMR[EMR]
+        LakeFormation --> Athena[Athena]
+        LakeFormation --> S3[S3]
+
+  - id: q20
+    type: multiple_choice
+    question: |
+      A data engineer must encrypt data in Amazon Redshift, Amazon EMR, and AWS Glue. Which statement best describes encryption options in these AWS analytics services?
+    options:
+      - text: Each service supports both server-side and client-side encryption, with integration to AWS KMS for key management.
+        is_correct: true
+      - text: Only Amazon Redshift supports encryption at rest; EMR and Glue require manual custom scripting for security.
+        is_correct: false
+      - text: Encryption is enabled by default and cannot be modified or disabled in any analytics service.
+        is_correct: false
+      - text: AWS analytics services require third-party tools for all encryption needs to maintain compliance standards.
+        is_correct: false
+    explanation: |
+      Correct: All major AWS analytics services support encryption and KMS integration.
+    diagram: |
+      graph TD
+        Redshift[Redshift] --> KMS[KMS]
+        EMR[EMR] --> KMS
+        Glue[Glue] --> KMS
+
+  - id: q21
+    type: multiple_choice
+    question: |
+      A security architect is comparing client-side and server-side encryption in AWS. What is a key difference?
+    options:
+      - text: With client-side encryption, data is encrypted before it is sent to AWS; with server-side encryption, AWS encrypts data after receiving it.
+        is_correct: true
+      - text: Server-side encryption is only available for S3 and cannot be utilized by Redshift or other analytics services.
+        is_correct: false
+      - text: Client-side encryption is managed entirely by AWS and does not require users to handle encryption keys.
+        is_correct: false
+      - text: Server-side encryption requires users to manage and rotate all encryption keys themselves using local hardware.
+        is_correct: false
+    explanation: |
+      Correct: Client-side encryption happens before upload; server-side occurs after AWS receives the data.
+    diagram: |
+      graph TD
+        Client[Client] --> Encrypt[Encrypt Data]
+        Encrypt --> AWS[AWS Service]
+        AWS --> SSE[Server-Side Encryption]
+
+  - id: q22
+    type: multiple_choice
+    question: |
+      A compliance officer needs to ensure sensitive data is protected in AWS analytics services. Which approach is recommended?
+    options:
+      - text: Use encryption, access controls, and monitoring to protect sensitive data at rest and in transit.
+        is_correct: true
+      - text: Store sensitive data in plain text for easier access and to reduce the computational overhead of encryption.
+        is_correct: false
+      - text: Rely only on network firewalls for data protection without implementing granular resource-level access controls.
+        is_correct: false
+      - text: Disable all encryption to improve performance and allow for faster indexing of large analytic datasets.
+        is_correct: false
+    explanation: |
+      Correct: Encryption and access controls are essential for protecting sensitive data.
+    diagram: |
+      graph TD
+        Sensitive[Sensitive Data] --> Encrypt[Encryption]
+        Sensitive --> Access[Access Control]
+        Sensitive --> Monitor[Monitoring]
+
+  - id: q23
+    type: multiple_choice
+    question: |
+      A data scientist is tasked with anonymizing and masking data in AWS. What is a best practice for data anonymization and masking?
+    options:
+      - text: Apply masking and anonymization techniques such as redaction, tokenization, or key salting to sensitive fields before sharing or processing data.
+        is_correct: true
+      - text: Share all data without modification to speed up analytics and ensure the highest possible data accuracy.
+        is_correct: false
+      - text: Use only encryption and skip masking for compliance to avoid losing statistical significance in the datasets.
+        is_correct: false
+      - text: Mask data by simply removing all numeric values from the source files before uploading them to S3.
+        is_correct: false
+    explanation: |
+      Correct: Masking and anonymization protect sensitive information.
+    diagram: |
+      graph TD
+        Data[Data] --> Mask[Masking]
+        Data --> Anon[Anonymization]
+        Data --> Salt[Key Salting]
+
+  - id: q24
+    type: multiple_choice
+    question: |
+      A data engineer must comply with company policies and laws regarding data masking and anonymization. What is the correct approach?
+    options:
+      - text: Apply masking and anonymization methods that meet compliance requirements before storing or processing data.
+        is_correct: true
+      - text: Ignore compliance laws if the data is encrypted at rest using AWS managed encryption keys.
+        is_correct: false
+      - text: Use masking only for non-sensitive data while keeping sensitive information in its original format for analysis.
+        is_correct: false
+      - text: Rely on default AWS settings for all compliance needs without implementing custom masking logic.
+        is_correct: false
+    explanation: |
+      Correct: Compliance requires proper masking and anonymization.
+    diagram: |
+      graph TD
+        Policy[Policy] --> Masking[Masking]
+        Policy --> Anonymization[Anonymization]
+
+  - id: q25
+    type: multiple_choice
+    question: |
+      A developer is using AWS KMS to encrypt and decrypt data. What is a best practice for using encryption keys in AWS?
+    options:
+      - text: Use AWS KMS to centrally manage, rotate, and control access to encryption keys for all supported services.
+        is_correct: true
+      - text: Store encryption keys in application source code for convenience and to avoid external service dependencies.
+        is_correct: false
+      - text: Use a single key for all data, regardless of sensitivity, to simplify the key management lifecycle.
+        is_correct: false
+      - text: Disable key rotation to avoid complexity and prevent potential issues with decrypting older data objects.
+        is_correct: false
+    explanation: |
+      Correct: KMS provides secure, centralized key management and rotation.
+    diagram: |
+      graph TD
+        KMS[KMS] --> Encrypt[Encrypt]
+        KMS --> Decrypt[Decrypt]
+
+  - id: q26
+    type: multiple_choice
+    question: |
+      A data architect needs to configure encryption for data that moves between AWS accounts. What is a recommended approach?
+    options:
+      - text: Use AWS KMS with cross-account key policies to enable secure encryption and decryption across accounts.
+        is_correct: true
+      - text: Share encryption keys by email between accounts to ensure that administrators have local copies for recovery.
+        is_correct: false
+      - text: Disable encryption for cross-account data transfers to ensure maximum compatibility between different service versions.
+        is_correct: false
+      - text: Use only client-side encryption for all cross-account scenarios without integrating with AWS identity services.
+        is_correct: false
+    explanation: |
+      Correct: KMS cross-account policies enable secure encryption across AWS accounts.
+    diagram: |
+      graph TD
+        AccountA[Account A] --> KMS[KMS]
+        AccountB[Account B] --> KMS
+
+  - id: q27
+    type: multiple_choice
+    question: |
+      A security engineer must ensure that data is encrypted in transit within AWS. What is a best practice?
+    options:
+      - text: Enable encryption in transit using TLS/SSL for all data transfers between AWS services and clients.
+        is_correct: true
+      - text: Use unencrypted protocols for faster data transfer when moving large volumes of non-sensitive analytics data.
+        is_correct: false
+      - text: Rely only on encryption at rest for all security needs and ignore transit security within a VPC.
+        is_correct: false
+      - text: Disable encryption in transit for internal AWS traffic to reduce latency in microservices communication.
+        is_correct: false
+    explanation: |
+      Correct: Encryption in transit protects data as it moves between systems.
+    diagram: |
+      graph TD
+        Data[Data] --> TLS[TLS/SSL]
+        TLS --> AWS[AWS Service]
+
+  - id: q28
+    type: multiple_choice
+    question: |
+      A developer needs to log application data for auditing purposes in AWS. What is a recommended approach?
+    options:
+      - text: Use Amazon CloudWatch Logs to collect, store, and analyze application logs.
+        is_correct: true
+      - text: Store logs only on local disks of EC2 instances to avoid the costs associated with cloud logging services.
+        is_correct: false
+      - text: Use S3 bucket policies to generate application logs based on object access and lifecycle events.
+        is_correct: false
+      - text: Rely on VPC flow logs for all application logging needs including high-level business logic auditing.
+        is_correct: false
+    explanation: |
+      Correct: CloudWatch Logs is designed for application log collection and analysis.
+    diagram: |
+      graph TD
+        App[Application] --> CWL[CloudWatch Logs]
+
+  - id: q29
+    type: multiple_choice
+    question: |
+      A security analyst must log access to AWS services for compliance. Which AWS service is best suited for this purpose?
+    options:
+      - text: Use AWS CloudTrail to record and monitor API calls and access to AWS services.
+        is_correct: true
+      - text: Use Amazon SNS to store access logs and broadcast security alerts to administrative users.
+        is_correct: false
+      - text: Use Lambda environment variables for access logging to minimize the architectural complexity of the solution.
+        is_correct: false
+      - text: Use S3 event notifications to track all service access and generate audit reports automatically.
+        is_correct: false
+    explanation: |
+      Correct: CloudTrail provides detailed logging of AWS service access and API calls.
+    diagram: |
+      graph TD
+        User[User] --> CloudTrail[CloudTrail]
+
+  - id: q30
+    type: multiple_choice
+    question: |
+      An enterprise wants to centralize all AWS logs for easier auditing. What is a recommended solution?
+    options:
+      - text: Use AWS CloudTrail Lake or a centralized CloudWatch Logs group to aggregate logs from multiple accounts and regions.
+        is_correct: true
+      - text: Store logs separately in each service with no aggregation to prevent cross-account security risks.
+        is_correct: false
+      - text: Use only EC2 instance logs for centralization and ignore logs from managed services like RDS or S3.
+        is_correct: false
+      - text: Rely on default log retention settings for all services and manually download logs when an audit occurs.
+        is_correct: false
+    explanation: |
+      Correct: Centralized logging simplifies audit and compliance.
+    diagram: |
+      graph TD
+        Account1[Account 1] --> Central[Central Log Group]
+        Account2[Account 2] --> Central
+
+  - id: q31
+    type: multiple_choice
+    question: |
+      A compliance officer needs to track all API calls made in an AWS environment. Which service should be used?
+    options:
+      - text: Enable AWS CloudTrail to log and monitor all API activity across AWS accounts.
+        is_correct: true
+      - text: Use Amazon Athena to directly capture API calls from the network layer without additional configuration.
+        is_correct: false
+      - text: Use CloudWatch Alarms for API call logging and long-term storage of security audit data.
+        is_correct: false
+      - text: Store API call logs in Lambda function code to ensure they are processed in real-time.
+        is_correct: false
+    explanation: |
+      Correct: CloudTrail is the standard for API call tracking in AWS.
+    diagram: |
+      graph TD
+        API[API Calls] --> CloudTrail[CloudTrail]
+
+  - id: q32
+    type: multiple_choice
+    question: |
+      A DevOps engineer needs to store application logs for later analysis. What is a best practice in AWS?
+    options:
+      - text: Use CloudWatch Logs to store, search, and analyze application logs over time.
+        is_correct: true
+      - text: Store logs only in temporary EC2 instance storage and back them up to tape occasionally.
+        is_correct: false
+      - text: Use S3 event notifications for log storage and real-time analysis of application performance.
+        is_correct: false
+      - text: Rely on CloudFormation templates for log retention and automated deletion of old log data.
+        is_correct: false
+    explanation: |
+      Correct: CloudWatch Logs provides durable, searchable log storage.
+    diagram: |
+      graph TD
+        App[App] --> CWL[CloudWatch Logs]
+
+  - id: q33
+    type: multiple_choice
+    question: |
+      A data engineer needs to run centralized queries on AWS logs for audit purposes. Which service is designed for this?
+    options:
+      - text: Use AWS CloudTrail Lake to run SQL-based queries on centralized log data.
+        is_correct: true
+      - text: Use Lambda to store logs in environment variables for querying during the execution phase.
+        is_correct: false
+      - text: Use S3 bucket policies to analyze logs and run complex queries on administrative actions.
+        is_correct: false
+      - text: Use EC2 instance logs for all centralized queries and business intelligence reporting.
+        is_correct: false
+    explanation: |
+      Correct: CloudTrail Lake enables advanced, centralized log queries.
+    diagram: |
+      graph TD
+        Logs[Logs] --> CTL[CloudTrail Lake]
+
+  - id: q34
+    type: multiple_choice
+    question: |
+      A security team wants to analyze AWS logs using SQL and search capabilities. Which AWS services can be used for log analysis?
+    options:
+      - text: Use Athena, CloudWatch Logs Insights, or Amazon OpenSearch Service to analyze and search log data.
+        is_correct: true
+      - text: Use only S3 event notifications for log analysis and real-time visualization of security events.
+        is_correct: false
+      - text: Store logs in Lambda function code for searching and performing complex data transformations.
+        is_correct: false
+      - text: Use CloudFormation to analyze logs directly and generate infrastructure update reports.
+        is_correct: false
+    explanation: |
+      Correct: Athena, CloudWatch Logs Insights, and OpenSearch are designed for log analysis.
+    diagram: |
+      graph TD
+        Logs[Logs] --> Athena[Athena]
+        Logs --> Insights[Logs Insights]
+        Logs --> OpenSearch[OpenSearch]
+
+  - id: q35
+    type: multiple_choice
+    question: |
+      A data engineer is integrating Amazon EMR with other AWS services to handle large volumes of log data. What is a recommended approach?
+    options:
+      - text: Integrate EMR with CloudWatch Logs, S3, or OpenSearch Service to efficiently process and store large log datasets.
+        is_correct: true
+      - text: Store all logs only in EMR local storage to maximize processing speed for large-scale data analysis.
+        is_correct: false
+      - text: Use Lambda environment variables for large log storage and real-time processing of stream data.
+        is_correct: false
+      - text: Rely on default log settings for all services and avoid external integrations to simplify the architecture.
+        is_correct: false
+    explanation: |
+      Correct: EMR can be integrated with other AWS services for scalable log processing.
+    diagram: |
+      graph TD
+        EMR[EMR] --> CWL[CloudWatch Logs]
+        EMR --> S3[S3]
+        EMR --> OpenSearch[OpenSearch]
+
+  - id: q36
+    type: multiple_choice
+    question: |
+      A data engineer must protect personally identifiable information (PII) in AWS analytics workloads. What is a recommended approach?
+    options:
+      - text: Use encryption, access controls, and data masking to protect PII in storage and during processing.
+        is_correct: true
+      - text: Store PII in plain text for easier access and to ensure data availability for all analytics users.
+        is_correct: false
+      - text: Rely only on network firewalls to protect PII without implementing application-level security measures.
+        is_correct: false
+      - text: Disable all access controls for PII data to encourage collaboration and faster data processing.
+        is_correct: false
+    explanation: |
+      Correct: Protecting PII requires multiple layers of security.
+    diagram: |
+      graph TD
+        PII[PII] --> Encrypt[Encryption]
+        PII --> Mask[Masking]
+        PII --> Access[Access Control]
+
+  - id: q37
+    type: multiple_choice
+    question: |
+      A compliance officer is concerned about data sovereignty in AWS. What is a key consideration?
+    options:
+      - text: Ensure that data is stored and processed only in allowed AWS Regions to comply with legal and regulatory requirements.
+        is_correct: true
+      - text: Store all data in any region for convenience and to utilize the lowest latency for global users.
+        is_correct: false
+      - text: Data sovereignty is not relevant for cloud workloads and is automatically handled by the AWS shared responsibility model.
+        is_correct: false
+      - text: Use only default AWS settings for data location without considering regional compliance or legal restrictions.
+        is_correct: false
+    explanation: |
+      Correct: Data sovereignty requires control over data location.
+    diagram: |
+      graph TD
+        Data[Data] --> Region[Allowed Region]
+
+  - id: q38
+    type: multiple_choice
+    question: |
+      A data analyst needs to share data securely between Amazon Redshift clusters. What is a best practice for granting permissions for data sharing?
+    options:
+      - text: Use Redshift data sharing features and grant permissions to specific users or roles as needed.
+        is_correct: true
+      - text: Share data by copying it to public S3 buckets to ensure that all internal and external clusters can access it.
+        is_correct: false
+      - text: Allow all users access to all shared data by default to simplify the data exploration process.
+        is_correct: false
+      - text: Use only manual exports and physical media for data sharing to maintain the highest level of air-gapped security.
+        is_correct: false
+    explanation: |
+      Correct: Redshift data sharing allows secure, permission-based access.
+    diagram: |
+      graph TD
+        Redshift[Redshift] --> Share[Data Sharing]
+        Share --> User[User/Role]

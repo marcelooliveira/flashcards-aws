@@ -1,0 +1,616 @@
+questions:
+  - id: q1
+    type: multiple_choice
+    question: |
+      A data engineering team is evaluating different AWS storage platforms for a new analytics project. They need to consider durability, scalability, and cost characteristics. What is the first step in selecting the most suitable storage platform?
+    options:
+      - text: Analyze the characteristics of each AWS storage platform, such as S3, EBS, and EFS, to match them with the project's durability, scalability, and cost requirements.
+        is_correct: true
+      - text: Provision the largest available Amazon EBS volume types immediately to ensure that the maximum possible storage capacity is available for all anticipated project workloads.
+        is_correct: false
+      - text: Standardize on Amazon S3 as the default storage layer for the entire organization, assuming it is the only AWS service capable of supporting complex analytics workloads.
+        is_correct: false
+      - text: Implement Amazon EFS as the primary storage solution for all data assets, regardless of the specific access patterns, performance benchmarks, or cost constraints.
+        is_correct: false
+    explanation: |
+      Correct: Understanding the characteristics of each storage platform is essential for matching them to project requirements.
+    diagram: |
+      graph TD
+        Requirements[Project Requirements] --> Analysis[Analyze Storage Platforms]
+        Analysis --> Selection[Select Platform]
+  - id: q2
+    type: multiple_choice
+    question: |
+      A financial services company needs to store transaction data with strict performance requirements. Which approach ensures the storage service is configured to meet these demands?
+    options:
+      - text: Select and configure the AWS storage service (such as EBS, S3, or DynamoDB) based on the required throughput, latency, and access patterns.
+        is_correct: true
+      - text: Utilize the default out-of-the-box configurations for all provisioned AWS storage services, assuming they are pre-optimized for every financial industry workload.
+        is_correct: false
+      - text: Migrate all transactional data into Amazon S3 Glacier Flexible Retrieval to maximize the overall performance of the real-time analytics and reporting engine.
+        is_correct: false
+      - text: Deploy Amazon EBS volumes for all data storage needs across the enterprise, regardless of the actual performance metrics or specific data access requirements.
+        is_correct: false
+    explanation: |
+      Correct: Configuring storage services to match performance demands is critical for meeting business needs.
+    diagram: |
+      graph TD
+        Demands[Performance Demands] --> Config[Configure Storage Service]
+        Config --> Results[Meets Requirements]
+  - id: q3
+    type: multiple_choice
+    question: |
+      A genomics research lab processes both .csv patient records and large Parquet DNA sequence files. What is the most important consideration when choosing data storage formats for their pipeline?
+    options:
+      - text: Evaluate the volume, velocity, and variety of data to select formats like .csv for tabular data and Parquet for large, complex datasets.
+        is_correct: true
+      - text: Perform a wholesale conversion of all incoming data into standardized .txt files to guarantee full compatibility with every available AWS analytics and processing service.
+        is_correct: false
+      - text: Mandate the use of legacy .csv file formats for all data storage across the pipeline, irrespective of the underlying data structure, record complexity, or file size.
+        is_correct: false
+      - text: Archive all unstructured data exclusively in the Parquet format to prioritize storage cost reduction, even if this approach adds complexity to downstream processing.
+        is_correct: false
+    explanation: |
+      Correct: Choosing the right data format depends on data characteristics and processing needs.
+    diagram: |
+      graph TD
+        Data[Data Types] --> Format[Choose Format]
+        Format --> Pipeline[Pipeline Efficiency]
+  - id: q4
+    type: multiple_choice
+    question: |
+      A logistics company is migrating data from on-premises to AWS. What is the best practice for aligning data storage with migration requirements?
+    options:
+      - text: Assess migration requirements and select AWS storage solutions (such as S3, EFS, or FSx) that support the necessary data transfer methods and access patterns.
+        is_correct: true
+      - text: Transfer all existing on-premises data directly into Amazon S3 Standard buckets without conducting an analysis of migration bandwidth or future data access needs.
+        is_correct: false
+      - text: Direct all migrated data into Amazon S3 Glacier to prioritize the minimization of monthly storage costs, regardless of the required data retrieval frequency.
+        is_correct: false
+      - text: Identify and select the specific AWS storage service that offers the lowest published cost per GB, regardless of its alignment with migration or access requirements.
+        is_correct: false
+    explanation: |
+      Correct: Aligning storage solutions with migration requirements ensures efficient and reliable data transfer.
+    diagram: |
+      graph TD
+        Migration[Migration Requirements] --> Storage[Select Storage Solution]
+        Storage --> Success[Successful Migration]
+  - id: q5
+    type: multiple_choice
+    question: |
+      A media company needs to store and access video files with varying access patterns, including frequent and infrequent retrieval. How should they determine the appropriate AWS storage solution?
+    options:
+      - text: Analyze access patterns and select storage classes (such as S3 Standard, S3 Standard-IA, or S3 Glacier) that match the frequency and latency needs of each dataset.
+        is_correct: true
+      - text: Consolidate all video media files within the S3 Standard storage class to avoid the administrative complexity associated with managing multiple lifecycle tiers.
+        is_correct: false
+      - text: Implement Amazon EBS as the primary storage for all video files to ensure maximum potential throughput, regardless of the resulting infrastructure costs.
+        is_correct: false
+      - text: Provision all data within the S3 Glacier Deep Archive tier to achieve the lowest possible storage costs, even for video files that require frequent retrieval.
+        is_correct: false
+    explanation: |
+      Correct: Matching storage solutions to access patterns optimizes cost and performance.
+    diagram: |
+      graph TD
+        Patterns[Access Patterns] --> Choice[Choose Storage Class]
+        Choice --> Outcome[Optimized Storage]
+  - id: q6
+    type: multiple_choice
+    question: |
+      A data warehouse team is experiencing query failures due to table locks in Amazon Redshift. What is the best practice for managing locks to prevent access issues?
+    options:
+      - text: Monitor and manage table locks in Redshift by analyzing lock wait events and optimizing transaction design to minimize lock contention.
+        is_correct: true
+      - text: Disregard lock-related warnings in the console, assuming that Amazon Redshift will automatically resolve all resource contention conflicts without manual intervention.
+        is_correct: false
+      - text: Perform a hard restart of the entire Amazon Redshift cluster immediately whenever a lock event is detected to clear the transaction queue and restore access.
+        is_correct: false
+      - text: Schedule manual vacuum operations to run immediately after every individual query to ensure that table-level locks are prevented from occurring in the system.
+        is_correct: false
+    explanation: |
+      Correct: Proactively managing locks and optimizing transactions reduces access issues in Redshift.
+    diagram: |
+      graph TD
+        Locks[Table Locks] --> Monitor[Monitor & Optimize]
+        Monitor --> Access[Improved Access]
+  - id: q7
+    type: multiple_choice
+    question: |
+      A financial analytics team is running transactional workloads on Amazon RDS and encounters access issues due to row-level locks. What is the recommended approach to manage locks and maintain data availability?
+    options:
+      - text: Monitor RDS lock metrics, tune queries, and optimize transaction isolation levels to reduce lock contention and improve concurrency.
+        is_correct: true
+      - text: Deactivate all transaction isolation levels and concurrency controls to eliminate the possibility of locking within the Amazon RDS database environment.
+        is_correct: false
+      - text: Initiate a reboot of the RDS instance at frequent intervals throughout the day to clear active locks and maintain continuous data availability for users.
+        is_correct: false
+      - text: Redirect all application workloads to read replicas exclusively to bypass lock-related issues, regardless of whether the operations involve data modifications.
+        is_correct: false
+    explanation: |
+      Correct: Monitoring and tuning transactions is key to managing locks and maintaining availability in RDS.
+    diagram: |
+      graph TD
+        RDS[RDS Locks] --> Tune[Tune Transactions]
+        Tune --> Availability[High Availability]
+
+  - id: q8
+    type: multiple_choice
+    question: |
+      A data engineering team must optimize cost and performance for a new analytics workload. Which approach best implements the appropriate storage service for specific cost and performance requirements using Amazon Redshift?
+    options:
+      - text: Analyze workload requirements and configure Redshift clusters, node types, and distribution styles to balance cost and performance.
+        is_correct: true
+      - text: Adopt the default Amazon Redshift configuration for all production workloads, assuming the service is pre-optimized for every possible analytics use case.
+        is_correct: false
+      - text: Ingest all project data into Amazon Redshift clusters without performing an analysis of the specific node types or the anticipated data workload patterns.
+        is_correct: false
+      - text: Deploy the largest available Amazon Redshift cluster size to guarantee high performance levels, regardless of the impact on the project's overall budget.
+        is_correct: false
+    explanation: |
+      Correct: Matching Redshift configuration to workload needs optimizes both cost and performance.
+    diagram: |
+      graph TD
+        Workload[Workload] --> Config[Configure Redshift]
+        Config --> Results[Optimized Results]
+
+  - id: q9
+    type: multiple_choice
+    question: |
+      A big data team is designing a pipeline for large-scale processing. What is the best way to implement the appropriate storage service for cost and performance using Amazon EMR?
+    options:
+      - text: Select EMR instance types, storage options, and cluster size based on workload requirements to optimize cost and performance.
+        is_correct: true
+      - text: Limit the infrastructure to only On-Demand Amazon EC2 instances for all EMR jobs to ensure the highest possible level of processing reliability.
+        is_correct: false
+      - text: Configure the system to store all intermediate processing data within HDFS, regardless of the underlying cost implications or the data's durability needs.
+        is_correct: false
+      - text: Provision the largest possible EMR cluster size for every job to proactively avoid performance bottlenecks, regardless of the actual workload complexity.
+        is_correct: false
+    explanation: |
+      Correct: Tuning EMR resources and storage to workload needs is key for cost-effective performance.
+    diagram: |
+      graph TD
+        Pipeline[Pipeline] --> EMR[Configure EMR]
+        EMR --> Outcome[Cost & Performance]
+
+  - id: q10
+    type: multiple_choice
+    question: |
+      A data lake architect needs to implement a storage solution that balances cost and performance for a large, multi-tenant environment. Which approach is best for AWS Lake Formation?
+    options:
+      - text: Use Lake Formation to manage S3 storage classes, access policies, and partitioning to optimize cost and performance for each tenant.
+        is_correct: true
+      - text: Centralize all tenant data into a single Amazon S3 bucket using default settings and a flat structure for all distinct organizational departments.
+        is_correct: false
+      - text: Standardize on the Amazon S3 Standard storage class for all multi-tenant data, regardless of the actual data access frequency or lifecycle requirements.
+        is_correct: false
+      - text: Implement a unified access policy and assign it to every user in the environment to simplify administrative management and reduce configuration overhead.
+        is_correct: false
+    explanation: |
+      Correct: Lake Formation enables fine-grained control and optimization for multi-tenant data lakes.
+    diagram: |
+      graph TD
+        Tenants[Tenants] --> LakeFormation[Lake Formation Config]
+        LakeFormation --> Results[Optimized Data Lake]
+
+  - id: q11
+    type: multiple_choice
+    question: |
+      A database administrator must ensure cost-effective, high-performance storage for transactional workloads. What is the best practice for Amazon RDS?
+    options:
+      - text: Choose RDS instance types, storage options, and performance settings based on workload analysis to meet cost and performance goals.
+        is_correct: true
+      - text: Utilize the standard default Amazon RDS configuration for all database instances, assuming it provides the ideal balance for every transactional workload.
+        is_correct: false
+      - text: Provision the largest available Amazon RDS instance size for every database to guarantee peak performance, regardless of the resulting financial costs.
+        is_correct: false
+      - text: Configure all databases to use General Purpose SSD (gp2) storage for all volumes, regardless of the specific IOPS requirements or latency sensitivities.
+        is_correct: false
+    explanation: |
+      Correct: Tuning RDS resources and storage to workload needs is essential for cost and performance.
+    diagram: |
+      graph TD
+        Workload[Workload] --> RDS[Configure RDS]
+        RDS --> Results[Optimized DB]
+
+  - id: q12
+    type: multiple_choice
+    question: |
+      A NoSQL architect is tasked with implementing a DynamoDB solution for a high-traffic application. What is the best way to meet specific cost and performance requirements?
+    options:
+      - text: Configure DynamoDB table settings, capacity modes, and indexes based on access patterns and workload analysis.
+        is_correct: true
+      - text: Apply the default Amazon DynamoDB settings to every table in the environment, as these settings are pre-optimized for all potential NoSQL use cases.
+        is_correct: false
+      - text: Standardize on the use of On-Demand capacity mode for every table in the account, regardless of the stability or predictability of the traffic patterns.
+        is_correct: false
+      - text: Consolidate all disparate data entities into a single, massive DynamoDB table to simplify the overall management of the application's data layer.
+        is_correct: false
+    explanation: |
+      Correct: DynamoDB configuration should match workload and access patterns for optimal results.
+    diagram: |
+      graph TD
+        App[Application] --> DynamoDB[Configure DynamoDB]
+        DynamoDB --> Results[Performance & Cost]
+
+  - id: q13
+    type: multiple_choice
+    question: |
+      A streaming data team needs to implement a cost-effective, high-performance solution for ingesting and processing real-time data. What is the best practice for Amazon Kinesis Data Streams?
+    options:
+      - text: Configure the number of shards, retention period, and enhanced fan-out based on throughput and latency requirements.
+        is_correct: true
+      - text: Implement the default Amazon Kinesis configuration for all data streams, regardless of the specific workload characteristics or processing requirements.
+        is_correct: false
+      - text: Increase the data retention period to the maximum possible setting for every stream to proactively prevent any potential data loss during processing.
+        is_correct: false
+      - text: Deploy all streaming workloads using a single shard configuration to minimize operational costs, regardless of the actual throughput or volume needs.
+        is_correct: false
+    explanation: |
+      Correct: Kinesis should be tuned to workload needs for cost and performance.
+    diagram: |
+      graph TD
+        Stream[Stream] --> Kinesis[Configure Kinesis]
+        Kinesis --> Results[Optimized Stream]
+
+  - id: q14
+    type: multiple_choice
+    question: |
+      A data streaming architect is designing a solution using Amazon MSK. What is the best way to implement the appropriate storage service for specific cost and performance requirements?
+    options:
+      - text: Select MSK broker instance types, storage volumes, and partitioning based on workload analysis and throughput needs.
+        is_correct: true
+      - text: Adopt the standard MSK cluster configuration for all streaming workloads, assuming it is universally suitable for every enterprise-level Kafka deployment.
+        is_correct: false
+      - text: Architect the system to store all incoming data within a single Kafka topic to simplify the management of the data streaming infrastructure.
+        is_correct: false
+      - text: Provision the largest available broker instance types for the MSK cluster to guarantee performance, regardless of the impact on project costs.
+        is_correct: false
+    explanation: |
+      Correct: MSK configuration should be tailored to workload and cost requirements.
+    diagram: |
+      graph TD
+        Workload[Workload] --> MSK[Configure MSK]
+        MSK --> Results[Optimized Kafka]
+
+  - id: q15
+    type: multiple_choice
+    question: |
+      A data engineering team must configure Amazon Redshift for a workload with specific access patterns and requirements. What is the best approach?
+    options:
+      - text: Tune Redshift distribution styles, sort keys, and workload management settings to match access patterns and query requirements.
+        is_correct: true
+      - text: Apply the default Amazon Redshift cluster configuration to every production workload, regardless of the specific data access patterns or query types.
+        is_correct: false
+      - text: Store all disparate data sets within a single massive table to simplify the query writing process, regardless of the impact on performance or access.
+        is_correct: false
+      - text: Select the largest available node type for the Redshift cluster to guarantee high performance, regardless of the specific nature of the workload.
+        is_correct: false
+    explanation: |
+      Correct: Redshift should be configured to match access patterns for optimal performance.
+    diagram: |
+      graph TD
+        Patterns[Access Patterns] --> Redshift[Configure Redshift]
+        Redshift --> Results[Performance]
+
+  - id: q16
+    type: multiple_choice
+    question: |
+      A data analytics team is using Amazon EMR for a variety of workloads with different access patterns. What is the best way to configure EMR for these requirements?
+    options:
+      - text: Adjust EMR cluster size, instance types, and storage options to match the access patterns and workload requirements.
+        is_correct: true
+      - text: Deploy all Amazon EMR jobs using the default cluster configuration settings, regardless of the specific access patterns or processing requirements.
+        is_correct: false
+      - text: Architect the solution to store all processed data within HDFS exclusively, regardless of the actual data access frequency or long-term durability needs.
+        is_correct: false
+      - text: Provision the largest possible cluster size for every EMR job to guarantee peak performance, regardless of the actual workload size or complexity.
+        is_correct: false
+    explanation: |
+      Correct: EMR should be tuned to workload and access patterns for best results.
+    diagram: |
+      graph TD
+        Patterns[Access Patterns] --> EMR[Configure EMR]
+        EMR --> Results[Optimized EMR]
+
+  - id: q17
+    type: multiple_choice
+    question: |
+      A data lake administrator is configuring AWS Lake Formation for a multi-tenant environment with diverse access patterns. What is the best practice?
+    options:
+      - text: Use Lake Formation to manage S3 storage classes, partitioning, and access policies based on access patterns and tenant requirements.
+        is_correct: true
+      - text: Consolidate all tenant data into a single Amazon S3 bucket with default settings, using the same lifecycle policies for all organizational departments.
+        is_correct: false
+      - text: Utilize only the Amazon S3 Standard storage class for every data asset in the lake, regardless of how frequently each tenant accesses their data.
+        is_correct: false
+      - text: Simplify the administrative management of the data lake by assigning a single, identical access policy to all users across every tenant group.
+        is_correct: false
+    explanation: |
+      Correct: Lake Formation enables fine-grained control and optimization for multi-tenant data lakes.
+    diagram: |
+      graph TD
+        Patterns[Access Patterns] --> LakeFormation[Configure Lake Formation]
+        LakeFormation --> Results[Optimized Data Lake]
+
+  - id: q18
+    type: multiple_choice
+    question: |
+      A database administrator must configure Amazon RDS for workloads with specific access patterns and requirements. What is the best approach?
+    options:
+      - text: Select RDS instance types, storage options, and performance settings based on access patterns and workload analysis.
+        is_correct: true
+      - text: Implement the default Amazon RDS configuration settings for every database instance in the account, regardless of the specific data access patterns.
+        is_correct: false
+      - text: Provision the largest available Amazon RDS instance size for all production databases to guarantee performance, regardless of the actual workload needs.
+        is_correct: false
+      - text: Configure all databases to use General Purpose SSD (gp2) storage for every volume, regardless of the specific IOPS requirements of the application.
+        is_correct: false
+    explanation: |
+      Correct: RDS should be configured to match access patterns for optimal results.
+    diagram: |
+      graph TD
+        Patterns[Access Patterns] --> RDS[Configure RDS]
+        RDS --> Results[Performance]
+
+  - id: q19
+    type: multiple_choice
+    question: |
+      A NoSQL architect is configuring DynamoDB for a workload with unique access patterns. What is the best practice?
+    options:
+      - text: Configure table settings, indexes, and capacity modes in DynamoDB to match access patterns and workload requirements.
+        is_correct: true
+      - text: Maintain the default Amazon DynamoDB settings for all tables in the application, regardless of the specific access patterns or data throughput needs.
+        is_correct: false
+      - text: Activate On-Demand capacity mode for every table in the environment, regardless of whether the traffic patterns are predictable or highly variable.
+        is_correct: false
+      - text: Store all distinct data entities within a single table to simplify the architectural management, regardless of the underlying access patterns or scaling needs.
+        is_correct: false
+    explanation: |
+      Correct: DynamoDB should be tuned to workload and access patterns for best results.
+    diagram: |
+      graph TD
+        Patterns[Access Patterns] --> DynamoDB[Configure DynamoDB]
+        DynamoDB --> Results[Performance]
+
+  - id: q20
+    type: multiple_choice
+    question: |
+      A cloud architect is designing a data lake using Amazon S3. What is the best way to apply S3 to appropriate use cases?
+    options:
+      - text: Use S3 storage classes, bucket policies, and lifecycle rules to match data access patterns, retention, and compliance needs.
+        is_correct: true
+      - text: Store all organizational data within the Amazon S3 Standard tier to avoid the complexity involved in managing multiple storage classes and lifecycle rules.
+        is_correct: false
+      - text: Migrate all data into Amazon S3 Glacier Deep Archive as the primary storage tier, regardless of the required data access frequency or retrieval latency.
+        is_correct: false
+      - text: Implement a single, unified bucket policy and assign it to every user in the organization to simplify the overall management of the data lake infrastructure.
+        is_correct: false
+    explanation: |
+      Correct: S3 should be configured for each use case to optimize cost, access, and compliance.
+    diagram: |
+      graph TD
+        UseCase[Use Case] --> S3[Configure S3]
+        S3 --> Results[Optimized Storage]
+
+  - id: q21
+    type: multiple_choice
+    question: |
+      A data warehouse architect is applying Amazon Redshift to a new analytics use case. What is the best approach?
+    options:
+      - text: Configure Redshift clusters, distribution styles, and workload management to match the analytics use case and data volume.
+        is_correct: true
+      - text: Deploy the default Amazon Redshift configuration for every new analytics workload, assuming it provides the ideal balance for all potential use cases.
+        is_correct: false
+      - text: Consolidate all incoming data into a single table to simplify the structure of analytics queries, regardless of the impact on overall performance.
+        is_correct: false
+      - text: Select the largest available node type for the cluster to guarantee the highest possible performance, regardless of the actual data volume or workload requirements.
+        is_correct: false
+    explanation: |
+      Correct: Redshift should be tailored to each analytics use case for best results.
+    diagram: |
+      graph TD
+        UseCase[Use Case] --> Redshift[Configure Redshift]
+        Redshift --> Results[Optimized Analytics]
+
+  - id: q22
+    type: multiple_choice
+    question: |
+      A big data engineer is applying Amazon EMR to a new data processing use case. What is the best practice?
+    options:
+      - text: Select EMR cluster size, instance types, and storage options to match the processing use case and data characteristics.
+        is_correct: true
+      - text: Implement the default Amazon EMR configuration for every processing job, assuming it is pre-optimized for all potential big data workloads.
+        is_correct: false
+      - text: Architect the system to store all datasets within HDFS exclusively, regardless of the actual access frequency or the long-term durability requirements.
+        is_correct: false
+      - text: Provision the largest possible cluster size for every job to guarantee high performance, regardless of the specific processing needs of the use case.
+        is_correct: false
+    explanation: |
+      Correct: EMR should be configured for each use case to optimize performance and cost.
+    diagram: |
+      graph TD
+        UseCase[Use Case] --> EMR[Configure EMR]
+        EMR --> Results[Optimized Processing]
+
+  - id: q23
+    type: multiple_choice
+    question: |
+      A data lake administrator is applying AWS Lake Formation to a new use case. What is the best approach?
+    options:
+      - text: Use Lake Formation to manage S3 storage classes, partitioning, and access policies to match the use case and data requirements.
+        is_correct: true
+      - text: Centralize all project data into a single Amazon S3 bucket with default settings, using a flat folder structure for every distinct data category.
+        is_correct: false
+      - text: Mandate the use of only the Amazon S3 Standard storage class for every data asset, regardless of the specific lifecycle or retrieval requirements of the use case.
+        is_correct: false
+      - text: Assign the same identical set of access policies to every user in the environment to simplify the administrative management of the data lake.
+        is_correct: false
+    explanation: |
+      Correct: Lake Formation should be configured for each use case to optimize the data lake.
+    diagram: |
+      graph TD
+        UseCase[Use Case] --> LakeFormation[Configure Lake Formation]
+        LakeFormation --> Results[Optimized Data Lake]
+
+  - id: q24
+    type: multiple_choice
+    question: |
+      A database administrator is applying Amazon RDS to a new application use case. What is the best practice?
+    options:
+      - text: Select RDS instance types, storage options, and performance settings to match the application use case and workload.
+        is_correct: true
+      - text: Deploy the standard default Amazon RDS configuration for all new applications, assuming it is universally suitable for every database workload.
+        is_correct: false
+      - text: Standardize on the largest available Amazon RDS instance size for all database workloads to ensure peak performance levels at all times.
+        is_correct: false
+      - text: Configure all databases to use General Purpose SSD (gp2) storage, regardless of the specific IOPS requirements or latency sensitivity of the application.
+        is_correct: false
+    explanation: |
+      Correct: RDS should be configured for each use case to optimize performance and cost.
+    diagram: |
+      graph TD
+        UseCase[Use Case] --> RDS[Configure RDS]
+        RDS --> Results[Optimized DB]
+
+  - id: q25
+    type: multiple_choice
+    question: |
+      A NoSQL architect is applying DynamoDB to a new use case. What is the best approach?
+    options:
+      - text: Configure table settings, indexes, and capacity modes in DynamoDB to match the use case and workload requirements.
+        is_correct: true
+      - text: Adopt the default Amazon DynamoDB settings for every new table, assuming they are pre-optimized for all potential NoSQL data models.
+        is_correct: false
+      - text: Enable On-Demand capacity mode for every table in the account, regardless of the predictability or stability of the application's traffic patterns.
+        is_correct: false
+      - text: Consolidate all distinct data entities into a single, massive table to simplify the architectural management of the data layer for the new use case.
+        is_correct: false
+    explanation: |
+      Correct: DynamoDB should be configured for each use case to optimize performance and cost.
+    diagram: |
+      graph TD
+        UseCase[Use Case] --> DynamoDB[Configure DynamoDB]
+        DynamoDB --> Results[Optimized NoSQL]
+
+  - id: q26
+    type: multiple_choice
+    question: |
+      A streaming data architect is applying Amazon Kinesis Data Streams to a new use case. What is the best practice?
+    options:
+      - text: Configure the number of shards, retention period, and enhanced fan-out in Kinesis to match the use case and throughput requirements.
+        is_correct: true
+      - text: Use the default Amazon Kinesis configuration for all new data streams, regardless of the specific throughput or processing needs of the application.
+        is_correct: false
+      - text: Set the data retention period to the maximum available duration for every stream to prevent any possibility of data loss during high-traffic periods.
+        is_correct: false
+      - text: Implement a single shard configuration for every stream to minimize operational costs, regardless of the actual data volume or latency requirements.
+        is_correct: false
+    explanation: |
+      Correct: Kinesis should be configured for each use case to optimize performance and cost.
+    diagram: |
+      graph TD
+        UseCase[Use Case] --> Kinesis[Configure Kinesis]
+        Kinesis --> Results[Optimized Stream]
+
+  - id: q27
+    type: multiple_choice
+    question: |
+      A data streaming architect is applying Amazon MSK to a new use case. What is the best approach?
+    options:
+      - text: Select MSK broker instance types, storage volumes, and partitioning to match the use case and throughput requirements.
+        is_correct: true
+      - text: Utilize the standard MSK cluster configuration for every streaming use case, assuming it is universally applicable for all Kafka-based workloads.
+        is_correct: false
+      - text: Architect the system to store all incoming data within a single Kafka topic to simplify the management and monitoring of the streaming infrastructure.
+        is_correct: false
+      - text: Deploy the largest available broker instance types for every workload to guarantee high performance, regardless of the impact on infrastructure costs.
+        is_correct: false
+    explanation: |
+      Correct: MSK should be configured for each use case to optimize performance and cost.
+    diagram: |
+      graph TD
+        UseCase[Use Case] --> MSK[Configure MSK]
+        MSK --> Results[Optimized Kafka]
+
+  - id: q28
+    type: multiple_choice
+    question: |
+      A data engineering team is integrating AWS Transfer Family and AWS DMS into their data processing system. What is the best practice?
+    options:
+      - text: Use Transfer Family for secure file transfers and DMS for database migrations to enable seamless integration into data pipelines.
+        is_correct: true
+      - text: Implement AWS Transfer Family as the exclusive tool for all data migrations, regardless of whether the source is a file system or a relational database.
+        is_correct: false
+      - text: Utilize AWS DMS exclusively for both file-based transfers and transactional database migrations to consolidate the number of services used in the pipeline.
+        is_correct: false
+      - text: Mandate that all organizational data be stored in Amazon S3 before initiating any migration or transfer process, regardless of the source or destination.
+        is_correct: false
+    explanation: |
+      Correct: Using the right tool for each migration type ensures efficient integration.
+    diagram: |
+      graph TD
+        Integration[Integration] --> TransferFamily[Transfer Family]
+        Integration --> DMS[DMS]
+        TransferFamily --> Pipeline[Data Pipeline]
+        DMS --> Pipeline
+
+  - id: q29
+    type: multiple_choice
+    question: |
+      A data warehouse architect is implementing Amazon Redshift federated queries for remote data access. What is the best approach?
+    options:
+      - text: Use Redshift federated queries to access and join data across Redshift and external sources without moving data.
+        is_correct: true
+      - text: Execute a full migration of all external datasets into the local Amazon Redshift cluster before attempting to run any complex analytical queries.
+        is_correct: false
+      - text: Rely exclusively on Amazon Redshift Spectrum for every instance of remote data access, regardless of the source database type or query complexity.
+        is_correct: false
+      - text: Store all remote data assets in a centralized Amazon S3 bucket before attempting to perform any queries against external data sources.
+        is_correct: false
+    explanation: |
+      Correct: Federated queries enable seamless access to external data sources.
+    diagram: |
+      graph TD
+        Redshift[Redshift] --> Federated[Configure Federated Query]
+        Federated --> Results[Remote Access]
+
+  - id: q30
+    type: multiple_choice
+    question: |
+      A data warehouse administrator is implementing Amazon Redshift materialized views for remote access. What is the best practice?
+    options:
+      - text: Use materialized views to store precomputed results from external data sources for faster query performance.
+        is_correct: true
+      - text: Direct all analytical queries to the external data sources for every user request to ensure that the most current data is always retrieved.
+        is_correct: false
+      - text: Standardize on the use of Amazon Redshift Spectrum for all remote data access needs, avoiding the use of materialized views entirely.
+        is_correct: false
+      - text: Transfer all required data into Amazon S3 buckets as a preliminary step before creating any materialized views within the Redshift cluster.
+        is_correct: false
+    explanation: |
+      Correct: Materialized views improve performance for remote data access.
+    diagram: |
+      graph TD
+        Redshift[Redshift] --> Materialized[Materialized View]
+        Materialized --> Results[Fast Access]
+
+  - id: q31
+    type: multiple_choice
+    question: |
+      A data warehouse architect is using Amazon Redshift Spectrum to access external data. What is the best approach?
+    options:
+      - text: Use Redshift Spectrum to query data in S3 without loading it into Redshift, enabling scalable analytics on external datasets.
+        is_correct: true
+      - text: Perform a manual load of all external data into local Redshift tables before initiating any query operations to ensure maximum compatibility.
+        is_correct: false
+      - text: Implement federated queries as the primary method for all external data access, regardless of the data volume or the storage location.
+        is_correct: false
+      - text: Restrict all external data storage to the Amazon S3 Standard storage class to ensure the highest possible availability for Spectrum queries.
+        is_correct: false
+    explanation: |
+      Correct: Spectrum enables direct querying of S3 data for scalable analytics.
+    diagram: |
+      graph TD
+        Redshift[Redshift] --> Spectrum[Spectrum Query]
+        Spectrum --> Results[Scalable Analytics]
