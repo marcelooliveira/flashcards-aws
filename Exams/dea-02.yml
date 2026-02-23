@@ -46,43 +46,51 @@
     question: |
       A company stores data from an application in an Amazon DynamoDB table that operates in provisioned capacity mode. The workloads of the application have predictable throughput load on a regular schedule. Every Monday, there is an immediate increase in activity early in the morning. The application has very low usage during weekends. The company must ensure that the application performs consistently during peak usage times. Which solution will meet these requirements in the MOST cost-effective way?
     options:
-      - text: "Increase the provisioned capacity to the maximum capacity that is currently present during peak load times."
+      - text: Increase the provisioned capacity to the maximum capacity that is currently present during peak load times.
         is_correct: false
-      - text: "Divide the table into two tables. Provision each table with half of the provisioned capacity of the original table. Spread queries evenly across both tables."
-        is_correct: false
-      - text: "Use AWS Application Auto Scaling to schedule higher provisioned capacity for peak usage times. Schedule lower capacity during off-peak times."
+      - text: Use AWS Application Auto Scaling to schedule higher provisioned capacity for peak usage times. Schedule lower capacity during off-peak times.
         is_correct: true
-      - text: "Change the capacity mode from provisioned to on-demand. Configure the table to scale up and scale down based on the load on the table."
+      - text: Divide the table into two tables. Provision each table with half of the provisioned capacity of the original table. Spread queries evenly across both tables.
+        is_correct: false
+      - text: Change the capacity mode from provisioned to on-demand. Configure the table to scale up and scale down based on the load on the table.
         is_correct: false
     explanation: |
-      Application Auto Scaling allows scheduled scaling of DynamoDB provisioned capacity, optimizing costs and ensuring performance during predictable peak and off-peak times.
+      Correct: For predictable, scheduled workloads, Scheduled Scaling via AWS Application Auto Scaling provides the best balance of performance and cost. It allows the company to proactively increase capacity before the Monday morning rush and decrease it during the quiet weekend, taking advantage of lower provisioned pricing.
+      Incorrect: On-demand mode is more expensive for predictable traffic. Keeping maximum capacity permanently is wasteful. Splitting tables adds unnecessary architectural complexity.
+    explanationImg: dea-02-53.jpg
     diagram: |
-      graph TD
-        A[DynamoDB Table] --> B[Application Auto Scaling]
-        B --> C[Schedule Capacity]
-        C --> D[Cost-effective Performance]
+      graph LR
+      Schedule[AWS Application Auto Scaling] -->|Mon 06:00 AM| Up[Increase RCU/WCU]
+      Schedule -->|Fri 06:00 PM| Down[Decrease RCU/WCU]
+      Up --> Table[(DynamoDB Table)]
+      Down --> Table
 
   - id: q54
     type: multiple_choice
     question: |
       A company is planning to migrate on-premises Apache Hadoop clusters to Amazon EMR. The company also needs to migrate a data catalog into a persistent storage solution. The company currently stores the data catalog in an on-premises Apache Hive metastore on the Hadoop clusters. The company requires a serverless solution to migrate the data catalog. Which solution will meet these requirements MOST cost-effectively?
     options:
-      - text: "Use AWS Database Migration Service (AWS DMS) to migrate the Hive metastore into Amazon S3. Configure AWS Glue Data Catalog to scan Amazon S3 to produce the data catalog."
+      - text: Configure an external Hive metastore in Amazon EMR. Migrate the existing on-premises Hive metastore into Amazon EMR. Use Amazon Aurora MySQL to store the company's data catalog.
+        is_correct: false
+      - text: Configure a Hive metastore in Amazon EMR. Migrate the existing on-premises Hive metastore into Amazon EMR. Use AWS Glue Data Catalog to store the company's data catalog as an external data catalog.
         is_correct: true
-      - text: "Configure a Hive metastore in Amazon EMR. Migrate the existing on-premises Hive metastore into Amazon EMR. Use AWS Glue Data Catalog to store the company's data catalog as an external data catalog."
+      - text: Configure a new Hive metastore in Amazon EMR. Migrate the existing on-premises Hive metastore into Amazon EMR. Use the new metastore as the company's data catalog.
         is_correct: false
-      - text: "Configure an external Hive metastore in Amazon EMR. Migrate the existing on-premises Hive metastore into Amazon EMR. Use Amazon Aurora MySQL to store the company's data catalog."
-        is_correct: false
-      - text: "Configure a new Hive metastore in Amazon EMR. Migrate the existing on-premises Hive metastore into Amazon EMR. Use the new metastore as the company's data catalog."
+      - text: Use AWS Database Migration Service (AWS DMS) to migrate the Hive metastore into Amazon S3. Configure AWS Glue Data Catalog to scan Amazon S3 to produce the data catalog.
         is_correct: false
     explanation: |
-      Migrating the Hive metastore to S3 and using AWS Glue Data Catalog provides a serverless, persistent, and cost-effective solution for catalog management after Hadoop migration.
+      Correct: AWS Glue Data Catalog is a fully managed, serverless replacement for the Hive Metastore. It provides persistent storage for metadata that survives EMR cluster termination and is more cost-effective than running a dedicated RDS or Aurora instance for the same purpose.
+      Incorrect: Using Aurora incurs higher costs due to instance pricing. Internal EMR metastores are not persistent. Using DMS and S3 scanners adds unnecessary operational complexity.
     diagram: |
       graph TD
-        A[On-premises Hive Metastore] --> B[AWS DMS]
-        B --> C[S3]
-        C --> D[Glue Data Catalog]
-        D --> E[Persistent Serverless Catalog]
+      subgraph On-Premises
+      Hadoop[Hadoop Cluster] --- HiveMS[Hive Metastore]
+      end
+      subgraph AWS Cloud
+      EMR[Amazon EMR] -->|Metadata| Glue[AWS Glue Data Catalog]
+      Glue ---|Persistent & Serverless| Athena[Amazon Athena]
+      end
+      HiveMS -->|Migrate| Glue
 
   - id: q55
     type: multiple_choice
@@ -196,7 +204,7 @@
       An airline company is collecting metrics about flight activities for analytics. The company is conducting a proof of concept (POC) test to show how analytics can provide insights that the company can use to increase on-time departures. The POC test uses objects in Amazon S3 that contain the metrics in .csv format. The POC test uses Amazon Athena to query the data. The data is partitioned in the S3 bucket by date. As the amount of data increases, the company wants to optimize the storage solution to improve query performance. Which combination of solutions will meet these requirements? (Choose two.)
     options:
       - text: "Add a randomized string to the beginning of the keys in Amazon S3 to get more throughput across partitions."
-        is_correct: true
+        is_correct: false
       - text: "Use an S3 bucket that is in the same account that uses Athena to query the data."
         is_correct: false
       - text: "Use an S3 bucket that is in the same AWS Region where the company runs Athena queries."
@@ -206,14 +214,12 @@
       - text: "Preprocess the .csv data to Apache Parquet format by fetching only the data blocks that are needed for predicates."
         is_correct: true
     explanation: |
-      Using randomized prefixes increases S3 throughput, storing data in the same region as Athena reduces latency, and converting to Parquet format improves query performance by enabling efficient columnar scans.
+      Storing data in the same region as Athena reduces latency, and converting to Parquet format improves query performance by enabling efficient columnar scans.
     diagram: |
       graph TD
-        A[S3 CSV Data] --> B[Randomized Prefix]
-        A --> C[Same Region as Athena]
+        A[S3 CSV Data] --> C[Same Region as Athena]
         A --> D[Parquet Format]
-        B --> E[Optimized Query Performance]
-        C --> E
+        C --> E[Optimized Query Performance]
         D --> E
 
   - id: q61

@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "Web",
   "resources": {
-    "hash": "sha256-kYONYqBglqLVlXMipK8hGeiX1ea4osrYh6yAuncp4Ac=",
+    "hash": "sha256-dZzCJ8rT2vyWddG3exOOW6O6EhQgqGnWjB6n/xoLZck=",
     "fingerprinting": {
       "MermaidJS.Blazor.z1meltx858.wasm": "MermaidJS.Blazor.wasm",
       "Microsoft.AspNetCore.Components.77lbhfxbe5.wasm": "Microsoft.AspNetCore.Components.wasm",
@@ -47,7 +47,7 @@
       "System.Threading.n5ppejuuhz.wasm": "System.Threading.wasm",
       "System.7mkjnfwul0.wasm": "System.wasm",
       "System.Private.CoreLib.3wrsqjqcm1.wasm": "System.Private.CoreLib.wasm",
-      "Web.zacyz17ktd.wasm": "Web.wasm",
+      "Web.8nrz4ymjak.wasm": "Web.wasm",
       "dotnet.js": "dotnet.js",
       "dotnet.native.xidrk0eo52.js": "dotnet.native.js",
       "dotnet.native.y68cfu4kuf.wasm": "dotnet.native.wasm",
@@ -117,7 +117,7 @@
       "System.Text.RegularExpressions.h5bhj6sp1c.wasm": "sha256-S+JR3QKnzqS3M5pSdbyGSpv9iUU/xN/2PJ1IkIX7c5c=",
       "System.Threading.n5ppejuuhz.wasm": "sha256-ZVqAdmVQkqedPOVid8yORJq6/P4I+NlvR19QR4PIQfY=",
       "System.7mkjnfwul0.wasm": "sha256-H4K9w0OHWwZCaMDfVwQjW0dSqnnS/iuCkysBB+Q2c3A=",
-      "Web.zacyz17ktd.wasm": "sha256-NXbUkn39Q5TOBk1e9EaLC3wasIGAppbNIEd5AmqTQ6A="
+      "Web.8nrz4ymjak.wasm": "sha256-TB2CtzpWdviy7s4XDuQ6Ugf0nt8MgDTZjlfdHOvvZvo="
     },
     "libraryInitializers": {
       "_content/Toolbelt.Blazor.GetProperty.Script/Toolbelt.Blazor.GetProperty.Script.lib.module.js": "sha256-rN9ebccf1yzi+bWyyip51JJuAKONWUHDBKWnKUpDWAA="
