@@ -35,6 +35,9 @@
             </div>
             <div><button @onclick="@(() => SpeakText(Question.Explanation))" style="font-size: 36px;">📢</button></div>
         </div>
+        <div class="full-width">
+          <img src="@Question.ExplanationImg" />
+        </div>
         <MermaidDiagram Definition="@Question.Diagram"/>
     }
     <script type="text/javascript">

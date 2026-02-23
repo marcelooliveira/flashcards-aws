@@ -819,11 +819,11 @@
       - text: Turn on the public access setting for the DB instance.
         is_correct: false
       - text: Update the security group of the DB instance to allow only Lambda function invocations on the database port.
-        is_correct: true
+        is_correct: false
       - text: Configure the Lambda function to run in the same subnet that the DB instance uses.
         is_correct: true
       - text: Attach the same security group to the Lambda function and the DB instance. Include a self-referencing rule that allows access through the database port.
-        is_correct: false
+        is_correct: true
       - text: Update the network ACL of the private subnet to include a self-referencing rule that allows access through the database port.
         is_correct: false
     explanation: |
@@ -847,45 +847,49 @@
     options:
       - text: Deploy a custom Python script on an Amazon Elastic Container Service (Amazon ECS) cluster.
         is_correct: false
-      - text: Create an AWS Lambda Python function with provisioned concurrency.
-        is_correct: false
+      - text: Create an AWS Lambda Python function.
+        is_correct: true
       - text: Deploy a custom Python script that can integrate with API Gateway on Amazon Elastic Kubernetes Service (Amazon EKS).
         is_correct: false
-      - text: Create an AWS Lambda function. Ensure that the function is warm by scheduling an Amazon EventBridge rule to invoke the Lambda function every 5 minutes by using mock events.
-        is_correct: true
+      - text: Create an AWS Lambda Python function with provisioned concurrency.
+        is_correct: false
     explanation: |
-      Correct: Lambda with EventBridge scheduled invocations keeps the function warm and minimizes operational overhead for occasional API Gateway calls.
-      Incorrect: ECS, EKS, and provisioned concurrency add complexity and cost for infrequent invocations.
+      Correct: Creating a standard AWS Lambda function is the definition of "least operational overhead" for occasional tasks. As a serverless service, it requires no infrastructure management (no clusters, no OS patching, no scaling rules). You only pay for the execution time.
+      Incorrect: ECS and EKS (Containers/Kubernetes) require managing clusters, task definitions, and underlying nodes, which is excessive for a single script. Provisioned Concurrency is an optimization to avoid cold starts that incurs a constant cost and requires additional configuration, making it more complex than a standard Lambda function for "occasional" use.
     diagram: |
-      graph TD
-      React[ReactJS Website]
-      APIGateway[API Gateway]
-      Lambda[AWS Lambda]
-      EventBridge[Amazon EventBridge]
-      React --> APIGateway
-      APIGateway --> Lambda
-      EventBridge --> Lambda
+      graph LR
+      React[ReactJS Frontend] -->|REST Call| APIGW[API Gateway]
+      APIGW -->|Trigger| Lambda[AWS Lambda Script]
+      Lambda -->|Execution| Results[Results]
+      Results -->|JSON Response| APIGW
+      APIGW -->|Response| React
 
   - id: q34
     type: multiple_choice
     question: |
       A company has a production AWS account that runs company workloads. The company's security team created a security AWS account to store and analyze security logs from the production AWS account. The security logs in the production AWS account are stored in Amazon CloudWatch Logs. The company needs to use Amazon Kinesis Data Streams to deliver the security logs to the security AWS account. Which solution will meet these requirements?
     options:
-      - text: "Create a destination data stream in the production AWS account. In the security AWS account, create an IAM role that has cross-account permissions to Kinesis Data Streams in the production AWS account."
+      - text: Create a destination data stream in the production AWS account. In the security AWS account, create an IAM role that has cross-account permissions to Kinesis Data Streams in the production AWS account.
         is_correct: false
-      - text: "Create a destination data stream in the security AWS account. Create an IAM role and a trust policy to grant CloudWatch Logs the permission to put data into the stream. Create a subscription filter in the security AWS account."
+      - text: Create a destination data stream in the security AWS account. Create an IAM role and a trust policy to grant CloudWatch Logs the permission to put data into the stream. Create a subscription filter in the production AWS account.
         is_correct: true
-      - text: "Create a destination data stream in the production AWS account. In the production AWS account, create an IAM role that has cross-account permissions to Kinesis Data Streams in the security AWS account."
+      - text: Create a destination data stream in the security AWS account. Create an IAM role and a trust policy to grant CloudWatch Logs the permission to put data into the stream. Create a subscription filter in the security AWS account.
         is_correct: false
-      - text: "Create a destination data stream in the security AWS account. Create an IAM role and a trust policy to grant CloudWatch Logs the permission to put data into the stream. Create a subscription filter in the production AWS account."
+      - text: Create a destination data stream in the production AWS account. In the production AWS account, create an IAM role that has cross-account permissions to Kinesis Data Streams in the security AWS account.
         is_correct: false
     explanation: |
-      The correct solution is to create a destination data stream in the security AWS account, grant CloudWatch Logs permission to put data into the stream, and create a subscription filter in the security AWS account. This ensures logs are delivered securely and directly to the security account for analysis.
+      Correct: To stream logs across accounts, the Kinesis Data Stream and a CloudWatch Logs Destination are created in the recipient (Security) account. An IAM role grants CloudWatch Logs permission to write to that stream. Finally, a Subscription Filter is created in the source (Production) account to forward the logs to the Destination.
+      Incorrect: Subscription filters must reside in the account where the logs are generated. Placing the stream in the production account defeats the purpose of centralized security logging in a separate account.
     diagram: |
-      graph TD
-        A[Production AWS Account] -->|CloudWatch Logs| B[Kinesis Data Streams]
-        B --> C[Security AWS Account]
-        C --> D[Analyze Security Logs]
+      graph LR
+      subgraph Production Account
+      CWL[CloudWatch Logs] --> SF[Subscription Filter]
+      end
+      subgraph Security Account
+      SF --> Dest[CloudWatch Destination]
+      Dest --> KDS[Kinesis Data Stream]
+      IAM[IAM Role/Trust Policy] -.->|Permits| Dest
+      end
 
   - id: q35
     type: multiple_choice
@@ -938,22 +942,25 @@
     question: |
       A data engineer must manage the ingestion of real-time streaming data into AWS. The data engineer wants to perform real-time analytics on the incoming streaming data by using time-based aggregations over a window of up to 30 minutes. The data engineer needs a solution that is highly fault tolerant. Which solution will meet these requirements with the LEAST operational overhead?
     options:
-      - text: "Use an AWS Lambda function that includes both the business and the analytics logic to perform time-based aggregations over a window of up to 30 minutes for the data in Amazon Kinesis Data Streams."
-        is_correct: false
-      - text: "Use Amazon Managed Service for Apache Flink (previously known as Amazon Kinesis Data Analytics) to analyze the data that might occasionally contain duplicates by using multiple types of aggregations."
+      - text: Use Amazon Managed Service for Apache Flink to analyze the data by using multiple types of aggregations to perform time-based analytics over a window of up to 30 minutes.
         is_correct: true
-      - text: "Use an AWS Lambda function that includes both the business and the analytics logic to perform aggregations for a tumbling window of up to 30 minutes, based on the event timestamp."
+      - text: Use Amazon Managed Service for Apache Flink to analyze the data that might occasionally contain duplicates by using multiple types of aggregations.
         is_correct: false
-      - text: "Use Amazon Managed Service for Apache Flink (previously known as Amazon Kinesis Data Analytics) to analyze the data by using multiple types of aggregations to perform time-based analytics over a window of up to 30 minutes."
-        is_correct: true
+      - text: Use an AWS Lambda function that includes both the business and the analytics logic to perform time-based aggregations over a window of up to 30 minutes for the data in Amazon Kinesis Data Streams.
+        is_correct: false
+      - text: Use an AWS Lambda function that includes both the business and the analytics logic to perform aggregations for a tumbling window of up to 30 minutes, based on the event timestamp.
+        is_correct: false
     explanation: |
-      Amazon Managed Service for Apache Flink provides a highly fault-tolerant, scalable, and managed solution for real-time analytics with time-based windowing, minimizing operational overhead compared to Lambda-based approaches.
+      Correct: Amazon Managed Service for Apache Flink is a fully managed service designed for complex streaming analytics. It handles state management and fault tolerance natively, which is critical for long windows (30 minutes). 
+      Incorrect: Lambda functions are not suitable for 30-minute stateful windows because they are ephemeral, have a 15-minute timeout, and would require external state management (increasing overhead). The other Flink option focuses on duplicates, which is a secondary concern compared to the primary requirement of time-based aggregation.
     diagram: |
-      graph TD
-        A[Streaming Data] --> B[Kinesis Data Streams]
-        B --> C[Apache Flink]
-        C --> D[Time-based Aggregations]
-        D --> E[Real-time Analytics]
+      graph LR
+      KDS[Kinesis Data Streams] --> Flink[Managed Service for Apache Flink]
+      subgraph Flink Process
+      Window[30-minute Time Window] --> Agg[Aggregation Logic]
+      State[Fault-Tolerant State] --- Window
+      end
+      Agg --> Sink[S3 / DynamoDB / Redshift]
 
   - id: q38
     type: multiple_choice
@@ -969,12 +976,14 @@
       - text: "Use AWS DataSync to create new gp3 volumes. Transfer the data from the original gp2 volumes to the new gp3 volumes."
         is_correct: false
     explanation: |
-      Changing the volume type directly from gp2 to gp3 is the simplest and least disruptive method, as it does not require detaching volumes or transferring data, minimizing operational overhead and risk of data loss.
+      Correct: Amazon EBS Elastic Volumes allow you to modify the volume type, size, and performance attributes of an in-use volume without detachment or downtime. This is the most efficient way to upgrade from gp2 to gp3.
+      Incorrect: Creating new volumes, taking snapshots, or using DataSync involves manual data movement, additional costs for temporary storage, and potential application downtime, significantly increasing operational overhead.
     diagram: |
-      graph TD
-        A[EC2 Instance] --> B[EBS gp2 Volume]
-        B --> C[Change Volume Type]
-        C --> D[EBS gp3 Volume]
+      graph LR
+      EC2[EC2 Instance] --- EBS[EBS Volume]
+      EBS -->|Modify Type| gp2((gp2))
+      gp2 -.->|In-place Transition| gp3((gp3))
+      style gp3 fill:#f96,stroke:#333
 
   - id: q39
     type: multiple_choice
@@ -1046,24 +1055,25 @@
     question: |
       A company has five offices in different AWS Regions. Each office has its own human resources (HR) department that uses a unique IAM role. The company stores employee records in a data lake that is based on Amazon S3 storage. A data engineering team needs to limit access to the records. Each HR department should be able to access records for only employees who are within the HR department's Region. Which combination of steps should the data engineering team take to meet this requirement with the LEAST operational overhead? (Choose two.)
     options:
-      - text: "Use data filters for each Region to register the S3 paths as data locations."
+      - text: Enable fine-grained access control in AWS Lake Formation. Add a data filter for each Region.
         is_correct: true
-      - text: "Register the S3 path as an AWS Lake Formation location."
+      - text: Modify the IAM roles of the HR departments to add a data filter for each department's Region.
+        is_correct: false
+      - text: Create a separate S3 bucket for each Region. Configure an IAM policy to allow S3 access. Restrict access based on Region.
+        is_correct: false
+      - text: Use data filters for each Region to register the S3 paths as data locations.
+        is_correct: false
+      - text: Register the S3 path as an AWS Lake Formation location.
         is_correct: true
-      - text: "Modify the IAM roles of the HR departments to add a data filter for each department's Region."
-        is_correct: false
-      - text: "Enable fine-grained access control in AWS Lake Formation. Add a data filter for each Region."
-        is_correct: false
-      - text: "Create a separate S3 bucket for each Region. Configure an IAM policy to allow S3 access. Restrict access based on Region."
-        is_correct: false
     explanation: |
-      Registering the S3 path as a Lake Formation location and using data filters for each Region allows for centralized, fine-grained access control with minimal operational overhead, avoiding the need for multiple buckets or complex IAM policies.
+      Correct: Registering the S3 path in Lake Formation brings the data under centralized governance. Using Lake Formation's fine-grained access control (data filters) allows for row-level security, ensuring each HR role only sees data corresponding to their specific region without duplicating data into separate buckets.
+      Incorrect: IAM roles cannot filter data inside files. Creating separate buckets for each region adds significant data management overhead. Data filters are used for access control logic, not for registering storage locations.
     diagram: |
       graph TD
-        A[S3 Data Lake] --> B[Lake Formation Location]
-        B --> C[Data Filters by Region]
-        C --> D[HR IAM Roles]
-        D --> E[Region-based Access]
+      S3[(S3 Data Lake)] --> LF[AWS Lake Formation]
+      LF -->|Filter: Region=Asia| HR_Asia[HR Dept Asia Role]
+      LF -->|Filter: Region=Europe| HR_EU[HR Dept Europe Role]
+      LF -->|Filter: Region=US| HR_US[HR Dept US Role]
 
   - id: q43
     type: multiple_choice
@@ -1138,21 +1148,22 @@
     question: |
       A company needs to partition the Amazon S3 storage that the company uses for a data lake. The partitioning will use a path of the S3 object keys in the following format: s3://bucket/prefix/year=2023/month=01/day=01. A data engineer must ensure that the AWS Glue Data Catalog synchronizes with the S3 storage when the company adds new partitions to the bucket. Which solution will meet these requirements with the LEAST latency?
     options:
-      - text: "Schedule an AWS Glue crawler to run every morning."
-        is_correct: false
-      - text: "Manually run the AWS Glue CreatePartition API twice each day."
-        is_correct: false
-      - text: "Use code that writes data to Amazon S3 to invoke the Boto3 AWS Glue create_partition API call."
+      - text: Use code that writes data to Amazon S3 to invoke the Boto3 AWS Glue create_partition API call.
         is_correct: true
-      - text: "Run the MSCK REPAIR TABLE command from the AWS Glue console."
+      - text: Run the MSCK REPAIR TABLE command from the AWS Glue console.
+        is_correct: false
+      - text: Manually run the AWS Glue CreatePartition API twice each day.
+        is_correct: false
+      - text: Schedule an AWS Glue crawler to run every morning.
         is_correct: false
     explanation: |
-      Invoking the create_partition API immediately after writing data ensures the Glue Data Catalog is updated with minimal latency, compared to scheduled crawlers or manual operations.
+      Correct: Invoking the `create_partition` API call directly from the data ingestion code ensures that the Data Catalog is updated the moment the data is written to S3. This provides near-zero latency compared to scheduled or manual processes.
+      Incorrect: Glue Crawlers and manual API calls introduce significant delays (latency) because they run on a schedule. MSCK REPAIR TABLE is operationally heavy and slow for large datasets as it must scan the entire S3 path to identify changes.
     diagram: |
-      graph TD
-        A[S3 Data Write] --> B[Invoke create_partition API]
-        B --> C[Glue Data Catalog]
-        C --> D[Partition Synced]
+      graph LR
+      App[Ingestion Application] -->|1. Write Data| S3[(Amazon S3)]
+      App -->|2. Immediate Update| Glue[AWS Glue Data Catalog]
+      Glue -->|Partition Available| Athena[Amazon Athena / Analytics]
 
   - id: q47
     type: multiple_choice
@@ -1213,8 +1224,10 @@
         is_correct: false
     explanation: |
       S3 Select allows direct querying of specific columns from S3 objects in Parquet format, minimizing operational overhead for one-time tasks.
+    explanationImg: dea-01-49.jpg
     diagram: |
       graph TD
         A[S3 Parquet Objects] --> B[S3 Select]
         B --> C[Query Column]
         C --> D[Minimal Overhead]
+

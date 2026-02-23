@@ -232,6 +232,11 @@ else
 
       question.Type = GetScalarValue(qNode, "type");
       question.Explanation = GetScalarValue(qNode, "explanation");
+      string explanationImage = GetScalarValue(qNode, "explanationImg");
+      if (!string.IsNullOrWhiteSpace(explanationImage))
+      {
+        question.ExplanationImg = $"Exams/images/{explanationImage}";
+      }
       question.Diagram = GetScalarValue(qNode, "diagram");
       question.Difficulty = GetScalarValue(qNode, "difficulty");
 
