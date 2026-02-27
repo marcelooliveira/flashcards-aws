@@ -14,6 +14,8 @@
         is_correct: false
     explanation: |
       Correct: AWS Glue uses a Service Role to assume permissions. This is the standard security best practice for service-to-service authorization.
+      Incorrect: IAM users with access keys are for manual or external access, not service-to-service. Splitting policies doesn't solve the assignment issue, and bucket policies alone don't grant Glue the identity to perform actions.
+    explanationImg: dea-03-01.jpg
     diagram: |
       graph LR
         Glue[AWS Glue Job]
@@ -37,6 +39,8 @@
         is_correct: false
     explanation: |
       Correct: AWS Glue job run monitoring provides specific profiling metrics (like glue.driver.aggregate.pushed_records) to help determine if a job is over or under-provisioned.
+      Incorrect: The visual editor is for design, not performance profiling. While CloudWatch has metrics and logs, they are too generic or unstructured compared to the specialized "Job Run Monitoring" dashboard which is built specifically for DPU optimization.
+    explanationImg: dea-03-02.jpg
     diagram: |
       graph TD
         Console[Glue Console]
@@ -62,6 +66,7 @@
         is_correct: false
     explanation: |
       Correct: Amazon OpenSearch is optimized for full-text search and metadata indexing, providing the best performance for the "search" use case described.
+      Incorrect: S3 Object Tagging has limits on the number of tags and is slow to query via EMR. Redshift and Athena are excellent for structured analytical queries, but "searching" through extracted text and metadata across thousands of docs is significantly faster and more flexible in a search engine like OpenSearch.
     diagram: |
       graph LR
         S3[(S3 Images)]
@@ -88,6 +93,7 @@
         is_correct: false
     explanation: |
       Correct: Lambda runs code without servers, and EventBridge Scheduler replaces the on-prem cron with zero infrastructure management.
+      Incorrect: CloudShell is an interactive shell and not for scheduling. EC2 instances (with or without an IDE) require managing the OS, patching, and scaling, which violates the "minimal effort" requirement compared to serverless Lambda.
     diagram: |
       graph TD
         EB[EventBridge Scheduler]
@@ -111,6 +117,7 @@
         is_correct: true
     explanation: |
       Correct: Macie automatically discovers PII. Using EventBridge to catch Macie findings is a serverless, event-driven approach with minimal overhead.
+      Incorrect: S3 notifications triggering Lambda would require you to write custom code to scan for PII, which is high overhead. Polling Macie findings via a scheduled Lambda introduces delay (not "immediate") and unnecessary compute costs.
     diagram: |
       graph LR
         S3[(S3)]
@@ -136,6 +143,7 @@
         is_correct: false
     explanation: |
       Correct: SSE-KMS is natively supported by Redshift's COPY command, provided the Redshift role has permissions to use the KMS key.
+      Incorrect: SSE-C requires passing the encryption key in every request header, which the Redshift COPY command does not support. Client-side encryption requires manual decryption before loading, adding complexity and overhead.
     diagram: |
       graph LR
         S3[(S3 Encrypted)]
@@ -159,6 +167,9 @@
         is_correct: false
     explanation: |
       Correct: Lake Formation is built on top of Glue to provide row, column, and cell-level security with much less overhead than managing DB grants or EMR.
+      Incorrect (Option 1): Glue Data Catalog alone provides metadata management but lacks row/cell-level access control. Lake Formation sits on top of Glue to add these fine-grained permissions.
+      Incorrect (Option 2): Aurora with SQL GRANTs requires manual database administration and doesn't scale efficiently for managing granular permissions across a data lake architecture.
+      Incorrect (Option 4): EMR Hive metastore requires significant operational overhead and manual grant management, not suitable for enterprise-level row/cell access control.
     diagram: |
       graph TD
         S3[(S3)]
@@ -184,6 +195,9 @@
         is_correct: false
     explanation: |
       Correct: Redshift Spectrum allows querying nested data in S3 directly, keeping the main Redshift cluster's local storage clean and highly available.
+      Incorrect (Option 2): Loading as SUPER type requires physically loading the data into Redshift, consuming local storage and adding ETL complexity. Spectrum queries without loading.
+      Incorrect (Option 3): ETL parsing with Glue adds processing overhead and requires repeated transformations; Spectrum handles nested JSON natively without intermediate transformations.
+      Incorrect (Option 4): Unloading and using Glue Studio creates a data movement bottleneck and doesn't maintain tight integration with Redshift analytics.
     diagram: |
       graph TD
         RS[Redshift Cluster]
@@ -207,6 +221,9 @@
         is_correct: false
     explanation: |
       Correct: Firehose is a managed service that handles scaling and real-time delivery; the Lambda transformation is a standard way to convert formats like Parquet.
+      Incorrect (Option 1): S3 upload-triggered Glue is batch-oriented and introduces latency; not suitable for near real-time requirements.
+      Incorrect (Option 3): KCL on EC2 requires heavy operational overhead: instance management, scaling, patching, and monitoring. This violates the "least overhead" requirement.
+      Incorrect (Option 4): EMR with Hive is expensive and requires infrastructure management. UNLOADs are not designed as the primary streaming ingestion mechanism.
     diagram: |
       graph LR
         Logs[Log Stream]
@@ -232,6 +249,9 @@
         is_correct: false
     explanation: |
       Correct: S3 Standard-IA is cheaper for infrequent SQL queries via Athena. Glacier Flexible Retrieval meets the 12-hour retrieval requirement.
+      Incorrect (Option 2): Intelligent-Tiering doesn't automatically move to Deep Archive, only to Archive/Deep Archive. It's more expensive for this tiered access pattern.
+      Incorrect (Option 3): Keeping new data in an expensive Redshift database wastes resources. Standard is also more expensive than Standard-IA for infrequently accessed data.
+      Incorrect (Option 4): RDS database incurs continuous compute costs; snapshots don't provide SQL queryability. This is significantly more expensive than Athena on Standard-IA.
     diagram: |
       graph TD
         S3IA[S3 Standard-IA] -->|3yr| GFR[Glacier Flexible Retrieval]
@@ -255,6 +275,9 @@
         is_correct: false
     explanation: |
       Correct: Increasing retention gives the app more time to recover. A DLQ captures messages that fail repeatedly rather than letting them disappear.
+      Incorrect (Option 2): Visibility timeout only hides a message temporarily during processing; it doesn't extend the message's total lifetime in the queue.
+      Incorrect (Option 4): A delay queue simply delays message delivery; it doesn't prevent expiration and doesn't address the underlying downtime issue.
+      Incorrect (Option 5): Reducing processing time doesn't help if the app is down entirely; messages will still expire regardless of processing speed.
     diagram: |
       graph LR
         SQS[SQS Queue]
@@ -279,6 +302,9 @@
         is_correct: false
     explanation: |
       Correct: AppFlow is a managed service designed specifically to ingest data from SaaS applications into AWS services like Redshift.
+      Incorrect (Option 2): EventBridge handles event routing but is not designed for managing SaaS data connectors or continuous data integration into Redshift.
+      Incorrect (Option 3): Lambda UDFs within Redshift execute code within the database, not for pulling external SaaS data. This approach is for in-database transformations.
+      Incorrect (Option 4): MWAA requires significant overhead for deployment and orchestration; AppFlow is simpler and purpose-built for SaaS-to-AWS integrations.
     diagram: |
       graph LR
         SaaS[SaaS Sales App]
@@ -302,6 +328,9 @@
         is_correct: true
     explanation: |
       Correct: This follows the Principle of Least Privilege by restricting the action to read-only (GetObject) and limiting the resource to a specific path.
+      Incorrect (Option 1): "Append" implies adding, not replacing, which would keep the s3:* permission. Resources must specify the object path, not just the bucket.
+      Incorrect (Option 2): GetObjectAttributes is metadata-only and insufficient for reading object contents. Bucket-level resources don't specify object paths.
+      Incorrect (Option 3): Bucket-level resource ARN (without /* suffix) doesn't grant access to individual objects within the bucket. Object-level permissions require the full path.
     diagram: |
       graph TD
         Lambda[Lambda Function]
@@ -329,6 +358,9 @@
         is_correct: false
     explanation: |
       Correct: Deletion is explicit, purging clears the queue, and reaching maxReceiveCount moves/removes the message to a DLQ.
+      Incorrect (Option 4): ReceiveMessage fetches the message but doesn't remove it. The message remains until explicitly deleted or fails and reaches maxReceiveCount.
+      Incorrect (Option 5): Visibility timeout makes a message temporarily invisible during processing, but when it expires, the message reappears. It's not removed.
+      Incorrect (Option 6): Editing queue configuration (e.g., timeout settings, retention) doesn't affect existing messages. It applies to future messages and queue behavior.
     diagram: |
       graph TD
         SQS[SQS Queue]
@@ -354,6 +386,9 @@
         is_correct: false
     explanation: |
       Correct: RAM-based storage (tmpfs) is significantly faster than any network-based storage (DAX/NFS/MemoryDB) because it avoids the network stack entirely.
+      Incorrect (Option 2): DAX adds network latency (network calls to DynamoDB service) and is primarily a caching layer for DynamoDB queries, not arbitrary storage.
+      Incorrect (Option 3): NFS (PersistentVolume) involves network I/O calls and is orders of magnitude slower than in-memory access.
+      Incorrect (Option 4): MemoryDB is an in-memory database service accessed over the network, adding network stack overhead compared to local RAM.
     diagram: |
       graph LR
         Node[EC2 Node]
@@ -376,6 +411,9 @@
         is_correct: false
     explanation: |
       Correct: Data Sharing avoids moving data, and Redshift Serverless ensures you only pay for the 2 hours of compute used during the test.
+      Incorrect (Option 1): Unloading/loading involves data transfer costs, Glue job overhead, and requires maintaining a separate test cluster incurring baseline costs.
+      Incorrect (Option 3): Spectrum on unloaded data still requires maintaining a provisioned cluster in test environment, which incurs continuous costs beyond the 2 hours.
+      Incorrect (Option 4): Restoring a snapshot requires creating a full-sized provisioned cluster that accumulates costs between test runs. Snapshot restore also takes time, not ideal for 2-hour windows.
     diagram: |
       graph LR
         Prod[Prod Redshift]
@@ -399,6 +437,9 @@
         is_correct: false
     explanation: |
       Correct: Keeping 3 months in Redshift covers daily needs; S3 Standard allows Spectrum to query the 12-month window yearly; Deep Archive handles the compliance phase cheaply.
+      Incorrect (Option 1): Keeping 12 months of data in expensive Redshift storage wastes resources for infrequent yearly access. Redshift is optimized for operational analytics, not archive.
+      Incorrect (Option 2): Moving to Deep Archive at 12 months is too early; the yearly analysis at 12 months requires queryable data. Deep Archive has retrieval costs and long retrieval times.
+      Incorrect (Option 4): Glacier Instant Retrieval is more expensive than Standard for long-term storage and unnecessary for 12-month compliance data since retrieval is infrequent.
     diagram: |
       graph TD
         RS[Redshift - 3mo]
@@ -423,6 +464,9 @@
         is_correct: true
     explanation: |
       Correct: Secrets Manager has native, built-in support for rotating RDS credentials automatically.
+      Incorrect (Option 1): IAM database authentication uses temporary tokens, not credentials; it doesn't apply to SQL Server and doesn't involve rotation of stored credentials.
+      Incorrect (Option 2): Parameter Store stores configuration values but lacks native automatic rotation capabilities for database credentials. Rotation requires external Lambda functions.
+      Incorrect (Option 3): STS generates temporary security credentials for API access, not for storing and rotating database connection credentials for SQL Server RDS.
     diagram: |
       graph LR
         App[App on EC2]
@@ -450,6 +494,9 @@
         is_correct: false
     explanation: |
       Correct: More shards allow more Lambda instances; parallelization factor lets one shard trigger multiple Lambdas; enhanced fan-out reduces latency.
+      Incorrect (Option 3): Provisioned vs. on-demand capacity doesn't affect Lambda invocation speed or iterator age. It affects cost model and throughput, not latency for processing.
+      Incorrect (Option 5): Reserved concurrency prevents scale-out; it doesn't improve performance. It's for predictability and cost optimization, not performance tuning.
+      Incorrect (Option 6): Provisioned concurrency pre-initializes Lambda (reducing cold starts), but it doesn't address the root cause of high IteratorAgeMilliseconds, which is throughput/parallelism.
     diagram: |
       graph LR
         K[Kinesis Stream]
@@ -476,6 +523,9 @@
         is_correct: true
     explanation: |
       Correct: EFS is the AWS managed NFS service that can be natively mounted by Lambda, allowing shared file access across concurrent executions.
+      Incorrect (Option 1): Lambda ephemeral storage (/tmp) is per-execution, not shared across concurrent Lambdas. Each invocation gets isolated storage.
+      Incorrect (Option 2): EBS volumes attach to EC2 instances and cannot be mounted by Lambda. They're not designed for serverless access patterns.
+      Incorrect (Option 3): DynamoDB is a key-value database, not a file system. It's not suitable for file-level access patterns that replaced on-prem NFS.
     diagram: |
       graph LR
         L1[Lambda 1]
