@@ -1,0 +1,558 @@
+﻿questions:
+  - id: gl1
+    topic: "AWS Glue"
+    type: multiple_choice
+    question: |
+      Uma empresa de varejo possui dados espalhados em diversos buckets S3 em formatos CSV, JSON e Parquet. Eles precisam de uma solução que descubra automaticamente o esquema desses dados e os torne disponíveis para consulta via SQL sem mover os arquivos.
+      Qual componente do AWS Glue deve ser utilizado para essa tarefa?
+    options:
+      - text: "AWS Glue Crawlers para escanear o S3 e popular o AWS Glue Data Catalog."
+        is_correct: true
+      - text: "AWS Glue Jobs rodando scripts Python Shell para mapear os campos manualmente."
+        is_correct: false
+      - text: "AWS Glue DataBrew para criar perfis de dados e inferir tipos de colunas."
+        is_correct: false
+      - text: "AWS Glue Workflows para orquestrar a ingestão de dados brutos."
+        is_correct: false
+    explanation: |
+      Correct: Crawlers conectam-se a repositórios de dados, inferem esquemas e criam tabelas de metadados no Data Catalog.
+      Incorrect:
+        Jobs são para transformação (ETL), não para descoberta automática de esquema.
+        DataBrew é uma ferramenta visual de preparação de dados (limpeza), não um catálogo.
+        Workflows são para orquestração de pipelines, não para descoberta de metadados.
+    diagram: |
+      graph LR
+        A[S3 Buckets] --> B[Glue Crawler]
+        B --> C[(Glue Data Catalog)]
+        C --> D[Athena/Redshift Spectrum]
+    tags: [Glue, Metadata]
+
+  - id: gl2
+    topic: "Glue, Hive, and ETL"
+    type: multiple_choice
+    question: |
+      Ao desenvolver um script de ETL no AWS Glue para processar grandes conjuntos de dados, um engenheiro decide usar o Apache Spark. Como o Glue interage com o ecossistema Hive para gerenciar metadados de tabelas?
+    options:
+      - text: "O Glue Data Catalog é compatível com o Hive Metastore, servindo como um repositório central de metadados."
+        is_correct: true
+      - text: "O Glue exige a instalação de um cluster Hadoop EC2 para rodar o serviço Hive Metastore localmente."
+        is_correct: false
+      - text: "Scripts do Glue não podem ler tabelas formatadas para Hive, apenas arquivos brutos no S3."
+        is_correct: false
+      - text: "O Glue utiliza o Amazon RDS para emular um servidor Hive Thrift de forma transparente."
+        is_correct: false
+    explanation: |
+      Correct: O Data Catalog é um substituto gerenciado e "drop-in" para o Hive Metastore no AWS.
+      Incorrect:
+        O Glue é serverless; você não precisa gerenciar instâncias EC2 ou Hadoop.
+        O Glue foi desenhado especificamente para ler formatos compatíveis com Hive (Parquet, ORC, etc).
+        Embora o Hive Metastore original use um banco relacional, o Glue abstrai toda essa camada.
+    tags: [Glue, Hive]
+
+  - id: gl3
+    topic: "Modifying the Glue Data Catalog from ETL Scripts"
+    type: multiple_choice
+    question: |
+      Um script de ETL do Glue gera novas partições em um bucket S3 diariamente. O engenheiro quer que o Data Catalog seja atualizado automaticamente ao final da execução do Job sem precisar rodar um Crawler.
+      Qual configuração no script DynamicFrame permite isso?
+    options:
+      - text: "Habilitar a opção 'enableUpdateCatalog' e configurar o 'partitionKeys' no sink do Glue."
+        is_correct: true
+      - text: "Executar o comando SQL 'MSCK REPAIR TABLE' dentro do script Spark."
+        is_correct: false
+      - text: "Usar o comando 'aws glue update-table' via CLI de dentro do worker."
+        is_correct: false
+      - text: "Configurar um Trigger de evento no S3 para cada novo arquivo gerado."
+        is_correct: false
+    explanation: |
+      Correct: O Glue ETL pode atualizar o catálogo diretamente durante a gravação se configurado para isso, economizando tempo e custo de Crawlers.
+      Incorrect:
+        'MSCK REPAIR' é um comando Hive que exige conexão direta com o Metastore, menos eficiente que a integração nativa do Glue.
+        Chamar a CLI dentro do worker é ineficiente e difícil de gerenciar.
+    tags: [ETL, DynamicFrame]
+
+  - id: gl4
+    topic: "Running ETL Jobs with Bookmarks"
+    type: multiple_choice
+    question: |
+      Um Job do Glue processa dados incrementais do S3 a cada hora. Como garantir que o Job processe apenas os novos arquivos que chegaram desde a última execução, evitando o reprocessamento de dados antigos?
+    options:
+      - text: "Habilitar o recurso 'Job Bookmarks' na configuração do Job."
+        is_correct: true
+      - text: "Mover os arquivos processados para uma pasta 'archive' via script."
+        is_correct: false
+      - text: "Usar uma cláusula 'WHERE' baseada na data de modificação do arquivo no S3."
+        is_correct: false
+      - text: "Configurar o Job para rodar em modo 'Full Refresh' e deletar o destino antes de começar."
+        is_correct: false
+    explanation: |
+      Correct: Job Bookmarks rastreiam o estado da execução e lembram quais arquivos já foram processados.
+      Incorrect:
+        Mover arquivos no S3 é custoso em termos de operações de API (LIST/COPY/DELETE).
+        Filtrar por data manualmente requer lógica complexa e pode ignorar arquivos que chegaram com atraso.
+    diagram: |
+      graph TD
+        A[Files: 1, 2, 3] --> B[Job Run 1]
+        B --"Store State"--> C[Bookmark]
+        D[Files: 1, 2, 3, 4, 5] --> E[Job Run 2]
+        C --"Only process 4, 5"--> E
+    tags: [ETL, Bookmarks]
+
+  - id: gl5
+    topic: "Glue Costs and Anti-Patterns"
+    type: multiple_choice
+    question: |
+      Qual das situações abaixo representa um anti-padrão no uso do AWS Glue que pode elevar drasticamente os custos sem ganho de performance?
+    options:
+      - text: "Rodar um Crawler a cada 5 minutos em um bucket com milhões de arquivos pequenos sem usar S3 Event Notifications."
+        is_correct: true
+      - text: "Usar instâncias do tipo G.1X para jobs com grande volume de dados e transformações complexas."
+        is_correct: false
+      - text: "Habilitar o Auto Scaling para ajustar o número de Workers dinamicamente."
+        is_correct: false
+      - text: "Armazenar dados em formato Parquet para reduzir o volume de leitura em consultas futuras."
+        is_correct: false
+    explanation: |
+      Correct: Crawlers em buckets gigantes com muitos arquivos pequenos são lentos e caros; prefira notificações de eventos do S3 ou atualize o catálogo via Job.
+      Incorrect:
+        Workers G.1X são adequados para tarefas Spark.
+        Auto Scaling é uma recomendação de redução de custo.
+        Parquet é um padrão recomendado para performance e custo.
+    tags: [Costs, Performance]
+
+  - id: gl6
+    topic: "AWS Glue Flex Jobs"
+    type: multiple_choice
+    question: |
+      Uma empresa possui jobs de ETL não críticos que rodam durante a madrugada para gerar relatórios diários. Eles buscam reduzir os custos de execução desses jobs em até 35%.
+      Qual classe de execução do Glue deve ser selecionada?
+    options:
+      - text: "Glue Flex"
+        is_correct: true
+      - text: "Glue Standard"
+        is_correct: false
+      - text: "Glue Dedicated"
+        is_correct: false
+      - text: "Glue Serverless Plus"
+        is_correct: false
+    explanation: |
+      Correct: O Glue Flex usa capacidade excedente para jobs não urgentes a um preço menor.
+      Incorrect:
+        Standard é o preço normal.
+        Dedicated e Serverless Plus não são nomes de classes de execução do Glue.
+    tags: [Flex, Cost-Saving]
+
+  - id: gl7
+    topic: "AWS Glue Studio"
+    type: multiple_choice
+    question: |
+      Um analista de dados sem conhecimento profundo em Python ou Scala precisa criar um pipeline de ETL para unir duas tabelas e filtrar nulos.
+      Qual interface do Glue é mais recomendada?
+    options:
+      - text: "AWS Glue Studio"
+        is_correct: true
+      - text: "Glue Workflow Designer"
+        is_correct: false
+      - text: "AWS Cloud9"
+        is_correct: false
+      - text: "Glue Interactive Sessions"
+        is_correct: false
+    explanation: |
+      Correct: Glue Studio oferece uma interface visual drag-and-drop para criar jobs de ETL sem escrever código.
+      Incorrect:
+        Workflow Designer é para orquestração, não para lógica de transformação interna.
+        Cloud9 é um IDE de código puro.
+        Interactive Sessions são para desenvolvimento via notebooks (Jupyter).
+    tags: [GUI, ETL]
+
+  - id: gl8
+    topic: "AWS Glue Data Quality"
+    type: multiple_choice
+    question: |
+      Como você pode garantir automaticamente que uma coluna 'email' em um conjunto de dados do Glue não contenha valores nulos e siga um formato específico antes de carregá-lo no Data Warehouse?
+    options:
+      - text: "Definir regras DQDL (Data Quality Definition Language) usando o AWS Glue Data Quality."
+        is_correct: true
+      - text: "Escrever um script Spark que use 'df.filter' para remover linhas inválidas."
+        is_correct: false
+      - text: "Configurar um Amazon Macie para escanear a tabela em busca de erros de formato."
+        is_correct: false
+      - text: "Usar o Amazon CloudWatch para disparar alertas de erro de sintaxe."
+        is_correct: false
+    explanation: |
+      Correct: O Glue Data Quality permite definir regras de validação legíveis por humanos e integrá-las ao pipeline.
+      Incorrect:
+        Embora Spark funcione, exige código manual e manutenção.
+        Macie é para descoberta de dados sensíveis (PII), não para qualidade de dados técnica.
+    tags: [Data Quality, DQDL]
+
+  - id: gl9
+    topic: "AWS Glue DataBrew"
+    type: multiple_choice
+    question: |
+      Qual é a principal diferença entre o AWS Glue ETL (Studio) e o AWS Glue DataBrew?
+    options:
+      - text: "O DataBrew é focado em limpeza visual e preparação de dados para analistas, enquanto o Glue ETL é para engenharia de dados em escala Spark."
+        is_correct: true
+      - text: "O Glue ETL é gratuito, enquanto o DataBrew cobra por hora de consulta."
+        is_correct: false
+      - text: "O DataBrew não suporta o S3 como destino, apenas o Amazon Redshift."
+        is_correct: false
+      - text: "O Glue ETL é focado apenas em dados estruturados, e o DataBrew apenas em não-estruturados."
+        is_correct: false
+    explanation: |
+      Correct: DataBrew é uma ferramenta visual estilo planilha com mais de 250 transformações prontas para usuários de negócio.
+      Incorrect:
+        Ambos são serviços pagos.
+        Ambos suportam S3 e diversos outros destinos.
+    tags: [DataBrew, Comparison]
+
+  - id: gl10
+    topic: "Handling PII in DataBrew Transformations"
+    type: multiple_choice
+    question: |
+      Uma equipe precisa mascarar números de previdência social (SSN) em um dataset antes que ele seja compartilhado com o time de marketing.
+      Como o DataBrew facilita essa tarefa?
+    options:
+      - text: "Ele possui transformações integradas para detectar e ofuscar dados de PII (Personally Identifiable Information)."
+        is_correct: true
+      - text: "Ele deleta automaticamente qualquer coluna que contenha nomes ou endereços."
+        is_correct: false
+      - text: "Ele exige a integração com o AWS KMS para criptografar cada célula do arquivo."
+        is_correct: false
+      - text: "Ele encaminha os dados para o Amazon Rekognition para identificar rostos em imagens."
+        is_correct: false
+    explanation: |
+      Correct: O DataBrew inclui tarefas específicas para identificação e anonimização de dados sensíveis.
+      Incorrect:
+        Deleção automática seria destrutiva e não é o comportamento padrão.
+        KMS é para criptografia de disco/arquivo, não para ofuscação de nível de aplicação visual.
+    tags: [PII, Security]
+
+  - id: gl11
+    topic: "AWS Glue Workflows"
+    type: multiple_choice
+    question: |
+      Você precisa criar um pipeline que: 1) Roda um Crawler, 2) Se o Crawler tiver sucesso, roda um Job de ETL, 3) Se o Job falhar, envia uma notificação SNS.
+      Qual ferramenta do Glue deve ser usada para coordenar essas dependências?
+    options:
+      - text: "AWS Glue Workflows"
+        is_correct: true
+      - text: "AWS Step Functions"
+        is_correct: false
+      - text: "AWS Glue Blueprints"
+        is_correct: false
+      - text: "Amazon EventBridge"
+        is_correct: false
+    explanation: |
+      Correct: Workflows são nativos do Glue para encadear crawlers, jobs e gatilhos.
+      Incorrect:
+        Step Functions poderiam fazer, mas o Glue Workflows é a solução integrada dentro do console do Glue.
+        Blueprints são templates para gerar workflows, não o motor de execução.
+    diagram: |
+      graph TD
+        A[Trigger] --> B[Crawler]
+        B --"Success"--> C[ETL Job]
+        C --"Failure"--> D[SNS Notification]
+    tags: [Orchestration, Workflows]
+
+  - id: gl12
+    topic: "AWS Lake Formation"
+    type: multiple_choice
+    question: |
+      Um administrador de dados quer definir permissões de acesso a tabelas do S3 usando um modelo de controle de acesso baseado em tags (LF-Tags) e conceder acesso a nível de coluna para diferentes grupos do IAM.
+      Qual serviço simplifica essa gestão centralizada?
+    options:
+      - text: "AWS Lake Formation"
+        is_correct: true
+      - text: "Amazon S3 Bucket Policies"
+        is_correct: false
+      - text: "IAM Role Policies"
+        is_correct: false
+      - text: "AWS Resource Access Manager"
+        is_correct: false
+    explanation: |
+      Correct: O Lake Formation atua como uma camada acima do Glue para fornecer segurança granular (coluna/linha) e centralizada.
+      Incorrect:
+        Políticas de bucket S3 não entendem colunas ou linhas, apenas arquivos (objetos).
+        IAM sozinho ficaria extremamente complexo para gerenciar milhares de tabelas e colunas.
+    tags: [Security, Data Lake]
+
+  - id: gl13
+    topic: "AWS Lake Formation Data Filters"
+    type: multiple_choice
+    question: |
+      Como o Lake Formation permite que um analista financeiro veja apenas as transações da região 'Norte' em uma tabela que contém dados de todo o país?
+    options:
+      - text: "Através do uso de Data Filters que aplicam filtragem em nível de linha (Row-level security)."
+        is_correct: true
+      - text: "Criando uma cópia da tabela no S3 contendo apenas os dados do Norte."
+        is_correct: false
+      - text: "Usando uma View no Athena com a cláusula WHERE fixa."
+        is_correct: false
+      - text: "Restringindo a permissão 's3:GetObject' baseada no prefixo da pasta."
+        is_correct: false
+    explanation: |
+      Correct: Data Filters permitem definir expressões SQL que restringem quais linhas um usuário pode ver.
+      Incorrect:
+        Duplicar dados aumenta o custo e a complexidade de governança.
+        Prefixos de pasta só funcionam se os dados estiverem fisicamente particionados por região no S3.
+    tags: [Security, Filters]
+
+  - id: gl14
+    topic: "Amazon Athena"
+    type: multiple_choice
+    question: |
+      Qual é a principal característica arquitetural do Amazon Athena que o torna ideal para consultas ad-hoc?
+    options:
+      - text: "É um serviço serverless baseado em Presto/Trino que consulta dados diretamente no S3."
+        is_correct: true
+      - text: "É um banco de dados relacional baseado em instâncias EC2 otimizadas para memória."
+        is_correct: false
+      - text: "Ele exige que os dados sejam carregados em volumes SSD locais antes da consulta."
+        is_correct: false
+      - text: "Ele utiliza o motor do DynamoDB para indexar arquivos Parquet."
+        is_correct: false
+    explanation: |
+      Correct: Athena não tem servidores para gerenciar e cobra apenas pelos dados escaneados no S3.
+    diagram: |
+      graph LR
+        A[Analista] --"Query SQL"--> B[Athena]
+        B --"Read"--> C[S3 Data]
+        B --"Metadata"--> D[Glue Catalog]
+    tags: [Athena, Serverless]
+
+  - id: gl15
+    topic: "Athena Performance"
+    type: multiple_choice
+    question: |
+      Para reduzir custos e melhorar a performance de consultas no Athena em um dataset de 10 TB, qual das seguintes ações é a mais eficaz?
+    options:
+      - text: "Converter os dados de CSV para Parquet e particionar por colunas frequentemente filtradas."
+        is_correct: true
+      - text: "Aumentar o número de instâncias do Athena no console da AWS."
+        is_correct: false
+      - text: "Comprimir os arquivos CSV usando o formato ZIP."
+        is_correct: false
+      - text: "Usar o comando 'SELECT *' em todas as consultas para garantir que o cache seja populado."
+        is_correct: false
+    explanation: |
+      Correct: Parquet é colunar, permitindo que o Athena leia apenas as colunas necessárias; o particionamento limita a quantidade de arquivos escaneados.
+      Incorrect:
+        Você não gerencia instâncias no Athena (é serverless).
+        ZIP não é splittable para processamento paralelo; prefira Snappy ou GZIP.
+        'SELECT *' aumenta o custo, pois o Athena cobra por byte lido.
+    tags: [Athena, Optimization]
+
+  - id: gl16
+    topic: "Athena ACID Transactions"
+    type: multiple_choice
+    question: |
+      Tradicionalmente, atualizar ou deletar registros individuais no S3 era difícil. Qual recurso do Athena resolve isso permitindo operações de INSERT, UPDATE e DELETE com garantias ACID?
+    options:
+      - text: "Suporte a transações ACID usando formatos de tabela como Apache Iceberg."
+        is_correct: true
+      - text: "Integração direta com o Amazon RDS via Database Links."
+        is_correct: false
+      - text: "Uso do comando 'ALTER OBJECT' nativo do S3."
+        is_correct: false
+      - text: "Habilitação do Versionamento de Bucket no S3."
+        is_correct: false
+    explanation: |
+      Correct: O Athena suporta transações ACID em tabelas Iceberg, permitindo updates em nível de linha no Data Lake.
+      Incorrect:
+        O S3 é um storage de objetos imutáveis; ele não tem um comando 'ALTER' para mudar parte de um arquivo.
+    tags: [Athena, ACID]
+
+  - id: gl17
+    topic: "Apache Spark"
+    type: multiple_choice
+    question: |
+      O Apache Spark é amplamente utilizado no AWS Glue. Qual é o principal benefício do Spark em comparação com scripts Python tradicionais para processamento de Big Data?
+    options:
+      - text: "Processamento distribuído em memória através de um cluster de workers."
+        is_correct: true
+      - text: "Capacidade de rodar scripts em navegadores web sem conexão com a internet."
+        is_correct: false
+      - text: "Integração nativa com macros de Excel."
+        is_correct: false
+      - text: "Garantia de que o código rodará mais rápido em uma única CPU de alta performance."
+        is_correct: false
+    explanation: |
+      Correct: Spark divide o trabalho em partições e as processa paralelamente em vários nós.
+    diagram: |
+      graph TD
+        D[Driver Node] --> W1[Worker 1]
+        D --> W2[Worker 2]
+        W1 --> T1[Task A]
+        W2 --> T2[Task B]
+    tags: [Spark, Distributed]
+
+  - id: gl18
+    topic: "Athena Federated Queries"
+    type: multiple_choice
+    question: |
+      Um usuário precisa cruzar dados de vendas que estão no S3 com dados de clientes que residem em um banco de dados operacional Amazon RDS MySQL.
+      Como o Athena pode realizar essa consulta sem mover os dados do RDS para o S3?
+    options:
+      - text: "Usando o Athena Federated Query através de um Lambda connector."
+        is_correct: true
+      - text: "Criando um link simbólico no S3 que aponta para o RDS."
+        is_correct: false
+      - text: "Usando o comando 'COPY FROM' do Athena."
+        is_correct: false
+      - text: "O Athena não pode consultar dados fora do S3."
+        is_correct: false
+    explanation: |
+      Correct: Federated Queries usam o Athena Query Federation SDK (rodando em Lambda) para buscar dados de fontes externas em tempo real.
+    diagram: |
+      graph LR
+        A[Athena] --> B[Lambda Connector]
+        B --> C[(RDS MySQL)]
+        B --> D[(Redshift)]
+        A --> E[S3 Data Lake]
+    tags: [Athena, Federation]
+
+  - id: gl19
+    topic: "Athena and CREATE TABLE AS SELECT (CTAS)"
+    type: multiple_choice
+    question: |
+      Para que serve o comando CTAS (CREATE TABLE AS SELECT) no Amazon Athena?
+    options:
+      - text: "Para criar uma nova tabela no Glue Catalog e simultaneamente converter/salvar os dados no S3 em um novo formato."
+        is_correct: true
+      - text: "Para criar um backup temporário que dura apenas a sessão da consulta."
+        is_correct: false
+      - text: "Para mover dados de um bucket S3 para um cluster Redshift provisionado."
+        is_correct: false
+      - text: "Para renomear uma tabela existente sem alterar os arquivos de origem."
+        is_correct: false
+    explanation: |
+      Correct: CTAS é comumente usado para converter CSVs para Parquet ou re-particionar dados diretamente via SQL no Athena.
+    tags: [Athena, CTAS]
+
+  - id: gl20
+    topic: "Spark Integration with Kinesis and Redshift"
+    type: multiple_choice
+    question: |
+      Um Job do Glue (Spark) precisa ler dados em tempo real e gravá-los no Redshift. Qual é o método mais eficiente para realizar a gravação no Redshift a partir do Spark?
+    options:
+      - text: "Usar o conector do Redshift que faz o staging dos dados no S3 e então executa um comando COPY."
+        is_correct: true
+      - text: "Executar múltiplos comandos 'INSERT INTO' via JDBC para cada linha."
+        is_correct: false
+      - text: "Enviar os dados via API do Redshift Data API."
+        is_correct: false
+      - text: "Gravar diretamente nos arquivos de dados no diretório do líder do Redshift."
+        is_correct: false
+    explanation: |
+      Correct: A gravação em massa via S3 + COPY é a única forma performática de carregar o Redshift em escala.
+    tags: [Spark, Redshift]
+
+  - id: gl21
+    topic: "Athena Fine-Grained Access to AWS Glue Data Catalog"
+    type: multiple_choice
+    question: |
+      Ao usar o Lake Formation para controlar o acesso ao Glue Catalog, o que acontece se um usuário tentar rodar uma query no Athena sobre uma coluna para a qual ele não tem permissão?
+    options:
+      - text: "A query falha com um erro de acesso negado ou a coluna é omitida dos resultados, dependendo da configuração."
+        is_correct: true
+      - text: "O Athena criptografa automaticamente os resultados dessa coluna."
+        is_correct: false
+      - text: "O AWS Billing cobra o dobro pelo acesso não autorizado."
+        is_correct: false
+      - text: "O usuário é desconectado automaticamente do console AWS."
+        is_correct: false
+    explanation: |
+      Correct: O Lake Formation intercepta a solicitação do Athena e aplica as permissões definidas (coluna/linha).
+    tags: [Security, Access]
+
+  - id: gl22
+    topic: "Athena and Glue, Costs, and Security"
+    type: multiple_choice
+    question: |
+      O custo do Amazon Athena é baseado em:
+    options:
+      - text: "Quantidade de dados escaneados por consulta (mínimo de 10MB por consulta)."
+        is_correct: true
+      - text: "Número de usuários simultâneos logados no console."
+        is_correct: false
+      - text: "Tempo de execução da CPU do cluster Presto."
+        is_correct: false
+      - text: "Capacidade de armazenamento total do Glue Data Catalog."
+        is_correct: false
+    explanation: |
+      Correct: O preço é de US$ 5 por TB escaneado. Formatos colunares (Parquet) reduzem drasticamente esse custo.
+    tags: [Costs, Athena]
+
+  - id: gl23
+    topic: "Apache Iceberg and Athena / EMR / Glue Integration"
+    type: multiple_choice
+    question: |
+      Qual é a vantagem de utilizar o formato de tabela Apache Iceberg em um Data Lake no AWS?
+    options:
+      - text: "Ele permite evolução de esquema sem reescrever dados e suporta isolamento de snapshot (Time Travel)."
+        is_correct: true
+      - text: "Ele transforma o S3 em um banco de dados NoSQL de ultra-baixa latência (sub-ms)."
+        is_correct: false
+      - text: "Ele elimina a necessidade de usar o AWS Glue Data Catalog."
+        is_correct: false
+      - text: "Ele é o único formato compatível com arquivos de imagem e vídeo."
+        is_correct: false
+    explanation: |
+      Correct: Iceberg traz funcionalidades de banco de dados SQL para o S3, como histórico de versões e updates eficientes.
+    tags: [Iceberg, Data Lake]
+
+  - id: gl24
+    topic: "AWS Glue Data Quality"
+    type: multiple_choice
+    question: |
+      Onde os resultados das avaliações de qualidade de dados do AWS Glue são armazenados para monitoramento?
+    options:
+      - text: "Amazon CloudWatch e opcionalmente no bucket S3 de sua escolha."
+        is_correct: true
+      - text: "Apenas no console do Glue por 24 horas."
+        is_correct: false
+      - text: "Dentro da própria tabela de dados como uma nova coluna 'quality_score'."
+        is_correct: false
+      - text: "Em um banco de dados RDS PostgreSQL gerenciado pelo AWS."
+        is_correct: false
+    explanation: |
+      Correct: Isso permite criar dashboards no CloudWatch para acompanhar a saúde dos dados ao longo do tempo.
+    tags: [Monitoring, Data Quality]
+
+  - id: gl25
+    topic: "Athena, Glue, and S3 Data Lakes - Hands On"
+    type: multiple_choice
+    question: |
+      Você executou um Crawler do Glue e ele criou uma tabela, mas ao consultar no Athena, as linhas aparecem vazias ou com erro. Qual o primeiro item a verificar?
+    options:
+      - text: "O SerDe (Serializer/Deserializer) e as permissões de IAM do Athena para ler o bucket S3."
+        is_correct: true
+      - text: "A velocidade da internet do administrador."
+        is_correct: false
+      - text: "Se o arquivo no S3 está com o nome em letras maiúsculas."
+        is_correct: false
+      - text: "O limite de instâncias EC2 na região."
+        is_correct: false
+    explanation: |
+      Correct: O SerDe define como o Athena interpreta os bytes do S3. Erros de permissão IAM também são causas comuns de falha na leitura.
+    tags: [Troubleshooting, Athena]
+
+  - id: gl26
+    topic: "Spark Integration with Athena"
+    type: multiple_choice
+    question: |
+      Como você pode usar o Amazon Athena dentro de um notebook Jupyter rodando no Glue Interactive Sessions para análise exploratória?
+    options:
+      - text: "Usando o driver PyAthena ou a biblioteca 'awswrangler' para executar queries SQL e carregar resultados em Pandas DataFrames."
+        is_correct: true
+      - text: "O Spark não pode se comunicar com o Athena, apenas com o S3 diretamente."
+        is_correct: false
+      - text: "Copiando e colando o CSV manualmente do bucket para o notebook."
+        is_correct: false
+      - text: "O Athena exige uma conexão JDBC persistente que não funciona em notebooks serverless."
+        is_correct: false
+    explanation: |
+      Correct: 'awswrangler' (AWS SDK para Pandas) é a forma mais comum de integrar serviços de dados da AWS em notebooks Python.
+    tags: [Spark, Analysis]

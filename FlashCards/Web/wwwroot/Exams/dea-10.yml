@@ -1,0 +1,778 @@
+﻿questions:
+  - id: glue_basics
+    type: multiple_choice
+    question: |
+      A data engineering team at a retail company needs to discover the schema of several petabytes of raw JSON and CSV data stored in Amazon S3. They want to create a centralized metadata repository that can be used by various analytics tools without manually defining table structures. 
+      Which solution should the architect implement to automate this process?
+    options:
+      - text: Configure an AWS Glue Crawler to scan the S3 buckets and automatically populate the AWS Glue Data Catalog.
+        is_correct: true
+      - text: Use an Amazon EMR cluster with a custom Spark script to parse file headers and update an RDS MySQL Hive Metastore.
+        is_correct: false
+      - text: Create an Amazon Athena named query for each S3 prefix to manually define the schema as an external table.
+        is_correct: false
+      - text: Deploy an AWS Lambda function triggered by S3 PutObject events to call the Glue CreateTable API for every new file.
+        is_correct: false
+    explanation: |
+      Correct: AWS Glue Crawlers are the primary mechanism for automated schema discovery and populating the Glue Data Catalog.
+      Incorrect: 
+        EMR with RDS is not serverless and requires significant operational overhead.
+        Athena manual queries do not provide automation for schema discovery across large-scale data.
+        Lambda triggers for every file would be extremely inefficient and costly at petabyte scale.
+    diagram: |
+      graph LR
+        A[S3 Data Lake] --> B[AWS Glue Crawler]
+        B --> C[AWS Glue Data Catalog]
+        C --> D[Athena/Redshift Spectrum]
+
+  - id: glue_hive_etl
+    type: multiple_choice
+    question: |
+      A financial services firm is migrating its legacy Apache Hive workloads from an on-premises Hadoop cluster to AWS. They want to continue using Hive-compatible tools but prefer a serverless metadata management solution that integrates natively with AWS analytics services.
+      How should the solutions architect configure the metadata layer?
+    options:
+      - text: Use the AWS Glue Data Catalog as a central, Hive-compatible metastore for all ETL and analytical workloads.
+        is_correct: true
+      - text: Provision a persistent Amazon EMR cluster running a dedicated Hive Metastore backed by Amazon Aurora.
+        is_correct: false
+      - text: Implement an Amazon DynamoDB table to store schema definitions and use a custom Glue Transform to read it.
+        is_correct: false
+      - text: Configure Amazon Redshift to act as the primary Hive Metastore for the S3-based data lake.
+        is_correct: false
+    explanation: |
+      Correct: The AWS Glue Data Catalog is a managed, Hive-compatible metastore that replaces the need for a self-managed Hive Metastore.
+      Incorrect: 
+        A dedicated EMR/Aurora metastore requires managing infrastructure and scaling.
+        DynamoDB is not natively Hive-compatible without significant custom coding.
+        Redshift is a data warehouse, not a Hive-compatible metadata catalog for external S3 data.
+    diagram: |
+      graph TD
+        A[Legacy Hive Scripts] --> B[AWS Glue ETL]
+        B --> C[AWS Glue Data Catalog]
+        C -.-> D[Hive Compatible Metastore]
+
+  - id: modify_catalog_etl
+    type: multiple_choice
+    question: |
+      A developer is writing an AWS Glue ETL job in PySpark. During the execution, the job generates new data partitions in S3. The developer wants to ensure that the Glue Data Catalog is updated with these new partitions as part of the job run itself to avoid waiting for a crawler.
+      Which approach should the developer take?
+    options:
+      - text: Set the 'enableUpdateCatalog' and 'updateBehavior' parameters in the Glue DynamicFrame sink options.
+        is_correct: true
+      - text: Use the 'boto3.client("glue").update_table' method inside a Python loop for every record processed.
+        is_correct: false
+      - text: Configure an S3 event notification to trigger a separate Lambda function that updates the Catalog.
+        is_correct: false
+      - text: Change the Glue Job's IAM role to 'AdministratorAccess' to allow automatic background catalog syncing.
+        is_correct: false
+    explanation: |
+      Correct: Glue ETL jobs can update the Data Catalog directly during the write phase using specific sink configuration parameters.
+      Incorrect: 
+        Using Boto3 inside a loop for every record is extremely slow and hits API rate limits.
+        S3 event notifications introduce unnecessary complexity and potential race conditions.
+        IAM roles grant permission but do not trigger the logic required to sync metadata.
+    diagram: |
+      graph LR
+        A[Glue ETL Job] --> B{Sink Config}
+        B -- updateBehavior --> C[Glue Data Catalog]
+        B -- write --> D[S3 Partitions]
+
+  - id: glue_bookmarks
+    type: multiple_choice
+    question: |
+      A logistics company runs a daily AWS Glue ETL job to process incremental data from S3. They need to ensure that the job only processes new files arriving since the last successful run, without moving or deleting source files.
+      Which Glue feature should be enabled to achieve this?
+    options:
+      - text: Enable Job Bookmarks in the Glue job settings to track the state of processed files.
+        is_correct: true
+      - text: Use an S3 Lifecycle Policy to tag files as 'processed' after they are read by the Glue job.
+        is_correct: false
+      - text: Set the Glue Job Worker Type to G.4X to automatically enable hardware-level state tracking.
+        is_correct: false
+      - text: Implement a manifest file in S3 and manually update it using an AWS Step Function.
+        is_correct: false
+    explanation: |
+      Correct: Job Bookmarks maintain state and track which S3 objects have been processed in previous runs.
+      Incorrect: 
+        S3 Lifecycle policies manage object age/transitions, not ETL processing state.
+        Worker types (G.4X) relate to compute power, not state management features.
+        Manual manifest management is complex and error-prone compared to native bookmarks.
+    diagram: |
+      graph LR
+        A[S3 Source] --> B[Glue ETL + Bookmarks]
+        B -- check state --> C[(State Store)]
+        B --> D[Processed Sink]
+
+  - id: glue_costs_antipatterns
+    type: multiple_choice
+    question: |
+      An organization notices that their AWS Glue costs are unexpectedly high. Upon auditing, they find many jobs are processing thousands of tiny files (under 1MB) and Crawlers are set to run every 10 minutes. 
+      What is the most effective way to reduce costs?
+    options:
+      - text: Group small files into larger chunks before processing and reduce Crawler frequency.
+        is_correct: true
+      - text: Switch from PySpark to Scala, as Scala jobs are billed at a 50% lower DPU rate.
+        is_correct: false
+      - text: Increase the 'Max Retries' setting to ensure jobs finish faster on the first attempt.
+        is_correct: false
+      - text: Disable the Glue Data Catalog and use an S3-based local file index instead.
+        is_correct: false
+    explanation: |
+      Correct: The 'Small File Problem' causes massive overhead in Spark. Reducing frequency and grouping data optimizes DPU usage.
+      Incorrect: 
+        DPU billing is independent of the programming language used.
+        Increasing retries does not reduce the cost of an inefficient job; it might increase it.
+        The Catalog is not the primary cost driver; DPU hours spent on inefficient processing are.
+    diagram: |
+      graph TD
+        A[Tiny Files] -- High Overhead --> B[Glue DPU Waste]
+        C[Large Files] -- Optimized --> D[Glue DPU Savings]
+
+  - id: glue_flex_jobs
+    type: multiple_choice
+    question: |
+      A company has several non-critical ETL jobs that perform nightly data consolidation. These jobs do not have strict completion deadlines. The company wants to optimize costs by using spare AWS capacity.
+      Which Glue execution class should they use?
+    options:
+      - text: Use AWS Glue Flex jobs to run workloads on non-critical compute capacity at a reduced rate.
+        is_correct: true
+      - text: Request EC2 Spot Instances and manually attach them to the Glue Service Role.
+        is_correct: false
+      - text: Use the 'Standard' execution class but set 'Max Capacity' to 0.1 DPU.
+        is_correct: false
+      - text: Implement AWS Glue Interactive Sessions with a 1-minute idle timeout.
+        is_correct: false
+    explanation: |
+      Correct: Glue Flex is designed for non-urgent jobs, offering a lower price point using spare capacity.
+      Incorrect: 
+        Glue is serverless; users cannot manually attach EC2 Spot instances to it.
+        The minimum DPU for Standard jobs is typically 2; 0.1 is not a valid setting.
+        Interactive sessions are for development, not for optimizing production batch job costs.
+    diagram: |
+      graph LR
+        A[Non-Urgent Job] --> B{Execution Class}
+        B -- Flex --> C[Spare Capacity/Low Cost]
+        B -- Standard --> D[Dedicated Capacity/Full Cost]
+
+  - id: glue_studio
+    type: multiple_choice
+    question: |
+      A business analyst needs to build an ETL pipeline to join data from three different S3 buckets and filter out invalid records. The analyst is not proficient in Python or Scala.
+      Which tool provides a visual interface to accomplish this task?
+    options:
+      - text: AWS Glue Studio, which offers a drag-and-drop interface for designing and monitoring ETL jobs.
+        is_correct: true
+      - text: AWS Glue DataBrew, which is used to write and compile Spark JAR files visually.
+        is_correct: false
+      - text: Amazon EMR Studio, which is a visual IDE for managing Hadoop HDFS permissions.
+        is_correct: false
+      - text: Amazon Athena Query Editor, which converts SQL queries into visual flowchart diagrams.
+        is_correct: false
+    explanation: |
+      Correct: Glue Studio is the visual design tool for building ETL pipelines without writing code.
+      Incorrect: 
+        DataBrew is for data preparation/cleaning, not for building full Spark ETL scripts.
+        EMR Studio is an IDE for developers, not a drag-and-drop ETL builder for non-coders.
+        Athena Query Editor is for SQL, not for visual ETL orchestration.
+    diagram: |
+      graph TD
+        A[Visual Interface] --> B[Join/Filter/Transform]
+        B --> C[Auto-generated Code]
+        C --> D[Glue Job Run]
+
+  - id: glue_data_quality
+    type: multiple_choice
+    question: |
+      A pharmaceutical company must ensure that clinical trial data uploaded to S3 meets strict validation rules (e.g., no null values in the 'PatientID' column). They want to stop the pipeline if the data quality fails.
+      What feature of AWS Glue should they use?
+    options:
+      - text: AWS Glue Data Quality, using Data Quality Definition Language (DQDL) to define and enforce rules.
+        is_correct: true
+      - text: AWS Glue Schema Registry, to block any file that contains a null value at the S3 level.
+        is_correct: false
+      - text: Amazon S3 Guard, which validates file content before the upload is finalized.
+        is_correct: false
+      - text: Glue Crawler 'Strict Mode', which ignores rows that do not match the expected data type.
+        is_correct: false
+    explanation: |
+      Correct: AWS Glue Data Quality allows the definition of DQDL rules to monitor and enforce data integrity.
+      Incorrect: 
+        Schema Registry manages formats for streaming, not row-level data quality rules for S3.
+        S3 Guard is not a real AWS service for content validation.
+        Crawlers infer schema but do not provide a 'Strict Mode' for data quality enforcement.
+    diagram: |
+      graph LR
+        A[Raw Data] --> B[Glue Data Quality]
+        B -- Pass --> C[Prod Table]
+        B -- Fail --> D[Alert/Stop]
+
+  - id: glue_databrew
+    type: multiple_choice
+    question: |
+      A data scientist needs to clean a dataset containing inconsistent date formats and missing addresses. They require an interactive, spreadsheet-like view to apply transformations without writing code.
+      Which service is designed for this visual data preparation?
+    options:
+      - text: AWS Glue DataBrew, a visual data preparation tool with over 250 built-in transformations.
+        is_correct: true
+      - text: AWS Glue Studio, used for building high-scale streaming transformations via CLI.
+        is_correct: false
+      - text: Amazon QuickSight, which transforms S3 data into Parquet using its analysis engine.
+        is_correct: false
+      - text: AWS Lake Formation, which provides a visual grid for editing CSV files directly in S3.
+        is_correct: false
+    explanation: |
+      Correct: DataBrew provides an interactive workspace for visual data cleaning and normalization.
+      Incorrect: 
+        Glue Studio is for ETL job orchestration, not interactive 'spreadsheet-style' cleaning.
+        QuickSight is a BI visualization tool, not a data preparation tool.
+        Lake Formation is for security and governance, not for editing data content.
+    diagram: |
+      graph LR
+        A[Messy Data] --> B[DataBrew Workspace]
+        B -- Apply Steps --> C[Clean Data]
+
+  - id: databrew_demo
+    type: multiple_choice
+    question: |
+      A user is exploring AWS Glue DataBrew and wants to apply the same set of 15 transformation steps (like renaming columns and changing cases) to multiple datasets. 
+      How can these steps be saved and reused in DataBrew?
+    options:
+      - text: Create a DataBrew Recipe, which stores the sequence of transformations as a reusable asset.
+        is_correct: true
+      - text: Save a Glue Blueprint, which exports the steps as a CloudFormation template.
+        is_correct: false
+      - text: Export the session as a 'Glue Spark Script' and import it into other DataBrew projects.
+        is_correct: false
+      - text: Create a DataBrew Workflow, which links the S3 bucket metadata to the transformations.
+        is_correct: false
+    explanation: |
+      Correct: In DataBrew, a 'Recipe' is a set of instructions that can be applied to any dataset.
+      Incorrect: 
+        Blueprints are for creating Glue Workflows, not for DataBrew transformation steps.
+        While DataBrew can run on Spark, it doesn't primarily manage logic through 'imported' scripts.
+        Workflows in Glue are for orchestration, not for defining step-by-step data cleaning logic.
+    diagram: |
+      graph TD
+        A[Dataset A] --> B[Recipe]
+        C[Dataset B] --> B
+        B --> D[Clean Output]
+
+  - id: databrew_pii
+    type: multiple_choice
+    question: |
+      An insurance company needs to process customer records. Before the data is accessible to the marketing team, sensitive information like Social Security Numbers (SSN) must be masked.
+      How can this be automated using AWS Glue DataBrew?
+    options:
+      - text: Use the built-in PII transformation in DataBrew to detect and mask sensitive data patterns.
+        is_correct: true
+      - text: Apply an Amazon Macie policy that deletes any row containing an SSN pattern during the DataBrew job.
+        is_correct: false
+      - text: Configure an S3 Bucket Policy to automatically encrypt the SSN column with a different KMS key.
+        is_correct: false
+      - text: Use a Glue Crawler to exclude columns that have names matching a PII dictionary.
+        is_correct: false
+    explanation: |
+      Correct: DataBrew has native PII detection and masking capabilities.
+      Incorrect: 
+        Macie is for discovery and alerting, it does not redact data during an ETL job.
+        S3 Bucket Policies control access to files, not individual columns or data patterns.
+        Crawlers find schema; they do not mask or redact data based on content.
+    diagram: |
+      graph LR
+        A[S3 Data with PII] --> B[DataBrew Job]
+        B -- PII Masking --> C[Redacted S3 Data]
+
+  - id: glue_workflows
+    type: multiple_choice
+    question: |
+      A data engineer needs to automate a sequence where a Glue Crawler runs first, followed by a Glue ETL job only if the crawler succeeds, and finally an SNS notification is sent.
+      What is the best way to orchestrate this within the Glue service?
+    options:
+      - text: Create an AWS Glue Workflow to define triggers and dependencies between Crawlers and Jobs.
+        is_correct: true
+      - text: Use AWS Step Functions to manually poll the Glue API every 30 seconds for status updates.
+        is_correct: false
+      - text: Set up a Cron job on an EC2 instance that executes AWS CLI commands in order.
+        is_correct: false
+      - text: Enable 'Auto-Sequence' in the Glue Data Catalog settings for the specific database.
+        is_correct: false
+    explanation: |
+      Correct: Glue Workflows are the native way to orchestrate multiple Glue components (Jobs, Crawlers, Triggers).
+      Incorrect: 
+        Step Functions is a valid external tool, but Glue Workflows is the internal service-specific feature requested.
+        EC2 Cron jobs increase operational overhead and are not serverless.
+        There is no 'Auto-Sequence' feature in the Glue Data Catalog.
+    diagram: |
+      graph TD
+        A[Trigger] --> B[Crawler]
+        B -- Success --> C[ETL Job]
+        C --> D[SNS Notify]
+
+  - id: lake_formation_basics
+    type: multiple_choice
+    question: |
+      A company wants to move away from complex S3 Bucket Policies to manage data access. They need a centralized way to grant 'SELECT' permissions on specific tables and columns to different IAM users.
+      Which service provides this capability?
+    options:
+      - text: AWS Lake Formation, which provides granular access control for the Data Catalog and S3 data.
+        is_correct: true
+      - text: AWS Organizations, used to create SCPs that block access to specific CSV columns.
+        is_correct: false
+      - text: Amazon S3 Access Points, configured with 'Column-Level-Filtering' enabled.
+        is_correct: false
+      - text: AWS IAM, using 'Condition' keys to parse the SQL query during the Athena execution.
+        is_correct: false
+    explanation: |
+      Correct: Lake Formation simplifies security by allowing table and column-level permissions using a grant/revoke model.
+      Incorrect: 
+        SCPs in Organizations manage account-level boundaries, not granular data columns.
+        S3 Access Points do not natively understand or filter data 'columns'.
+        IAM cannot inspect or enforce security based on the internal structure of a file without an intermediary service like Lake Formation.
+    diagram: |
+      graph LR
+        A[Admin] --> B[Lake Formation]
+        B -- Grant Select --> C[User A]
+        C --> D[Athena]
+        D -- Restricted View --> E[S3 Data]
+
+  - id: lake_formation_filters
+    type: multiple_choice
+    question: |
+      A healthcare provider needs to ensure that researchers can only see patient records from their own clinic. The data is stored in a single large S3 table.
+      Which Lake Formation feature allows for this row-level security?
+    options:
+      - text: Data Filters, which allow defining row-level and cell-level security using SQL-like expressions.
+        is_correct: true
+      - text: Glue Partition Projection, which physically moves files into researcher-specific folders.
+        is_correct: false
+      - text: S3 Select, which uses a Lambda function to delete rows before they reach the user.
+        is_correct: false
+      - text: Athena Workgroups, which hardcode a 'WHERE' clause into every query automatically.
+        is_correct: false
+    explanation: |
+      Correct: Lake Formation Data Filters allow for row-level security based on attributes (e.g., ClinicID = 'XYZ').
+      Incorrect: 
+        Partition Projection is for performance optimization, not for security enforcement.
+        S3 Select is a retrieval optimization, not a security governance tool.
+        Athena Workgroups can limit query costs but cannot enforce row-level security natively.
+    diagram: |
+      graph TD
+        A[Query: SELECT *] --> B{Lake Formation Filter}
+        B -- Researcher Clinic A --> C[Rows for Clinic A]
+        B -- Researcher Clinic B --> D[Rows for Clinic B]
+
+  - id: athena_basics
+    type: multiple_choice
+    question: |
+      A startup needs to perform ad-hoc SQL queries on several terabytes of log data in S3. They want a serverless solution where they only pay for the queries they run, without managing any infrastructure.
+      Which service should they use?
+    options:
+      - text: Amazon Athena, an interactive query service that analyzes data in S3 using standard SQL.
+        is_correct: true
+      - text: Amazon Redshift, which requires provisioning a cluster to run SQL queries.
+        is_correct: false
+      - text: Amazon RDS, which replicates S3 data into a local EBS volume for analysis.
+        is_correct: false
+      - text: AWS Glue Studio, which provides a SQL console for real-time dashboarding.
+        is_correct: false
+    explanation: |
+      Correct: Athena is serverless, uses SQL, and charges based on the amount of data scanned.
+      Incorrect: 
+        Redshift (Provisioned) requires cluster management.
+        RDS is a relational database for OLTP, not designed for ad-hoc large-scale S3 data lake queries.
+        Glue Studio is for ETL, not primarily for ad-hoc SQL querying.
+    diagram: |
+      graph LR
+        A[S3 Logs] --> B[Athena]
+        B -- SQL Query --> C[Results]
+        D[Pay per Scan] -.-> B
+
+  - id: athena_glue_security
+    type: multiple_choice
+    question: |
+      When using Amazon Athena to query data, what role does the AWS Glue Data Catalog play, and how is security managed for the metadata?
+    options:
+      - text: Athena uses Glue as its metastore; security can be managed via IAM or Lake Formation permissions on the Catalog.
+        is_correct: true
+      - text: Glue physically stores the data for Athena; security is managed by encrypting the Glue Service Role.
+        is_correct: false
+      - text: Athena bypasses Glue for performance; security is managed strictly through S3 Bucket ACLs.
+        is_correct: false
+      - text: Glue is only used for billing; Athena uses its own internal metadata store for table schemas.
+        is_correct: false
+    explanation: |
+      Correct: Athena relies on Glue for metadata (schema/partitions), and Lake Formation provides the security layer for this metadata.
+      Incorrect: 
+        Glue does not store the data; S3 does.
+        Athena does not bypass Glue; it is integrated with it for table definitions.
+        Athena uses the Glue Data Catalog as its primary metastore in the AWS ecosystem.
+    diagram: |
+      graph LR
+        A[Athena] --> B[Glue Data Catalog]
+        B -- Permissions --> C[Lake Formation/IAM]
+        A --> D[S3 Data]
+
+  - id: athena_performance
+    type: multiple_choice
+    question: |
+      An analyst finds that Athena queries on a large dataset of small JSON files are very slow and expensive. 
+      Which strategy would most significantly improve performance and reduce cost?
+    options:
+      - text: Convert the data to Apache Parquet format and partition the data by a high-cardinality column like 'Date'.
+        is_correct: true
+      - text: Increase the 'Query Priority' setting in the Athena console to 'High'.
+        is_correct: false
+      - text: Store the data in S3 Glacier Instant Retrieval to take advantage of faster disk speeds.
+        is_correct: false
+      - text: Use the 'LIMIT 10' clause in every query to reduce the amount of data S3 reads.
+        is_correct: false
+    explanation: |
+      Correct: Parquet (columnar) reduces data scanned, and partitioning limits the amount of S3 prefixes searched.
+      Incorrect: 
+        There is no 'Query Priority' setting in Athena that changes performance.
+        Glacier is for archival; S3 Standard or Express One Zone is faster for Athena.
+        'LIMIT' does not reduce the data scanned in Athena; the entire block must often be read first.
+    diagram: |
+      graph TD
+        A[Many Small JSONs] -- Scan All --> B[Slow/Expensive]
+        C[Large Parquet + Partitions] -- Scan Subset --> D[Fast/Cheap]
+
+  - id: athena_acid
+    type: multiple_choice
+    question: |
+      A financial company needs to perform 'UPDATE' and 'DELETE' operations on specific rows in their S3 data lake to comply with GDPR requests. They want to ensure transactional consistency.
+      Which Athena feature supports this?
+    options:
+      - text: Athena ACID transactions, which use the Apache Iceberg table format for reliable S3 updates.
+        is_correct: true
+      - text: Athena S3-Overwrite, which automatically identifies and replaces lines within a CSV file.
+        is_correct: false
+      - text: Athena Federated Query, which allows SQL updates to be pushed directly to S3 metadata.
+        is_correct: false
+      - text: Athena Workgroup Isolation, which locks the S3 bucket during a 'DELETE' statement.
+        is_correct: false
+    explanation: |
+      Correct: Athena supports ACID transactions on Iceberg tables, allowing for row-level updates and deletes on S3.
+      Incorrect: 
+        Athena cannot natively 'update' lines inside a standard CSV/JSON file on S3.
+        Federated query is for external sources, not for adding ACID to S3 files.
+        Workgroups do not provide file-level locking for transactional consistency.
+    diagram: |
+      graph LR
+        A[Update/Delete Query] --> B[Athena ACID]
+        B --> C[Iceberg Table]
+        C --> D[S3 Manifests/Data]
+
+  - id: iceberg_integration
+    type: multiple_choice
+    question: |
+      A data platform uses Apache Iceberg to manage a large-scale data lake. They want to ensure that Glue ETL jobs, EMR Spark jobs, and Athena queries all see the same consistent view of the data.
+      How should they configure the metastore?
+    options:
+      - text: Use the AWS Glue Data Catalog as the shared Iceberg warehouse catalog for all services.
+        is_correct: true
+      - text: Maintain a separate Iceberg 'metadata.json' file on an EMR Master Node and share it via NFS.
+        is_correct: false
+      - text: Configure each service to use its own local 'S3-Pointer-Cache' for Iceberg snapshots.
+        is_correct: false
+      - text: Use Amazon DynamoDB as a lock manager while using Athena as the primary catalog.
+        is_correct: false
+    explanation: |
+      Correct: Glue Data Catalog acts as the central repository for Iceberg table metadata across the AWS ecosystem.
+      Incorrect: 
+        NFS sharing from an EMR node is not scalable and introduces a single point of failure.
+        Local caches would lead to data inconsistency across different services.
+        While DynamoDB can be used for locking in some custom setups, Glue is the native, integrated catalog for Iceberg on AWS.
+    diagram: |
+      graph TD
+        A[Athena] & B[EMR] & C[Glue ETL] --> D[AWS Glue Data Catalog]
+        D --> E[Iceberg Table on S3]
+
+  - id: athena_fine_grained
+    type: multiple_choice
+    question: |
+      A security administrator needs to restrict access so that a specific IAM user can query the 'orders' table in Athena but cannot see the 'credit_card_number' column.
+      How is this best implemented?
+    options:
+      - text: Use Lake Formation to grant 'SELECT' permissions to the user while excluding the sensitive column.
+        is_correct: true
+      - text: Use an IAM policy with a 'Condition' that denies 's3:GetObject' if the query contains the column name.
+        is_correct: false
+      - text: Create a separate S3 bucket for each column and only give the user access to the non-sensitive buckets.
+        is_correct: false
+      - text: Encrypt the sensitive column with a KMS key that the user does not have 'Decrypt' permissions for.
+        is_correct: false
+    explanation: |
+      Correct: Lake Formation provides column-level access control that Athena enforces during query execution.
+      Incorrect: 
+        IAM cannot inspect the content of a SQL query to deny S3 access dynamically.
+        Splitting every column into different buckets is architecturally complex and inefficient.
+        KMS encryption at the column level would cause the entire Athena query to fail if it tries to read the file.
+    diagram: |
+      graph LR
+        A[User] --> B[Athena]
+        B -- Checks --> C[Lake Formation]
+        C -- Exclude CC_Col --> B
+        B --> D[Result: No CC Data]
+
+  - id: apache_spark
+    type: multiple_choice
+    question: |
+      A company needs to process large-scale batch and streaming data. They require a framework that supports distributed processing, high-level APIs in Java/Python, and integrated machine learning libraries.
+      Which engine is the core component of AWS Glue ETL?
+    options:
+      - text: Apache Spark, a unified analytics engine for large-scale data processing.
+        is_correct: true
+      - text: Apache Hive, a data warehouse software for managing structured data on HDFS.
+        is_correct: false
+      - text: Presto, a distributed SQL query engine optimized for low-latency ad-hoc queries.
+        is_correct: false
+      - text: Apache Flink, an engine primarily used for stateful computations over data streams.
+        is_correct: false
+    explanation: |
+      Correct: AWS Glue ETL is built on top of Apache Spark.
+      Incorrect: 
+        Hive is supported on EMR but is not the primary engine for Glue ETL.
+        Presto is the engine behind Athena, not Glue ETL.
+        Flink is available in Amazon Managed Service for Apache Flink, but is not the base for Glue ETL.
+    diagram: |
+      graph TD
+        A[AWS Glue] --> B[Apache Spark Engine]
+        B --> C[PySpark / Scala]
+        B --> D[Distributed Nodes]
+
+  - id: athena_glue_s3_hands_on
+    type: multiple_choice
+    question: |
+      A data engineer is tasked with setting up a serverless analytics pipeline. They have uploaded CSV files to S3. 
+      What are the next 'hands-on' steps to make this data queryable in Athena?
+    options:
+      - text: Run a Glue Crawler to create a table in the Data Catalog, then query that table using Athena.
+        is_correct: true
+      - text: Use the 'athena-sync' CLI command to push S3 metadata into the Athena internal cache.
+        is_correct: false
+      - text: Manually create a JSON file in the 'metadata' folder of S3 and restart the Athena service.
+        is_correct: false
+      - text: Configure an EMR cluster to replicate the S3 files into an RDS database.
+        is_correct: false
+    explanation: |
+      Correct: The standard workflow is S3 -> Glue Crawler -> Glue Catalog -> Athena.
+      Incorrect: 
+        There is no 'athena-sync' command; metadata is retrieved from Glue.
+        Athena does not have a 'service restart' or manual JSON metadata folder requirement.
+        Replicating data to RDS defeats the purpose of a serverless S3 data lake.
+    diagram: |
+      graph LR
+        A[S3 CSV] --> B[Glue Crawler]
+        B --> C[Glue Catalog]
+        C --> D[Athena SQL]
+
+  - id: athena_ctas
+    type: multiple_choice
+    question: |
+      A company has a multi-terabyte table in CSV format. Queries are slow. They want to create a new version of the table in Parquet format, partitioned by 'Year', to optimize future queries.
+      Which SQL approach is most efficient?
+    options:
+      - text: Use the 'CREATE TABLE ... WITH (format = "PARQUET", partitioned_by = ARRAY["year"]) AS SELECT ...' (CTAS) statement.
+        is_correct: true
+      - text: Run a 'SELECT INTO' statement and then manually run a Glue Crawler to change the format.
+        is_correct: false
+      - text: Execute an 'ALTER TABLE SET FORMAT = PARQUET' command on the existing CSV table.
+        is_correct: false
+      - text: Use 'INSERT INTO' with the 'FORCE_PARQUET' hint in the SQL header.
+        is_correct: false
+    explanation: |
+      Correct: CTAS is the standard way in Athena to create a new, optimized table from existing data.
+      Incorrect: 
+        'SELECT INTO' is not the syntax used in Athena for this purpose.
+        'ALTER TABLE' cannot change the physical underlying file format of existing S3 data.
+        'FORCE_PARQUET' is not a valid Athena SQL hint.
+    diagram: |
+      graph TD
+        A[Raw CSV Table] --> B[CTAS Query]
+        B --> C[New Parquet Table]
+        C --> D[Optimized S3 Storage]
+
+  - id: spark_kinesis_redshift
+    type: multiple_choice
+    question: |
+      A streaming application ingests data from Amazon Kinesis. A Spark job in AWS Glue needs to process this data and perform an 'upsert' into an Amazon Redshift table.
+      What is the recommended architectural pattern?
+    options:
+      - text: Use Glue Streaming with the Redshift connector, which uses an S3 staging area to perform the COPY and merge.
+        is_correct: true
+      - text: Write data directly from Spark to Redshift using a standard JDBC 'INSERT' for every record.
+        is_correct: false
+      - text: Use a Kinesis Firehose to write directly to the Redshift Leader Node via an SSH tunnel.
+        is_correct: false
+      - text: Configure the Glue Job to write to a Redshift 'External Schema' without using S3.
+        is_correct: false
+    explanation: |
+      Correct: For performance, Spark-to-Redshift writes usually stage data in S3 and then execute a Redshift COPY command.
+      Incorrect: 
+        Individual JDBC inserts are too slow for large-scale distributed Spark jobs.
+        SSH tunnels to a leader node are not a standard or scalable Glue/Redshift integration.
+        Redshift Spectrum (External Schemas) is for reading S3 data, not for high-performance upserts from Spark.
+    diagram: |
+      graph LR
+        A[Kinesis] --> B[Glue Spark]
+        B --> C[S3 Staging]
+        C --> D[Redshift COPY/Merge]
+
+  - id: spark_integration_athena
+    type: multiple_choice
+    question: |
+      A data scientist wants to use a Jupyter Notebook to run Spark-based machine learning models on data managed by Athena. They want to avoid managing EMR clusters.
+      Which feature should they use?
+    options:
+      - text: Athena interactive sessions with Apache Spark, which provides a serverless Spark environment.
+        is_correct: true
+      - text: Athena-to-Glue Bridge, which converts SQL into PySpark code automatically.
+        is_correct: false
+      - text: Amazon SageMaker 'Athena-Plugin', which replicates S3 data into a Spark-EBS volume.
+        is_correct: false
+      - text: The 'athena-spark-submit' CLI tool to push local Spark jobs to the Athena engine.
+        is_correct: false
+    explanation: |
+      Correct: Athena now supports serverless Spark sessions directly from the console or via notebooks.
+      Incorrect: 
+        There is no 'Athena-to-Glue Bridge' for code conversion.
+        SageMaker interacts with Athena but does not use 'Spark-EBS volumes' for replication.
+        'athena-spark-submit' is not a valid AWS tool; sessions are managed within the Athena service.
+    diagram: |
+      graph LR
+        A[Jupyter Notebook] --> B[Athena Spark Session]
+        B --> C[Serverless Spark Engine]
+        C --> D[S3 Data Lake]
+
+  - id: athena_federated_queries
+    type: multiple_choice
+    question: |
+      An organization has data split across S3, Amazon RDS (PostgreSQL), and Amazon DynamoDB. They need to run a single SQL query to join these data sources for a weekly report.
+      Which Athena feature enables this?
+    options:
+      - text: Athena Federated Query, using Lambda-based data source connectors.
+        is_correct: true
+      - text: Athena Cross-Source Sync, which replicates all databases into a single S3 bucket.
+        is_correct: false
+      - text: Glue Elastic Views, which creates a materialized view of RDS in the Athena console.
+        is_correct: false
+      - text: Athena Query Federation, which requires installing a Presto agent on the RDS instance.
+        is_correct: false
+    explanation: |
+      Correct: Federated Query uses Lambda connectors to fetch data from non-S3 sources and join them in Athena.
+      Incorrect: 
+        Athena does not have a 'Cross-Source Sync' replication feature.
+        Glue Elastic Views is a separate service for data sync, not an Athena query feature.
+        You do not need to install agents on RDS instances for Athena federation.
+    diagram: |
+      graph TD
+        A[Athena] --> B[Lambda Connector]
+        B --> C[RDS]
+        B --> D[DynamoDB]
+        A --> E[S3]
+
+  - id: amazon_emr_basics
+    type: multiple_choice
+    question: |
+      A company needs to run a complex Hadoop-based genomic analysis that requires custom libraries and low-level access to the operating system. They expect to run this on hundreds of EC2 instances.
+      Which service should they use?
+    options:
+      - text: Amazon EMR, which provides a managed Hadoop framework on EC2.
+        is_correct: true
+      - text: AWS Glue, as it provides full root access to the underlying Spark workers.
+        is_correct: false
+      - text: Amazon Athena, which allows for custom C++ library injection into the SQL engine.
+        is_correct: false
+      - text: AWS Batch, using a single giant Lambda function to simulate a Hadoop cluster.
+        is_correct: false
+    explanation: |
+      Correct: EMR provides managed Hadoop/Spark clusters with full EC2 access for customization.
+      Incorrect: 
+        Glue is serverless and does not provide root access to the workers.
+        Athena does not allow custom OS-level library injections.
+        Lambda has a 15-minute limit and cannot effectively simulate a large Hadoop cluster.
+    diagram: |
+      graph TD
+        A[EMR Cluster] --> B[Master Node]
+        B --> C[Core Nodes]
+        B --> D[Task Nodes]
+        C & D --> E[EC2 Instances]
+
+  - id: emr_storage_integration
+    type: multiple_choice
+    question: |
+      A data engineer wants to reduce the cost of an EMR cluster by storing data in S3 instead of HDFS. They need the Hadoop applications to interact with S3 as if it were a standard file system.
+      What should they use?
+    options:
+      - text: EMR File System (EMRFS), which allows EMR to access S3 directly.
+        is_correct: true
+      - text: AWS Storage Gateway in File mode, mounted as an HDFS volume.
+        is_correct: false
+      - text: S3 DistCP, which creates a real-time symlink between HDFS and S3.
+        is_correct: false
+      - text: EMR Local-Mount, which uses EBS volumes to cache the entire S3 bucket.
+        is_correct: false
+    explanation: |
+      Correct: EMRFS is the connector that allows Hadoop to treat S3 as a file system.
+      Incorrect: 
+        Storage Gateway is for on-premises-to-cloud integration, not for EMR internal storage.
+        S3 DistCP is a tool for moving data, not a real-time file system connector.
+        Caching an entire petabyte S3 bucket on EBS is not feasible or cost-effective.
+    diagram: |
+      graph LR
+        A[EMR App] --> B[EMRFS]
+        B --> C[Amazon S3]
+        D[HDFS] -.-> A
+
+  - id: emr_hadoop_intro
+    type: multiple_choice
+    question: |
+      You are explaining the components of an EMR cluster to a new trainee. They ask how the cluster manages resources and schedules jobs across the different nodes.
+      Which component of the Hadoop ecosystem is responsible for this?
+    options:
+      - text: YARN (Yet Another Resource Negotiator), which manages cluster resources and job scheduling.
+        is_correct: true
+      - text: HDFS, which provides the SQL query interface for the Master node.
+        is_correct: false
+      - text: MapReduce, which is the only storage layer used by EMR clusters.
+        is_correct: false
+      - text: Apache Pig, which acts as the operating system for the EC2 instances.
+        is_correct: false
+    explanation: |
+      Correct: YARN is the resource management layer in Hadoop.
+      Incorrect: 
+        HDFS is for storage, not for SQL or scheduling.
+        MapReduce is a processing framework, not a storage layer.
+        Apache Pig is a high-level scripting language, not an operating system.
+    diagram: |
+      graph TD
+        A[YARN] --> B[App Master]
+        A --> C[Node Manager 1]
+        A --> D[Node Manager 2]
+
+  - id: emr_serverless_eks
+    type: multiple_choice
+    question: |
+      A company wants to run Spark jobs without managing EMR clusters. However, some of their teams already use Kubernetes for all their microservices and want to standardize their big data processing on the same platform.
+      Which EMR options should be recommended?
+    options:
+      - text: EMR Serverless for no-ops management, and EMR on EKS for Kubernetes-integrated workloads.
+        is_correct: true
+      - text: EMR on Lambda for serverless, and EMR on Fargate for containerization.
+        is_correct: false
+      - text: EMR Dedicated for Kubernetes, and EMR Standard for serverless.
+        is_correct: false
+      - text: AWS Glue for Kubernetes, and Athena for EMR-style processing.
+        is_correct: false
+    explanation: |
+      Correct: EMR Serverless removes cluster management, and EMR on EKS allows running EMR on Kubernetes.
+      Incorrect: 
+        EMR on Lambda is not a service.
+        'EMR Dedicated' is not a standard AWS service term.
+        Glue does not run 'on' Kubernetes in the same way EMR on EKS does.
+    diagram: |
+      graph TD
+        A[User] --> B{Option}
+        B -- No Clusters --> C[EMR Serverless]
+        B -- Kubernetes --> D[EMR on EKS]

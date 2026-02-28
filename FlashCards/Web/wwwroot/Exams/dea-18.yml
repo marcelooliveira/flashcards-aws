@@ -1,0 +1,257 @@
+﻿questions:
+  - id: sec1
+    topic: "Intro: Security, Identity, and Compliance"
+    type: multiple_choice
+    question: |
+      Under the AWS Shared Responsibility Model, which of the following is the responsibility of the customer?
+    options:
+      - text: "Configuration of Security Groups and Network ACLs."
+        is_correct: true
+      - text: "Physical security of the data centers."
+        is_correct: false
+      - text: "Patching the underlying virtualization software."
+        is_correct: false
+      - text: "Disposal of decommissioned storage drives."
+        is_correct: false
+    explanation: |
+      Correct: Customers are responsible for "Security in the Cloud," which includes network configurations, data encryption, and IAM.
+    tags: [Shared Responsibility, Security]
+
+  - id: sec2
+    topic: "Principle of Least Privilege"
+    type: multiple_choice
+    question: |
+      Which statement best describes the 'Principle of Least Privilege' in AWS IAM?
+    options:
+      - text: "Granting only the minimum permissions required to perform a specific task."
+        is_correct: true
+      - text: "Giving all users AdministratorAccess to avoid workflow interruptions."
+        is_correct: false
+      - text: "Using the Root user for daily administrative tasks."
+        is_correct: false
+      - text: "Assigning permissions based on the user's seniority level only."
+        is_correct: false
+    explanation: |
+      Correct: Least privilege reduces the attack surface by ensuring identities have no more access than necessary.
+    tags: [IAM, Best Practices]
+
+  - id: sec3
+    topic: "Data Masking and Anonymization"
+    type: multiple_choice
+    question: |
+      A company needs to share a dataset for testing but must ensure that PII (Personally Identifiable Information) like credit card numbers is replaced with functional but fake data. 
+      What is this process called?
+    options:
+      - text: "Data Masking."
+        is_correct: true
+      - text: "Data Encryption."
+        is_correct: false
+      - text: "Data Indexing."
+        is_correct: false
+      - text: "Data Versioning."
+        is_correct: false
+    explanation: |
+      Correct: Masking hides sensitive data while maintaining the structural format for testing or analysis.
+    tags: [Security, Privacy]
+
+  - id: sec4
+    topic: "Preventing Backups or Replication to Disallowed AWS Regions"
+    type: multiple_choice
+    question: |
+      To comply with data sovereignty laws, an organization must prevent any user from creating S3 buckets or replicating data to regions outside of Europe. 
+      What is the most effective way to enforce this globally across an AWS Organization?
+    options:
+      - text: "Apply a Service Control Policy (SCP) with a 'Deny' effect on non-EU regions."
+        is_correct: true
+      - text: "Create an IAM Group for every user with a region restriction."
+        is_correct: false
+      - text: "Configure a CloudWatch Alarm to notify when a bucket is created."
+        is_correct: false
+      - text: "Use S3 Lifecycle rules to delete objects in other regions."
+        is_correct: false
+    explanation: |
+      Correct: SCPs allow you to set guardrails that even account administrators cannot bypass, ensuring regional compliance.
+    tags: [Compliance, SCP]
+
+  - id: sec5
+    topic: "IAM Introduction: Users, Groups, Policies"
+    type: multiple_choice
+    question: |
+      In IAM, what is the primary purpose of a 'Group'?
+    options:
+      - text: "To manage permissions for multiple users by attaching policies to the group."
+        is_correct: true
+      - text: "To provide a login endpoint for a specific department."
+        is_correct: false
+      - text: "To act as an identity provider for external SAML users."
+        is_correct: false
+      - text: "To increase the API rate limit for specific users."
+        is_correct: false
+    explanation: |
+      Correct: IAM Groups allow you to assign a set of permissions to many users at once, simplifying management.
+    tags: [IAM, Identity]
+
+  - id: sec6
+    topic: "IAM Policies"
+    type: multiple_choice
+    question: |
+      Which part of an IAM Policy JSON structure defines the specific AWS service and action being allowed or denied?
+    options:
+      - text: "Action."
+        is_correct: true
+      - text: "Effect."
+        is_correct: false
+      - text: "Principal."
+        is_correct: false
+      - text: "Resource."
+        is_correct: false
+    explanation: |
+      Correct: The 'Action' element specifies the operations (e.g., 's3:PutObject') that the policy allows or denies.
+    tags: [IAM, JSON]
+
+  - id: sec7
+    topic: "IAM MFA"
+    type: multiple_choice
+    question: |
+      What is the AWS recommendation regarding the Root user and Multi-Factor Authentication (MFA)?
+    options:
+      - text: "Enable MFA for the Root user and only use it for tasks that require root privileges."
+        is_correct: true
+      - text: "MFA is only necessary for IAM Users, not the Root account."
+        is_correct: false
+      - text: "The Root user should be deleted immediately after creating an IAM Admin."
+        is_correct: false
+      - text: "Store the MFA hardware device in a public space for easy access."
+        is_correct: false
+    explanation: |
+      Correct: MFA is the most critical security layer for the Root account to prevent unauthorized access.
+    tags: [Security, MFA]
+
+  - id: sec8
+    topic: "IAM Roles"
+    type: multiple_choice
+    question: |
+      An EC2 instance needs to write logs to an S3 bucket. What is the most secure way to provide the instance with the necessary permissions?
+    options:
+      - text: "Attach an IAM Role to the EC2 instance using an Instance Profile."
+        is_correct: true
+      - text: "Hardcode an IAM User's Access Key and Secret Key in the application code."
+        is_correct: false
+      - text: "Enable public 'Write' access on the S3 bucket policy."
+        is_correct: false
+      - text: "Store credentials in an unencrypted text file on the EBS volume."
+        is_correct: false
+    explanation: |
+      Correct: IAM Roles provide temporary security credentials that are automatically rotated by AWS.
+    tags: [IAM, EC2]
+
+  - id: sec9
+    topic: "AWS KMS"
+    type: multiple_choice
+    question: |
+      You need to encrypt data in your application and want AWS to manage the underlying Hardware Security Modules (HSMs) while you control the key usage policies. 
+      Which service should you use?
+    options:
+      - text: "AWS Key Management Service (KMS)."
+        is_correct: true
+      - text: "AWS CloudHSM."
+        is_correct: false
+      - text: "AWS Certificate Manager."
+        is_correct: false
+      - text: "AWS Secrets Manager."
+        is_correct: false
+    explanation: |
+      Correct: KMS is a managed service that integrates with most AWS services to handle encryption keys.
+    tags: [KMS, Encryption]
+
+  - id: sec10
+    topic: "Amazon Macie"
+    type: multiple_choice
+    question: |
+      Which AWS service uses machine learning to automatically discover, classify, and protect sensitive data (like SSNs or API keys) stored in Amazon S3?
+    options:
+      - text: "Amazon Macie."
+        is_correct: true
+      - text: "Amazon GuardDuty."
+        is_correct: false
+      - text: "AWS Shield."
+        is_correct: false
+      - text: "Amazon Inspector."
+        is_correct: false
+    explanation: |
+      Correct: Macie is specifically designed for data visibility and security within S3 buckets.
+    tags: [Macie, S3, Privacy]
+
+  - id: sec11
+    topic: "AWS Secrets Manager"
+    type: multiple_choice
+    question: |
+      You need to store a database password and want it to be automatically rotated every 30 days without changing the application code. 
+      Which service is best for this?
+    options:
+      - text: "AWS Secrets Manager."
+        is_correct: true
+      - text: "AWS Systems Manager Parameter Store."
+        is_correct: false
+      - text: "IAM Policies."
+        is_correct: false
+      - text: "AWS KMS."
+        is_correct: false
+    explanation: |
+      Correct: Secrets Manager supports automatic rotation for RDS and other databases via Lambda integration.
+    tags: [SecretsManager, Security]
+
+  - id: sec12
+    topic: "AWS WAF"
+    type: multiple_choice
+    question: |
+      A web application is being targeted by SQL Injection and Cross-Site Scripting (XSS) attacks. 
+      Which AWS service can block these specific application-layer attacks?
+    options:
+      - text: "AWS WAF (Web Application Firewall)."
+        is_correct: true
+      - text: "AWS Shield."
+        is_correct: false
+      - text: "Network ACLs."
+        is_correct: false
+      - text: "Security Groups."
+        is_correct: false
+    explanation: |
+      Correct: WAF operates at Layer 7 (HTTP/HTTPS) and can filter traffic based on web attack patterns.
+    tags: [WAF, Security]
+
+  - id: sec13
+    topic: "AWS Shield"
+    type: multiple_choice
+    question: |
+      What is the primary purpose of AWS Shield Advanced?
+    options:
+      - text: "To provide enhanced protection and cost-protection against DDoS attacks."
+        is_correct: true
+      - text: "To scan EC2 instances for software vulnerabilities."
+        is_correct: false
+      - text: "To manage SSL certificates for Load Balancers."
+        is_correct: false
+      - text: "To encrypt S3 buckets at rest."
+        is_correct: false
+    explanation: |
+      Correct: Shield Advanced provides 24/7 access to the DDoS Response Team and protects against spikes in AWS bills caused by attacks.
+    tags: [Shield, DDoS]
+
+  - id: sec14
+    topic: "Key Salting"
+    type: multiple_choice
+    question: |
+      Why is 'Salting' used when hashing passwords before storing them in a database?
+    options:
+      - text: "To protect against rainbow table attacks by adding random data to the input."
+        is_correct: true
+      - text: "To compress the password so it takes up less space."
+        is_correct: false
+      - text: "To allow the password to be decrypted by the administrator."
+        is_correct: false
+      - text: "To make the password case-insensitive."
+        is_correct: false
+    explanation: |
+      Correct: Salting ensures that even if two users have the same password, their hashes will be different.
+    tags: [Cryptography, Security]

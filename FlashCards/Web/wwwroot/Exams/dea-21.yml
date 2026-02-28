@@ -1,0 +1,665 @@
+﻿questions:
+
+  # 1. Intro: Machine Learning
+  - id: q_ml_1
+    type: multiple_choice
+    question: |
+      A company collects large volumes of customer interaction data from its e‑commerce platform and wants to leverage machine learning to predict customer churn and personalize product recommendations. The company wants to standardize its ML workflows and avoid managing infrastructure directly.
+      Which combination of AWS services should a solutions architect recommend? (Choose two.)
+    options:
+      - text: Use Amazon SageMaker as the primary ML platform to build, train, and deploy models while managing the underlying compute and storage automatically.
+        is_correct: true
+      - text: Store training data in Amazon S3 and use SageMaker built‑in algorithms and managed training jobs to standardize the model development lifecycle.
+        is_correct: true
+      - text: Run all ML experiments on individual EC2 instances without containers or managed services, and rely on local storage for datasets.
+        is_correct: false
+      - text: Use AWS Lambda for training and deploying all models because it is serverless and scales automatically during inference.
+        is_correct: false
+    explanation: |
+      Correct answers: Use SageMaker plus S3‑backed datasets. SageMaker is AWS’s fully managed service for building, training, and deploying ML models, and S3 is the standard storage layer for ML data.
+
+      Intro: Machine Learning on AWS emphasizes managed services (SageMaker), data lakes in S3, and integrated tooling (Data Wrangler, Ground Truth, etc.) to reduce undifferentiated heavy lifting around infrastructure.
+
+      Incorrect: Running raw on EC2 without managed tooling increases operational overhead. Lambda is great for serverless compute but is not designed for heavy, long‑running ML training jobs.
+
+    diagram: |
+      graph TD
+        A[Customer Data] --> B[S3]
+        B --> C[SageMaker]
+        C --> D[Churn Model]
+        D --> E[Recs System]
+
+  # 2. Amazon SageMaker AI
+  - id: q_ml_2
+    type: multiple_choice
+    question: |
+      A company wants to experiment with large language models (LLMs) for document summarization and question‑answering without deploying and managing models on SageMaker endpoints. The company also wants to evaluate multiple models and compare their outputs easily.
+      Which combination of AWS services should a solutions architect implement? (Choose two.)
+    options:
+      - text: Use Amazon SageMaker AI to access hosted LLMs and run inference through the SageMaker Studio interface for experimentation and evaluation.
+        is_correct: true
+      - text: Capture model responses in Amazon S3 and compare them using custom scripts or Amazon SageMaker notebooks to choose the best model for production.
+        is_correct: true
+      - text: Deploy each LLM as a custom model on an EC2 instance behind an Application Load Balancer and call them via REST APIs from the application.
+        is_correct: false
+      - text: Use AWS Lambda to serve every LLM inference request because Lambda is the only serverless option for real‑time ML.
+        is_correct: false
+    explanation: |
+      Correct answers: Use SageMaker AI for hosted LLMs and S3/notebooks for comparison. SageMaker AI provides access to LLMs without needing to manage your own endpoints, ideal for exploration.
+
+      Amazon SageMaker AI in SageMaker Studio lets you experiment with models (including foundation models) through a no‑setup console experience, useful for PoC and evaluation.
+
+      Incorrect: Self‑hosting LLMs on EC2 adds heavy ops overhead. Lambda is not suitable for large, stateful LLM workloads due to timeouts and memory limits.
+
+    diagram: |
+      graph TD
+        A[User] --> B[SageMaker Studio]
+        B --> C[SageMaker AI LLM]
+        C --> D[S3 Results]
+        D --> E[Notebook Compare]
+
+  # 3. SageMaker Feature Store
+  - id: q_ml_3
+    type: multiple_choice
+    question: |
+      A company has multiple ML teams training different models on overlapping customer features (for example, purchase history, demographics). The company wants to avoid recreating the same features for each team and ensure that training and real‑time inference use consistent feature values.
+      Which combination of AWS services should a solutions architect implement? (Choose two.)
+    options:
+      - text: Use Amazon SageMaker Feature Store to centralize and version engineered features, enabling sharing across training and online inference.
+        is_correct: true
+      - text: Configure SageMaker training jobs and real‑time endpoints to read and write features from the same feature store to ensure consistency.
+        is_correct: true
+      - text: Let each team define its own ETL pipelines and store features in separate S3 prefixes without any shared schema or governance.
+        is_correct: false
+      - text: Store all features in Amazon DynamoDB and use AWS Lambda to transform them for each model at inference time.
+        is_correct: false
+    explanation: |
+      Correct answers: Use SageMaker Feature Store plus integrated training/inference workflows. The Feature Store provides a unified, versioned layer for ML features, avoiding duplication and drift.
+
+      SageMaker Feature Store is a managed service for storing, sharing, and versioning ML features across teams and stages of the ML lifecycle, including both offline and online stores.
+
+      Incorrect: Decentralized S3 feature stores without governance lead to inconsistency and duplication. DynamoDB is not optimized for large‑scale feature serving and ML workloads.
+
+    diagram: |
+      graph TD
+        A[ETL] --> B[Feature Store]
+        B --> C[Training Job]
+        B --> D[Real-Time Endpoint]
+
+  # 4. SageMaker ML Lineage Tracking
+  - id: q_ml_4
+    type: multiple_choice
+    question: |
+      A company operates multiple ML models in production that depend on specific datasets, training jobs, and hyperparameters. The compliance team wants to trace which model version was trained on which data and configuration, especially after incidents or audits.
+      Which combination of AWS features should a solutions architect implement? (Choose two.)
+    options:
+      - text: Enable SageMaker ML Lineage Tracking so that datasets, training jobs, models, and endpoints are automatically linked into a lineage graph.
+        is_correct: true
+      - text: Use SageMaker Experiments to track hyperparameters, metrics, and artifacts, and then correlate them with model versions in the lineage view.
+        is_correct: true
+      - text: Manually document training runs and model versions in a shared spreadsheet and expect teams to keep it up to date.
+        is_correct: false
+      - text: Store only model binaries in S3 and rely on CloudTrail logs to reconstruct which dataset was used for training.
+        is_correct: false
+    explanation: |
+      Correct answers: Use ML Lineage Tracking plus SageMaker Experiments. Lineage tracks the relationships between data, training jobs, models, and endpoints, while Experiments track experiments and parameters.
+
+      SageMaker ML Lineage Tracking automatically records how models are created, enabling traceability for compliance, debugging, and reproducibility. Experiments enrich this with detailed hyperparameter and metric tracking.
+
+      Incorrect: A spreadsheet is not scalable or auditable. CloudTrail tells you “who called what,” not “which model came from which data.”
+
+    diagram: |
+      graph TD
+        A[Dataset] --> B[Training Job]
+        B --> C[Model]
+        C --> D[Endpoint]
+        B -.-> E[Experiments]
+
+  # 5. SageMaker Ground Truth
+  - id: q_ml_5
+    type: multiple_choice
+    question: |
+      A company has a large collection of unlabeled images and audio recordings and wants to train supervised models for object detection and speech recognition. The company wants to minimize manual labeling effort and ensure label quality.
+      Which combination of AWS services should a solutions architect recommend? (Choose two.)
+    options:
+      - text: Use Amazon SageMaker Ground Truth to create labeling jobs, optionally augment it with automated labeling, and route complex samples to human workers.
+        is_correct: true
+      - text: Store the labeled datasets in Amazon S3 and use them as input for SageMaker training jobs for object detection and speech‑recognition models.
+        is_correct: true
+      - text: Have developers manually label each image and audio file using a local desktop tool and store the labels in a CSV file on individual laptops.
+        is_correct: false
+      - text: Use AWS Lambda to process raw images and audio and store the inferred labels directly into DynamoDB without explicit human review.
+        is_correct: false
+    explanation: |
+      Correct answers: Use SageMaker Ground Truth plus S3‑stored labeled data. Ground Truth scales labeling through managed workforces and optional automated labeling, producing high‑quality datasets for supervised training.
+
+      SageMaker Ground Truth is AWS’s managed data‑labeling service for images, text, video, and other modalities. It integrates with SageMaker training jobs for downstream model building.
+
+      Incorrect: Manual labeling on laptops is slow and unscalable. Using Lambda to auto‑generate labels without human review risks low‑quality labels for critical tasks.
+
+    diagram: |
+      graph TD
+        A[Raw Images/Audio] --> B[Ground Truth]
+        B --> C[Labeled Data in S3]
+        C --> D[SageMaker Training]
+
+  # 6. SageMaker Data Wrangler
+  - id: q_ml_6
+    type: multiple_choice
+    question: |
+      A company’s data scientists frequently spend time writing custom ETL code to clean and join multiple customer‑interaction datasets before training models. The team wants to accelerate feature engineering so they can focus more on modeling than on data preparation.
+      Which combination of AWS services should a solutions architect implement? (Choose two.)
+    options:
+      - text: Use Amazon SageMaker Data Wrangler to visually explore, clean, and transform datasets directly in SageMaker Studio without writing low‑level code.
+        is_correct: true
+      - text: Export the transformed data pipeline from Data Wrangler as a SageMaker Processing job or notebook so it can be reused across multiple projects.
+        is_correct: true
+      - text: Have each data scientist manually write and maintain separate Python scripts for data cleaning and assume they will stay consistent over time.
+        is_correct: false
+      - text: Rely on AWS Lambda functions to load all raw data into memory and transform it on‑the‑fly for each training job.
+        is_correct: false
+    explanation: |
+      Correct answers: Use SageMaker Data Wrangler plus exported pipelines. Data Wrangler provides a visual interface for data prep and integrates with SageMaker training, speeding up feature‑engineering.
+
+      SageMaker Data Wrangler is a no‑code/low‑code data‑prep tool inside SageMaker Studio that supports cleaning, joining, and feature engineering of large datasets.
+
+      Incorrect: Ad‑hoc scripts produce inconsistent, hard‑to‑reuse pipelines. Lambda is not designed for heavy data‑transformation ETL workloads.
+
+    diagram: |
+      graph TD
+        A[Raw Datasets] --> B[Data Wrangler]
+        B --> C[Cleaned Features]
+        C --> D[SageMaker Training]
+
+  # 7. SageMaker Canvas
+  - id: q_ml_7
+    type: multiple_choice
+    question: |
+      A company has business analysts who want to build simple predictive models (for example, customer churn, sales forecasting) without writing code or managing infrastructure. The company wants to ensure these models still integrate with existing AWS data sources.
+      Which combination of AWS services should a solutions architect implement? (Choose two.)
+    options:
+      - text: Use Amazon SageMaker Canvas to let business analysts build models with a point‑and‑click interface, connecting directly to S3 and other AWS data sources.
+        is_correct: true
+      - text: Export the trained models from Canvas into SageMaker formats so they can be served via SageMaker real‑time or batch endpoints if needed.
+        is_correct: true
+      - text: Require all predictive use cases to be implemented as custom machine‑learning notebooks written by data scientists, ignoring the business‑analyst workflow.
+        is_correct: false
+      - text: Use Amazon QuickSight alone to build “predictions” by extrapolating existing visualizations without any underlying ML model.
+        is_correct: false
+    explanation: |
+      Correct answers: Use SageMaker Canvas plus model export to SageMaker. Canvas lets non‑technical users build models from AWS data sources, while SageMaker enables production deployment.
+
+      SageMaker Canvas is a no‑code visual tool for business analysts to create ML models from AWS data sources (e.g., S3), and it integrates with SageMaker for deployment and governance.
+
+      Incorrect: Forcing everything into notebooks increases time‑to‑value and excludes business analysts. QuickSight dashboards alone do not train ML models.
+
+    diagram: |
+      graph TD
+        A[S3 Data] --> B[Canvas]
+        B --> C[ML Model]
+        C --> D[SageMaker Endpoint]
+
+  # 8. Data Engineering and Bedrock
+  - id: q_ml_8
+    type: multiple_choice
+    question: |
+      A company has a data lake in Amazon S3 and wants to use generative AI models to summarize reports and answer natural‑language questions over the data. The data engineering team wants to keep governance and data‑access controls in AWS instead of moving data to external AI platforms.
+      Which combination of AWS services should a solutions architect implement? (Choose two.)
+    options:
+      - text: Use Amazon Bedrock to invoke foundation models for summarization and question‑answering while keeping the data in S3 and applying standard IAM and S3 access policies.
+        is_correct: true
+      - text: Implement data pipelines in AWS Glue or custom ETL that prepare data in S3 and then expose it to Bedrock‑based applications through controlled APIs.
+        is_correct: true
+      - text: Copy all sensitive data into an external AI service’s storage layer and expose it via public APIs to maximize model performance.
+        is_correct: false
+      - text: Send raw S3 data directly to Bedrock without any preprocessing or access‑control layer, assuming the model is fully secure by default.
+        is_correct: false
+    explanation: |
+      Correct answers: Use Bedrock plus AWS‑based data pipelines. Bedrock lets you call LLMs while keeping data in AWS, and Glue/AWS ETL pipelines ensure data is clean and governed.
+
+      “Data Engineering and Bedrock” means using AWS data services (S3, Glue, etc.) to prepare data for generative AI workloads that run on managed foundation models via Bedrock.
+
+      Incorrect: Moving data outside AWS weakens controls and compliance. Sending raw data directly to a model without governance adds risk and may violate policies.
+
+    diagram: |
+      graph TD
+        A[S3 Raw Data] --> B[Glue ETL]
+        B --> C[Curated S3]
+        C --> D[Bedrock]
+        D --> E[App UI]
+
+  # 9. Introduction to Amazon Bedrock
+  - id: q_ml_9
+    type: multiple_choice
+    question: |
+      A company wants to experiment with multiple foundation models for chat, summarization, and code generation but does not want to manage model hosting, scaling, or infrastructure. The company also wants to control access through IAM policies.
+      Which combination of AWS services should a solutions architect implement? (Choose two.)
+    options:
+      - text: Use Amazon Bedrock to access a range of foundation models through a single API and let AWS manage the underlying infrastructure and scaling.
+        is_correct: true
+      - text: Configure IAM roles and policies to grant only authorized applications and users permission to invoke Bedrock models and specific model versions.
+        is_correct: true
+      - text: Deploy each foundation model on self‑managed GPU instances in multiple Regions and expose them through custom REST APIs.
+        is_correct: false
+      - text: Allow all AWS users to directly call Bedrock models without any specific IAM permissions or resource‑based policies.
+        is_correct: false
+    explanation: |
+      Correct answers: Use Bedrock plus IAM‑based access control. Bedrock provides a managed API to many foundation models, and IAM governs who can call which models.
+
+      Amazon Bedrock is a fully managed service that exposes foundation models (image and text) via an API, letting you focus on application logic instead of model hosting.
+
+      Incorrect: Self‑hosting all models multiplies cost and complexity. Open‑ended access to Bedrock introduces security and cost‑management risks.
+
+    diagram: |
+      graph TD
+        A[User/App] --> B[IAM Role]
+        B --> C[Bedrock API]
+        C --> D[Foundation Model]
+
+  # 10. A quick note on model access
+  - id: q_ml_10
+    type: multiple_choice
+    question: |
+      A company has multiple AWS accounts and wants to control which teams can access which foundation models in Bedrock. Some models are restricted because of licensing or compliance, while others can be used widely.
+      Which combination of AWS practices should a solutions architect implement? (Choose two.)
+    options:
+      - text: Enable Bedrock model access per account and use IAM conditions to allow or deny specific model ARNs based on team or use‑case tags.
+        is_correct: true
+      - text: Centralize model‑access decisions in AWS Organizations service control policies or permission boundaries so that child accounts cannot escalate access to restricted models.
+        is_correct: true
+      - text: Let each account owner independently enable all Bedrock models and decide who can use them without any central governance guardrails.
+        is_correct: false
+      - text: Disable Bedrock entirely and use only open‑source models hosted outside AWS, bypassing any AWS‑level access controls.
+        is_correct: false
+    explanation: |
+      Correct answers: Use IAM conditions on Bedrock model ARNs plus centralized governance via Organizations. This allows fine‑grained control over which models are available in which accounts and for which teams.
+
+      Model access in Bedrock is controlled at the AWS account level and then refined with IAM policies that reference specific model ARNs. This is important for licensing, compliance, and cost control.
+
+      Incorrect: Decentralized model access can lead to license violations and security gaps. Avoiding Bedrock entirely loses AWS’s managed pricing, scaling, and security model.
+
+    diagram: |
+      graph TD
+        A[Org Management] --> B[SCP]
+        B --> C[Account 1]
+        C --> D[IAM with Bedrock ARN Condition]
+        C --> E[Bedrock]
+
+  # 11. Hands-On in the Bedrock Playground
+  - id: q_ml_11
+    type: multiple_choice
+    question: |
+      A company wants its developers and business analysts to experiment safely with different foundation models (for example, chat, summarization, and code generation) without writing code or creating production infrastructure. The team wants to quickly compare outputs and test prompts.
+      Which combination of AWS features should a solutions architect recommend? (Choose two.)
+    options:
+      - text: Use the Bedrock Playground to let users interact with multiple foundation models through a web UI, adjust prompts, and compare outputs in real time.
+        is_correct: true
+      - text: Export the best‑performing prompts and model choices from the Playground into a code‑based application that calls the Bedrock API in production.
+        is_correct: true
+      - text: Require every experiment to be implemented as a custom Lambda function that calls Bedrock, forcing all users to write code before testing any prompt.
+        is_correct: false
+      - text: Send all prompts directly to external AI platforms instead of Bedrock so that users can rely on third‑party playgrounds.
+        is_correct: false
+    explanation: |
+      Correct answers: Use the Bedrock Playground plus a follow‑up code‑based integration. The Playground is a no‑code environment for experimenting with models, prompts, and parameters, and then exporting those settings to production.
+
+      The Bedrock Playground is an interactive web console inside AWS that lets non‑developers try foundation models, see side‑by‑side outputs, and refine prompts before building applications.
+
+      Incorrect: Requiring code‑only experimentation slows iteration. Using external playgrounds increases data‑exposure risk and weakens governance.
+
+    diagram: |
+      graph TD
+        A[User] --> B[Bedrock Playground]
+        B --> C[Compare Models]
+        C --> D[Export Prompt]
+        D --> E[Prod App]
+
+  # 12. Retrieval-Augmented Generation (RAG)
+  - id: q_ml_12
+    type: multiple_choice
+    question: |
+      A company wants to build a chatbot that answers questions about internal policies and documentation stored in a knowledge base. The chatbot must provide accurate, up‑to‑date answers by referencing the latest documents instead of relying only on the model’s pretrained knowledge.
+      Which combination of techniques and AWS services should a solutions architect implement? (Choose two.)
+    options:
+      - text: Use Retrieval‑Augmented Generation (RAG) to fetch relevant documents from the knowledge base and inject them into the model’s prompt before generating a response.
+        is_correct: true
+      - text: Store the knowledge base documents in Amazon S3 or a vector store and integrate them with a foundation model on Amazon Bedrock to power the chatbot.
+        is_correct: true
+      - text: Rely entirely on the foundation model’s pretrained knowledge without retrieving any external documents, assuming the model already knows all company policies.
+        is_correct: false
+      - text: Have human agents manually search documents and paste excerpts into the chat interface instead of automating retrieval.
+        is_correct: false
+    explanation: |
+      Correct answers: Use RAG plus a knowledge‑base store integrated with Bedrock. RAG retrieves relevant content and passes it into the prompt, so the model grounds its responses in current documents.
+
+      Retrieval‑Augmented Generation (RAG) combines a retrieval step (e.g., search over documents) with a generative model. This keeps answers fresh and factually tied to curated data rather than only to the model’s training data.
+
+      Incorrect: Pure generative models may hallucinate or answer with outdated facts. Manual retrieval is slow and not scalable for a chatbot.
+
+    diagram: |
+      graph TD
+        A[User Question] --> B[Search KB]
+        B --> C[Relevant Docs]
+        C --> D[Bedrock RAG]
+        D --> E[Answer]
+
+  # 13. Vector Stores and Semantic Search
+  - id: q_ml_13
+    type: multiple_choice
+    question: |
+      A company has a large corpus of technical documentation and wants users to find relevant information using natural‑language queries (for example, “How do I configure this feature?”). The system must return results based on meaning, not only exact keyword matches.
+      Which combination of AWS services should a solutions architect implement? (Choose two.)
+    options:
+      - text: Use embeddings from a foundation model to convert documents and queries into vectors and store them in a vector store that supports approximate nearest‑neighbor search.
+        is_correct: true
+      - text: Integrate the vector store with an application that calls Amazon Bedrock so that search results are used to enhance the model’s responses.
+        is_correct: true
+      - text: Store all documents as plain text in S3 and rely on exact string matching to find the relevant files.
+        is_correct: false
+      - text: Use Amazon DynamoDB as the primary store for embedded vectors and avoid dedicated vector‑search engines.
+        is_correct: false
+    explanation: |
+      Correct answers: Use embeddings plus a vector store with semantic search, integrated into Bedrock applications. This allows meaning‑based search and retrieval over large text corpora.
+
+      Vector Stores and Semantic Search convert text into high‑dimensional vectors and then use similarity search to find semantically related content, even if the wording differs.
+
+      Incorrect: Exact‑string matching fails to capture semantic similarity. DynamoDB is not optimized for low‑latency, high‑dimensional vector search.
+
+    diagram: |
+      graph TD
+        A[Docs] --> B[Embedding Model]
+        B --> C[Vector Store]
+        A[Query] --> B
+        B --> C
+        C --> D[Bedrock]
+
+  # 14. Bedrock Knowledge Bases
+  - id: q_ml_14
+    type: multiple_choice
+    question: |
+      A company wants to build a question‑answering system that can access internal documentation, FAQs, and support articles without building a custom vector‑search pipeline. The solution must be managed and integrate naturally with foundation models.
+      Which combination of AWS services and features should a solutions architect implement? (Choose two.)
+    options:
+      - text: Use Bedrock Knowledge Bases to store and index the company’s documents and automatically generate vector embeddings for them.
+        is_correct: true
+      - text: Configure a Bedrock agent or application that queries the knowledge base and synthesizes answers from retrieved documents using a foundation model.
+        is_correct: true
+      - text: Store all documents in Amazon S3 and implement a custom vector‑search layer using EC2 instances and open‑source libraries instead of using Bedrock Knowledge Bases.
+        is_correct: false
+      - text: Allow the foundation model to answer questions without any external knowledge base, assuming the model’s training data is sufficient.
+        is_correct: false
+    explanation: |
+      Correct answers: Use Bedrock Knowledge Bases plus a Bedrock agent or application. Knowledge Bases manage document ingestion, embedding, and retrieval so you can focus on the app logic.
+
+      Bedrock Knowledge Bases are managed storage and retrieval layers for documents that integrate directly with Bedrock models, enabling RAG‑style applications without rolling your own vector pipeline.
+
+      Incorrect: Building a custom vector pipeline on EC2 adds operational overhead. Not using any knowledge base risks inaccurate or outdated answers.
+
+    diagram: |
+      graph TD
+        A[Docs] --> B[Knowledge Base]
+        B --> C[Bedrock Agent]
+        C --> D[User Answer]
+
+  # 15. Hands-On with Bedrock Knowledge Bases
+  - id: q_ml_15
+    type: multiple_choice
+    question: |
+      A company wants to onboard customer‑support documentation into a Bedrock Knowledge Base and test how well the system answers sample questions before rolling out to end users. The team wants to iterate quickly on document quality and prompt templates.
+      Which combination of AWS workflows should a solutions architect recommend? (Choose two.)
+    options:
+      - text: Start with a small subset of documents in the Knowledge Base, test answers to common questions, and then refine the document set based on gaps and errors.
+        is_correct: true
+      - text: Experiment with different prompt templates in the Bedrock control panel or agent configuration and compare the quality of answers using sample user queries.
+        is_correct: true
+      - text: Immediately load all existing documentation into the Knowledge Base without testing and assume the system will work correctly out of the box.
+        is_correct: false
+      - text: Train a separate custom foundation model on the same documents instead of using a managed knowledge base and prompts.
+        is_correct: false
+    explanation: |
+      Correct answers: Use iterative testing with a small doc set plus prompt‑template experimentation. This lets you validate quality and tune accuracy before wide rollout.
+
+      Hands‑On with Bedrock Knowledge Bases emphasizes iterative improvement: start small, test, refine documents and prompts, then expand coverage.
+
+      Incorrect: Blind‑loading all data risks poor answers and makes tuning harder. Training a custom model is far more expensive and complex than tuning RAG‑style prompts.
+
+    diagram: |
+      graph TD
+        A[Small Docs] --> B[Knowledge Base]
+        B --> C[Agent Test]
+        C --> D[User Questions]
+        D --> E[Improved Docs/PROMPT]
+
+  # 16. Remember to clean up OpenSearch!!
+  - id: q_ml_16
+    type: multiple_choice
+    question: |
+      A company used Amazon OpenSearch Service as a vector store for a prototype RAG application but now wants to move to a different backend. The team forgot to decommission the OpenSearch domain and is incurring unnecessary costs.
+      Which combination of AWS practices should a solutions architect recommend? (Choose two.)
+    options:
+      - text: Delete the OpenSearch domain and associated resources after confirming that no applications still depend on it, to avoid ongoing charges.
+        is_correct: true
+      - text: Review AWS Cost Explorer and CloudTrail logs to identify which applications were using the OpenSearch domain and ensure they are updated to the new backend.
+        is_correct: true
+      - text: Keep the OpenSearch domain running with the same instance size indefinitely, even if no application is using it, to avoid missing data.
+        is_correct: false
+      - text: Migrate the data to a new OpenSearch domain of the same size and configuration without investigating cost or usage patterns.
+        is_correct: false
+    explanation: |
+      Correct answers: Clean up the OpenSearch domain after confirming no dependencies and use Cost Explorer and CloudTrail to audit usage. This avoids unnecessary cost and keeps the environment tidy.
+
+      “Remember to clean up OpenSearch” is a reminder that managed services like Amazon OpenSearch have ongoing costs; unused domains should be decommissioned proactively.
+
+      Incorrect: Running unused domains wastes money and violates cost‑optimization best practices. Blind migrations without analysis can perpetuate inefficiencies.
+
+    diagram: |
+      graph TD
+        A[Unused OpenSearch] --> B[Cost Explorer]
+        B --> C[CloudTrail Check]
+        C --> D[Delete or Migrate]
+        D --> E[No Extra Cost]
+
+  # 17. Pre-Retrieval and Chunking Strategies
+  - id: q_ml_17
+    type: multiple_choice
+    question: |
+      A company is building a RAG system to answer customer questions using product‑manual PDFs. The system frequently misses relevant information because the retrieval step does not find the right sections of the manual.
+      Which combination of strategies should a solutions architect implement? (Choose two.)
+    options:
+      - text: Improve pre‑retrieval by splitting the PDFs into semantically meaningful chunks (for example, per section or topic) before embedding and indexing them.
+        is_correct: true
+      - text: Add metadata to chunks (such as document type, version, and language) so that the retrieval step can filter and prioritize the most relevant ones before prompt injection.
+        is_correct: true
+      - text: Embed the entire PDF as a single chunk and rely only on the model’s long‑context window to find the right information.
+        is_correct: false
+      - text: Skip any preprocessing and let the foundation model search raw text without any structured retrieval or chunking.
+        is_correct: false
+    explanation: |
+      Correct answers: Improve chunking and add metadata. Good chunking makes retrieval more precise, and metadata lets the system filter by version, product line, etc.
+
+      Pre‑retrieval and chunking strategies define how documents are split and enriched before being stored in a vector store. This directly affects which parts of the document the RAG system can “see.”
+
+      Incorrect: Treating a PDF as one chunk makes it hard to locate specific sections. Skipping preprocessing relies solely on the model and degrades RAG performance.
+
+    diagram: |
+      graph TD
+        A[PDF] --> B[Chunker]
+        B --> C[Chunks with Metadata]
+        C --> D[Vector Store]
+        D --> E[Retriever]
+
+  # 18. Managing Chunking Strategies with Bedrock
+  - id: q_ml_18
+    type: multiple_choice
+    question: |
+      A company wants to standardize how documents are chunked for its Bedrock‑based RAG applications because different teams are currently using different sizes and strategies. The company also wants to ensure that chunks stay within the model’s context window.
+      Which combination of practices and AWS features should a solutions architect implement? (Choose two.)
+    options:
+      - text: Define a company‑wide chunking policy (for example, chunk size, overlap, and splitting strategy) and implement it in a shared library or Bedrock agent configuration.
+        is_correct: true
+      - text: Monitor Bedrock token‑count metrics and adjust the chunk size so that retrieved documents plus prompts stay within the model’s maximum context window.
+        is_correct: true
+      - text: Allow each team to pick its own chunking library and approach, even if some chunks are larger than the model’s context window.
+        is_correct: false
+      - text: Embed the complete unchunked document, regardless of length, and assume the model can still effectively use all of it.
+        is_correct: false
+    explanation: |
+      Correct answers: Standardize chunking and monitor token usage. A consistent policy plus token‑aware sizing keeps prompts within context limits and improves answer quality.
+
+      Managing chunking strategies with Bedrock means coordinating how text is split, then controlling how much of that text is actually passed to the model so you avoid truncation and overload.
+
+      Incorrect: Inconsistent chunking leads to varying quality and bugs. Oversized chunks that exceed the context window will be truncated, degrading the RAG results.
+
+    diagram: |
+      graph TD
+        A[Docs] --> B[Standard Chunker]
+        B --> C[Chunks < Context]
+        C --> D[Bedrock Agent]
+        D --> E[User Answer]
+
+  # 19. Optimizing your Vector Stores and Embeddings
+  - id: q_ml_19
+    type: multiple_choice
+    question: |
+      A company’s RAG system is returning slow or irrelevant results. The team suspects that the vector store and embeddings are not tuned for the domain (for example, technical support content). The company wants to improve both retrieval latency and relevance.
+      Which combination of AWS‑centric strategies should a solutions architect recommend? (Choose two.)
+    options:
+      - text: Fine‑tune or select an embedding model that is better suited to the domain (for example, technical support) and re‑generate the vector store from updated documents.
+        is_correct: true
+      - text: Optimize the vector store configuration (for example, instance type, shard count, and search parameters) to balance latency, throughput, and cost.
+        is_correct: true
+      - text: Keep using the original generic embedding model and avoid re‑populating the vector store because it would take too long.
+        is_correct: false
+      - text: Add many more documents to the vector store without tuning the embedding model or configuration, assuming “more data” will fix relevance.
+        is_correct: false
+    explanation: |
+      Correct answers: Align the embedding model with the domain and tune the vector‑store configuration. Better embeddings and well‑tuned search engines significantly improve recall and latency.
+
+      Optimizing vector stores and embeddings involves selecting the right model, re‑embedding data periodically, and tuning the underlying vector database (e.g., OpenSearch, PGVector) for performance.
+
+      Incorrect: Sticking to a generic model limits accuracy. Blindly adding data without tuning embeddings or configuration can make the system slower and less relevant.
+
+    diagram: |
+      graph TD
+        A[Domain Docs] --> B[Domain Embedding]
+        B --> C[Vector Store]
+        C --> D[Optimized Search]
+        D --> E[Higher Quality Answers]
+
+  # 20. Amazon Q Business
+  - id: q_ml_20
+    type: multiple_choice
+    question: |
+      A company wants to provide employees with a search and assistant experience over internal documents, knowledge bases, and HR policies without building and maintaining a custom AI system. The solution must integrate with existing AWS identity and data sources.
+      Which combination of AWS services should a solutions architect implement? (Choose two.)
+    options:
+      - text: Use Amazon Q Business as a managed AI‑powered assistant and search service that can connect to S3, knowledge bases, and internal systems through connectors.
+        is_correct: true
+      - text: Integrate Q Business with AWS Single Sign‑On and IAM so that only authorized users can access sensitive internal resources through the assistant.
+        is_correct: true
+      - text: Build a custom chatbot from scratch using Bedrock, Lambda, and a separate knowledge‑base service instead of using Q Business.
+        is_correct: false
+      - text: Grant broad access to Q Business for all users without any identity or permissions configuration, assuming it is secure by default.
+        is_correct: false
+    explanation: |
+      Correct answers: Use Amazon Q Business plus IAM/SSO integration. Q Business is a managed assistant and search product that can index internal data and answer questions using AWS‑hosted models.
+
+      Amazon Q Business acts as an enterprise‑ready AI assistant that can search and summarize content across AWS data sources, HR systems, and knowledge bases with built‑in access controls.
+
+      Incorrect: A custom build adds development and maintenance overhead. Skipping access controls exposes sensitive data through an assistant.
+
+    diagram: |
+      graph TD
+        A[User] --> B[Q Business]
+        B --> C[IAM/SSO]
+        B --> D[S3/Knowledge Base]
+        D --> B
+        B --> E[Answer]
+
+  # 21. Amazon Q Business - Hands On
+  - id: q_ml_21
+    type: multiple_choice
+    question: |
+      A company has deployed Amazon Q Business to assist employees with internal documentation, HR policies, and frequently asked questions. After the initial rollout, users report inconsistent answers and some sensitive documents appearing in responses.
+      Which combination of AWS practices should a solutions architect implement to improve Q Business quality and security? (Choose two.)
+    options:
+      - text: Define and refine the data sources and access policies in Q Business so that only authorized users can see sensitive documents through the assistant.
+        is_correct: true
+      - text: Regularly review Q Business usage logs and example questions to identify gaps in data sources, then add or update connected knowledge bases and S3 locations.
+        is_correct: true
+      - text: Allow Q Business to index all company data sources without any filters or permissions, assuming that the assistant will automatically understand what is sensitive.
+        is_correct: false
+      - text: Disable Q Business entirely and tell employees to use generic public‑web search engines for internal questions instead.
+        is_correct: false
+    explanation: |
+      Correct answers: Restrict and tune data sources plus regularly audit usage. Q Business should only see data sources governed with IAM and filters, and usage‑log analysis helps you improve knowledge‑base coverage and answer quality.
+
+      Amazon Q Business is a managed enterprise assistant that can index internal data and answer questions using AWS‑hosted models. “Hands‑On” means iterating on data sources, permissions, and prompts after deployment.
+
+      Incorrect: Open‑ended indexing of all data increases security and compliance risk. Sending employees to public search engines defeats the purpose of an internal, governed assistant.
+
+    diagram: |
+      graph TD
+        A[User] --> B[Q Business]
+        B --> C[Approved Data Sources]
+        B --> D[Logs Review]
+        D --> E[Updated KB]
+
+  # 22. Amazon Q Apps
+  - id: q_ml_22
+    type: multiple_choice
+    question: |
+      A company wants business users to create custom AI‑powered apps for tasks such as onboarding checklists, customer‑response drafts, and meeting‑summary generators without involving developers or writing code. The apps must still follow corporate security and governance policies.
+      Which combination of AWS services and practices should a solutions architect implement? (Choose two.)
+    options:
+      - text: Use Amazon Q Apps to let non‑technical users generate AI‑powered apps from natural‑language descriptions and integrate them with existing AWS data sources and systems.
+        is_correct: true
+      - text: Configure IAM roles and resource policies so that Q Apps can only access approved data sources and cannot export sensitive data to unapproved channels.
+        is_correct: true
+      - text: Build all custom AI apps manually using Lambda, Bedrock, and API Gateway because no‑code tools are not suitable for enterprise use.
+        is_correct: false
+      - text: Allow every user to create Q Apps that can read from any data source and send results to external email or messaging systems without any governance controls.
+        is_correct: false
+    explanation: |
+      Correct answers: Use Amazon Q Apps plus IAM‑based governance. Q Apps lets business users describe and generate AI apps in natural language, while IAM and policies keep data access and outputs under control.
+
+      Amazon Q Apps is a no‑code service that lets employees build AI‑powered apps directly from Q Business, connecting to AWS data sources and workflows without coding.
+
+      Incorrect: Manually building everything in code slows time‑to‑value. Unrestricted Q Apps usage can leak data or violate compliance.
+
+    diagram: |
+      graph TD
+        A[Business User] --> B[Q Apps]
+        B --> C[IAM Policy]
+        B --> D[S3/Knowledge Base]
+        D --> B
+        B --> E[Generated App]
+
+  # 23. Amazon Kendra
+  - id: q_ml_23
+    type: multiple_choice
+    question: |
+      A company wants to build a highly accurate search experience over internal documentation, FAQs, and support articles. Users should be able to ask questions in natural language and receive precise answers or relevant document links instead of just keyword‑based search results.
+      Which combination of AWS services should a solutions architect implement? (Choose two.)
+    options:
+      - text: Use Amazon Kendra as an intelligent enterprise search service that indexes documents and returns answers or excerpts based on natural‑language queries.
+        is_correct: true
+      - text: Integrate Kendra with Amazon Bedrock or a custom application so that retrieved documents feed into a generative model for summarization and question‑answering.
+        is_correct: true
+      - text: Build a simple ElasticSearch cluster on EC2 that indexes raw text and exposes it through a basic keyword‑search API, without any ML‑based ranking.
+        is_correct: false
+      - text: Use Amazon S3 Select and Lambda to scan documents for keywords and return matching files without any dedicated search‑ranking logic.
+        is_correct: false
+    explanation: |
+      Correct answers: Use Amazon Kendra plus an integration with Bedrock or an app. Kendra uses ML to understand queries and return precise answers or document highlights, and it can power RAG‑style experiences.
+
+      Amazon Kendra is an ML‑powered enterprise search service that can index S3, databases, and other data sources and return answers or documents in response to natural‑language questions.
+
+      Incorrect: A basic Elasticsearch‑on‑EC2 setup without ML ranking is weaker for semantic understanding. S3 Select + Lambda keyword‑scanning does not provide ranked, answer‑oriented search.
+
+    diagram: |
+      graph TD
+        A[User Question] --> B[Kendra]
+        B --> C[Answer / Docs]
+        C --> D[Bedrock Agent]
+        D --> E[Summarized Answer]

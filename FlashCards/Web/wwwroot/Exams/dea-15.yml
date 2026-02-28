@@ -1,0 +1,710 @@
+﻿questions:
+  - id: an1
+    topic: "Amazon EMR"
+    type: multiple_choice
+    question: |
+      Uma empresa precisa processar um dataset de 50 TB usando Apache Spark. Eles querem ter controle total sobre as versões do software e a configuração das instâncias EC2 subjacentes para otimizar o custo usando instâncias Spot.
+      Qual serviço da AWS é o mais indicado?
+    options:
+      - text: "Amazon EMR (Elastic MapReduce) em instâncias EC2."
+        is_correct: true
+      - text: "AWS Glue ETL Jobs."
+        is_correct: false
+      - text: "Amazon Athena."
+        is_correct: false
+      - text: "Amazon Redshift Serverless."
+        is_correct: false
+    explanation: |
+      Correct: O EMR permite gerenciar clusters Hadoop/Spark com controle granular de hardware e suporte nativo a Spot Instances.
+      Incorrect:
+        O Glue é totalmente gerenciado (serverless), oferecendo menos controle sobre a infraestrutura.
+        Athena é para consultas SQL ad-hoc, não para processamento Spark complexo e customizado.
+    diagram: |
+      graph TD
+        A[Master Node] --> B[Core Node 1]
+        A --> C[Core Node 2]
+        B --> D[Task Nodes -Spot-]
+        C --> D
+    tags: [EMR, BigData]
+
+  - id: an2
+    topic: "EMR Serverless; EMR on EKS"
+    type: multiple_choice
+    question: |
+      Sua equipe já utiliza Kubernetes (EKS) para todos os microserviços. Eles querem rodar jobs do Apache Spark sem gerenciar clusters EMR separados, aproveitando a infraestrutura de containers existente.
+      Qual opção do EMR deve ser utilizada?
+    options:
+      - text: "Amazon EMR on EKS."
+        is_correct: true
+      - text: "Amazon EMR Serverless."
+        is_correct: false
+      - text: "Amazon EMR com instâncias dedicadas."
+        is_correct: false
+      - text: "AWS Fargate diretamente."
+        is_correct: false
+    explanation: |
+      Correct: O EMR on EKS permite rodar workloads de analytics em clusters Kubernetes existentes, compartilhando recursos.
+      Incorrect:
+        EMR Serverless remove a necessidade de gerenciar qualquer cluster, inclusive o EKS.
+    tags: [EMR, EKS, Containers]
+
+  - id: an3
+    topic: "Amazon Kinesis Data Streams"
+    type: multiple_choice
+    question: |
+      Uma aplicação de monitoramento precisa capturar 1.000 eventos por segundo de logs de servidores e retê-los por 7 dias para análise. Os dados devem ser consumidos por múltiplas aplicações em tempo real.
+      Qual serviço atende a esses requisitos?
+    options:
+      - text: "Amazon Kinesis Data Streams."
+        is_correct: true
+      - text: "Amazon Kinesis Data Firehose."
+        is_correct: false
+      - text: "Amazon SQS."
+        is_correct: false
+      - text: "Amazon MSK Connect."
+        is_correct: false
+    explanation: |
+      Correct: Kinesis Data Streams é focado em streaming de baixa latência com suporte a retenção configurável e múltiplos consumidores.
+      Incorrect:
+        Firehose é para carregar dados em destinos (S3, Redshift) e não suporta múltiplos consumidores de "stream".
+        SQS não é otimizado para streaming de dados em massa com múltiplos consumidores lendo o mesmo dado.
+    tags: [Kinesis, Streaming]
+
+  - id: an4
+    topic: "Amazon Kinesis Data Streams - Scaling"
+    type: multiple_choice
+    question: |
+      Um stream do Kinesis configurado em modo 'Provisioned' está recebendo o erro 'ProvisionedThroughputExceededException'. A carga de entrada aumentou significativamente.
+      Qual ação resolve o problema?
+    options:
+      - text: "Realizar o Shard Splitting para aumentar a capacidade do stream."
+        is_correct: true
+      - text: "Habilitar o Enhanced Fan-Out nos produtores."
+        is_correct: false
+      - text: "Aumentar o tempo de retenção para 365 dias."
+        is_correct: false
+      - text: "Mudar o modo de capacidade para On-Demand."
+        is_correct: true
+    explanation: |
+      Correct: No modo Provisioned, você deve aumentar o número de Shards (Splitting). Mudar para On-Demand também resolve, pois a AWS escala automaticamente. (Ambas são válidas, mas Shard Splitting é a resposta técnica para o modo Provisioned).
+    diagram: |
+      graph LR
+        A[Shard 1] --> B[Shard 1.1]
+        A --> C[Shard 1.2]
+        D[Throughput Total] --"Aumenta"--> E[Capacidade Dobrada]
+    tags: [Kinesis, Scaling]
+
+  - id: an5
+    topic: "Amazon Kinesis Data Streams - Enhanced Fan Out"
+    type: multiple_choice
+    question: |
+      Você tem 5 aplicações diferentes consumindo dados do mesmo Kinesis Data Stream. Você nota que a latência de leitura está aumentando porque os consumidores estão competindo pelo throughput de 2MB/s do shard.
+      Qual recurso garante 2MB/s dedicados para CADA consumidor?
+    options:
+      - text: "Enhanced Fan-Out."
+        is_correct: true
+      - text: "Kinesis Data Streams On-Demand."
+        is_correct: false
+      - text: "Shard Merging."
+        is_correct: false
+      - text: "Uso da Kinesis Producer Library (KPL)."
+        is_correct: false
+    explanation: |
+      Correct: Enhanced Fan-Out fornece um pipe de 2MB/s dedicado por consumidor usando push via HTTP/2.
+    tags: [Kinesis, Performance]
+
+  - id: an6
+    topic: "Amazon Data Firehose"
+    type: multiple_choice
+    question: |
+      Qual é a principal diferença entre Kinesis Data Streams e Amazon Data Firehose?
+    options:
+      - text: "Firehose é 'near real-time' e entrega dados diretamente em destinos (S3/Redshift), enquanto Streams é tempo real e exige consumidores customizados."
+        is_correct: true
+      - text: "Streams é serverless e Firehose exige gerenciamento de instâncias EC2."
+        is_correct: false
+      - text: "Firehose suporta retenção de 7 dias, enquanto Streams não armazena dados."
+        is_correct: false
+      - text: "Não há diferença, são nomes diferentes para o mesmo serviço."
+        is_correct: false
+    explanation: |
+      Correct: Firehose é um serviço de entrega (delivery) que agrupa dados em buffers antes de enviar para o destino final.
+    tags: [Kinesis, Firehose]
+
+  - id: an7
+    topic: "Amazon Managed Service for Apache Flink (MSAF)"
+    type: multiple_choice
+    question: |
+      Uma empresa precisa realizar agregações complexas (como janelas de tempo deslizantes de 5 minutos) em um stream de dados antes de salvá-los.
+      Qual serviço é o sucessor do Kinesis Data Analytics para SQL?
+    options:
+      - text: "Amazon Managed Service for Apache Flink."
+        is_correct: true
+      - text: "Amazon Managed Service for Apache Kafka."
+        is_correct: false
+      - text: "AWS Glue Streaming ETL."
+        is_correct: false
+      - text: "Amazon Kinesis Video Streams."
+        is_correct: false
+    explanation: |
+      Correct: O antigo Kinesis Data Analytics foi renomeado e evoluiu para o Managed Service for Apache Flink.
+    tags: [Flink, Analytics]
+
+  - id: an8
+    topic: "Amazon MSK"
+    type: multiple_choice
+    question: |
+      Sua empresa decidiu usar Apache Kafka para o pipeline de dados devido à compatibilidade com ferramentas open-source. Eles querem reduzir a sobrecarga operacional de gerenciar o ZooKeeper e os brokers.
+      Qual serviço deve ser usado?
+    options:
+      - text: "Amazon MSK (Managed Streaming for Apache Kafka)."
+        is_correct: true
+      - text: "Amazon Kinesis Data Streams."
+        is_correct: false
+      - text: "Amazon MQ."
+        is_correct: false
+      - text: "AWS Step Functions."
+        is_correct: false
+    explanation: |
+      Correct: O MSK gerencia a infraestrutura do Kafka, permitindo que você foque nos tópicos e produtores/consumidores.
+    diagram: |
+      graph LR
+        A[Producer] --> B[MSK Cluster -Brokers-]
+        B --> C[Consumer]
+        D[Managed ZooKeeper/Kraft] -.-> B
+    tags: [Kafka, MSK]
+
+  - id: an9
+    topic: "Amazon OpenSearch Service"
+    type: multiple_choice
+    question: |
+      Você precisa implementar uma barra de busca em um site de e-commerce que suporte pesquisa por texto completo (full-text search) e auto-complete com latência de milissegundos.
+      Qual serviço é o mais adequado?
+    options:
+      - text: "Amazon OpenSearch Service."
+        is_correct: true
+      - text: "Amazon Redshift."
+        is_correct: false
+      - text: "Amazon RDS PostgreSQL."
+        is_correct: false
+      - text: "Amazon DocumentDB."
+        is_correct: false
+    explanation: |
+      Correct: OpenSearch (sucessor do Elasticsearch) é otimizado para indexação e busca de documentos de texto em alta velocidade.
+    tags: [OpenSearch, Search]
+
+  - id: an10
+    topic: "OpenSearch Vector Engines"
+    type: multiple_choice
+    question: |
+      Para uma aplicação de IA Generativa, você precisa realizar uma "Busca Semântica" comparando vetores de embeddings.
+      O OpenSearch suporta essa funcionalidade?
+    options:
+      - text: "Sim, através do recurso de Vector Engine (k-NN - k-Nearest Neighbors)."
+        is_correct: true
+      - text: "Não, busca por vetores só é possível no Amazon Neptune."
+        is_correct: false
+      - text: "Sim, mas exige a exportação dos dados para o S3 primeiro."
+        is_correct: false
+      - text: "Não, vetores só podem ser processados por modelos no SageMaker."
+        is_correct: false
+    explanation: |
+      Correct: O OpenSearch possui um plugin k-NN que permite realizar buscas de similaridade vetorial eficientes.
+    tags: [AI, Vector]
+
+  - id: an11
+    topic: "Amazon QuickSight"
+    type: multiple_choice
+    question: |
+      Um analista de negócios precisa criar um dashboard interativo para visualizar as vendas mundiais. Ele quer que o dashboard sugira insights automaticamente usando Machine Learning (ML).
+      Qual serviço ele deve usar?
+    options:
+      - text: "Amazon QuickSight."
+        is_correct: true
+      - text: "AWS Glue DataBrew."
+        is_correct: false
+      - text: "Amazon Managed Grafana."
+        is_correct: false
+      - text: "Amazon CloudWatch Dashboards."
+        is_correct: false
+    explanation: |
+      Correct: QuickSight é a ferramenta de BI da AWS que inclui recursos de ML Insights e Q (busca em linguagem natural).
+    tags: [QuickSight, BI]
+
+  - id: an12
+    topic: "QuickSight Pricing and Dashboards; ML Insights"
+    type: multiple_choice
+    question: |
+      Qual é o modelo de preços do QuickSight para "Leitores" (usuários que apenas consomem dashboards) na edição Enterprise?
+    options:
+      - text: "Pagamento por sessão ($0.30/sessão) com um valor máximo mensal ($5/mês)."
+        is_correct: true
+      - text: "Valor fixo de $100 por usuário, independente do uso."
+        is_correct: false
+      - text: "Cobrança baseada no volume de dados visualizados no dashboard."
+        is_correct: false
+      - text: "Gratuito para usuários que já possuem conta AWS."
+        is_correct: false
+    explanation: |
+      Correct: O modelo de "Reader pricing" é muito econômico para grandes empresas, pois limita o gasto por usuário esporádico.
+    tags: [QuickSight, Pricing]
+
+  - id: an13
+    topic: "AWS Budgets"
+    type: multiple_choice
+    question: |
+      Você quer ser notificado via e-mail e Slack assim que sua conta atingir 80% do valor orçado para o mês de serviços de IA.
+      Qual ferramenta você deve configurar?
+    options:
+      - text: "AWS Budgets."
+        is_correct: true
+      - text: "AWS Cost Explorer."
+        is_correct: false
+      - text: "AWS Compute Optimizer."
+        is_correct: false
+      - text: "AWS Trusted Advisor."
+        is_correct: false
+    explanation: |
+      Correct: AWS Budgets permite criar alertas baseados em custos reais ou previstos.
+    tags: [Budgets, Finance]
+
+  - id: an14
+    topic: "Amazon API Gateway"
+    type: multiple_choice
+    question: |
+      Uma empresa quer expor suas funções Lambda como uma API REST pública. Eles precisam de recursos como autenticação, limitação de taxa (throttling) e cache de respostas.
+      Qual serviço atende a essa necessidade?
+    options:
+      - text: "Amazon API Gateway."
+        is_correct: true
+      - text: "Application Load Balancer (ALB)."
+        is_correct: false
+      - text: "AWS AppSync."
+        is_correct: false
+      - text: "Amazon CloudFront."
+        is_correct: false
+    explanation: |
+      Correct: O API Gateway é o serviço serverless para criar, publicar e gerenciar APIs em qualquer escala.
+    diagram: |
+      graph LR
+        A[Client] --"HTTPS"--> B[API Gateway]
+        B --"Auth/Throttle"--> C[Lambda]
+        C --"Response"--> B
+        B --"Response"--> A
+    tags: [API, Gateway]
+
+  - id: an15
+    topic: "Amazon API Gateway - Hands On"
+    type: multiple_choice
+    question: |
+      No API Gateway, qual é a diferença entre um 'Deployment' e um 'Stage'?
+    options:
+      - text: "Um Deployment é um snapshot da configuração da API; um Stage é um caminho (ex: /prod, /dev) que aponta para um Deployment."
+        is_correct: true
+      - text: "Deployment é para APIs REST e Stage é para APIs WebSocket."
+        is_correct: false
+      - text: "Stage é onde você escreve o código Lambda; Deployment é onde você define as chaves de API."
+        is_correct: false
+      - text: "Não há diferença técnica significativa."
+        is_correct: false
+    explanation: |
+      Correct: Você faz o deploy da sua configuração e então associa esse deploy a um estágio específico para torná-lo acessível.
+    tags: [API, Operations]
+
+  - id: an16
+    topic: "Kinesis Analytics Costs; RANDOM_CUT_FOREST"
+    type: multiple_choice
+    question: |
+      Qual é a função do algoritmo RANDOM_CUT_FOREST dentro do Amazon Managed Service for Apache Flink (antigo Kinesis Analytics)?
+    options:
+      - text: "Detectar anomalias em fluxos de dados de streaming em tempo real."
+        is_correct: true
+      - text: "Realizar a compressão de dados antes de salvá-los no S3."
+        is_correct: false
+      - text: "Criptografar campos sensíveis usando chaves do KMS."
+        is_correct: false
+      - text: "Gerar senhas aleatórias para conexões de banco de dados."
+        is_correct: false
+    explanation: |
+      Correct: RANDOM_CUT_FOREST é um algoritmo de ML usado para identificar desvios e anomalias em séries temporais de dados.
+    tags: [ML, Analytics]
+
+  - id: an17
+    topic: "Amazon MSK - Serverless"
+    type: multiple_choice
+    question: |
+      Você quer usar Apache Kafka, mas não quer escolher tipos de instância de broker nem gerenciar o armazenamento. Você quer que a capacidade aumente ou diminua automaticamente com base no tráfego.
+      Qual opção do MSK é ideal?
+    options:
+      - text: "Amazon MSK Serverless."
+        is_correct: true
+      - text: "Amazon MSK Provisioned."
+        is_correct: false
+      - text: "Amazon Kinesis Data Streams."
+        is_correct: false
+      - text: "AWS Glue Streaming."
+        is_correct: false
+    explanation: |
+      Correct: O MSK Serverless cuida de toda a escalabilidade e provisionamento de recursos de forma transparente.
+    tags: [Kafka, Serverless]
+
+  - id: an18
+    topic: "Amazon OpenSearch Serverless"
+    type: multiple_choice
+    question: |
+      Qual é a principal vantagem do OpenSearch Serverless para cargas de trabalho de busca esporádicas?
+    options:
+      - text: "Ele separa a computação do armazenamento e escala automaticamente sem a necessidade de configurar shards ou nós."
+        is_correct: true
+      - text: "Ele é 100% gratuito para sempre."
+        is_correct: false
+      - text: "Ele não exige que você defina um esquema para os dados (index-less)."
+        is_correct: false
+      - text: "Ele funciona apenas dentro de uma VPC sem acesso à internet."
+        is_correct: false
+    explanation: |
+      Correct: O OpenSearch Serverless abstrai a complexidade de gerenciamento de clusters e infraestrutura.
+    tags: [OpenSearch, Serverless]
+
+  - id: an19
+    topic: "QuickSight Calculated Fields and Level-Aware Calculations"
+    type: multiple_choice
+    question: |
+      Você precisa calcular a porcentagem de vendas de um produto em relação ao total de vendas de sua categoria, independentemente dos filtros aplicados no visual.
+      Qual recurso do QuickSight permite isso?
+    options:
+      - text: "Level-Aware Calculations (LAC)."
+        is_correct: true
+      - text: "Calculated Fields simples."
+        is_correct: false
+      - text: "ML Insights."
+        is_correct: false
+      - text: "Filtros de Dashboard."
+        is_correct: false
+    explanation: |
+      Correct: LAC permite realizar agregações em níveis diferentes do que está sendo exibido no gráfico (ex: total da categoria vs total da linha).
+    tags: [QuickSight, Analytics]
+
+  - id: an20
+    topic: "AWS Cost Explorer"
+    type: multiple_choice
+    question: |
+      Qual ferramenta você usaria para visualizar graficamente seus gastos nos últimos 6 meses e prever os gastos para os próximos 12 meses?
+    options:
+      - text: "AWS Cost Explorer."
+        is_correct: true
+      - text: "AWS Budgets."
+        is_correct: false
+      - text: "AWS Pricing Calculator."
+        is_correct: false
+      - text: "Cost and Usage Report (CUR)."
+        is_correct: false
+    explanation: |
+      Correct: Cost Explorer é a ferramenta visual para análise histórica e projeção de custos.
+    tags: [Costs, Analytics]
+
+  - id: an21
+    topic: "EMR, AWS integration, and Storage"
+    type: multiple_choice
+    question: |
+      No Amazon EMR, onde os dados devem ser armazenados para garantir que não sejam perdidos quando o cluster for encerrado?
+    options:
+      - text: "Amazon S3 (usando EMRFS)."
+        is_correct: true
+      - text: "HDFS no armazenamento local das instâncias (HDFS)."
+        is_correct: false
+      - text: "Instâncias de Core Nodes apenas."
+        is_correct: false
+      - text: "Amazon EBS volumes sem snapshots."
+        is_correct: false
+    explanation: |
+      Correct: O EMRFS permite que o EMR use o S3 como sistema de arquivos persistente, desacoplando computação de armazenamento.
+    tags: [EMR, Storage]
+
+  - id: an22
+    topic: "Amazon Kinesis Data Streams - Handling Duplicates"
+    type: multiple_choice
+    question: |
+      Como uma aplicação consumidora do Kinesis deve lidar com a possibilidade de receber registros duplicados (at-least-once delivery)?
+    options:
+      - text: "Implementando lógica de de-duplicação ou idempotência no consumidor."
+        is_correct: true
+      - text: "Habilitando a configuração 'No-Duplicates' no stream."
+        is_correct: false
+      - text: "Usando apenas 1 Shard no stream."
+        is_correct: false
+      - text: "Aumentando o tempo de retenção para 24 horas."
+        is_correct: false
+    explanation: |
+      Correct: Sistemas de streaming garantem a entrega "pelo menos uma vez", então o consumidor deve ser resiliente a duplicatas.
+    tags: [Kinesis, Architecture]
+
+  - id: an23
+    topic: "Amazon Kinesis vs. Amazon MSK"
+    type: multiple_choice
+    question: |
+      Qual cenário favorece o uso do Amazon MSK em vez do Kinesis Data Streams?
+    options:
+      - text: "Migração de uma infraestrutura Kafka on-premise existente ou necessidade de processar mensagens maiores que 1MB."
+        is_correct: true
+      - text: "Integração nativa e rápida com o AWS Lambda."
+        is_correct: false
+      - text: "Necessidade de um serviço 100% serverless com setup zero."
+        is_correct: false
+      - text: "Projetos simples com baixo volume de dados."
+        is_correct: false
+    explanation: |
+      Correct: O MSK é melhor para migrações Kafka e suporta mensagens maiores (Kinesis tem limite rígido de 1MB).
+    tags: [Comparison, Streaming]
+
+  - id: an24
+    topic: "Kinesis Data Stream Troubleshooting and Performance Tuning"
+    type: multiple_choice
+    question: |
+      Você percebe que os registros estão chegando ao consumidor com um atraso crescente (IteratorAgeMilliseconds alto). Qual é a causa provável?
+    options:
+      - text: "O consumidor está mais lento do que a taxa de produção de dados."
+        is_correct: true
+      - text: "O Shard está vazio."
+        is_correct: false
+      - text: "O tempo de retenção expirou."
+        is_correct: false
+      - text: "Os produtores estão usando o SDK errado."
+        is_correct: false
+    explanation: |
+      Correct: IteratorAge mede a distância entre o último dado lido e o dado mais recente no stream. Se aumenta, o consumidor está sobrecarregado.
+    tags: [Kinesis, Troubleshooting]
+
+  - id: an25
+    topic: "Amazon MSK - Connect"
+    type: multiple_choice
+    question: |
+      Qual recurso do MSK permite mover dados entre o Kafka e outros serviços como S3 ou bancos de dados sem escrever código de integração?
+    options:
+      - text: "MSK Connect (Managed Kafka Connect)."
+        is_correct: true
+      - text: "MSK Serverless."
+        is_correct: false
+      - text: "Kafka Streams API."
+        is_correct: false
+      - text: "AWS AppFlow."
+        is_correct: false
+    explanation: |
+      Correct: MSK Connect gerencia conectores Kafka Connect para ingestão e exportação de dados.
+    tags: [Kafka, Integration]
+
+  - id: an26
+    topic: "Amazon Quick Suite / QuickSight"
+    type: multiple_choice
+    question: |
+      Como o QuickSight consegue oferecer performance ultra-rápida mesmo em grandes datasets?
+    options:
+      - text: "Usando o SPICE (Super-fast, Parallel, In-memory Calculation Engine)."
+        is_correct: true
+      - text: "Conectando-se apenas ao Amazon Redshift."
+        is_correct: false
+      - text: "Utilizando o cache do navegador do usuário."
+        is_correct: false
+      - text: "Reduzindo a resolução dos gráficos automaticamente."
+        is_correct: false
+    explanation: |
+      Correct: SPICE é o motor de memória do QuickSight que acelera cálculos e visualizações.
+    tags: [QuickSight, Performance]
+
+  - id: an27
+    topic: "Amazon Kinesis Data Streams - Security"
+    type: multiple_choice
+    question: |
+      Como você pode garantir que os dados no Kinesis Data Streams estejam protegidos contra acessos não autorizados?
+    options:
+      - text: "Criptografia em repouso (KMS), criptografia em trânsito (TLS) e políticas de IAM."
+        is_correct: true
+      - text: "Usando apenas o console da AWS."
+        is_correct: false
+      - text: "Desabilitando o acesso via internet."
+        is_correct: false
+      - text: "Criptografando os dados manualmente antes de enviar."
+        is_correct: false
+    explanation: |
+      Correct: Kinesis integra-se nativamente com KMS para segurança de dados.
+    tags: [Security, Kinesis]
+
+  - id: an28
+    topic: "Amazon Kinesis Data Streams - Producers"
+    type: multiple_choice
+    question: |
+      Qual ferramenta de produtor do Kinesis é mais indicada para aplicações Java que precisam de alta performance através de agregação e batching automático de registros?
+    options:
+      - text: "Kinesis Producer Library (KPL)."
+        is_correct: true
+      - text: "Kinesis Agent."
+        is_correct: false
+      - text: "AWS SDK (PutRecord)."
+        is_correct: false
+      - text: "Kinesis Data Firehose."
+        is_correct: false
+    explanation: |
+      Correct: A KPL otimiza a escrita no stream através de técnicas de agregação de registros pequenos.
+    tags: [Kinesis, Producer]
+
+  - id: an29
+    topic: "OpenSearch Index Management and Designing for Stability"
+    type: multiple_choice
+    question: |
+      Para evitar falhas em um cluster OpenSearch durante picos de escrita, qual é a recomendação de design?
+    options:
+      - text: "Usar instâncias com armazenamento SSD (EBS) e configurar o número correto de réplicas e shards primários."
+        is_correct: true
+      - text: "Ter apenas 1 nó no cluster para evitar sincronização."
+        is_correct: false
+      - text: "Desabilitar a indexação de campos de texto."
+        is_correct: false
+      - text: "Mover o cluster para uma região diferente."
+        is_correct: false
+    explanation: |
+      Correct: O design de shards impacta diretamente a estabilidade e performance do cluster.
+    tags: [OpenSearch, Design]
+
+  - id: an30
+    topic: "Amazon OpenSearch Service Performance"
+    type: multiple_choice
+    question: |
+      Qual tipo de instância do OpenSearch oferece o melhor custo-benefício para análise de logs em larga escala com retenção de longo prazo?
+    options:
+      - text: "Instâncias com armazenamento 'UltraWarm' e 'Cold Storage'."
+        is_correct: true
+      - text: "Instâncias de computação acelerada (GPU)."
+        is_correct: false
+      - text: "Instâncias T3.micro."
+        is_correct: false
+      - text: "Instâncias de memória otimizada sem disco local."
+        is_correct: false
+    explanation: |
+      Correct: UltraWarm permite armazenar grandes volumes de dados de forma barata usando S3 como backend.
+    tags: [OpenSearch, Cost]
+
+  - id: an31
+    topic: "EMR Promises; Intro to Hadoop"
+    type: multiple_choice
+    question: |
+      O ecossistema Hadoop no EMR é composto por quais camadas principais?
+    options:
+      - text: "HDFS (Armazenamento), YARN (Gerenciamento de Recursos) e MapReduce (Processamento)."
+        is_correct: true
+      - text: "S3, Lambda e DynamoDB."
+        is_correct: false
+      - text: "EC2, VPC e IAM."
+        is_correct: false
+      - text: "Docker, Kubernetes e Helm."
+        is_correct: false
+    explanation: |
+      Correct: Estes são os três pilares fundamentais do Apache Hadoop.
+    tags: [Hadoop, EMR]
+
+  - id: an32
+    topic: "Amazon Kinesis Data Streams - Consumers"
+    type: multiple_choice
+    question: |
+      Qual biblioteca é recomendada pela AWS para criar consumidores Java robustos que gerenciam automaticamente o checkpointing e o balanceamento de shards?
+    options:
+      - text: "Kinesis Client Library (KCL)."
+        is_correct: true
+      - text: "Kinesis Producer Library (KPL)."
+        is_correct: false
+      - text: "AWS SDK for Java."
+        is_correct: false
+      - text: "Apache Kafka Streams."
+        is_correct: false
+    explanation: |
+      Correct: A KCL abstrai a complexidade de gerenciar quais shards estão sendo lidos por quais instâncias do consumidor.
+    tags: [Kinesis, Consumer]
+
+  - id: an33
+    topic: "Amazon Kinesis Data Streams - Hands On"
+    type: multiple_choice
+    question: |
+      No console do Kinesis, qual métrica você deve observar para saber se os produtores estão sendo rejeitados por excederem o limite do Shard?
+    options:
+      - text: "WriteProvisionedThroughputExceeded."
+        is_correct: true
+      - text: "ReadProvisionedThroughputExceeded."
+        is_correct: false
+      - text: "IncomingBytes."
+        is_correct: false
+      - text: "IteratorAge."
+        is_correct: false
+    explanation: |
+      Correct: Esta métrica CloudWatch indica quando você está tentando escrever mais de 1MB/s ou 1000 records/s por shard.
+    tags: [Kinesis, Metrics]
+
+  - id: an34
+    topic: "Quiz 7: Analytics practice exam questions"
+    type: multiple_choice
+    question: |
+      Uma solução precisa ingerir cliques de sites (10GB/hora), transformá-los e carregá-los no Redshift para BI. Qual a arquitetura serverless mais simples?
+    options:
+      - text: "Kinesis Data Firehose (com transformação Lambda) direto para o Redshift."
+        is_correct: true
+      - text: "EC2 rodando Logstash para o Redshift."
+        is_correct: false
+      - text: "S3 Event Notifications para cada clique chamando uma Lambda."
+        is_correct: false
+      - text: "EMR Cluster rodando 24/7."
+        is_correct: false
+    explanation: |
+      Correct: Firehose é a forma mais simples e serverless de ingerir e carregar dados no Redshift.
+    tags: [Exam, Analytics]
+
+  - id: an35
+    topic: "Intro: Everything Else"
+    type: multiple_choice
+    question: |
+      Qual serviço é usado para orquestrar fluxos de trabalho de processamento de dados que envolvem múltiplos serviços AWS como Glue, Lambda e EMR?
+    options:
+      - text: "AWS Step Functions."
+        is_correct: true
+      - text: "Amazon AppFlow."
+        is_correct: false
+      - text: "AWS Glue Workflows."
+        is_correct: false
+      - text: "Amazon EventBridge."
+        is_correct: true
+    explanation: |
+      Correct: Step Functions e Glue Workflows são as respostas corretas, mas Step Functions é a solução de orquestração geral mais poderosa da AWS.
+    tags: [Orchestration]
+
+  - id: an36
+    topic: "AWS Budgets - Hands On"
+    type: multiple_choice
+    question: |
+      Você pode configurar o AWS Budgets para interromper automaticamente uma instância EC2 se o orçamento for excedido?
+    options:
+      - text: "Sim, usando 'Budget Actions' integradas com políticas de IAM ou Service Control Policies (SCPs)."
+        is_correct: true
+      - text: "Não, orçamentos servem apenas para notificação."
+        is_correct: false
+      - text: "Sim, mas apenas se a instância for do tipo Spot."
+        is_correct: false
+      - text: "Não, essa ação só pode ser feita manualmente pelo Root user."
+        is_correct: false
+    explanation: |
+      Correct: Budget Actions permitem tomar medidas reativas automaticamente quando um limite é atingido.
+    tags: [Budgets, Automation]
+
+  - id: an37
+    topic: "Amazon Kinesis Data Streams - Handling Duplicates"
+    type: multiple_choice
+    question: |
+      O que causa a duplicação de registros no Kinesis no lado do produtor?
+    options:
+      - text: "Retentativas do produtor (retries) após um timeout de rede, mesmo que o dado tenha chegado ao Kinesis."
+        is_correct: true
+      - text: "O Shard Splitting cria cópias de todos os dados."
+        is_correct: false
+      - text: "O uso de criptografia KMS."
+        is_correct: false
+      - text: "A expiração do tempo de retenção."
+        is_correct: false
+    explanation: |
+      Correct: Se o produtor não recebe o ACK (confirmação), ele reenvia o dado, podendo gerar duplicidade.
+    tags: [Kinesis, Reliability]

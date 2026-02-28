@@ -1,0 +1,809 @@
+﻿questions:
+
+  # 1. Intro: Networking and Content Delivery
+  - id: q1
+    type: multiple_choice
+    question: |
+      A company operates a global e‑commerce application that serves millions of users across different regions. The company wants to reduce latency for end users, protect the application from common DDoS attacks, and ensure that traffic flows efficiently over AWS’s global backbone.
+      Which combination of AWS services should a solutions architect recommend to meet these requirements? (Choose two.)
+    options:
+      - text: Deploy the application in multiple AWS Regions behind an Application Load Balancer and use Amazon Route 53 latency‑based routing to direct users to the nearest Region.
+        is_correct: true
+      - text: Use Amazon CloudFront as a global content delivery network and integrate it with AWS Shield Standard to mitigate common DDoS attacks.
+        is_correct: true
+      - text: Route all user traffic through a single on‑premises VPN connection and use Amazon EC2 instances to terminate the VPN and forward the traffic to the application.
+        is_correct: false
+      - text: Use only an Internet Gateway to connect the application’s VPC to the public internet and rely on AWS WAF integrated directly on EC2 instances to filter traffic.
+        is_correct: false
+    explanation: |
+      Correct answers: Use Route 53 with latency‑based routing and a multi‑Region load‑balanced architecture, and use CloudFront with AWS Shield Standard. These services reduce latency by routing users closer to application endpoints and protect the front‑end edge from DDoS while leveraging AWS’s global backbone.
+
+      Networking and Content Delivery in AWS cover how to route traffic (VPC, subnets, gateways), resolve DNS (Route 53), and deliver content efficiently (CloudFront, etc.). In this scenario the key is combining global routing (Route 53) with an edge‑optimized CDN (CloudFront).
+
+      Incorrect: Relying on a single VPN connection creates a bottleneck and increases latency. Using only an Internet Gateway without higher‑level services like Route 53 or CloudFront does not optimize global routing or DDoS protection.
+
+    diagram: |
+      graph TD
+        A[User] --> B[Route 53]
+        B --> C[Latency-Based Region]
+        C --> D[ALB]
+        D --> E[EC2 Workers]
+        F[User] --> G[CloudFront]
+        G --> D
+        H[AWS Shield] --> G
+
+  # 2. VPC, Subnets, Internet Gateway, NAT Gateway
+  - id: q2
+    type: multiple_choice
+    question: |
+      A company is migrating a three‑tier web application to AWS. The web and application tiers must be publicly accessible, but the database tier must not be exposed to the internet. The company also needs outbound internet access for the application tier to download updates.
+      Which combination of AWS networking components should a solutions architect implement to meet these requirements? (Choose two.)
+    options:
+      - text: Launch the database instances in a private subnet with a route only to the VPC and allow inbound traffic only from the application subnet through security groups.
+        is_correct: true
+      - text: Create a public subnet for the web and application tiers, attach an Internet Gateway to the VPC, and place a NAT Gateway in the public subnet to provide internet access for the private subnet.
+        is_correct: true
+      - text: Deploy all instances in a single public subnet and filter traffic to the database using security groups so that only specific application servers can connect.
+        is_correct: false
+      - text: Use a single NAT Gateway in a private subnet and route all internet‑bound traffic from the public subnet through that NAT Gateway to reduce exposure.
+        is_correct: false
+    explanation: |
+      Correct answers: Use a private subnet for the database with no direct internet route and a NAT Gateway in a public subnet for outbound internet. This design keeps the database isolated while allowing the application tier to reach the internet via the NAT.
+
+      A VPC (Virtual Private Cloud) is an isolated virtual network in AWS. Subnets divide the VPC into public and private segments. An Internet Gateway enables internet access for public subnets, and a NAT Gateway lets private instances reach the internet without exposing them.
+
+      Incorrect: Placing all tiers in one public subnet still exposes the database to the internet (even if filtered by security groups). Using a NAT Gateway in a private subnet is not a supported configuration; NAT Gateways must sit in a public subnet with an Internet Gateway.
+
+    diagram: |
+      graph TD
+        A[User] --> B[Public Subnet]
+        B --> C[Web/ALB]
+        B --> D[App Tier]
+        E[Private Subnet] --> F[Database]
+        D --> E
+        G[Internet Gateway] --> H[NAT Gateway]
+        D --> H
+
+  # 3. NACL, Security Groups, VPC Flow Logs
+  - id: q3
+    type: multiple_choice
+    question: |
+      A company wants to secure its multi‑tier application in AWS. The web tier must only accept HTTP and HTTPS from the internet, and the application tier must only accept traffic from the web tier. The company also wants to log all traffic that enters and leaves the database subnet for audit purposes.
+      Which combination of AWS features should a solutions architect use to meet these requirements? (Choose two.)
+    options:
+      - text: Configure security groups on the web tier to allow inbound HTTP and HTTPS from 0.0.0.0/0 and on the application tier to allow inbound traffic only from the web tier’s security group.
+        is_correct: true
+      - text: Enable VPC Flow Logs on the database subnet to capture metadata about IP traffic for later analysis using Amazon CloudWatch Logs Insights.
+        is_correct: true
+      - text: Allow all TCP traffic on the network ACL of the web subnet and then use security groups on the application tier to restrict traffic to only that subnet.
+        is_correct: false
+      - text: Use a single security group for all tiers and filter traffic inside the application code instead of relying on network‑level controls.
+        is_correct: false
+    explanation: |
+      Correct answers: Use security groups to restrict traffic between tiers and enable VPC Flow Logs on the database subnet. Security groups provide stateful, instance‑level firewall rules, while Flow Logs capture metadata about IP traffic for security and compliance audits.
+
+      NACLs (Network ACLs) are stateless, subnet‑level firewalls; security groups are stateful, instance‑level firewalls. VPC Flow Logs record information about IP traffic going to and from network interfaces in a VPC, which is useful for troubleshooting and monitoring.
+
+      Incorrect: Opening all TCP at the NACL level undermines security, even if security groups are restrictive. Not using security groups and relying on application‑level filtering alone exposes the environment to unnecessary risk and does not meet AWS‑recommended defense‑in‑depth.
+
+    diagram: |
+      graph TD
+        A[Internet] --> B[VPC]
+        B --> C[Web Tier SG]
+        C --> D[App Tier SG]
+        D --> E[DB Subnet]
+        F[VPC Flow Logs] -.- E
+
+  # 4. VPC Peering, Endpoints, VPN, Direct Connect
+  - id: q4
+    type: multiple_choice
+    question: |
+      A company runs an application in a development AWS account and must securely access an Amazon S3 bucket owned by a separate production account. The company also wants to extend its on‑premises Active Directory into AWS for authentication and minimize data transfer costs over the public internet.
+      Which combination of AWS features should a solutions architect recommend? (Choose two.)
+    options:
+      - text: Create a VPC endpoint for Amazon S3 in the development VPC and adjust the bucket policy in the production account to allow access from the development VPC’s endpoint.
+        is_correct: true
+      - text: Establish an AWS Site‑to‑Site VPN or AWS Direct Connect connection between the on‑premises network and the AWS VPC to extend the corporate directory into AWS.
+        is_correct: true
+      - text: Use an Internet Gateway and a public NAT Gateway in the development VPC to route traffic to the production S3 bucket over the public internet.
+        is_correct: false
+      - text: Set up a VPC peering connection between the development and production VPCs and route all S3 traffic through the peering connection.
+        is_correct: false
+    explanation: |
+      Correct answers: Use a VPC endpoint for S3 and a VPN or Direct Connect connection. VPC endpoints keep S3 traffic within the AWS network, avoiding the public internet and reducing exposure and latency. A VPN or Direct Connect securely extends the on‑premises network into AWS.
+
+      VPC peering connects two VPCs in the same region, but it does not apply to S3; S3 traffic must still traverse the public internet (unless using a gateway endpoint). VPC endpoints (gateway or interface) allow private access to AWS services without going over the internet.
+
+      Incorrect: Using public NAT and an Internet Gateway exposes traffic to the internet and increases cost and latency. VPC peering does not optimize S3 traffic; it only connects VPC‑to‑VPC routes.
+
+    diagram: |
+      graph TD
+        A[On-Prem] --> B[VPN/Direct Connect]
+        B --> C[Dev VPC]
+        C --> D[VPC Endpoint S3]
+        D --> E[Prod S3]
+
+  # 5. VPC Cheat Sheet & Closing Comments
+  - id: q5
+    type: multiple_choice
+    question: |
+      A new AWS user is designing a VPC for a three‑tier application but is overwhelmed by the options for subnets, routing, and connectivity. The user wants a simple, well‑documented pattern that can be reused for multiple projects and shared with other team members.
+      Which combination of practices should a solutions architect recommend to help the user adopt a consistent VPC design? (Choose two.)
+    options:
+      - text: Create a reusable VPC template using AWS CloudFormation that defines public and private subnets, route tables, Internet Gateway, and NAT Gateway.
+        is_correct: true
+      - text: Maintain an internal “VPC cheat sheet” that documents subnet CIDR ranges, routing rules, and security group patterns for common application tiers.
+        is_correct: true
+      - text: For each new project, start with the default VPC and manually add Internet Gateway, NAT instances, and custom security groups without documenting the changes.
+        is_correct: false
+      - text: Allow each developer to design their own VPC schema and then merge them later into a single account to avoid upfront design overhead.
+        is_correct: false
+    explanation: |
+      Correct answers: Use a CloudFormation template and a living VPC cheat sheet. This promotes consistency, reduces human error, and makes it easy to onboard new team members.
+
+      A VPC “cheat sheet” is just a documented reference of common patterns (public/private subnets, routing, NAT, security groups). Together with infrastructure‑as‑code tools like CloudFormation, it helps standardize VPC designs across projects.
+
+      Incorrect: Relying on the default VPC without documenting changes leads to inconsistent architectures. Letting each developer define their own VPC schema results in tangled, hard‑to‑manage networks.
+
+    diagram: |
+      graph TD
+        A[Developer] --> B[CloudFormation Template]
+        B --> C[Standard VPC]
+        D[Tech Docs] --> E[VPC Cheat Sheet]
+        C --> F[Multi-Tier App]
+
+  # 6. AWS PrivateLink
+  - id: q6
+    type: multiple_choice
+    question: |
+      A company operates a shared payment‑processing API in a central AWS account. Several application teams in different VPCs must consume this API without exposing it to the public internet or routing traffic through the corporate data center.
+      Which combination of AWS services should a solutions architect implement to meet these requirements? (Choose two.)
+    options:
+      - text: Expose the payment API behind an internal Application Load Balancer and create a VPC endpoint service (AWS PrivateLink) for that load balancer.
+        is_correct: true
+      - text: Allow each application VPC to create an interface VPC endpoint that connects to the PrivateLink service, keeping traffic within the AWS network.
+        is_correct: true
+      - text: Expose the API on a public ALB with strict security groups and route all application traffic through the public internet to that endpoint.
+        is_correct: false
+      - text: Place the API behind a NAT Gateway in the central account and have each application VPC route traffic to that NAT Gateway over the public internet.
+        is_correct: false
+    explanation: |
+      Correct answers: Use PrivateLink (VPC endpoint service) and consumer interface endpoints. This keeps traffic private inside AWS, avoids the public internet, and provides a clean, scalable way to share the API.
+
+      AWS PrivateLink lets you expose services in one VPC as a private endpoint that other VPCs can consume without public IPs or NAT. Interface endpoints are ENIs that connect consumer VPCs to the service endpoint.
+
+      Incorrect: Exposing the API publicly increases attack surface and latency. Routing traffic through a NAT Gateway over the internet defeats the purpose of private connectivity.
+
+    diagram: |
+      graph TD
+        A[App VPC 1] --> B[Interface Endpoint]
+        C[App VPC 2] --> D[Interface Endpoint]
+        B --> E[Payment ALB]
+        D --> E
+        E --> F[PrivateLink Service]
+
+  # 7. What is DNS?
+  - id: q7
+    type: multiple_choice
+    question: |
+      A company is migrating its web application from on‑premises servers to AWS. The company wants users to continue accessing the application using the same domain name while the underlying infrastructure changes.
+      Which combination of actions should a solutions architect recommend to manage this transition safely? (Choose two.)
+    options:
+      - text: Configure DNS records in a DNS provider (such as Amazon Route 53) to point the application’s domain name to the new AWS load balancer’s DNS name.
+        is_correct: true
+      - text: Lower the DNS TTL value before the migration so that any changes to DNS records propagate faster when the application is moved.
+        is_correct: true
+      - text: Hard‑code the new AWS IP address into each user’s browser and disable DNS resolution entirely to avoid caching issues.
+        is_correct: false
+      - text: Configure the on‑premises application servers to forward all HTTP requests to the AWS load balancer using a proxy rule instead of updating DNS.
+        is_correct: false
+    explanation: |
+      Correct answers: Update DNS records and reduce TTL before the cut‑over. DNS (Domain Name System) translates human‑readable domain names into IP addresses. Lowering TTL speeds up propagation so that users migrate to the new IPs quicker.
+
+      DNS is a directory service that maps hostnames (for example, `app.example.com`) to IP addresses. It is critical for routing traffic to the right infrastructure, especially during migrations.
+
+      Incorrect: Bypassing DNS entirely is fragile and not scalable. Using a proxy on the old servers does not update the logical endpoint and can create performance bottlenecks.
+
+    diagram: |
+      graph TD
+        A[User] --> B[DNS Query]
+        B --> C[Route 53]
+        C --> D[LB DNS]
+        D --> E[New AWS LB]
+
+  # 8. Amazon Route 53
+  - id: q8
+    type: multiple_choice
+    question: |
+      A company runs a global web application behind multiple Application Load Balancers in different AWS Regions. The company wants to route users to the nearest healthy Region and automatically fail over traffic if an entire Region becomes unavailable.
+      Which combination of Route 53 features should a solutions architect implement to meet these requirements? (Choose two.)
+    options:
+      - text: Use Route 53 latency‑based routing to direct users to the nearest Region and health checks to monitor the health of each Region’s ALB.
+        is_correct: true
+      - text: Configure Route 53 failover routing with primary and secondary records so that traffic is redirected if the primary Region fails health checks.
+        is_correct: true
+      - text: Use a single Route 53 A record pointing to the DNS name of a single ALB, allowing the load balancer to route traffic globally.
+        is_correct: false
+      - text: Route all traffic through a single CloudFront distribution and ignore Route 53 routing policies entirely.
+        is_correct: false
+    explanation: |
+      Correct answers: Use latency‑based routing with health checks and add failover routing for disaster‑recovery scenarios. Route 53 is AWS’s DNS service that can route traffic based on latency, failover, geolocation, and other policies while monitoring health.
+
+      Route 53 translates domain names into IPs and can distribute traffic across multiple endpoints (ALBs, CloudFront, etc.) using different routing policies. Health checks detect when an endpoint is unhealthy and can trigger failover.
+
+      Incorrect: A single A record pointing to one ALB does not provide global routing or failover. While CloudFront can fan out to multiple origins, this question is about DNS‑based routing, which Route 53 handles.
+
+    diagram: |
+      graph TD
+        A[User] --> B[Route 53]
+        B --> C[Latency/Health Check]
+        C --> D[Region 1 ALB]
+        C --> E[Region 2 ALB]
+
+  # 9. Amazon Route 53 - Registering Domains - Hands On
+  - id: q9
+    type: multiple_choice
+    question: |
+      A startup wants to launch a web application under a new brand name and register a custom domain. The company also wants to ensure that only authorized team members can manage the domain’s DNS records and transfers.
+      Which combination of AWS services and practices should a solutions architect recommend? (Choose two.)
+    options:
+      - text: Register the domain using Amazon Route 53’s domain registrar and store the domain name and DNS settings in the same AWS account.
+        is_correct: true
+      - text: Create an IAM role for DNS administrators and restrict Route 53 resource access so that only authorized team members can modify DNS records and initiate domain transfers.
+        is_correct: true
+      - text: Register the domain with a third‑party registrar and import its DNS records into Route 53 without enabling any IAM permissions on the Route 53 hosted zone.
+        is_correct: false
+      - text: Grant every developer in the company full IAM power‑user permissions so that they can manage the domain and DNS records freely.
+        is_correct: false
+   
+  # 1. Intro: Networking and Content Delivery
+  - id: q1
+    type: multiple_choice
+    question: |
+      A company operates a global e‑commerce application that serves millions of users across different regions. The company wants to reduce latency for end users, protect the application from common DDoS attacks, and ensure that traffic flows efficiently over AWS’s global backbone.
+      Which combination of AWS services should a solutions architect recommend to meet these requirements? (Choose two.)
+    options:
+      - text: Deploy the application in multiple AWS Regions behind an Application Load Balancer and use Amazon Route 53 latency‑based routing to direct users to the nearest Region.
+        is_correct: true
+      - text: Use Amazon CloudFront as a global content delivery network and integrate it with AWS Shield Standard to mitigate common DDoS attacks.
+        is_correct: true
+      - text: Route all user traffic through a single on‑premises VPN connection and use Amazon EC2 instances to terminate the VPN and forward the traffic to the application.
+        is_correct: false
+      - text: Use only an Internet Gateway to connect the application’s VPC to the public internet and rely on AWS WAF integrated directly on EC2 instances to filter traffic.
+        is_correct: false
+    explanation: |
+      Correct answers: Use Route 53 with latency‑based routing and a multi‑Region load‑balanced architecture, and use CloudFront with AWS Shield Standard. These services reduce latency by routing users closer to application endpoints and protect the front‑end edge from DDoS while leveraging AWS’s global backbone.
+
+      Networking and Content Delivery in AWS cover how to route traffic (VPC, subnets, gateways), resolve DNS (Route 53), and deliver content efficiently (CloudFront, etc.). In this scenario the key is combining global routing (Route 53) with an edge‑optimized CDN (CloudFront).
+
+      Incorrect: Relying on a single VPN connection creates a bottleneck and increases latency. Using only an Internet Gateway without higher‑level services like Route 53 or CloudFront does not optimize global routing or DDoS protection.
+
+    diagram: |
+      graph TD
+        A[User] --> B[Route 53]
+        B --> C[Latency-Based Region]
+        C --> D[ALB]
+        D --> E[EC2 Workers]
+        F[User] --> G[CloudFront]
+        G --> D
+        H[AWS Shield] --> G
+
+  # 2. VPC, Subnets, Internet Gateway, NAT Gateway
+  - id: q2
+    type: multiple_choice
+    question: |
+      A company is migrating a three‑tier web application to AWS. The web and application tiers must be publicly accessible, but the database tier must not be exposed to the internet. The company also needs outbound internet access for the application tier to download updates.
+      Which combination of AWS networking components should a solutions architect implement to meet these requirements? (Choose two.)
+    options:
+      - text: Launch the database instances in a private subnet with a route only to the VPC and allow inbound traffic only from the application subnet through security groups.
+        is_correct: true
+      - text: Create a public subnet for the web and application tiers, attach an Internet Gateway to the VPC, and place a NAT Gateway in the public subnet to provide internet access for the private subnet.
+        is_correct: true
+      - text: Deploy all instances in a single public subnet and filter traffic to the database using security groups so that only specific application servers can connect.
+        is_correct: false
+      - text: Use a single NAT Gateway in a private subnet and route all internet‑bound traffic from the public subnet through that NAT Gateway to reduce exposure.
+        is_correct: false
+    explanation: |
+      Correct answers: Use a private subnet for the database with no direct internet route and a NAT Gateway in a public subnet for outbound internet. This design keeps the database isolated while allowing the application tier to reach the internet via the NAT.
+
+      A VPC (Virtual Private Cloud) is an isolated virtual network in AWS. Subnets divide the VPC into public and private segments. An Internet Gateway enables internet access for public subnets, and a NAT Gateway lets private instances reach the internet without exposing them.
+
+      Incorrect: Placing all tiers in one public subnet still exposes the database to the internet (even if filtered by security groups). Using a NAT Gateway in a private subnet is not a supported configuration; NAT Gateways must sit in a public subnet with an Internet Gateway.
+
+    diagram: |
+      graph TD
+        A[User] --> B[Public Subnet]
+        B --> C[Web/ALB]
+        B --> D[App Tier]
+        E[Private Subnet] --> F[Database]
+        D --> E
+        G[Internet Gateway] --> H[NAT Gateway]
+        D --> H
+
+  # 3. NACL, Security Groups, VPC Flow Logs
+  - id: q3
+    type: multiple_choice
+    question: |
+      A company wants to secure its multi‑tier application in AWS. The web tier must only accept HTTP and HTTPS from the internet, and the application tier must only accept traffic from the web tier. The company also wants to log all traffic that enters and leaves the database subnet for audit purposes.
+      Which combination of AWS features should a solutions architect use to meet these requirements? (Choose two.)
+    options:
+      - text: Configure security groups on the web tier to allow inbound HTTP and HTTPS from 0.0.0.0/0 and on the application tier to allow inbound traffic only from the web tier’s security group.
+        is_correct: true
+      - text: Enable VPC Flow Logs on the database subnet to capture metadata about IP traffic for later analysis using Amazon CloudWatch Logs Insights.
+        is_correct: true
+      - text: Allow all TCP traffic on the network ACL of the web subnet and then use security groups on the application tier to restrict traffic to only that subnet.
+        is_correct: false
+      - text: Use a single security group for all tiers and filter traffic inside the application code instead of relying on network‑level controls.
+        is_correct: false
+    explanation: |
+      Correct answers: Use security groups to restrict traffic between tiers and enable VPC Flow Logs on the database subnet. Security groups provide stateful, instance‑level firewall rules, while Flow Logs capture metadata about IP traffic for security and compliance audits.
+
+      NACLs (Network ACLs) are stateless, subnet‑level firewalls; security groups are stateful, instance‑level firewalls. VPC Flow Logs record information about IP traffic going to and from network interfaces in a VPC, which is useful for troubleshooting and monitoring.
+
+      Incorrect: Opening all TCP at the NACL level undermines security, even if security groups are restrictive. Not using security groups and relying on application‑level filtering alone exposes the environment to unnecessary risk and does not meet AWS‑recommended defense‑in‑depth.
+
+    diagram: |
+      graph TD
+        A[Internet] --> B[VPC]
+        B --> C[Web Tier SG]
+        C --> D[App Tier SG]
+        D --> E[DB Subnet]
+        F[VPC Flow Logs] -.- E
+
+  # 4. VPC Peering, Endpoints, VPN, Direct Connect
+  - id: q4
+    type: multiple_choice
+    question: |
+      A company runs an application in a development AWS account and must securely access an Amazon S3 bucket owned by a separate production account. The company also wants to extend its on‑premises Active Directory into AWS for authentication and minimize data transfer costs over the public internet.
+      Which combination of AWS features should a solutions architect recommend? (Choose two.)
+    options:
+      - text: Create a VPC endpoint for Amazon S3 in the development VPC and adjust the bucket policy in the production account to allow access from the development VPC’s endpoint.
+        is_correct: true
+      - text: Establish an AWS Site‑to‑Site VPN or AWS Direct Connect connection between the on‑premises network and the AWS VPC to extend the corporate directory into AWS.
+        is_correct: true
+      - text: Use an Internet Gateway and a public NAT Gateway in the development VPC to route traffic to the production S3 bucket over the public internet.
+        is_correct: false
+      - text: Set up a VPC peering connection between the development and production VPCs and route all S3 traffic through the peering connection.
+        is_correct: false
+    explanation: |
+      Correct answers: Use a VPC endpoint for S3 and a VPN or Direct Connect connection. VPC endpoints keep S3 traffic within the AWS network, avoiding the public internet and reducing exposure and latency. A VPN or Direct Connect securely extends the on‑premises network into AWS.
+
+      VPC peering connects two VPCs in the same region, but it does not apply to S3; S3 traffic must still traverse the public internet (unless using a gateway endpoint). VPC endpoints (gateway or interface) allow private access to AWS services without going over the internet.
+
+      Incorrect: Using public NAT and an Internet Gateway exposes traffic to the internet and increases cost and latency. VPC peering does not optimize S3 traffic; it only connects VPC‑to‑VPC routes.
+
+    diagram: |
+      graph TD
+        A[On-Prem] --> B[VPN/Direct Connect]
+        B --> C[Dev VPC]
+        C --> D[VPC Endpoint S3]
+        D --> E[Prod S3]
+
+  # 5. VPC Cheat Sheet & Closing Comments
+  - id: q5
+    type: multiple_choice
+    question: |
+      A new AWS user is designing a VPC for a three‑tier application but is overwhelmed by the options for subnets, routing, and connectivity. The user wants a simple, well‑documented pattern that can be reused for multiple projects and shared with other team members.
+      Which combination of practices should a solutions architect recommend to help the user adopt a consistent VPC design? (Choose two.)
+    options:
+      - text: Create a reusable VPC template using AWS CloudFormation that defines public and private subnets, route tables, Internet Gateway, and NAT Gateway.
+        is_correct: true
+      - text: Maintain an internal “VPC cheat sheet” that documents subnet CIDR ranges, routing rules, and security group patterns for common application tiers.
+        is_correct: true
+      - text: For each new project, start with the default VPC and manually add Internet Gateway, NAT instances, and custom security groups without documenting the changes.
+        is_correct: false
+      - text: Allow each developer to design their own VPC schema and then merge them later into a single account to avoid upfront design overhead.
+        is_correct: false
+    explanation: |
+      Correct answers: Use a CloudFormation template and a living VPC cheat sheet. This promotes consistency, reduces human error, and makes it easy to onboard new team members.
+
+      A VPC “cheat sheet” is just a documented reference of common patterns (public/private subnets, routing, NAT, security groups). Together with infrastructure‑as‑code tools like CloudFormation, it helps standardize VPC designs across projects.
+
+      Incorrect: Relying on the default VPC without documenting changes leads to inconsistent architectures. Letting each developer define their own VPC schema results in tangled, hard‑to‑manage networks.
+
+    diagram: |
+      graph TD
+        A[Developer] --> B[CloudFormation Template]
+        B --> C[Standard VPC]
+        D[Tech Docs] --> E[VPC Cheat Sheet]
+        C --> F[Multi-Tier App]
+
+  # 6. AWS PrivateLink
+  - id: q6
+    type: multiple_choice
+    question: |
+      A company operates a shared payment‑processing API in a central AWS account. Several application teams in different VPCs must consume this API without exposing it to the public internet or routing traffic through the corporate data center.
+      Which combination of AWS services should a solutions architect implement to meet these requirements? (Choose two.)
+    options:
+      - text: Expose the payment API behind an internal Application Load Balancer and create a VPC endpoint service (AWS PrivateLink) for that load balancer.
+        is_correct: true
+      - text: Allow each application VPC to create an interface VPC endpoint that connects to the PrivateLink service, keeping traffic within the AWS network.
+        is_correct: true
+      - text: Expose the API on a public ALB with strict security groups and route all application traffic through the public internet to that endpoint.
+        is_correct: false
+      - text: Place the API behind a NAT Gateway in the central account and have each application VPC route traffic to that NAT Gateway over the public internet.
+        is_correct: false
+    explanation: |
+      Correct answers: Use PrivateLink (VPC endpoint service) and consumer interface endpoints. This keeps traffic private inside AWS, avoids the public internet, and provides a clean, scalable way to share the API.
+
+      AWS PrivateLink lets you expose services in one VPC as a private endpoint that other VPCs can consume without public IPs or NAT. Interface endpoints are ENIs that connect consumer VPCs to the service endpoint.
+
+      Incorrect: Exposing the API publicly increases attack surface and latency. Routing traffic through a NAT Gateway over the internet defeats the purpose of private connectivity.
+
+    diagram: |
+      graph TD
+        A[App VPC 1] --> B[Interface Endpoint]
+        C[App VPC 2] --> D[Interface Endpoint]
+        B --> E[Payment ALB]
+        D --> E
+        E --> F[PrivateLink Service]
+
+  # 7. What is DNS?
+  - id: q7
+    type: multiple_choice
+    question: |
+      A company is migrating its web application from on‑premises servers to AWS. The company wants users to continue accessing the application using the same domain name while the underlying infrastructure changes.
+      Which combination of actions should a solutions architect recommend to manage this transition safely? (Choose two.)
+    options:
+      - text: Configure DNS records in a DNS provider (such as Amazon Route 53) to point the application’s domain name to the new AWS load balancer’s DNS name.
+        is_correct: true
+      - text: Lower the DNS TTL value before the migration so that any changes to DNS records propagate faster when the application is moved.
+        is_correct: true
+      - text: Hard‑code the new AWS IP address into each user’s browser and disable DNS resolution entirely to avoid caching issues.
+        is_correct: false
+      - text: Configure the on‑premises application servers to forward all HTTP requests to the AWS load balancer using a proxy rule instead of updating DNS.
+        is_correct: false
+    explanation: |
+      Correct answers: Update DNS records and reduce TTL before the cut‑over. DNS (Domain Name System) translates human‑readable domain names into IP addresses. Lowering TTL speeds up propagation so that users migrate to the new IPs quicker.
+
+      DNS is a directory service that maps hostnames (for example, `app.example.com`) to IP addresses. It is critical for routing traffic to the right infrastructure, especially during migrations.
+
+      Incorrect: Bypassing DNS entirely is fragile and not scalable. Using a proxy on the old servers does not update the logical endpoint and can create performance bottlenecks.
+
+    diagram: |
+      graph TD
+        A[User] --> B[DNS Query]
+        B --> C[Route 53]
+        C --> D[LB DNS]
+        D --> E[New AWS LB]
+
+  # 8. Amazon Route 53
+  - id: q8
+    type: multiple_choice
+    question: |
+      A company runs a global web application behind multiple Application Load Balancers in different AWS Regions. The company wants to route users to the nearest healthy Region and automatically fail over traffic if an entire Region becomes unavailable.
+      Which combination of Route 53 features should a solutions architect implement to meet these requirements? (Choose two.)
+    options:
+      - text: Use Route 53 latency‑based routing to direct users to the nearest Region and health checks to monitor the health of each Region’s ALB.
+        is_correct: true
+      - text: Configure Route 53 failover routing with primary and secondary records so that traffic is redirected if the primary Region fails health checks.
+        is_correct: true
+      - text: Use a single Route 53 A record pointing to the DNS name of a single ALB, allowing the load balancer to route traffic globally.
+        is_correct: false
+      - text: Route all traffic through a single CloudFront distribution and ignore Route 53 routing policies entirely.
+        is_correct: false
+    explanation: |
+      Correct answers: Use latency‑based routing with health checks and add failover routing for disaster‑recovery scenarios. Route 53 is AWS’s DNS service that can route traffic based on latency, failover, geolocation, and other policies while monitoring health.
+
+      Route 53 translates domain names into IPs and can distribute traffic across multiple endpoints (ALBs, CloudFront, etc.) using different routing policies. Health checks detect when an endpoint is unhealthy and can trigger failover.
+
+      Incorrect: A single A record pointing to one ALB does not provide global routing or failover. While CloudFront can fan out to multiple origins, this question is about DNS‑based routing, which Route 53 handles.
+
+    diagram: |
+      graph TD
+        A[User] --> B[Route 53]
+        B --> C[Latency/Health Check]
+        C --> D[Region 1 ALB]
+        C --> E[Region 2 ALB]
+
+  # 9. Amazon Route 53 - Registering Domains - Hands On
+  - id: q9
+    type: multiple_choice
+    question: |
+      A startup wants to launch a web application under a new brand name and register a custom domain. The company also wants to ensure that only authorized team members can manage the domain’s DNS records and transfers.
+      Which combination of AWS services and practices should a solutions architect recommend? (Choose two.)
+    options:
+      - text: Register the domain using Amazon Route 53’s domain registrar and store the domain name and DNS settings in the same AWS account.
+        is_correct: true
+      - text: Create an IAM role for DNS administrators and restrict Route 53 resource access so that only authorized team members can modify DNS records and initiate domain transfers.
+        is_correct: true
+      - text: Register the domain with a third‑party registrar and import its DNS records into Route 53 without enabling any IAM permissions on the Route 53 hosted zone.
+        is_correct: false
+      - text: Grant every developer in the company full IAM power‑user permissions so that they can manage the domain and DNS records freely.
+        is_correct: false
+    explanation: |
+      Correct answers: Use Route 53 for domain registration and lock down access with IAM roles. Managing domains inside AWS makes administration easier and integrates with other AWS services.
+
+      Route 53 can act both as a DNS host and as a domain registrar.
+
+  # 26. Intro: Management and Governance
+  - id: q26
+    type: multiple_choice
+    question: |
+      A company operates multiple AWS accounts for different departments and wants to standardize how it configures, monitors, and audits resources across all accounts. The company also wants to detect and respond to configuration changes automatically.
+      Which combination of AWS services should a solutions architect recommend to meet these requirements? (Choose two.)
+    options:
+      - text: Use AWS Organizations to centrally manage multiple AWS accounts and apply service control policies to enforce governance guardrails.
+        is_correct: true
+      - text: Enable AWS Config and AWS CloudTrail to track resource configurations and API activity, and trigger automated remediation when changes drift from desired baselines.
+        is_correct: true
+      - text: Create separate IAM users for each team and give them full administrator access so they can configure resources as they see fit.
+        is_correct: false
+      - text: Use Amazon CloudWatch only for monitoring and skip centralized configuration and audit services to avoid complexity.
+        is_correct: false
+    explanation: |
+      Correct answers: Use AWS Organizations plus AWS Config and CloudTrail. Organizations centrally manages accounts and policies, while Config and CloudTrail track configuration and API activity, enabling governance and compliance.
+
+      Management and Governance in AWS covers how to centrally manage accounts (Organizations), standardize deployments (CloudFormation, Config), and monitor and audit changes (CloudTrail, CloudWatch, Config). Together they reduce risk and operational overhead.
+
+      Incorrect: Giving full admin access to every team undermines security and consistency. Using only CloudWatch ignores configuration‑change and compliance tracking, which Config and CloudTrail provide.
+
+    diagram: |
+      graph TD
+        A[Organizations] --> B[Account 1]
+        A --> C[Account 2]
+        B --> D[Config]
+        C --> E[CloudTrail]
+        D --> F[Remediation]
+        E --> F
+
+  # 27. Amazon CloudWatch - Metrics
+  - id: q27
+    type: multiple_choice
+    question: |
+      A company runs a scalable web application on EC2 instances behind an Application Load Balancer. The operations team wants to monitor CPU utilization, request counts, and HTTP error rates across all instances and receive alerts when thresholds are exceeded.
+      Which combination of AWS features should a solutions architect implement? (Choose two.)
+    options:
+      - text: Enable detailed CloudWatch metrics for EC2 instances and the Application Load Balancer to capture CPU utilization, request counts, and HTTP errors.
+        is_correct: true
+      - text: Create CloudWatch alarms on those metrics to trigger notifications via Amazon SNS when thresholds are breached.
+        is_correct: true
+      - text: Rely solely on AWS CloudTrail to monitor performance metrics and trigger alerts based on API call patterns.
+        is_correct: false
+      - text: Configure health checks on the ALB only and assume that these replace CloudWatch metrics for monitoring application health.
+        is_correct: false
+    explanation: |
+      Correct answers: Use CloudWatch metrics and alarms. CloudWatch Metrics collect numeric data about resource performance (CPU, requests, errors), and CloudWatch Alarms automatically notify when thresholds are crossed.
+
+      CloudWatch Metrics are numeric values collected at regular intervals (e.g., CPU usage, request counts). Alarms on these metrics trigger actions (SNS, Auto Scaling, Lambda) when conditions are met.
+
+      Incorrect: CloudTrail logs API calls, not runtime performance. ALB health checks verify target reachability but do not replace granular metrics and alarms for capacity and error‑rate monitoring.
+
+    diagram: |
+      graph TD
+        A[EC2] --> B[CloudWatch Metrics]
+        C[ALB] --> B
+        B --> D[CloudWatch Alarm]
+        D --> E[SNS]
+
+  # 28. Amazon CloudWatch - Logs
+  - id: q28
+    type: multiple_choice
+    question: |
+      A company runs a serverless application using AWS Lambda and Amazon API Gateway. The development team needs to troubleshoot errors and performance issues by analyzing application logs generated by Lambda functions and API Gateway.
+      Which combination of AWS features should a solutions architect implement? (Choose two.)
+    options:
+      - text: Enable CloudWatch Logs for API Gateway and Lambda so that all function invocations and API calls are automatically captured in log streams.
+        is_correct: true
+      - text: Use CloudWatch Logs Insights to query, filter, and analyze logs from Lambda and API Gateway in near real time.
+        is_correct: true
+      - text: Store Lambda logs in Amazon S3 using manual export scripts and run ad‑hoc queries using Amazon Athena instead of using CloudWatch Logs.
+        is_correct: false
+      - text: Configure AWS CloudTrail to capture Lambda logs and filter them using CloudTrail Insights for application‑level troubleshooting.
+        is_correct: false
+    explanation: |
+      Correct answers: Use CloudWatch Logs and Logs Insights. CloudWatch Logs automatically captures logs from Lambda and API Gateway, and Logs Insights allows fast, structured queries over these logs.
+
+      CloudWatch Logs is AWS’s log‑collection and analysis service. Logs Insights adds a query engine so you can filter, aggregate, and visualize log data without exporting it.
+
+      Incorrect: Exporting logs to S3 manually is operationally heavy and not the native pattern. CloudTrail tracks API activity, not application‑specific logs; it should complement, not replace, CloudWatch Logs.
+
+    diagram: |
+      graph TD
+        A[Lambda] --> B[CloudWatch Logs]
+        C[API Gateway] --> B
+        B --> D[Logs Insights]
+
+  # 29. Amazon CloudWatch Logs - Hands On
+  - id: q29
+    type: multiple_choice
+    question: |
+      A company runs a fleet of EC2 instances running a custom Java application. The operations team wants to centralize all application logs from these instances into AWS and set up automated parsing and alerting when specific error keywords appear.
+      Which combination of AWS services should a solutions architect implement? (Choose two.)
+    options:
+      - text: Install the CloudWatch Logs agent or use the unified CloudWatch Agent on each EC2 instance to send application log files to CloudWatch Logs.
+        is_correct: true
+      - text: Create CloudWatch Logs subscription filters that scan for error‑level messages and forward matches to Amazon SNS or AWS Lambda for alerting or remediation.
+        is_correct: true
+      - text: Stream all application logs to Amazon Kinesis Data Streams through a custom script and ignore CloudWatch Logs entirely.
+        is_correct: false
+      - text: Store logs in the EC2 instance’s local file system and rely only on shell commands to inspect logs during troubleshooting.
+        is_correct: false
+    explanation: |
+      Correct answers: Use the CloudWatch Agent and CloudWatch Logs subscription filters. This centralizes logs in AWS and enables automated alerting on specific patterns.
+
+      The CloudWatch Logs Agent (or unified agent) forwards logs from EC2 to CloudWatch Logs. Subscription filters can match text patterns and send alerts or trigger Lambda functions when errors occur.
+
+      Incorrect: Sending logs directly to Kinesis adds complexity and cost if the goal is only monitoring and alerting. Keeping logs only on‑premises/ECS local disks makes it hard to centralize and automate responses.
+
+    diagram: |
+      graph TD
+        A[EC2] --> B[CloudWatch Agent]
+        B --> C[CloudWatch Logs]
+        C --> D[Subscription Filter]
+        D --> E[Lambda/SNS]
+
+  # 30. Amazon CloudWatch Logs Unified Agent
+  - id: q30
+    type: multiple_choice
+    question: |
+      A company manages hundreds of EC2 instances running multiple operating systems (Linux and Windows) and several containerized services. The operations team wants a single, unified way to collect system metrics and application logs from all these environments and forward them to CloudWatch.
+      Which combination of AWS services should a solutions architect implement? (Choose two.)
+    options:
+      - text: Install the CloudWatch Unified Agent on all EC2 instances and configure it to collect both system metrics and custom logs from log files and Windows Event Logs.
+        is_correct: true
+      - text: Use CloudWatch Logs Insights to analyze and troubleshoot the unified data collected from mixed environments in a single interface.
+        is_correct: true
+      - text: Configure each EC2 instance to write metrics directly into DynamoDB tables and use DynamoDB Streams to trigger alerts based on metric thresholds.
+        is_correct: false
+      - text: Send logs to Amazon S3 only and use different tools per OS to parse and visualize them, without using CloudWatch.
+        is_correct: false
+    explanation: |
+      Correct answers: Use the CloudWatch Unified Agent and CloudWatch Logs Insights. The Unified Agent is a single agent that can collect metrics and logs from Linux, Windows, and containers and send them to CloudWatch.
+
+      The CloudWatch Unified Agent simplifies monitoring across heterogeneous environments. Logs Insights then allows unified querying across all collected logs.
+
+      Incorrect: Writing raw metrics to DynamoDB is not the idiomatic AWS pattern and complicates alerting. Skipping CloudWatch loses the integrated AWS observability experience.
+
+    diagram: |
+      graph TD
+        A[Linux EC2] --> B[Unified Agent]
+        C[Windows EC2] --> B
+        D[Containers] --> B
+        B --> E[CloudWatch Metrics/LLogs]
+        E --> F[Logs Insights]
+
+  # 31. Amazon CloudWatch - Alarms
+  - id: q31
+    type: multiple_choice
+    question: |
+      A company runs a web application using Amazon EC2 auto‑scaling groups. The operations team wants to automatically scale out when CPU utilization exceeds 70% and scale in when it drops below 30%, while also receiving email alerts when thresholds are breached.
+      Which combination of AWS services should a solutions architect use? (Choose two.)
+    options:
+      - text: Create CloudWatch alarms on EC2 CPU utilization that trigger Auto Scaling policies to adjust the number of instances up or down.
+        is_correct: true
+      - text: Configure the CloudWatch alarms to send notifications to an Amazon SNS topic that delivers alerts to email addresses or chat channels.
+        is_correct: true
+      - text: Use AWS Config to monitor CPU utilization and trigger scaling actions based on configuration‑drift rules.
+        is_correct: false
+      - text: Rely on AWS CloudTrail to track API calls related to EC2 and manually scale instances when more API calls are detected.
+        is_correct: false
+    explanation: |
+      Correct answers: Use CloudWatch alarms for Auto Scaling and SNS notifications. CloudWatch Alarms watch metric thresholds and can trigger Auto Scaling actions or send alerts via SNS.
+
+      CloudWatch Alarms evaluate metrics over time (e.g., CPU, request count) and perform actions when thresholds are crossed. SNS delivers these signals to stakeholders or other services.
+
+      Incorrect: AWS Config tracks configuration changes, not runtime metrics. CloudTrail tracks API calls, not workload‑level metrics; neither substitutes CloudWatch alarms.
+
+    diagram: |
+      graph TD
+        A[EC2] --> B[CloudWatch Metrics]
+        B --> C[CloudWatch Alarm]
+        C --> D[Auto Scaling]
+        C --> E[SNS]
+
+  # 32. Amazon CloudWatch - Alarms - Hands On
+  - id: q32
+    type: multiple_choice
+    question: |
+      A company runs a microservices architecture on Amazon EC2 and wants to monitor request latency from the Application Load Balancer and automatically scale the backend instances when average latency exceeds 200 milliseconds.
+      Which combination of AWS services and components should a solutions architect implement? (Choose two.)
+    options:
+      - text: Create a CloudWatch alarm on ALB latency metrics that triggers an Auto Scaling policy to add more EC2 instances when the average latency exceeds 200 ms for several consecutive periods.
+        is_correct: true
+      - text: Configure the Auto Scaling group to scale in gradually after a cooldown period when latency falls below 200 ms for a sustained period.
+        is_correct: true
+      - text: Use AWS CloudTrail to filter API calls related to latency and trigger scaling based on the number of ALB‑related API invocations.
+        is_correct: false
+      - text: Define a static, fixed number of EC2 instances and rely on AWS Config rules to detect any changes in instance count.
+        is_correct: false
+    explanation: |
+      Correct answers: Use CloudWatch Alarms on ALB latency plus Auto Scaling with cooldown. CloudWatch exposes ALB latency metrics that can drive scaling, and Auto Scaling policies can add or remove instances in response.
+
+      CloudWatch Alarms on ALB metrics (e.g., TargetResponseTime, RequestCountPerTarget) can trigger Auto Scaling. Cooldown periods prevent over‑scaling during transient spikes.
+
+      Incorrect: CloudTrail tracks API calls, not application latency. A fixed instance count with Config rules ignores the dynamic nature of traffic and does not provide elastic scaling.
+
+    diagram: |
+      graph TD
+        A[ALB] --> B[CloudWatch Metrics]
+        B --> C[CloudWatch Alarm]
+        C --> D[Auto Scaling]
+        D --> E[EC2 Group]
+
+  # 33. Amazon CloudTrail
+  - id: q33
+    type: multiple_choice
+    question: |
+      A company wants to audit all API activity in its AWS accounts, including who made changes, when they were made, and which resources were affected. The security team also wants to automate alerts when sensitive operations occur.
+      Which combination of AWS services should a solutions architect implement? (Choose two.)
+    options:
+      - text: Enable AWS CloudTrail in all AWS accounts to capture API activity and store logs in an S3 bucket with proper encryption and access controls.
+        is_correct: true
+      - text: Create Amazon EventBridge rules that process CloudTrail events to trigger Lambda functions or SNS notifications when sensitive operations (for example, IAM changes) occur.
+        is_correct: true
+      - text: Use AWS Config only to track configuration changes and ignore CloudTrail because “Config can replace CloudTrail” for auditing.
+        is_correct: false
+      - text: Send all CloudWatch Logs to CloudTrail and configure CloudTrail to generate metrics and alarms for operational issues.
+        is_correct: false
+    explanation: |
+      Correct answers: Use CloudTrail plus EventBridge. CloudTrail logs all or selected AWS API calls, while EventBridge can react to those events in near real time to send alerts or invoke automation.
+
+      CloudTrail answers “who did what, when, and on which resource.” It is the primary service for governance‑ and security‑focused logging. EventBridge can route and trigger actions on these events.
+
+      Incorrect: AWS Config tracks resource configurations, not API‑level who‑did‑what data; it complements CloudTrail but does not replace it. CloudWatch Logs and CloudTrail are separate services with different roles.
+
+    diagram: |
+      graph TD
+        A[AWS Accounts] --> B[CloudTrail]
+        B --> C[S3 Bucket]
+        B --> D[EventBridge]
+        D --> E[Lambda/SNS]
+
+  # 34. Amazon CloudTrail - Hands On
+  - id: q34
+    type: multiple_choice
+    question: |
+      A company has multiple AWS accounts under AWS Organizations and wants centralized auditing of all member‑account activity. The security team also wants to ensure that CloudTrail logs cannot be tampered with by any single account.
+      Which combination of AWS features should a solutions architect implement? (Choose two.)
+    options:
+      - text: Create an organization‑level CloudTrail trail that logs all management events across all member accounts and stores the logs in an S3 bucket in the management account.
+        is_correct: true
+      - text: Enable CloudTrail log file integrity validation and S3 bucket access logging so that any unauthorized changes to log files are detectable.
+        is_correct: true
+      - text: Let each account create its own CloudTrail trail and allow unrestricted write access to the S3 log buckets for all account principals.
+        is_correct: false
+      - text: Use AWS Config instead of CloudTrail to store and audit all API calls, assuming that Config captures every API request.
+        is_correct: false
+    explanation: |
+      Correct answers: Use an organization‑level CloudTrail trail with integrity validation and centralized logging in the management account S3 bucket. This provides a single source of truth for auditing across accounts.
+
+      CloudTrail log file integrity validation uses cryptographic hashes so you can verify that logs have not been altered. S3 access logging shows who accessed the bucket, strengthening audit‑trail trust.
+
+      Incorrect: Decentralized trails with open write access increase the risk of log tampering or deletion. AWS Config does not record every API call; it tracks configuration states, not the full API audit trail.
+
+    diagram: |
+      graph TD
+        A[Org Management] --> B[CloudTrail Trail]
+        C[Account 1] --> B
+        D[Account 2] --> B
+        B --> E[S3 Bucket]
+        E --> F[Integrity Checks]
+
+  # 35. AWS CloudTrail Lake
+  - id: q35
+    type: multiple_choice
+    question: |
+      A company has enabled CloudTrail in multiple AWS Regions and wants to run SQL queries across all historical audit logs to find specific security‑related events without managing S3 buckets and analysis pipelines manually.
+      Which combination of AWS services should a solutions architect implement? (Choose two.)
+    options:
+      - text: Enable CloudTrail Lake in the AWS account and automatically ingest existing CloudTrail logs from S3 into a query‑ready lake.
+        is_correct: true
+      - text: Query the CloudTrail Lake store using standard SQL to search for specific events, such as root‑user logins or IAM changes, across multiple Regions and accounts.
+        is_correct: true
+      - text: Continue using standalone S3 buckets for CloudTrail logs and manually run Amazon Athena queries on each bucket without using CloudTrail Lake.
+        is_correct: false
+      - text: Replace CloudTrail with AWS CloudWatch Logs for auditing and analyze logs using CloudWatch Logs Insights instead of CloudTrail Lake.
+        is_correct: false
+    explanation: |
+      Correct answers: Use CloudTrail Lake plus SQL queries. CloudTrail Lake automatically ingests CloudTrail logs and stores them in a centralized, query‑optimized store, letting you run SQL instead of managing S3 and Athena yourself.
+
+      CloudTrail Lake is designed for large‑scale forensic and security‑analysis workflows. It lets you search across Regions and accounts in a single query, which is ideal for compliance and incident response.
+
+      Incorrect: Managing S3 and Athena per‑bucket is more operational effort and less scalable. CloudWatch Logs is for metrics and application logs, not fine‑grained API‑level auditing.
+
+    diagram: |
+      graph TD
+        A[CloudTrail Logs] --> B[CloudTrail Lake]
+        B --> C[SQL Query]
+        C --> D[Security Team]

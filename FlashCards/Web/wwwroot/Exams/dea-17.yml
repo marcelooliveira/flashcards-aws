@@ -1,0 +1,391 @@
+﻿questions:
+  - id: mig1
+    topic: "Intro: Migration and Transfer"
+    type: multiple_choice
+    question: |
+      A company wants to move 500 TB of data from their on-premises data center to AWS. Their internet connection is limited to 100 Mbps. 
+      Which strategy is the most time-efficient for this large-scale transfer?
+    options:
+      - text: "Use physical migration devices like AWS Snowball Edge."
+        is_correct: true
+      - text: "Upload the data via the AWS Management Console."
+        is_correct: false
+      - text: "Establish a Site-to-Site VPN and use multi-part upload."
+        is_correct: false
+      - text: "Use AWS Transfer Family with SFTP."
+        is_correct: false
+    explanation: |
+      Correct: Transferring 500 TB over 100 Mbps would take years. Physical devices bypass bandwidth limitations.
+    tags: [Migration, Snowball]
+
+  - id: mig2
+    topic: "AWS Database Migration Service (AWS DMS)"
+    type: multiple_choice
+    question: |
+      You are migrating an Oracle database to Amazon Aurora PostgreSQL. During the migration, you need to keep the source database operational. 
+      Which feature of DMS allows for continuous data syncing?
+    options:
+      - text: "Change Data Capture (CDC)."
+        is_correct: true
+      - text: "Full Load only."
+        is_correct: false
+      - text: "AWS Schema Conversion Tool (SCT) synchronization."
+        is_correct: false
+      - text: "Amazon S3 Import."
+        is_correct: false
+    explanation: |
+      Correct: CDC captures changes from the source transaction log and applies them to the target in real-time.
+    diagram: |
+      graph LR
+        S[(Source DB)] --"CDC"--> D[DMS Replication Instance]
+        D --"Apply"--> T[(Target RDS)]
+    tags: [DMS, Database]
+
+  - id: mig3
+    topic: "AWS DataSync"
+    type: multiple_choice
+    question: |
+      An organization needs to synchronize millions of small files between their on-premises NFS server and Amazon EFS daily. 
+      Which service is purpose-built to automate and accelerate this specific task?
+    options:
+      - text: "AWS DataSync."
+        is_correct: true
+      - text: "AWS Snowcone."
+        is_correct: false
+      - text: "AWS Storage Gateway."
+        is_correct: false
+      - text: "Amazon S3 Transfer Acceleration."
+        is_correct: false
+    explanation: |
+      Correct: DataSync is optimized for moving data between on-premises storage and AWS storage services (S3, EFS, FSx).
+    tags: [DataSync, Storage]
+
+  - id: mig4
+    topic: "AWS Transfer Family"
+    type: multiple_choice
+    question: |
+      A partner organization insists on using SFTP to upload weekly reports into your Amazon S3 bucket. 
+      How can you provide a managed SFTP endpoint without managing any servers?
+    options:
+      - text: "Use AWS Transfer Family."
+        is_correct: true
+      - text: "Deploy an EC2 instance with OpenSSH installed."
+        is_correct: false
+      - text: "Configure an API Gateway with a binary proxy."
+        is_correct: false
+      - text: "Use Amazon WorkDocs."
+        is_correct: false
+    explanation: |
+      Correct: AWS Transfer Family provides fully managed support for SFTP, FTPS, and FTP directly into S3 or EFS.
+    tags: [Transfer, SFTP]
+
+  - id: comp1
+    topic: "EC2 Graviton-based instances"
+    type: multiple_choice
+    question: |
+      A DevOps engineer wants to reduce costs for a CPU-intensive web application. The application code is written in Python and is architecture-agnostic. 
+      Which EC2 instance type family should they test for the best price-performance ratio?
+    options:
+      - text: "Graviton-based instances (e.g., C6g, M7g)."
+        is_correct: true
+      - text: "Intel-based instances (e.g., C5, M5)."
+        is_correct: false
+      - text: "AMD-based instances (e.g., C6a)."
+        is_correct: false
+      - text: "Accelerated computing instances (e.g., P4)."
+        is_correct: false
+    explanation: |
+      Correct: AWS Graviton processors (ARM-based) offer significantly better price-performance compared to x86 counterparts.
+    tags: [EC2, Graviton]
+
+  - id: comp2
+    topic: "AWS Lambda"
+    type: multiple_choice
+    question: |
+      What is the maximum execution timeout for an AWS Lambda function?
+    options:
+      - text: "15 minutes."
+        is_correct: true
+      - text: "5 minutes."
+        is_correct: false
+      - text: "30 minutes."
+        is_correct: false
+      - text: "1 hour."
+        is_correct: false
+    explanation: |
+      Correct: Lambda functions have a hard limit of 900 seconds (15 minutes). For longer tasks, AWS Batch or Step Functions are used.
+    tags: [Lambda, Serverless]
+
+  - id: comp3
+    topic: "AWS Lambda - File Systems Mounting"
+    type: multiple_choice
+    question: |
+      A data scientist needs to process large files (over 10 GB) using a Lambda function. The data must persist across multiple function invocations. 
+      What is the best storage solution?
+    options:
+      - text: "Mount an Amazon EFS (Elastic File System) to the Lambda function."
+        is_correct: true
+      - text: "Use the local /tmp directory."
+        is_correct: false
+      - text: "Increase the Lambda memory to 10 GB."
+        is_correct: false
+      - text: "Attach an Amazon EBS volume to the Lambda function."
+        is_correct: false
+    explanation: |
+      Correct: Lambda can natively mount EFS, providing shared, persistent storage that can handle large datasets.
+    tags: [Lambda, EFS]
+
+  - id: comp4
+    topic: "AWS SAM"
+    type: multiple_choice
+    question: |
+      Which AWS service/tool is an extension of CloudFormation specifically designed for defining serverless applications with shorthand syntax?
+    options:
+      - text: "AWS SAM (Serverless Application Model)."
+        is_correct: true
+      - text: "AWS CDK (Cloud Development Kit)."
+        is_correct: false
+      - text: "AWS Amplify."
+        is_correct: false
+      - text: "AWS CodeDeploy."
+        is_correct: false
+    explanation: |
+      Correct: SAM transforms shorthand YAML/JSON into full CloudFormation templates for Lambda, DynamoDB, and APIs.
+    tags: [SAM, Serverless]
+
+  - id: comp5
+    topic: "AWS Batch"
+    type: multiple_choice
+    question: |
+      A financial firm runs thousands of simulation jobs every night. Each job requires varying CPU/Memory and takes 2 hours to complete. 
+      Which service automates the scheduling and execution of these containerized batch workloads?
+    options:
+      - text: "AWS Batch."
+        is_correct: true
+      - text: "AWS Lambda."
+        is_correct: false
+      - text: "Amazon ECS with Auto Scaling."
+        is_correct: false
+      - text: "AWS Step Functions."
+        is_correct: false
+    explanation: |
+      Correct: AWS Batch dynamically provisions the optimal quantity and type of compute resources (EC2 or Fargate) for long-running batch jobs.
+    tags: [Batch, Compute]
+
+  - id: cont1
+    topic: "Amazon ECS"
+    type: multiple_choice
+    question: |
+      In Amazon ECS, which launch type allows you to run containers without managing the underlying EC2 instances?
+    options:
+      - text: "AWS Fargate."
+        is_correct: true
+      - text: "EC2 Launch Type."
+        is_correct: false
+      - text: "EKS Anywhere."
+        is_correct: false
+      - text: "Amazon LightSail."
+        is_correct: false
+    explanation: |
+      Correct: Fargate is the serverless compute engine for ECS and EKS.
+    tags: [ECS, Fargate]
+
+  - id: cont2
+    topic: "Amazon EKS"
+    type: multiple_choice
+    question: |
+      A company wants to run a standard Kubernetes cluster on AWS while offloading the management of the Kubernetes Control Plane. 
+      Which service should they use?
+    options:
+      - text: "Amazon EKS (Elastic Kubernetes Service)."
+        is_correct: true
+      - text: "Amazon ECS."
+        is_correct: false
+      - text: "AWS App Runner."
+        is_correct: false
+      - text: "Amazon EC2."
+        is_correct: false
+    explanation: |
+      Correct: EKS provides a managed Kubernetes control plane across multiple Availability Zones.
+    tags: [EKS, Kubernetes]
+
+  - id: app1
+    topic: "Amazon SQS"
+    type: multiple_choice
+    question: |
+      You have a distributed system where a producer sends messages to a consumer. You want to ensure that if the consumer fails, the message is not lost but remains available for another attempt. 
+      What SQS feature handles this?
+    options:
+      - text: "Visibility Timeout."
+        is_correct: true
+      - text: "Message Retention Period."
+        is_correct: false
+      - text: "Long Polling."
+        is_correct: false
+      - text: "Delay Queues."
+        is_correct: false
+    explanation: |
+      Correct: While a consumer processes a message, it is hidden from others for the Visibility Timeout. If not deleted, it reappears in the queue.
+    diagram: |
+      graph LR
+        P[Producer] --> Q[SQS Queue]
+        Q --"ReceiveMessage"--> C[Consumer]
+        C --"Visibility Timeout starts"--> C
+        C --"Success? Delete"--> Q
+    tags: [SQS, Messaging]
+
+  - id: app2
+    topic: "Amazon SNS - with SQS Fan Out"
+    type: multiple_choice
+    question: |
+      A system needs to send a single message from a producer to multiple SQS queues simultaneously for parallel processing. 
+      What is the recommended architectural pattern?
+    options:
+      - text: "SNS Fan Out: Publish to an SNS Topic with multiple SQS queues subscribed."
+        is_correct: true
+      - text: "Chained SQS: Connect queues in a series."
+        is_correct: false
+      - text: "API Gateway broadcast."
+        is_correct: false
+      - text: "SQS FIFO groups."
+        is_correct: false
+    explanation: |
+      Correct: SNS "Fan Out" is the standard pattern for decoupling and delivering messages to multiple endpoints.
+    diagram: |
+      graph TD
+        P[Producer] --> T[SNS Topic]
+        T --> Q1[SQS Queue A]
+        T --> Q2[SQS Queue B]
+        T --> Q3[SQS Queue C]
+    tags: [SNS, SQS, FanOut]
+
+  - id: app3
+    topic: "AWS Step Functions"
+    type: multiple_choice
+    question: |
+      You are building a complex workflow that involves Lambda functions, manual human approvals, and conditional branching. 
+      Which service is best for orchestrating this "state machine"?
+    options:
+      - text: "AWS Step Functions."
+        is_correct: true
+      - text: "AWS Glue Workflows."
+        is_correct: false
+      - text: "Amazon SNS."
+        is_correct: false
+      - text: "Amazon EventBridge."
+        is_correct: false
+    explanation: |
+      Correct: Step Functions allow you to coordinate multiple AWS services into serverless workflows.
+    tags: [StepFunctions, Orchestration]
+
+  - id: app4
+    topic: "Amazon AppFlow"
+    type: multiple_choice
+    question: |
+      A marketing team needs to move customer data from Salesforce to Amazon Redshift without writing any code or setting up infrastructure. 
+      Which service should they use?
+    options:
+      - text: "Amazon AppFlow."
+        is_correct: true
+      - text: "AWS DataSync."
+        is_correct: false
+      - text: "Amazon EventBridge."
+        is_correct: false
+      - text: "AWS Glue."
+        is_correct: false
+    explanation: |
+      Correct: AppFlow is a fully managed integration service that enables secure data transfer between SaaS applications and AWS.
+    tags: [AppFlow, Integration]
+
+  - id: app5
+    topic: "Amazon EventBridge"
+    type: multiple_choice
+    question: |
+      You want to trigger a Lambda function whenever an Amazon S3 object is created, but you also want to filter for specific metadata patterns and route the same event to multiple targets. 
+      What is the most flexible service for this?
+    options:
+      - text: "Amazon EventBridge."
+        is_correct: true
+      - text: "S3 Event Notifications."
+        is_correct: false
+      - text: "Amazon SNS."
+        is_correct: false
+      - text: "Amazon Kinesis."
+        is_correct: false
+    explanation: |
+      Correct: EventBridge (formerly CloudWatch Events) provides advanced rule-based routing and schema discovery.
+    tags: [EventBridge, Serverless]
+
+  - id: app6
+    topic: "Amazon Managed Workflows for Apache Airflow (Amazon MWAA)"
+    type: multiple_choice
+    question: |
+      A data engineering team uses Apache Airflow to orchestrate their Python-based ETL pipelines. They want to move to AWS but avoid managing the underlying servers and Airflow installation. 
+      What service should they choose?
+    options:
+      - text: "Amazon MWAA."
+        is_correct: true
+      - text: "AWS Glue."
+        is_correct: false
+      - text: "AWS Step Functions."
+        is_correct: false
+      - text: "Amazon EMR."
+        is_correct: false
+    explanation: |
+      Correct: MWAA is a managed service that makes it easy to run the open-source version of Apache Airflow on AWS.
+    tags: [MWAA, Airflow]
+
+  - id: app7
+    topic: "Amazon SQS - Dead Letter Queues"
+    type: multiple_choice
+    question: |
+      An SQS message has been unsuccessfully processed 5 times. You want to isolate this message to analyze why it's failing. 
+      What should you configure?
+    options:
+      - text: "A Dead Letter Queue (DLQ) with a Redrive Policy."
+        is_correct: true
+      - text: "Increase the Visibility Timeout."
+        is_correct: false
+      - text: "Configure a Delay Queue."
+        is_correct: false
+      - text: "Use an SNS subscription filter."
+        is_correct: false
+    explanation: |
+      Correct: A DLQ stores messages that could not be processed successfully after a certain number of attempts.
+    tags: [SQS, DLQ]
+
+  - id: cont3
+    topic: "Amazon ECR"
+    type: multiple_choice
+    question: |
+      Where do you store Docker images in AWS to be used by ECS or EKS clusters?
+    options:
+      - text: "Amazon ECR (Elastic Container Registry)."
+        is_correct: true
+      - text: "Amazon S3."
+        is_correct: false
+      - text: "AWS Artifact."
+        is_correct: false
+      - text: "EC2 Instance Store."
+        is_correct: false
+    explanation: |
+      Correct: ECR is a fully managed Docker container registry.
+    tags: [ECR, Docker]
+
+  - id: comp6
+    topic: "EC2 in Big Data"
+    type: multiple_choice
+    question: |
+      Which EC2 instance family is specifically optimized for high-throughput, sequential read/write access to large datasets on local storage, common in HDFS or MapReduce?
+    options:
+      - text: "Storage Optimized (D, H, or I families)."
+        is_correct: true
+      - text: "Compute Optimized (C family)."
+        is_correct: false
+      - text: "Memory Optimized (R family)."
+        is_correct: false
+      - text: "General Purpose (M family)."
+        is_correct: false
+    explanation: |
+      Correct: Storage optimized instances are designed for workloads that require high, sequential read and write access to very large datasets.
+    tags: [EC2, BigData]
