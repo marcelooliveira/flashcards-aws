@@ -1,0 +1,442 @@
+﻿questions:
+
+  # 1. AWS Access Keys, CLI & SDK
+  - id: q_devops_1
+    type: multiple_choice
+    question: |
+      A company has a team of developers who must deploy and manage AWS resources programmatically from their local machines and CI/CD pipelines. The company wants to avoid hard‑coding credentials in applications and automate secure access to AWS services.
+      Which combination of AWS features and practices should a solutions architect recommend? (Choose two.)
+    options:
+      - text: Create IAM users with access keys for programmatic access and configure the AWS CLI and SDKs to use these credentials through named profiles stored in ~/.aws/credentials or environment variables.
+        is_correct: true
+      - text: Prefer IAM roles and temporary credentials (for example, via AWS STS or EC2 instance roles) for applications and CI/CD jobs instead of long‑term access keys whenever possible.
+        is_correct: true
+      - text: Embed AWS access key IDs and secrets directly into application source code and commit them to version control so that all developers use the same credentials.
+        is_correct: false
+      - text: Share a single IAM user and access key among all developers and assume that rotating the key once a year is sufficient for security.
+        is_correct: false
+    explanation: |
+      Correct answers: Use IAM users with CLI/SDK‑managed profiles plus IAM roles and temporary credentials. Access keys allow programmatic access to AWS APIs, and the CLI/SDKs can securely store them in local credential files. Roles and temp credentials improve security by avoiding long‑lived keys.
+
+      AWS Access Keys, CLI & SDK cover how to authenticate and interact with AWS services programmatically. The CLI and SDKs use access keys, roles, or assume‑role identities to sign API calls without exposing them in application code.
+
+      Incorrect: Hard‑coding keys in code and committing to Git is a major security risk. Reusing one shared key makes it impossible to audit per‑user activity and increases blast radius.
+
+    diagram: |
+      graph TD
+        A[Developer] --> B[AWS CLI/SDK]
+        B --> C[Named Profile]
+        B --> D[IAM User Access Key]
+        E[App/CI] --> F[EC2 Role/STS]
+        F --> G[AWS APIs]
+
+  # 2. AWS CLI Setup on Windows
+  - id: q_devops_2
+    type: multiple_choice
+    question: |
+      A company has a Windows workstation team that must frequently interact with AWS using the AWS CLI for tasks such as listing S3 buckets, starting EC2 instances, and inspecting CloudWatch Logs. The team wants a consistent, supported setup without manual configuration of environment variables.
+      Which combination of AWS practices should a solutions architect implement? (Choose two.)
+    options:
+      - text: Install the AWS CLI v2 for Windows using the MSI installer and run aws configure to store IAM credentials and region in the default profile under C:\Users\USERNAME\.aws\credentials.
+        is_correct: true
+      - text: Use PowerShell or Command Prompt with aws commands and ensure that the PATH includes the AWS CLI installation so that all team members invoke the same version.
+        is_correct: true
+      - text: Store AWS access keys as environment variables in the system settings of each Windows machine and distribute them via an internal wiki without any rotation policy.
+        is_correct: false
+      - text: Require the team to use only the AWS Management Console for all operations and ignore the CLI to avoid configuration complexity.
+        is_correct: false
+    explanation: |
+      Correct answers: Install AWS CLI v2 and use `aws configure` plus a consistent PATH. The Windows MSI installer simplifies setup, and `aws configure` creates a default profile that avoids manual env‑var management.
+
+      AWS CLI Setup on Windows means using the official AWS CLI v2 installer, running `aws configure`, and letting the CLI read credentials from the standard `~/.aws/credentials` file that AWS SDKs also use.
+
+      Incorrect: Hard‑coded environment variables in system settings are hard to rotate and audit. Avoiding the CLI limits automation and repeatability.
+
+    diagram: |
+      graph TD
+        A[Windows Workstation] --> B[CLI v2 MSI]
+        B --> C[aws configure]
+        C --> D[Cred File]
+        A --> E[PowerShell]
+        E --> F[aws s3 ls]
+
+  # 3. AWS CLI Setup on Mac OS X
+  - id: q_devops_3
+    type: multiple_choice
+    question: |
+      A company has a team of Mac‑based developers who want to use the AWS CLI for repetitive tasks such as uploading files to S3, managing Lambda functions, and querying CloudWatch Logs. The team wants to follow AWS‑recommended installation and configuration patterns.
+      Which combination of AWS practices should a solutions architect implement? (Choose two.)
+    options:
+      - text: Install the AWS CLI v2 on macOS using the bundled installer script or a package manager such as Homebrew, then run aws configure to store credentials and default region.
+        is_correct: true
+      - text: Store IAM credentials in the standard ~/.aws/credentials file and use named profiles for different environments (for example, dev, prod) so that developers can switch profiles easily.
+        is_correct: true
+      - text: Install an older, unmaintained AWS CLI version from a third‑party GitHub repository and keep it for several years without updating.
+        is_correct: false
+      - text: Hard‑code AWS credentials into shell scripts used by the CLI and distribute them via a shared USB drive to avoid using configuration files.
+        is_correct: false
+    explanation: |
+      Correct answers: Use AWS CLI v2 plus named profiles in `~/.aws/credentials`. The official AWS CLI v2 installer or Homebrew keeps the CLI up‑to‑date, and profiles allow clean separation of dev/prod credentials.
+
+      AWS CLI Setup on macOS emphasizes using the AWS‑provided installer or Homebrew, then relying on the standard AWS configuration and credential files so that SDKs and other tools share the same profile setup.
+
+      Incorrect: Unofficial CLI versions can be unstable and insecure. Hard‑coding keys in scripts and offline media is operationally fragile and risky.
+
+    diagram: |
+      graph TD
+        A[Mac Dev] --> B[CLI v2 Installer]
+        B --> C[aws configure]
+        C --> D[~/.aws/credentials]
+        D --> E[aws --profile prod]
+        E --> F[S3 Upload]
+
+  # 4. AWS CLI Setup on Linux
+  - id: q_devops_4
+    type: multiple_choice
+    question: |
+      A company runs Linux‑based build servers that must interact with AWS services via the AWS CLI during CI/CD runs. The team wants to standardize CLI version and configuration across all servers and avoid manual per‑server setup.
+      Which combination of AWS practices should a solutions architect implement? (Choose two.)
+    options:
+      - text: Install the AWS CLI v2 on Linux using the bundled installer script or a distribution‑specific package manager, and configure a shared IAM role for the build servers instead of individual access keys wherever possible.
+        is_correct: true
+      - text: Use configuration files in ~/.aws/ and environment variables such as AWS_DEFAULT_REGION to keep commands consistent across servers and pipelines.
+        is_correct: true
+      - text: Install an outdated version of the AWS CLI using an internal repository that is not updated and assume it will work for all AWS features.
+        is_correct: false
+      - text: Embed AWS access keys into every build‑step script and store them in plain text in the CI/CD configuration files.
+        is_correct: false
+    explanation: |
+      Correct answers: Install AWS CLI v2 plus use IAM roles and standard AWS‑config files. CLI v2 with roles reduces the need for long‑lived keys, and centralized config files and env vars keep commands portable.
+
+      AWS CLI Setup on Linux focuses on installing the latest AWS‑provided CLI v2 (via installer or package manager) and using IAM roles plus `~/.aws/config` and `credentials` so scripts don’t depend on local tweaks.
+
+      Incorrect: Stale CLI versions may miss new features and security fixes. Hard‑coding keys in CI/CD configs is a security and maintenance anti‑pattern.
+
+    diagram: |
+      graph TD
+        A[Linux Build Server] --> B[CLI v2]
+        B --> C[IAM Role]
+        B --> D[.aws/config]
+        D --> E[aws ec2 describe-instances]
+
+  # 5. AWS CLI Hands On
+  - id: q_devops_5
+    type: multiple_choice
+    question: |
+      A company wants its developers to use the AWS CLI to automate repetitive tasks such as creating S3 buckets, setting up CloudWatch Logs groups, and inspecting EC2 instances. The team wants to ensure that CLI usage is consistent, secure, and aligned with least‑privilege access.
+      Which combination of AWS practices should a solutions architect implement? (Choose two.)
+    options:
+      - text: Define IAM policies that grant minimal required permissions for each CLI task and attach them to IAM users or roles used by the CLI.
+        is_correct: true
+      - text: Provide reusable CLI command templates or scripts (for example, in a Git repo) that developers can run with aws commands and named profiles instead of memorizing long command lines.
+        is_correct: true
+      - text: Allow developers to use the AWS CLI with full administrator privileges so they can run any command without asking for additional permissions.
+        is_correct: false
+      - text: Require every developer to manually type long, complex CLI commands for each operation instead of using scripts or templates to avoid “automation overhead.”
+        is_correct: false
+    explanation: |
+      Correct answers: Use least‑privilege IAM policies plus reusable CLI templates. This ensures security and consistency while still enabling automation and faster iteration.
+
+      AWS CLI Hands On is about using the CLI effectively for day‑to‑day operations: creating resources, reading logs, and scripting workflows using `aws` commands with named profiles and shell scripts.
+
+      Incorrect: Full‑admin access violates least‑privilege and increases risk. Avoiding scripts makes work slower and more error‑prone.
+
+    diagram: |
+      graph TD
+        A[Developer] --> B[CLI Script]
+        B --> C[aws s3 mb]
+        B --> D[aws logs create-log-group]
+        C & D --> E[IAM Policies]
+
+  # 6. AWS CDK
+  - id: q_devops_6
+    type: multiple_choice
+    question: |
+      A company wants to provision its AWS infrastructure (VPCs, EC2, Lambda, API Gateway, etc.) using code instead of manually created resources or hand‑written CloudFormation templates. The team wants to reuse patterns and iterate quickly.
+      Which combination of AWS tools and practices should a solutions architect implement? (Choose two.)
+    options:
+      - text: Use AWS CDK with a language such as TypeScript or Python to define stacks and constructs, and let CDK automatically generate CloudFormation templates for deployment.
+        is_correct: true
+      - text: Package common infrastructure patterns (for example, a standard VPC construct) as reusable CDK constructs so that multiple teams can instantiate them with minimal configuration.
+        is_correct: true
+      - text: Continue managing all infrastructure through the AWS Management Console and avoid any infrastructure‑as‑code tools to keep the environment simple.
+        is_correct: false
+      - text: Maintain separate CloudFormation templates for each project and ignore CDK because it “adds too much abstraction.”
+        is_correct: false
+    explanation: |
+      Correct answers: Use AWS CDK plus reusable constructs. CDK lets you define infrastructure in code, and constructs encapsulate reusable patterns that can be shared across projects.
+
+      AWS CDK is an open‑source framework that lets you model AWS infrastructure using real programming languages (e.g., TypeScript, Python) and outputs CloudFormation under the hood for deployment.
+
+      Incorrect: Console‑only operation is slow to reproduce and doesn’t scale. Avoiding CDK while using raw CloudFormation templates loses the benefits of code reusability and type‑safe constructs.
+
+    diagram: |
+      graph TD
+        A[TypeScript/Python] --> B[CDK App]
+        B --> C[Standard VPC Construct]
+        C --> D[CloudFormation]
+        D --> E[EC2, Lambda, etc.]
+
+  # 7. AWS CDK - Hands On
+  - id: q_devops_7
+    type: multiple_choice
+    question: |
+      A company has started using AWS CDK to manage infrastructure but is struggling with version control, testing, and collaboration across teams. The team wants to treat infrastructure as real code and avoid manual deployments.
+      Which combination of AWS practices should a solutions architect implement? (Choose two.)
+    options:
+      - text: Store CDK code in version control (for example, Git) and use CI/CD pipelines (for example, CodePipeline and CodeBuild) to synthesize and deploy stacks on pull‑request or merge events.
+        is_correct: true
+      - text: Use CDK commands such as cdk synth and cdk diff to review CloudFormation changes before running cdk deploy, improving visibility and safety.
+        is_correct: true
+      - text: Allow each developer to run cdk deploy directly from their local machine against production accounts without any approval or testing stage.
+        is_correct: false
+      - text: Keep the CDK source code in personal laptops and only share ZIP files via email instead of using a central Git repository.
+        is_correct: false
+    explanation: |
+      Correct answers: Use version control plus CI/CD and change‑preview commands. CDK‑hands‑on best practices include Git, CI/CD pipelines, and using `cdk synth` / `cdk diff` before deployment to review changes and avoid surprises.
+
+      AWS CDK - Hands On emphasizes treating CDK code like application code: versioned, tested, and deployed via pipelines rather than manual CLI invocations.
+
+      Incorrect: Local, unreviewed deployments into production are risky and non‑repeatable. Distributed ZIP files break collaboration and traceability.
+
+    diagram: |
+      graph TD
+        A[Git Repo] --> B[CI/CD]
+        B --> C[cdk synth]
+        C --> D[cdk diff]
+        D --> E[cdk deploy]
+        E --> F[Prod Stacks]
+
+  # 8. AWS CodeDeploy
+  - id: q_devops_8
+    type: multiple_choice
+    question: |
+      A company runs applications on EC2 instances and wants to automate the deployment of new application versions without downtime. The team wants to control how many instances are updated at a time and roll back quickly if errors occur.
+      Which combination of AWS services and practices should a solutions architect implement? (Choose two.)
+    options:
+      - text: Use AWS CodeDeploy to deploy application revisions to EC2 instances, specifying deployment groups and deployment strategies (for example, blue/green or rolling) to minimize downtime.
+        is_correct: true
+      - text: Integrate CodeDeploy with Auto Scaling groups so that new instances are automatically provisioned with the latest application version during scaling events.
+        is_correct: true
+      - text: Manually copy updated application packages to each EC2 instance using SSH and restart the applications directly on the server.
+        is_correct: false
+      - text: Deploy all application changes directly to the production instances without any staging or rollback plan, assuming the deployment will always succeed.
+        is_correct: false
+    explanation: |
+      Correct answers: Use CodeDeploy with defined deployment groups and strategies plus integration with Auto Scaling. CodeDeploy automates software deployment to EC2, reducing errors and making rollbacks and phased deployments easy.
+
+      AWS CodeDeploy automates application deployments to EC2, on‑premises servers, and Lambda, supporting blue/green, rolling, and canary strategies.
+
+      Incorrect: Manual SSH‑based deployment is slow and error‑prone. Deploying directly to production with no staging or rollback increases business risk.
+
+    diagram: |
+      graph TD
+        A[Application Package] --> B[CodeDeploy]
+        B --> C[EC2 Group]
+        C --> D[Rolling Deployment]
+        D --> E[Auto Scaling]
+
+  # 9. AWS CodeBuild
+  - id: q_devops_9
+    type: multiple_choice
+    question: |
+      A company wants to build and test its application code in a consistent, repeatable environment before deploying to production. The team wants to avoid managing build servers and ensure that builds run in isolated environments.
+      Which combination of AWS services and practices should a solutions architect implement? (Choose two.)
+    options:
+      - text: Use AWS CodeBuild to run build scripts and tests in managed, ephemeral compute environments based on buildspec files stored in the source repository.
+        is_correct: true
+      - text: Store build artifacts in Amazon S3 and configure CodeBuild to pass them to AWS CodeDeploy or a deployment pipeline for downstream stages.
+        is_correct: true
+      - text: Install Jenkins on a single, shared EC2 instance and run all builds there, regardless of project size or isolation requirements.
+        is_correct: false
+      - text: Skip automated testing and only build artifacts manually on developer machines before pushing to production.
+        is_correct: false
+    explanation: |
+      Correct answers: Use CodeBuild plus S3 for artifacts. CodeBuild runs builds in isolated, managed environments defined by buildspec files, producing artifacts that can be consumed by CodeDeploy or other stages.
+
+      AWS CodeBuild is a fully managed continuous integration service that compiles source code, runs tests, and produces artifacts without the user managing build servers.
+
+      Incorrect: A shared Jenkins EC2 instance creates a bottleneck and risks jobs stepping on each other. Manual builds bypass testing and repeatability.
+
+    diagram: |
+      graph TD
+        A[Source Repo] --> B[CodeBuild]
+        B --> C[Buildspec]
+        B --> D[Test]
+        D --> E[S3 Artifact]
+        E --> F[CodeDeploy]
+
+  # 10. AWS CodePipeline
+  - id: q_devops_10
+    type: multiple_choice
+    question: |
+      A company wants to standardize its CI/CD workflow across multiple services and enforce a consistent process: build, test, deploy to staging, and then deploy to production with manual approval. The company wants to track the entire pipeline state in AWS.
+      Which combination of AWS services and practices should a solutions architect implement? (Choose two.)
+    options:
+      - text: Use AWS CodePipeline to define stages for source, build, staging deployment, and production deployment, with manual approval actions between staging and production.
+        is_correct: true
+      - text: Connect CodePipeline to AWS CodeCommit, AWS CodeBuild, and AWS CodeDeploy (or similar services) so that each stage automatically receives and processes the output from the previous stage.
+        is_correct: true
+      - text: Replace CodePipeline with a single script that directly calls AWS CLI commands to deploy to staging and production, bypassing any managed pipeline service.
+        is_correct: false
+      - text: Manually trigger the build, test, and deployment steps from different tools and ignore the pipeline console, assuming the process is consistent as long as humans follow a checklist.
+        is_correct: false
+    explanation: |
+      Correct answers: Use CodePipeline stages plus integration with CodeCommit, CodeBuild, and CodeDeploy. CodePipeline orchestrates the full CI/CD workflow, tying source, build, and deployment into a single, auditable pipeline.
+
+      AWS CodePipeline is a fully managed service that automates the release process, supporting stages such as source, build, test, staging, and production, with manual approval gates for safer deployments.
+
+      Incorrect: A script that bypasses CodePipeline loses visibility, auditability, and built‑in rollback and status tracking. Manual, checklist‑based processes are error‑prone and hard to scale.
+
+    diagram: |
+      graph TD
+        A[CodeCommit] --> B[CodePipeline]
+        B --> C[CodeBuild]
+        C --> D[CodeDeploy (Staging)]
+        D --> E[Manual Approval]
+        E --> F[CodeDeploy (Prod)]
+
+  # 11. AWS Budgets
+  - id: q_devops_11
+    type: multiple_choice
+    question: |
+      A company wants to monitor AWS spending and receive alerts when the monthly cost for a specific account or service exceeds a predefined threshold. The team also wants to define budgets that cover forecasted usage, not just actual spend.
+      Which combination of AWS features should a solutions architect implement? (Choose two.)
+    options:
+      - text: Create AWS Budgets for the account or service to set cost or usage thresholds and configure SNS notifications when the budget is exceeded.
+        is_correct: true
+      - text: Use AWS Budgets with forecasted cost options so that the company can receive alerts even before the actual spend reaches the threshold, based on usage trends.
+        is_correct: true
+      - text: Rely on a custom script that polls AWS Cost and Usage Reports once a month and parses the CSV to estimate if the account is over budget.
+        is_correct: false
+      - text: Ignore AWS Budgets entirely and assume that the AWS console cost‑summary charts are sufficient for controlling spending.
+        is_correct: false
+    explanation: |
+      Correct answers: Use AWS Budgets plus forecasted budgets. Budgets let you set monthly ceilings and notify SNS when thresholds are breached, and forecasting helps catch overspending early.
+
+      AWS Budgets lets you create cost or usage budgets for accounts, services, or tags and sends alerts when thresholds are crossed, enabling proactive cost control.
+
+      Incorrect: A manual CSV‑based script is late, brittle, and hard to maintain. Console charts show history but do not prevent overruns with alerts and forecasts.
+
+    diagram: |
+      graph TD
+        A[Monthly Spend] --> B[AWS Budgets]
+        B --> C[Alert]
+        B --> D[SNS]
+
+  # 12. AWS Budgets - Hands On
+  - id: q_devops_12
+    type: multiple_choice
+    question: |
+      A company has multiple AWS accounts in AWS Organizations and wants to centralize cost‑control rules for development, test, and production accounts. Finance wants to enforce different budget thresholds for each environment and receive consolidated alerts.
+      Which combination of AWS features and practices should a solutions architect implement? (Choose two.)
+    options:
+      - text: Create AWS Budgets at the Organizations level or per account, using linked accounts and tags to define environment‑specific limits for dev, test, and prod.
+        is_correct: true
+      - text: Route budget alerts through a central Amazon SNS topic that forwards messages to finance and operations teams, avoiding per‑account notification sprawl.
+        is_correct: true
+      - text: Let each team manage its own spreadsheets to track AWS spending instead of relying on AWS Budgets, assuming that spreadsheets are “more flexible.”
+        is_correct: false
+      - text: Configure AWS Budgets only for the master account and ignore budgets for individual member accounts, assuming that high‑level totals are enough.
+        is_correct: false
+    explanation: |
+      Correct answers: Use Organizations‑aligned AWS Budgets plus a centralized SNS topic. This lets you set different caps per environment and deliver alerts to the right stakeholders from a single flow.
+
+      AWS Budgets - Hands On means actually configuring per‑account or per‑tag budgets, testing alert routing, and tuning thresholds based on real usage patterns.
+
+      Incorrect: Spreadsheets are manual and error‑prone; they defeat automation. Only budgeting at the master‑account level hides overspending at the team or project level.
+
+    diagram: |
+      graph TD
+        A[Org Accounts] --> B[Per-Account Budgets]
+        B --> C[Tagged Envs]
+        C --> D[Central SNS]
+        D --> E[Finance/Ops]
+
+  # 13. AWS Cost Explorer
+  - id: q_devops_13
+    type: multiple_choice
+    question: |
+      A company wants to analyze AWS spending over the last 12 months, identify cost‑driving services and accounts, and forecast future costs to support budget approvals. The team wants an interactive visualization experience inside AWS.
+      Which combination of AWS features should a solutions architect implement? (Choose two.)
+    options:
+      - text: Use AWS Cost Explorer to visualize cost and usage data by service, linked account, and custom tags, and drill down into specific time periods and regions.
+        is_correct: true
+      - text: Create custom cost and usage reports and set up forecasts for the next few months using Cost Explorer so that the finance team can justify budget requests.
+        is_correct: true
+      - text: Download raw billing data once a year and analyze it in a local spreadsheet to avoid learning another AWS console.
+        is_correct: false
+      - text: Assume that the monthly AWS bill PDF is enough for detailed cost analysis and skip using any AWS‑native visualization tools.
+        is_correct: false
+    explanation: |
+      Correct answers: Use AWS Cost Explorer plus its forecasting and custom views. Cost Explorer lets you filter, graph, and project costs by multiple dimensions, making it ideal for reporting and forecasting.
+
+      AWS Cost Explorer is an interactive visualization tool that shows historical cost and usage data and can project future costs, helping you identify trends and drivers.
+
+      Incorrect: Yearly, manual spreadsheet analysis is slow and reactive. The PDF bill lacks interactivity and dimensionality for deep analysis.
+
+    diagram: |
+      graph TD
+        A[Cost & Usage Data] --> B[Cost Explorer]
+        B --> C[Graphs by Service]
+        B --> D[Forecast]
+        D --> E[Finance Approval]
+
+  # 14. Amazon API Gateway
+  - id: q_devops_14
+    type: multiple_choice
+    question: |
+      A company runs multiple backend services on AWS Lambda, EC2, and containers and wants to expose them behind a single API endpoint with common security, throttling, and logging controls. The company also wants to version and stage APIs for development, test, and production.
+      Which combination of AWS features should a solutions architect implement? (Choose two.)
+    options:
+      - text: Use Amazon API Gateway to define REST or HTTP APIs that route requests to Lambda, EC2, or containerized services and enforce authorization, throttling, and logging for all endpoints.
+        is_correct: true
+      - text: Create separate API stages (for example, dev, test, prod) in API Gateway so that the same API specification can be deployed to multiple environments with different backend configurations.
+        is_correct: true
+      - text: Expose each backend service on a public EC2‑level DNS name and let clients discover and call them directly, without any API gateway layer.
+        is_correct: false
+      - text: Hard‑code API endpoints and security checks in each client application instead of centralizing them in API Gateway.
+        is_correct: false
+    explanation: |
+      Correct answers: Use API Gateway as the single API layer plus stages for environment separation. API Gateway provides a unified entry point, authentication, rate limiting, and logging, while stages let you deploy the same API spec to dev/test/prod safely.
+
+      Amazon API Gateway is a fully managed service that creates, publishes, maintains, and secures APIs at scale, routing requests to AWS backends and external services.
+
+      Incorrect: Exposing backends directly increases attack surface and makes security and throttling harder to manage. Client‑side hard‑coding couples clients to specific endpoints.
+
+    diagram: |
+      graph TD
+        A[Client] --> B[API Gateway]
+        B --> C[dev Stage]
+        B --> D[test Stage]
+        B --> E[prod Stage]
+        C --> F[Lambda/EC2]
+
+  # 15. Amazon API Gateway - Hands On
+  - id: q_devops_15
+    type: multiple_choice
+    question: |
+      A company has deployed APIs in Amazon API Gateway but wants to improve security, observability, and maintenance. The team wants to require API keys, enforce rate limits, and monitor usage patterns over time.
+      Which combination of AWS practices should a solutions architect implement? (Choose two.)
+    options:
+      - text: Enable API keys and usage plans in API Gateway so that callers must provide a valid key and are subject to rate and quota limits.
+        is_correct: true
+      - text: Enable CloudWatch Logs and CloudWatch Metrics for API Gateway and use dashboards to track request counts, latency, and error rates over time.
+        is_correct: true
+      - text: Allow all API methods to be public and anonymous, assuming that the backend services will handle all security and throttling.
+        is_correct: false
+      - text: Disable API Gateway logging and metrics to reduce costs and assume that backend logs alone are sufficient for monitoring.
+        is_correct: false
+    explanation: |
+      Correct answers: Use API keys/usage plans plus CloudWatch logs and metrics. This lets you control who calls the API, how often, and how much, while measuring performance and errors at the gateway layer.
+
+      Amazon API Gateway - Hands On focuses on configuring API keys, throttling, authorization, and logging so that the API is secure, observable, and easy to maintain.
+
+      Incorrect: Public, anonymous APIs expose rate‑limit‑bypass risks. Disabling gateway‑level observability hides important traffic insights and errors.
+
+    diagram: |
+      graph TD
+        A[Client] --> B[API Gateway]
+        B --> C[API Key / Throttle]
+        B --> D[CloudWatch Logs/Metrics]
+        B --> E[Backend Service]

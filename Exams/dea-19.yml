@@ -1,0 +1,280 @@
+﻿questions:
+  - id: net1
+    topic: "VPC, Subnets, Internet Gateway, NAT Gateway"
+    type: multiple_choice
+    question: |
+      You have an EC2 instance in a private subnet that needs to download security patches from the internet. The instance must not be reachable from the internet. 
+      Which component should you deploy in a public subnet to allow this?
+    options:
+      - text: "NAT Gateway."
+        is_correct: true
+      - text: "Internet Gateway."
+        is_correct: false
+      - text: "VPC Peering."
+        is_correct: false
+      - text: "Egress-Only Internet Gateway."
+        is_correct: false
+    explanation: |
+      Correct: A NAT Gateway allows instances in a private subnet to connect to the internet while preventing the internet from initiating a connection with those instances.
+    tags: [VPC, Networking]
+
+  - id: net2
+    topic: "NACL, Security Groups, VPC Flow Logs"
+    type: multiple_choice
+    question: |
+      Which of the following statements correctly describes a difference between Security Groups and Network ACLs (NACLs)?
+    options:
+      - text: "Security Groups are stateful (return traffic is allowed), while NACLs are stateless (return traffic must be explicitly allowed)."
+        is_correct: true
+      - text: "Security Groups act at the subnet level, while NACLs act at the instance level."
+        is_correct: false
+      - text: "Security Groups support 'Deny' rules, while NACLs only support 'Allow' rules."
+        is_correct: false
+      - text: "There is no difference; they are redundant layers."
+        is_correct: false
+    explanation: |
+      Correct: Security Groups track the state of connections. NACLs require explicit rules for both inbound and outbound traffic.
+    tags: [Security, VPC]
+
+  - id: net3
+    topic: "VPC Peering, Endpoints, VPN, Direct Connect"
+    type: multiple_choice
+    question: |
+      A company wants a dedicated, private, and high-bandwidth physical network connection from their on-premises data center to AWS. 
+      Which service should they use?
+    options:
+      - text: "AWS Direct Connect."
+        is_correct: true
+      - text: "AWS Site-to-Site VPN."
+        is_correct: false
+      - text: "VPC Endpoint Services."
+        is_correct: false
+      - text: "AWS Transit Gateway."
+        is_correct: false
+    explanation: |
+      Correct: Direct Connect provides a physical fiber connection that bypasses the public internet for consistent performance.
+    tags: [Hybrid, Networking]
+
+  - id: net4
+    topic: "Amazon Route 53"
+    type: multiple_choice
+    question: |
+      You want to route traffic to the AWS region with the lowest latency for your end users. 
+      Which Route 53 routing policy should you select?
+    options:
+      - text: "Latency Routing Policy."
+        is_correct: true
+      - text: "Geolocation Routing Policy."
+        is_correct: false
+      - text: "Weighted Routing Policy."
+        is_correct: false
+      - text: "Failover Routing Policy."
+        is_correct: false
+    explanation: |
+      Correct: Latency routing directs users to the region that provides the fastest response time based on network round-trip measurements.
+    tags: [DNS, Route53]
+
+  - id: net5
+    topic: "Amazon CloudFront"
+    type: multiple_choice
+    question: |
+      A global media company wants to reduce the latency for users downloading video files stored in S3. 
+      Which service provides a network of edge locations to cache this content closer to users?
+    options:
+      - text: "Amazon CloudFront."
+        is_correct: true
+      - text: "Amazon Route 53."
+        is_correct: false
+      - text: "AWS Global Accelerator."
+        is_correct: false
+      - text: "S3 Transfer Acceleration."
+        is_correct: false
+    explanation: |
+      Correct: CloudFront is a Content Delivery Network (CDN) that caches data at Edge Locations worldwide.
+    tags: [CDN, CloudFront]
+
+  - id: net6
+    topic: "Amazon CloudFront - Cache Invalidation"
+    type: multiple_choice
+    question: |
+      You updated an image in your S3 bucket, but users are still seeing the old version via CloudFront. 
+      What is the fastest way to force CloudFront to distribute the new version?
+    options:
+      - text: "Create a CloudFront Invalidation for the specific object path."
+        is_correct: true
+      - text: "Delete the CloudFront Distribution and recreate it."
+        is_correct: false
+      - text: "Wait for the TTL (Time to Live) to expire."
+        is_correct: false
+      - text: "Rename the S3 bucket."
+        is_correct: false
+    explanation: |
+      Correct: Invalidation removes the object from edge caches before the TTL expires.
+    tags: [CloudFront, DevOps]
+
+  - id: gov1
+    topic: "Amazon CloudWatch - Metrics"
+    type: multiple_choice
+    question: |
+      By default, CloudWatch receives metrics from EC2 every 5 minutes. You need to see metrics every 1 minute for a critical application. 
+      What should you enable?
+    options:
+      - text: "Detailed Monitoring."
+        is_correct: true
+      - text: "Basic Monitoring."
+        is_correct: false
+      - text: "High-Resolution Alarms."
+        is_correct: false
+      - text: "VPC Flow Logs."
+        is_correct: false
+    explanation: |
+      Correct: Detailed monitoring increases the frequency of metric data reported to CloudWatch to 1-minute intervals.
+    tags: [Monitoring, CloudWatch]
+
+  - id: gov2
+    topic: "Amazon CloudWatch - Alarms"
+    type: multiple_choice
+    question: |
+      You want to automatically stop an EC2 instance if its CPU utilization stays below 10% for over an hour to save costs. 
+      What can perform this action?
+    options:
+      - text: "CloudWatch Alarms with EC2 Actions."
+        is_correct: true
+      - text: "AWS Config Rules."
+        is_correct: false
+      - text: "CloudTrail Insights."
+        is_correct: false
+      - text: "AWS Trusted Advisor."
+        is_correct: false
+    explanation: |
+      Correct: CloudWatch Alarms can trigger EC2 actions like Stop, Terminate, Reboot, or Recover.
+    tags: [CloudWatch, Automation]
+
+  - id: gov3
+    topic: "Amazon CloudTrail"
+    type: multiple_choice
+    question: |
+      An unauthorized user deleted a production database. Which service would you check to find out 'who' performed the API call and 'when'?
+    options:
+      - text: "AWS CloudTrail."
+        is_correct: true
+      - text: "Amazon CloudWatch."
+        is_correct: false
+      - text: "AWS Config."
+        is_correct: false
+      - text: "AWS Trusted Advisor."
+        is_correct: false
+    explanation: |
+      Correct: CloudTrail records a history of API calls made within your AWS account for auditing and security.
+    tags: [Auditing, CloudTrail]
+
+  - id: gov4
+    topic: "AWS Config"
+    type: multiple_choice
+    question: |
+      Which service would you use to track how the configuration of an EBS volume has changed over time and check if it complies with company policy?
+    options:
+      - text: "AWS Config."
+        is_correct: true
+      - text: "AWS CloudFormation."
+        is_correct: false
+      - text: "Amazon CloudWatch Logs."
+        is_correct: false
+      - text: "AWS Systems Manager."
+        is_correct: false
+    explanation: |
+      Correct: AWS Config provides a detailed inventory and history of configuration changes for your AWS resources.
+    tags: [Compliance, Config]
+
+  - id: gov5
+    topic: "CloudWatch vs. CloudTrail vs. Config"
+    type: multiple_choice
+    question: |
+      Which service is best suited for 'Performance Monitoring', 'API Auditing', and 'Resource Compliance' respectively?
+    options:
+      - text: "CloudWatch, CloudTrail, Config."
+        is_correct: true
+      - text: "Config, CloudWatch, CloudTrail."
+        is_correct: false
+      - text: "CloudTrail, Config, CloudWatch."
+        is_correct: false
+      - text: "CloudWatch, Config, CloudTrail."
+        is_correct: false
+    explanation: |
+      Correct: CloudWatch = Performance; CloudTrail = API activity; Config = Configuration/Compliance.
+    tags: [Management, Summary]
+
+  - id: gov6
+    topic: "AWS CloudFormation"
+    type: multiple_choice
+    question: |
+      You want to deploy an entire production environment (VPC, EC2, RDS) consistently across multiple AWS regions using code. 
+      Which service handles 'Infrastructure as Code'?
+    options:
+      - text: "AWS CloudFormation."
+        is_correct: true
+      - text: "AWS Elastic Beanstalk."
+        is_correct: false
+      - text: "AWS CodeDeploy."
+        is_correct: false
+      - text: "AWS Systems Manager."
+        is_correct: false
+    explanation: |
+      Correct: CloudFormation allows you to model and provision AWS resources using a declarative template (YAML or JSON).
+    tags: [IaC, CloudFormation]
+
+  - id: gov7
+    topic: "SSM Parameter Store"
+    type: multiple_choice
+    question: |
+      You need a secure, hierarchical storage for configuration data such as database strings and license codes. 
+      Which Systems Manager feature provides this?
+    options:
+      - text: "Parameter Store."
+        is_correct: true
+      - text: "Run Command."
+        is_correct: false
+      - text: "State Manager."
+        is_correct: false
+      - text: "Patch Manager."
+        is_correct: false
+    explanation: |
+      Correct: Parameter Store provides secure storage for configuration data and secrets management.
+    tags: [SystemsManager, Configuration]
+
+  - id: gov8
+    topic: "AWS Well-Architected Framework & Tool"
+    type: multiple_choice
+    question: |
+      Which of the following is NOT one of the six pillars of the AWS Well-Architected Framework?
+    options:
+      - text: "Marketing Optimization."
+        is_correct: true
+      - text: "Operational Excellence."
+        is_correct: false
+      - text: "Security."
+        is_correct: false
+      - text: "Sustainability."
+        is_correct: false
+    explanation: |
+      Correct: The pillars are Operational Excellence, Security, Reliability, Performance Efficiency, Cost Optimization, and Sustainability.
+    tags: [Architecture, Pillars]
+
+  - id: gov9
+    topic: "Amazon DataZone"
+    type: multiple_choice
+    question: |
+      A large enterprise needs a data management service to catalog, discover, and share data at scale across organizational boundaries. 
+      Which service should they use?
+    options:
+      - text: "Amazon DataZone."
+        is_correct: true
+      - text: "AWS Glue Data Catalog."
+        is_correct: false
+      - text: "Amazon Athena."
+        is_correct: false
+      - text: "AWS Lake Formation."
+        is_correct: false
+    explanation: |
+      Correct: DataZone is a data management service that makes it faster and easier for customers to catalog, discover, share, and govern data.
+    tags: [DataZone, Governance]

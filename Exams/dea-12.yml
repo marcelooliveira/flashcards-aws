@@ -1,0 +1,480 @@
+﻿questions:
+  - id: db1
+    topic: "Amazon DynamoDB"
+    type: multiple_choice
+    question: |
+      A gaming startup needs a database to store user profiles and session states. The workload is highly unpredictable, with sudden spikes when new features are released. They require sub-millisecond latency and a fully managed solution that scales storage and throughput automatically.
+      Which database service should the architect recommend?
+    options:
+      - text: "Amazon DynamoDB with On-Demand capacity mode."
+        is_correct: true
+      - text: "Amazon RDS for PostgreSQL with Multi-AZ enabled."
+        is_correct: false
+      - text: "Amazon ElastiCache for Memcached with Auto Scaling."
+        is_correct: false
+      - text: "Amazon Aurora Serverless v2 with Global Databases."
+        is_correct: false
+    explanation: |
+      Correct: DynamoDB is a NoSQL database providing consistent single-digit millisecond performance at any scale; On-Demand mode is perfect for unpredictable workloads.
+      Incorrect:
+        RDS PostgreSQL is relational and requires manual scaling of instance types for massive spikes, unlike the seamless scaling of DynamoDB.
+        ElastiCache is an in-memory store; while fast, it is not a primary durable database for persistent user profiles.
+        Aurora Serverless is a strong contender but generally has higher cold-start latency and overhead compared to the key-value efficiency of DynamoDB for simple profiles.
+    diagram: |
+      graph LR
+        A[Mobile App] --> B[API Gateway]
+        B --> C[Lambda]
+        C --> D[(DynamoDB On-Demand)]
+    tags: [NoSQL, Serverless]
+
+  - id: db2
+    topic: "Amazon DynamoDB - Hands On"
+    type: multiple_choice
+    question: |
+      A developer is creating a new table via the AWS Management Console. They need to define the schema for a 'ProductCatalog' table.
+      Which of the following must be explicitly defined during the table creation process in DynamoDB?
+    options:
+      - text: "The Attribute Name and Type for the Partition Key (and optional Sort Key)."
+        is_correct: true
+      - text: "All attribute names and their data types (String, Number, Boolean) for the entire table."
+        is_correct: false
+      - text: "The maximum storage limit in GB and the number of allowed concurrent connections."
+        is_correct: false
+      - text: "The VPC ID and Subnets where the DynamoDB nodes will be provisioned."
+        is_correct: false
+    explanation: |
+      Correct: DynamoDB is schema-less; you only define the Primary Key (Partition Key and Sort Key) at creation.
+      Incorrect:
+        You do not define non-key attributes in advance (schema-less).
+        DynamoDB has virtually unlimited storage and doesn't limit connections like a traditional SQL DB.
+        DynamoDB is a public regional service; it is not provisioned inside your VPC subnets (though VPC Endpoints can be used for access).
+    diagram: |
+      graph TD
+        A[Create Table] --> B[Define Table Name]
+        B --> C[Define Partition Key: PK]
+        C --> D[Define Sort Key: SK -Optional-]
+        D --> E[Provision Table]
+    tags: [Console, Schema]
+
+  - id: db3
+    topic: "Amazon DynamoDB in Big Data"
+    type: multiple_choice
+    question: |
+      A data engineering team is building a big data pipeline. They need to export massive amounts of DynamoDB data to an Amazon S3 bucket in Parquet format for analysis using Amazon Athena, without impacting the production table's performance.
+      What is the most efficient way to achieve this?
+    options:
+      - text: "Use the 'Export to S3' feature, which leverages DynamoDB continuous backups (PITR)."
+        is_correct: true
+      - text: "Write a Spark job on EMR to Scan the entire table and save the output to S3."
+        is_correct: false
+      - text: "Enable DynamoDB Streams and use a Lambda function to write every record to S3."
+        is_correct: false
+      - text: "Create an AWS Glue Crawler to read directly from the DynamoDB table and store it in S3."
+        is_correct: false
+    explanation: |
+      Correct: Export to S3 is a managed feature that doesn't consume RCU or affect table performance because it uses backup data.
+      Incorrect:
+        A full Scan consumes RCU and can throttle production traffic.
+        Streams/Lambda is for real-time changes, not for bulk historical export.
+        Glue reading directly from the table still consumes provisioned RCU.
+    diagram: |
+      graph LR
+        A[(DynamoDB)] --"PITR Backups"--> B[Internal Export Engine]
+        B --"Parquet/JSON"--> C[S3 Bucket]
+        C --> D[Amazon Athena]
+    tags: [Big Data, S3 Export]
+
+  - id: db4
+    topic: "Amazon DynamoDB - Throughput (RCU & WCU)"
+    type: multiple_choice
+    question: |
+      An application needs to perform 10 strongly consistent reads per second of items that are 8 KB in size.
+      How many Read Capacity Units (RCUs) should be provisioned for this table?
+    options:
+      - text: "20 RCUs"
+        is_correct: true
+      - text: "10 RCUs"
+        is_correct: false
+      - text: "40 RCUs"
+        is_correct: false
+      - text: "80 RCUs"
+        is_correct: false
+    explanation: |
+      Correct: One RCU handles 1 strongly consistent read/sec for 4KB. 8KB requires 2 RCUs. 10 reads * 2 RCUs = 20.
+      Incorrect:
+        10 RCUs would only work for 4KB items.
+        40 RCUs would be the calculation for 16KB items or if the math was doubled incorrectly.
+        80 RCUs is significantly over-provisioned.
+    diagram: |
+      graph TD
+        A[10 Reads/sec] --> B{Strongly Consistent?}
+        B --Yes--> C[1 RCU per 4KB]
+        C --> D[8KB / 4KB = 2 RCUs per item]
+        D --> E[10 * 2 = 20 RCUs]
+    tags: [Capacity, Math]
+
+  - id: db5
+    topic: "Amazon DynamoDB - Throughput (RCU & WCU) - Hands On"
+    type: multiple_choice
+    question: |
+      During a load test, a developer observes 'ProvisionedThroughputExceededException' errors on a table configured with 500 WCUs. The CloudWatch metrics show that the total consumed WCU is only 200.
+      What is the most likely cause of this throttling?
+    options:
+      - text: "The table has a 'Hot Key' issue where most writes are hitting a single partition."
+        is_correct: true
+      - text: "The table has reached the maximum storage limit for a single DynamoDB table."
+        is_correct: false
+      - text: "The developer forgot to enable 'Auto-Scaling' in the DynamoDB settings."
+        is_correct: false
+      - text: "The items being written are larger than 1 KB, causing the WCU count to double."
+        is_correct: false
+    explanation: |
+      Correct: Throttling can happen even if total WCU is low if one partition exceeds its 1,000 WCU limit (Hot Key).
+      Incorrect:
+        DynamoDB has no storage limit that would cause throughput throttling.
+        Auto-scaling prevents total limit issues, but doesn't fix partition-level hot keys.
+        Larger items would increase 'Consumed WCU' in metrics, but the user sees low consumption.
+    diagram: |
+      graph TD
+        A[Traffic] --> B[Partition 1 -HOT-]
+        A --> C[Partition 2]
+        A --> D[Partition 3]
+        B --"Exceeds 1000 WCU"--> E[Throttle Error]
+    tags: [Throttling, Hot Key]
+
+  - id: db6
+    topic: "Amazon DynamoDB - Basic APIs"
+    type: multiple_choice
+    question: |
+      A developer needs to retrieve 50 specific items from a DynamoDB table using their Primary Keys. What is the most efficient API call to retrieve these items in a single request?
+    options:
+      - text: "BatchGetItem"
+        is_correct: true
+      - text: "Scan"
+        is_correct: false
+      - text: "Query"
+        is_correct: false
+      - text: "TransactGetItems"
+        is_correct: false
+    explanation: |
+      Correct: BatchGetItem allows retrieving up to 100 items by primary key across one or more tables in one call.
+      Incorrect:
+        Scan reads the entire table, which is extremely inefficient for specific keys.
+        Query is used to find items sharing the same Partition Key but with different Sort Keys.
+        TransactGetItems is for atomic operations and has higher latency/cost than BatchGetItem.
+    diagram: |
+      graph LR
+        A[App] --"BatchGetItem PK1, PK2... PK50"--> B[(DynamoDB)]
+        B --"List of Items"--> A
+    tags: [API, Performance]
+
+  - id: db7
+    topic: "Amazon DynamoDB - Basic APIs - Hands On"
+    type: multiple_choice
+    question: |
+      When using the 'UpdateItem' API, a developer wants to ensure that an attribute 'StockLevel' is only decremented if its current value is greater than zero.
+      How can this be implemented?
+    options:
+      - text: "Use a Condition Expression: 'attribute_exists(StockLevel) AND StockLevel > :zero'."
+        is_correct: true
+      - text: "Use a Key Condition Expression to filter the Partition Key before updating."
+        is_correct: false
+      - text: "Perform a GetItem first, check the value in code, and then call PutItem."
+        is_correct: false
+      - text: "Enable 'Optimistic Locking' in the DynamoDB table configuration settings."
+        is_correct: false
+    explanation: |
+      Correct: Condition Expressions allow for atomic server-side checks before performing the write.
+      Incorrect:
+        Key Condition Expressions are for Queries, not for update logic.
+        Read-then-write (GetItem then PutItem) is prone to race conditions (not atomic).
+        Optimistic Locking is implemented client-side (usually via Version numbers), not a console toggle.
+    diagram: |
+      graph TD
+        A[Request: Update Stock] --> B{Condition: Stock > 0}
+        B --Pass--> C[Update Successful]
+        B --Fail--> D[ConditionalCheckFailedException]
+    tags: [API, Conditions]
+
+  - id: db8
+    topic: "Amazon DynamoDB - Indexes (LSI & GSI)"
+    type: multiple_choice
+    question: |
+      A company has a 'Orders' table with 'OrderID' as the Partition Key. They need to query orders by 'CustomerID' and also by 'OrderDate'. The 'CustomerID' queries need to be eventually consistent and work across all partitions.
+      Which index should be created?
+    options:
+      - text: "A Global Secondary Index (GSI) with 'CustomerID' as the Partition Key."
+        is_correct: true
+      - text: "A Local Secondary Index (LSI) with 'CustomerID' as the Sort Key."
+        is_correct: false
+      - text: "A GSI with 'OrderDate' as the Partition Key and 'CustomerID' as the Sort Key."
+        is_correct: false
+      - text: "A Primary Index modification to include 'CustomerID' in the partition schema."
+        is_correct: false
+    explanation: |
+      Correct: GSIs allow querying across the whole table with a new Partition Key and are eventually consistent.
+      Incorrect:
+        LSIs require the same Partition Key as the base table (OrderID), so you couldn't query by CustomerID alone.
+        Adding OrderDate as PK for the CustomerID query doesn't solve the specific need to query by CustomerID.
+        You cannot modify the Primary Index of an existing DynamoDB table.
+    diagram: |
+      graph LR
+        subgraph Base Table
+          A[OrderID -PK-]
+        end
+        subgraph GSI
+          B[CustomerID -New PK-] --> A
+        end
+    tags: [Indexes, GSI]
+
+  - id: db9
+    topic: "Amazon DynamoDB - Indexes (LSI & GSI) - Hands On"
+    type: multiple_choice
+    question: |
+      A developer is trying to add a Local Secondary Index (LSI) to a DynamoDB table that was created several months ago. The AWS Console does not provide an option to add the LSI.
+      What is the reason for this?
+    options:
+      - text: "LSIs can only be created at the same time the table is created."
+        is_correct: true
+      - text: "The table must first be converted to 'Global Table' mode to support LSIs."
+        is_correct: false
+      - text: "The developer needs to increase the provisioned RCU to allow for index replication."
+        is_correct: false
+      - text: "LSIs are only supported on tables that do not have a Sort Key."
+        is_correct: false
+    explanation: |
+      Correct: Unlike GSIs, LSIs are immutable and must be defined during initial table creation.
+      Incorrect:
+        Global Tables relate to multi-region replication, not index types.
+        Throughput limits don't prevent the visibility of the feature, only its performance.
+        LSIs actually *require* a table to have a Sort Key (Composite Key) to exist.
+    diagram: |
+      graph TD
+        A[Table Creation] --"Define LSI"--> B[Success]
+        C[Existing Table] --"Try Add LSI"--> D[Not Supported]
+        C --"Try Add GSI"--> E[Success]
+    tags: [LSI, Constraints]
+
+  - id: db10
+    topic: "Amazon DynamoDB - PartiQL"
+    type: multiple_choice
+    question: |
+      A team of SQL developers wants to interact with DynamoDB using a familiar syntax like 'SELECT', 'INSERT', and 'UPDATE' instead of using the standard AWS SDK method calls.
+      Which DynamoDB feature provides this capability?
+    options:
+      - text: "PartiQL"
+        is_correct: true
+      - text: "DynamoDB SQL-Proxy"
+        is_correct: false
+      - text: "Amazon Athena Federated Query"
+        is_correct: false
+      - text: "DynamoDB Accelerator (DAX) SQL Engine"
+        is_correct: false
+    explanation: |
+      Correct: PartiQL is a SQL-compatible query language for Amazon DynamoDB.
+      Incorrect:
+        'DynamoDB SQL-Proxy' does not exist as an AWS service.
+        Athena can query DynamoDB but it's for analytics, not for primary application CRUD operations.
+        DAX is a cache and does not change the API language to SQL.
+    diagram: |
+      graph LR
+        A[Developer] --"SELECT * FROM Users WHERE ID=1"--> B[PartiQL Engine]
+        B --> C[(DynamoDB)]
+    tags: [PartiQL, SQL]
+
+  - id: db11
+    topic: "Amazon DynamoDB Accelerator (DAX)"
+    type: multiple_choice
+    question: |
+      A high-traffic weather application experiences millions of 'GetItem' requests for the same few static weather data items. The company wants to reduce DynamoDB costs and achieve microsecond response times.
+      Which solution is most appropriate?
+    options:
+      - text: "Deploy a DynamoDB Accelerator (DAX) cluster in front of the table."
+        is_correct: true
+      - text: "Increase the provisioned RCU and enable 'Read Replication'."
+        is_correct: false
+      - text: "Use Amazon ElastiCache for Redis and implement 'write-through' logic in the app."
+        is_correct: false
+      - text: "Enable 'Eventually Consistent' reads to reduce the RCU cost by 50%."
+        is_correct: false
+    explanation: |
+      Correct: DAX is a managed, highly available, in-memory cache for DynamoDB that delivers microsecond latency.
+      Incorrect:
+        Increasing RCU increases costs; DAX reduces the need for high RCU on the base table.
+        ElastiCache works but requires significant application code changes; DAX is API-compatible with DynamoDB.
+        Eventually consistent reads reduce cost but only provide millisecond (not microsecond) latency.
+    diagram: |
+      graph LR
+        A[App] --"GetItem"--> B[DAX Cache]
+        B --"Cache Hit"--> A
+        B --"Cache Miss"--> C[(DynamoDB)]
+    tags: [DAX, Caching]
+
+  - id: db12
+    topic: "Amazon DynamoDB Accelerator (DAX) - Hands On"
+    type: multiple_choice
+    question: |
+      A developer is migrating an application to use DAX. They have updated the application code to use the DAX SDK instead of the standard DynamoDB SDK.
+      What other configuration change is required to allow the application to reach the DAX cluster?
+    options:
+      - text: "Ensure the application is running within the same VPC as the DAX cluster and the Security Group allows access."
+        is_correct: true
+      - text: "Change the DynamoDB Table Endpoint URL in the AWS Console to the DAX Cluster endpoint."
+        is_correct: false
+      - text: "Enable 'Public Access' on the DAX cluster settings to allow the SDK to connect over the internet."
+        is_correct: false
+      - text: "Update the IAM Role of the DynamoDB table to include 'AllowDAX:Connect' permissions."
+        is_correct: false
+    explanation: |
+      Correct: DAX is a VPC-based service; the client must have network access to the DAX nodes via VPC routing and Security Groups.
+      Incorrect:
+        You don't change the table endpoint in the console; you change the endpoint in the application's SDK client.
+        DAX does not support public internet endpoints for security reasons.
+        IAM permissions are applied to the application role, not to the table's role.
+    diagram: |
+      graph LR
+        subgraph VPC
+          A[App on EC2] --"Port 8111"--> B[DAX Cluster]
+          B --> C[(DynamoDB)]
+        end
+    tags: [DAX, Networking]
+
+  - id: db13
+    topic: "Amazon DynamoDB - Streams"
+    type: multiple_choice
+    question: |
+      A company needs to implement a feature where a welcome email is sent to a user immediately after their profile is created in a DynamoDB table.
+      Which architecture provides the most decoupled and reliable solution?
+    options:
+      - text: "Enable DynamoDB Streams and trigger an AWS Lambda function to send the email."
+        is_correct: true
+      - text: "Have the application code call Amazon SES immediately after the DynamoDB PutItem call."
+        is_correct: false
+      - text: "Use a CloudWatch Alarm to monitor the 'PutItem' metric and trigger a Lambda function."
+        is_correct: false
+      - text: "Set up a Kinesis Data Firehose to stream all table data to a custom email-sending application."
+        is_correct: false
+    explanation: |
+      Correct: DynamoDB Streams capture change events (inserts/updates/deletes) and can trigger Lambda for event-driven processing.
+      Incorrect:
+        App-side calls (SES after PutItem) create tight coupling and if the email call fails, the database write can't be easily undone.
+        CloudWatch metrics don't contain the item data (like the user's email address).
+        Firehose is for bulk delivery, not for immediate individual event triggers like sending an email.
+    diagram: |
+      graph LR
+        A[(DynamoDB)] --"Insert Event"--> B[DynamoDB Stream]
+        B --> C[Lambda]
+        C --> D[Amazon SES]
+    tags: [Streams, Event-Driven]
+
+  - id: db14
+    topic: "Amazon DynamoDB - Streams - Hands On"
+    type: multiple_choice
+    question: |
+      When enabling DynamoDB Streams, a developer is asked to choose the 'StreamViewType'. They need to see the state of the item as it was *before* the update and as it is *after* the update.
+      Which option should they select?
+    options:
+      - text: "New and old images"
+        is_correct: true
+      - text: "New image only"
+        is_correct: false
+      - text: "Keys only"
+        is_correct: false
+      - text: "Modified attributes only"
+        is_correct: false
+    explanation: |
+      Correct: 'New and old images' includes both the entire item before the change and the entire item after the change.
+      Incorrect:
+        'New image only' would miss the previous state.
+        'Keys only' only shows the PK/SK, which is not enough to see attribute changes.
+        'Modified attributes' is not a valid StreamViewType in DynamoDB.
+    diagram: |
+      graph TD
+        A[Update Item] --> B{Stream View Type}
+        B --"New and Old"--> C[Old Item Image]
+        B --"New and Old"--> D[New Item Image]
+    tags: [Streams, Configuration]
+
+  - id: db15
+    topic: "Amazon DynamoDB - Time To Live (TTL)"
+    type: multiple_choice
+    question: |
+      A digital advertising company needs to store temporary session tokens that should automatically expire and be deleted after 2 hours to keep the table size manageable and reduce costs.
+      What is the most efficient way to implement this?
+    options:
+      - text: "Enable TTL on the table and store the expiration timestamp (in Epoch seconds) in a specific attribute."
+        is_correct: true
+      - text: "Create a Lambda function scheduled by EventBridge to Scan the table and delete old items."
+        is_correct: false
+      - text: "Set the 'ItemExpiration' parameter in the PutItem API call to 7200 seconds."
+        is_correct: false
+      - text: "Use an LSI on a timestamp attribute and periodically delete the entire index."
+        is_correct: false
+    explanation: |
+      Correct: TTL is a free feature that automatically deletes items based on a timestamp attribute without consuming RCU.
+      Incorrect:
+        Scanning and deleting manually via Lambda/EventBridge consumes RCU and is complex to manage.
+        There is no 'ItemExpiration' parameter in the standard PutItem API.
+        You cannot delete an LSI without deleting the whole table, and indices don't manage expiration.
+    diagram: |
+      graph LR
+        A[Item: {exp_time: 1710000000}] --> B[(DynamoDB TTL Engine)]
+        B --"Time reaches 1710000000"--> C[Item Deleted]
+        C --"Event"--> D[DynamoDB Stream -Optional-]
+    tags: [TTL, Cost-Optimization]
+
+  - id: db16
+    topic: "Amazon DynamoDB - Patterns with S3"
+    type: multiple_choice
+    question: |
+      An application needs to store user metadata in DynamoDB, including a profile picture. Some profile pictures are larger than 400 KB, exceeding the DynamoDB item size limit.
+      What is the recommended architectural pattern?
+    options:
+      - text: "Store the picture in Amazon S3 and store the S3 Object URL in a DynamoDB attribute."
+        is_correct: true
+      - text: "Compress the picture using Base64 encoding before storing it as a Binary attribute."
+        is_correct: false
+      - text: "Split the picture into multiple 400 KB chunks and store them as a List in DynamoDB."
+        is_correct: false
+      - text: "Increase the 'MaxItemSize' setting in the DynamoDB table properties to 2 MB."
+        is_correct: false
+    explanation: |
+      Correct: Storing large blobs in S3 and metadata in DynamoDB is the standard 'sidecar' pattern for handling large items.
+      Incorrect:
+        Base64 encoding actually increases the size of the data by ~33%.
+        Splitting chunks is complex to reconstruct and expensive in terms of RCU/WCU.
+        DynamoDB has a hard limit of 400 KB per item that cannot be increased.
+    diagram: |
+      graph LR
+        A[User] --"Upload Pic"--> B[S3 Bucket]
+        A --"Save Meta"--> C[(DynamoDB)]
+        C --"Contains Pointer"--> B
+    tags: [S3, Design-Patterns]
+
+  - id: db17
+    topic: "Amazon DynamoDB - Security"
+    type: multiple_choice
+    question: |
+      A financial company requires that developers can only access items in a DynamoDB table where the Partition Key (EmployeeID) matches their own unique IAM 'sub' identifier.
+      How can this fine-grained access control be implemented?
+    options:
+      - text: "Use an IAM Policy with a Condition 'dynamodb:LeadingKeys' set to the user's ID."
+        is_correct: true
+      - text: "Encrypt the table using a customer-managed KMS key that only certain users can access."
+        is_correct: false
+      - text: "Create a separate DynamoDB table for every single employee to ensure isolation."
+        is_correct: false
+      - text: "Enable VPC Endpoints and restrict access based on the source IP of the developer."
+        is_correct: false
+    explanation: |
+      Correct: 'LeadingKeys' is a specific IAM condition for DynamoDB that allows users to access only items with a specific Partition Key.
+      Incorrect:
+        KMS encryption protects data at rest but doesn't provide item-level access control logic.
+        Creating thousands of tables is an operational nightmare and not a recommended practice.
+        Source IP restriction is a network security layer, not a data-level authorization layer.
+    diagram: |
+      graph TD
+        A[User: ID_123] --> B{IAM Policy Check}
+        B --"PK == ID_123?"--> C[Allow]
+        B --"PK == ID_999?"--> D[Deny]
+    tags: [Security, IAM]

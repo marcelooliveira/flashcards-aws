@@ -1,0 +1,694 @@
+﻿questions:
+  - id: rds1
+    topic: "Amazon RDS"
+    type: multiple_choice
+    question: |
+      A company is migrating its legacy MySQL database to Amazon RDS. They require high availability and automatic failover across multiple data centers to ensure business continuity during an outage.
+      Which feature should the solutions architect enable?
+    options:
+      - text: "Enable Multi-AZ deployment to create a synchronous standby replica in a different Availability Zone."
+        is_correct: true
+      - text: "Create a Read Replica in a different Region and configure it as the primary failover target."
+        is_correct: false
+      - text: "Configure an Amazon S3 bucket to store continuous binary log exports for manual recovery."
+        is_correct: false
+      - text: "Use Amazon EC2 Auto Scaling groups to manage the database instances across subnets."
+        is_correct: false
+    explanation: |
+      Correct: Multi-AZ provides synchronous replication and automated failover, which is the standard for high availability in RDS.
+      Incorrect:
+        Read Replicas are for scaling reads, and cross-region failover is manual and asynchronous.
+        S3 exports are for backups, not real-time high availability.
+        RDS is a managed service; users do not manage the underlying instances with Auto Scaling groups.
+    diagram: |
+      graph LR
+        A[Primary DB - AZ1] --"Sync Replication"--> B[Standby DB - AZ2]
+        C[App Server] --"Writes to"--> A
+        A --"Failure"--> D[Automatic DNS Failover to B]
+    tags: [RDS, HA]
+
+  - id: rds2
+    topic: "Shared and exclusive locks in RDS"
+    type: multiple_choice
+    question: |
+      A developer is troubleshooting performance issues in an RDS PostgreSQL database. They notice that long-running 'SELECT' queries are preventing 'UPDATE' operations on the same table, causing application timeouts.
+      What is the likely cause of this locking behavior?
+    options:
+      - text: "The SELECT query has acquired a Shared Lock (AccessShareLock), and the UPDATE is waiting for an Exclusive Lock."
+        is_correct: true
+      - text: "The database is using Optimistic Locking, which prevents any reads during a write operation."
+        is_correct: false
+      - text: "The RDS instance has 'Lock Escalation' enabled, converting row locks into table-level locks."
+        is_correct: false
+      - text: "The UPDATE operation is blocked because the RDS instance is in 'ReadOnly' mode during a backup."
+        is_correct: false
+    explanation: |
+      Correct: In relational databases, DML operations (UPDATE) require exclusive locks that are incompatible with shared locks held by active queries.
+      Incorrect:
+        Optimistic locking is an application-level pattern, not a native DB engine locking mechanism.
+        RDS PostgreSQL does not perform 'Lock Escalation' from rows to tables like some other engines.
+        Backups in RDS (using multi-AZ or snapshots) do not put the primary DB in ReadOnly mode.
+    diagram: |
+      graph TD
+        A[Session 1: SELECT] --"Shared Lock"--> T[Table A]
+        B[Session 2: UPDATE] --"Needs Exclusive Lock"--> T
+        B --"WAIT"--> A
+    tags: [RDS, Locking]
+
+  - id: rds3
+    topic: "Amazon RDS Best Practices"
+    type: multiple_choice
+    question: |
+      An architect needs to optimize an RDS SQL Server instance that experiences high I/O wait times during peak hours. The database size is 5 TB and requires consistent performance.
+      Which best practice should be applied?
+    options:
+      - text: "Migrate the storage type to Provisioned IOPS (io1/io2) and use an 'RDS Optimized' instance type."
+        is_correct: true
+      - text: "Use General Purpose SSD (gp2) and rely on the burst credit balance for peak performance."
+        is_correct: false
+      - text: "Disable automated backups during peak hours to free up disk I/O bandwidth."
+        is_correct: false
+      - text: "Enable 'Auto Minor Version Upgrade' to ensure the database engine is patched for I/O bugs."
+        is_correct: false
+    explanation: |
+      Correct: Provisioned IOPS provides consistent, low-latency performance for large, I/O-intensive workloads.
+      Incorrect:
+        gp2/gp3 may run out of burst credits, leading to performance degradation.
+        Disabling backups is a security risk and doesn't solve the underlying storage throughput bottleneck.
+        Version upgrades are important but won't solve a hardware-level I/O capacity issue.
+    diagram: |
+      graph LR
+        A[App] --> B[RDS Instance]
+        B --"High Throughput"--> C[Provisioned IOPS Storage]
+    tags: [Best Practices, Storage]
+
+  - id: rds4
+    topic: "Amazon Aurora"
+    type: multiple_choice
+    question: |
+      A company requires a MySQL-compatible database that can scale read operations across 15 replicas and provides a self-healing storage system that replicates data 6 times across 3 Availability Zones.
+      Which service is the best fit?
+    options:
+      - text: "Amazon Aurora"
+        is_correct: true
+      - text: "Amazon RDS for MySQL"
+        is_correct: false
+      - text: "Amazon DocumentDB"
+        is_correct: false
+      - text: "Amazon Redshift"
+        is_correct: false
+    explanation: |
+      Correct: Aurora's unique storage architecture replicates data 6-ways and supports up to 15 low-latency read replicas.
+      Incorrect:
+        RDS MySQL only supports up to 5 read replicas and uses standard EBS replication (not 6-way).
+        DocumentDB is for MongoDB compatibility.
+        Redshift is an OLAP data warehouse, not an OLTP database.
+    diagram: |
+      graph TD
+        A[Aurora Master] --"6-way copy"--> B[Cluster Volume]
+        B --> C[AZ1]
+        B --> D[AZ2]
+        B --> E[AZ3]
+        A --> F[Up to 15 Replicas]
+    tags: [Aurora, Architecture]
+
+  - id: rds5
+    topic: "Amazon Aurora - Hands On"
+    type: multiple_choice
+    question: |
+      A developer is setting up an Aurora Cluster and needs to ensure that the application always connects to the current Writer instance, even after a failover occurs.
+      Which endpoint should the application use?
+    options:
+      - text: "The Cluster Endpoint."
+        is_correct: true
+      - text: "The Reader Endpoint."
+        is_correct: false
+      - text: "The Instance Endpoint of the primary node."
+        is_correct: false
+      - text: "The Public IP address of the DB subnet group."
+        is_correct: false
+    explanation: |
+      Correct: The Cluster Endpoint always points to the current primary (Writer) instance in an Aurora cluster.
+      Incorrect:
+        The Reader Endpoint balances traffic among the read-only replicas.
+        Instance Endpoints are static; if that specific instance fails or becomes a reader, the app will fail to write.
+        Subnet groups do not have IP addresses for database connectivity.
+    diagram: |
+      graph LR
+        App --"mydb.cluster-xyz.aws.com"--> ClusterEndpoint
+        ClusterEndpoint --"Points to"--> Writer[Primary Instance]
+        Writer --"Failover"--> NewWriter
+        ClusterEndpoint --"Updates to"--> NewWriter
+    tags: [Aurora, Endpoints]
+
+  - id: rds6
+    topic: "Aurora as a Vector Store with pgvector"
+    type: multiple_choice
+    question: |
+      An AI startup wants to store vector embeddings generated by an LLM in a relational database to perform semantic searches using RAG (Retrieval-Augmented Generation).
+      Which combination allows this in AWS?
+    options:
+      - text: "Amazon Aurora PostgreSQL with the pgvector extension enabled."
+        is_correct: true
+      - text: "Amazon Aurora MySQL with the Vector-Search plugin."
+        is_correct: false
+      - text: "Amazon Neptune using the Gremlin query language."
+        is_correct: false
+      - text: "Amazon Aurora Serverless v1 with a custom Python UDF."
+        is_correct: false
+    explanation: |
+      Correct: pgvector is a popular open-source extension supported by Aurora PostgreSQL for vector similarity searches.
+      Incorrect:
+        Aurora MySQL does not natively support pgvector or an equivalent robust vector search plugin yet.
+        Neptune is for graphs, though it has vector capabilities, Aurora PG is the standard "relational" choice.
+        Serverless v1 is legacy and doesn't support the latest extensions as efficiently as v2.
+    diagram: |
+      graph LR
+        A[User Query] --> B[Embedding Model]
+        B --"Vector"--> C[Aurora PG + pgvector]
+        C --"Cosine Similarity"--> D[Contextual Data]
+    tags: [AI, VectorSearch]
+
+  - id: rds7
+    topic: "Amazon DocumentDB"
+    type: multiple_choice
+    question: |
+      A company is migrating a MongoDB-based content management system to AWS. They want a fully managed, scalable, and highly available database that is compatible with their existing MongoDB drivers.
+      Which service should they use?
+    options:
+      - text: "Amazon DocumentDB (with MongoDB compatibility)."
+        is_correct: true
+      - text: "Amazon DynamoDB."
+        is_correct: false
+      - text: "Amazon Keyspaces."
+        is_correct: false
+      - text: "Amazon OpenSearch Service."
+        is_correct: false
+    explanation: |
+      Correct: DocumentDB is designed specifically to provide MongoDB compatibility with an AWS-managed architecture.
+      Incorrect:
+        DynamoDB is a key-value/document store but uses a different API and is not MongoDB compatible.
+        Keyspaces is for Cassandra compatibility.
+        OpenSearch is for search and analytics, not a primary document database.
+    diagram: |
+      graph LR
+        A[Mongo Drivers] --> B[DocumentDB Endpoint]
+        B --> C[JSON-like Documents]
+    tags: [NoSQL, DocumentDB]
+
+  - id: rds8
+    topic: "Amazon MemoryDB for Redis"
+    type: multiple_choice
+    question: |
+      An application requires an in-memory database that provides microsecond latency but also guarantees that data is stored durably across multiple Availability Zones as a primary database.
+      Which service meets the durability requirement?
+    options:
+      - text: "Amazon MemoryDB for Redis."
+        is_correct: true
+      - text: "Amazon ElastiCache for Redis."
+        is_correct: false
+      - text: "Amazon DynamoDB Accelerator (DAX)."
+        is_correct: false
+      - text: "Amazon Neptune."
+        is_correct: false
+    explanation: |
+      Correct: MemoryDB uses a multi-AZ transaction log to ensure data is durable while remaining in-memory.
+      Incorrect:
+        ElastiCache is primarily a cache; while it has replication, it is not considered a "durable primary database" in the same way.
+        DAX is only a cache for DynamoDB.
+        Neptune is a graph database.
+    diagram: |
+      graph LR
+        A[App] --> B[MemoryDB]
+        B --"In-Memory"--> C[Speed]
+        B --"Multi-AZ Log"--> D[Durability]
+    tags: [NoSQL, MemoryDB]
+
+  - id: rds9
+    topic: "Amazon Keyspaces (for Apache Cassandra)"
+    type: multiple_choice
+    question: |
+      A company currently uses Apache Cassandra to store high-volume time-series data. They want to move to a serverless AWS service that supports CQL (Cassandra Query Language).
+      What should they choose?
+    options:
+      - text: "Amazon Keyspaces."
+        is_correct: true
+      - text: "Amazon Timestream."
+        is_correct: false
+      - text: "Amazon RDS for MariaDB."
+        is_correct: false
+      - text: "Amazon DocumentDB."
+        is_correct: false
+    explanation: |
+      Correct: Amazon Keyspaces is a scalable, highly available, and managed Apache Cassandra–compatible database service.
+      Incorrect:
+        Timestream is for time-series but doesn't support CQL.
+        MariaDB and DocumentDB use different query languages (SQL and Mongo respectively).
+    diagram: |
+      graph LR
+        A[Cassandra App] --"CQL"--> B[Amazon Keyspaces]
+        B --> C[Serverless Scaling]
+    tags: [NoSQL, Keyspaces]
+
+  - id: rds10
+    topic: "Amazon Neptune"
+    type: multiple_choice
+    question: |
+      A social media company needs to store complex relationships between users, such as "friends of friends," "likes," and "follows," and needs to query these connections efficiently.
+      Which database type is best suited for this?
+    options:
+      - text: "Amazon Neptune (Graph Database)."
+        is_correct: true
+      - text: "Amazon RDS (Relational Database)."
+        is_correct: false
+      - text: "Amazon Redshift (Data Warehouse)."
+        is_correct: false
+      - text: "Amazon ElastiCache (In-memory)."
+        is_correct: false
+    explanation: |
+      Correct: Neptune is a graph database optimized for traversing complex relationships (nodes and edges).
+      Incorrect:
+        RDS requires complex JOINs for many-to-many relationships, which become slow at scale.
+        Redshift is for analytics/OLAP.
+        ElastiCache is for caching, not complex relationship modeling.
+    diagram: |
+      graph LR
+        User1((User)) --"Follows"--> User2((User))
+        User2 --"Likes"--> Post((Post))
+        Post --"Tag"--> Category((Topic))
+    tags: [NoSQL, Graph]
+
+  - id: rds11
+    topic: "Amazon Neptune - Query Languages"
+    type: multiple_choice
+    question: |
+      A developer is building a graph application on Amazon Neptune. They need to choose a query language.
+      Which of the following are supported by Neptune?
+    options:
+      - text: "Gremlin, openCypher, and SPARQL."
+        is_correct: true
+      - text: "SQL, PL/SQL, and T-SQL."
+        is_correct: false
+      - text: "CQL and MongoDB Query Language."
+        is_correct: false
+      - text: "GraphQL and REST only."
+        is_correct: false
+    explanation: |
+      Correct: Neptune supports Property Graph (Gremlin, openCypher) and W3C RDF (SPARQL) models.
+      Incorrect:
+        SQL is for relational DBs.
+        CQL is for Cassandra/Keyspaces.
+        GraphQL is an API layer, not a native graph DB query language in Neptune.
+    tags: [Neptune, Query]
+
+  - id: rds12
+    topic: "Amazon Timestream"
+    type: multiple_choice
+    question: |
+      An IoT company needs to store and analyze trillion of events per day from smart meters. The data is time-sensitive, and older data should be automatically moved from memory storage to magnetic storage to save costs.
+      Which service is purpose-built for this?
+    options:
+      - text: "Amazon Timestream."
+        is_correct: true
+      - text: "Amazon RDS for MySQL."
+        is_correct: false
+      - text: "Amazon S3 Glacier."
+        is_correct: false
+      - text: "Amazon DynamoDB."
+        is_correct: false
+    explanation: |
+      Correct: Timestream is a serverless time-series database with built-in data lifecycle management (Memory vs. Magnetic).
+      Incorrect:
+        RDS MySQL is not optimized for the scale of trillions of time-series events.
+        Glacier is for archival, not active querying.
+        DynamoDB can do time-series but requires manual management of TTL and storage tiers.
+    diagram: |
+      graph LR
+        A[IoT Data] --> B[Memory Store -Fast-]
+        B --"Auto Tiering"--> C[Magnetic Store -Cheap-]
+        D[SQL Query] --> B
+        D --> C
+    tags: [NoSQL, Timestream]
+
+  - id: rds13
+    topic: "Amazon Redshift Intro & Architecture"
+    type: multiple_choice
+    question: |
+      A company wants to migrate its data warehouse to AWS. They need a service that uses Columnar Storage and Massively Parallel Processing (MPP) to perform complex queries on petabytes of structured data.
+      Which service should they choose?
+    options:
+      - text: "Amazon Redshift."
+        is_correct: true
+      - text: "Amazon RDS for PostgreSQL."
+        is_correct: false
+      - text: "Amazon Athena."
+        is_correct: false
+      - text: "Amazon Aurora."
+        is_correct: false
+    explanation: |
+      Correct: Redshift is the flagship AWS OLAP service using columnar storage and MPP for large-scale analytics.
+      Incorrect:
+        RDS and Aurora are OLTP (row-based) and not designed for petabyte-scale analytics.
+        Athena is a query service for S3, not a dedicated data warehouse with MPP clusters.
+    diagram: |
+      graph TD
+        L[Leader Node] --> C1[Compute Node 1]
+        L --> C2[Compute Node 2]
+        C1 --"Slices"--> S1[Disk Data]
+    tags: [Redshift, OLAP]
+
+  - id: rds14
+    topic: "Redshift Spectrum and Performance Tuning"
+    type: multiple_choice
+    question: |
+      A data analyst needs to query historical logs stored in Amazon S3 in Parquet format and join them with current sales data stored in an Amazon Redshift cluster.
+      Which Redshift feature allows this without loading the S3 data into the cluster?
+    options:
+      - text: "Amazon Redshift Spectrum."
+        is_correct: true
+      - text: "Redshift COPY Command."
+        is_correct: false
+      - text: "Redshift Data API."
+        is_correct: false
+      - text: "Redshift Federated Query."
+        is_correct: false
+    explanation: |
+      Correct: Spectrum allows Redshift to query data directly from S3 using an external schema.
+      Incorrect:
+        COPY command loads data into Redshift tables.
+        Data API is for running queries via an asynchronous API.
+        Federated Query is for querying other live databases (RDS/Aurora).
+    diagram: |
+      graph LR
+        A[Redshift Cluster] --"Query"--> B[Spectrum Nodes]
+        B --"Parallel Scan"--> C[S3 Data Lake]
+        A --"Join with"--> D[Local Storage]
+    tags: [Redshift, Spectrum]
+
+  - id: rds15
+    topic: "Redshift Durability and Scaling"
+    type: multiple_choice
+    question: |
+      A company needs to ensure their Redshift cluster is durable. How does Redshift handle data durability and backup within the cluster?
+    options:
+      - text: "It automatically replicates data within the cluster and continuously backs up to Amazon S3."
+        is_correct: true
+      - text: "It uses Multi-AZ synchronous replication similar to Amazon RDS."
+        is_correct: false
+      - text: "It relies on RAID 0 on the compute nodes and requires manual snapshots."
+        is_correct: false
+      - text: "It uses Amazon EBS volumes with Provisioned IOPS for 11 nines of durability."
+        is_correct: false
+    explanation: |
+      Correct: Redshift replicates data across compute nodes and provides automated incremental snapshots to S3.
+      Incorrect:
+        Standard Redshift is not Multi-AZ (though Multi-AZ is a newer, specific feature, the base durability is S3 snapshots).
+        Manual snapshots are not the only way; it's automated.
+    tags: [Redshift, Durability]
+
+  - id: rds16
+    topic: "Redshift Distribution Styles"
+    type: multiple_choice
+    question: |
+      A database engineer is optimizing a Redshift table. The table is a very large fact table that is frequently joined with a small dimension table.
+      What distribution style should be used for the SMALL dimension table to minimize network traffic (shuffling) during joins?
+    options:
+      - text: "DISTSTYLE ALL"
+        is_correct: true
+      - text: "DISTSTYLE EVEN"
+        is_correct: false
+      - text: "DISTSTYLE KEY"
+        is_correct: false
+      - text: "DISTSTYLE AUTO"
+        is_correct: false
+    explanation: |
+      Correct: DISTSTYLE ALL copies the entire table to every node, making it ideal for small tables that join with everything.
+      Incorrect:
+        EVEN uses round-robin and will cause data shuffling.
+        KEY distributes based on a column, which is better for large-to-large joins.
+        AUTO lets Redshift decide, but for a known small table, ALL is the explicit best practice.
+    tags: [Redshift, Optimization]
+
+  - id: rds17
+    topic: "Redshift Data Flows and the COPY command"
+    type: multiple_choice
+    question: |
+      What is the most efficient way to load large amounts of data from multiple files in an S3 bucket into an Amazon Redshift table?
+    options:
+      - text: "Use a single COPY command with a manifest file or a prefix."
+        is_correct: true
+      - text: "Use multiple INSERT statements within a Python script."
+        is_correct: false
+      - text: "Use the Redshift Data API to perform individual PutItem calls."
+        is_correct: false
+      - text: "Upload the data to an EBS volume and attach it to the Leader node."
+        is_correct: false
+    explanation: |
+      Correct: The COPY command is designed for high-speed, parallel loading from S3, DynamoDB, or EMR.
+      Incorrect:
+        INSERT statements are slow and not designed for bulk loading in an MPP system.
+        PutItem is a DynamoDB API, not Redshift.
+    diagram: |
+      graph LR
+        S3[S3: File1, File2, File3] --"Parallel COPY"--> C1[Compute Node 1]
+        S3 --"Parallel COPY"--> C2[Compute Node 2]
+    tags: [Redshift, Ingestion]
+
+  - id: rds18
+    topic: "Redshift Integration / WLM / Vacuum"
+    type: multiple_choice
+    question: |
+      A Redshift cluster has been running many DELETE and UPDATE operations, leading to fragmented storage and degraded query performance.
+      Which command should be run to reclaim space and resort the data?
+    options:
+      - text: "VACUUM"
+        is_correct: true
+      - text: "ANALYZE"
+        is_correct: false
+      - text: "RESIZE"
+        is_correct: false
+      - text: "REINDEX"
+        is_correct: false
+    explanation: |
+      Correct: VACUUM reclaims disk space and resorts rows.
+      Incorrect:
+        ANALYZE updates statistics for the query optimizer.
+        RESIZE changes cluster capacity.
+    tags: [Redshift, Maintenance]
+
+  - id: rds19
+    topic: "Redshift Resizing"
+    type: multiple_choice
+    question: |
+      A company needs to double the size of its Redshift cluster to handle an end-of-quarter reporting surge. They need the cluster to remain available for read-only queries during the resize process.
+      Which resize type should they use?
+    options:
+      - text: "Elastic Resize"
+        is_correct: true
+      - text: "Classic Resize"
+        is_correct: false
+      - text: "In-place Upgrade"
+        is_correct: false
+      - text: "Snapshot Restore Resize"
+        is_correct: false
+    explanation: |
+      Correct: Elastic Resize is fast (minutes) and handles most common scaling scenarios while keeping the cluster online.
+      Incorrect:
+        Classic Resize takes hours or days as it copies data to a new cluster.
+    tags: [Redshift, Scaling]
+
+  - id: rds20
+    topic: "RA3 Nodes, Cross-Region Data Sharing, Redshift ML"
+    type: multiple_choice
+    question: |
+      A company wants to scale its Redshift storage independently of its compute power. They also want to share data across different Redshift clusters in different AWS regions.
+      Which node type and feature should they use?
+    options:
+      - text: "RA3 nodes with Redshift Data Sharing."
+        is_correct: true
+      - text: "DC2 nodes with Redshift Spectrum."
+        is_correct: false
+      - text: "DS2 nodes with Classic Resize."
+        is_correct: false
+      - text: "RA3 nodes with Redshift Federated Queries."
+        is_correct: false
+    explanation: |
+      Correct: RA3 nodes use "Managed Storage" (S3-backed) to decouple compute/storage, and Data Sharing allows cross-cluster access.
+    diagram: |
+      graph LR
+        A[Cluster 1: RA3] --"Data Sharing"--> B[Cluster 2: RA3]
+        A --"Storage"--> S[(Managed Storage/S3)]
+    tags: [Redshift, RA3]
+
+  - id: rds21
+    topic: "Redshift Security"
+    type: multiple_choice
+    question: |
+      How can an administrator ensure that data in an Amazon Redshift cluster is encrypted at rest?
+    options:
+      - text: "Enable encryption at cluster creation using AWS KMS or a Hardware Security Module (HSM)."
+        is_correct: true
+      - text: "Enable SSL/TLS in the JDBC/ODBC connection string."
+        is_correct: false
+      - text: "Use an S3 Bucket Policy to encrypt the incoming COPY files."
+        is_correct: false
+      - text: "Redshift is encrypted by default and cannot be turned off."
+        is_correct: false
+    explanation: |
+      Correct: Encryption at rest must be selected at creation or via a cluster modification that migrates data to a new encrypted cluster.
+      Incorrect:
+        SSL/TLS is for encryption in transit.
+    tags: [Redshift, Security]
+
+  - id: rds22
+    topic: "Redshift Serverless"
+    type: multiple_choice
+    question: |
+      A company has highly intermittent analytics workloads that only run for a few hours a week. They want to avoid paying for an idle cluster.
+      Which Redshift option should they use?
+    options:
+      - text: "Amazon Redshift Serverless."
+        is_correct: true
+      - text: "Amazon Redshift Provisioned with Pause/Resume."
+        is_correct: false
+      - text: "Amazon Athena."
+        is_correct: false
+      - text: "Amazon Redshift RA3 reserved instances."
+        is_correct: false
+    explanation: |
+      Correct: Serverless automatically scales and charges only for the RPU-hours used during query execution.
+    tags: [Redshift, Serverless]
+
+  - id: rds23
+    topic: "Redshift Materialized Views"
+    type: multiple_choice
+    question: |
+      A dashboard executes the same complex join and aggregation query every minute. Performance is slow. How can Redshift speed up this specific repeatable query?
+    options:
+      - text: "Create a Materialized View to store the pre-computed result set."
+        is_correct: true
+      - text: "Use a Standard View to simplify the SQL syntax."
+        is_correct: false
+      - text: "Increase the WLM (Workload Management) concurrency slots."
+        is_correct: false
+      - text: "Add a Sort Key to the underlying fact table."
+        is_correct: false
+    explanation: |
+      Correct: Materialized Views cache the result of the query, significantly speeding up repeated complex workloads.
+    tags: [Redshift, Performance]
+
+  - id: rds24
+    topic: "Redshift Data Sharing / Data Shares"
+    type: multiple_choice
+    question: |
+      Which Redshift feature allows a "Producer" cluster to grant read-only access to specific schemas and tables to a "Consumer" cluster without moving the data?
+    options:
+      - text: "Redshift Data Sharing."
+        is_correct: true
+      - text: "Redshift Spectrum."
+        is_correct: false
+      - text: "VPC Peering with Security Group rules."
+        is_correct: false
+      - text: "Snapshot Sharing."
+        is_correct: false
+    explanation: |
+      Correct: Data Sharing enables secure, live access to data across clusters without data movement.
+    tags: [Redshift, Sharing]
+
+  - id: rds25
+    topic: "Redshift Lambda UDF"
+    type: multiple_choice
+    question: |
+      An architect needs to perform a custom data masking operation on Redshift data using a proprietary Python library that is not available in standard SQL.
+      How can this be achieved within a Redshift query?
+    options:
+      - text: "Create a Lambda User-Defined Function (UDF) and call it from the SQL statement."
+        is_correct: true
+      - text: "Use the COPY command with a Lambda transformation."
+        is_correct: false
+      - text: "Write a stored procedure in PL/pgSQL."
+        is_correct: false
+      - text: "Export the data to S3 and use a Glue Job."
+        is_correct: false
+    explanation: |
+      Correct: Redshift can trigger Lambda functions as UDFs to perform custom logic or external lookups.
+    diagram: |
+      graph LR
+        A[Redshift Query] --"Calls"--> B[AWS Lambda]
+        B --"Masked Data"--> A
+    tags: [Redshift, Lambda]
+
+  - id: rds26
+    topic: "Redshift Federated Queries"
+    type: multiple_choice
+    question: |
+      A data scientist wants to query "live" operational data in an RDS MySQL database and join it with historical data in Redshift without performing an ETL process.
+      Which feature should they use?
+    options:
+      - text: "Redshift Federated Query."
+        is_correct: true
+      - text: "Redshift Spectrum."
+        is_correct: false
+      - text: "AWS Glue Elastic Views."
+        is_correct: false
+      - text: "Aurora Read Replicas."
+        is_correct: false
+    explanation: |
+      Correct: Federated Queries allow Redshift to query live data in RDS, Aurora, and S3.
+    tags: [Redshift, Federated]
+
+  - id: rds27
+    topic: "Redshift System Tables and System Views"
+    type: multiple_choice
+    question: |
+      A database administrator needs to see which queries are currently running and which users are logged into the Redshift cluster.
+      Where should they look?
+    options:
+      - text: "System Tables and Views (e.g., STV_INFLIGHT, SVL_QUERY_REPORT)."
+        is_correct: true
+      - text: "CloudWatch Logs only."
+        is_correct: false
+      - text: "AWS CloudTrail."
+        is_correct: false
+      - text: "The S3 backup bucket manifest."
+        is_correct: false
+    explanation: |
+      Correct: Redshift provides a set of STL (Log) and STV (Virtual) tables for monitoring cluster activity.
+    tags: [Redshift, Monitoring]
+
+  - id: rds28
+    topic: "Redshift Data API"
+    type: multiple_choice
+    question: |
+      A developer is building a web application using AWS SDK that needs to run queries against Redshift. They want to avoid managing persistent database connections (JDBC/ODBC).
+      Which service should they use?
+    options:
+      - text: "Amazon Redshift Data API."
+        is_correct: true
+      - text: "Redshift Query Editor v2."
+        is_correct: false
+      - text: "Amazon Athena."
+        is_correct: false
+      - text: "AWS AppSync."
+        is_correct: false
+    explanation: |
+      Correct: The Data API allows you to run SQL commands via HTTP calls without persistent connections.
+    tags: [Redshift, API]
+
+  - id: rds29
+    topic: "Redshift - Hands On"
+    type: multiple_choice
+    question: |
+      What is the correct way to start using a Redshift cluster for the first time in the AWS Console?
+    options:
+      - text: "Configure a Cluster Subnet Group, create the cluster, and authorize ingress in the Security Group."
+        is_correct: true
+      - text: "Create an S3 bucket and upload a CSV to trigger the cluster creation."
+        is_correct: false
+      - text: "Redshift clusters are pre-provisioned in every region and only need an IAM role."
+        is_correct: false
+      - text: "Launch an EC2 instance and install the Redshift agent."
+        is_correct: false
+    explanation: |
+      Correct: Redshift requires network configuration (Subnet Groups/VPC) and security rules before it can be accessed.
+    tags: [Redshift, Operations]

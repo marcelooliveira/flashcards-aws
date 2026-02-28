@@ -1,0 +1,488 @@
+﻿questions:
+  - id: st1
+    topic: "Set up an AWS Billing Alarm"
+    type: multiple_choice
+    question: |
+      Um novo administrador da AWS deseja garantir que não haverá surpresas na fatura mensal. Ele precisa ser notificado via e-mail assim que os custos estimados excederem $50.
+      Qual é o primeiro passo obrigatório antes de criar o alarme no CloudWatch?
+    options:
+      - text: "Habilitar 'Receive Billing Alerts' nas preferências de faturamento do console de Billing."
+        is_correct: true
+      - text: "Criar um tópico SNS na região us-east-1."
+        is_correct: false
+      - text: "Instalar o AWS CLI e rodar o comando 'aws billing set-threshold'."
+        is_correct: false
+      - text: "Configurar um AWS Budget com ação de interrupção de instâncias."
+        is_correct: false
+    explanation: |
+      Correct: Os alertas de faturamento do CloudWatch só recebem dados se a opção de monitoramento de custos estiver explicitamente ativada nas preferências da conta.
+    tags: [Billing, CloudWatch]
+
+  - id: st2
+    topic: "Amazon S3"
+    type: multiple_choice
+    question: |
+      O Amazon S3 é classificado como qual tipo de serviço de armazenamento?
+    options:
+      - text: "Armazenamento de Objetos (Object Storage)."
+        is_correct: true
+      - text: "Armazenamento de Blocos (Block Storage)."
+        is_correct: false
+      - text: "Sistema de Arquivos de Rede (Network File System)."
+        is_correct: false
+      - text: "Banco de Dados NoSQL de chave-valor."
+        is_correct: false
+    explanation: |
+      Correct: O S3 armazena dados como objetos em buckets, identificados por chaves (keys), e não utiliza uma hierarquia de arquivos real, mas sim um espaço de nomes plano.
+    diagram: |
+      graph LR
+        A[Bucket] --> B[Object: Key/Name]
+        B --> C[Value: Data/Bytes]
+        B --> D[Metadata]
+        B --> E[Version ID]
+    tags: [S3, Fundamentals]
+
+  - id: st3
+    topic: "Amazon S3 Security - Bucket Policy"
+    type: multiple_choice
+    question: |
+      Uma empresa deseja permitir que uma aplicação rodando em uma conta AWS diferente (Conta B) possa ler objetos de um bucket específico na Conta A.
+      Qual recurso de segurança do S3 deve ser anexado ao bucket para permitir esse acesso cross-account?
+    options:
+      - text: "S3 Bucket Policy."
+        is_correct: true
+      - text: "IAM User Policy na Conta A."
+        is_correct: false
+      - text: "S3 ACL (Access Control List)."
+        is_correct: false
+      - text: "S3 Access Points."
+        is_correct: false
+    explanation: |
+      Correct: Bucket Policies são políticas baseadas em recursos que permitem definir quem (Principal) tem acesso ao bucket, facilitando o acesso entre contas.
+    tags: [S3, Security]
+
+  - id: st4
+    topic: "Amazon S3 - Versioning"
+    type: multiple_choice
+    question: |
+      Ao habilitar o Versionamento em um bucket S3, o que acontece quando um usuário deleta um objeto sem especificar um ID de versão?
+    options:
+      - text: "O S3 insere um 'Delete Marker' (marcador de exclusão) e o objeto parece ter sido removido."
+        is_correct: true
+      - text: "O objeto é movido permanentemente para o S3 Glacier."
+        is_correct: false
+      - text: "O S3 remove todas as versões anteriores automaticamente."
+        is_correct: false
+      - text: "A operação de delete falha com um erro de Access Denied."
+        is_correct: false
+    explanation: |
+      Correct: O objeto não é excluído; o Delete Marker torna-se a versão atual. O objeto pode ser recuperado deletando-se esse marcador.
+    diagram: |
+      graph TD
+        A[Object v1] --> B[Object v2]
+        B --> C[Delete Marker -Current-]
+    tags: [S3, Versioning]
+
+  - id: st5
+    topic: "Amazon S3 - Replication"
+    type: multiple_choice
+    question: |
+      Para que a Replicação entre Regiões (CRR) do S3 funcione corretamente, quais são os dois requisitos fundamentais?
+    options:
+      - text: "O Versionamento deve estar habilitado em ambos os buckets (origem e destino) e o S3 precisa de uma IAM Role de permissão."
+        is_correct: true
+      - text: "Os buckets devem ter nomes idênticos e estar na mesma conta AWS."
+        is_correct: false
+      - text: "O MFA Delete deve estar ativo e os buckets devem ser públicos."
+        is_correct: false
+      - text: "A criptografia SSE-C deve ser utilizada obrigatoriamente."
+        is_correct: false
+    explanation: |
+      Correct: Sem versionamento, o S3 não consegue rastrear as alterações para replicar; a IAM Role permite ao S3 ler da origem e escrever no destino.
+    tags: [S3, Replication]
+
+  - id: st6
+    topic: "Amazon S3 - Storage Classes"
+    type: multiple_choice
+    question: |
+      Qual classe de armazenamento do S3 é a mais indicada para dados que são acessados raramente (menos de uma vez por mês), mas que exigem acesso imediato (milissegundos) quando solicitados?
+    options:
+      - text: "S3 Standard-IA (Infrequent Access)."
+        is_correct: true
+      - text: "S3 Glacier Instant Retrieval."
+        is_correct: true
+      - text: "S3 One Zone-IA."
+        is_correct: false
+      - text: "S3 Glacier Deep Archive."
+        is_correct: false
+    explanation: |
+      Correct: S3 Standard-IA e Glacier Instant Retrieval oferecem latência de milissegundos. Standard-IA é para acesso mensal; Glacier Instant Retrieval é para acesso trimestral com custo de armazenamento ainda menor. (Ambas são válidas, mas Glacier Instant Retrieval é o foco para raridade extrema com alta performance).
+    tags: [S3, StorageClasses]
+
+  - id: st7
+    topic: "Amazon S3 Express One Zone"
+    type: multiple_choice
+    question: |
+      Uma aplicação de treinamento de Machine Learning exige latência de milissegundos de um dígito e centenas de milhares de transações por segundo no acesso a dados no S3.
+      Qual classe de armazenamento foi introduzida especificamente para esse cenário de ultra-performance?
+    options:
+      - text: "Amazon S3 Express One Zone."
+        is_correct: true
+      - text: "Amazon S3 Intelligent-Tiering."
+        is_correct: false
+      - text: "Amazon S3 Standard."
+        is_correct: false
+      - text: "Amazon S3 Outposts."
+        is_correct: false
+    explanation: |
+      Correct: S3 Express One Zone é até 10x mais rápido que o S3 Standard e armazena dados em buckets de diretório dedicados para performance extrema.
+    tags: [S3, Performance]
+
+  - id: st8
+    topic: "Amazon S3 - Lifecycle Rules"
+    type: multiple_choice
+    question: |
+      Como você pode automatizar a transição de objetos do S3 Standard para o S3 Glacier após 90 dias da criação para economizar custos?
+    options:
+      - text: "Criando uma S3 Lifecycle Rule com uma ação de 'Transition'."
+        is_correct: true
+      - text: "Configurando uma função Lambda disparada por EventBridge a cada 24 horas."
+        is_correct: false
+      - text: "Habilitando o S3 Intelligent-Tiering e definindo o limite para 90 dias."
+        is_correct: false
+      - text: "Usando o S3 Storage Lens para mover os arquivos."
+        is_correct: false
+    explanation: |
+      Correct: Lifecycle Rules gerenciam o ciclo de vida dos objetos (transição e expiração) de forma automática e gratuita.
+    tags: [S3, Lifecycle]
+
+  - id: st9
+    topic: "Amazon S3 - Event Notifications"
+    type: multiple_choice
+    question: |
+      Um desenvolvedor deseja que uma miniatura de imagem seja gerada automaticamente sempre que uma foto for carregada em um bucket S3.
+      Quais destinos são suportados nativamente pelas Notificações de Eventos do S3?
+    options:
+      - text: "SNS Topics, SQS Queues e AWS Lambda Functions."
+        is_correct: true
+      - text: "Amazon SES, DynamoDB e Kinesis Data Firehose."
+        is_correct: false
+      - text: "Amazon EC2, AWS Step Functions e CloudWatch Logs."
+        is_correct: false
+      - text: "Apenas AWS Lambda."
+        is_correct: false
+    explanation: |
+      Correct: Estes três serviços são os destinos padrão para notificações de eventos do S3 (além do EventBridge).
+    diagram: |
+      graph LR
+        A[S3 Upload] --"Event"--> B{S3 Event Notification}
+        B --> C[Lambda]
+        B --> D[SNS]
+        B --> E[SQS]
+    tags: [S3, Events]
+
+  - id: st10
+    topic: "Amazon S3 - Encryption"
+    type: multiple_choice
+    question: |
+      Qual tipo de criptografia do S3 exige que o Amazon gerencie as chaves de criptografia e o ciclo de vida delas sem custos adicionais para o usuário?
+    options:
+      - text: "SSE-S3 (Server-Side Encryption with S3-Managed Keys)."
+        is_correct: true
+      - text: "SSE-KMS (Server-Side Encryption with AWS KMS Keys)."
+        is_correct: false
+      - text: "SSE-C (Server-Side Encryption with Customer-Provided Keys)."
+        is_correct: false
+      - text: "DSSE-KMS (Dual-layer Server-Side Encryption)."
+        is_correct: false
+    explanation: |
+      Correct: SSE-S3 é a criptografia padrão e gratuita onde a AWS gerencia a AES-256 master key.
+    tags: [S3, Encryption]
+
+  - id: st11
+    topic: "Amazon S3 Tables: Introduction and the Apache Iceberg Table Format"
+    type: multiple_choice
+    question: |
+      O Amazon S3 Tables é uma nova funcionalidade que fornece tabelas de analytics nativas no S3. Qual formato de tabela aberto é utilizado como base para essa integração?
+    options:
+      - text: "Apache Iceberg."
+        is_correct: true
+      - text: "Apache Parquet."
+        is_correct: false
+      - text: "Delta Lake."
+        is_correct: false
+      - text: "Apache Hudi."
+        is_correct: false
+    explanation: |
+      Correct: O S3 Tables utiliza o formato Iceberg para fornecer transações ACID e gerenciamento de metadados diretamente no S3.
+    tags: [S3 Tables, Iceberg]
+
+  - id: st12
+    topic: "Amazon S3 - Storage Lens"
+    type: multiple_choice
+    question: |
+      Qual ferramenta fornece um dashboard centralizado para visualizar métricas de uso e atividade de armazenamento em toda a organização AWS, ajudando a identificar buckets sem criptografia ou versões antigas acumuladas?
+    options:
+      - text: "Amazon S3 Storage Lens."
+        is_correct: true
+      - text: "Amazon S3 Inventory."
+        is_correct: false
+      - text: "AWS Trusted Advisor."
+        is_correct: false
+      - text: "AWS Cost Explorer."
+        is_correct: false
+    explanation: |
+      Correct: O Storage Lens oferece visibilidade total e recomendações de otimização para o S3 em nível de conta ou organização.
+    tags: [S3, Monitoring]
+
+  - id: st13
+    topic: "Amazon EBS"
+    type: multiple_choice
+    question: |
+      Um banco de dados rodando em uma instância EC2 precisa de um volume de armazenamento de blocos persistente que sobreviva à interrupção da instância.
+      Qual é a limitação fundamental de um volume EBS padrão (não-Multi-Attach)?
+    options:
+      - text: "Ele só pode ser anexado a uma única instância por vez e deve estar na mesma AZ que a instância."
+        is_correct: true
+      - text: "Ele pode ser acessado via internet através de um URL HTTP."
+        is_correct: false
+      - text: "Seus dados são replicados automaticamente entre todas as AZs da região."
+        is_correct: false
+      - text: "Ele é um serviço serverless que escala capacidade infinitamente."
+        is_correct: false
+    explanation: |
+      Correct: Volumes EBS são zonais; eles residem em uma Availability Zone específica e só podem ser montados por instâncias naquela mesma AZ.
+    diagram: |
+      graph TD
+        subgraph AZ-A
+          I[EC2 Instance] --- V[(EBS Volume)]
+        end
+        subgraph AZ-B
+          V2[(EBS Volume B)]
+        end
+    tags: [EBS, Fundamentals]
+
+  - id: st14
+    topic: "Amazon EBS Elastic Volumes"
+    type: multiple_choice
+    question: |
+      Você precisa aumentar o tamanho de um volume EBS de 100 GB para 500 GB e mudar o tipo de 'gp2' para 'gp3' enquanto a instância EC2 está em execução.
+      Qual recurso permite isso sem downtime?
+    options:
+      - text: "EBS Elastic Volumes."
+        is_correct: true
+      - text: "EBS Multi-Attach."
+        is_correct: false
+      - text: "EBS Snapshots."
+        is_correct: false
+      - text: "RAID 0 Striping."
+        is_correct: false
+    explanation: |
+      Correct: Elastic Volumes permite modificar tamanho, performance (IOPS) e tipo de volume em tempo real sem desconectar o volume.
+    tags: [EBS, ElasticVolumes]
+
+  - id: st15
+    topic: "Amazon EFS"
+    type: multiple_choice
+    question: |
+      Sua empresa precisa de um sistema de arquivos compartilhado que possa ser montado simultaneamente por centenas de instâncias EC2 rodando Linux em várias Availability Zones.
+      Qual serviço deve ser escolhido?
+    options:
+      - text: "Amazon EFS (Elastic File System)."
+        is_correct: true
+      - text: "Amazon EBS."
+        is_correct: false
+      - text: "Amazon S3 Glacier."
+        is_correct: false
+      - text: "Amazon FSx for Windows."
+        is_correct: false
+    explanation: |
+      Correct: O EFS é um sistema de arquivos NFS gerenciado que suporta acesso simultâneo (read-after-write consistency) em múltiplas AZs.
+    diagram: |
+      graph LR
+        A[EC2 AZ-1] --"NFS"--> E[(EFS File System)]
+        B[EC2 AZ-2] --"NFS"--> E
+        C[EC2 AZ-3] --"NFS"--> E
+    tags: [EFS, SharedStorage]
+
+  - id: st16
+    topic: "Amazon EFS vs. Amazon EBS"
+    type: multiple_choice
+    question: |
+      Qual é uma diferença crucial de custo entre o Amazon EBS e o Amazon EFS?
+    options:
+      - text: "No EBS você paga pelo que provisiona; no EFS você paga pelo que usa (armazenamento real)."
+        is_correct: true
+      - text: "O EFS é sempre mais barato que o EBS para qualquer carga de trabalho."
+        is_correct: false
+      - text: "O EBS cobra por requisição, enquanto o EFS cobra apenas por transferência de dados."
+        is_correct: false
+      - text: "O EBS não tem custo de armazenamento se a instância estiver desligada."
+        is_correct: false
+    explanation: |
+      Correct: O EBS exige que você pague pelo tamanho total do volume criado (ex: 100GB mesmo se usar 1GB). O EFS escala e cobra conforme o consumo de dados.
+    tags: [Comparison, Cost]
+
+  - id: st17
+    topic: "AWS Backup"
+    type: multiple_choice
+    question: |
+      Um gerente de TI quer centralizar a política de backup para RDS, EBS e EFS em um único lugar, garantindo que os backups sejam imutáveis e protegidos contra deleção acidental.
+      Qual serviço deve ser implementado?
+    options:
+      - text: "AWS Backup."
+        is_correct: true
+      - text: "AWS DataSync."
+        is_correct: false
+      - text: "Amazon CloudWatch Events."
+        is_correct: false
+      - text: "S3 Lifecycle Manager."
+        is_correct: false
+    explanation: |
+      Correct: AWS Backup é um serviço de gerenciamento centralizado para automatizar backups em vários serviços AWS.
+    tags: [Backup, Compliance]
+
+  - id: st18
+    topic: "Amazon S3 Access Points"
+    type: multiple_choice
+    question: |
+      Em buckets com datasets compartilhados por centenas de aplicações, as Bucket Policies tornam-se gigantescas e difíceis de gerenciar.
+      Qual recurso permite criar "endpoints" específicos com políticas de acesso individuais para simplificar a gestão?
+    options:
+      - text: "Amazon S3 Access Points."
+        is_correct: true
+      - text: "Amazon S3 Object Lambda."
+        is_correct: false
+      - text: "VPC Endpoints."
+        is_correct: false
+      - text: "IAM Groups."
+        is_correct: false
+    explanation: |
+      Correct: Access Points são nomes de rede únicos com suas próprias políticas, permitindo decompor uma política de bucket complexa em partes gerenciáveis.
+    tags: [S3, AccessControl]
+
+  - id: st19
+    topic: "Amazon S3 - Performance"
+    type: multiple_choice
+    question: |
+      Para otimizar o upload de arquivos grandes (maiores que 100 MB) para o S3, qual técnica é recomendada para aumentar a velocidade e a resiliência a falhas de rede?
+    options:
+      - text: "S3 Multipart Upload."
+        is_correct: true
+      - text: "S3 Transfer Acceleration."
+        is_correct: true
+      - text: "Usar o comando 'aws s3 sync'."
+        is_correct: false
+      - text: "Aumentar o MTU da instância EC2."
+        is_correct: false
+    explanation: |
+      Correct: O Multipart Upload quebra o arquivo em partes e as envia em paralelo. Se uma parte falha, apenas ela precisa ser reenviada. S3 Transfer Acceleration usa a rede global da AWS para acelerar o trajeto. (Ambas são corretas, mas Multipart Upload é o fundamento técnico para arquivos grandes).
+    tags: [S3, Performance]
+
+  - id: st20
+    topic: "Amazon S3 Tables: Table Buckets and Intelligent Tiering"
+    type: multiple_choice
+    question: |
+      Onde os metadados e os dados das Amazon S3 Tables são armazenados fisicamente?
+    options:
+      - text: "Em um tipo especial de bucket chamado Table Bucket."
+        is_correct: true
+      - text: "Dentro de uma tabela do DynamoDB."
+        is_correct: false
+      - text: "Em um cluster EMR dedicado."
+        is_correct: false
+      - text: "No AWS Glue Data Catalog apenas."
+        is_correct: false
+    explanation: |
+      Correct: Table Buckets são buckets otimizados para armazenar tabelas no formato Iceberg com alta performance.
+    tags: [S3 Tables, Storage]
+
+  - id: st21
+    topic: "Amazon S3 - Default Encryption"
+    type: multiple_choice
+    question: |
+      Desde 2023, o que acontece com a criptografia de novos objetos enviados ao S3 se o usuário não especificar nenhuma configuração de criptografia?
+    options:
+      - text: "O S3 aplica automaticamente a criptografia SSE-S3 por padrão."
+        is_correct: true
+      - text: "O objeto é rejeitado com um erro 403 Forbidden."
+        is_correct: false
+      - text: "O objeto é armazenado em texto plano (sem criptografia)."
+        is_correct: false
+      - text: "O S3 solicita que o usuário crie uma chave KMS."
+        is_correct: false
+    explanation: |
+      Correct: Atualmente, todos os novos uploads para o S3 são criptografados no lado do servidor (SSE-S3) por padrão.
+    tags: [S3, Security]
+
+  - id: st22
+    topic: "Amazon S3 - Lifecycle Rules - Hands On"
+    type: multiple_choice
+    question: |
+      Você deseja que versões não-atuais de objetos sejam deletadas permanentemente após 30 dias. Onde essa regra deve ser configurada?
+    options:
+      - text: "Lifecycle Rule -> NoncurrentVersionExpiration."
+        is_correct: true
+      - text: "Bucket Policy -> DeleteAction."
+        is_correct: false
+      - text: "S3 Replication -> Expire Marker."
+        is_correct: false
+      - text: "IAM Policy -> S3:DeleteObjectVersion."
+        is_correct: false
+    explanation: |
+      Correct: As regras de ciclo de vida têm seções específicas para gerenciar versões antigas (non-current) de forma independente da versão atual.
+    tags: [S3, Lifecycle]
+
+  - id: st23
+    topic: "About DSSE-KMS"
+    type: multiple_choice
+    question: |
+      O que significa o 'DSSE-KMS' no contexto de criptografia do Amazon S3?
+    options:
+      - text: "Dual-layer Server-Side Encryption with AWS KMS, aplicando duas camadas independentes de criptografia no nível do objeto."
+        is_correct: true
+      - text: "Dynamic S3 Security Engine, que troca as chaves a cada 10 minutos."
+        is_correct: false
+      - text: "Dedicated S3 Storage Encryption para conformidade com o governo."
+        is_correct: false
+      - text: "Distributed Server-Side Encryption para buckets multiregião."
+        is_correct: false
+    explanation: |
+      Correct: O DSSE-KMS aplica duas camadas de criptografia AES-256 para atender a requisitos rigorosos de conformidade (como o CNSA 2.0).
+    tags: [Security, Encryption]
+
+  - id: st24
+    topic: "Amazon S3 Tables: Replicas and Security"
+    type: multiple_choice
+    question: |
+      As Amazon S3 Tables suportam replicação para outras regiões?
+    options:
+      - text: "Sim, os Table Buckets podem ser replicados para outras regiões AWS para fins de DR (Disaster Recovery)."
+        is_correct: true
+      - text: "Não, as tabelas são estritamente zonais e não podem sair da AZ de origem."
+        is_correct: false
+      - text: "Sim, mas apenas se o formato for alterado para CSV."
+        is_correct: false
+      - text: "Não, o S3 Tables ainda não suporta nenhuma forma de replicação."
+        is_correct: false
+    explanation: |
+      Correct: Assim como os buckets padrão, os Table Buckets suportam replicação regional.
+    tags: [S3 Tables, Replication]
+
+  - id: st25
+    topic: "AWS Backup - Hands On"
+    type: multiple_choice
+    question: |
+      O que é um 'Backup Vault' no AWS Backup?
+    options:
+      - text: "Um contêiner lógico que armazena e organiza os pontos de recuperação (backups)."
+        is_correct: true
+      - text: "Uma instância EC2 especial usada para processar backups."
+        is_correct: false
+      - text: "Um bucket S3 onde os arquivos de backup são visíveis via FTP."
+        is_correct: false
+      - text: "Um hardware físico que a AWS envia para o seu data center."
+        is_correct: false
+    explanation: |
+      Correct: O Vault organiza os backups e permite aplicar políticas de acesso e criptografia (KMS) a todos os itens contidos nele.
+    tags: [Backup, Management]

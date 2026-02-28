@@ -1,0 +1,730 @@
+﻿questions:
+  - id: q1
+    topic: "Amazon Kinesis Data Streams"
+    type: multiple_choice
+    question: |
+      A global media company needs to ingest real-time clickstream data from millions of users. The data must be available for multiple independent analytics applications to process simultaneously, and the company requires the ability to replay the data for up to 7 days if a processing error occurs.
+      Which solution meets these requirements with the least operational overhead?
+    options:
+      - text: "Use Amazon Kinesis Data Streams to ingest the data and configure the retention period to 168 hours."
+        is_correct: true
+      - text: "Use Amazon SQS FIFO queues to collect the data and set the message retention period to 7 days."
+        is_correct: false
+      - text: "Use Amazon SNS to fan out the clickstream events to multiple SQS queues for independent processing."
+        is_correct: false
+      - text: "Use Amazon Data Firehose to stream the data directly into an Amazon S3 bucket for batch analysis."
+        is_correct: false
+    explanation: |
+      Correct: Kinesis Data Streams supports multiple concurrent consumers and data retention (replayability) up to 365 days.
+      Incorrect:
+        SQS does not support multiple independent consumers reading the same message; once deleted by one, it's gone for others.
+        SNS lacks a native replay mechanism or long-term storage of events for later processing.
+        Firehose is for delivery to destinations and does not allow real-time "replay" from the stream itself like Data Streams.
+    diagram: |
+      graph LR
+        A[Users] --> B[Kinesis Data Stream]
+        B --> C[App 1: Real-time Dash]
+        B --> D[App 2: Fraud Detection]
+        B --> E[App 3: S3 Archival]
+    tags: [Ingestion, Real-time]
+
+  - id: q2
+    topic: "Amazon Kinesis Data Streams - Producers"
+    type: multiple_choice
+    question: |
+      A developer is building a high-throughput Java application that sends sensor data to Kinesis. To optimize costs and network efficiency, the company wants to maximize the amount of data sent in each HTTP request to the Kinesis API.
+      Which producer strategy should the architect recommend?
+    options:
+      - text: "Use the Kinesis Producer Library (KPL) to implement record aggregation and collection."
+        is_correct: true
+      - text: "Use the AWS SDK 'PutRecord' API call in a multi-threaded loop to increase concurrency."
+        is_correct: false
+      - text: "Configure an Amazon SQS queue to buffer the records before a Lambda function calls 'PutRecords' in batches."
+        is_correct: false
+      - text: "Implement client-side compression using GZIP before sending individual records via the 'PutRecord' API."
+        is_correct: false
+    explanation: |
+      Correct: The KPL automatically aggregates multiple user records into a single Kinesis record, significantly increasing throughput per API call.
+      Incorrect:
+        PutRecord is less efficient than PutRecords or KPL as it sends one record per call.
+        Adding SQS increases complexity and latency without providing the native aggregation benefits of KPL.
+        Compression helps with size but doesn't solve the overhead of making frequent individual HTTP requests.
+    diagram: |
+      graph LR
+        A[Java App + KPL] --"Aggregated Batch"--> B[Kinesis Shard]
+        B --> C[Consumer]
+    tags: [Producers, KPL]
+
+  - id: q3
+    topic: "Amazon Kinesis Data Streams - Consumers"
+    type: multiple_choice
+    question: |
+      An e-commerce company needs a custom consumer application to process order data from a Kinesis stream. The application must automatically handle load balancing across multiple instances and resume processing from the last known position after a restart.
+      Which consumer implementation is most appropriate?
+    options:
+      - text: "Use the Kinesis Client Library (KCL) to manage shard leases and checkpoint progress in DynamoDB."
+        is_correct: true
+      - text: "Create a custom Python script using the 'GetRecords' API and store sequence numbers in a local file."
+        is_correct: false
+      - text: "Use an AWS Lambda function with the 'StartingPosition' set to 'LATEST' and a 1-minute timeout."
+        is_correct: false
+      - text: "Configure an S3-based consumer that uses S3 Event Notifications to trigger processing of stream segments."
+        is_correct: false
+    explanation: |
+      Correct: KCL is designed for distributed consumers; it uses DynamoDB to track shard ownership and progress (checkpointing).
+      Incorrect:
+        Storing sequence numbers locally fails in distributed environments where multiple instances need shared state.
+        'LATEST' ignores records sent before the Lambda was active, and it doesn't offer the granular control of KCL for complex state.
+        Kinesis does not trigger S3 Event Notifications; this is an architecturally invalid flow.
+    diagram: |
+      graph TD
+        A[Kinesis Stream] --> B[KCL Worker 1]
+        A --> C[KCL Worker 2]
+        B --> D[(DynamoDB Checkpoints)]
+        C --> D
+    tags: [Consumers, KCL]
+
+  - id: q4
+    topic: "Amazon Kinesis Data Streams - Hands On"
+    type: multiple_choice
+    question: |
+      A DevOps engineer is testing a new Kinesis stream named 'TestStream' using the AWS CLI. After successfully putting a record into the stream, the engineer needs to manually read that specific record from the CLI.
+      What sequence of commands must be performed?
+    options:
+      - text: "Run 'get-shard-iterator' to obtain an iterator, then pass it to the 'get-records' command."
+        is_correct: true
+      - text: "Run 'describe-stream' to find the record's sequence number, then use 'view-records'."
+        is_correct: false
+      - text: "Run 'list-shards' and then pipe the output into the 'read-records' command for the specific shard."
+        is_correct: false
+      - text: "Run 'get-records' directly using the stream name and the partition key of the record."
+        is_correct: false
+    explanation: |
+      Correct: In the Kinesis API, you cannot read directly; you must first get an iterator for a specific shard and position.
+      Incorrect:
+        'view-records' and 'read-records' are not valid AWS CLI commands for Kinesis.
+        'get-records' requires a Shard Iterator as a mandatory parameter, not just the stream name or partition key.
+    diagram: |
+      graph TD
+        A[CLI User] --"1. get-shard-iterator"--> B[Kinesis API]
+        B --"Iterator ID"--> A
+        A --"2. get-records --iterator ID"--> B
+        B --"Data Records"--> A
+    tags: [CLI, Operations]
+
+  - id: q5
+    topic: "Amazon Kinesis Data Streams - Enhanced Fan Out"
+    type: multiple_choice
+    question: |
+      A financial data provider has a single Kinesis stream with multiple high-priority consumer applications. Each application requires low-latency delivery and must avoid contention for the standard 2 MB/s read limit of the shards.
+      Which feature should the architect enable?
+    options:
+      - text: "Enhanced Fan-Out to provide dedicated 2 MB/s throughput for each registered consumer."
+        is_correct: true
+      - text: "Shard Splitting to increase the aggregate throughput of the stream to 10 MB/s."
+        is_correct: false
+      - text: "Kinesis Data Firehose with an AWS Lambda transformation to push data to the consumers."
+        is_correct: false
+      - text: "Amazon ElastiCache for Redis to buffer the stream data for multiple consumer reads."
+        is_correct: false
+    explanation: |
+      Correct: Enhanced Fan-Out provides dedicated throughput per consumer using HTTP/2, eliminating contention.
+      Incorrect:
+        Shard splitting increases total stream capacity but consumers still compete for the same 2 MB/s limit per shard unless using Fan-Out.
+        Firehose adds latency and is not designed for real-time low-latency consumer patterns.
+        Redis adds complexity and doesn't solve the underlying Kinesis architectural throughput limit.
+    diagram: |
+      graph LR
+        A[Kinesis Shard] --"Pipe 1 (2MB/s)"--> B[Consumer A]
+        A --"Pipe 2 (2MB/s)"--> C[Consumer B]
+        A --"Pipe 3 (2MB/s)"--> D[Consumer C]
+    tags: [Performance, Fan-out]
+
+  - id: q6
+    topic: "Amazon Kinesis Data Streams - Scaling"
+    type: multiple_choice
+    question: |
+      A company's Kinesis Data Stream is receiving 'ProvisionedThroughputExceededException' errors during peak hours. The stream is currently configured with 10 shards.
+      What is the most appropriate scaling action to resolve this?
+    options:
+      - text: "Perform a Resharding operation to increase the number of shards in the stream."
+        is_correct: true
+      - text: "Increase the Retention Period of the stream from 24 hours to 7 days."
+        is_correct: false
+      - text: "Switch the Stream Mode to 'Provisioned' and double the shard count manually."
+        is_correct: false
+      - text: "Increase the write capacity of the DynamoDB table used by the KCL consumers."
+        is_correct: false
+    explanation: |
+      Correct: Throughput issues in Kinesis are solved by increasing the number of shards (Resharding).
+      Incorrect:
+        Retention period affects how long data stays in the stream, not how much data can flow in/out per second.
+        The question implies the stream is already in 'Provisioned' mode; switching doesn't solve the immediate shard limit unless the count is changed.
+        DynamoDB scaling helps the consumer, but 'ProvisionedThroughputExceeded' usually refers to the stream's ingress/egress limits.
+    diagram: |
+      graph TD
+        A[Current: 10 Shards] --"Split Shards"--> B[Target: 20 Shards]
+        B --> C[Double Ingress/Egress Capacity]
+    tags: [Scaling, Shards]
+
+  - id: q7
+    topic: "Amazon Kinesis Data Streams - Handling Duplicates"
+    type: multiple_choice
+    question: |
+      A logistics company notices that some sensor data is duplicated in their backend database. They determined that network retries at the producer level are causing the same records to be sent to Kinesis multiple times.
+      How should the architect ensure the data is processed only once?
+    options:
+      - text: "Embed a unique ID in the record and use the consumer to perform an idempotency check."
+        is_correct: true
+      - text: "Enable 'Deduplication' in the Kinesis Data Streams console under advanced settings."
+        is_correct: false
+      - text: "Use a Kinesis FIFO stream to automatically discard duplicate sequence numbers."
+        is_correct: false
+      - text: "Configure the Kinesis Producer Library (KPL) to set 'MaxRetries' to 0."
+        is_correct: false
+    explanation: |
+      Correct: Kinesis guarantees at-least-once delivery; consumers must handle deduplication using a unique business ID and a stateful store.
+      Incorrect:
+        There is no 'Deduplication' checkbox in the Kinesis console.
+        Kinesis does not have a 'FIFO' mode (that is an SQS feature).
+        Setting retries to 0 risks data loss, which is usually unacceptable in production.
+    diagram: |
+      graph LR
+        A[Producer] --"Send ID: 123"--> B[Kinesis]
+        B --"ID: 123"--> C[Consumer]
+        C --"Check ID 123"--> D[(DynamoDB)]
+        D --"Already Processed?"--> C
+    tags: [Duplicates, Idempotency]
+
+  - id: q8
+    topic: "Amazon Kinesis Data Streams - Security"
+    type: multiple_choice
+    question: |
+      A healthcare provider must encrypt all data in transit and at rest within their Kinesis Data Streams to meet HIPAA requirements.
+      Which combination of steps meets these security requirements?
+    options:
+      - text: "Enable Server-Side Encryption (SSE-KMS) and use HTTPS (TLS) endpoints for API calls."
+        is_correct: true
+      - text: "Use IAM policies to restrict stream access and enable S3 bucket encryption for logs."
+        is_correct: false
+      - text: "Enable PrivateLink for Kinesis and use Client-Side Encryption with the AWS Encryption SDK."
+        is_correct: false
+      - text: "Set up a Site-to-Site VPN and use the 'SecretStream' feature in AWS Secrets Manager."
+        is_correct: false
+    explanation: |
+      Correct: SSE-KMS handles encryption at rest, while TLS (standard for AWS APIs) handles encryption in transit.
+      Incorrect:
+        S3 encryption doesn't protect the data while it resides inside the Kinesis shards.
+        PrivateLink provides network security, but encryption (rest/transit) is still required for HIPAA.
+        There is no 'SecretStream' feature in Secrets Manager for Kinesis data encryption.
+    diagram: |
+      graph LR
+        A[Producer] --"HTTPS/TLS"--> B[Kinesis Stream]
+        subgraph Encryption at Rest
+          B <--> C[(KMS Key)]
+        end
+    tags: [Security, Encryption]
+
+  - id: q9
+    topic: "Amazon Data Firehose"
+    type: multiple_choice
+    question: |
+      A company wants to capture real-time application logs and deliver them to an Amazon S3 bucket for long-term storage and an Amazon OpenSearch cluster for near-real-time analysis. They want to avoid managing consumer applications or code.
+      Which solution is most appropriate?
+    options:
+      - text: "Use Amazon Data Firehose to deliver the logs to both Amazon S3 and Amazon OpenSearch."
+        is_correct: true
+      - text: "Use Kinesis Data Streams with a Lambda function that writes to S3 and OpenSearch."
+        is_correct: false
+      - text: "Use Amazon MSK with a Kafka Connect sink for S3 and a custom producer for OpenSearch."
+        is_correct: false
+      - text: "Use Amazon SNS to publish log messages to S3 and OpenSearch subscription endpoints."
+        is_correct: false
+    explanation: |
+      Correct: Firehose is a fully managed, serverless delivery service for S3, OpenSearch, Redshift, and Splunk.
+      Incorrect:
+        Kinesis Data Streams requires managing consumer code (Lambda), which contradicts the 'avoid managing code' requirement.
+        MSK/Kafka Connect is not as 'zero-management' as Firehose.
+        SNS cannot deliver directly to S3 or OpenSearch without intermediate Lambda functions.
+    diagram: |
+      graph LR
+        A[App Logs] --> B[Firehose]
+        B --> C[S3 Bucket]
+        B --> D[OpenSearch]
+    tags: [Firehose, Delivery]
+
+  - id: q10
+    topic: "Kinesis Data Stream Troubleshooting and Performance Tuning"
+    type: multiple_choice
+    question: |
+      A developer notices that their KCL-based consumer is lagging behind. The CloudWatch metric 'GetRecords.IteratorAgeMilliseconds' is increasing. The CPU and Memory of the consumer instances are low.
+      How can the developer improve the processing speed?
+    options:
+      - text: "Increase the number of shards in the stream to allow more parallel processing by KCL workers."
+        is_correct: true
+      - text: "Decrease the shard count to reduce the overhead of managing shard leases in DynamoDB."
+        is_correct: false
+      - text: "Enable Enhanced Fan-Out on the stream to reduce the latency of 'PutRecord' calls."
+        is_correct: false
+      - text: "Switch the KCL checkpointing frequency to occur every 100 milliseconds."
+        is_correct: false
+    explanation: |
+      Correct: More shards allow KCL to scale horizontally by adding more worker threads/instances to process data in parallel.
+      Incorrect:
+        Decreasing shard count reduces throughput, making the lag worse.
+        Enhanced Fan-Out improves read throughput for consumers, but the primary bottleneck for 'lag' in KCL is usually the number of parallel workers (limited by shard count).
+        Frequent checkpointing increases DynamoDB load and can actually slow down the consumer.
+    diagram: |
+      graph TD
+        A[Lagging Consumer] --"Increase Shards"--> B[More Parallel Tasks]
+        B --> C[Decreased IteratorAge]
+    tags: [Troubleshooting, Performance]
+
+  - id: q11
+    topic: "Kinesis Data Analytics / Managed Service for Apache Flink (MSAF)"
+    type: multiple_choice
+    question: |
+      A retail company needs to calculate the average sales per product category every 5 minutes using a sliding window. The data is arriving via Kinesis Data Streams.
+      Which service is designed for this type of complex temporal analysis?
+    options:
+      - text: "Amazon Managed Service for Apache Flink."
+        is_correct: true
+      - text: "Amazon Data Firehose with Lambda transformations."
+        is_correct: false
+      - text: "Amazon QuickSight with a SPICE engine refresh."
+        is_correct: false
+      - text: "Amazon Redshift with a materialized view."
+        is_correct: false
+    explanation: |
+      Correct: MSAF (Apache Flink) is built for stateful, windowed stream processing.
+      Incorrect:
+        Firehose transformations are stateless and not suitable for complex temporal windows (like 5-minute averages).
+        QuickSight is a BI tool for visualization, not a real-time stream processing engine.
+        Redshift is for data warehousing; while it has streaming ingestion, Flink is the preferred engine for complex real-time logic.
+    diagram: |
+      graph LR
+        A[Kinesis Stream] --> B[Apache Flink App]
+        B --"Sliding Window Avg"--> C[Output Stream]
+    tags: [Analytics, Flink]
+
+  - id: q12
+    topic: "Update: Kinesis Data Analytics EOL"
+    type: multiple_choice
+    question: |
+      An architect is reviewing a legacy system that uses 'Kinesis Data Analytics for SQL Applications'. The company wants to modernize the stack using current AWS recommended services.
+      What is the direct replacement for this service?
+    options:
+      - text: "Amazon Managed Service for Apache Flink."
+        is_correct: true
+      - text: "Amazon Managed Streaming for Apache Kafka."
+        is_correct: false
+      - text: "AWS Glue Streaming ETL."
+        is_correct: false
+      - text: "Amazon Athena Federated Query."
+        is_correct: false
+    explanation: |
+      Correct: AWS has consolidated Kinesis Data Analytics under the 'Managed Service for Apache Flink' umbrella.
+      Incorrect:
+        MSK is a message broker (Kafka), not a stream processing engine.
+        Glue Streaming is an ETL service, but Flink is the direct evolutionary path for Kinesis Analytics.
+        Athena is for querying data in place, not for continuous stream processing.
+    diagram: |
+      graph LR
+        A[Legacy: Kinesis Analytics SQL] --"Modernize To"--> B[Managed Service for Apache Flink]
+    tags: [Modernization, Flink]
+
+  - id: q13
+    topic: "Kinesis Analytics Costs; RANDOM_CUT_FOREST"
+    type: multiple_choice
+    question: |
+      A cybersecurity company wants to detect anomalies in network traffic patterns. They need to identify outliers in a Kinesis stream in real-time using a built-in Machine Learning algorithm.
+      Which function should they use within Amazon Managed Service for Apache Flink?
+    options:
+      - text: "RANDOM_CUT_FOREST"
+        is_correct: true
+      - text: "K_MEANS_CLUSTERING"
+        is_correct: false
+      - text: "LINEAR_REGRESSION"
+        is_correct: false
+      - text: "LOGISTIC_REDUNDANCY"
+        is_correct: false
+    explanation: |
+      Correct: RANDOM_CUT_FOREST is the industry-standard algorithm provided by AWS for anomaly detection in streaming data.
+      Incorrect:
+        K_MEANS and LINEAR_REGRESSION are ML algorithms but are not provided as built-in, easy-to-use SQL functions for anomaly detection in this service.
+        'LOGISTIC_REDUNDANCY' is not a standard ML algorithm name in the context of Kinesis Analytics.
+    diagram: |
+      graph LR
+        A[Stream Data] --> B[Flink: RANDOM_CUT_FOREST]
+        B --"Anomaly Score > Threshold"--> C[Alert]
+    tags: [ML, Anomaly Detection]
+
+  - id: q14
+    topic: "Amazon MSK"
+    type: multiple_choice
+    question: |
+      A company is migrating a large-scale Apache Kafka environment from an on-premises data center to AWS. They require full control over Kafka versions and configurations but want to offload the management of the underlying hardware and OS.
+      Which service is the best fit?
+    options:
+      - text: "Amazon Managed Streaming for Apache Kafka (MSK)."
+        is_correct: true
+      - text: "Amazon Kinesis Data Streams."
+        is_correct: false
+      - text: "Amazon MQ with RabbitMQ engine."
+        is_correct: false
+      - text: "Amazon MSK Serverless."
+        is_correct: false
+    explanation: |
+      Correct: MSK provides managed Kafka brokers while allowing full compatibility with Kafka APIs and custom configurations.
+      Incorrect:
+        Kinesis is an AWS-proprietary API and not compatible with Kafka applications.
+        Amazon MQ is for message queuing (RabbitMQ/ActiveMQ), not high-throughput log streaming.
+        MSK Serverless offers less control over specific Kafka configurations compared to standard MSK clusters.
+    diagram: |
+      graph TD
+        A[Admin] --"Configures Topics/Versions"--> B[MSK Cluster]
+        subgraph AWS Managed
+          B --> C[Broker 1]
+          B --> D[Broker 2]
+          B --> E[Zookeeper/KRaft]
+        end
+    tags: [Kafka, MSK]
+
+  - id: q15
+    topic: "Amazon MSK - Connect"
+    type: multiple_choice
+    question: |
+      A data engineer needs to move data from an Amazon MSK topic to an Amazon S3 bucket for archival. The engineer wants to use the open-source Kafka Connect S3 Sink connector without managing the underlying EC2 instances for the workers.
+      Which feature should be used?
+    options:
+      - text: "Amazon MSK Connect."
+        is_correct: true
+      - text: "Amazon Data Firehose with MSK Source."
+        is_correct: false
+      - text: "AWS Glue Schema Registry."
+        is_correct: false
+      - text: "Amazon MSK Serverless."
+        is_correct: false
+    explanation: |
+      Correct: MSK Connect is a managed service for running Kafka Connectors (source and sink) on AWS.
+      Incorrect:
+        Firehose can read from MSK, but the question specifically asks to use the 'Kafka Connect S3 Sink connector'.
+        Schema Registry manages data formats, not the movement of data.
+        MSK Serverless is an architecture for the Kafka cluster itself, not for running connectors.
+    diagram: |
+      graph LR
+        A[MSK Topic] --> B[MSK Connect: S3 Sink]
+        B --> C[S3 Bucket]
+    tags: [Connectors, MSK]
+
+  - id: q16
+    topic: "Amazon MSK - Serverless"
+    type: multiple_choice
+    question: |
+      A startup is building a microservices architecture that uses Apache Kafka for event sourcing. Their traffic is highly bursty and unpredictable. They want to avoid the operational task of rightsizing clusters or brokers.
+      Which MSK deployment mode is most suitable?
+    options:
+      - text: "Amazon MSK Serverless."
+        is_correct: true
+      - text: "Amazon MSK Provisioned."
+        is_correct: false
+      - text: "Amazon Kinesis Data Streams On-Demand."
+        is_correct: false
+      - text: "Amazon MSK with EC2 Auto Scaling groups."
+        is_correct: false
+    explanation: |
+      Correct: MSK Serverless automatically scales compute and storage, making it ideal for unpredictable workloads.
+      Incorrect:
+        MSK Provisioned requires manual sizing of brokers and instance types.
+        Kinesis On-Demand is a different service entirely (not Kafka).
+        Standard MSK does not natively use EC2 Auto Scaling groups for brokers in the way described.
+    diagram: |
+      graph TD
+        A[Bursty Traffic] --> B[MSK Serverless]
+        B --"Auto-scales Capacity"--> C[Events]
+    tags: [Serverless, MSK]
+
+  - id: q17
+    topic: "Amazon Kinesis vs. Amazon MSK"
+    type: multiple_choice
+    question: |
+      A company is starting a new project and needs to choose a streaming platform. The development team is small and prefers AWS-native services with minimal configuration and built-in integration with AWS Lambda. They have no previous experience with Apache Kafka.
+      Which service should the architect recommend?
+    options:
+      - text: "Amazon Kinesis Data Streams."
+        is_correct: true
+      - text: "Amazon MSK."
+        is_correct: false
+      - text: "Amazon Data Firehose."
+        is_correct: false
+      - text: "Amazon SQS."
+        is_correct: false
+    explanation: |
+      Correct: Kinesis is the 'AWS-native' choice, easier to manage than MSK, and has seamless Lambda integration.
+      Incorrect:
+        MSK is more complex and typically chosen by teams who already use Kafka or need its specific ecosystem.
+        Firehose is for delivery, not for general-purpose stream processing with Lambda-based custom logic.
+        SQS is a queue, not a streaming platform with ordered shards and replayability.
+    diagram: |
+      graph LR
+        A[Native AWS Integration] --> B[Kinesis]
+        C[Open Source Ecosystem] --> D[MSK]
+    tags: [Comparison, Decision]
+
+  - id: q18
+    topic: "Amazon OpenSearch Service"
+    type: multiple_choice
+    question: |
+      An online retailer needs to provide a search bar for their product catalog that supports synonyms, typos, and keyword highlighting. They also need a dashboard to visualize search trends.
+      Which service should they implement?
+    options:
+      - text: "Amazon OpenSearch Service."
+        is_correct: true
+      - text: "Amazon Redshift."
+        is_correct: false
+      - text: "Amazon CloudSearch."
+        is_correct: false
+      - text: "Amazon Neptune."
+        is_correct: false
+    explanation: |
+      Correct: OpenSearch is a search and analytics engine that excels at full-text search and includes Dashboards.
+      Incorrect:
+        Redshift is a data warehouse, not optimized for full-text search features like synonyms or highlights.
+        CloudSearch is a legacy service with fewer features than OpenSearch.
+        Neptune is a graph database, used for relationship mapping, not text search.
+    diagram: |
+      graph LR
+        A[Catalog Data] --> B[OpenSearch Index]
+        B --"Search Query"--> C[User Results]
+        B --"Trends"--> D[OpenSearch Dashboards]
+    tags: [Search, Analytics]
+
+  - id: q19
+    topic: "Amazon OpenSearch Service, Pt. 2"
+    type: multiple_choice
+    question: |
+      A DevOps engineer is configuring an Amazon OpenSearch cluster for production. The company requires the cluster to remain available even in the event of an Availability Zone (AZ) failure.
+      What is the recommended configuration?
+    options:
+      - text: "Enable Multi-AZ deployment (2 or 3 AZs) and use Dedicated Master Nodes."
+        is_correct: true
+      - text: "Deploy the cluster in a Single AZ and enable daily snapshots to S3."
+        is_correct: false
+      - text: "Use an Application Load Balancer to mirror traffic to clusters in two different regions."
+        is_correct: false
+      - text: "Enable Cross-Cluster Replication with an MSK topic as the primary buffer."
+        is_correct: false
+    explanation: |
+      Correct: Multi-AZ ensures high availability of data nodes, while Dedicated Master Nodes ensure the cluster's stability/brain remains healthy during AZ issues.
+      Incorrect:
+        Single AZ is a single point of failure for the cluster.
+        Multi-region mirroring is complex and overkill for basic AZ-level high availability.
+        MSK is not a native buffering solution for OpenSearch HA.
+    diagram: |
+      graph TD
+        subgraph Region
+          subgraph AZ 1
+            A[Data Node]
+            B[Master Node]
+          end
+          subgraph AZ 2
+            C[Data Node]
+            D[Master Node]
+          end
+        end
+    tags: [High Availability, OpenSearch]
+
+  - id: q20
+    topic: "OpenSearch Index Management and Designing for Stability"
+    type: multiple_choice
+    question: |
+      A company stores 1 TB of log data per day in OpenSearch. They only need high performance for the last 7 days of data. Data between 7 and 30 days old can be stored on cheaper storage, and data older than 30 days should be deleted.
+      How can this be automated?
+    options:
+      - text: "Configure an Index State Management (ISM) policy to move indices between Hot, Warm, and Delete states."
+        is_correct: true
+      - text: "Use an AWS Lambda function to daily resize the EBS volumes of the data nodes."
+        is_correct: false
+      - text: "Enable Amazon Data Firehose to automatically delete old indices based on a TTL setting."
+        is_correct: false
+      - text: "Manually rotate indices using the OpenSearch Dashboards 'Dev Tools' console every morning."
+        is_correct: false
+    explanation: |
+      Correct: ISM allows you to define a lifecycle for indices, automating the move to 'Warm' storage and eventual deletion.
+      Incorrect:
+        Resizing EBS volumes does not move data to cheaper 'Warm' nodes or delete specific indices.
+        Firehose delivers data but does not manage the lifecycle of existing indices in the OpenSearch cluster.
+        Manual rotation is prone to error and does not meet the 'automated' requirement.
+    diagram: |
+      graph LR
+        A[New Logs] --> B[Hot Node]
+        B --"After 7 Days"--> C[Warm Node]
+        C --"After 30 Days"--> D[Delete]
+    tags: [Storage, ISM]
+
+  - id: q21
+    topic: "Amazon OpenSearch Service Performance"
+    type: multiple_choice
+    question: |
+      A marketing team is running complex aggregations on an OpenSearch cluster. They are seeing high 'JVMMemoryPressure' and slow response times.
+      What is the most effective way to scale the cluster to improve performance?
+    options:
+      - text: "Scale out by adding more data nodes or scale up by using instance types with more RAM."
+        is_correct: true
+      - text: "Decrease the number of primary shards for the index to reduce overhead."
+        is_correct: false
+      - text: "Enable 'GZIP' compression on the API requests to reduce network bandwidth."
+        is_correct: false
+      - text: "Reduce the 'Refresh Interval' of the index to 100ms to ensure data is searchable faster."
+        is_correct: false
+    explanation: |
+      Correct: JVM Memory Pressure is solved by providing more total heap memory, either by adding more nodes (scale out) or using larger instances (scale up).
+      Incorrect:
+        Decreasing shards can actually hurt performance if the shards become too large (over 50GB).
+        Bandwidth is rarely the cause of JVMMemoryPressure.
+        A very low refresh interval (100ms) increases CPU and memory pressure, making performance worse.
+    diagram: |
+      graph TD
+        A[High JVM Pressure] --> B[Scale Out: Add Nodes]
+        B --> C[More Distributed Heap Memory]
+        C --> D[Lower Pressure]
+    tags: [Performance, Scaling]
+
+  - id: q22
+    topic: "Amazon OpenSearch Serverless"
+    type: multiple_choice
+    question: |
+      A small development team wants to add a search feature to an internal portal. They want to avoid the complexity of choosing instance types, managing shards, or patching the OpenSearch software.
+      Which deployment option should they choose?
+    options:
+      - text: "Amazon OpenSearch Serverless."
+        is_correct: true
+      - text: "Amazon OpenSearch Managed Cluster."
+        is_correct: false
+      - text: "Elasticsearch on Amazon EC2."
+        is_correct: false
+      - text: "Amazon CloudSearch with Auto-Scaling enabled."
+        is_correct: false
+    explanation: |
+      Correct: OpenSearch Serverless is the on-demand, no-infrastructure-management version of the service.
+      Incorrect:
+        Managed Clusters still require choosing instance types and managing shard counts.
+        EC2 requires the most management (OS, software, patching).
+        CloudSearch is a different, legacy service.
+    diagram: |
+      graph LR
+        A[User Request] --> B[OpenSearch Serverless Endpoint]
+        B --"Auto-scales Compute/Storage"--> C[Search Results]
+    tags: [Serverless, OpenSearch]
+
+  - id: q23
+    topic: "OpenSearch Vector Engines"
+    type: multiple_choice
+    question: |
+      An AI research company needs a database to store and perform similarity searches on billions of vector embeddings for a recommendation engine.
+      Which capability within OpenSearch Service meets this need?
+    options:
+      - text: "OpenSearch Vector Engine with k-NN (k-Nearest Neighbors) plugin."
+        is_correct: true
+      - text: "OpenSearch SQL Engine with materialized views."
+        is_correct: false
+      - text: "OpenSearch Logstash Integration with GeoIP filters."
+        is_correct: false
+      - text: "OpenSearch Trace Analytics for OpenTelemetry."
+        is_correct: false
+    explanation: |
+      Correct: The Vector Engine/k-NN plugin is specifically designed to handle vector similarity searches for AI/ML.
+      Incorrect:
+        SQL/Materialized views are for structured data queries, not high-dimensional vector math.
+        GeoIP filters are for geographic location analysis.
+        Trace Analytics is for application monitoring and debugging.
+    diagram: |
+      graph LR
+        A[Vector Embedding] --> B[k-NN Index]
+        C[Query Vector] --"Find Similar"--> B
+        B --"Nearest Neighbors"--> D[Results]
+    tags: [AI, Vector Search]
+
+  - id: q24
+    topic: "Amazon Quick Suite / QuickSight"
+    type: multiple_choice
+    question: |
+      A business analyst needs to create an interactive dashboard that combines data from an S3 bucket (queried via Athena) and an RDS MySQL database. The analyst has no coding experience.
+      Which service is the best choice?
+    options:
+      - text: "Amazon QuickSight."
+        is_correct: true
+      - text: "AWS Glue DataBrew."
+        is_correct: false
+      - text: "Amazon Managed Grafana."
+        is_correct: false
+      - text: "Amazon SageMaker Canvas."
+        is_correct: false
+    explanation: |
+      Correct: QuickSight is the AWS BI tool designed for non-technical users to create dashboards from multiple data sources.
+      Incorrect:
+        DataBrew is for visual data preparation, not for building final dashboards.
+        Grafana is primarily for operational/infrastructure monitoring, not general business intelligence.
+        SageMaker Canvas is for building ML models without code, not for general BI dashboarding.
+    diagram: |
+      graph TD
+        A[Athena/S3] --> B[QuickSight]
+        C[RDS MySQL] --> B
+        B --> D[Dashboard for Users]
+    tags: [BI, Dashboards]
+
+  - id: q25
+    topic: "QuickSight Pricing and Dashboards; ML Insights"
+    type: multiple_choice
+    question: |
+      A company wants to provide 1,000 external users with access to a sales dashboard. They want to pay based on actual usage rather than a flat fee per user and want the dashboard to automatically highlight key takeaways in text.
+      Which configuration should they use?
+    options:
+      - text: "QuickSight Reader capacity/session pricing and enable ML Insights (Auto-Narratives)."
+        is_correct: true
+      - text: "QuickSight Enterprise User pricing and use standard pie charts for summaries."
+        is_correct: false
+      - text: "QuickSight Standard Edition with an annual subscription per user."
+        is_correct: false
+      - text: "QuickSight Mobile App with IAM-based federated access and SPICE."
+        is_correct: false
+    explanation: |
+      Correct: Reader pricing is 'per session' (capped), and ML Insights provides 'Auto-Narratives' (text takeaways).
+      Incorrect:
+        Enterprise User pricing is a flat monthly fee, which is expensive for 1,000 occasional users.
+        Standard Edition lacks many Enterprise features like ML Insights and Reader pricing.
+        The Mobile app is just an interface and doesn't solve the pricing or text narrative requirements.
+    diagram: |
+      graph LR
+        A[Data] --> B[QuickSight Engine]
+        B --"ML Insights"--> C[Text Narratives]
+        D[Users] --"Pay per Session"--> E[Access Dashboard]
+    tags: [Pricing, ML Insights]
+
+  - id: q26
+    topic: "Quicksight Calculated Fields and Level-Aware Calculations"
+    type: multiple_choice
+    question: |
+      An analyst needs to create a KPI that shows a salesperson's total revenue as a percentage of the entire company's revenue. This percentage must remain constant even if the user applies a filter to show only a specific region on the dashboard.
+      Which feature should be used?
+    options:
+      - text: "Level-Aware Calculations (LAC) using the PRE_FILTER attribute."
+        is_correct: true
+      - text: "Standard Calculated Field using the 'PERCENT_OF_TOTAL' function."
+        is_correct: false
+      - text: "Athena View that pre-calculates the global total and joins it to the main dataset."
+        is_correct: false
+      - text: "QuickSight Parameter with a dynamic default value based on a filter."
+        is_correct: false
+    explanation: |
+      Correct: LAC with PRE_FILTER computes the aggregate (total revenue) before dashboard filters are applied, allowing for a fixed denominator.
+      Incorrect:
+        Standard functions like PERCENT_OF_TOTAL are visual-level calculations and will re-calculate based on the filtered data.
+        Athena views are static and don't allow for the dynamic interactivity expected in QuickSight.
+        Parameters do not calculate multi-level aggregates natively across the whole dataset.
+    diagram: |
+      graph TD
+        A[Raw Data] --"1. LAC PRE_FILTER"--> B[Global Total Revenue]
+        A --"2. Filter Applied"--> C[Regional Data]
+        C / B --> D[Fixed Percentage KPI]
+    tags: [Calculations, LAC]
