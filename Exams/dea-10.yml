@@ -19,6 +19,7 @@
         EMR with RDS is not serverless and requires significant operational overhead.
         Athena manual queries do not provide automation for schema discovery across large-scale data.
         Lambda triggers for every file would be extremely inefficient and costly at petabyte scale.
+    explanationImg: dea-10-01.jpg
     diagram: |
       graph LR
         A[S3 Data Lake] --> B[AWS Glue Crawler]
@@ -45,6 +46,7 @@
         A dedicated EMR/Aurora metastore requires managing infrastructure and scaling.
         DynamoDB is not natively Hive-compatible without significant custom coding.
         Redshift is a data warehouse, not a Hive-compatible metadata catalog for external S3 data.
+    explanationImg: dea-10-02.jpg
     diagram: |
       graph TD
         A[Legacy Hive Scripts] --> B[AWS Glue ETL]
@@ -71,6 +73,7 @@
         Using Boto3 inside a loop for every record is extremely slow and hits API rate limits.
         S3 event notifications introduce unnecessary complexity and potential race conditions.
         IAM roles grant permission but do not trigger the logic required to sync metadata.
+    explanationImg: dea-10-03.jpg
     diagram: |
       graph LR
         A[Glue ETL Job] --> B{Sink Config}
@@ -97,6 +100,7 @@
         S3 Lifecycle policies manage object age/transitions, not ETL processing state.
         Worker types (G.4X) relate to compute power, not state management features.
         Manual manifest management is complex and error-prone compared to native bookmarks.
+    explanationImg: dea-10-04.jpg
     diagram: |
       graph LR
         A[S3 Source] --> B[Glue ETL + Bookmarks]
@@ -123,6 +127,7 @@
         DPU billing is independent of the programming language used.
         Increasing retries does not reduce the cost of an inefficient job; it might increase it.
         The Catalog is not the primary cost driver; DPU hours spent on inefficient processing are.
+    explanationImg: dea-10-05.jpg
     diagram: |
       graph TD
         A[Tiny Files] -- High Overhead --> B[Glue DPU Waste]
@@ -148,6 +153,7 @@
         Glue is serverless; users cannot manually attach EC2 Spot instances to it.
         The minimum DPU for Standard jobs is typically 2; 0.1 is not a valid setting.
         Interactive sessions are for development, not for optimizing production batch job costs.
+    explanationImg: dea-10-06.jpg
     diagram: |
       graph LR
         A[Non-Urgent Job] --> B{Execution Class}
@@ -174,6 +180,7 @@
         DataBrew is for data preparation/cleaning, not for building full Spark ETL scripts.
         EMR Studio is an IDE for developers, not a drag-and-drop ETL builder for non-coders.
         Athena Query Editor is for SQL, not for visual ETL orchestration.
+    explanationImg: dea-10-07.jpg
     diagram: |
       graph TD
         A[Visual Interface] --> B[Join/Filter/Transform]
@@ -200,6 +207,7 @@
         Schema Registry manages formats for streaming, not row-level data quality rules for S3.
         S3 Guard is not a real AWS service for content validation.
         Crawlers infer schema but do not provide a 'Strict Mode' for data quality enforcement.
+    explanationImg: dea-10-08.jpg
     diagram: |
       graph LR
         A[Raw Data] --> B[Glue Data Quality]
@@ -226,6 +234,7 @@
         Glue Studio is for ETL job orchestration, not interactive 'spreadsheet-style' cleaning.
         QuickSight is a BI visualization tool, not a data preparation tool.
         Lake Formation is for security and governance, not for editing data content.
+    explanationImg: dea-10-09.jpg
     diagram: |
       graph LR
         A[Messy Data] --> B[DataBrew Workspace]
@@ -251,6 +260,7 @@
         Blueprints are for creating Glue Workflows, not for DataBrew transformation steps.
         While DataBrew can run on Spark, it doesn't primarily manage logic through 'imported' scripts.
         Workflows in Glue are for orchestration, not for defining step-by-step data cleaning logic.
+    explanationImg: dea-10-10.jpg
     diagram: |
       graph TD
         A[Dataset A] --> B[Recipe]
@@ -277,6 +287,7 @@
         Macie is for discovery and alerting, it does not redact data during an ETL job.
         S3 Bucket Policies control access to files, not individual columns or data patterns.
         Crawlers find schema; they do not mask or redact data based on content.
+    explanationImg: dea-10-11.jpg
     diagram: |
       graph LR
         A[S3 Data with PII] --> B[DataBrew Job]
@@ -302,6 +313,7 @@
         Step Functions is a valid external tool, but Glue Workflows is the internal service-specific feature requested.
         EC2 Cron jobs increase operational overhead and are not serverless.
         There is no 'Auto-Sequence' feature in the Glue Data Catalog.
+    explanationImg: dea-10-12.jpg
     diagram: |
       graph TD
         A[Trigger] --> B[Crawler]
@@ -328,6 +340,7 @@
         SCPs in Organizations manage account-level boundaries, not granular data columns.
         S3 Access Points do not natively understand or filter data 'columns'.
         IAM cannot inspect or enforce security based on the internal structure of a file without an intermediary service like Lake Formation.
+    explanationImg: dea-10-13.jpg
     diagram: |
       graph LR
         A[Admin] --> B[Lake Formation]
@@ -355,6 +368,7 @@
         Partition Projection is for performance optimization, not for security enforcement.
         S3 Select is a retrieval optimization, not a security governance tool.
         Athena Workgroups can limit query costs but cannot enforce row-level security natively.
+    explanationImg: dea-10-14.jpg
     diagram: |
       graph TD
         A[Query: SELECT *] --> B{Lake Formation Filter}
@@ -381,6 +395,7 @@
         Redshift (Provisioned) requires cluster management.
         RDS is a relational database for OLTP, not designed for ad-hoc large-scale S3 data lake queries.
         Glue Studio is for ETL, not primarily for ad-hoc SQL querying.
+    explanationImg: dea-10-15.jpg
     diagram: |
       graph LR
         A[S3 Logs] --> B[Athena]
@@ -406,6 +421,7 @@
         Glue does not store the data; S3 does.
         Athena does not bypass Glue; it is integrated with it for table definitions.
         Athena uses the Glue Data Catalog as its primary metastore in the AWS ecosystem.
+    explanationImg: dea-10-16.jpg
     diagram: |
       graph LR
         A[Athena] --> B[Glue Data Catalog]
@@ -432,6 +448,7 @@
         There is no 'Query Priority' setting in Athena that changes performance.
         Glacier is for archival; S3 Standard or Express One Zone is faster for Athena.
         'LIMIT' does not reduce the data scanned in Athena; the entire block must often be read first.
+    explanationImg: dea-10-17.jpg
     diagram: |
       graph TD
         A[Many Small JSONs] -- Scan All --> B[Slow/Expensive]
@@ -457,6 +474,7 @@
         Athena cannot natively 'update' lines inside a standard CSV/JSON file on S3.
         Federated query is for external sources, not for adding ACID to S3 files.
         Workgroups do not provide file-level locking for transactional consistency.
+    explanationImg: dea-10-18.jpg
     diagram: |
       graph LR
         A[Update/Delete Query] --> B[Athena ACID]
@@ -483,6 +501,7 @@
         NFS sharing from an EMR node is not scalable and introduces a single point of failure.
         Local caches would lead to data inconsistency across different services.
         While DynamoDB can be used for locking in some custom setups, Glue is the native, integrated catalog for Iceberg on AWS.
+    explanationImg: dea-10-19.jpg
     diagram: |
       graph TD
         A[Athena] & B[EMR] & C[Glue ETL] --> D[AWS Glue Data Catalog]
@@ -508,6 +527,7 @@
         IAM cannot inspect the content of a SQL query to deny S3 access dynamically.
         Splitting every column into different buckets is architecturally complex and inefficient.
         KMS encryption at the column level would cause the entire Athena query to fail if it tries to read the file.
+    explanationImg: dea-10-20.jpg
     diagram: |
       graph LR
         A[User] --> B[Athena]
@@ -535,6 +555,7 @@
         Hive is supported on EMR but is not the primary engine for Glue ETL.
         Presto is the engine behind Athena, not Glue ETL.
         Flink is available in Amazon Managed Service for Apache Flink, but is not the base for Glue ETL.
+    explanationImg: dea-10-21.jpg
     diagram: |
       graph TD
         A[AWS Glue] --> B[Apache Spark Engine]
@@ -561,6 +582,7 @@
         There is no 'athena-sync' command; metadata is retrieved from Glue.
         Athena does not have a 'service restart' or manual JSON metadata folder requirement.
         Replicating data to RDS defeats the purpose of a serverless S3 data lake.
+    explanationImg: dea-10-22.jpg
     diagram: |
       graph LR
         A[S3 CSV] --> B[Glue Crawler]
@@ -587,6 +609,7 @@
         'SELECT INTO' is not the syntax used in Athena for this purpose.
         'ALTER TABLE' cannot change the physical underlying file format of existing S3 data.
         'FORCE_PARQUET' is not a valid Athena SQL hint.
+    explanationImg: dea-10-23.jpg
     diagram: |
       graph TD
         A[Raw CSV Table] --> B[CTAS Query]
@@ -613,6 +636,7 @@
         Individual JDBC inserts are too slow for large-scale distributed Spark jobs.
         SSH tunnels to a leader node are not a standard or scalable Glue/Redshift integration.
         Redshift Spectrum (External Schemas) is for reading S3 data, not for high-performance upserts from Spark.
+    explanationImg: dea-10-24.jpg
     diagram: |
       graph LR
         A[Kinesis] --> B[Glue Spark]
@@ -639,6 +663,7 @@
         There is no 'Athena-to-Glue Bridge' for code conversion.
         SageMaker interacts with Athena but does not use 'Spark-EBS volumes' for replication.
         'athena-spark-submit' is not a valid AWS tool; sessions are managed within the Athena service.
+    explanationImg: dea-10-25.jpg
     diagram: |
       graph LR
         A[Jupyter Notebook] --> B[Athena Spark Session]
@@ -665,6 +690,7 @@
         Athena does not have a 'Cross-Source Sync' replication feature.
         Glue Elastic Views is a separate service for data sync, not an Athena query feature.
         You do not need to install agents on RDS instances for Athena federation.
+    explanationImg: dea-10-26.jpg
     diagram: |
       graph TD
         A[Athena] --> B[Lambda Connector]
@@ -692,6 +718,7 @@
         Glue is serverless and does not provide root access to the workers.
         Athena does not allow custom OS-level library injections.
         Lambda has a 15-minute limit and cannot effectively simulate a large Hadoop cluster.
+    explanationImg: dea-10-27.jpg
     diagram: |
       graph TD
         A[EMR Cluster] --> B[Master Node]
@@ -719,6 +746,7 @@
         Storage Gateway is for on-premises-to-cloud integration, not for EMR internal storage.
         S3 DistCP is a tool for moving data, not a real-time file system connector.
         Caching an entire petabyte S3 bucket on EBS is not feasible or cost-effective.
+    explanationImg: dea-10-28.jpg
     diagram: |
       graph LR
         A[EMR App] --> B[EMRFS]
@@ -745,6 +773,7 @@
         HDFS is for storage, not for SQL or scheduling.
         MapReduce is a processing framework, not a storage layer.
         Apache Pig is a high-level scripting language, not an operating system.
+    explanationImg: dea-10-29.jpg
     diagram: |
       graph TD
         A[YARN] --> B[App Master]
@@ -771,6 +800,7 @@
         EMR on Lambda is not a service.
         'EMR Dedicated' is not a standard AWS service term.
         Glue does not run 'on' Kubernetes in the same way EMR on EKS does.
+    explanationImg: dea-10-30.jpg
     diagram: |
       graph TD
         A[User] --> B{Option}
