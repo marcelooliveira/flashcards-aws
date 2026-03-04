@@ -20,6 +20,7 @@
         RDS PostgreSQL is relational and requires manual scaling of instance types for massive spikes, unlike the seamless scaling of DynamoDB.
         ElastiCache is an in-memory store; while fast, it is not a primary durable database for persistent user profiles.
         Aurora Serverless is a strong contender but generally has higher cold-start latency and overhead compared to the key-value efficiency of DynamoDB for simple profiles.
+    explanationImg: dea-12-01.jpg
     diagram: |
       graph LR
         A[Mobile App] --> B[API Gateway]
@@ -48,6 +49,7 @@
         You do not define non-key attributes in advance (schema-less).
         DynamoDB has virtually unlimited storage and doesn't limit connections like a traditional SQL DB.
         DynamoDB is a public regional service; it is not provisioned inside your VPC subnets (though VPC Endpoints can be used for access).
+    explanationImg: dea-12-02.jpg
     diagram: |
       graph TD
         A[Create Table] --> B[Define Table Name]
@@ -77,6 +79,7 @@
         A full Scan consumes RCU and can throttle production traffic.
         Streams/Lambda is for real-time changes, not for bulk historical export.
         Glue reading directly from the table still consumes provisioned RCU.
+    explanationImg: dea-12-03.jpg
     diagram: |
       graph LR
         A[(DynamoDB)] --"PITR Backups"--> B[Internal Export Engine]
@@ -105,6 +108,7 @@
         10 RCUs would only work for 4KB items.
         40 RCUs would be the calculation for 16KB items or if the math was doubled incorrectly.
         80 RCUs is significantly over-provisioned.
+    explanationImg: dea-12-04.jpg
     diagram: |
       graph TD
         A[10 Reads/sec] --> B{Strongly Consistent?}
@@ -134,6 +138,7 @@
         DynamoDB has no storage limit that would cause throughput throttling.
         Auto-scaling prevents total limit issues, but doesn't fix partition-level hot keys.
         Larger items would increase 'Consumed WCU' in metrics, but the user sees low consumption.
+    explanationImg: dea-12-05.jpg
     diagram: |
       graph TD
         A[Traffic] --> B[Partition 1 -HOT-]
@@ -162,6 +167,7 @@
         Scan reads the entire table, which is extremely inefficient for specific keys.
         Query is used to find items sharing the same Partition Key but with different Sort Keys.
         TransactGetItems is for atomic operations and has higher latency/cost than BatchGetItem.
+    explanationImg: dea-12-06.jpg
     diagram: |
       graph LR
         A[App] --"BatchGetItem PK1, PK2... PK50"--> B[(DynamoDB)]
@@ -189,6 +195,7 @@
         Key Condition Expressions are for Queries, not for update logic.
         Read-then-write (GetItem then PutItem) is prone to race conditions (not atomic).
         Optimistic Locking is implemented client-side (usually via Version numbers), not a console toggle.
+    explanationImg: dea-12-07.jpg
     diagram: |
       graph TD
         A[Request: Update Stock] --> B{Condition: Stock > 0}
@@ -217,6 +224,7 @@
         LSIs require the same Partition Key as the base table (OrderID), so you couldn't query by CustomerID alone.
         Adding OrderDate as PK for the CustomerID query doesn't solve the specific need to query by CustomerID.
         You cannot modify the Primary Index of an existing DynamoDB table.
+    explanationImg: dea-12-08.jpg
     diagram: |
       graph LR
         subgraph Base Table
@@ -248,6 +256,7 @@
         Global Tables relate to multi-region replication, not index types.
         Throughput limits don't prevent the visibility of the feature, only its performance.
         LSIs actually *require* a table to have a Sort Key (Composite Key) to exist.
+    explanationImg: dea-12-09.jpg
     diagram: |
       graph TD
         A[Table Creation] --"Define LSI"--> B[Success]
@@ -276,6 +285,7 @@
         'DynamoDB SQL-Proxy' does not exist as an AWS service.
         Athena can query DynamoDB but it's for analytics, not for primary application CRUD operations.
         DAX is a cache and does not change the API language to SQL.
+    explanationImg: dea-12-10.jpg
     diagram: |
       graph LR
         A[Developer] --"SELECT * FROM Users WHERE ID=1"--> B[PartiQL Engine]
@@ -303,6 +313,7 @@
         Increasing RCU increases costs; DAX reduces the need for high RCU on the base table.
         ElastiCache works but requires significant application code changes; DAX is API-compatible with DynamoDB.
         Eventually consistent reads reduce cost but only provide millisecond (not microsecond) latency.
+    explanationImg: dea-12-11.jpg
     diagram: |
       graph LR
         A[App] --"GetItem"--> B[DAX Cache]
@@ -331,6 +342,7 @@
         You don't change the table endpoint in the console; you change the endpoint in the application's SDK client.
         DAX does not support public internet endpoints for security reasons.
         IAM permissions are applied to the application role, not to the table's role.
+    explanationImg: dea-12-12.jpg
     diagram: |
       graph LR
         subgraph VPC
@@ -360,6 +372,7 @@
         App-side calls (SES after PutItem) create tight coupling and if the email call fails, the database write can't be easily undone.
         CloudWatch metrics don't contain the item data (like the user's email address).
         Firehose is for bulk delivery, not for immediate individual event triggers like sending an email.
+    explanationImg: dea-12-13.jpg
     diagram: |
       graph LR
         A[(DynamoDB)] --"Insert Event"--> B[DynamoDB Stream]
@@ -388,6 +401,7 @@
         'New image only' would miss the previous state.
         'Keys only' only shows the PK/SK, which is not enough to see attribute changes.
         'Modified attributes' is not a valid StreamViewType in DynamoDB.
+    explanationImg: dea-12-14.jpg
     diagram: |
       graph TD
         A[Update Item] --> B{Stream View Type}
@@ -416,6 +430,7 @@
         Scanning and deleting manually via Lambda/EventBridge consumes RCU and is complex to manage.
         There is no 'ItemExpiration' parameter in the standard PutItem API.
         You cannot delete an LSI without deleting the whole table, and indices don't manage expiration.
+    explanationImg: dea-12-15.jpg
     diagram: |
       graph LR
         A[Item: {exp_time: 1710000000}] --> B[(DynamoDB TTL Engine)]
@@ -444,6 +459,7 @@
         Base64 encoding actually increases the size of the data by ~33%.
         Splitting chunks is complex to reconstruct and expensive in terms of RCU/WCU.
         DynamoDB has a hard limit of 400 KB per item that cannot be increased.
+    explanationImg: dea-12-16.jpg
     diagram: |
       graph LR
         A[User] --"Upload Pic"--> B[S3 Bucket]
@@ -472,6 +488,7 @@
         KMS encryption protects data at rest but doesn't provide item-level access control logic.
         Creating thousands of tables is an operational nightmare and not a recommended practice.
         Source IP restriction is a network security layer, not a data-level authorization layer.
+    explanationImg: dea-12-17.jpg
     diagram: |
       graph TD
         A[User: ID_123] --> B{IAM Policy Check}
