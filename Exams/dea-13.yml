@@ -20,6 +20,7 @@
         Read Replicas are for scaling reads, and cross-region failover is manual and asynchronous.
         S3 exports are for backups, not real-time high availability.
         RDS is a managed service; users do not manage the underlying instances with Auto Scaling groups.
+    explanationImg: dea-13-01.jpg
     diagram: |
       graph LR
         A[Primary DB - AZ1] --"Sync Replication"--> B[Standby DB - AZ2]
@@ -54,6 +55,7 @@
         B[Session 2: UPDATE] --"Needs Exclusive Lock"--> T
         B --"WAIT"--> A
     tags: [RDS, Locking]
+    explanationImg: dea-13-02.jpg
 
   - id: rds3
     topic: "Amazon RDS Best Practices"
@@ -81,6 +83,7 @@
         A[App] --> B[RDS Instance]
         B --"High Throughput"--> C[Provisioned IOPS Storage]
     tags: [Best Practices, Storage]
+    explanationImg: dea-13-03.jpg
 
   - id: rds4
     topic: "Amazon Aurora"
@@ -111,6 +114,7 @@
         B --> E[AZ3]
         A --> F[Up to 15 Replicas]
     tags: [Aurora, Architecture]
+    explanationImg: dea-13-04.jpg
 
   - id: rds5
     topic: "Amazon Aurora - Hands On"
@@ -140,6 +144,7 @@
         Writer --"Failover"--> NewWriter
         ClusterEndpoint --"Updates to"--> NewWriter
     tags: [Aurora, Endpoints]
+    explanationImg: dea-13-05.jpg
 
   - id: rds6
     topic: "Aurora as a Vector Store with pgvector"
@@ -168,6 +173,7 @@
         B --"Vector"--> C[Aurora PG + pgvector]
         C --"Cosine Similarity"--> D[Contextual Data]
     tags: [AI, VectorSearch]
+    explanationImg: dea-13-06.jpg
 
   - id: rds7
     topic: "Amazon DocumentDB"
@@ -195,6 +201,7 @@
         A[Mongo Drivers] --> B[DocumentDB Endpoint]
         B --> C[JSON-like Documents]
     tags: [NoSQL, DocumentDB]
+    explanationImg: dea-13-07.jpg
 
   - id: rds8
     topic: "Amazon MemoryDB for Redis"
@@ -223,6 +230,7 @@
         B --"In-Memory"--> C[Speed]
         B --"Multi-AZ Log"--> D[Durability]
     tags: [NoSQL, MemoryDB]
+    explanationImg: dea-13-08.jpg
 
   - id: rds9
     topic: "Amazon Keyspaces (for Apache Cassandra)"
@@ -249,6 +257,7 @@
         A[Cassandra App] --"CQL"--> B[Amazon Keyspaces]
         B --> C[Serverless Scaling]
     tags: [NoSQL, Keyspaces]
+    explanationImg: dea-13-09.jpg
 
   - id: rds10
     topic: "Amazon Neptune"
@@ -277,6 +286,7 @@
         User2 --"Likes"--> Post((Post))
         Post --"Tag"--> Category((Topic))
     tags: [NoSQL, Graph]
+    explanationImg: dea-13-10.jpg
 
   - id: rds11
     topic: "Amazon Neptune - Query Languages"
@@ -300,6 +310,7 @@
         CQL is for Cassandra/Keyspaces.
         GraphQL is an API layer, not a native graph DB query language in Neptune.
     tags: [Neptune, Query]
+    explanationImg: dea-13-11.jpg
 
   - id: rds12
     topic: "Amazon Timestream"
@@ -329,6 +340,7 @@
         D[SQL Query] --> B
         D --> C
     tags: [NoSQL, Timestream]
+    explanationImg: dea-13-12.jpg
 
   - id: rds13
     topic: "Amazon Redshift Intro & Architecture"
@@ -356,6 +368,7 @@
         L --> C2[Compute Node 2]
         C1 --"Slices"--> S1[Disk Data]
     tags: [Redshift, OLAP]
+    explanationImg: dea-13-13.jpg
 
   - id: rds14
     topic: "Redshift Spectrum and Performance Tuning"
@@ -384,6 +397,7 @@
         B --"Parallel Scan"--> C[S3 Data Lake]
         A --"Join with"--> D[Local Storage]
     tags: [Redshift, Spectrum]
+    explanationImg: dea-13-14.jpg
 
   - id: rds15
     topic: "Redshift Durability and Scaling"
@@ -405,6 +419,7 @@
         Standard Redshift is not Multi-AZ (though Multi-AZ is a newer, specific feature, the base durability is S3 snapshots).
         Manual snapshots are not the only way; it's automated.
     tags: [Redshift, Durability]
+    explanationImg: dea-13-15.jpg
 
   - id: rds16
     topic: "Redshift Distribution Styles"
@@ -428,6 +443,7 @@
         KEY distributes based on a column, which is better for large-to-large joins.
         AUTO lets Redshift decide, but for a known small table, ALL is the explicit best practice.
     tags: [Redshift, Optimization]
+    explanationImg: dea-13-16.jpg
 
   - id: rds17
     topic: "Redshift Data Flows and the COPY command"
@@ -453,6 +469,7 @@
         S3[S3: File1, File2, File3] --"Parallel COPY"--> C1[Compute Node 1]
         S3 --"Parallel COPY"--> C2[Compute Node 2]
     tags: [Redshift, Ingestion]
+    explanationImg: dea-13-17.jpg
 
   - id: rds18
     topic: "Redshift Integration / WLM / Vacuum"
@@ -475,6 +492,7 @@
         ANALYZE updates statistics for the query optimizer.
         RESIZE changes cluster capacity.
     tags: [Redshift, Maintenance]
+    explanationImg: dea-13-18.jpg
 
   - id: rds19
     topic: "Redshift Resizing"
@@ -496,6 +514,7 @@
       Incorrect:
         Classic Resize takes hours or days as it copies data to a new cluster.
     tags: [Redshift, Scaling]
+    explanationImg: dea-13-19.jpg
 
   - id: rds20
     topic: "RA3 Nodes, Cross-Region Data Sharing, Redshift ML"
@@ -519,6 +538,7 @@
         A[Cluster 1: RA3] --"Data Sharing"--> B[Cluster 2: RA3]
         A --"Storage"--> S[(Managed Storage/S3)]
     tags: [Redshift, RA3]
+    explanationImg: dea-13-20.jpg
 
   - id: rds21
     topic: "Redshift Security"
@@ -539,6 +559,7 @@
       Incorrect:
         SSL/TLS is for encryption in transit.
     tags: [Redshift, Security]
+    explanationImg: dea-13-21.jpg
 
   - id: rds22
     topic: "Redshift Serverless"
@@ -558,6 +579,7 @@
     explanation: |
       Correct: Serverless automatically scales and charges only for the RPU-hours used during query execution.
     tags: [Redshift, Serverless]
+    explanationImg: dea-13-22.jpg
 
   - id: rds23
     topic: "Redshift Materialized Views"
@@ -576,6 +598,7 @@
     explanation: |
       Correct: Materialized Views cache the result of the query, significantly speeding up repeated complex workloads.
     tags: [Redshift, Performance]
+    explanationImg: dea-13-23.jpg
 
   - id: rds24
     topic: "Redshift Data Sharing / Data Shares"
@@ -594,6 +617,7 @@
     explanation: |
       Correct: Data Sharing enables secure, live access to data across clusters without data movement.
     tags: [Redshift, Sharing]
+    explanationImg: dea-13-24.jpg
 
   - id: rds25
     topic: "Redshift Lambda UDF"
@@ -617,6 +641,7 @@
         A[Redshift Query] --"Calls"--> B[AWS Lambda]
         B --"Masked Data"--> A
     tags: [Redshift, Lambda]
+    explanationImg: dea-13-25.jpg
 
   - id: rds26
     topic: "Redshift Federated Queries"
@@ -636,6 +661,7 @@
     explanation: |
       Correct: Federated Queries allow Redshift to query live data in RDS, Aurora, and S3.
     tags: [Redshift, Federated]
+    explanationImg: dea-13-26.jpg
 
   - id: rds27
     topic: "Redshift System Tables and System Views"
@@ -655,6 +681,7 @@
     explanation: |
       Correct: Redshift provides a set of STL (Log) and STV (Virtual) tables for monitoring cluster activity.
     tags: [Redshift, Monitoring]
+    explanationImg: dea-13-27.jpg
 
   - id: rds28
     topic: "Redshift Data API"
@@ -674,6 +701,7 @@
     explanation: |
       Correct: The Data API allows you to run SQL commands via HTTP calls without persistent connections.
     tags: [Redshift, API]
+    explanationImg: dea-13-28.jpg
 
   - id: rds29
     topic: "Redshift - Hands On"
@@ -692,3 +720,4 @@
     explanation: |
       Correct: Redshift requires network configuration (Subnet Groups/VPC) and security rules before it can be accessed.
     tags: [Redshift, Operations]
+    explanationImg: dea-13-29.jpg
