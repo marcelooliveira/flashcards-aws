@@ -26,6 +26,7 @@
         B --> C[(Glue Data Catalog)]
         C --> D[Athena/Redshift Spectrum]
     tags: [Glue, Metadata]
+    explanationImg: dea-14-01.jpg
 
   - id: gl2
     topic: "Glue, Hive, and ETL"
@@ -48,6 +49,7 @@
         O Glue foi desenhado especificamente para ler formatos compatíveis com Hive (Parquet, ORC, etc).
         Embora o Hive Metastore original use um banco relacional, o Glue abstrai toda essa camada.
     tags: [Glue, Hive]
+    explanationImg: dea-14-02.jpg
 
   - id: gl3
     topic: "Modifying the Glue Data Catalog from ETL Scripts"
@@ -70,6 +72,7 @@
         'MSCK REPAIR' é um comando Hive que exige conexão direta com o Metastore, menos eficiente que a integração nativa do Glue.
         Chamar a CLI dentro do worker é ineficiente e difícil de gerenciar.
     tags: [ETL, DynamicFrame]
+    explanationImg: dea-14-03.jpg
 
   - id: gl4
     topic: "Running ETL Jobs with Bookmarks"
@@ -97,6 +100,7 @@
         D[Files: 1, 2, 3, 4, 5] --> E[Job Run 2]
         C --"Only process 4, 5"--> E
     tags: [ETL, Bookmarks]
+    explanationImg: dea-14-04.jpg
 
   - id: gl5
     topic: "Glue Costs and Anti-Patterns"
@@ -119,6 +123,7 @@
         Auto Scaling é uma recomendação de redução de custo.
         Parquet é um padrão recomendado para performance e custo.
     tags: [Costs, Performance]
+    explanationImg: dea-14-05.jpg
 
   - id: gl6
     topic: "AWS Glue Flex Jobs"
@@ -141,6 +146,7 @@
         Standard é o preço normal.
         Dedicated e Serverless Plus não são nomes de classes de execução do Glue.
     tags: [Flex, Cost-Saving]
+    explanationImg: dea-14-06.jpg
 
   - id: gl7
     topic: "AWS Glue Studio"
@@ -164,6 +170,7 @@
         Cloud9 é um IDE de código puro.
         Interactive Sessions são para desenvolvimento via notebooks (Jupyter).
     tags: [GUI, ETL]
+    explanationImg: dea-14-07.jpg
 
   - id: gl8
     topic: "AWS Glue Data Quality"
@@ -185,6 +192,7 @@
         Embora Spark funcione, exige código manual e manutenção.
         Macie é para descoberta de dados sensíveis (PII), não para qualidade de dados técnica.
     tags: [Data Quality, DQDL]
+    explanationImg: dea-14-08.jpg
 
   - id: gl9
     topic: "AWS Glue DataBrew"
@@ -206,6 +214,7 @@
         Ambos são serviços pagos.
         Ambos suportam S3 e diversos outros destinos.
     tags: [DataBrew, Comparison]
+    explanationImg: dea-14-09.jpg
 
   - id: gl10
     topic: "Handling PII in DataBrew Transformations"
@@ -228,6 +237,7 @@
         Deleção automática seria destrutiva e não é o comportamento padrão.
         KMS é para criptografia de disco/arquivo, não para ofuscação de nível de aplicação visual.
     tags: [PII, Security]
+    explanationImg: dea-14-10.jpg
 
   - id: gl11
     topic: "AWS Glue Workflows"
@@ -255,6 +265,7 @@
         B --"Success"--> C[ETL Job]
         C --"Failure"--> D[SNS Notification]
     tags: [Orchestration, Workflows]
+    explanationImg: dea-14-11.jpg
 
   - id: gl12
     topic: "AWS Lake Formation"
@@ -277,6 +288,7 @@
         Políticas de bucket S3 não entendem colunas ou linhas, apenas arquivos (objetos).
         IAM sozinho ficaria extremamente complexo para gerenciar milhares de tabelas e colunas.
     tags: [Security, Data Lake]
+    explanationImg: dea-14-12.jpg
 
   - id: gl13
     topic: "AWS Lake Formation Data Filters"
@@ -298,6 +310,7 @@
         Duplicar dados aumenta o custo e a complexidade de governança.
         Prefixos de pasta só funcionam se os dados estiverem fisicamente particionados por região no S3.
     tags: [Security, Filters]
+    explanationImg: dea-14-13.jpg
 
   - id: gl14
     topic: "Amazon Athena"
@@ -321,6 +334,7 @@
         B --"Read"--> C[S3 Data]
         B --"Metadata"--> D[Glue Catalog]
     tags: [Athena, Serverless]
+    explanationImg: dea-14-14.jpg
 
   - id: gl15
     topic: "Athena Performance"
@@ -343,6 +357,7 @@
         ZIP não é splittable para processamento paralelo; prefira Snappy ou GZIP.
         'SELECT *' aumenta o custo, pois o Athena cobra por byte lido.
     tags: [Athena, Optimization]
+    explanationImg: dea-14-15.jpg
 
   - id: gl16
     topic: "Athena ACID Transactions"
@@ -363,6 +378,7 @@
       Incorrect:
         O S3 é um storage de objetos imutáveis; ele não tem um comando 'ALTER' para mudar parte de um arquivo.
     tags: [Athena, ACID]
+    explanationImg: dea-14-16.jpg
 
   - id: gl17
     topic: "Apache Spark"
@@ -387,6 +403,7 @@
         W1 --> T1[Task A]
         W2 --> T2[Task B]
     tags: [Spark, Distributed]
+    explanationImg: dea-14-17.jpg
 
   - id: gl18
     topic: "Athena Federated Queries"
@@ -412,6 +429,7 @@
         B --> D[(Redshift)]
         A --> E[S3 Data Lake]
     tags: [Athena, Federation]
+    explanationImg: dea-14-18.jpg
 
   - id: gl19
     topic: "Athena and CREATE TABLE AS SELECT (CTAS)"
@@ -430,6 +448,7 @@
     explanation: |
       Correct: CTAS é comumente usado para converter CSVs para Parquet ou re-particionar dados diretamente via SQL no Athena.
     tags: [Athena, CTAS]
+    explanationImg: dea-14-19.jpg
 
   - id: gl20
     topic: "Spark Integration with Kinesis and Redshift"
@@ -448,6 +467,7 @@
     explanation: |
       Correct: A gravação em massa via S3 + COPY é a única forma performática de carregar o Redshift em escala.
     tags: [Spark, Redshift]
+    explanationImg: dea-14-20.jpg
 
   - id: gl21
     topic: "Athena Fine-Grained Access to AWS Glue Data Catalog"
@@ -466,6 +486,7 @@
     explanation: |
       Correct: O Lake Formation intercepta a solicitação do Athena e aplica as permissões definidas (coluna/linha).
     tags: [Security, Access]
+    explanationImg: dea-14-21.jpg
 
   - id: gl22
     topic: "Athena and Glue, Costs, and Security"
@@ -484,6 +505,7 @@
     explanation: |
       Correct: O preço é de US$ 5 por TB escaneado. Formatos colunares (Parquet) reduzem drasticamente esse custo.
     tags: [Costs, Athena]
+    explanationImg: dea-14-22.jpg
 
   - id: gl23
     topic: "Apache Iceberg and Athena / EMR / Glue Integration"
@@ -502,6 +524,7 @@
     explanation: |
       Correct: Iceberg traz funcionalidades de banco de dados SQL para o S3, como histórico de versões e updates eficientes.
     tags: [Iceberg, Data Lake]
+    explanationImg: dea-14-23.jpg
 
   - id: gl24
     topic: "AWS Glue Data Quality"
@@ -520,6 +543,7 @@
     explanation: |
       Correct: Isso permite criar dashboards no CloudWatch para acompanhar a saúde dos dados ao longo do tempo.
     tags: [Monitoring, Data Quality]
+    explanationImg: dea-14-24.jpg
 
   - id: gl25
     topic: "Athena, Glue, and S3 Data Lakes - Hands On"
@@ -538,6 +562,7 @@
     explanation: |
       Correct: O SerDe define como o Athena interpreta os bytes do S3. Erros de permissão IAM também são causas comuns de falha na leitura.
     tags: [Troubleshooting, Athena]
+    explanationImg: dea-14-25.jpg
 
   - id: gl26
     topic: "Spark Integration with Athena"
@@ -556,3 +581,4 @@
     explanation: |
       Correct: 'awswrangler' (AWS SDK para Pandas) é a forma mais comum de integrar serviços de dados da AWS em notebooks Python.
     tags: [Spark, Analysis]
+    explanationImg: dea-14-26.jpg
