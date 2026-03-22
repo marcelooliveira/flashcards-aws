@@ -373,9 +373,6 @@ else
           }
           q.WasCorrect = string.Join(',', q.SelectedOptions.OrderBy(o => o)) == string.Join(',', q.CorrectOptions.OrderBy(o => o));
           q.IsLocked = (q.WasCorrect ?? false);
-
-          CorrectCount += q.WasCorrect == true ? 1 : 0;
-          WrongCount += q.WasCorrect == false ? 1 : 0;
         }
 
         if (!(q.WasCorrect?? false))
@@ -400,6 +397,8 @@ else
     {
       CurrentIndex = firstUnansweredIndex;
     }
+    // After restoring answers, compute aggregate counts from question states
+    UpdateCounts();
   }
 
   async Task SaveAnswerAsync(Question q, int index)
@@ -461,14 +460,14 @@ else
 
     ResetCounts();
 
+    // Ensure UI reflects cleared state
+    UpdateCounts();
+
     StateHasChanged();
   }
 
   async Task NextQuestion(Question question)
   {
-    CorrectCount += question.WasCorrect == true ? 1 : 0;
-    WrongCount += question.WasCorrect == false ? 1 : 0;
-
     if (CurrentIndex < Questions.Count - 1)
       CurrentIndex++;
 
@@ -481,9 +480,26 @@ else
             CurrentIndex--;
     }
 
-    void ShowAnswer()
+    async Task ShowAnswer()
     {
-        Questions[CurrentIndex].IsLocked = true;
+      var q = Questions[CurrentIndex];
+
+      // If the question hasn't been evaluated yet, compute WasCorrect from selected options
+      if (q.WasCorrect == null)
+      {
+        var selected = q.SelectedOptions ?? new List<int>();
+        q.WasCorrect = string.Join(',', selected.OrderBy(o => o)) == string.Join(',', q.CorrectOptions.OrderBy(o => o));
+      }
+
+      q.IsLocked = true;
+
+      // Persist the revealed answer
+      await SaveAnswerAsync(q, CurrentIndex);
+
+      // Update aggregated counts immediately so the UI reflects the revealed answer
+      UpdateCounts();
+
+      StateHasChanged();
     }
 
     void ResetCounts()
@@ -497,7 +513,7 @@ else
         // Save the user's answer for this question
         await SaveAnswerAsync(q, CurrentIndex);
 
-        StateHasChanged();
+      StateHasChanged();
     }
 
     [Inject] NavigationManager NavigationManager { get; set; } = default!;
@@ -510,5 +526,18 @@ else
         public List<int> SelectedOptions { get; set; } = new();
         public bool? WasCorrect { get; set; }
         public bool IsLocked { get; set; }
+    }
+
+    void UpdateCounts()
+    {
+      if (Questions == null || Questions.Count == 0)
+      {
+        CorrectCount = 0;
+        WrongCount = 0;
+        return;
+      }
+
+      CorrectCount = Questions.Count(q => q.WasCorrect == true);
+      WrongCount = Questions.Count(q => q.WasCorrect == false);
     }
 }
