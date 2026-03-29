@@ -1,0 +1,842 @@
+questions:
+  - id: q066
+    type: multiple_choice
+    question: |
+      When a Large Language Model (LLM) processes a sentence, it breaks the text down into smaller units that can be words, parts of words, or characters. What are these units called?
+    options:
+      - text: Vectors
+        is_correct: false
+      - text: Tokens
+        is_correct: true
+      - text: Neurons
+        is_correct: false
+      - text: Chunks
+        is_correct: false
+    explanation: |
+      Correct: Tokens are the basic units of text that an LLM processes. They can represent whole words, sub-words, or even punctuation.
+      Incorrect: Vectors are numerical representations. Neurons are components of the network architecture. Chunks are larger segments of text used for retrieval.
+    diagram: |
+      graph LR
+        Text["Learning AI"] --> T1[Learn]
+        Text --> T2[ing]
+        Text --> T3[" "]
+        Text --> T4[AI]
+        subgraph Tokens
+        T1 & T2 & T3 & T4
+        end
+
+  - id: q067
+    type: multiple_choice
+    question: |
+      A developer is preparing a large PDF document for a Retrieval-Augmented Generation (RAG) system. They need to break the document into smaller, manageable segments to fit within the model's context window. What is this process called?
+    options:
+      - text: Tokenization
+        is_correct: false
+      - text: Embedding
+        is_correct: false
+      - text: Chunking
+        is_correct: true
+      - text: Fine-tuning
+        is_correct: false
+    explanation: |
+      Correct: Chunking is the process of splitting a large piece of text into smaller segments (chunks) to ensure they can be processed effectively by a model or stored in a vector database.
+      Incorrect: Tokenization happens at a much more granular level. Embedding converts text to numbers. Fine-tuning is a training process.
+    diagram: |
+      graph TD
+        Doc[Large Document] --> C1[Chunk 1: Intro]
+        Doc --> C2[Chunk 2: Methods]
+        Doc --> C3[Chunk 3: Results]
+
+  - id: q068
+    type: multiple_choice
+    question: |
+      In Generative AI, words or phrases are converted into a series of continuous numbers that capture their semantic meaning, allowing the model to understand that "king" and "queen" are related. What are these numerical representations called?
+    options:
+      - text: Hyperparameters
+        is_correct: false
+      - text: Embeddings
+        is_correct: true
+      - text: Algorithms
+        is_correct: false
+      - text: Prompts
+        is_correct: false
+    explanation: |
+      Correct: Embeddings are dense vector representations of data (text, images, etc.) that capture semantic relationships in a high-dimensional space.
+      Incorrect: Hyperparameters are configuration settings. Algorithms are sets of rules. Prompts are the inputs provided by users.
+    diagram: |
+      graph LR
+        Word[Apple] --> Model[Embedding Model]
+        Model --> Vec["[0.12, -0.59, 0.88...]"]
+
+  - id: q069
+    type: multiple_choice
+    question: |
+      An AI system stores embeddings in a specialized database to perform similarity searches. In mathematical terms, what are these lists of numbers that represent points in a multi-dimensional space?
+    options:
+      - text: Matrices
+        is_correct: false
+      - text: Vectors
+        is_correct: true
+      - text: Scalars
+        is_correct: false
+      - text: Integers
+        is_correct: false
+    explanation: |
+      Correct: Vectors are ordered lists of numbers that represent a point in a multi-dimensional space, used in GenAI to represent the "position" of a concept's meaning.
+      Incorrect: Matrices are 2D grids of numbers. Scalars are single numbers. Integers are whole numbers.
+    diagram: |
+      graph TD
+        V1["Vector A: [1.1, 2.3]"]
+        V2["Vector B: [1.2, 2.2]"]
+        V1 ---|High Similarity| V2
+
+  - id: q070
+    type: multiple_choice
+    question: |
+      A user is refining the input text sent to an LLM by adding context, constraints, and examples to improve the quality and accuracy of the model's output. What is this practice called?
+    options:
+      - text: Prompt engineering
+        is_correct: true
+      - text: Data pre-processing
+        is_correct: false
+      - text: Model monitoring
+        is_correct: false
+      - text: Feature scaling
+        is_correct: false
+    explanation: |
+      Correct: Prompt engineering is the process of carefully crafting and optimizing the input (prompt) to guide a generative AI model toward a desired output.
+      Incorrect: Pre-processing happens before training. Monitoring happens after deployment. Feature scaling is a numerical data technique.
+    diagram: |
+      graph LR
+        P[Prompt + Context + Constraints] --> LLM[LLM]
+        LLM --> Out[High Quality Output]
+
+  - id: q071
+    type: multiple_choice
+    question: |
+      Most modern Large Language Models (LLMs) rely on a specific neural network architecture that uses "attention mechanisms" to weigh the importance of different words in a sentence regardless of their distance. What is this architecture called?
+    options:
+      - text: Recurrent Neural Network (RNN)
+        is_correct: false
+      - text: Transformer
+        is_correct: true
+      - text: Convolutional Neural Network (CNN)
+        is_correct: false
+      - text: Decision Tree
+        is_correct: false
+    explanation: |
+      Correct: The Transformer architecture is the foundation of modern GenAI, enabling models to process text in parallel and understand long-range dependencies via self-attention.
+      Incorrect: RNNs process data sequentially and struggle with long text. CNNs are mainly for images. Decision trees are not deep learning architectures.
+    diagram: |
+      graph TD
+        In[Input Sequence] --> Att[Self-Attention Mechanism]
+        Att --> Out[Contextual Representation]
+
+  - id: q072
+    type: multiple_choice
+    question: |
+      Amazon Bedrock provides access to broad, multi-purpose models trained on massive datasets that can be adapted to a wide range of downstream tasks. What is the standard term for these types of models?
+    options:
+      - text: Specialized models
+        is_correct: false
+      - text: Foundation models (FMs)
+        is_correct: true
+      - text: Regression models
+        is_correct: false
+      - text: Edge models
+        is_correct: false
+    explanation: |
+      Correct: Foundation models are large-scale models trained on vast amounts of data that can be used "out of the box" or fine-tuned for many different use cases.
+      Incorrect: Specialized models are built for one task. Regression models predict numbers. Edge models are small models designed for mobile/IoT devices.
+    diagram: |
+      graph TD
+        FM[Foundation Model]
+        FM --> T1[Chatbots]
+        FM --> T2[Summarization]
+        FM --> T3[Coding]
+
+  - id: q073
+    type: multiple_choice
+    question: |
+      A company is using a model that can process both text descriptions and images simultaneously to generate a descriptive caption for a photo. What category does this model fall into?
+    options:
+      - text: Unimodal model
+        is_correct: false
+      - text: Multimodal model
+        is_correct: true
+      - text: Binary model
+        is_correct: false
+      - text: Linear model
+        is_correct: false
+    explanation: |
+      Correct: Multimodal models are capable of processing and relating information from different types of data (modalities) such as text, images, video, or audio.
+      Incorrect: Unimodal models handle only one type (e.g., text-only). Binary and linear refer to mathematical properties, not data modalities.
+    diagram: |
+      graph LR
+        Text[Text] --> MM[Multimodal FM]
+        Image[Image] --> MM
+        MM --> Output[Understanding/Generation]
+
+  - id: q074
+    type: multiple_choice
+    question: |
+      A creative agency uses an AI tool to generate realistic-looking landscapes. The model works by gradually removing "noise" from a random field of pixels until a clear image emerges. What type of model is this?
+    options:
+      - text: Diffusion model
+        is_correct: true
+      - text: Transformer model
+        is_correct: false
+      - text: Regression model
+        is_correct: false
+      - text: Support Vector Machine
+        is_correct: false
+    explanation: |
+      Correct: Diffusion models are a class of generative models used primarily for image and video generation that work by reversing a process of adding noise to data.
+      Incorrect: Transformers are mostly for sequences/text. Regression is for numerical prediction. SVM is a traditional classification algorithm.
+    diagram: |
+      graph LR
+        Noise[Random Noise] --> D1[Step 1]
+        D1 --> D2[Step 2]
+        D2 --> Image[Final Image]
+
+  - id: q075
+    type: multiple_choice
+    question: |
+      An entertainment studio wants to use Generative AI to create background music for video games and short promotional clips from text descriptions. Which use case category does this belong to?
+    options:
+      - text: Data classification
+        is_correct: false
+      - text: Image, video, and audio generation
+        is_correct: true
+      - text: Sentiment analysis
+        is_correct: false
+      - text: Database sharding
+        is_correct: false
+    explanation: |
+      Correct: GenAI can create entirely new content across various media types, including audio and video, based on user-provided prompts.
+      Incorrect: Classification and sentiment analysis are discriminative, not generative. Sharding is a database architecture concept.
+    diagram: |
+      graph LR
+        Prompt["Epic Orchestral Music"] --> Gen[GenAI Audio Model]
+        Gen --> File[Audio.wav]
+
+  - id: q076
+    type: multiple_choice
+    question: |
+      A legal firm needs to quickly extract the most important points from hundreds of pages of court transcripts. Which GenAI application is best suited for this?
+    options:
+      - text: Summarization
+        is_correct: true
+      - text: Translation
+        is_correct: false
+      - text: Code generation
+        is_correct: false
+      - text: Forecasting
+        is_correct: false
+    explanation: |
+      Correct: Summarization is a core LLM use case where the model distills long documents into concise versions while retaining key information.
+      Incorrect: Translation changes languages. Code generation writes programming code. Forecasting predicts future numerical values.
+    diagram: |
+      graph LR
+        Long[100 Page Transcript] --> LLM[Summarizer]
+        LLM --> Short[Executive Summary]
+
+  - id: q077
+    type: multiple_choice
+    question: |
+      A travel agency wants to deploy a 24/7 digital entity that can help customers book flights, answer questions about hotel amenities, and provide itinerary suggestions in a conversational manner. What is this called?
+    options:
+      - text: Data warehouse
+        is_correct: false
+      - text: AI assistant
+        is_correct: true
+      - text: SQL query
+        is_correct: false
+      - text: Firewall
+        is_correct: false
+    explanation: |
+      Correct: AI assistants (or chatbots) use GenAI to engage in natural language conversations and assist users with specific tasks.
+      Incorrect: A data warehouse stores data. A SQL query retrieves data. A firewall is a security component.
+    diagram: |
+      graph LR
+        User[User] -->|Chat| AI[AI Assistant]
+        AI -->|Search/Action| Tools[Booking API]
+
+  - id: q078
+    type: multiple_choice
+    question: |
+      A multinational corporation uses a GenAI model to instantly convert internal training manuals from English into Japanese and German while maintaining the original technical context. Which use case is this?
+    options:
+      - text: Code generation
+        is_correct: false
+      - text: Translation
+        is_correct: true
+      - text: Sentiment analysis
+        is_correct: false
+      - text: Clustering
+        is_correct: false
+    explanation: |
+      Correct: GenAI models, particularly LLMs, are highly effective at machine translation across dozens of languages.
+      Incorrect: Code generation is for programming. Sentiment analysis identifies emotions. Clustering groups data points.
+    diagram: |
+      graph LR
+        En[English Manual] --> LLM[Translation Model]
+        LLM --> Jp[Japanese Manual]
+
+  - id: q079
+    type: multiple_choice
+    question: |
+      A software developer uses an AI tool to write a boilerplate Python script for connecting to an AWS Lambda function based on a natural language comment. What GenAI capability is being used?
+    options:
+      - text: Image generation
+        is_correct: false
+      - text: Code generation
+        is_correct: true
+      - text: Forecasting
+        is_correct: false
+      - text: Speech recognition
+        is_correct: false
+    explanation: |
+      Correct: Code generation allows developers to describe logic in plain English and have the model output functional programming code.
+      Incorrect: Image generation, forecasting, and speech recognition serve different modalities and goals.
+    diagram: |
+      graph LR
+        Prompt["Write a Python S3 uploader"] --> LLM[Coding Model]
+        LLM --> Code["import boto3..."]
+
+  - id: q080
+    type: multiple_choice
+    question: |
+      A retail company replaces its rigid, "press 1 for billing" phone system with a GenAI-powered voice agent that can understand complex customer complaints and offer personalized solutions. What is this use case?
+    options:
+      - text: Customer service agents
+        is_correct: true
+      - text: Database sharding
+        is_correct: false
+      - text: Network routing
+        is_correct: false
+      - text: Data encryption
+        is_correct: false
+    explanation: |
+      Correct: GenAI-powered customer service agents can handle complex, nuanced human interactions more effectively than traditional rule-based IVR systems.
+      Incorrect: Sharding, routing, and encryption are IT infrastructure and security concepts.
+    diagram: |
+      graph LR
+        Cust[Angry Customer] --> AI[GenAI Agent]
+        AI --> Res[Solution/Empathy]
+
+  - id: q081
+    type: multiple_choice
+    question: |
+      Instead of matching exact keywords, a modern corporate portal uses GenAI to understand the *intent* behind a user's question, such as "How do I get paid for my commute?", and finds relevant HR policies even if they use different words. What is this use case?
+    options:
+      - text: Search (Semantic)
+        is_correct: true
+      - text: Image generation
+        is_correct: false
+      - text: Regression
+        is_correct: false
+      - text: Anomaly detection
+        is_correct: false
+    explanation: |
+      Correct: GenAI enables semantic search, which understands the meaning and intent of a query rather than just matching keywords.
+      Incorrect: Image generation, regression, and anomaly detection do not describe the process of information retrieval based on meaning.
+    diagram: |
+      graph LR
+        Q["Commute Pay"] --> Sem[Semantic Search]
+        Sem --> Policy["Travel Expense Policy"]
+
+  - id: q082
+    type: multiple_choice
+    question: |
+      An online bookstore uses GenAI to generate highly personalized "Why you might like this" descriptions for books based on a user's specific past reading history and interests. Which use case is this?
+    options:
+      - text: Recommendation engines
+        is_correct: true
+      - text: Speech recognition
+        is_correct: false
+      - text: Image generation
+        is_correct: false
+      - text: Load balancing
+        is_correct: false
+    explanation: |
+      Correct: While traditional recommendation engines exist, GenAI can enhance them by generating personalized content and understanding deeper relationships between items and user tastes.
+      Incorrect: Speech, image, and load balancing are unrelated to suggesting items based on preferences.
+    diagram: |
+      graph LR
+        History[User Likes: Fantasy] --> GenAI[RecSys]
+        GenAI --> Text["Because you like dragons..."]
+
+  - id: q083
+    type: multiple_choice
+    question: |
+      At the beginning of the Foundation Model lifecycle, an organization is filtering massive web crawls to remove low-quality content, duplicates, and toxic language to ensure the model learns from high-quality information. Which stage is this?
+    options:
+      - text: Model selection
+        is_correct: false
+      - text: Data selection
+        is_correct: true
+      - text: Fine-tuning
+        is_correct: false
+      - text: Reinforcement learning
+        is_correct: false
+    explanation: |
+      Correct: Data selection (and curation) is the critical first step where the quality, diversity, and volume of the training data are determined.
+      Incorrect: Model selection happens after data strategy. Fine-tuning is an optimization step. Reinforcement learning happens after the base model is built.
+    diagram: |
+      graph LR
+        Raw[Raw Web Crawl] --> Filter[Quality Filtering]
+        Filter --> Dedupe[De-duplication]
+        Dedupe --> Ready[Curated Training Set]
+
+  - id: q084
+    type: multiple_choice
+    question: |
+      An enterprise needs a model that balances high performance with low latency for a mobile application. They compare different parameter sizes and architectures (e.g., Llama vs. Claude) to find the best fit for their budget and hardware. This stage is:
+    options:
+      - text: Pre-training
+        is_correct: false
+      - text: Deployment
+        is_correct: false
+      - text: Model selection
+        is_correct: true
+      - text: Data labeling
+        is_correct: false
+    explanation: |
+      Correct: Model selection involves choosing the right foundation model based on factors like parameter count, context window, cost, and specific task capabilities.
+      Incorrect: Pre-training is the act of building the model. Deployment is making it live. Data labeling is a supervised learning task.
+    diagram: |
+      graph TD
+        Req[Requirements] --> Compare{Model Selection}
+        Compare --> Option1[Small/Fast Model]
+        Compare --> Option2[Large/High Intelligence Model]
+
+  - id: q085
+    type: multiple_choice
+    question: |
+      A research lab is using thousands of GPUs to train a transformer architecture on petabytes of unlabeled text data for several months. The goal is to create a base model that understands general language patterns. What is this stage?
+    options:
+      - text: Pre-training
+        is_correct: true
+      - text: Fine-tuning
+        is_correct: false
+      - text: Prompt Engineering
+        is_correct: false
+      - text: Evaluation
+        is_correct: false
+    explanation: |
+      Correct: Pre-training is the most resource-intensive phase where a model learns from a vast, unlabeled dataset to gain general-purpose knowledge.
+      Incorrect: Fine-tuning is specialized training. Prompt engineering doesn't involve model training. Evaluation happens after the model is built.
+    diagram: |
+      graph LR
+        BigData[Vast Unlabeled Data] --> Compute[GPU Cluster]
+        Compute --> FM[Base Foundation Model]
+
+  - id: q086
+    type: multiple_choice
+    question: |
+      A healthcare company takes a general-purpose foundation model and performs additional training on a smaller, high-quality dataset of medical journals and clinical notes to improve its accuracy in that specific domain. This is:
+    options:
+      - text: Pre-training
+        is_correct: false
+      - text: Fine-tuning
+        is_correct: true
+      - text: Quantization
+        is_correct: false
+      - text: Zero-shot learning
+        is_correct: false
+    explanation: |
+      Correct: Fine-tuning is the process of taking a pre-trained model and training it further on a domain-specific dataset to specialize its performance.
+      Incorrect: Pre-training creates the base model. Quantization is a compression technique. Zero-shot learning involves no additional training.
+    diagram: |
+      graph LR
+        Base[Base LLM] --> MedData[Medical Dataset]
+        MedData --> Train[Fine-tuning]
+        Train --> Spec[Medical Specialized LLM]
+
+  - id: q087
+    type: multiple_choice
+    question: |
+      Before releasing a new model, a team uses benchmarks like MMLU (Massive Multitask Language Understanding) and human "Red Teaming" to check for accuracy, bias, and safety. Which lifecycle stage is this?
+    options:
+      - text: Model selection
+        is_correct: false
+      - text: Evaluation
+        is_correct: true
+      - text: Pre-training
+        is_correct: false
+      - text: Tokenization
+        is_correct: false
+    explanation: |
+      Correct: Evaluation involves testing the model against benchmarks and safety standards to ensure it is ready for use.
+      Incorrect: Selection is at the start. Pre-training is the build phase. Tokenization is a data processing step.
+    diagram: |
+      graph TD
+        Model[Trained Model] --> Bench[Benchmarks/MMLU]
+        Model --> Safety[Safety Testing/Red Teaming]
+        Bench & Safety --> Report[Evaluation Report]
+
+  - id: q088
+    type: multiple_choice
+    question: |
+      An organization makes their fine-tuned model available via an Amazon Bedrock Provisioned Throughput endpoint so that their internal applications can start sending production traffic to it. This is:
+    options:
+      - text: Deployment
+        is_correct: true
+      - text: Pre-training
+        is_correct: false
+      - text: Chunking
+        is_correct: false
+      - text: Data selection
+        is_correct: false
+    explanation: |
+      Correct: Deployment is the act of hosting the model on infrastructure where it can be consumed by end-users or applications.
+      Incorrect: Pre-training and data selection are development steps. Chunking is a text processing method.
+    diagram: |
+      graph LR
+        FM[Fine-tuned Model] --> Hosting[Bedrock Endpoint]
+        Hosting --> Traffic[Production Traffic]
+
+  - id: q089
+    type: multiple_choice
+    question: |
+      A company provides a "Thumbs Up/Down" button next to every AI-generated response in their application. They use this data to identify where the model is failing and plan future improvements. What stage does this represent?
+    options:
+      - text: Pre-training
+        is_correct: false
+      - text: Deployment
+        is_correct: false
+      - text: Feedback
+        is_correct: true
+      - text: Embedding
+        is_correct: false
+    explanation: |
+      Correct: The feedback loop involves collecting user interactions and corrections to inform the next iteration of the model lifecycle (e.g., RLHF or more fine-tuning).
+      Incorrect: Pre-training and deployment happen before user feedback can be collected. Embedding is a numerical representation of data.
+    diagram: |
+      graph LR
+        User[User] --> Rate[Rating/Correction]
+        Rate --> Logs[Feedback Logs]
+        Logs --> Improve[Model Improvement Plan]
+
+  - id: q090
+    type: multiple_choice
+    question: |
+      A customer support department uses a single Large Language Model (LLM) to handle diverse tasks including sentiment analysis, language translation, and draft email generation without needing separate models for each. Which advantage of Generative AI does this illustrate?
+    options:
+      - text: Adaptability
+        is_correct: true
+      - text: Data Sovereignty
+        is_correct: false
+      - text: Hardware Redundancy
+        is_correct: false
+      - text: Deterministic Logic
+        is_correct: false
+    explanation: |
+      Correct: Adaptability refers to the ability of foundation models to be used for a wide variety of downstream tasks with little to no additional training.
+      Incorrect: Data sovereignty relates to legal data locations. GenAI models are generally non-deterministic, and they do not inherently provide hardware redundancy.
+    diagram: |
+      graph LR
+        FM[One Foundation Model] --> T1[Summarize]
+        FM --> T2[Translate]
+        FM --> T3[Draft Email]
+
+  - id: q091
+    type: multiple_choice
+    question: |
+      An organization integrates an AI assistant into its internal portal to provide instant answers to employee HR questions based on company policy documents. Which advantage of GenAI is being prioritized here?
+    options:
+      - text: Latency Optimization
+        is_correct: false
+      - text: Responsiveness
+        is_correct: true
+      - text: Cold Storage Efficiency
+        is_correct: false
+      - text: Manual Verification
+        is_correct: false
+    explanation: |
+      Correct: Responsiveness in GenAI refers to the ability to provide immediate, contextually relevant interaction and feedback to user queries in real-time.
+      Incorrect: While latency is a technical metric, responsiveness is the broader advantage of interactive engagement. Cold storage and manual verification are unrelated to the speed of AI interaction.
+    diagram: |
+      graph LR
+        User[Employee Query] --> AI[GenAI Assistant]
+        AI -->|Immediate| Ans[Policy Answer]
+
+  - id: q092
+    type: multiple_choice
+    question: |
+      A non-technical business analyst is able to build a prototype for a sentiment analysis tool by simply describing the desired outcome in plain English to an Amazon Bedrock model. This represents which advantage of GenAI?
+    options:
+      - text: Computational Complexity
+        is_correct: false
+      - text: Simplicity
+        is_correct: true
+      - text: Hyperparameter Sensitivity
+        is_correct: false
+      - text: Resource Intensiveness
+        is_correct: false
+    explanation: |
+      Correct: Simplicity refers to the ease of use provided by natural language interfaces, allowing users to interact with complex models without deep coding or ML expertise.
+      Incorrect: Computational complexity and resource intensiveness are actually disadvantages or challenges, not advantages.
+    diagram: |
+      graph LR
+        User[Plain English Prompt] --> LLM[LLM Engine]
+        LLM --> Result[Working Analysis]
+
+  - id: q093
+    type: multiple_choice
+    question: |
+      A user asks a generative AI model about a historical event that never occurred, and the model provides a highly detailed and confident but entirely false response. What is this phenomenon called?
+    options:
+      - text: Overfitting
+        is_correct: false
+      - text: Data Drift
+        is_correct: false
+      - text: Hallucination
+        is_correct: true
+      - text: Tokenization
+        is_correct: false
+    explanation: |
+      Correct: Hallucination occurs when a GenAI model generates text that is factually incorrect, nonsensical, or detached from reality, often with high confidence.
+      Incorrect: Overfitting is a training error. Data drift happens over time in production. Tokenization is a text-processing step.
+    diagram: |
+      graph TD
+        Q[Fake Event Question] --> LLM[LLM]
+        LLM -->|Confidently| A[False Detailed Answer]
+
+  - id: q094
+    type: multiple_choice
+    question: |
+      A bank is hesitant to use a Large Language Model for loan approvals because they cannot easily trace or explain the exact internal logic the model used to arrive at a specific decision. Which disadvantage does this describe?
+    options:
+      - text: Scalability
+        is_correct: false
+      - text: Interpretability
+        is_correct: true
+      - text: Availability
+        is_correct: false
+      - text: Multi-tenancy
+        is_correct: false
+    explanation: |
+      Correct: Interpretability (or "Black Box" nature) is the difficulty in understanding or explaining how a complex deep learning model transforms inputs into specific outputs.
+      Incorrect: Scalability and availability are usually strengths of cloud-based AI. Multi-tenancy is an architectural pattern, not a model logic issue.
+    diagram: |
+      graph LR
+        In[Input] --> Box[Black Box Model]
+        Box --> Out[Output]
+        User[User] -.->|Why?| Box
+
+  - id: q095
+    type: multiple_choice
+    question: |
+      A company finds that an AI-generated summary of a technical manual missed several critical safety warnings present in the original text. Which disadvantage of GenAI is highlighted here?
+    options:
+      - text: High Latency
+        is_correct: false
+      - text: Inaccuracy
+        is_correct: true
+      - text: Cold Start
+        is_correct: false
+      - text: Throughput Limit
+        is_correct: false
+    explanation: |
+      Correct: Inaccuracy refers to the risk that GenAI models may produce outputs that are incomplete, omit crucial details, or contain errors despite appearing polished.
+      Incorrect: Latency and throughput are performance metrics. Cold start is a serverless compute issue.
+    diagram: |
+      graph TD
+        Src[Full Manual] --> LLM[Summarizer]
+        LLM --> Summary[Incomplete Summary]
+        Summary -->|Missing| Warn[Safety Warnings]
+
+  - id: q096
+    type: multiple_choice
+    question: |
+      A developer provides the exact same prompt to a generative model twice but receives slightly different wording and structure in the responses each time. This characteristic is known as:
+    options:
+      - text: Nondeterminism
+        is_correct: true
+      - text: Determinism
+        is_correct: false
+      - text: Consistency
+        is_correct: false
+      - text: Linearity
+        is_correct: false
+    explanation: |
+      Correct: Nondeterminism means that given the same input, a model can produce different outputs due to the probabilistic nature of word prediction.
+      Incorrect: Determinism is the opposite (same input always equals same output). Consistency and linearity do not describe this probabilistic behavior.
+    diagram: |
+      graph TD
+        P[Same Prompt] --> LLM[LLM]
+        LLM --> R1[Response A]
+        LLM --> R2[Response B]
+
+  - id: q097
+    type: multiple_choice
+    question: |
+      When selecting a model for a project that requires generating high-quality architectural images from text, a team must choose between a Large Language Model and a Diffusion Model. Which factor are they considering?
+    options:
+      - text: Model types
+        is_correct: true
+      - text: Data encryption
+        is_correct: false
+      - text: User authentication
+        is_correct: false
+      - text: Network bandwidth
+        is_correct: false
+    explanation: |
+      Correct: Selecting the correct model type (e.g., Diffusion for images vs. Transformer for text) is a fundamental choice based on the modality of the task.
+      Incorrect: Encryption, authentication, and bandwidth are infrastructure and security considerations, not model selection factors.
+    diagram: |
+      graph TD
+        Task[Generate Image] --> Type{Model Type?}
+        Type -->|Text| LLM
+        Type -->|Visual| Diff[Diffusion Model]
+
+  - id: q098
+    type: multiple_choice
+    question: |
+      A global logistics firm needs an AI model that can process customer queries in under 200 milliseconds to maintain a smooth user experience. This requirement primarily influences which selection factor?
+    options:
+      - text: Compliance
+        is_correct: false
+      - text: Performance requirements
+        is_correct: true
+      - text: Model explainability
+        is_correct: false
+      - text: Training data volume
+        is_correct: false
+    explanation: |
+      Correct: Performance requirements like latency (speed) and throughput (volume) are critical factors when choosing a model for real-time applications.
+      Incorrect: Compliance refers to laws. Explainability refers to understanding logic. Training data volume is a pre-selection factor for custom models.
+    diagram: |
+      graph LR
+        Req[<200ms Latency] --> Select[Model Selection]
+        Select --> Small[Faster/Smaller Model]
+
+  - id: q099
+    type: multiple_choice
+    question: |
+      A legal department insists that any AI model used must have been trained on data that is free from copyrighted material to avoid intellectual property risks. Which factor is being evaluated?
+    options:
+      - text: Capabilities
+        is_correct: false
+      - text: Constraints
+        is_correct: true
+      - text: Context window
+        is_correct: false
+      - text: Prompt limit
+        is_correct: false
+    explanation: |
+      Correct: Constraints are limitations or boundaries (often legal, ethical, or technical) that restrict which models can be used for a specific business case.
+      Incorrect: Capabilities refer to what the model *can* do. Context window and prompt limits are technical specifications.
+    diagram: |
+      graph TD
+        Legal[Copyright Policy] --> Const[Constraint]
+        Const -->|Filter| Models[Approved Models]
+
+  - id: q100
+    type: multiple_choice
+    question: |
+      Before deploying an AI assistant, a European healthcare provider must ensure the model's hosting environment adheres to GDPR regulations regarding sensitive patient data. This represents:
+    options:
+      - text: Compliance
+        is_correct: true
+      - text: Model accuracy
+        is_correct: false
+      - text: Temperature setting
+        is_correct: false
+      - text: Token limit
+        is_correct: false
+    explanation: |
+      Correct: Compliance refers to the necessity of meeting regulatory, legal, and security standards (like GDPR, HIPAA, or SOC2) when deploying AI.
+      Incorrect: Accuracy is a performance metric. Temperature and token limits are model parameters.
+    diagram: |
+      graph LR
+        Gov[GDPR/HIPAA] --> Env[Secure Hosting]
+        Env --> App[Healthcare AI App]
+
+  - id: q101
+    type: multiple_choice
+    question: |
+      A travel company measures how well their GenAI chatbot performs when asked about diverse topics like flight bookings, hotel reviews, and local weather. This is an evaluation of:
+    options:
+      - text: Inference cost
+        is_correct: false
+      - text: Cross-domain performance
+        is_correct: true
+      - text: Data sharding
+        is_correct: false
+      - text: Binary precision
+        is_correct: false
+    explanation: |
+      Correct: Cross-domain performance evaluates a model's ability to provide high-quality results across different subject areas or industries.
+      Incorrect: Inference cost is financial. Sharding is database logic. Binary precision is a narrow ML metric.
+    diagram: |
+      graph TD
+        LLM[One Model]
+        LLM --> D1[Flights]
+        LLM --> D2[Hotels]
+        LLM --> D3[Weather]
+
+  - id: q102
+    type: multiple_choice
+    question: |
+      A law firm implements GenAI to automate initial document discovery, reducing the time lawyers spend on manual review by 60%. Which business value is being realized?
+    options:
+      - text: Efficiency
+        is_correct: true
+      - text: Conversion rate
+        is_correct: false
+      - text: Model entropy
+        is_correct: false
+      - text: Packet loss
+        is_correct: false
+    explanation: |
+      Correct: Efficiency is the business value gained by reducing the resources (time, labor, cost) required to complete a task through automation or AI assistance.
+      Incorrect: Conversion rate is about sales. Entropy and packet loss are technical/mathematical terms.
+    diagram: |
+      graph LR
+        Manual[Manual Review: 10 hrs] --> AI[GenAI]
+        AI --> Auto[AI Review: 4 hrs]
+
+  - id: q103
+    type: multiple_choice
+    question: |
+      An e-commerce site uses GenAI to write personalized product descriptions and notices that more visitors are clicking the "Buy" button than before. This is an improvement in:
+    options:
+      - text: Accuracy
+        is_correct: false
+      - text: Conversion rate
+        is_correct: true
+      - text: Latency
+        is_correct: false
+      - text: Model parameters
+        is_correct: false
+    explanation: |
+      Correct: Conversion rate measures the percentage of users who take a desired action (like a purchase) after interacting with the AI-enhanced content.
+      Incorrect: Accuracy is a technical metric. Latency is speed. Parameters are part of the model's internal architecture.
+    diagram: |
+      graph TD
+        Visitors[1000 Visitors] --> Buy[50 Purchases]
+        Buy --> CR[5% Conversion Rate]
+
+  - id: q104
+    type: multiple_choice
+    question: |
+      A media company uses GenAI to create hyper-personalized newsletters, leading to a 20% increase in the total income generated from a single subscriber over the course of their subscription. This metric is:
+    options:
+      - text: Customer Lifetime Value (CLV)
+        is_correct: true
+      - text: Area Under the Curve (AUC)
+        is_correct: false
+      - text: Training cost
+        is_correct: false
+      - text: Model bias
+        is_correct: false
+    explanation: |
+      Correct: Customer Lifetime Value (CLV) tracks the total revenue a business can reasonably expect from a single customer account throughout the business relationship.
+      Incorrect: AUC is a performance metric. Training cost is an upfront expense. Bias is an ethical/technical error.
+    diagram: |
+      graph LR
+        P1[Month 1: $10] + P2[Month 2: $10] + PN[Month N: $10] --> CLV[Total CLV]
+
