@@ -1,0 +1,1433 @@
+questions:
+  - id: q001
+    type: multiple_choice
+    question: |
+      A retail company wants to implement a system that can mimic human intelligence to perform tasks such as visual perception, speech recognition, and decision-making. Which broad field of computer science describes this overarching capability?
+    options:
+      - text: Artificial Intelligence (AI)
+        is_correct: true
+      - text: Robotic Process Automation (RPA)
+        is_correct: false
+      - text: Statistical Forecasting
+        is_correct: false
+      - text: Data Warehousing
+        is_correct: false
+    explanation: |
+      Correct: Artificial Intelligence (AI) is the broad field of computer science dedicated to creating systems capable of performing tasks that typically require human intelligence.
+      Incorrect: RPA focuses on automating repetitive rule-based tasks rather than mimicking intelligence. Statistical forecasting is a subset of data analysis. Data warehousing is a storage strategy, not a field of intelligence.
+    diagram: |
+      graph LR
+        CS[Computer Science] --> AI[Artificial Intelligence]
+        AI --> ML[Machine Learning]
+        ML --> DL[Deep Learning]
+
+  - id: q002
+    type: multiple_choice
+    question: |
+      An e-commerce platform uses a system that improves its product recommendations automatically over time by identifying patterns in historical user purchase data without being explicitly programmed for every scenario. Which concept does this represent?
+    options:
+      - text: Hard-coded Logic
+        is_correct: false
+      - text: Machine Learning (ML)
+        is_correct: true
+      - text: Database Indexing
+        is_correct: false
+      - text: Static Scripting
+        is_correct: false
+    explanation: |
+      Correct: Machine Learning is a subset of AI that uses algorithms to parse data, learn from it, and make predictions or decisions based on patterns without explicit programming.
+      Incorrect: Hard-coded logic and static scripting do not learn from data. Database indexing is a performance optimization for data retrieval.
+    diagram: |
+      graph LR
+        Data[Historical Data] --> Algo[ML Algorithm]
+        Algo --> Patterns[Pattern Recognition]
+        Patterns --> Improv[Improved Accuracy]
+
+  - id: q003
+    type: multiple_choice
+    question: |
+      A technology firm is developing an autonomous vehicle system that uses multi-layered architectures to process high-dimensional sensory data. This approach is inspired by the structure of the human brain. Which subset of AI are they using?
+    options:
+      - text: Linear Regression
+        is_correct: false
+      - text: Deep Learning (DL)
+        is_correct: true
+      - text: Bayesian Networks
+        is_correct: false
+      - text: Heuristic Search
+        is_correct: false
+    explanation: |
+      Correct: Deep Learning is a subset of ML based on artificial neural networks with multiple layers (deep) that can learn complex patterns from large amounts of data.
+      Incorrect: Linear regression is a simple statistical method. Bayesian networks are probabilistic models. Heuristic search is a problem-solving technique not necessarily involving layered learning.
+    diagram: |
+      graph TD
+        Input[Input Layer] --> H1[Hidden Layer 1]
+        H1 --> H2[Hidden Layer 2]
+        H2 --> Output[Output Layer]
+
+  - id: q004
+    type: multiple_choice
+    question: |
+      A developer is building a model that consists of interconnected nodes organized into input, hidden, and output layers to recognize complex patterns. What is the technical name for this computational structure?
+    options:
+      - text: Decision Tree
+        is_correct: false
+      - text: Neural Networks
+        is_correct: true
+      - text: Support Vector Machine
+        is_correct: false
+      - text: K-Nearest Neighbors
+        is_correct: false
+    explanation: |
+      Correct: Neural networks are computing systems inspired by the biological neural networks that constitute animal brains, using interconnected nodes to process information.
+      Incorrect: Decision trees use a branching flow. SVMs and KNN are specific ML algorithms that do not inherently use the layered node structure of neural networks.
+    diagram: |
+      graph LR
+        N1((Node)) --- N2((Node))
+        N1 --- N3((Node))
+        N2 --- N4((Node))
+        N3 --- N4((Node))
+
+  - id: q005
+    type: multiple_choice
+    question: |
+      A manufacturing company implements a system that automatically detects defects in products on a high-speed assembly line by analyzing live video feeds. Which AI capability is being utilized here?
+    options:
+      - text: Computer Vision
+        is_correct: true
+      - text: Predictive Maintenance
+        is_correct: false
+      - text: Sentiment Analysis
+        is_correct: false
+      - text: Speech-to-Text
+        is_correct: false
+    explanation: |
+      Correct: Computer Vision is the field of AI that enables computers and systems to derive meaningful information from digital images, videos, and other visual inputs.
+      Incorrect: Predictive maintenance uses sensor data (telemetry). Sentiment analysis and Speech-to-Text deal with text and audio, respectively.
+    diagram: |
+      graph LR
+        Image[Image/Video] --> CV[Computer Vision Model]
+        CV --> Detect[Object Detection/Defect]
+
+  - id: q006
+    type: multiple_choice
+    question: |
+      A customer service department wants to deploy a chatbot that can understand, interpret, and respond to customer inquiries written in various languages. Which AI technology should they focus on?
+    options:
+      - text: Natural Language Processing (NLP)
+        is_correct: true
+      - text: Generative Adversarial Networks
+        is_correct: false
+      - text: Edge Computing
+        is_correct: false
+      - text: Reinforcement Learning
+        is_correct: false
+    explanation: |
+      Correct: NLP is the branch of AI that gives computers the ability to understand text and spoken words in much the same way human beings can.
+      Incorrect: GANs are used for generating new data (like images). Edge computing is a deployment architecture. Reinforcement learning is a training paradigm based on rewards.
+    diagram: |
+      graph LR
+        Text[Human Text] --> NLP[NLP Engine]
+        NLP --> Intent[Identify Intent]
+        NLP --> Entity[Extract Entities]
+
+  - id: q007
+    type: multiple_choice
+    question: |
+      After a data scientist has selected an algorithm and provided it with data, the resulting artifact can be used to make predictions on new, unseen data. What is this artifact called?
+    options:
+      - text: Dataset
+        is_correct: false
+      - text: Model
+        is_correct: true
+      - text: Feature
+        is_correct: false
+      - text: Hyperparameter
+        is_correct: false
+    explanation: |
+      Correct: A model is the output of a machine learning algorithm run on data; it represents what was learned and is used to make predictions.
+      Incorrect: A dataset is the input. A feature is an individual measurable property. A hyperparameter is a configuration setting for the algorithm.
+    diagram: |
+      graph LR
+        Algo[Algorithm] + Data[Data] --> Model[Trained Model]
+        NewData[New Data] --> Model --> Pred[Prediction]
+
+  - id: q008
+    type: multiple_choice
+    question: |
+      A software engineer is writing a specific set of step-by-step instructions for a computer to follow to solve a mathematical problem or complete a task. What is this set of instructions called?
+    options:
+      - text: Algorithm
+        is_correct: true
+      - text: Neural Layer
+        is_correct: false
+      - text: Inference Engine
+        is_correct: false
+      - text: Training Set
+        is_correct: false
+    explanation: |
+      Correct: An algorithm is a finite sequence of well-defined, computer-implementable instructions, typically to solve a class of specific problems or to perform a computation.
+      Incorrect: Neural layers are components of a model. Inference engines apply models to data. Training sets are data used to build models.
+    diagram: |
+      graph TD
+        Start(Start) --> Step1[Step 1]
+        Step1 --> Step2[Step 2]
+        Step2 --> End(End)
+
+  - id: q009
+    type: multiple_choice
+    question: |
+      In the machine learning lifecycle, what are the two distinct phases: first, where the model learns from data, and second, where the model is used to make real-time predictions?
+    options:
+      - text: Labeling and Cleaning
+        is_correct: false
+      - text: Training and Inferencing
+        is_correct: true
+      - text: Encoding and Decoding
+        is_correct: false
+      - text: Validation and Testing
+        is_correct: false
+    explanation: |
+      Correct: Training is the process of teaching the model, while inferencing is the process of using the trained model to make predictions on new data.
+      Incorrect: Labeling/Cleaning are data prep steps. Encoding/Decoding are data transformation steps. Validation/Testing are evaluation steps.
+    diagram: |
+      graph LR
+        subgraph Phase 1
+        Data[Data] --> Train[Training] --> Model[Model]
+        end
+        subgraph Phase 2
+        New[New Input] --> Infer[Inferencing] --> Output[Result]
+        end
+
+  - id: q010
+    type: multiple_choice
+    question: |
+      A financial institution notices that their loan approval model consistently favors one demographic group over another because the historical data used was unrepresentative. What is this phenomenon called?
+    options:
+      - text: Variance
+        is_correct: false
+      - text: Bias
+        is_correct: true
+      - text: Overfitting
+        is_correct: false
+      - text: Regularization
+        is_correct: false
+    explanation: |
+      Correct: Bias in AI refers to systematic errors in a model's predictions, often caused by prejudiced or unrepresentative training data, leading to unfair outcomes.
+      Incorrect: Variance refers to model sensitivity to small fluctuations. Overfitting is when a model learns noise. Regularization is a technique to prevent overfitting.
+    diagram: |
+      graph TD
+        D[Historical Data] -->|Contains Prejudice| M[Model]
+        M -->|Systematic Error| O[Biased Output]
+
+  - id: q011
+    type: multiple_choice
+    question: |
+      When developing an AI system for hiring, an organization ensures that the model provides similar outcomes for individuals with similar qualifications, regardless of protected characteristics. Which principle are they applying?
+    options:
+      - text: Fairness
+        is_correct: true
+      - text: Scalability
+        is_correct: false
+      - text: Latency
+        is_correct: false
+      - text: Precision
+        is_correct: false
+    explanation: |
+      Correct: Fairness in AI involves ensuring that models do not discriminate and that they treat all groups or individuals equitably.
+      Incorrect: Scalability refers to handling growth. Latency refers to speed. Precision is a specific accuracy metric.
+    diagram: |
+      graph LR
+        GroupA[Group A] --> Model[Fair Model]
+        GroupB[Group B] --> Model
+        Model --> Equal[Equitable Treatment]
+
+  - id: q012
+    type: multiple_choice
+    question: |
+      A data scientist evaluates a model and finds it performs exceptionally well on training data but fails to generalize to new, real-world data. What term describes how well the model matches the data?
+    options:
+      - text: Fit
+        is_correct: true
+      - text: Batching
+        is_correct: false
+      - text: Tuning
+        is_correct: false
+      - text: Sharding
+        is_correct: false
+    explanation: |
+      Correct: Fit refers to how well a machine learning model approximates the underlying patterns of the data (e.g., Underfitting or Overfitting).
+      Incorrect: Batching is a data processing method. Tuning is the process of optimization. Sharding is a database partitioning technique.
+    diagram: |
+      graph TD
+        U[Underfitting: Too Simple]
+        O[Overfitting: Too Complex]
+        G[Good Fit: Balanced]
+
+  - id: q013
+    type: multiple_choice
+    question: |
+      A company is using Amazon Bedrock to access a foundation model that has been trained on massive datasets to generate human-like text, summarize documents, and write code. What type of model is this?
+    options:
+      - text: Convolutional Neural Network (CNN)
+        is_correct: false
+      - text: Large Language Model (LLM)
+        is_correct: true
+      - text: Decision Forest
+        is_correct: false
+      - text: Clustering Model
+        is_correct: false
+    explanation: |
+      Correct: Large Language Models (LLMs) are AI models trained on vast amounts of text data, capable of understanding and generating natural language across various tasks.
+      Incorrect: CNNs are primarily for images. Decision Forests are for tabular classification/regression. Clustering models are for grouping unlabeled data.
+    diagram: |
+      graph LR
+        BigData[Vast Text Data] --> Train[Massive Training]
+        Train --> LLM[LLM]
+        LLM --> Gen[Generate/Summarize/Code]
+
+  - id: q014
+    type: multiple_choice
+    question: |
+      A data scientist is preparing a dataset for a supervised learning project where the goal is to predict if an email is 'Spam' or 'Not Spam'. Each email in the dataset has been manually tagged with the correct category. What type of data does this represent?
+    options:
+      - text: Labeled data
+        is_correct: true
+      - text: Unlabeled data
+        is_correct: false
+      - text: Synthetic data
+        is_correct: false
+      - text: Metadata
+        is_correct: false
+    explanation: |
+      Correct: Labeled data consists of input data paired with the correct output (label), which is essential for supervised learning tasks like classification.
+      Incorrect: Unlabeled data lacks the target tag. Synthetic data is artificially generated. Metadata is data about data (like file size) rather than the content used for training.
+    diagram: |
+      graph LR
+        Input[Email Content] --> Label[Tag: Spam]
+        Input2[Email Content] --> Label2[Tag: Not Spam]
+        subgraph Dataset
+        Input
+        Label
+        end
+
+  - id: q015
+    type: multiple_choice
+    question: |
+      A financial analyst is working with a dataset stored in a relational database. The data is organized into rows and columns, containing customer IDs, transaction amounts, and dates. What is the most accurate term for this data format?
+    options:
+      - text: Unstructured data
+        is_correct: false
+      - text: Tabular data
+        is_correct: true
+      - text: Natural language data
+        is_correct: false
+      - text: Binary data
+        is_correct: false
+    explanation: |
+      Correct: Tabular data is organized in a table format with rows (observations) and columns (features), common in spreadsheets and SQL databases.
+      Incorrect: Unstructured data lacks a pre-defined model. Natural language data refers to free-form text. Binary data refers to encoded files like images or executables.
+    diagram: |
+      classDiagram
+        class Table {
+            Row 1: Cust_ID, Amt
+            Row 2: Cust_ID, Amt
+            Row 3: Cust_ID, Amt
+        }
+
+  - id: q016
+    type: multiple_choice
+    question: |
+      An energy company uses sensors to record electricity consumption at 15-minute intervals over several months to predict future demand. What type of data are they collecting?
+    options:
+      - text: Geospatial data
+        is_correct: false
+      - text: Time-series data
+        is_correct: true
+      - text: Categorical data
+        is_correct: false
+      - text: Image data
+        is_correct: false
+    explanation: |
+      Correct: Time-series data is a sequence of data points recorded at specific, successive time intervals, used to track changes over time.
+      Incorrect: Geospatial data relates to physical locations. Categorical data represents discrete groups. Image data consists of pixel values.
+    diagram: |
+      graph LR
+        T1[10:00 AM: 50kW] --> T2[10:15 AM: 55kW]
+        T2 --> T3[10:30 AM: 48kW]
+        T3 --> T4[Time Sequence]
+
+  - id: q017
+    type: multiple_choice
+    question: |
+      A healthcare provider is training a deep learning model to identify fractures in X-ray files stored in Amazon S3. Which data type is the model primarily processing?
+    options:
+      - text: Text data
+        is_correct: false
+      - text: Tabular data
+        is_correct: false
+      - text: Image data
+        is_correct: true
+      - text: Audio data
+        is_correct: false
+    explanation: |
+      Correct: Image data consists of visual information represented as a grid of pixels, commonly used in computer vision tasks.
+      Incorrect: Text, tabular, and audio data represent words, structured numbers, and sound waves, respectively, which do not apply to X-ray visuals.
+    diagram: |
+      graph LR
+        Xray[X-Ray File] --> Pixels[Pixel Grid]
+        Pixels --> CNN[Computer Vision Model]
+        CNN --> Result[Fracture Detected]
+
+  - id: q018
+    type: multiple_choice
+    question: |
+      A marketing team wants to analyze thousands of customer reviews from social media to understand brand sentiment. What is the primary type of data involved in this Natural Language Processing (NLP) task?
+    options:
+      - text: Text data
+        is_correct: true
+      - text: Numerical data
+        is_correct: false
+      - text: Structured data
+        is_correct: false
+      - text: Time-series data
+        is_correct: false
+    explanation: |
+      Correct: Text data consists of sequences of characters and words, which is the foundational input for NLP models.
+      Incorrect: Numerical data refers to numbers. Structured data refers to data in fixed fields. While reviews have a timestamp, the core content for sentiment analysis is text.
+    diagram: |
+      graph LR
+        Review["I love this product!"] --> Tokens[Tokens: I, love, this...]
+        Tokens --> Sentiment[Positive Sentiment]
+
+  - id: q019
+    type: multiple_choice
+    question: |
+      A data engineer is managing a collection of PDF documents, video files, and call recordings. How is this data best classified compared to data found in a traditional SQL database?
+    options:
+      - text: Structured and Semi-structured
+        is_correct: false
+      - text: Unstructured and Structured
+        is_correct: true
+      - text: Tabular and Relational
+        is_correct: false
+      - text: Quantitative and Qualitative
+        is_correct: false
+    explanation: |
+      Correct: PDFs and videos are "unstructured" (no fixed schema), while SQL databases contain "structured" data (highly organized).
+      Incorrect: Tabular/Relational both refer to structured data. Quantitative/Qualitative refers to the nature of the information rather than its technical structure.
+    diagram: |
+      graph TD
+        subgraph Unstructured
+        PDF[PDFs]
+        VID[Videos]
+        end
+        subgraph Structured
+        DB[(SQL Database)]
+        end
+
+  - id: q020
+    type: multiple_choice
+    question: |
+      A financial company is building a model to predict house prices based on features like square footage, number of bedrooms, and location. They provide the model with a dataset where each house's features are paired with its actual historical sale price. What type of machine learning is this?
+    options:
+      - text: Supervised learning
+        is_correct: true
+      - text: Unsupervised learning
+        is_correct: false
+      - text: Reinforcement learning
+        is_correct: false
+      - text: Clustering
+        is_correct: false
+    explanation: |
+      Correct: Supervised learning involves training a model on a labeled dataset, where the algorithm learns the mapping from inputs to known outputs (labels).
+      Incorrect: Unsupervised learning deals with unlabeled data. Reinforcement learning is based on rewards/penalties. Clustering is a specific type of unsupervised learning.
+    diagram: |
+      graph LR
+        Data[Input + Label] --> Model[Supervised Model]
+        Model --> Pred[Predicted Label]
+
+  - id: q021
+    type: multiple_choice
+    question: |
+      A marketing agency has a large dataset of customer purchase histories but no predefined categories or labels. They want to use an AI model to automatically group customers with similar buying behaviors for targeted ads. Which machine learning approach is most appropriate?
+    options:
+      - text: Supervised learning
+        is_correct: false
+      - text: Unsupervised learning
+        is_correct: true
+      - text: Reinforcement learning
+        is_correct: false
+      - text: Regression
+        is_correct: false
+    explanation: |
+      Correct: Unsupervised learning finds hidden patterns or intrinsic structures in input data that does not have historical labels or outcomes attached.
+      Incorrect: Supervised learning requires labels. Reinforcement learning requires an environment/reward system. Regression is a supervised learning task for predicting continuous values.
+    diagram: |
+      graph TD
+        Raw[Unlabeled Data] --> Algo[Unsupervised Algo]
+        Algo --> C1[Cluster 1]
+        Algo --> C2[Cluster 2]
+
+  - id: q022
+    type: multiple_choice
+    question: |
+      An engineering team is developing a model to navigate an autonomous drone. The model learns by receiving "points" when it successfully avoids an obstacle and "penalties" when it crashes. Over many iterations, the drone improves its flight path. What type of learning is being used?
+    options:
+      - text: Supervised learning
+        is_correct: false
+      - text: Semi-supervised learning
+        is_correct: false
+      - text: Reinforcement learning
+        is_correct: true
+      - text: Dimensionality reduction
+        is_correct: false
+    explanation: |
+      Correct: Reinforcement learning is a paradigm where an agent learns to make decisions by performing actions in an environment to maximize cumulative rewards.
+      Incorrect: Supervised learning requires a teacher (labels). Semi-supervised uses a mix of labeled/unlabeled data. Dimensionality reduction is an unsupervised technique to reduce features.
+    diagram: |
+      graph LR
+        Agent[Agent/Drone] -->|Action| Env[Environment]
+        Env -->|Reward/Penalty| Agent
+        Env -->|New State| Agent        
+
+  - id: q023
+    type: multiple_choice
+    question: |
+      A medical imaging center is using an AI model to highlight potential anomalies in X-rays for radiologists to review. The final diagnosis is always made by the doctor, but the AI helps prioritize urgent cases. Which AI value proposition does this best represent?
+    options:
+      - text: Fully autonomous operation
+        is_correct: false
+      - text: Assisting human decision-making
+        is_correct: true
+      - text: Replacing specialized workforce
+        is_correct: false
+      - text: Eliminating the need for data privacy
+        is_correct: false
+    explanation: |
+      Correct: AI can provide value by acting as an "augmented intelligence" tool that assists humans in making faster, more informed decisions without replacing human oversight.
+      Incorrect: The scenario describes a human-in-the-loop process, not full autonomy. AI is meant to support, not necessarily replace, experts. Data privacy remains critical in all AI applications.
+    diagram: |
+      graph LR
+        Data[Medical Image] --> AI[AI Analysis]
+        AI --> Flags[Highlighted Anomalies]
+        Flags --> Doc[Radiologist Review]
+        Doc --> Decision[Final Diagnosis]
+
+  - id: q024
+    type: multiple_choice
+    question: |
+      A global streaming service needs to provide personalized movie recommendations to millions of users simultaneously. Why is Machine Learning preferred over a manual rule-based system for this specific requirement?
+    options:
+      - text: Solution scalability
+        is_correct: true
+      - text: Lower initial development cost
+        is_correct: false
+      - text: Guaranteed 100% accuracy
+        is_correct: false
+      - text: Reduced need for cloud storage
+        is_correct: false
+    explanation: |
+      Correct: ML models can scale to handle massive amounts of data and users, adapting to complex patterns that would be impossible for humans to manage via manual rules.
+      Incorrect: ML often requires higher upfront investment in data and training. No ML model guarantees 100% accuracy. Large-scale ML typically increases rather than reduces storage needs.
+    diagram: |
+      graph TD
+        Users[Millions of Users] --> Model[ML Recommendation Model]
+        Model --> P1[User A: Sci-Fi]
+        Model --> P2[User B: Drama]
+        Model --> P3[User N: Comedy]
+
+  - id: q025
+    type: multiple_choice
+    question: |
+      A logistics company implements an AI-powered system that automatically sorts thousands of incoming packages by reading handwritten addresses and routing them to the correct delivery zones. What is the primary benefit of this application?
+    options:
+      - text: Automation of repetitive tasks
+        is_correct: true
+      - text: Increased hardware lifespan
+        is_correct: false
+      - text: Manual data entry verification
+        is_correct: false
+      - text: Improved physical security
+        is_correct: false
+    explanation: |
+      Correct: AI provides significant value by automating high-volume, repetitive manual tasks (like reading handwriting), increasing efficiency and reducing human error.
+      Incorrect: AI software does not inherently increase the lifespan of physical hardware. The goal here is to remove manual entry, not verify it manually. While it improves efficiency, it is not a security-focused application.
+    diagram: |
+      graph LR
+        Pkg[Incoming Package] --> OCR[AI Handwriting Recognition]
+        OCR --> Route[Automatic Routing]
+        Route --> Zone[Delivery Zone]
+
+  - id: q026
+    type: multiple_choice
+    question: |
+      A small startup is considering building a custom deep learning model to automate a simple data entry task that occurs only once a month and takes a human 10 minutes to complete. After evaluating the costs of data collection, GPU instances for training, and engineering time, they decide not to proceed. Which factor primarily influenced this decision?
+    options:
+      - text: Cost-benefit analysis
+        is_correct: true
+      - text: Model latency
+        is_correct: false
+      - text: Data sovereignty
+        is_correct: false
+      - text: Overfitting
+        is_correct: false
+    explanation: |
+      Correct: A cost-benefit analysis involves weighing the total cost of developing and maintaining an AI solution against the actual value or time savings it provides. In this case, the manual effort is too low to justify the high development cost.
+      Incorrect: Latency refers to inference speed, which isn't a concern for a monthly task. Data sovereignty relates to legal data locations. Overfitting is a technical training error, not a business viability factor.
+    diagram: |
+      graph TD
+        Cost[High Development Cost] vs[vs] Value[Low Manual Effort]
+        Cost --> Decision{Not Appropriate}
+        Value --> Decision
+
+  - id: q027
+    type: multiple_choice
+    question: |
+      An accounting firm needs a tool to calculate the exact tax liability for its clients based on current fixed legal formulas and tax brackets. Why would a traditional rule-based software program be more appropriate than a Machine Learning model for this task?
+    options:
+      - text: ML models cannot handle numerical data found in tax documents.
+        is_correct: false
+      - text: A specific, deterministic outcome is needed instead of a prediction.
+        is_correct: true
+      - text: Traditional software is always more secure than AI-based solutions.
+        is_correct: false
+      - text: ML models require constant internet connectivity for calculations.
+        is_correct: false
+    explanation: |
+      Correct: AI/ML is probabilistic and based on patterns, making it unsuitable for tasks requiring 100% mathematical precision based on rigid, deterministic legal rules where "almost correct" is not acceptable.
+      Incorrect: ML models excel at numerical data. Security depends on implementation, not the logic type. ML models can run offline (on-device) just as easily as traditional software.
+    diagram: |
+      graph LR
+        Logic[Fixed Legal Formula] --> Method{Choose Method}
+        Method -->|Deterministic| Rule[Traditional Code/Rules]
+        Method -->|Probabilistic| ML[Machine Learning]
+        Rule --> Result[100% Exact Result]
+
+  - id: q028
+    type: multiple_choice
+    question: |
+      A real estate platform wants to build a feature that predicts the specific market value of a house in dollars based on its square footage, age, and location. Which machine learning technique is most appropriate for predicting this continuous numerical value?
+    options:
+      - text: Regression
+        is_correct: true
+      - text: Classification
+        is_correct: false
+      - text: Clustering
+        is_correct: false
+      - text: Dimensionality Reduction
+        is_correct: false
+    explanation: |
+      Correct: Regression is used when the target variable is a continuous numerical value, such as a price, temperature, or stock value.
+      Incorrect: Classification is for discrete categories. Clustering is an unsupervised technique for grouping data without labels. Dimensionality reduction is used to simplify features.
+    diagram: |
+      graph LR
+        Features[Size, Age, Zip] --> Model[Regression Model]
+        Model --> Value[$450,000]
+
+  - id: q029
+    type: multiple_choice
+    question: |
+      A bank is developing a system to automatically sort incoming customer emails into three specific folders: "Billing," "Technical Support," and "General Inquiry." Which machine learning technique should be used to assign these discrete labels?
+    options:
+      - text: Regression
+        is_correct: false
+      - text: Classification
+        is_correct: true
+      - text: Clustering
+        is_correct: false
+      - text: Reinforcement Learning
+        is_correct: false
+    explanation: |
+      Correct: Classification is a supervised learning technique used to categorize data into predefined, discrete classes or labels.
+      Incorrect: Regression predicts continuous numbers, not categories. Clustering creates its own groups without predefined labels. Reinforcement learning focuses on decision-making through rewards.
+    diagram: |
+      graph TD
+        Email[Incoming Email] --> Model[Classification Model]
+        Model --> B[Billing]
+        Model --> T[Tech Support]
+        Model --> G[General]
+
+  - id: q030
+    type: multiple_choice
+    question: |
+      A retail company has a large database of customer transaction history but no specific labels for their behavior. They want to identify distinct groups of customers with similar shopping habits for targeted marketing. Which technique is most suitable?
+    options:
+      - text: Regression
+        is_correct: false
+      - text: Binary Classification
+        is_correct: false
+      - text: Clustering
+        is_correct: true
+      - text: Time-series Forecasting
+        is_correct: false
+    explanation: |
+      Correct: Clustering is an unsupervised learning technique used to find natural groupings or patterns in data without pre-existing labels.
+      Incorrect: Regression and Classification are supervised and require labels. Forecasting predicts future values in a sequence.
+    diagram: |
+      graph LR
+        Data[Unlabeled Customers] --> Model[Clustering]
+        Model --> G1[Group: Big Spenders]
+        Model --> G2[Group: Occasional Buyers]
+
+  - id: q031
+    type: multiple_choice
+    question: |
+      An insurance company uses an AI system to automatically analyze photos of car accidents to estimate the severity of vehicle damage. Which real-world AI application does this represent?
+    options:
+      - text: Natural Language Processing
+        is_correct: false
+      - text: Computer Vision
+        is_correct: true
+      - text: Speech Recognition
+        is_correct: false
+      - text: Forecasting
+        is_correct: false
+    explanation: |
+      Correct: Computer Vision allows machines to interpret and understand visual information from the world, such as digital images or videos.
+      Incorrect: NLP deals with text. Speech recognition deals with audio. Forecasting predicts future trends from historical data.
+    diagram: |
+      graph LR
+        Photo[Car Photo] --> AI[Computer Vision]
+        AI --> Damage[Heavy Damage Detected]
+
+  - id: q032
+    type: multiple_choice
+    question: |
+      A global enterprise wants to implement a system that can automatically summarize long legal documents and extract key contract dates. Which AI field is specialized for this task?
+    options:
+      - text: Natural Language Processing (NLP)
+        is_correct: true
+      - text: Computer Vision
+        is_correct: false
+      - text: Recommendation Systems
+        is_correct: false
+      - text: Fraud Detection
+        is_correct: false
+    explanation: |
+      Correct: NLP focuses on the interaction between computers and human language, including tasks like summarization, translation, and entity extraction.
+      Incorrect: Computer Vision is for images. Recommendation systems suggest items. Fraud detection identifies anomalous transactions.
+    diagram: |
+      graph LR
+        Doc[100 Page Contract] --> NLP[NLP Model]
+        NLP --> Sum[1 Page Summary]
+
+  - id: q033
+    type: multiple_choice
+    question: |
+      A smartphone manufacturer is enhancing its virtual assistant so that it can accurately transcribe spoken user commands into text in noisy environments. Which AI application is being utilized?
+    options:
+      - text: Sentiment Analysis
+        is_correct: false
+      - text: Speech Recognition
+        is_correct: true
+      - text: Forecasting
+        is_correct: false
+      - text: Clustering
+        is_correct: false
+    explanation: |
+      Correct: Speech recognition (or Speech-to-Text) is the capability of a machine to identify and process spoken words into a machine-readable format.
+      Incorrect: Sentiment analysis detects emotion in text. Forecasting and clustering do not involve audio processing.
+    diagram: |
+      graph LR
+        Audio[Voice Waveform] --> Model[Speech Recognition]
+        Model --> Text["Set an alarm"]
+
+  - id: q034
+    type: multiple_choice
+    question: |
+      An online streaming platform uses an AI model to analyze a user's watch history and suggest new shows they are likely to enjoy. This is an example of which AI application?
+    options:
+      - text: Forecasting
+        is_correct: false
+      - text: Fraud Detection
+        is_correct: false
+      - text: Recommendation Systems
+        is_correct: true
+      - text: Computer Vision
+        is_correct: false
+    explanation: |
+      Correct: Recommendation systems predict the "rating" or "preference" a user would give to an item based on their past behavior or similar users.
+      Incorrect: Forecasting predicts future numeric trends. Fraud detection finds bad actors. Computer vision is for visual data.
+    diagram: |
+      graph TD
+        History[Watched: Show A, B] --> Model[RecSys]
+        Model --> Suggest[Suggested: Show C]
+
+  - id: q035
+    type: multiple_choice
+    question: |
+      A credit card company monitors millions of transactions in real-time to identify unusual spending patterns that deviate from a customer's normal profile. Which AI application is primarily used here?
+    options:
+      - text: Natural Language Processing
+        is_correct: false
+      - text: Fraud Detection
+        is_correct: true
+      - text: Speech Recognition
+        is_correct: false
+      - text: Recommendation Systems
+        is_correct: false
+    explanation: |
+      Correct: Fraud detection systems use AI to identify patterns and anomalies in data to flag suspicious activities and prevent unauthorized transactions.
+      Incorrect: NLP, Speech, and Recommendations serve communication or marketing goals, not security and anomaly detection.
+    diagram: |
+      graph LR
+        TX[New Transaction] --> Model[Fraud Detection]
+        Model --> Result{Suspicious?}
+        Result -->|Yes| Alert[Block Card]
+
+  - id: q036
+    type: multiple_choice
+    question: |
+      A utility company uses historical weather data and previous year's energy consumption to predict how much electricity will be needed during an upcoming heatwave. Which AI application does this describe?
+    options:
+      - text: Computer Vision
+        is_correct: false
+      - text: Forecasting
+        is_correct: true
+      - text: Sentiment Analysis
+        is_correct: false
+      - text: Fraud Detection
+        is_correct: false
+    explanation: |
+      Correct: Forecasting involves using historical data to make informed predictions about future trends or values (often time-series data).
+      Incorrect: Computer vision is for images. Sentiment analysis is for text. Fraud detection is for security anomalies.
+    diagram: |
+      graph LR
+        Past[Past Usage] + Weather[Forecast] --> Model[Forecasting]
+        Model --> Future[Expected Load: 500MW]
+
+  - id: q037
+    type: multiple_choice
+    question: |
+      A data scientist is identifying and gathering diverse datasets from various sources, such as Amazon S3 buckets, relational databases, and streaming logs, to serve as the foundation for a new machine learning project. Which phase of the ML pipeline is this?
+    options:
+      - text: Data collection
+        is_correct: true
+      - text: Feature engineering
+        is_correct: false
+      - text: Model training
+        is_correct: false
+      - text: Monitoring
+        is_correct: false
+    explanation: |
+      Correct: Data collection is the initial step of the ML pipeline where raw data is gathered from different internal or external sources for future processing.
+      Incorrect: Feature engineering transforms existing data. Training happens after data is ready. Monitoring occurs after the model is in production.
+    diagram: |
+      graph LR
+        S3[S3 Bucket] --> DC[Data Collection]
+        RDS[RDS Database] --> DC
+        Logs[Streams] --> DC
+
+  - id: q038
+    type: multiple_choice
+    question: |
+      Before building a model, a researcher uses statistical summaries and visualization tools like histograms and scatter plots to understand the distribution of data and identify potential outliers. What is this process called?
+    options:
+      - text: Model deployment
+        is_correct: false
+      - text: Hyperparameter tuning
+        is_correct: false
+      - text: Exploratory Data Analysis (EDA)
+        is_correct: true
+      - text: Data labeling
+        is_correct: false
+    explanation: |
+      Correct: EDA is the process of analyzing datasets to summarize their main characteristics, often using visual methods, to guide the modeling strategy.
+      Incorrect: Deployment is the final stage. Tuning happens during training. Labeling is the process of adding target tags to data.
+    diagram: |
+      graph TD
+        Raw[Gathered Data] --> Stats[Mean/Std Dev]
+        Raw --> Plot[Histograms/Boxplots]
+        Stats & Plot --> Insights[EDA Insights]
+
+  - id: q039
+    type: multiple_choice
+    question: |
+      A machine learning engineer is handling missing values in a dataset and normalizing numerical scales to ensure that the algorithm can process the data efficiently. Which stage of the pipeline are they performing?
+    options:
+      - text: Data collection
+        is_correct: false
+      - text: Data pre-processing
+        is_correct: true
+      - text: Model evaluation
+        is_correct: false
+      - text: Monitoring
+        is_correct: false
+    explanation: |
+      Correct: Data pre-processing involves cleaning raw data, handling missing values, and scaling features to make the data suitable for an ML model.
+      Incorrect: Collection is the gathering phase. Evaluation checks model performance. Monitoring tracks a live model.
+    diagram: |
+      graph LR
+        Noise[Missing Values] --> Process[Pre-processing]
+        Process --> Clean[Clean Dataset]
+
+  - id: q040
+    type: multiple_choice
+    question: |
+      To improve a model's performance, a developer creates a new "is_weekend" binary attribute from a "timestamp" column in the original dataset. What is this specific task called?
+    options:
+      - text: Data collection
+        is_correct: false
+      - text: Feature engineering
+        is_correct: true
+      - text: Hyperparameter tuning
+        is_correct: false
+      - text: Model deployment
+        is_correct: false
+    explanation: |
+      Correct: Feature engineering is the process of selecting, manipulating, and transforming raw data into new features that better represent the underlying problem to the predictive model.
+      Incorrect: Collection is gathering data. Tuning adjusts model settings. Deployment makes the model available to users.
+    diagram: |
+      graph LR
+        Date[2026-03-29] --> Engine[Feature Engineering]
+        Engine --> IsSun[is_sunday: True]
+
+  - id: q041
+    type: multiple_choice
+    question: |
+      A data scientist provides a selected algorithm with a set of labeled training data so the algorithm can learn the relationship between features and the target variable. Which pipeline component does this describe?
+    options:
+      - text: Exploratory Data Analysis
+        is_correct: false
+      - text: Data pre-processing
+        is_correct: false
+      - text: Model training
+        is_correct: true
+      - text: Model monitoring
+        is_correct: false
+    explanation: |
+      Correct: Model training is the phase where the ML algorithm builds a model by finding patterns in the training data.
+      Incorrect: EDA and Pre-processing occur before training. Monitoring occurs after deployment.
+    diagram: |
+      graph LR
+        Data[Training Data] --> Algo[Algorithm]
+        Algo --> Pattern[Pattern Matching]
+        Pattern --> Model[Trained Model]
+
+  - id: q042
+    type: multiple_choice
+    question: |
+      During the training process, a developer manually adjusts the learning rate and the number of layers in a neural network to find the configuration that yields the highest accuracy. What is this process called?
+    options:
+      - text: Feature engineering
+        is_correct: false
+      - text: Hyperparameter tuning
+        is_correct: true
+      - text: Exploratory Data Analysis
+        is_correct: false
+      - text: Data collection
+        is_correct: false
+    explanation: |
+      Correct: Hyperparameter tuning is the process of optimizing the external settings (hyperparameters) of an algorithm that are not learned during training.
+      Incorrect: Feature engineering changes the data. EDA explores data. Collection gathers data.
+    diagram: |
+      graph TD
+        Config[LR: 0.01, Layers: 3] --> Train[Train]
+        Train --> Score[Accuracy: 85%]
+        Score --> Adjust[LR: 0.001, Layers: 5]
+        Adjust --> Train
+
+  - id: q043
+    type: multiple_choice
+    question: |
+      After training is complete, a machine learning team uses a separate "hold-out" dataset to calculate metrics such as precision, recall, and F1-score. Which phase of the pipeline is being described?
+    options:
+      - text: Data collection
+        is_correct: false
+      - text: Feature engineering
+        is_correct: false
+      - text: Model evaluation
+        is_correct: true
+      - text: Model monitoring
+        is_correct: false
+    explanation: |
+      Correct: Evaluation is the stage where the model's performance is measured using specific metrics on a test dataset it has never seen before.
+      Incorrect: Collection and Engineering happen early. Monitoring happens late in the lifecycle.
+    diagram: |
+      graph LR
+        Test[Test Data] --> Model[Trained Model]
+        Model --> Pred[Predictions]
+        Pred --> Metric[Precision/Recall]
+
+  - id: q044
+    type: multiple_choice
+    question: |
+      A cloud architect packages a finalized ML model into a Docker container and exposes it via an API endpoint so that a web application can request real-time predictions. Which stage does this represent?
+    options:
+      - text: Data pre-processing
+        is_correct: false
+      - text: Model training
+        is_correct: false
+      - text: Model deployment
+        is_correct: true
+      - text: Exploratory Data Analysis
+        is_correct: false
+    explanation: |
+      Correct: Model deployment is the process of integrating a machine learning model into an existing production environment where it can take in data and return predictions.
+      Incorrect: Pre-processing and Training are development steps. EDA is an exploration step.
+    diagram: |
+      graph LR
+        Model[Final Model] --> API[API Endpoint]
+        App[App] -->|Request| API
+        API -->|Prediction| App
+
+  - id: q045
+    type: multiple_choice
+    question: |
+      An operations team uses Amazon CloudWatch to track the accuracy of a live model over time and ensure that the model's performance does not degrade as real-world data changes. Which pipeline component is this?
+    options:
+      - text: Data collection
+        is_correct: false
+      - text: Model training
+        is_correct: false
+      - text: Model monitoring
+        is_correct: true
+      - text: Hyperparameter tuning
+        is_correct: false
+    explanation: |
+      Correct: Monitoring is the ongoing process of tracking a model's performance in production to detect "drift" or degradation in quality.
+      Incorrect: Collection, Training, and Tuning are all pre-deployment or development activities.
+    diagram: |
+      graph LR
+        Live[Live Predictions] --> Audit[Performance Check]
+        Audit --> Alert[Alert if Accuracy Drops]
+
+  - id: q046
+    type: multiple_choice
+    question: |
+      A startup wants to add image classification to their app but has limited data and a tight deadline. They decide to use a ResNet model from a public repository that has already been trained on the ImageNet dataset. What is this source of ML model called?
+    options:
+      - text: Custom model training
+        is_correct: false
+      - text: Open source pre-trained model
+        is_correct: true
+      - text: Synthetic model generation
+        is_correct: false
+      - text: Reinforcement learning agent
+        is_correct: false
+    explanation: |
+      Correct: Open source pre-trained models are existing models trained by others on large datasets, available for public use or fine-tuning.
+      Incorrect: Custom training involves building the model from scratch. Synthetic generation refers to creating data, not the model source itself.
+    diagram: |
+      graph LR
+        Repo[Model Hub] -->|Download| App[Your Application]
+        App -->|Inference| Result[Prediction]
+
+  - id: q047
+    type: multiple_choice
+    question: |
+      A highly specialized medical research firm is developing a model to identify a rare genetic marker. Because no existing models handle this specific data, they must collect their own data and define the architecture themselves. What is this approach?
+    options:
+      - text: Training a custom model
+        is_correct: true
+      - text: Using a Foundation Model
+        is_correct: false
+      - text: Zero-shot learning
+        is_correct: false
+      - text: Off-the-shelf API usage
+        is_correct: false
+    explanation: |
+      Correct: Training a custom model involves creating a model from scratch using domain-specific data and custom-defined parameters.
+      Incorrect: Foundation models and off-the-shelf APIs provide general-purpose intelligence that may not fit niche, rare genetic data.
+    diagram: |
+      graph LR
+        Data[Unique Data] --> Algo[Selected Algo]
+        Algo --> Train[Custom Training]
+        Train --> Model[Proprietary Model]
+
+  - id: q048
+    type: multiple_choice
+    question: |
+      A company wants to deploy an ML model using a service that automatically handles infrastructure scaling, patching, and high availability, allowing them to focus solely on calling an endpoint. Which method is this?
+    options:
+      - text: Self-hosted API on EC2
+        is_correct: false
+      - text: Managed API service
+        is_correct: true
+      - text: Local inference
+        is_correct: false
+      - text: On-premises deployment
+        is_correct: false
+    explanation: |
+      Correct: Managed API services (like Amazon SageMaker endpoints) handle the underlying infrastructure management, scaling, and maintenance automatically.
+      Incorrect: Self-hosted APIs require the user to manage the instances, OS, and scaling logic manually.
+    diagram: |
+      graph LR
+        Req[Client Request] --> API[Managed Endpoint]
+        API --> Scale{Auto Scaling}
+        Scale --> Model[Inference]
+
+  - id: q049
+    type: multiple_choice
+    question: |
+      A fintech company requires full control over the specific software environment, library versions, and underlying GPU hardware for their model serving layer. They decide to run their model inside a custom Docker container on Amazon EC2. Which method is this?
+    options:
+      - text: Serverless Inference
+        is_correct: false
+      - text: Managed API service
+        is_correct: false
+      - text: Self-hosted API
+        is_correct: true
+      - text: SaaS-based ML
+        is_correct: false
+    explanation: |
+      Correct: A self-hosted API gives developers maximum control over the environment and hardware but increases operational overhead.
+      Incorrect: Managed services and SaaS options abstract away the environment details that this company wants to control.
+    diagram: |
+      graph TD
+        EC2[EC2 Instance] --> OS[Linux/Docker]
+        OS --> Custom[Custom Libraries/Env]
+        Custom --> Model[Serving API]
+
+  - id: q050
+    type: multiple_choice
+    question: |
+      A developer needs a comprehensive, integrated development environment (IDE) that supports the entire machine learning lifecycle, from building and training to deploying models on AWS. Which service should they use?
+    options:
+      - text: Amazon S3
+        is_correct: false
+      - text: Amazon SageMaker AI
+        is_correct: true
+      - text: AWS Lambda
+        is_correct: false
+      - text: Amazon Redshift
+        is_correct: false
+    explanation: |
+      Correct: Amazon SageMaker AI is a fully managed service that provides every developer and data scientist with the ability to build, train, and deploy ML models quickly.
+      Incorrect: S3 is for storage, Lambda is for serverless compute, and Redshift is a data warehouse.
+    diagram: |
+      graph LR
+        Build[Build] --> Train[Train]
+        Train --> Deploy[Deploy]
+        subgraph SageMaker
+        Build
+        Train
+        Deploy
+        end
+
+  - id: q051
+    type: multiple_choice
+    question: |
+      A data scientist spends too much time writing manual code to clean and transform data. They want a visual interface to simplify data preparation and feature engineering. Which SageMaker feature is designed for this?
+    options:
+      - text: SageMaker Model Monitor
+        is_correct: false
+      - text: SageMaker Feature Store
+        is_correct: false
+      - text: SageMaker Data Wrangler
+        is_correct: true
+      - text: SageMaker Pipelines
+        is_correct: false
+    explanation: |
+      Correct: SageMaker Data Wrangler reduces the time it takes to aggregate and prepare data for ML using a visual interface.
+      Incorrect: Model Monitor is for production; Feature Store is for sharing features; Pipelines is for workflow orchestration.
+    diagram: |
+      graph LR
+        Raw[Raw Data] --> DW[Data Wrangler]
+        DW -->|Visual Transform| Ready[ML Ready Data]
+
+  - id: q052
+    type: multiple_choice
+    question: |
+      An organization wants to store and share standardized machine learning features across multiple teams and models to ensure consistency and reusability. Which SageMaker feature should they use?
+    options:
+      - text: SageMaker Data Wrangler
+        is_correct: false
+      - text: SageMaker Feature Store
+        is_correct: true
+      - text: SageMaker Ground Truth
+        is_correct: false
+      - text: SageMaker Debugger
+        is_correct: false
+    explanation: |
+      Correct: SageMaker Feature Store is a centralized repository to store, share, and manage features for machine learning models.
+      Incorrect: Ground Truth is for labeling; Debugger is for training analysis; Data Wrangler is for transformation.
+    diagram: |
+      graph TD
+        TeamA[Team A] --> FS[(Feature Store)]
+        TeamB[Team B] --> FS
+        FS --> Model1[Model 1]
+        FS --> Model2[Model 2]
+
+  - id: q053
+    type: multiple_choice
+    question: |
+      A production model's accuracy has started to decline because the real-world data distributions have changed since the model was trained. Which AWS service feature can automatically detect this "data drift"?
+    options:
+      - text: SageMaker Data Wrangler
+        is_correct: false
+      - text: SageMaker Feature Store
+        is_correct: false
+      - text: SageMaker Model Monitor
+        is_correct: true
+      - text: SageMaker Clarify
+        is_correct: false
+    explanation: |
+      Correct: SageMaker Model Monitor continuously monitors the quality of SageMaker ML models in production to detect deviations in data quality or model performance.
+      Incorrect: Data Wrangler and Feature Store are pre-production tools. Clarify is used for bias detection and explainability.
+    diagram: |
+      graph LR
+        Live[Live Data] --> SM_MM[Model Monitor]
+        SM_MM -->|Compare| Baseline[Training Baseline]
+        SM_MM -->|Alert| Dev[Developer]
+
+  - id: q054
+    type: multiple_choice
+    question: |
+      In an MLOps workflow, a team frequently tests different combinations of algorithms, data versions, and hyperparameters to see which performs best. This iterative process is known as:
+    options:
+      - text: Experimentation
+        is_correct: true
+      - text: Model deployment
+        is_correct: false
+      - text: Data labeling
+        is_correct: false
+      - text: Infrastructure as Code
+        is_correct: false
+    explanation: |
+      Correct: Experimentation is a core MLOps concept where different hypotheses, data, and parameters are tested and tracked to find the optimal model.
+      Incorrect: Deployment is the final step. Labeling is a data step. IaC is a general DevOps practice.
+    diagram: |
+      graph TD
+        Hypo[Hypothesis] --> Test[Test/Train]
+        Test --> Result[Evaluate]
+        Result -->|Refine| Hypo
+
+  - id: q055
+    type: multiple_choice
+    question: |
+      A company wants to ensure that their ML training and deployment steps are not manual. They want to create a CI/CD pipeline so that the exact same steps happen every time a new model is built. Which MLOps concept is this?
+    options:
+      - text: Data Augmentation
+        is_correct: false
+      - text: Repeatable processes
+        is_correct: true
+      - text: Manual Tuning
+        is_correct: false
+      - text: One-off analysis
+        is_correct: false
+    explanation: |
+      Correct: Repeatable processes in MLOps ensure that training and deployment workflows are automated and consistent, reducing human error.
+      Incorrect: Data augmentation is a training technique. Manual tuning and one-off analysis are the opposites of repeatable automation.
+    diagram: |
+      graph LR
+        Code[Code Change] --> Pipe[Automated Pipeline]
+        Pipe --> Train[Train]
+        Train --> Eval[Eval]
+        Eval --> Deploy[Deploy]
+
+  - id: q056
+    type: multiple_choice
+    question: |
+      An e-commerce site needs its recommendation engine to handle a 10x increase in traffic during Black Friday without crashing or slowing down. This requirement refers to:
+    options:
+      - text: Model Interpretability
+        is_correct: false
+      - text: Scalable systems
+        is_correct: true
+      - text: Data Cleaning
+        is_correct: false
+      - text: Model Versioning
+        is_correct: false
+    explanation: |
+      Correct: Scalable systems in MLOps can handle increasing workloads (data or traffic) by adding resources dynamically.
+      Incorrect: Interpretability, cleaning, and versioning are important but do not directly address the ability to handle traffic spikes.
+    diagram: |
+      graph TD
+        User[Users] --> Load[Load Balancer]
+        Load --> N1[Node 1]
+        Load --> N2[Node 2]
+        Load --> N3[Node N...]
+
+  - id: q057
+    type: multiple_choice
+    question: |
+      An ML team chooses a quick, "hacky" solution to get a model into production, knowing they will need to refactor the code and improve the data pipeline later. This future burden is called:
+    options:
+      - text: Capital Expenditure
+        is_correct: false
+      - text: Managing technical debt
+        is_correct: true
+      - text: Model Drift
+        is_correct: false
+      - text: Inference Latency
+        is_correct: false
+    explanation: |
+      Correct: Technical debt represents the future cost of rework caused by choosing an easy or suboptimal solution now instead of a better approach that would take longer.
+      Incorrect: Capex is a financial term. Drift is a performance issue. Latency is a speed metric.
+    diagram: |
+      graph LR
+        Quick[Quick Hack] --> Ship[Ship Faster]
+        Ship --> Future[High Maintenance Cost]
+
+  - id: q058
+    type: multiple_choice
+    question: |
+      Before a model can be used by customers, it must pass security audits, meet latency requirements, and have a rollback plan. This state of being fully prepared for the live environment is:
+    options:
+      - text: Exploratory analysis
+        is_correct: false
+      - text: Achieving production readiness
+        is_correct: true
+      - text: Model pruning
+        is_correct: false
+      - text: Hyperparameter tuning
+        is_correct: false
+    explanation: |
+      Correct: Production readiness ensures the model meets all operational, security, and performance standards required for the live environment.
+      Incorrect: Exploration and tuning are earlier stages. Pruning is a model optimization technique.
+    diagram: |
+      graph TD
+        M[Model] --> C1[Security Check]
+        C1 --> C2[Latency Test]
+        C2 --> C3[Rollback Plan]
+        C3 --> Ready[Production Ready]
+
+  - id: q059
+    type: multiple_choice
+    question: |
+      A team observes that their customer churn model is increasingly missing new types of churn behavior that didn't exist a year ago. What MLOps process is needed to fix this?
+    options:
+      - text: Model re-training
+        is_correct: true
+      - text: Data collection only
+        is_correct: false
+      - text: Changing the API key
+        is_correct: false
+      - text: Increasing CPU power
+        is_correct: false
+    explanation: |
+      Correct: Model re-training uses the latest data to update the model so it can learn new patterns and maintain its accuracy.
+      Incorrect: Just collecting data doesn't update the model logic. API keys and CPU power don't address learning new patterns.
+    diagram: |
+      graph LR
+        Perf[Performance Drop] --> Alert[Alert]
+        Alert --> NewData[Get New Data]
+        NewData --> Train[Re-train]
+        Train --> Update[Update Live Model]
+
+  - id: q060
+    type: multiple_choice
+    question: |
+      In a binary classification model for spam detection, what is the metric that measures the percentage of total predictions that were correct?
+    options:
+      - text: Accuracy
+        is_correct: true
+      - text: F1 Score
+        is_correct: false
+      - text: Area Under the Curve (AUC)
+        is_correct: false
+      - text: Latency
+        is_correct: false
+    explanation: |
+      Correct: Accuracy is the ratio of correct predictions to the total number of input samples.
+      Incorrect: F1 Score balances precision and recall. AUC measures the ability to distinguish between classes. Latency is speed.
+    diagram: |
+      graph TD
+        A[Accuracy = ]
+        B[Correct Predictions / Total Predictions]
+
+  - id: q061
+    type: multiple_choice
+    question: |
+      Which metric provides a single value that represents a model's performance across all possible classification thresholds, specifically its ability to distinguish between positive and negative classes?
+    options:
+      - text: Recall
+        is_correct: false
+      - text: Accuracy
+        is_correct: false
+      - text: Area Under the Curve (AUC)
+        is_correct: true
+      - text: Mean Absolute Error (MAE)
+        is_correct: false
+    explanation: |
+      Correct: AUC (of the ROC curve) measures how well the model discriminates between classes. A higher AUC means the model is better at predicting 0s as 0s and 1s as 1s.
+      Incorrect: MAE is for regression. Accuracy can be misleading in imbalanced datasets. Recall only looks at positive samples.
+    diagram: |
+      graph LR
+        Curve[ROC Curve] --> Calc[Calculate Area]
+        Calc --> AUC[AUC Value 0.0 to 1.0]
+
+  - id: q062
+    type: multiple_choice
+    question: |
+      A team is evaluating a fraud detection model. They need to balance the need to catch as many frauds as possible (Recall) with the need to avoid annoying innocent customers (Precision). Which combined metric should they use?
+    options:
+      - text: F1 Score
+        is_correct: true
+      - text: RMSE
+        is_correct: false
+      - text: R-Squared
+        is_correct: false
+      - text: Bias
+        is_correct: false
+    explanation: |
+      Correct: The F1 score is the harmonic mean of precision and recall, providing a single metric that balances both.
+      Incorrect: RMSE and R-Squared are for regression. Bias is an error type, not a performance metric.
+    diagram: |
+      graph TD
+        P[Precision] --> F1[F1 Score]
+        R[Recall] --> F1
+
+  - id: q063
+    type: multiple_choice
+    question: |
+      When deciding whether to deploy a new AI chatbot, the finance team calculates the total cloud infrastructure cost divided by the number of active users. This is an example of which business metric?
+    options:
+      - text: Return on Investment (ROI)
+        is_correct: false
+      - text: Cost per user
+        is_correct: true
+      - text: Development cost
+        is_correct: false
+      - text: Customer feedback
+        is_correct: false
+    explanation: |
+      Correct: Cost per user helps determine the financial efficiency of a service as it scales.
+      Incorrect: ROI measures total profit vs. total cost. Development cost is the upfront build cost. Feedback is qualitative data.
+    diagram: |
+      graph TD
+        Total[Total Monthly Cost] / Users[Active Users] --> CPU[Cost Per User]
+
+  - id: q064
+    type: multiple_choice
+    question: |
+      A manager is calculating the total expense of data scientists' salaries, compute resources for training, and data labeling services for a six-month project. This represents:
+    options:
+      - text: Return on Investment (ROI)
+        is_correct: false
+      - text: Development costs
+        is_correct: true
+      - text: Model Latency
+        is_correct: false
+      - text: Customer churn rate
+        is_correct: false
+    explanation: |
+      Correct: Development costs include all the resources (human and technical) required to build the initial model.
+      Incorrect: ROI is the gain from the investment. Latency and churn are performance/business outcomes, not build costs.
+    diagram: |
+      graph LR
+        Salary[Salaries] + GPU[Compute] + Labels[Labeling] --> DevCost[Total Dev Cost]
+
+  - id: q065
+    type: multiple_choice
+    question: |
+      After launching a recommendation engine, a company notices that app ratings have increased from 3.5 to 4.2 stars, and users are leaving positive comments about the "personalized feel." This is:
+    options:
+      - text: Return on Investment (ROI)
+        is_correct: false
+      - text: Accuracy
+        is_correct: false
+      - text: Customer feedback
+        is_correct: true
+      - text: Data Drift
+        is_correct: false
+    explanation: |
+      Correct: Customer feedback provides qualitative and quantitative (ratings) evidence of how users perceive the value of an AI feature.
+      Incorrect: ROI is financial. Accuracy is a mathematical model metric. Drift is a negative technical phenomenon.
+    diagram: |
+      graph LR
+        User[User] --> Rate[4 Stars]
+        User --> Text["I love these suggestions!"]
+        Rate & Text --> Feed[Customer Feedback]
