@@ -3,6 +3,7 @@
 @using System.Security.Cryptography
 @using System.Text.Json
 @using Web.Model
+@using Web.Helpers
 @using YamlDotNet.Core
 @using YamlDotNet.RepresentationModel;
 
@@ -11,11 +12,25 @@
 <div class="mdc-typography--headline6 mb">Flashcards</div>
 
 <div class="mb md-navigation-panel">
+    <label for="prefixSelect" class="md-label"><b>Selecione o prefixo:</b></label>
+    <div class="md-select-wrapper">
+        <select id="prefixSelect" @onchange="OnPrefixChanged" class="md-select">
+            <option value="">-- Escolha --</option>
+            @foreach (var prefix in ExamPrefixes)
+            {
+                <option value="@prefix">@prefix.ToUpper()</option>
+            }
+        </select>
+        <span class="md-highlight"></span>
+    </div>
+</div>
+
+<div class="mb md-navigation-panel">
     <label for="examSelect" class="md-label"><b>Selecione o exame:</b></label>
     <div class="md-select-wrapper">
         <select id="examSelect" @bind="examName" class="md-select">
         <option value="">-- Escolha --</option>
-        @foreach (var exam in examOptions)
+        @foreach (var exam in FilteredExamOptions)
         {
             <option value="@exam">@exam</option>
         }
@@ -85,17 +100,33 @@ else
 @code {
   List<Question> Questions = new();
   string examName { get; set; }
+  string selectedPrefix { get; set; } = string.Empty;
   bool examLoaded = false;
   int CurrentIndex = 0;
   int CorrectCount = 0;
   int WrongCount = 0;
+
+  // Prefixes are always derived from examOptions; no separate list must be maintained.
+  List<string> ExamPrefixes =>
+      ExamPrefixHelper.GetPrefixes(examOptions).ToList();
+
+  List<string> FilteredExamOptions =>
+      ExamPrefixHelper.GetFilteredOptions(examOptions, selectedPrefix).ToList();
+
+  void OnPrefixChanged(ChangeEventArgs e)
+  {
+      selectedPrefix = e.Value?.ToString() ?? string.Empty;
+      examName = string.Empty;
+      // Do NOT reset Questions, CurrentIndex, CorrectCount, WrongCount, or localStorage
+      StateHasChanged();
+  }
 
   // Adicione aqui as opções disponíveis
   List<string> examOptions = new() { 
                                         "dva-1", "dva-2", "dva-3",
                                         "dva-4", "dva-5", "dva-6",
                                         "dva-7", "dva-8",
-                                        "aif-01", 
+                                        "aif-01", "aif-02", "aif-03", "aif-04", "aif-05", "aif-06",
                                         "dea-01", "dea-02", "dea-03", "dea-04", "dea-05",
                                         "dea-06", "dea-07", "dea-08", "dea-09", "dea-10",
                                         "dea-11", "dea-12", "dea-13", "dea-14", "dea-15",
