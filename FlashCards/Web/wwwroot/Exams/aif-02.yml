@@ -840,3 +840,212 @@ questions:
       graph LR
         P1[Month 1: $10] + P2[Month 2: $10] + PN[Month N: $10] --> CLV[Total CLV]
 
+  - id: q105
+    type: multiple_choice
+    question: |
+      A developer needs to quickly deploy a popular open-source foundation model like Llama 3 or Mistral. They want a solution that provides one-click deployment into their own dedicated Amazon SageMaker infrastructure. Which service should they use?
+    options:
+      - text: Amazon SageMaker JumpStart
+        is_correct: true
+      - text: Amazon Q Business
+        is_correct: false
+      - text: Amazon Bedrock PartyRock
+        is_correct: false
+      - text: AWS Ground Station
+        is_correct: false
+    explanation: |
+      Correct: SageMaker JumpStart is a machine learning hub that allows you to accelerate model deployment with pre-trained models and end-to-end solutions.
+      Incorrect: Amazon Q is a generative AI assistant. PartyRock is for experimental app building. Ground Station is for satellite communications.
+    diagram: |
+      graph LR
+        JS[SageMaker JumpStart] -->|Select| Llama[Llama 3]
+        Llama -->|One-Click| EP[SageMaker Endpoint]
+
+  - id: q106
+    type: multiple_choice
+    question: |
+      An employee with no coding experience wants to experiment with building a basic generative AI application using a "drag-and-drop" style playground to share with colleagues. Which tool is specifically designed for this educational, low-stakes experimentation?
+    options:
+      - text: Amazon Bedrock Data Automation
+        is_correct: false
+      - text: Amazon Bedrock PartyRock
+        is_correct: true
+      - text: AWS PrivateLink
+        is_correct: false
+      - text: Amazon SageMaker Pipelines
+        is_correct: false
+    explanation: |
+      Correct: PartyRock is an Amazon Bedrock Playground that lets anyone create AI-powered apps in a fun, intuitive way without writing code.
+      Incorrect: Data Automation is for industrial-scale data processing. PrivateLink is for networking. SageMaker Pipelines is for MLOps workflows.
+    diagram: |
+      graph TD
+        User[Non-Coder] --> PR[PartyRock]
+        PR --> Widgets[UI Widgets + Prompts]
+        Widgets --> App[Shared AI App]
+
+  - id: q107
+    type: multiple_choice
+    question: |
+      A corporation wants to provide its employees with a generative AI-powered assistant that can answer questions about internal wikis, summarize Jira tickets, and help write emails while maintaining enterprise-grade security. Which service is best suited for this?
+    options:
+      - text: Amazon Q
+        is_correct: true
+      - text: Amazon SageMaker JumpStart
+        is_correct: false
+      - text: Amazon Rekognition
+        is_correct: false
+      - text: AWS Glue
+        is_correct: false
+    explanation: |
+      Correct: Amazon Q is a generative AI-powered assistant that can be tailored to a business's specific data, code, and operations.
+      Incorrect: JumpStart is for model deployment. Rekognition is for image analysis. Glue is for data integration.
+    diagram: |
+      graph LR
+        User[Employee] --> Q[Amazon Q]
+        Q --> Data[Internal Docs/Jira]
+        Q --> Out[Secure Answer]
+
+  - id: q108
+    type: multiple_choice
+    question: |
+      A logistics company has millions of scanned paper invoices. They need a generative AI feature that can automatically extract structured data (like total cost and vendor name) from these diverse image-based documents at scale. Which service feature should they use?
+    options:
+      - text: Amazon Bedrock PartyRock
+        is_correct: false
+      - text: Amazon Bedrock Data Automation
+        is_correct: true
+      - text: Amazon Macie
+        is_correct: false
+      - text: AWS Snowball
+        is_correct: false
+    explanation: |
+      Correct: Amazon Bedrock Data Automation (BDAs) allows you to automate the process of transforming unstructured data (PDFs, images) into structured formats using FMs.
+      Incorrect: PartyRock is for app experimentation. Macie is for sensitive data discovery. Snowball is for physical data transfer.
+    diagram: |
+      graph LR
+        Doc[Scanned Invoice] --> BDA[Bedrock Data Automation]
+        BDA --> JSON[Structured Data: Total=$100]
+
+  - id: q109
+    type: multiple_choice
+    question: |
+      By using Amazon Bedrock's serverless API, a startup can implement high-end language translation features without having to manage servers or deeply understand neural network architectures. This represents which AWS advantage?
+    options:
+      - text: Hardware Redundancy
+        is_correct: false
+      - text: Lower barrier to entry
+        is_correct: true
+      - text: Data Sovereignty
+        is_correct: false
+      - text: Manual Scaling
+        is_correct: false
+    explanation: |
+      Correct: Managed services lower the barrier to entry by removing the need for deep ML expertise and infrastructure management.
+      Incorrect: Hardware redundancy and data sovereignty are important but don't define the ease of starting. Manual scaling is a disadvantage.
+    diagram: |
+      graph TD
+        Idea[New App Idea] -->|No Servers/No ML PhD| Bedrock[Bedrock API]
+        Bedrock --> Market[Launch Product]
+
+  - id: q110
+    type: multiple_choice
+    question: |
+      A company chooses to use Amazon Bedrock because it allows them to pay only for what they use (per-token) instead of paying for 24/7 server uptime, which significantly reduces their initial financial risk. This highlights:
+    options:
+      - text: Cost-effectiveness
+        is_correct: true
+      - text: Speed to market
+        is_correct: false
+      - text: Compliance
+        is_correct: false
+      - text: Responsibility
+        is_correct: false
+    explanation: |
+      Correct: Cost-effectiveness in AWS GenAI often stems from pay-as-you-go pricing models that align costs with actual usage.
+      Incorrect: Speed to market refers to time. Compliance refers to laws. Responsibility refers to the shared model of security.
+    diagram: |
+      graph LR
+        Pay[Pay per Token] --> Saving[No Idle Server Cost]
+
+  - id: q111
+    type: multiple_choice
+    question: |
+      A healthcare provider uses AWS to build their AI application because AWS has already achieved HIPAA and SOC2 certifications for the underlying infrastructure, saving the provider months of audit preparation. This benefit is:
+    options:
+      - text: Accessibility
+        is_correct: false
+      - text: Compliance
+        is_correct: true
+      - text: Performance
+        is_correct: false
+      - text: Nondeterminism
+        is_correct: false
+    explanation: |
+      Correct: Compliance refers to AWS meeting regulatory standards, which the customer can leverage to secure their own applications.
+      Incorrect: Accessibility is ease of use. Performance is speed. Nondeterminism is a model behavior.
+    diagram: |
+      graph TD
+        AWS[AWS Infra] --> Certs[HIPAA/SOC2/GDPR]
+        Certs --> User[Compliant Medical App]
+
+  - id: q112
+    type: multiple_choice
+    question: |
+      A developer is building a high-priority chatbot. They must decide between an "on-demand" pricing model (pay per token) and "provisioned throughput" (reserved capacity). If they need consistent, guaranteed low latency regardless of traffic spikes, which cost tradeoff are they making?
+    options:
+      - text: Responsiveness/Performance
+        is_correct: true
+      - text: Custom models
+        is_correct: false
+      - text: Regional coverage
+        is_correct: false
+      - text: Data encryption
+        is_correct: false
+    explanation: |
+      Correct: Choosing provisioned throughput involves paying more to guarantee responsiveness and performance, ensuring the model reacts quickly even under load.
+      Incorrect: Custom models are a different training choice. Regional coverage refers to geographic availability.
+    diagram: |
+      graph TD
+        PT[Provisioned Throughput] -->|Higher Cost| Latency[Low/Stable Latency]
+        OD[On-Demand] -->|Lower Cost| Var[Variable Latency]
+
+  - id: q113
+    type: multiple_choice
+    question: |
+      An organization wants to use a specific model available in the us-east-1 region but realizes their data must stay in Europe for legal reasons. They must decide whether to wait for the model to launch in the eu-central-1 region. This describes:
+    options:
+      - text: Token-based pricing
+        is_correct: false
+      - text: Regional coverage
+        is_correct: true
+      - text: Provisioned throughput
+        is_correct: false
+      - text: Redundancy
+        is_correct: false
+    explanation: |
+      Correct: Regional coverage refers to the availability of specific AWS services and models in different geographic areas, which can impact cost and compliance.
+      Incorrect: Token pricing is about usage. Provisioned throughput is capacity. Redundancy is about backup systems.
+    diagram: |
+      graph LR
+        US[Region: US-East-1] --> ModelA[Model A Available]
+        EU[Region: EU-West-1] --> ModelA[Model A Missing]
+
+  - id: q114
+    type: multiple_choice
+    question: |
+      Which pricing model is most cost-effective for a developer who is still in the "testing and discovery" phase, sending only a few hundred requests per day to an LLM?
+    options:
+      - text: Provisioned Throughput
+        is_correct: false
+      - text: Token-based pricing
+        is_correct: true
+      - text: Reserved Instance pricing
+        is_correct: false
+      - text: Fixed Monthly License
+        is_correct: false
+    explanation: |
+      Correct: Token-based pricing (pay-as-you-go) is ideal for low-volume or unpredictable workloads typical of the testing phase.
+      Incorrect: Provisioned throughput is expensive and meant for high-volume production. Fixed licenses are rare in modern cloud AI.
+    diagram: |
+      graph LR
+        Usage[Low Usage] --> Pay[Small Token Bill]
