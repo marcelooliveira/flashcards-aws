@@ -1,0 +1,618 @@
+questions:
+  - id: q249
+    type: multiple_choice
+    question: |
+      A company wants to subscribe to third-party healthcare datasets to improve the accuracy of its diagnostic AI model. Which AWS service provides a curated catalog of third-party data that can be directly integrated into AWS?
+    options:
+      - text: AWS Glue
+        is_correct: false
+      - text: AWS Data Exchange
+        is_correct: true
+      - text: Amazon Redshift
+        is_correct: false
+      - text: AWS Artifact
+        is_correct: false
+    explanation: |
+      Correct: AWS Data Exchange makes it easy to find, subscribe to, and use third-party data in the AWS Cloud.
+      Incorrect: Glue is for ETL. Redshift is a data warehouse. Artifact is for compliance reports.
+    diagram: |
+      graph LR
+        Provider[Data Provider] --> DE[AWS Data Exchange]
+        DE --> Customer[Your AWS Account]
+        Customer --> S3[Amazon S3]
+
+  - id: q250
+    type: multiple_choice
+    question: |
+      An organization needs to process petabytes of data using open-source frameworks like Apache Spark and Presto to prepare a massive dataset for model pre-training. Which service is best suited for this big-data task?
+    options:
+      - text: Amazon EMR
+        is_correct: true
+      - text: Amazon QuickSight
+        is_correct: false
+      - text: AWS PrivateLink
+        is_correct: false
+      - text: Amazon Macie
+        is_correct: false
+    explanation: |
+      Correct: Amazon EMR (Elastic MapReduce) is the industry-leading cloud big data platform for processing vast amounts of data using open-source tools.
+      Incorrect: QuickSight is for BI/Dashboards. PrivateLink is for networking. Macie is for security.
+
+  - id: q251
+    type: multiple_choice
+    question: |
+      A data engineer needs to crawl multiple data sources, identify data formats, and suggest schemas to build a centralized Data Catalog for a GenAI pipeline. Which service automates this?
+    options:
+      - text: AWS Glue
+        is_correct: true
+      - text: Amazon Redshift
+        is_correct: false
+      - text: AWS Budgets
+        is_correct: false
+      - text: Amazon EC2
+        is_correct: false
+    explanation: |
+      Correct: AWS Glue is a serverless data integration service that makes it easy to discover, prepare, and combine data for analytics and machine learning.
+      Incorrect: Redshift is for OLAP. Budgets is for cost management. EC2 is for compute.
+
+  - id: q252
+    type: multiple_choice
+    question: |
+      A data scientist wants to clean and normalize a dataset for fine-tuning using a visual interface without writing any code. Which AWS tool should they use?
+    options:
+      - text: AWS Glue DataBrew
+        is_correct: true
+      - text: Amazon SageMaker Training Jobs
+        is_correct: false
+      - text: AWS PrivateLink
+        is_correct: false
+      - text: Amazon EMR
+        is_correct: false
+    explanation: |
+      Correct: AWS Glue DataBrew is a visual data preparation tool that allows users to clean and normalize data without writing code.
+      Incorrect: Training Jobs are for executing code. EMR requires cluster management and scripting.
+
+  - id: q253
+    type: multiple_choice
+    question: |
+      An enterprise wants to set up a secure data lake and manage fine-grained access control (at the column level) for their S3-based training data. Which service simplifies this setup?
+    options:
+      - text: AWS Lake Formation
+        is_correct: true
+      - text: Amazon OpenSearch Service
+        is_correct: false
+      - text: Amazon Redshift
+        is_correct: false
+      - text: AWS IAM
+        is_correct: false
+    explanation: |
+      Correct: AWS Lake Formation makes it easy to set up a secure data lake and provides centralized control for data access.
+      Incorrect: While IAM handles permissions, Lake Formation provides a higher-level, data-specific governance layer.
+
+  - id: q254
+    type: multiple_choice
+    question: |
+      A developer is implementing a RAG (Retrieval-Augmented Generation) system and needs a high-performance vector database to store and search through document embeddings. Which AWS service provides this capability natively?
+    options:
+      - text: Amazon OpenSearch Service
+        is_correct: true
+      - text: Amazon QuickSight
+        is_correct: false
+      - text: AWS Glue
+        is_correct: false
+      - text: AWS Data Exchange
+        is_correct: false
+    explanation: |
+      Correct: Amazon OpenSearch Service includes vector engine capabilities specifically designed for high-scale RAG applications.
+      Incorrect: QuickSight is for visualization. Glue is for ETL.
+
+  - id: q255
+    type: multiple_choice
+    question: |
+      After evaluating a model's performance, a business analyst wants to create an interactive dashboard with natural language "Q" capabilities to visualize accuracy trends for stakeholders. Which service should they use?
+    options:
+      - text: Amazon QuickSight
+        is_correct: true
+      - text: AWS Artifact
+        is_correct: false
+      - text: Amazon Redshift
+        is_correct: false
+      - text: AWS CloudTrail
+        is_correct: false
+    explanation: |
+      Correct: Amazon QuickSight is a business intelligence service that offers "Amazon QuickSight Q," allowing users to ask questions about data in natural language.
+      Incorrect: Redshift stores data. Artifact is for compliance. CloudTrail is for logs.
+
+  - id: q256
+    type: multiple_choice
+    question: |
+      A company needs a cloud data warehouse that can perform complex SQL queries on petabytes of structured data to analyze the impact of their AI assistant on sales. Which service is appropriate?
+    options:
+      - text: Amazon Redshift
+        is_correct: true
+      - text: Amazon EC2
+        is_correct: false
+      - text: AWS Glue DataBrew
+        is_correct: false
+      - text: Amazon S3
+        is_correct: false
+    explanation: |
+      Correct: Amazon Redshift is a fast, fully managed data warehouse that makes it simple and cost-effective to analyze all your data using standard SQL.
+      Incorrect: EC2 is for general-purpose servers. S3 is object storage.
+
+  - id: q257
+    type: multiple_choice
+    question: |
+      To prevent unexpected charges during a fine-tuning project, a manager wants to receive an email alert if the estimated monthly spend on Amazon Bedrock exceeds $500. Which tool should they use?
+    options:
+      - text: AWS Budgets
+        is_correct: true
+      - text: AWS Cost Explorer
+        is_correct: false
+      - text: AWS Trusted Advisor
+        is_correct: false
+      - text: Amazon Inspector
+        is_correct: false
+    explanation: |
+      Correct: AWS Budgets allows you to set custom budgets that alert you when your costs or usage exceed (or are forecasted to exceed) your budgeted amount.
+      Incorrect: Cost Explorer is for analyzing past spend. Trusted Advisor gives general recommendations.
+
+  - id: q258
+    type: multiple_choice
+    question: |
+      A Cloud Financial Manager wants to see a 12-month visual forecast of their AI-related spending and identify which specific IAM users are responsible for the most cost. Which tool is best for this analysis?
+    options:
+      - text: AWS Cost Explorer
+        is_correct: true
+      - text: AWS Budgets
+        is_correct: false
+      - text: AWS Artifact
+        is_correct: false
+      - text: AWS Config
+        is_correct: false
+    explanation: |
+      Correct: AWS Cost Explorer provides a visual interface to see, understand, and manage your AWS costs and usage over time, including forecasting.
+      Incorrect: Budgets are for threshold alerts. Artifact is for legal/compliance documents.
+
+  - id: q259
+    type: multiple_choice
+    question: |
+      A developer needs full control over the operating system and the ability to choose specific NVIDIA GPUs to run a self-managed deep learning framework. Which AWS service provides this level of infrastructure access?
+    options:
+      - text: Amazon EC2
+        is_correct: true
+      - text: Amazon Bedrock
+        is_correct: false
+      - text: AWS Lambda
+        is_correct: false
+      - text: Amazon SageMaker Canvas
+        is_correct: false
+    explanation: |
+      Correct: Amazon EC2 (Elastic Compute Cloud) provides scalable, virtualized compute capacity where you have full root access to the OS and hardware selection.
+      Incorrect: Bedrock is a serverless API. Lambda is for short-lived functions. Canvas is a no-code ML tool.
+
+  - id: q260
+    type: multiple_choice
+    question: |
+      A developer wants to run a microservices-based AI application using Docker containers without managing the underlying Kubernetes control plane. Which AWS-native container orchestration service should they use?
+    options:
+      - text: Amazon Elastic Container Service (Amazon ECS)
+        is_correct: true
+      - text: Amazon Elastic Kubernetes Service (Amazon EKS)
+        is_correct: false
+      - text: AWS Lambda
+        is_correct: false
+      - text: Amazon EC2
+    explanation: |
+      Correct: Amazon ECS is a fully managed container orchestration service that is AWS-native and simpler to use for Docker containers compared to Kubernetes.
+      Incorrect: EKS is specifically for Kubernetes. Lambda is serverless functions. EC2 is for virtual machines.
+
+  - id: q261
+    type: multiple_choice
+    question: |
+      An organization is migrating an existing on-premises Kubernetes cluster to AWS to take advantage of managed security and scalability for their ML training workloads. Which service is the best fit?
+    options:
+      - text: Amazon ECS
+        is_correct: false
+      - text: Amazon Elastic Kubernetes Service (Amazon EKS)
+        is_correct: true
+      - text: Amazon Lightsail
+        is_correct: false
+      - text: AWS Fargate
+        is_correct: false
+    explanation: |
+      Correct: Amazon EKS is a managed service that makes it easy to run Kubernetes on AWS without needing to install and operate your own Kubernetes control plane.
+      Incorrect: ECS is the AWS-proprietary orchestrator. Fargate is a serverless compute engine for both ECS and EKS.
+
+  - id: q262
+    type: multiple_choice
+    question: |
+      A company needs a managed database to store JSON-like metadata for their AI models, maintaining full compatibility with their existing MongoDB drivers and tools. Which service should they choose?
+    options:
+      - text: Amazon DocumentDB
+        is_correct: true
+      - text: Amazon RDS
+        is_correct: false
+      - text: Amazon DynamoDB
+        is_correct: false
+      - text: Amazon Neptune
+        is_correct: false
+    explanation: |
+      Correct: Amazon DocumentDB is a fast, scalable, and fully managed document database service that supports MongoDB workloads.
+      Incorrect: RDS is for relational data. DynamoDB is NoSQL (key-value). Neptune is for graphs.
+
+  - id: q263
+    type: multiple_choice
+    question: |
+      Which serverless, NoSQL database is ideal for storing high-frequency AI application logs or user session data with single-digit millisecond latency at any scale?
+    options:
+      - text: Amazon Redshift
+        is_correct: false
+      - text: Amazon DynamoDB
+        is_correct: true
+      - text: Amazon Aurora
+        is_correct: false
+      - text: AWS Glue
+    explanation: |
+      Correct: Amazon DynamoDB is a key-value and document database that delivers single-digit millisecond performance at any scale.
+      Incorrect: Redshift is for OLAP. Aurora is relational. Glue is for ETL.
+
+  - id: q264
+    type: multiple_choice
+    question: |
+      To improve the latency of an AI inference application, a developer wants to implement an in-memory data store to cache frequently accessed results using Redis or Memcached. Which service is most appropriate?
+    options:
+      - text: Amazon ElastiCache
+        is_correct: true
+      - text: Amazon MemoryDB
+        is_correct: false
+      - text: Amazon RDS
+        is_correct: false
+      - text: Amazon S3
+    explanation: |
+      Correct: Amazon ElastiCache is a managed in-memory data store and cache service, compatible with Redis and Memcached.
+      Incorrect: MemoryDB is a durable database (not just a cache). RDS is disk-based relational storage.
+
+  - id: q265
+    type: multiple_choice
+    question: |
+      Which Redis-compatible, durable, in-memory database service should be used when an AI application requires ultra-fast performance AND data durability across multiple Availability Zones?
+    options:
+      - text: Amazon ElastiCache
+        is_correct: false
+      - text: Amazon MemoryDB
+        is_correct: true
+      - text: Amazon RDS
+        is_correct: false
+      - text: Amazon DynamoDB
+    explanation: |
+      Correct: Amazon MemoryDB for Redis is a durable, in-memory database service for ultra-fast performance.
+      Incorrect: ElastiCache is primarily a cache and does not prioritize durability as a primary database would.
+
+  - id: q266
+    type: multiple_choice
+    question: |
+      A data scientist is analyzing the relationships between different users and the products they buy to detect complex fraud rings. Which graph database service is designed for this high-relationship data?
+    options:
+      - text: Amazon Neptune
+        is_correct: true
+      - text: Amazon DocumentDB
+        is_correct: false
+      - text: Amazon RDS
+        is_correct: false
+      - text: Amazon Redshift
+    explanation: |
+      Correct: Amazon Neptune is a fast, reliable, fully managed graph database service that makes it easy to build and run applications that work with highly connected datasets.
+      Incorrect: DocumentDB is for documents. RDS is relational. Redshift is a warehouse.
+
+  - id: q267
+    type: multiple_choice
+    question: |
+      An organization wants to run a standard PostgreSQL or MySQL database to store administrative metadata for their AI platform. Which service simplifies the setup, operation, and scaling of these relational databases?
+    options:
+      - text: Amazon RDS
+        is_correct: true
+      - text: Amazon DynamoDB
+        is_correct: false
+      - text: Amazon Neptune
+        is_correct: false
+      - text: Amazon DocumentDB
+    explanation: |
+      Correct: Amazon RDS (Relational Database Service) makes it easy to set up, operate, and scale a relational database in the cloud.
+      Incorrect: The others are non-relational (NoSQL, Graph, or Document) databases.
+
+  - id: q268
+    type: multiple_choice
+    question: |
+      A social media company wants to analyze user comments to automatically detect sentiment (positive, negative, or neutral) and extract key phrases. Which AWS AI service performs this text analysis?
+    options:
+      - text: Amazon Rekognition
+        is_correct: false
+      - text: Amazon Comprehend
+        is_correct: true
+      - text: Amazon Lex
+        is_correct: false
+      - text: Amazon Polly
+    explanation: |
+      Correct: Amazon Comprehend is a natural-language processing (NLP) service that uses machine learning to find insights and relationships in text, including sentiment analysis.
+      Incorrect: Rekognition is for images/video. Lex is for chatbots. Polly is for text-to-speech.
+
+  - id: q269
+    type: multiple_choice
+    question: |
+      Which AWS service allows you to build a sophisticated chatbot with conversational AI that can be integrated into mobile apps or websites using the same technology that powers Alexa?
+    options:
+      - text: Amazon Lex
+        is_correct: true
+      - text: Amazon Transcribe
+        is_correct: false
+      - text: Amazon Translate
+        is_correct: false
+      - text: Amazon Textract
+    explanation: |
+      Correct: Amazon Lex is a service for building conversational interfaces into any application using voice and text.
+      Incorrect: Transcribe is speech-to-text. Translate is for language translation. Textract is for document OCR.
+
+  - id: q270
+    type: multiple_choice
+    question: |
+      An e-commerce company wants to provide "Customers who bought this also bought..." style suggestions using a managed service that uses the same ML technology as Amazon.com. Which service should they use?
+    options:
+      - text: Amazon Personalize
+        is_correct: true
+      - text: Amazon Fraud Detector
+        is_correct: false
+      - text: Amazon Kendra
+        is_correct: false
+      - text: Amazon Rekognition
+    explanation: |
+      Correct: Amazon Personalize allows developers to build applications with the same machine learning technology used by Amazon.com for real-time personalized recommendations.
+      Incorrect: Fraud Detector is for risk. Kendra is for search. Rekognition is for vision.
+
+  - id: q271
+    type: multiple_choice
+    question: |
+      A legal firm needs to extract structured data, such as names and dates, from thousands of scanned PDF contracts. Which service can extract both text and structured data like tables and forms?
+    options:
+      - text: Amazon Rekognition
+        is_correct: false
+      - text: Amazon Textract
+        is_correct: true
+      - text: Amazon Comprehend
+        is_correct: false
+      - text: Amazon Translate
+    explanation: |
+      Correct: Amazon Textract is a machine learning service that automatically extracts text, handwriting, and data from scanned documents.
+      Incorrect: Rekognition detects objects in images. Comprehend analyzes text meaning. Translate changes languages.
+
+  - id: q272
+    type: multiple_choice
+    question: |
+      Which AI service provides a highly accurate, intelligent search experience for employees to find information across various enterprise data sources like SharePoint, S3, and Salesforce?
+    options:
+      - text: Amazon Kendra
+        is_correct: true
+      - text: Amazon Lex
+        is_correct: false
+      - text: Amazon Polly
+        is_correct: false
+      - text: Amazon SageMaker
+    explanation: |
+      Correct: Amazon Kendra is an intelligent search service powered by machine learning that provides a more accurate way to search across content silos.
+      Incorrect: Lex is for chat. Polly is for speech. SageMaker is a platform for building models.
+
+  - id: q273
+    type: multiple_choice
+    question: |
+      A developer is using an AI assistant inside their IDE to generate code suggestions, fix bugs, and receive real-time security scans of their C# and .NET code. Which service is this?
+    options:
+      - text: Amazon Q Business
+        is_correct: false
+      - text: Amazon Q Developer
+        is_correct: true
+      - text: Amazon SageMaker AI
+        is_correct: false
+      - text: AWS Lambda
+    explanation: |
+      Correct: Amazon Q Developer is an LLM-powered assistant specifically for developers, providing coding help, debugging, and optimizations within the IDE and AWS Console.
+      Incorrect: Q Business is for enterprise employees to ask questions about company data. SageMaker AI is a platform for model development.
+
+  - id: q274
+    type: multiple_choice
+    question: |
+      A company wants to convert written articles into lifelike spoken audio in multiple languages to increase accessibility. Which service should they use?
+    options:
+      - text: Amazon Polly
+        is_correct: true
+      - text: Amazon Transcribe
+        is_correct: false
+      - text: Amazon Translate
+        is_correct: false
+      - text: Amazon Lex
+    explanation: |
+      Correct: Amazon Polly is a service that turns text into lifelike speech, allowing you to create applications that talk.
+      Incorrect: Transcribe is for speech-to-text. Translate is for text-to-text translation. Lex is for conversational bots.
+
+  - id: q275
+    type: multiple_choice
+    question: |
+      An organization wants to use a new family of Amazon-built foundation models (FMs) that are optimized for high-intelligence, multimodal tasks and cost-efficiency. What is this model family called?
+    options:
+      - text: Amazon Titan
+        is_correct: false
+      - text: Amazon Nova
+        is_correct: true
+      - text: Llama 3
+        is_correct: false
+      - text: Claude 3
+    explanation: |
+      Correct: Amazon Nova is a newer family of foundation models from Amazon designed for intelligence, speed, and multimodality.
+      Incorrect: Titan is another Amazon FM family, but Nova is the specific latest addition in scope. Llama and Claude are third-party models.
+
+  - id: q276
+    type: multiple_choice
+    question: |
+      A CTO wants to ensure that their GenAI workload follows AWS best practices across performance, cost, and sustainability. Which tool provides a consistent process for reviewing architectures and identifying high-risk issues?
+    options:
+      - text: AWS Well-Architected Tool
+        is_correct: true
+      - text: AWS CloudTrail
+        is_correct: false
+      - text: Amazon Inspector
+        is_correct: false
+      - text: AWS Trusted Advisor
+    explanation: |
+      Correct: The AWS Well-Architected Tool helps you review the state of your workloads and compares them to the latest AWS architectural best practices.
+      Incorrect: CloudTrail is for logging. Inspector is for vulnerabilities. Trusted Advisor provides automated checks but not a structured architectural review process.
+    diagram: |
+      graph TD
+        WA[Well-Architected Tool] --> P1[Operational Excellence]
+        WA --> P2[Security]
+        WA --> P3[Reliability]
+        WA --> P4[Performance Efficiency]
+        WA --> P5[Cost Optimization]
+        WA --> P6[Sustainability]
+
+  - id: q277
+    type: multiple_choice
+    question: |
+      An AI application serves global users by generating personalized images. To reduce latency, the company wants to cache these images at edge locations closer to the users. Which service should they use?
+    options:
+      - text: Amazon CloudFront
+        is_correct: true
+      - text: Amazon VPC
+        is_correct: false
+      - text: AWS PrivateLink
+        is_correct: false
+      - text: Amazon S3 Glacier
+    explanation: |
+      Correct: Amazon CloudFront is a fast content delivery network (CDN) service that securely delivers data, videos, and applications to users globally with low latency.
+      Incorrect: VPC is a private network. PrivateLink is for internal service connectivity. Glacier is for long-term storage.
+
+  - id: q278
+    type: multiple_choice
+    question: |
+      A developer needs to create an isolated section of the AWS Cloud to launch resources like SageMaker notebook instances in a private subnet with no direct internet access. What is this virtual network called?
+    options:
+      - text: Amazon VPC
+        is_correct: true
+      - text: AWS Direct Connect
+        is_correct: false
+      - text: Amazon CloudFront
+        is_correct: false
+      - text: AWS IAM
+    explanation: |
+      Correct: Amazon VPC (Virtual Private Cloud) lets you provision a logically isolated section of the AWS Cloud where you can launch AWS resources in a virtual network that you define.
+      Incorrect: Direct Connect is a physical link. CloudFront is a CDN. IAM is for identities.
+
+  - id: q279
+    type: multiple_choice
+    question: |
+      A security team needs to manage the lifecycle of database credentials and API keys used by their AI agents, ensuring they are automatically rotated every 30 days. Which service is designed for this?
+    options:
+      - text: AWS Secrets Manager
+        is_correct: true
+      - text: AWS KMS
+        is_correct: false
+      - text: Amazon Macie
+        is_correct: false
+      - text: AWS Artifact
+    explanation: |
+      Correct: AWS Secrets Manager helps you protect secrets needed to access your applications, services, and IT resources, and it natively supports secret rotation.
+      Incorrect: KMS manages encryption keys, not the secrets themselves. Macie finds PII. Artifact is for compliance reports.
+
+  - id: q280
+    type: multiple_choice
+    question: |
+      Which AWS service provides the underlying encryption keys used to encrypt Amazon Bedrock model artifacts at rest and allows for centralized control over who can use those keys?
+    options:
+      - text: AWS Key Management Service (AWS KMS)
+        is_correct: true
+      - text: AWS Identity and Access Management (IAM)
+        is_correct: false
+      - text: AWS Secrets Manager
+        is_correct: false
+      - text: Amazon Inspector
+    explanation: |
+      Correct: AWS KMS makes it easy for you to create and manage cryptographic keys and control their use across a wide range of AWS services and your applications.
+      Incorrect: IAM handles "who can do what," but KMS specifically handles the "keys" used for encryption.
+
+  - id: q281
+    type: multiple_choice
+    question: |
+      An organization has terabytes of raw video files used for one-time model training. They want to store this data at the lowest possible cost, accepting that retrieving the data might take several hours. Which storage class is best?
+    options:
+      - text: Amazon S3 Standard
+        is_correct: false
+      - text: Amazon S3 Glacier
+        is_correct: true
+      - text: Amazon EBS
+        is_correct: false
+      - text: Amazon EFS
+    explanation: |
+      Correct: Amazon S3 Glacier (including Flexible Retrieval and Deep Archive) provides the lowest-cost storage for data that is rarely accessed and for which retrieval times of several hours are acceptable.
+      Incorrect: S3 Standard is for frequent access. EBS and EFS are high-performance file/block storage for active compute.
+
+  - id: q282
+    type: multiple_choice
+    question: |
+      A data engineer needs to store millions of small JSON files containing training metadata. The storage must be highly durable, scalable, and allow for individual files to be accessed instantly via a URL. Which service should they use?
+    options:
+      - text: Amazon S3
+        is_correct: true
+      - text: Amazon RDS
+        is_correct: false
+      - text: Amazon S3 Glacier
+        is_correct: false
+      - text: Amazon EBS
+    explanation: |
+      Correct: Amazon S3 (Simple Storage Service) is an object storage service that offers industry-leading scalability, data availability, security, and performance.
+      Incorrect: RDS is relational. Glacier is for long-term cold storage (not instant access). EBS is a block store for EC2.
+
+  - id: q283
+    type: multiple_choice
+    question: |
+      A company is undergoing a SOC2 audit. They need to prove that their use of AWS Identity and Access Management (IAM) follows the principle of "least privilege" by showing the history of permission changes. Which combination of services helps with this?
+    options:
+      - text: AWS CloudTrail and AWS IAM
+        is_correct: true
+      - text: Amazon S3 and Amazon Polly
+        is_correct: false
+      - text: AWS Secrets Manager and AWS KMS
+        is_correct: false
+      - text: Amazon QuickSight and Amazon Redshift
+    explanation: |
+      Correct: IAM defines the permissions, and AWS CloudTrail logs the API calls made to change those permissions, creating a verifiable audit trail.
+      Incorrect: The other combinations do not provide identity-level audit trails.
+
+  - id: q284
+    type: multiple_choice
+    question: |
+      Which AWS feature allows a developer to define a set of permissions as a JSON document and attach it to an IAM Role, specifying exactly which Amazon Bedrock models the role can invoke?
+    options:
+      - text: IAM Policies
+        is_correct: true
+      - text: Resource Groups
+        is_correct: false
+      - text: Trusted Advisor
+        is_correct: false
+      - text: S3 Buckets
+    explanation: |
+      Correct: IAM Policies are JSON documents that define permissions. When attached to an identity (user, group, or role), they determine what the identity can do.
+      Incorrect: Resource Groups organize resources. Trusted Advisor gives advice. S3 is for storage.
+
+  - id: q285
+    type: multiple_choice
+    question: |
+      To maintain a high security posture, a company wants to automatically scan its EC2-based AI training environment for software vulnerabilities every time a new instance is launched. Which service should they use?
+    options:
+      - text: Amazon Inspector
+        is_correct: true
+      - text: AWS Artifact
+        is_correct: false
+      - text: Amazon Macie
+        is_correct: false
+      - text: AWS Config
+    explanation: |
+      Correct: Amazon Inspector automatically discovers and scans EC2 instances, container images, and Lambda functions for known software vulnerabilities and network exposure.
+      Incorrect: Artifact is for documentation. Macie is for S3 data privacy. Config tracks resource state changes but doesn't "scan for vulnerabilities" in software packages.
