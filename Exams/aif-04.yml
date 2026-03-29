@@ -1,0 +1,654 @@
+questions:
+  - id: q180
+    type: multiple_choice
+    question: |
+      A recruitment AI consistently ranks candidates from a specific geographic region lower than others, despite similar qualifications. This is an example of which Responsible AI concern?
+    options:
+      - text: Bias
+        is_correct: true
+      - text: Veracity
+        is_correct: false
+      - text: Latency
+        is_correct: false
+      - text: Tokenization
+        is_correct: false
+    explanation: |
+      Correct: Bias refers to systematic errors in a model's output that result in unfair treatment of certain groups or individuals.
+      Incorrect: Veracity is about truthfulness. Latency is speed. Tokenization is data processing.
+    diagram: |
+      graph LR
+        Data[Biased Training Data] --> Model[AI Model]
+        Model --> Output[Unfair Predictions]
+
+  - id: q181
+    type: multiple_choice
+    question: |
+      An organization ensures that its AI-powered loan approval system provides equal opportunity for all applicants, regardless of their ethnic background. This principle is known as:
+    options:
+      - text: Fairness
+        is_correct: true
+      - text: Robustness
+        is_correct: false
+      - text: Model size
+        is_correct: false
+      - text: Compression
+        is_correct: false
+    explanation: |
+      Correct: Fairness in AI ensures that models do not produce outcomes that disproportionately benefit or disadvantage specific groups based on protected characteristics.
+      Incorrect: Robustness is about stability under stress. Model size and compression are technical architectural traits.
+
+  - id: q182
+    type: multiple_choice
+    question: |
+      A company designs a voice assistant that supports multiple dialects and accents to ensure users from various cultural backgrounds can use it effectively. This represents:
+    options:
+      - text: Inclusivity
+        is_correct: true
+      - text: Nondeterminism
+        is_correct: false
+      - text: Temperature
+        is_correct: false
+      - text: Overfitting
+        is_correct: false
+    explanation: |
+      Correct: Inclusivity in Responsible AI means designing systems that are accessible and effective for the broadest possible range of users and backgrounds.
+      Incorrect: Nondeterminism and temperature are model behaviors. Overfitting is a training error.
+
+  - id: q183
+    type: multiple_choice
+    question: |
+      An AI model used for autonomous driving is tested against "adversarial attacks" to ensure it doesn't fail when encountering unexpected or malicious inputs. This feature is:
+    options:
+      - text: Robustness
+        is_correct: true
+      - text: Veracity
+        is_correct: false
+      - text: Bias
+        is_correct: false
+      - text: Fine-tuning
+        is_correct: false
+    explanation: |
+      Correct: Robustness is the ability of a model to maintain its performance and safety even when faced with noisy, unexpected, or adversarial data.
+      Incorrect: Veracity is truth. Bias is unfairness. Fine-tuning is a training method.
+
+  - id: q184
+    type: multiple_choice
+    question: |
+      Which pillar of Responsible AI focuses on preventing the model from generating harmful instructions, such as how to create a weapon or engage in self-harm?
+    options:
+      - text: Safety
+        is_correct: true
+      - text: Speed
+        is_correct: false
+      - text: Complexity
+        is_correct: false
+      - text: Availability
+        is_correct: false
+    explanation: |
+      Correct: Safety involves implementing guardrails to prevent the AI from generating dangerous, illegal, or harmful content.
+      Incorrect: Speed, complexity, and availability are operational or architectural metrics.
+
+  - id: q185
+    type: multiple_choice
+    question: |
+      A user asks an AI for medical advice, and the model provides a response that is factually grounded in peer-reviewed journals rather than making up fake symptoms. This refers to:
+    options:
+      - text: Veracity
+        is_correct: true
+      - text: Hallucination
+        is_correct: false
+      - text: Underfitting
+        is_correct: false
+      - text: Entropy
+        is_correct: false
+    explanation: |
+      Correct: Veracity refers to the truthfulness and factual accuracy of the model's outputs.
+      Incorrect: Hallucination is the absence of veracity. Underfitting is a training failure. Entropy is a measure of randomness.
+
+  - id: q186
+    type: multiple_choice
+    question: |
+      A developer wants to implement content filtering to block "Hate Speech" and "Insults" in both user prompts and model responses. Which Amazon Bedrock feature is best suited for this?
+    options:
+      - text: Amazon Bedrock Guardrails
+        is_correct: true
+      - text: Amazon Bedrock Knowledge Bases
+        is_correct: false
+      - text: Amazon Bedrock Agents
+        is_correct: false
+      - text: Amazon Bedrock Provisioned Throughput
+        is_correct: false
+    explanation: |
+      Correct: Amazon Bedrock Guardrails allow you to implement highly customizable safeguards to filter harmful content and PII.
+      Incorrect: Knowledge Bases are for RAG. Agents are for tasks. Provisioned Throughput is for capacity.
+    diagram: |
+      graph LR
+        User[Prompt] --> G[Guardrail]
+        G -->|Filtered| Model[Foundation Model]
+        Model --> G2[Guardrail]
+        G2 -->|Safe Output| User
+
+  - id: q187
+    type: multiple_choice
+    question: |
+      When selecting a foundation model, a company evaluates the carbon footprint of the model's training process and the energy efficiency of the hardware it runs on. These are:
+    options:
+      - text: Environmental considerations
+        is_correct: true
+      - text: Legal constraints
+        is_correct: false
+      - text: Token limits
+        is_correct: false
+      - text: Accuracy metrics
+        is_correct: false
+    explanation: |
+      Correct: Environmental considerations involve assessing the ecological impact, such as energy consumption and carbon emissions, of AI workloads.
+      Incorrect: These are ethical/sustainability choices, not legal requirements or technical performance limits.
+
+  - id: q188
+    type: multiple_choice
+    question: |
+      A CTO chooses to use a smaller, distilled model because it requires significantly less electricity to run in production than a massive LLM. This practice supports:
+    options:
+      - text: Sustainability
+        is_correct: true
+      - text: Hallucination
+        is_correct: false
+      - text: Redundancy
+        is_correct: false
+      - text: Latent space
+        is_correct: false
+    explanation: |
+      Correct: Sustainability in AI selection focuses on long-term viability by minimizing resource consumption and environmental impact.
+      Incorrect: Hallucination is a disadvantage. Redundancy is for availability. Latent space is internal model math.
+
+  - id: q189
+    type: multiple_choice
+    question: |
+      A company is sued because their generative AI model produced code that was an exact copy of a copyrighted library without attribution. This is an example of:
+    options:
+      - text: Intellectual property infringement claims
+        is_correct: true
+      - text: Zero-shot reasoning
+        is_correct: false
+      - text: Data curation
+        is_correct: false
+      - text: Prompt routing
+        is_correct: false
+    explanation: |
+      Correct: IP infringement is a major legal risk where AI-generated content may inadvertently violate existing copyrights or patents.
+      Incorrect: Zero-shot, data curation, and prompt routing are technical or architectural terms.
+
+  - id: q190
+    type: multiple_choice
+    question: |
+      A bank uses an AI for credit scoring, but the model consistently denies loans to a specific minority group. The bank now faces a class-action lawsuit. This legal risk is:
+    options:
+      - text: Biased model outputs
+        is_correct: true
+      - text: Cost-effectiveness
+        is_correct: false
+      - text: Prompt templates
+        is_correct: false
+      - text: RAG
+        is_correct: false
+    explanation: |
+      Correct: Biased outputs can lead to discriminatory practices, resulting in significant legal liabilities and regulatory penalties.
+      Incorrect: Cost, templates, and RAG do not represent legal risks in this context.
+
+  - id: q191
+    type: multiple_choice
+    question: |
+      An AI model leaked a customer's private medical history during a chat session. As a result, the company's stock price dropped and users deleted their accounts. This represents:
+    options:
+      - text: Loss of customer trust
+        is_correct: true
+      - text: Improved productivity
+        is_correct: false
+      - text: Model distillation
+        is_correct: false
+      - text: Token caching
+        is_correct: false
+    explanation: |
+      Correct: Loss of customer trust is a devastating business and legal consequence of AI failures, especially those involving privacy or safety.
+      Incorrect: Productivity and distillation are positive or technical concepts.
+
+  - id: q192
+    type: multiple_choice
+    question: |
+      An AI assistant gave a user dangerous advice regarding a chemical mixture, leading to physical injury. The company is now liable for:
+    options:
+      - text: End user risk
+        is_correct: true
+      - text: Low latency
+        is_correct: false
+      - text: Data sharding
+        is_correct: false
+      - text: Multimodal support
+        is_correct: false
+    explanation: |
+      Correct: End user risk involves the potential for AI outputs to cause physical, financial, or emotional harm to the person interacting with the system.
+      Incorrect: Latency, sharding, and multimodality are technical performance or feature descriptions.
+
+  - id: q193
+    type: multiple_choice
+    question: |
+      A chatbot confidentially stated that a local business owner was involved in a crime that never happened. The business owner sues the AI company for defamation. This legal risk is caused by:
+    options:
+      - text: Hallucinations
+        is_correct: true
+      - text: Model size
+        is_correct: false
+      - text: Token based pricing
+        is_correct: false
+      - text: Amazon S3
+        is_correct: false
+    explanation: |
+      Correct: Hallucinations (false information) can lead to legal claims like defamation or misinformation.
+      Incorrect: Model size, pricing, and S3 are not causes of factual errors in model logic.
+
+  - id: q194
+    type: multiple_choice
+    question: |
+      When building a training dataset, a developer ensures that images of "Doctors" include a wide range of genders and ethnicities. This dataset characteristic is:
+    options:
+      - text: Inclusivity
+        is_correct: true
+      - text: Overfitting
+        is_correct: false
+      - text: Compression
+        is_correct: false
+      - text: Latency
+        is_correct: false
+    explanation: |
+      Correct: Inclusivity in datasets ensures that all groups are represented fairly and positively, preventing the reinforcement of stereotypes.
+      Incorrect: Overfitting, compression, and latency are technical training or performance issues.
+
+  - id: q195
+    type: multiple_choice
+    question: |
+      A data scientist checks their dataset to see if it includes data from rural, urban, and suburban populations. This check for varied perspectives is:
+    options:
+      - text: Diversity
+        is_correct: true
+      - text: Temperature
+        is_correct: false
+      - text: Stop sequences
+        is_correct: false
+      - text: Bedrock Agents
+        is_correct: false
+    explanation: |
+      Correct: Diversity in a dataset refers to the inclusion of a wide variety of data points and perspectives.
+      Incorrect: Temperature and stop sequences are inference parameters. Agents are for task execution.
+
+  - id: q196
+    type: multiple_choice
+    question: |
+      To ensure high quality, a company only uses data from verified medical journals and government records rather than general web crawls. This refers to:
+    options:
+      - text: Curated data sources
+        is_correct: true
+      - text: Prompt routing
+        is_correct: false
+      - text: Zero-shot learning
+        is_correct: false
+      - text: Nondeterminism
+        is_correct: false
+    explanation: |
+      Correct: Curated data sources are high-quality, verified, and intentionally selected datasets used to improve model reliability.
+      Incorrect: Routing, learning types, and model behaviors do not describe the source of the data.
+
+  - id: q197
+    type: multiple_choice
+    question: |
+      In a classification dataset for "Spam detection," the developer ensures there are exactly 5,000 "Spam" emails and 5,000 "Not Spam" emails. This is a:
+    options:
+      - text: Balanced dataset
+        is_correct: true
+      - text: Hallucination
+        is_correct: false
+      - text: Context window
+        is_correct: false
+      - text: Chain-of-thought
+        is_correct: false
+    explanation: |
+      Correct: A balanced dataset has an equal or appropriate proportion of examples for each class, preventing the model from becoming biased toward the majority class.
+      Incorrect: Hallucinations and context windows are model traits. Chain-of-thought is a prompting technique.
+
+  - id: q198
+    type: multiple_choice
+    question: |
+      A model's training data predominantly features one demographic, causing it to perform significantly worse for other groups. This is a direct effect of:
+    options:
+      - text: Bias
+        is_correct: true
+      - text: Underfitting
+        is_correct: false
+      - text: Latency
+        is_correct: false
+      - text: Provisioned throughput
+        is_correct: false
+    explanation: |
+      Correct: Bias in the training data leads to disparate impact, where the model's accuracy varies unfairly across demographic groups.
+      Incorrect: Underfitting is general inaccuracy. Latency is speed. Provisioned throughput is capacity.
+
+  - id: q199
+    type: multiple_choice
+    question: |
+      A model predicts "The person is a criminal" for almost every input because the training data was low quality and full of errors. This generalized error is:
+    options:
+      - text: Inaccuracy
+        is_correct: true
+      - text: Multi-lingual support
+        is_correct: false
+      - text: RAG
+        is_correct: false
+      - text: Agentic AI
+        is_correct: false
+    explanation: |
+      Correct: Inaccuracy is a broad effect of poor training or bias where the model's predictions frequently do not match reality.
+      Incorrect: Multi-lingual support, RAG, and Agentic AI are features or architectures.
+
+  - id: q200
+    type: multiple_choice
+    question: |
+      A model performs perfectly on the training data but fails completely on new, real-world data because it "memorized" the noise in the training set. This is:
+    options:
+      - text: Overfitting
+        is_correct: true
+      - text: Underfitting
+        is_correct: false
+      - text: Veracity
+        is_correct: false
+      - text: Fairness
+        is_correct: false
+    explanation: |
+      Correct: Overfitting occurs when a model learns the training data too well, including its noise and outliers, making it unable to generalize to new data.
+      Incorrect: Underfitting is when the model is too simple to learn the data. Veracity and Fairness are ethical goals.
+    diagram: |
+      graph TD
+        Train[Train Set] -->|Perfect Score| Model[Model]
+        Test[Real World] -->|Low Score| Model
+
+  - id: q201
+    type: multiple_choice
+    question: |
+      A model is too simple to capture the underlying patterns in the data, resulting in poor performance on both the training set and new data. This is:
+    options:
+      - text: Underfitting
+        is_correct: true
+      - text: Overfitting
+        is_correct: false
+      - text: Robustness
+        is_correct: false
+      - text: Inclusivity
+        is_correct: false
+    explanation: |
+      Correct: Underfitting occurs when a model is not complex enough to learn the patterns in the data.
+      Incorrect: Overfitting is the opposite. Robustness and Inclusivity are positive AI traits.
+
+  - id: q202
+    type: multiple_choice
+    question: |
+      A developer is checking their dataset labels to ensure the "Correct" answers aren't biased by the personal opinions of the human labelers. This is:
+    options:
+      - text: Analyzing label quality
+        is_correct: true
+      - text: Model distillation
+        is_correct: false
+      - text: Token caching
+        is_correct: false
+      - text: Provisioned throughput
+        is_correct: false
+    explanation: |
+      Correct: Analyzing label quality is a critical step to detect bias introduced during the data preparation phase.
+      Incorrect: Distillation, caching, and throughput are architectural or operational concerns.
+
+  - id: q203
+    type: multiple_choice
+    question: |
+      A company hires a third-party group of experts to manually review AI logs and verify that the model's responses are ethical and accurate. This is:
+    options:
+      - text: Human audits
+        is_correct: true
+      - text: Pre-training
+        is_correct: false
+      - text: Prompt routing
+        is_correct: false
+      - text: Embedding
+        is_correct: false
+    explanation: |
+      Correct: Human audits involve people reviewing AI behavior to ensure it aligns with safety and ethical standards.
+      Incorrect: Pre-training is a phase. Routing and embedding are technical processes.
+
+  - id: q204
+    type: multiple_choice
+    question: |
+      To find hidden bias, a developer breaks down their model's accuracy scores by age, gender, and zip code. This technique is:
+    options:
+      - text: Subgroup analysis
+        is_correct: true
+      - text: Chain-of-thought
+        is_correct: false
+      - text: RAG
+        is_correct: false
+      - text: Vector storage
+        is_correct: false
+    explanation: |
+      Correct: Subgroup analysis involves evaluating model performance across different slices of data to identify disparate impact or bias.
+      Incorrect: CoT, RAG, and Vector storage are prompting or architectural techniques.
+
+  - id: q205
+    type: multiple_choice
+    question: |
+      Which AWS tool can be used to detect potential bias in training data and model predictions, as well as explain how specific features influence a model's output?
+    options:
+      - text: Amazon SageMaker Clarify
+        is_correct: true
+      - text: AWS Snowball
+        is_correct: false
+      - text: Amazon Route 53
+        is_correct: false
+      - text: AWS Artifact
+        is_correct: false
+    explanation: |
+      Correct: SageMaker Clarify helps detect bias and provides explainability for machine learning models.
+      Incorrect: Snowball is for data transfer. Route 53 is DNS. Artifact is for compliance reports.
+
+  - id: q206
+    type: multiple_choice
+    question: |
+      A company wants to detect "model drift" in production—when the model's performance starts to degrade over time as the real-world data changes. Which tool should they use?
+    options:
+      - text: Amazon SageMaker Model Monitor
+        is_correct: true
+      - text: Amazon Bedrock Agents
+        is_correct: false
+      - text: AWS CloudTrail
+        is_correct: false
+      - text: Amazon Q
+        is_correct: false
+    explanation: |
+      Correct: SageMaker Model Monitor continuously monitors the quality of ML models in production to detect drift.
+      Incorrect: Agents execute tasks. CloudTrail is for API logging. Amazon Q is an assistant.
+
+  - id: q207
+    type: multiple_choice
+    question: |
+      When an AI is unsure of its answer, a company uses a workflow to automatically route the response to a human for review before it is sent to the customer. Which AWS service facilitates this "human-in-the-loop" process?
+    options:
+      - text: Amazon Augmented AI (Amazon A2I)
+        is_correct: true
+      - text: AWS Lambda
+        is_correct: false
+      - text: Amazon Bedrock Guardrails
+        is_correct: false
+      - text: AWS Direct Connect
+        is_correct: false
+    explanation: |
+      Correct: Amazon A2I makes it easy to build workflows required for human review of ML predictions.
+      Incorrect: Lambda is serverless compute. Guardrails filter content automatically. Direct Connect is a networking service.
+
+  - id: q208
+    type: multiple_choice
+    question: |
+      A financial institution is using a Decision Tree model to approve loans because the internal logic can be easily mapped and understood by auditors. This characteristic is known as:
+    options:
+      - text: Transparency and Explainability
+        is_correct: true
+      - text: Black-box modeling
+        is_correct: false
+      - text: Tokenization
+        is_correct: false
+      - text: Data Augmentation
+        is_correct: false
+    explanation: |
+      Correct: Transparent and explainable models allow humans to understand how the model arrived at a specific decision, which is critical for regulated industries.
+      Incorrect: Black-box models (like deep neural networks) are often high-performing but lack transparency in their decision-making process.
+    diagram: |
+      graph LR
+        Input[Data] --> Model[Transparent Model]
+        Model --> Logic[Visible Logic]
+        Logic --> Output[Decision]
+
+  - id: q209
+    type: multiple_choice
+    question: |
+      A complex Foundation Model (FM) with billions of parameters provides highly accurate results, but developers cannot explain exactly why the model chose one word over another. This model is best described as:
+    options:
+      - text: Transparent
+        is_correct: false
+      - text: Not transparent (Black-box)
+        is_correct: true
+      - text: Deterministic
+        is_correct: false
+      - text: Linear
+        is_correct: false
+    explanation: |
+      Correct: Many high-parameter foundation models are considered "black boxes" because their internal weights and non-linear paths are too complex for direct human interpretation.
+      Incorrect: Transparency implies the logic is clear. Black-box models are usually non-linear and non-deterministic by nature.
+
+  - id: q210
+    type: multiple_choice
+    question: |
+      Which AWS tool provides a standardized way to document model information, including intended use, risk ratings, and evaluation results, to improve transparency for stakeholders?
+    options:
+      - text: SageMaker Model Cards
+        is_correct: true
+      - text: AWS CloudTrail
+        is_correct: false
+      - text: Amazon Route 53
+        is_correct: false
+      - text: Amazon SQS
+        is_correct: false
+    explanation: |
+      Correct: SageMaker Model Cards act as a "fact sheet" for a model, documenting critical information for governance and transparency.
+      Incorrect: CloudTrail is for API logs. Route 53 is DNS. SQS is a message queue.
+    diagram: |
+      graph TD
+        MC[SageMaker Model Card]
+        MC --> Use[Intended Use]
+        MC --> Risk[Risk Rating]
+        MC --> Eval[Evaluation Results]
+
+  - id: q211
+    type: multiple_choice
+    question: |
+      A researcher chooses to use a model where the weights and training code are publicly available, allowing for deep auditing of the model's behavior. This refers to:
+    options:
+      - text: Proprietary models
+        is_correct: false
+      - text: Open source models
+        is_correct: true
+      - text: Serverless APIs
+        is_correct: false
+      - text: Prompt routing
+        is_correct: false
+    explanation: |
+      Correct: Open source models provide transparency by allowing developers to inspect the model's architecture, weights, and often the training methodology.
+      Incorrect: Proprietary models (like those behind some private APIs) keep their internal details secret.
+
+  - id: q212
+    type: multiple_choice
+    question: |
+      To ensure transparency, a developer reviews the documentation of a dataset to understand the demographics of the individuals whose data was used for training. This focus on "data transparency" helps identify:
+    options:
+      - text: Potential Bias
+        is_correct: true
+      - text: Network Latency
+        is_correct: false
+      - text: Storage Costs
+        is_correct: false
+      - text: GPU Utilization
+        is_correct: false
+    explanation: |
+      Correct: Knowing what data went into a model is essential for explaining its behavior and identifying potential biases.
+      Incorrect: Latency, costs, and GPU metrics are operational, not related to model transparency or data ethics.
+
+  - id: q213
+    type: multiple_choice
+    question: |
+      Before integrating a model, a legal team checks the "Licensing" terms to see if the model can be used for commercial purposes and if there are restrictions on disclosing the model's logic. This is a step toward:
+    options:
+      - text: Responsible model selection
+        is_correct: true
+      - text: Prompt engineering
+        is_correct: false
+      - text: Knowledge distillation
+        is_correct: false
+      - text: Fine-tuning
+        is_correct: false
+    explanation: |
+      Correct: Licensing is a critical part of transparency and accountability, defining how a model can be legally used and shared.
+      Incorrect: Prompting, distillation, and fine-tuning are technical activities, not legal/governance activities.
+
+  - id: q214
+    type: multiple_choice
+    question: |
+      An organization finds that as they make their model more "interpretable" (easier for humans to understand), the model's predictive accuracy slightly decreases. This is a common tradeoff between:
+    options:
+      - text: Interpretability and Performance
+        is_correct: true
+      - text: Cost and Latency
+        is_correct: false
+      - text: Security and Safety
+        is_correct: false
+      - text: Storage and Networking
+        is_correct: false
+    explanation: |
+      Correct: There is often a tradeoff where simpler, highly interpretable models (like linear regression) may not perform as well as complex, non-transparent models (like deep neural networks).
+      Incorrect: While other tradeoffs exist, the relationship between "understanding the logic" and "raw power" is the core of this AI challenge.
+
+  - id: q215
+    type: multiple_choice
+    question: |
+      A team decides to limit the transparency of a model's internal weights to prevent attackers from finding vulnerabilities to "jailbreak" the system. This represents a tradeoff between:
+    options:
+      - text: Transparency and Safety
+        is_correct: true
+      - text: Tokenization and Pricing
+        is_correct: false
+      - text: Training and Fine-tuning
+        is_correct: false
+      - text: RAG and Agents
+        is_correct: false
+    explanation: |
+      Correct: Sometimes, full transparency can expose "vulnerability surfaces," making it harder to ensure the safety of the model against malicious actors.
+      Incorrect: Tokenization, pricing, RAG, and Agents do not directly address the conflict between openness and protection.
+
+  - id: q216
+    type: multiple_choice
+    question: |
+      When designing an explainable AI system, a developer ensures that the explanations provided are tailored to the end-user's level of expertise (e.g., simple for customers, detailed for auditors). This follows the principle of:
+    options:
+      - text: Human-centered design
+        is_correct: true
+      - text: Reinforcement learning
+        is_correct: false
+      - text: Continuous pre-training
+        is_correct: false
+      - text: Model quantization
+        is_correct: false
+    explanation: |
+      Correct: Human-centered design for XAI (Explainable AI) focuses on making AI decisions understandable and actionable for the specific humans interacting with the system.
+      Incorrect: RL, pre-training, and quantization are machine-centric optimization techniques.
