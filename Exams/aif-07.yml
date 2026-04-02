@@ -1,0 +1,433 @@
+questions:
+  - id: ai-ml-001
+    type: multiple_choice
+    question: |
+      Uma companhia de telecomunicações está lançando um projeto de machine learning para aprimorar a categorização de usuários e customizar ações de promoção. No início do planejamento pela equipe de data science, eles buscam mapear os maiores obstáculos na adoção de ML. Qual alternativa indica o desafio principal para esse cenário?
+    options:
+      - text: Complexidade para obter e tratar dados de qualidade superior visando o treino dos modelos.
+        is_correct: true
+      - text: Restrições no uso de machine learning em situações práticas do dia a dia.
+        is_correct: false
+      - text: Escassez de algoritmos de ML disponíveis comercialmente.
+        is_correct: false
+      - text: Capacidade de processamento inadequada para rodar modelos simples de ML.
+        is_correct: false
+    explanation: |
+      Correta: A coleta e o preparo de dados limpos e pertinentes representam um dos maiores entraves no ML. Esse passo é vital para modelos precisos e geralmente exige muito esforço e tempo.
+      Incorretas: Há uma ampla gama de algoritmos acessíveis. Recursos computacionais para modelos básicos estão disponíveis na nuvem. O ML tem aplicações reais abundantes, sem limitações significativas.
+    diagram: |
+      graph TD
+        A[Dados Iniciais] --> B{Limpeza e Tratamento}
+        B -->|Principal Gargalo| C[Dados Qualificados]
+        C --> D[Treino do Modelo]
+        style B fill:#f96,stroke:#333,stroke-width:2px
+
+  - id: ai-ml-002
+    type: multiple_choice
+    question: |
+      Uma organização de logística investiga o Amazon Q para otimizar rotinas operacionais. O time precisa compreender como o Amazon Q aplica IA generativa em atividades como criação de relatórios e exame de volumes massivos de dados. Quais técnicas de IA generativa empregadas no workflow do Amazon Q Business? (Escolha duas)
+    options:
+      - text: Large Language Model (LLM)
+        is_correct: true
+      - text: Retrieval-Augmented Generation (RAG)
+        is_correct: true
+      - text: Modelo de Difusão (Diffusion Model)
+        is_correct: false
+      - text: Redes Adversárias Generativas (GAN)
+        is_correct: false
+    explanation: |
+      Corretas: Amazon Q emprega LLMs para processamentos linguísticos (resumos, texto gerado) e RAG para refinar respostas via consulta a repositórios corporativos confiáveis, sem retrreinamento.
+      Incorretas: Difusão e GANs priorizam geração de imagens ou dados artificiais, não sendo centrais no fluxo textual/empresarial do Amazon Q.
+    diagram: |
+      graph LR
+        User[Usuário] --> Q[Amazon Q]
+        Q --> LLM[LLM: Análise]
+        Q --> RAG[RAG: Busca em Dados]
+        RAG --> Knowledge[(Base Corporativa)]
+
+  - id: ai-ml-003
+    type: multiple_choice
+    question: |
+      Um especialista em dados alimenta um modelo já treinado no Amazon SageMaker com registros recentes de clientes (idade, histórico de compras) para estimar riscos de churn. Qual o nome preciso dessa etapa em que o modelo aplica conhecimentos adquiridos para gerar outputs com entradas inéditas?
+    options:
+      - text: Inferência (Inference)
+        is_correct: true
+      - text: Validação (Validation)
+        is_correct: false
+      - text: Teste (Testing)
+        is_correct: false
+      - text: Treinamento (Training)
+        is_correct: false
+    explanation: |
+      Correta: Inferência ocorre quando o modelo pronto realiza predições sobre dados novos inseridos pelo usuário.
+      Incorretas: Treinamento ajusta pesos. Validação e teste avaliam desempenho no desenvolvimento, não no uso produtivo com dados frescos.
+    diagram: |
+      graph LR
+        Input[Dados Novos] --> Model[Modelo Pronto]
+        Model -->|Inferência| Output[Predição]
+
+  - id: ai-ml-004
+    type: multiple_choice
+    question: |
+      Uma seguradora avalia o Amazon Bedrock para identificar irregularidades em sinistros e suporte ao usuário. Quanto às funcionalidades e precificação do Amazon Bedrock, quais afirmações estão certas? (Selecione duas)
+    options:
+      - text: Modelos compactos custam menos que os de grande porte.
+        is_correct: true
+      - text: Modelos personalizados só funcionam no modo de Capacidade Provisionada (Provisioned Throughput).
+        is_correct: true
+      - text: Modelos grandes saem mais em conta que os pequenos por economia de escala.
+        is_correct: false
+      - text: O modo On-Demand demanda contratos de duração fixa.
+        is_correct: false
+    explanation: |
+      Corretas: Modelos menores equilibram custo e performance. Customizações no Bedrock requerem alocação de throughput provisionado.
+      Incorretas: Grandes modelos elevam custos e tempo. On-Demand segue pay-per-use, sem compromissos de longo prazo.
+    diagram: |
+      graph TD
+        Pricing[Bedrock Custos] --> OnDemand[On-Demand: Base]
+        Pricing --> Provisioned[Provisioned: Customizados]
+
+  - id: ai-ml-005
+    type: multiple_choice
+    question: |
+      Referente à infraestrutura global da AWS, quais das opções a seguir estão precisas? (Escolha duas)
+    options:
+      - text: Toda Zona de Disponibilidade (AZ) abrange um ou mais centros de dados isolados.
+        is_correct: true
+      - text: Cada Região AWS inclui ao menos três Zonas de Disponibilidade (AZ).
+        is_correct: true
+      - text: Cada Região AWS tem no máximo duas Zonas de Disponibilidade.
+        is_correct: false
+      - text: Zonas de Disponibilidade equivalem a Localidades de Borda (Edge Locations).
+        is_correct: false
+    explanation: |
+      Corretas: AZs são grupos de data centers com infraestruturas redundantes de energia e rede. Regiões AWS garantem no mínimo 3 AZs para resiliência.
+      Incorretas: Mínimo é 3 por região. Edge Locations otimizam entrega de conteúdo via CloudFront, sem relação com AZs.
+    diagram: |
+      graph BT
+        DC1[Data Center] & DC2[Data Center] --> AZ[Zona de Disponibilidade]
+        AZ1[AZ 1] & AZ2[AZ 2] & AZ3[AZ 3] --> Region[Região AWS]
+
+  - id: ai-ml-006
+    type: multiple_choice
+    question: |
+      Uma equipe de data science em uma instituição educacional deseja organizar seu fluxo de trabalho de machine learning de maneira mais eficiente. Qual sequência de etapas representa a ordem recomendada para o processo de ML?
+    options:
+      - text: Coleta de dados, Pré‑processamento de dados, Treinamento do modelo, Avaliação do modelo.
+        is_correct: true
+      - text: Avaliação do modelo, Treinamento do modelo, Coleta de dados, Pré‑processamento de dados.
+        is_correct: false
+      - text: Pré‑processamento de dados, Avaliação do modelo, Treinamento do modelo, Coleta de dados.
+        is_correct: false
+      - text: Treinamento do modelo, Coleta de dados, Pré‑processamento de dados, Avaliação do modelo.
+        is_correct: false
+    explanation: |
+      Correta: A ordem lógica começa com a Coleta (obtenção dos dados), depois Pré‑processamento (limpeza e ajuste), seguido pelo Treinamento (ajuste dos parâmetros) e, por fim, Avaliação (mensuração da performance). [web:1][web:4][web:10]
+      Incorretas: Não é possível treinar ou avaliar um modelo sem antes coletar e preparar os dados. [web:4][web:7]
+    diagram: |
+      graph LR
+        A[Coleta] --> B[Pré-processamento]
+        B --> C[Treinamento]
+        C --> D[Avaliação]
+
+  - id: ai-ml-007
+    type: multiple_choice
+    question: |
+      No âmbito de IA Generativa, qual das alternativas a seguir descreve corretamente a forma como Modelos de Fundação (FMs) são treinados?
+    options:
+      - text: FMs utilizam conjuntos de dados não rotulados para aprendizado autossupervisionado.
+        is_correct: true
+      - text: FMs utilizam conjuntos de dados rotulados para aprendizado autossupervisionado.
+        is_correct: false
+      - text: FMs utilizam conjuntos de dados não rotulados para aprendizado supervisionado.
+        is_correct: false
+      - text: FMs utilizam conjuntos de dados rotulados para aprendizado supervisionado.
+        is_correct: false
+    explanation: |
+      Correta: Modelos de Fundação são treinados com grandes volumes de dados brutos e não rotulados, por meio de aprendizado autossupervisionado, em que o próprio modelo gera sinais de treinamento a partir da estrutura dos dados. [web:9][web:10]
+      Incorretas: Aprendizado supervisionado exige rótulos manuais, o que seria inviável na escala de um FM. [web:7][web:10]
+    diagram: |
+      graph TD
+        Data[Dados Não Rotulados/Brutos] --> FM[Modelo de Fundação]
+        FM --> |Auto-supervisão| Knowledge[Conhecimento Geral]
+
+  - id: ai-ml-008
+    type: multiple_choice
+    question: |
+      Como você caracterizaria, de forma mais precisa, a diferença entre dados estruturados e dados não estruturados no contexto de modelos de aprendizado de máquina?
+    options:
+      - text: Dados estruturados possuem um formato definido (linhas e colunas), enquanto dados não estruturados não seguem um esquema rígido (texto solto, imagens, vídeos).
+        is_correct: true
+      - text: Dados estruturados são exclusivamente textos livres, enquanto dados não estruturados são apenas tabelas numéricas.
+        is_correct: false
+      - text: Dados estruturados incluem apenas imagens e vídeos, enquanto dados não estruturados são limitados a valores numéricos.
+        is_correct: false
+      - text: Dados estruturados são úteis só para treinamento, enquanto dados não estruturados são empregados apenas para armazenamento.
+        is_correct: false
+    explanation: |
+      Correta: Dados estruturados (como bancos relacionais e planilhas) seguem esquemas fixos, enquanto dados não estruturados (PDFs, áudio, vídeo, textos) são mais flexíveis e exigem técnicas como Deep Learning. [web:2][web:5][web:8]
+      Incorretas: As demais alternativas invertem ou simplificam excessivamente a natureza dos dois tipos de dados. [web:2][web:5]
+    diagram: |
+      graph LR
+        subgraph Estruturado
+        T[Tabelas/Colunas]
+        end
+        subgraph Não Estruturado
+        M[Mídias/Texto Livre]
+        end
+
+  - id: ai-ml-009
+    type: multiple_choice
+    question: |
+      No Modelo de Responsabilidade Compartilhada da AWS, como se dá, em linhas gerais, a divisão de responsabilidades entre a AWS e o cliente?
+    options:
+      - text: A AWS é responsável pela segurança “da” nuvem (infraestrutura e hardware), enquanto o cliente é responsável pela segurança “na” nuvem (dados e aplicações).
+        is_correct: true
+      - text: Os clientes têm responsabilidade sobre a segurança física dos data centers da AWS.
+        is_correct: false
+      - text: A AWS cuida da criptografia de dados e do gerenciamento de acesso dos usuários do cliente.
+        is_correct: false
+      - text: A AWS define por padrão as configurações de segurança das aplicações do cliente.
+        is_correct: false
+    explanation: |
+      Correta: A AWS cuida da infraestrutura global (hardware, redes, hipervisores), e o cliente é responsável pelo que executa e armazena na nuvem: dados, sistemas operacionais, redes virtuais e políticas de IAM. [web:3][web:6][web:9]
+      Incorretas: A segurança física dos data centers é exclusiva da AWS, e ela não assume o gerenciamento de acesso ou configurações de aplicação do cliente. [web:3][web:9]
+    diagram: |
+      graph TD
+        AWS[AWS: Segurança DA Nuvem] --> Region[Regiões/AZs/Hardware]
+        User[Cliente: Segurança NA Nuvem] --> Data[Dados/Apps/IAM]
+
+  - id: ai-ml-010
+    type: multiple_choice
+    question: |
+      Associe os serviços Amazon SageMaker às respectivas funcionalidades: (A) Data Wrangler, (B) Canvas, (C) Ground Truth.
+    options:
+      - text: A‑2, B‑3, C‑1 (1= Feedback humano; 2= 300+ transformações; 3= Interface no‑code).
+        is_correct: true
+      - text: A‑3, B‑1, C‑2
+        is_correct: false
+      - text: A‑2, B‑1, C‑3
+        is_correct: false
+      - text: A‑1, B‑2, C‑3
+        is_correct: false
+    explanation: |
+      Correta: Data Wrangler (A) se concentra em preparar dados com diversas transformações prontas (2); Canvas (B) é a interface visual e no‑code para modelos de ML (3); Ground Truth (C) usa intervenção humana para rotular dados (1). [web:10]
+      Incorretas: As demais combinações não refletem adequadamente o foco de cada ferramenta. [web:10]
+    diagram: |
+      graph LR
+        Data[Dados] --> DW[Data Wrangler]
+        DW --> Canv[Canvas: No-Code]
+        DW --> GT[Ground Truth: Humano]
+
+  - id: ai-ml-011
+    type: multiple_choice
+    question: |
+      Qual método de aprendizado é utilizado pelos Modelos de Fundação para gerar sinais de treinamento a partir de dados brutos, permitindo escalar o processamento sem depender de rótulos manuais intensivos?
+    options:
+      - text: Aprendizado autossupervisionado (Self‑supervised learning).
+        is_correct: true
+      - text: Aprendizado por reforço (Reinforcement learning).
+        is_correct: false
+      - text: Aprendizado supervisionado (Supervised learning).
+        is_correct: false
+      - text: Aprendizado não supervisionado puro (Unsupervised learning).
+        is_correct: false
+    explanation: |
+      Correta: O aprendizado autossupervisionado permite que o modelo crie automaticamente rotulos internos a partir da própria estrutura dos dados, o que é essencial para Modelos de Fundação em grande escala. [web:7][web:10]
+      Incorretas: Supervisionado exige rótulos humanos; reforço usa recompensas/punições; não supervisionado agrupa dados, mas não gera rótulos explícitos para predição. [web:7][web:10]
+    diagram: |
+      graph TD
+        Raw[Dados Brutos] --> Model
+        Model -->|Oculta parte do dado| Task[Prever o Oculto]
+        Task -->|Gera Rótulo Interno| Learn[Aprendizado Autossupervisionado]
+
+  - id: ai-ml-012
+    type: multiple_choice
+    question: |
+      Qual das alternativas descreve com mais precisão a funcionalidade da ferramenta Amazon SageMaker Canvas?
+    options:
+      - text: Permite aplicar aprendizado de máquina para gerar previsões sem a necessidade de escrever código.
+        is_correct: true
+      - text: Explica como cada atributo de entrada influencia os resultados durante a inferência.
+        is_correct: false
+      - text: Fornece soluções completas de ponta a ponta com um único clique para usos comuns.
+        is_correct: false
+      - text: É a forma mais rápida de preparar dados tabulares e de imagem para modelos de ML.
+        is_correct: false
+    explanation: |
+      Correta: SageMaker Canvas é uma interface visual no‑code que permite analistas de negócios criar e usar modelos de ML sem codificação. [web:10]
+      Incorretas: Explicação de contribuições é papel do SageMaker Clarify; soluções 
+
+  - id: ai-ml-013
+    type: multiple_choice
+    question: |
+      Como arquiteto especializado em LLMs, você foi designado para reestruturar a infraestrutura de IA de uma empresa no AWS. A organização busca opções que apoiem de forma robusta o treinamento, a implantação e a administração de LLMs, com foco em escalabilidade e proteção de dados. Quais serviços AWS você indicaria? (Selecione dois)
+    options:
+      - text: Amazon Bedrock
+        is_correct: true
+      - text: Amazon SageMaker JumpStart
+        is_correct: true
+      - text: Amazon Q
+        is_correct: false
+      - text: AWS Trainium
+        is_correct: false
+    explanation: |
+      Corretas: O Amazon Bedrock facilita a criação de aplicações de IA generativa baseadas em Modelos de Fundação, por meio de APIs. O SageMaker JumpStart fornece um repositório de modelos pré‑treinados que podem ser implantados rapidamente em poucos cliques.
+      Incorretas: Amazon Q é um assistente conversacional, não uma plataforma de treinamento de modelos. Trainium e Inferentia são aceleradores de hardware, não serviços gerenciados de alto nível para desenvolvimento de LLMs.
+    diagram: |
+      graph TD
+        LLM[Desenvolvimento de LLM] --> Bedrock[Amazon Bedrock: Serverless/API]
+        LLM --> JumpStart[SageMaker JumpStart: Hub de Modelos]
+
+  - id: ai-ml-014
+    type: multiple_choice
+    question: |
+      O time de comunicação de uma instituição educacional pretende usar o Amazon Bedrock para redigir textos criativos para campanhas de engajamento. O que você sugeriria para obter respostas mais inventivas e diversas?
+    options:
+      - text: Usar uma Temperatura (Temperature) mais alta no Amazon Bedrock.
+        is_correct: true
+      - text: Usar uma Temperatura (Temperature) mais baixa no Amazon Bedrock.
+        is_correct: false
+      - text: Usar um Top‑P mais baixo para restringir as respostas.
+        is_correct: false
+      - text: Reduzir o número máximo de tokens por resposta.
+        is_correct: false
+    explanation: |
+      Correta: A Temperatura controla a aleatoriedade das respostas. Valores mais altos favorecem textos mais criativos e variados, enquanto valores baixos tornam as respostas mais previsíveis e focadas.
+      Incorretas: Temperatura baixa reduz a fluidez criativa. Top‑P menor restringe o leque de palavras sugeridas, tornando as respostas mais conservadoras.
+    diagram: |
+      graph LR
+        TempLow[Temp Baixa: 0.1] --> Det[Determinístico/Focado]
+        TempHigh[Temp Alta: 0.9] --> Creative[Criativo/Aleatório]
+
+  - id: ai-ml-015
+    type: multiple_choice
+    question: |
+      Uma consultoria de tecnologia quer implementar uma solução de IA que retorne respostas detalhadas a partir de um vasto repositório de relatórios internos. A equipe busca uma solução gerenciada no Amazon Bedrock que suporte o fluxo de trabalho de RAG (Geração Aumentada por Recuperação). Qual abordagem você recomendaria?
+    options:
+      - text: Bases de Conhecimento (Knowledge Bases) para Amazon Bedrock.
+        is_correct: true
+      - text: Pré‑treinamento contínuo (Continued pretraining) no Bedrock.
+        is_correct: false
+      - text: Guardrails para Amazon Bedrock.
+        is_correct: false
+      - text: Detecção de marca d'água (Watermark detection).
+        is_correct: false
+    explanation: |
+      Correta: As Knowledge Bases automatizam o pipeline de RAG, convertendo documentos em embeddings, armazenando‑os em um banco vetorial e permitindo que o modelo consulte dados internos sem re‑treino.
+      Incorretas: Pré‑treinamento modifica o modelo base, não integra dados externos em tempo real. Guardrails tratam de segurança e governança. Marca d'água é voltada para conteúdo multimídia.
+    diagram: |
+      graph LR
+        Doc[Documentos] --> KB[Knowledge Bases]
+        KB --> Vector[(Banco Vetorial)]
+        Vector --> Model[Modelo Bedrock]
+        Model --> Response[Resposta Contextualizada]
+
+  - id: ai-ml-016
+    type: multiple_choice
+    question: |
+      Uma empresa de logística está avaliando o uso de modelos multimodais para aprimorar a experiência do cliente (recomendações, atendimento e anotações de imagens). Qual alternativa descreve de forma mais exata a habilidade de um modelo multimodal?
+    options:
+      - text: Pode aceitar uma combinação de entradas (áudio/texto) e produzir uma combinação de saídas (vídeo/imagem).
+        is_correct: true
+      - text: Aceita apenas um tipo de entrada e gera apenas um tipo de saída.
+        is_correct: false
+      - text: Pode receber múltiplos tipos de entrada, mas produz apenas saída em texto.
+        is_correct: false
+      - text: Só processa imagens e gera descrições em áudio.
+        is_correct: false
+    explanation: |
+      Correta: Modelos multimodais interpretam e combinam diferentes modalidades (texto, imagem, áudio, vídeo) simultaneamente e podem gerar respostas em diversos formatos.
+      Incorretas: Modelos limitados a um único tipo de entrada ou saída são considerados unimodais, não multimodais.
+    diagram: |
+      graph TD
+        In[Texto + Imagem + Áudio] --> MultiModal[Modelo Multimodal]
+        MultiModal --> Out[Vídeo + Texto + Imagem]
+
+  - id: ai-ml-017
+    type: multiple_choice
+    question: |
+      Uma equipe de data science está ajustando a complexidade de um modelo de previsão de demanda para encontrar o melhor equilíbrio entre robustez e acurácia. Como você distinguiria Overfitting de Underfitting?
+    options:
+      - text: Overfitting ocorre quando o modelo performa bem no treino, mas mal em novos dados; Underfitting ocorre quando ele performa mal em ambos.
+        is_correct: true
+      - text: Underfitting ocorre quando o modelo é excessivamente complexo; Overfitting ocorre quando é muito simples.
+        is_correct: false
+      - text: Overfitting é desejável, pois capta todas as nuances dos dados de treinamento.
+        is_correct: false
+      - text: Ambos indicam modelos que se comportam igualmente bem em dados de treino e novos.
+        is_correct: false
+    explanation: |
+      Correta: Overfitting é quando o modelo se ajusta demais aos dados de treino, perdendo capacidade de generalização. Underfitting é quando o modelo é muito simples para capturar os padrões relevantes.
+      Incorretas: As definições estão invertidas ou confundem erro de ajuste com algo útil.
+    diagram: |
+      graph LR
+        U[Underfitting: Simples demais]
+        O[Overfitting: Complexo demais]
+        F[Good Fit: O equilíbrio ideal]
+
+  - id: ai-ml-018
+    type: multiple_choice
+    question: |
+      Para garantir que um modelo de análise financeira generalize adequadamente, é importante compreender a relação entre viés (bias) e variância (variance). O que é correto dizer sobre modelos com Underfitting e Overfitting?
+    options:
+      - text: Modelos com Underfitting apresentam alto viés; modelos com Overfitting apresentam alta variância.
+        is_correct: true
+      - text: Modelos com Underfitting têm baixo viés e alta variância.
+        is_correct: false
+      - text: Modelos com Overfitting têm baixo viés e baixa variância.
+        is_correct: false
+      - text: Ambos, por definição, possuem baixa variância e baixo viés.
+        is_correct: false
+    explanation: |
+      Correta: Underfitting gera erros sistemáticos elevados (alto viés), enquanto Overfitting produz predições muito sensíveis a pequenas variações (alta variância).
+      Incorretas: O objetivo é reduzir tanto o viés quanto a variância, encontrando um modelo bem ajustado.
+    diagram: |
+      graph TD
+        Bias[Viés Alto = Underfitting]
+        Var[Variância Alta = Overfitting]
+        Bias & Var --> Goal[Alvo: Baixo Viés e Baixa Variância]
+
+  - id: ai-ml-019
+    type: multiple_choice
+    question: |
+      Uma organização quer garantir que seus modelos de IA sejam éticos, imparciais e explicáveis. Quais ferramentas ou serviços AWS podem ser utilizados para apoiar boas práticas de IA Responsável? (Selecione dois)
+    options:
+      - text: Amazon SageMaker Clarify
+        is_correct: true
+      - text: Amazon SageMaker Model Monitor
+        is_correct: true
+      - text: Amazon Inspector
+        is_correct: false
+      - text: AWS Audit Manager
+        is_correct: false
+    explanation: |
+      Corretas: SageMaker Clarify ajuda a detectar vieses e explicar previsões. O Model Monitor acompanha a qualidade dos modelos em produção e identifica desvios de dados.
+      Incorretas: Inspector é voltado a vulnerabilidades de segurança de software e rede. Audit Manager trata de conformidade e auditoria de nuvem, não de governança específica de modelos de ML.
+    diagram: |
+      graph LR
+        RAI[IA Responsável] --> Clarify[Clarify: Justiça e Explicabilidade]
+        RAI --> Monitor[Model Monitor: Qualidade Contínua]
+
+  - id: ai-ml-020
+    type: multiple_choice
+    question: |
+      Qual é a ideia central por trás do Aprendizado de Máquina (Machine Learning) que um profissional de IA deve comunicar de forma clara para a diretoria de uma empresa?
+    options:
+      - text: Consiste em treinar algoritmos com grandes volumes de dados para identificar padrões e gerar previsões a partir de novas entradas.
+        is_correct: true
+      - text: Funciona apenas com regras fixas definidas por pessoas, sem necessidade de dados reais.
+        is_correct: false
+      - text: É sustentado exclusivamente por configurações de hardware, sem dependência de algoritmos de software.
+        is_correct: false
+      - text: Só produz resultados eficazes se todos os dados forem rotulados manualmente para cada operação.
+        is_correct: false
+    explanation: |
+      Correta: ML permite que sistemas aprendam automaticamente a partir de dados, descobrindo relações e fazendo previsões sem depender de regras explícitas codificadas por humanos.
+      Incorretas: ML é dependente de dados (não de regras fixas isoladas) e de software/algoritmos, não apenas de hardware. Também pode usar dados não rotulados (por exemplo, aprendizado não supervisionado).
+    diagram: |
+      graph LR
+        Data[Dados Históricos] --> Train[Treinamento]
+        Train --> Model[Modelo]
+        Model --> New[Novos Dados]
+        New --> Pred[Previsão Automática]
