@@ -1,0 +1,216 @@
+questions:
+  - id: ai-services-q01
+    type: multiple_choice
+    question: |
+      Qual funcionalidade do Amazon Comprehend permite identificar e proteger dados sensíveis, como nomes, endereços e números de documentos em textos?
+    options:
+      - text: Sentiment Analysis
+        is_correct: false
+      - text: Personally Identifiable Information (PII) Detection
+        is_correct: true
+      - text: Keyphrase Extraction
+        is_correct: false
+      - text: Syntax Analysis
+        is_correct: false
+    explanation: |
+      Correta: A detecção de PII é essencial para conformidade (LGPD/GDPR), permitindo localizar ou redigir informações que identifiquem indivíduos.
+      Incorretas: Sentimento foca na emoção; Keyphrases em palavras-chave; Sintaxe em gramática.
+    diagram: |
+      graph LR
+        Text[Texto Bruto] --> Comp[Amazon Comprehend]
+        Comp --> PII[PII Entities: Nome, CPF, Email]
+        PII --> Mask[Redação/Mascaramento]
+
+  - id: ai-services-q02
+    type: multiple_choice
+    question: |
+      No Amazon Translate, qual recurso permite garantir que termos técnicos específicos ou nomes de marcas (ex: 'Amazon') não sejam traduzidos incorretamente?
+    options:
+      - text: Active Custom Translation
+        is_correct: false
+      - text: Custom Terminology
+        is_correct: true
+      - text: Language Detection
+        is_correct: false
+      - text: Formality Customization
+        is_correct: false
+    explanation: |
+      Correta: Custom Terminology usa um arquivo CSV/TMX para forçar o serviço a usar traduções específicas para termos de nicho ou nomes próprios.
+      Incorretas: Active Custom é para estilo de tradução via exemplos. Formality ajusta o tom (formal/informal).
+    diagram: |
+      graph TD
+        Term[(CSV: Amazon -> Amazon)] --> Trans[Amazon Translate]
+        Input[A Amazon é grande] --> Trans
+        Trans --> Output[Amazon is big]
+
+  - id: ai-services-q03
+    type: multiple_choice
+    question: |
+      O Amazon Transcribe permite separar a fala de diferentes participantes em uma gravação. Como se chama essa funcionalidade?
+    options:
+      - text: Speaker Diarization
+        is_correct: true
+      - text: Channel Identification
+        is_correct: false
+      - text: Vocal Filtering
+        is_correct: false
+      - text: Content Redaction
+        is_correct: false
+    explanation: |
+      Correta: A Diarização identifica 'quem falou o quê', rotulando as falas como Speaker 0, Speaker 1, etc., em um único stream de áudio.
+      Incorretas: Channel Identification separa áudio de microfones físicos distintos (L/R). Redaction remove palavras.
+    diagram: |
+      graph LR
+        Audio[Áudio de Reunião] --> Transcribe[Transcribe + Diarization]
+        Transcribe --> T1[Speaker 0: Olá]
+        Transcribe --> T2[Speaker 1: Como vai?]
+
+  - id: ai-services-q04
+    type: multiple_choice
+    question: |
+      Qual linguagem de marcação o Amazon Polly utiliza para dar controle fino sobre a fala, como adicionar pausas, sussurros ou ênfase?
+    options:
+      - text: HTML
+        is_correct: false
+      - text: SSML (Speech Synthesis Markup Language)
+        is_correct: true
+      - text: JSON
+        is_correct: false
+      - text: XML-Audio
+        is_correct: false
+    explanation: |
+      Correta: SSML é o padrão da indústria para controlar aspectos prosódicos da voz sintética.
+      Incorretas: HTML é para web. JSON é para dados. XML-Audio não é um padrão da AWS.
+    diagram: |
+      graph TD
+        Text[speak - prosody pitch='high' - Texto /prosody - /speak] --> Polly[Amazon Polly]
+        Polly --> Voice[Áudio com Tom Agudo]
+
+  - id: ai-services-q05
+    type: multiple_choice
+    question: |
+      O Amazon Rekognition Video pode identificar automaticamente créditos finais e logotipos. Qual o nome dessa categoria de análise?
+    options:
+      - text: Face Liveness
+        is_correct: false
+      - text: Media Analysis (Segment Detection)
+        is_correct: true
+      - text: Label Detection
+        is_correct: false
+      - text: Object Tracking
+        is_correct: false
+    explanation: |
+      Correta: Segment Detection localiza pontos técnicos no vídeo (black frames, credits, slates) para automação de pós-produção.
+      Incorretas: Liveness é para segurança facial. Label Detection identifica objetos genéricos.
+    diagram: |
+      graph LR
+        Video[Filme] --> Rek[Rekognition Video]
+        Rek --> Seg[Detectar: Fim do Filme / Créditos]
+
+  - id: ai-services-q06
+    type: multiple_choice
+    question: |
+      No Amazon Lex, qual componente representa o objetivo final que o usuário deseja alcançar (ex: 'Reservar Voo')?
+    options:
+      - text: Utterance
+        is_correct: false
+      - text: Slot
+        is_correct: false
+      - text: Intent
+        is_correct: true
+      - text: Fulfillment
+        is_correct: false
+    explanation: |
+      Correta: Intent (Intenção) é a ação que o bot deve realizar.
+      Incorretas: Utterance é o que o usuário diz. Slot é o dado (origem/destino). Fulfillment é a execução final.
+    diagram: |
+      graph TD
+        U[Quero viajar] --> Intent[Intent: BookFlight]
+        Intent --> S1[Slot: Cidade]
+        Intent --> S2[Slot: Data]
+
+  - id: ai-services-q07
+    type: multiple_choice
+    question: |
+      Qual serviço de busca empresarial utiliza ML para entender perguntas em linguagem natural e retornar respostas diretas em vez de apenas links?
+    options:
+      - text: Amazon OpenSearch
+        is_correct: false
+      - text: Amazon Kendra
+        is_correct: true
+      - text: AWS Glue
+        is_correct: false
+      - text: Amazon CloudSearch
+        is_correct: false
+    explanation: |
+      Correta: O Kendra é um motor de busca semântica que 'lê' os documentos corporativos para responder perguntas como um assistente.
+      Incorretas: OpenSearch é busca por texto/vetor técnica. Glue é ETL.
+    diagram: |
+      graph TD
+        Q[Como ligo o VPN?] --> Kendra[Amazon Kendra]
+        Kendra --> Answer[Passo 1: Clique em...]
+        Kendra --> Source[Fonte: Manual_TI.pdf]
+
+  - id: ai-services-q08
+    type: multiple_choice
+    question: |
+      Qual a função do Amazon Augmented AI (A2I) no ciclo de vida de uma aplicação de IA?
+    options:
+      - text: Aumentar a resolução de imagens de baixa qualidade.
+        is_correct: false
+      - text: Gerenciar fluxos de revisão humana para predições de IA com baixa confiança.
+        is_correct: true
+      - text: Traduzir automaticamente modelos de PyTorch para TensorFlow.
+        is_correct: false
+      - text: Criar datasets sintéticos sem intervenção humana.
+        is_correct: false
+    explanation: |
+      Correta: O A2I implementa o 'Human-in-the-loop', enviando predições duvidosas para humanos validarem.
+      Incorretas: Não é para upscaling de imagem ou conversão de código.
+    diagram: |
+      graph TD
+        ML[Modelo IA] -->|Confiança Baixa| A2I[Amazon A2I]
+        A2I --> Human[Revisor Humano]
+        Human --> Result[Resultado Final Validado]
+
+  - id: ai-services-q09
+    type: multiple_choice
+    question: |
+      Qual destes serviços é focado em extrair dados estruturados (tabelas e formulários) de documentos, indo além do OCR simples?
+    options:
+      - text: Amazon Rekognition
+        is_correct: false
+      - text: Amazon Textract
+        is_correct: true
+      - text: Amazon Comprehend
+        is_correct: false
+      - text: Amazon Polly
+        is_correct: false
+    explanation: |
+      Correta: O Textract entende a estrutura visual de documentos (como tabelas de preços), preservando a relação entre células e cabeçalhos.
+      Incorretas: Rekognition é visual geral. Comprehend é texto puro (NLP).
+    diagram: |
+      graph LR
+        Img[Foto de Tabela] --> Textract
+        Textract --> Table[JSON: Coluna A, Linha 1]
+
+  - id: ai-services-q10
+    type: multiple_choice
+    question: |
+      Qual chip de hardware da AWS é otimizado especificamente para a fase de INFERÊNCIA (execução) de modelos treinados, visando menor custo?
+    options:
+      - text: AWS Trainium
+        is_correct: false
+      - text: AWS Inferentia
+        is_correct: true
+      - text: AWS Graviton
+        is_correct: false
+      - text: NVIDIA H100
+        is_correct: false
+    explanation: |
+      Correta: Inferentia (chips Inf1/Inf2) é desenhado para rodar modelos prontos com alta performance e economia.
+      Incorretas: Trainium é para treinamento. Graviton é CPU de propósito geral (ARM).
+    diagram: |
+      graph LR
+        Model[Modelo Pronto] --> Inf[AWS Inferentia]
+        Inf --> Res[Resposta Rápida e Barata]

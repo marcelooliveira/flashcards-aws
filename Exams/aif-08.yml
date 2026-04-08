@@ -1,0 +1,635 @@
+questions:
+  - id: sagemaker-q01
+    type: multiple_choice
+    question: |
+      Um analista de negócios deseja construir um modelo de machine learning para prever a rotatividade de clientes (churn) sem escrever nenhuma linha de código. Qual recurso do SageMaker é o mais apropriado?
+    options:
+      - text: SageMaker Studio Notebooks
+        is_correct: false
+      - text: SageMaker Canvas
+        is_correct: true
+      - text: SageMaker Training Jobs
+        is_correct: false
+      - text: SageMaker Debugger
+        is_correct: false
+    explanation: |
+      Correta: O SageMaker Canvas oferece uma interface visual e intuitiva (point-and-click) feita especificamente para usuários de negócio criarem modelos sem programação.
+      Incorretas: Notebooks exigem Python/R. Training Jobs são processos de backend. Debugger serve para análise técnica de erros em código.
+    diagram: |
+      graph LR
+        User[Usuário de Negócio] --> Canvas{SageMaker Canvas}
+        Canvas -->|No-Code| Model[Modelo de Predição]
+        style Canvas fill:#f96,stroke:#333
+
+  - id: sagemaker-q02
+    type: multiple_choice
+    question: |
+      Qual serviço você deve usar para criar conjuntos de dados de treinamento de alta qualidade usando anotadores humanos para rotular seus dados brutos?
+    options:
+      - text: SageMaker Ground Truth
+        is_correct: true
+      - text: SageMaker Data Wrangler
+        is_correct: false
+      - text: SageMaker Feature Store
+        is_correct: false
+      - text: SageMaker Model Monitor
+        is_correct: false
+    explanation: |
+      Correta: O Ground Truth gerencia fluxos de trabalho de rotulagem humana (interna ou via Mechanical Turk) e usa ML para acelerar o processo.
+      Incorretas: Data Wrangler é para transformação de dados. Feature Store é repositório de atributos. Model Monitor verifica modelos em produção.
+    diagram: |
+      graph TD
+        Raw[Dados Brutos] --> GT[SageMaker Ground Truth]
+        GT --> Workforce[Trabalhadores Humanos]
+        Workforce --> Labeled[Dados Rotulados]
+
+  - id: sagemaker-q03
+    type: multiple_choice
+    question: |
+      Uma equipe de IA precisa hospedar um Large Language Model (LLM) que leva vários minutos para processar uma única requisição. Qual opção de implantação é a mais adequada?
+    options:
+      - text: Real-time Inference
+        is_correct: false
+      - text: Asynchronous Inference
+        is_correct: true
+      - text: Serverless Inference
+        is_correct: false
+      - text: Batch Transform
+        is_correct: false
+    explanation: |
+      Correta: A inferência assíncrona é ideal para requisições com grandes payloads ou tempos de processamento longos, utilizando uma fila para gerenciar o tráfego.
+      Incorretas: Real-time e Serverless possuem timeouts curtos (geralmente 60s). Batch Transform é para processamento em lote offline, não por requisição pontual.
+    diagram: |
+      graph LR
+        Req[Requisição Longa] --> Queue[Fila SQS Interna]
+        Queue --> Model[LLM em Execução]
+        Model --> S3[Resultado no S3]
+
+  - id: sagemaker-q04
+    type: multiple_choice
+    question: |
+      Qual ferramenta do SageMaker fornece uma interface visual para limpar, transformar e explorar dados sem escrever código?
+    options:
+      - text: SageMaker Processing
+        is_correct: false
+      - text: SageMaker Data Wrangler
+        is_correct: true
+      - text: SageMaker Autopilot
+        is_correct: false
+      - text: SageMaker Feature Store
+        is_correct: false
+    explanation: |
+      Correta: Data Wrangler simplifica a preparação de dados com mais de 300 transformações integradas e visualizações instantâneas.
+      Incorretas: Processing roda scripts customizados. Autopilot automatiza o treino. Feature Store apenas armazena os dados já prontos.
+    diagram: |
+      graph TD
+        S3[Dados Brutos] --> DW[Data Wrangler]
+        DW -->|Transformações Visuais| Clean[Dados Limpos]
+
+  - id: sagemaker-q05
+    type: multiple_choice
+    question: |
+      Qual capacidade do SageMaker você deve usar para procurar o melhor modelo automaticamente, explorando diferentes algoritmos e hiperparâmetros?
+    options:
+      - text: SageMaker Pipelines
+        is_correct: false
+      - text: SageMaker Autopilot
+        is_correct: true
+      - text: SageMaker Debugger
+        is_correct: false
+      - text: SageMaker Feature Store
+        is_correct: false
+    explanation: |
+      Correta: O Autopilot automatiza a seleção de algoritmos e ajuste de hiperparâmetros com base no seu conjunto de dados e objetivo.
+      Incorretas: Pipelines são para orquestração. Debugger é para monitorar erros. Feature Store é para gestão de variáveis.
+    diagram: |
+      graph LR
+        Data[Dataset] --> Auto[SageMaker Autopilot]
+        Auto --> A[Modelo XGBoost]
+        Auto --> B[Modelo Linear Learner]
+        Auto --> Leader[Leaderboard: Melhor Modelo]
+
+  - id: sagemaker-q06
+    type: multiple_choice
+    question: |
+      O que é uma 'Production Variant' em um endpoint de tempo real do SageMaker?
+    options:
+      - text: Uma versão específica de um dataset.
+        is_correct: false
+      - text: Uma forma de hospedar diferentes modelos em um único endpoint para testes A/B.
+        is_correct: true
+      - text: Um tipo de instância de baixo custo.
+        is_correct: false
+      - text: Uma cópia de backup em outra região.
+        is_correct: false
+    explanation: |
+      Correta: Variantes de produção permitem testar diferentes modelos ou versões simultaneamente no mesmo endpoint, controlando a divisão de tráfego.
+      Incorretas: Versões de dataset são metadados. Instâncias baratas são as Spot. Backups regionais são configurações de infraestrutura.
+    diagram: |
+      graph TD
+        Traffic[Tráfego] --> EP[Endpoint]
+        EP -->|90%| V1[Variante A]
+        EP -->|10%| V2[Variante B]
+
+  - id: sagemaker-q07
+    type: multiple_choice
+    question: |
+      Qual ferramenta oferece acesso com um clique a Modelos de Fundação (FMs) pré-treinados e soluções completas para casos de uso comuns?
+    options:
+      - text: SageMaker Studio
+        is_correct: false
+      - text: SageMaker JumpStart
+        is_correct: true
+      - text: SageMaker Ground Truth
+        is_correct: false
+      - text: SageMaker Clarify
+        is_correct: false
+    explanation: |
+      Correta: JumpStart é o hub do SageMaker para algoritmos integrados, modelos de fundação e templates de solução.
+      Incorretas: Studio é o ambiente (IDE). Ground Truth é para rotulagem. Clarify é para análise de viés/explicabilidade.
+    diagram: |
+      graph LR
+        Hub[SageMaker JumpStart] -->|Deploy| FM[Llama/Stable Diffusion]
+        Hub -->|Templates| Sol[Detecção de Fraude]
+
+  - id: sagemaker-q08
+    type: multiple_choice
+    question: |
+      A precisão de um modelo diminuiu porque a distribuição dos dados do mundo real mudou desde que ele foi treinado. Este fenômeno é conhecido como:
+    options:
+      - text: Hyperparameter Tuning
+        is_correct: false
+      - text: Data Drift
+        is_correct: true
+      - text: Overfitting
+        is_correct: false
+      - text: Lineage Tracking
+        is_correct: false
+    explanation: |
+      Correta: Data Drift (Deriva de Dados) ocorre quando os dados de entrada em produção divergem estatisticamente dos dados usados no treino.
+      Incorretas: Overfitting ocorre durante o treino. Tuning é otimização. Lineage é rastreabilidade.
+    diagram: |
+      graph TD
+        T[Treino: Dados 2024] --> M[Modelo]
+        P[Produção: Dados 2026] --> M
+        P -.->|Mudança Estatística| Drift[Data Drift]
+
+  - id: sagemaker-q09
+    type: multiple_choice
+    question: |
+      Qual recurso do SageMaker ajuda a explicar as previsões do modelo identificando quais features tiveram mais impacto no resultado?
+    options:
+      - text: SageMaker Debugger
+        is_correct: false
+      - text: SageMaker Clarify
+        is_correct: true
+      - text: SageMaker Neo
+        is_correct: false
+      - text: SageMaker Projects
+        is_correct: false
+    explanation: |
+      Correta: Clarify fornece métricas de explicabilidade (como SHAP) para mostrar a importância de cada variável na decisão do modelo.
+      Incorretas: Debugger monitora o treino técnico. Neo otimiza para hardware. Projects são para MLOps.
+    diagram: |
+      graph LR
+        Pred[Previsão: Negada] --> Clarify[SageMaker Clarify]
+        Clarify --> Reason[Motivo: Score de Crédito Baixo]
+
+  - id: sagemaker-q10
+    type: multiple_choice
+    question: |
+      Qual recurso do SageMaker é projetado para automatizar o ciclo de vida MLOps, incluindo versionamento e orquestração de fluxo de trabalho?
+    options:
+      - text: SageMaker Studio
+        is_correct: false
+      - text: SageMaker Pipelines
+        is_correct: true
+      - text: SageMaker Ground Truth
+        is_correct: false
+      - text: SageMaker Data Wrangler
+        is_correct: false
+    explanation: |
+      Correta: SageMaker Pipelines é o serviço de CI/CD nativo para machine learning, permitindo automatizar todas as fases do workflow.
+      Incorretas: Studio é a interface. Ground Truth e Data Wrangler são focados apenas em dados.
+    diagram: |
+      graph LR
+        Step1[Preparo] --> Step2[Treino] --> Step3[Registro] --> Step4[Deploy]
+        style Step1 fill:#f9f,stroke:#333
+
+  - id: sagemaker-q11
+    type: multiple_choice
+    question: |
+      Um desenvolvedor deseja rodar um modelo em um dispositivo IoT baseado em ARM com memória limitada. Qual ferramenta deve ser usada para otimizar o modelo para este hardware?
+    options:
+      - text: SageMaker Neo
+        is_correct: true
+      - text: SageMaker Studio
+        is_correct: false
+      - text: SageMaker Model Monitor
+        is_correct: false
+      - text: SageMaker Feature Store
+        is_correct: false
+    explanation: |
+      Correta: Neo compila modelos para rodar mais rápido e com menor consumo de memória em diversos tipos de hardware de destino.
+      Incorretas: Studio é para desenvolvimento. Model Monitor é para acurácia. Feature Store gerencia dados.
+    diagram: |
+      graph LR
+        Model[Modelo Genérico] --> Neo[Compilador Neo] --> Edge[Arquivo Binário Otimizado]
+
+  - id: sagemaker-q12
+    type: multiple_choice
+    question: |
+      Qual é o objetivo principal do SageMaker Feature Store?
+    options:
+      - text: Vender modelos pré-treinados para outros clientes.
+        is_correct: false
+      - text: Armazenar, compartilhar e reutilizar atributos de dados (features) para treinamento e inferência.
+        is_correct: true
+      - text: Hospedar uma aplicação web que exibe predições.
+        is_correct: false
+      - text: Armazenar logs brutos de instâncias EC2.
+        is_correct: false
+    explanation: |
+      Correta: O Feature Store serve como um repositório centralizado para que diferentes times utilizem as mesmas features padronizadas em treino e produção.
+      Incorretas: O Marketplace vende modelos. CloudWatch armazena logs. Endpoints hospedam aplicações.
+    diagram: |
+      graph TD
+        Store[(Feature Store)]
+        Store --> Train[Treino Offline]
+        Store --> Serve[Inferência Online]
+
+  - id: sagemaker-q13
+    type: multiple_choice
+    question: |
+      Qual tipo de inferência é melhor para processar um grande conjunto de dados de uma só vez quando você não precisa de respostas em tempo real?
+    options:
+      - text: Real-time Inference
+        is_correct: false
+      - text: Batch Transform
+        is_correct: true
+      - text: Serverless Inference
+        is_correct: false
+      - text: Asynchronous Inference
+        is_correct: false
+    explanation: |
+      Correta: Batch Transform é ideal para processar grandes volumes de dados (ex: predições mensais) sem a necessidade de manter um servidor ativo 24/7.
+      Incorretas: As outras opções são voltadas para requisições individuais via API.
+    diagram: |
+      graph LR
+        S3_In[Dataset Gigante] --> Batch[Batch Transform] --> S3_Out[Resultados Gravados]
+
+  - id: sagemaker-q14
+    type: multiple_choice
+    question: |
+      Em um notebook do SageMaker, o que é uma 'Lifecycle Configuration'?
+    options:
+      - text: Uma forma de deletar um modelo automaticamente após 30 dias.
+        is_correct: false
+      - text: Um script shell que roda sempre que uma instância de notebook é criada ou iniciada para customizar o ambiente.
+        is_correct: true
+      - text: Uma configuração que controla o ciclo de faturamento da conta.
+        is_correct: false
+      - text: Um método para treinar modelos em múltiplas GPUs.
+        is_correct: false
+    explanation: |
+      Correta: Permite automatizar a instalação de bibliotecas ou repositórios Git toda vez que o cientista de dados inicia seu ambiente de trabalho.
+      Incorretas: Faturamento é no Billing. Treino multi-GPU é configuração de cluster. Deletar modelos exige scripts externos.
+    diagram: |
+      graph TD
+        Start[Início da Instância] --> Script[Lifecycle Script: pip install...] --> Jupyter[Ambiente Pronto]
+
+  - id: sagemaker-q15
+    type: multiple_choice
+    question: |
+      Qual ferramenta ajuda a manter um registro de todas as etapas, datasets e modelos em um workflow de ML para fins de auditoria?
+    options:
+      - text: SageMaker Lineage Tracking
+        is_correct: true
+      - text: SageMaker Debugger
+        is_correct: false
+      - text: SageMaker Canvas
+        is_correct: false
+      - text: SageMaker Hyperparameter Tuning
+        is_correct: false
+    explanation: |
+      Correta: O Lineage Tracking cria um grafo de "ancestralidade" de cada modelo, permitindo saber exatamente quais dados o geraram.
+      Incorretas: Debugger foca em erros. Canvas em no-code. Tuning em acurácia.
+    diagram: |
+      graph LR
+        D[Dados] --> T[Treino] --> M[Modelo]
+        M -.->|Audit Trail| Lineage[Lineage Tracking]
+
+  - id: sagemaker-q16
+    type: multiple_choice
+    question: |
+      Qual serviço lida com a execução real de um trabalho de treinamento no SageMaker?
+    options:
+      - text: SageMaker Ground Truth
+        is_correct: false
+      - text: SageMaker Training Jobs
+        is_correct: true
+      - text: SageMaker Model Monitor
+        is_correct: false
+      - text: SageMaker Feature Store
+        is_correct: false
+    explanation: |
+      Correta: Training Jobs são os recursos de computação gerenciados que executam seus algoritmos de ML.
+      Incorretas: Ground Truth rotula. Model Monitor verifica. Feature Store gerencia dados.
+    diagram: |
+      graph TD
+        Script[Código/Algoritmo] --> TJ[Training Job]
+        TJ --> Compute[Recurso de Computação Efêmero]
+        Compute --> Artifact[Modelo Salvo no S3]
+
+  - id: sagemaker-q17
+    type: multiple_choice
+    question: |
+      Qual recurso do SageMaker ajuda você a escolher o melhor tipo de instância para a implantação do seu modelo realizando testes de carga?
+    options:
+      - text: SageMaker Inference Recommender
+        is_correct: true
+      - text: SageMaker Debugger
+        is_correct: false
+      - text: SageMaker Hyperparameter Tuning
+        is_correct: false
+      - text: SageMaker Canvas
+        is_correct: false
+    explanation: |
+      Correta: Ele automatiza o benchmarking do modelo em várias instâncias para sugerir a melhor relação custo-benefício.
+      Incorretas: Debugger e HPO são para a fase de treino. Canvas é para criação.
+    diagram: |
+      graph LR
+        Model[Modelo] --> IR[Inference Recommender]
+        IR -->|Teste| m5.large
+        IR -->|Teste| g4dn.xlarge
+        IR --> Recommendation[Melhor Escolha]
+
+  - id: sagemaker-q18
+    type: multiple_choice
+    question: |
+      Qual é a principal vantagem do SageMaker Serverless Inference?
+    options:
+      - text: Oferece a menor latência possível para apps de alto tráfego.
+        is_correct: false
+      - text: Permite rodar modelos sem gerenciar a infraestrutura subjacente e pagando apenas pelo tempo de processamento.
+        is_correct: true
+      - text: Funciona apenas com modelos treinados em pequenos datasets.
+        is_correct: false
+      - text: Rotula automaticamente seus dados.
+        is_correct: false
+    explanation: |
+      Correta: Ideal para tráfego intermitente, eliminando custos de instâncias ociosas. Você paga apenas por milissegundo de uso.
+      Incorretas: Para latência ultra-baixa constante, usa-se Real-time provisionado. Rotulagem é Ground Truth.
+    diagram: |
+      graph TD
+        Req[Requisição] --> Scale{Escalonamento Automático}
+        Scale --> Model[Invocação]
+        Model -->|Fim| Down[Custo Zero]
+
+  - id: sagemaker-q19
+    type: multiple_choice
+    question: |
+      Qual ferramenta você usaria para catalogar, versionar e gerenciar o status de aprovação de seus modelos de ML treinados?
+    options:
+      - text: SageMaker Feature Store
+        is_correct: false
+      - text: SageMaker Model Registry
+        is_correct: true
+      - text: SageMaker Ground Truth
+        is_correct: false
+      - text: SageMaker Debugger
+        is_correct: false
+    explanation: |
+      Correta: O Model Registry centraliza as versões dos modelos e permite marcar se um modelo está "Approved" ou "Rejected" para produção.
+      Incorretas: Feature Store é para dados. Ground Truth para rotulagem. Debugger para monitorar erros.
+    diagram: |
+      graph LR
+        M1[Versão 1] --> Registry[Model Registry]
+        M2[Versão 2] --> Registry
+        Registry -->|Status| Approved[Pronto para Deploy]
+
+  - id: sagemaker-q20
+    type: multiple_choice
+    question: |
+      Qual é a função do SageMaker Role Manager?
+    options:
+      - text: Gerencia os papéis em um sistema de recomendação de filmes.
+        is_correct: false
+      - text: Simplifica a configuração de permissões IAM para usuários fornecendo templates baseados em funções ex Cientista de Dados.
+        is_correct: true
+      - text: Rotaciona automaticamente as senhas dos buckets S3.
+        is_correct: false
+      - text: Escolhe qual algoritmo deve ser o 'líder' em um grupo de modelos.
+        is_correct: false
+    explanation: |
+      Correta: Ajuda administradores a seguir o princípio de privilégio mínimo, facilitando a criação de roles IAM corretas para cada cargo da equipe de ML.
+      Incorretas: Não tem relação com roteiros de filmes ou senhas do S3. Escolha de algoritmo é com o Autopilot.
+    diagram: |
+      graph TD
+        Admin[Admin] --> RM[Role Manager]
+        RM -->|Template| DS[Role Cientista de Dados]
+        RM -->|Template| MLOps[Role Engenheiro MLOps]
+
+  - id: sagemaker-q21
+    type: multiple_choice
+    question: |
+      Uma equipe precisa construir um modelo para prever preços de casas a partir de um arquivo CSV. Qual recurso do SageMaker deve ser usado para construir isso automaticamente?
+    options:
+      - text: SageMaker Autopilot
+        is_correct: true
+      - text: SageMaker Neo
+        is_correct: false
+      - text: SageMaker Ground Truth
+        is_correct: false
+      - text: SageMaker Feature Store
+        is_correct: false
+    explanation: |
+      Correta: O Autopilot é especialista em dados tabulares (como CSV), cuidando de todo o processo de treino automático.
+      Incorretas: Neo é para otimização. Ground Truth para rotulagem. Feature Store para armazenamento.
+    diagram: |
+      graph LR
+        CSV[Dados CSV] --> Auto[SageMaker Autopilot] --> Model[Modelo de Regressão]
+
+  - id: sagemaker-q22
+    type: multiple_choice
+    question: |
+      Qual recurso do SageMaker ajuda a documentar informações do modelo, como uso pretendido, riscos e performance, visando transparência?
+    options:
+      - text: SageMaker Model Monitor
+        is_correct: false
+      - text: SageMaker Model Cards
+        is_correct: true
+      - text: SageMaker Training Jobs
+        is_correct: false
+      - text: SageMaker Debugger
+        is_correct: false
+    explanation: |
+      Correta: Model Cards funcionam como "fichas técnicas" do modelo para governança e IA responsável.
+      Incorretas: Model Monitor é para drift. Training Jobs para execução. Debugger para erros técnicos.
+    diagram: |
+      graph TD
+        Model[Modelo Final] --> Card[Model Card: Riscos, Uso, Acurácia]
+
+  - id: sagemaker-q23
+    type: multiple_choice
+    question: |
+      Qual é o objetivo principal do SageMaker Hyperparameter Tuning (HPO)?
+    options:
+      - text: Reduzir o custo de armazenamento do S3.
+        is_correct: false
+      - text: Encontrar a melhor versão de um modelo executando vários treinos com diferentes configurações do algoritmo.
+        is_correct: true
+      - text: Rotular imagens automaticamente.
+        is_correct: false
+      - text: Hospedar modelos em dispositivos de borda (edge).
+        is_correct: false
+    explanation: |
+      Correta: O HPO automatiza o ajuste de "parâmetros externos" (como learning rate) para maximizar a precisão do modelo.
+      Incorretas: Custos do S3 são fixos. Rotulagem é Ground Truth. Edge é Edge Manager.
+    diagram: |
+      graph TD
+        Job1[Treino 1: LR 0.01] --> Acc1[80%]
+        Job2[Treino 2: LR 0.001] --> Acc2[95%]
+        HPO[SageMaker HPO] -->|Escolhe| Job2
+
+  - id: sagemaker-q24
+    type: multiple_choice
+    question: |
+      Qual destas é uma vantagem de usar o SageMaker Data Wrangler?
+    options:
+      - text: Só pode ser usado por especialistas que conhecem SQL.
+        is_correct: false
+      - text: Permite visualizar e transformar dados com uma interface point-and-click.
+        is_correct: true
+      - text: Implanta automaticamente modelos em milhões de dispositivos.
+        is_correct: false
+      - text: Substitui a necessidade de ter uma conta AWS.
+        is_correct: false
+    explanation: |
+      Correta: Ele democratiza o acesso à preparação de dados, permitindo que usuários vejam correlações e limpem dados visualmente.
+      Incorretas: Ele é focado em quem não quer escrever SQL/Python. Deploy é tarefa de endpoints.
+    diagram: |
+      graph LR
+        User[Usuário] -->|Clica| Tool[Interface Wrangler] -->|Transforma| Result[Data Final]
+
+  - id: sagemaker-q25
+    type: multiple_choice
+    question: |
+      Qual recurso do SageMaker deve ser usado para gerenciar modelos em muitos dispositivos de borda, como câmeras inteligentes ou sensores?
+    options:
+      - text: SageMaker Edge Manager
+        is_correct: true
+      - text: SageMaker Studio
+        is_correct: false
+      - text: SageMaker Canvas
+        is_correct: false
+      - text: SageMaker Ground Truth
+        is_correct: false
+    explanation: |
+      Correta: O Edge Manager ajuda a gerenciar frotas de dispositivos, monitorando a performance do modelo localmente.
+      Incorretas: Studio é para dev. Canvas é no-code. Ground Truth é rotulagem.
+    diagram: |
+      graph LR
+        Cloud[Console SageMaker] -->|Monitora/Update| Edge[Frota de Sensores IoT]
+
+  - id: sagemaker-q26
+    type: multiple_choice
+    question: |
+      Ao usar o SageMaker JumpStart para um Modelo de Fundação, o que significa 'Fine-tuning'?
+    options:
+      - text: Significa deletar o modelo e começar do zero.
+        is_correct: false
+      - text: Significa treinar um modelo pré-treinado em um dataset menor e específico para melhorar a performance em uma tarefa específica.
+        is_correct: true
+      - text: Significa mudar o plano de faturamento.
+        is_correct: false
+      - text: Significa adicionar mais GPUs ao endpoint.
+        is_correct: false
+    explanation: |
+      Correta: Fine-tuning é o processo de "ajuste fino" de um modelo gigante (como o Llama) com dados da sua própria empresa.
+      Incorretas: Faturamento e hardware são configurações de infra, não de treinamento do modelo.
+    diagram: |
+      graph LR
+        Base[Modelo Genérico] -->|Dados Específicos| Tuning[Fine-Tuning] --> Specialized[Modelo Especialista]
+
+  - id: sagemaker-q27
+    type: multiple_choice
+    question: |
+      Qual capacidade do SageMaker você deve usar para automatizar o teste de seus modelos em um pipeline de CI/CD?
+    options:
+      - text: SageMaker Pipelines
+        is_correct: true
+      - text: SageMaker Ground Truth
+        is_correct: false
+      - text: SageMaker Canvas
+        is_correct: false
+      - text: SageMaker Data Wrangler
+        is_correct: false
+    explanation: |
+      Correta: Pipelines permite criar fluxos automatizados que rodam testes de acurácia antes de autorizar o deploy.
+      Incorretas: As outras ferramentas são para fases de dados ou criação manual.
+    diagram: |
+      graph LR
+        Code[Novo Código] --> Pipe[Pipeline Automático] --> Test[Teste de Modelo] --> Deploy[Produção]
+
+  - id: sagemaker-q28
+    type: multiple_choice
+    question: |
+      Qual é o propósito do SageMaker Model Dashboard?
+    options:
+      - text: Ver todos os seus modelos e monitorar sua performance e saúde em um só lugar.
+        is_correct: true
+      - text: Escrever código para novos algoritmos de ML.
+        is_correct: false
+      - text: Comprar dados de outros usuários.
+        is_correct: false
+      - text: Jogar videogame enquanto espera o treino terminar.
+        is_correct: false
+    explanation: |
+      Correta: O Dashboard centraliza alertas de monitoramento, facilitando a vida do engenheiro de MLOps.
+      Incorretas: Escrita de código é no Studio. Compra de dados é no Data Exchange.
+    diagram: |
+      graph TD
+        Status[Visualização Geral]
+        Status --> M1[Modelo A: Saudável]
+        Status --> M2[Modelo B: Alerta de Drift]
+
+  - id: sagemaker-q29
+    type: multiple_choice
+    question: |
+      Qual serviço dentro do SageMaker você usaria para descobrir por que um modelo fez uma previsão específica para uma apólice de seguro?
+    options:
+      - text: SageMaker Neo
+        is_correct: false
+      - text: SageMaker Clarify
+        is_correct: true
+      - text: SageMaker Training Jobs
+        is_correct: false
+      - text: SageMaker Data Wrangler
+        is_correct: false
+    explanation: |
+      Correta: Clarify fornece a "explicabilidade local", mostrando quais atributos (ex: idade, histórico) pesaram na decisão final.
+      Incorretas: Neo é para velocidade. Training Jobs para criação. Wrangler para dados.
+    diagram: |
+      graph LR
+        Decision[Seguro Negado] --> Clarify[Análise Clarify] --> Insight[Motivo: Inadimplência]
+
+  - id: sagemaker-q30
+    type: multiple_choice
+    question: |
+      O que uma 'SageMaker Notebook Instance' fornece?
+    options:
+      - text: Um caderno físico e uma caneta.
+        is_correct: false
+      - text: Uma instância de machine learning totalmente gerenciada rodando a aplicação Jupyter Notebook.
+        is_correct: true
+      - text: Uma forma de enviar e-mails automaticamente para o chefe.
+        is_correct: false
+      - text: Uma ferramenta para criar apresentações de PowerPoint.
+        is_correct: false
+    explanation: |
+      Correta: É o ambiente padrão de trabalho onde cientistas de dados escrevem código, exploram dados e executam treinos experimentais.
+      Incorretas: E-mails são com SES. Apresentações e itens físicos não fazem parte do escopo da AWS.
+    diagram: |
+      graph TD
+        User[Usuário] --> EC2[Instância Gerenciada] --> Jupyter[Jupyter Notebook / Lab]
