@@ -1,0 +1,636 @@
+questions:
+  - id: bedrock-q01
+    type: multiple_choice
+    question: |
+      Qual é a principal função do Amazon Bedrock dentro do ecossistema de IA da AWS?
+    options:
+      - text: Fornecer uma interface unificada para acessar Modelos de Fundação (FMs) de diversos provedores via API.
+        is_correct: true
+      - text: Treinar modelos de Deep Learning do zero usando instâncias EC2 P4d.
+        is_correct: false
+      - text: Atuar como um banco de dados vetorial nativo para armazenamento de embeddings.
+        is_correct: false
+      - text: Executar apenas modelos desenvolvidos exclusivamente pela própria Amazon.
+        is_correct: false
+    explanation: |
+      Correta: O Bedrock é um serviço gerenciado que democratiza o acesso a modelos de elite (Anthropic, Meta, Mistral, etc.) através de uma API simples, sem necessidade de gerenciar servidores.
+      Incorretas: O treino do zero ocorre no SageMaker. O Bedrock se integra a bancos vetoriais, mas não é um. Ele é propositalmente multimodelo.
+    diagram: |
+      graph LR
+        User[Aplicação] --> Bedrock[Amazon Bedrock API]
+        Bedrock --> A[Anthropic Claude]
+        Bedrock --> B[Meta Llama]
+        Bedrock --> C[Mistral AI]
+        Bedrock --> D[Amazon Titan]
+
+  - id: bedrock-q02
+    type: multiple_choice
+    question: |
+      No Amazon Bedrock, o que significa o termo 'Knowledge Bases'?
+    options:
+      - text: Uma biblioteca de documentação técnica da AWS sobre IA.
+        is_correct: false
+      - text: Uma funcionalidade que implementa o fluxo de Retrieval-Augmented Generation (RAG) de ponta a ponta.
+        is_correct: true
+      - text: Um repositório de códigos prontos para Python.
+        is_correct: false
+      - text: Uma lista de todos os usuários que acessaram os modelos.
+        is_correct: false
+    explanation: |
+      Correta: As Knowledge Bases (Bases de Conhecimento) automatizam o RAG, permitindo que o modelo consulte dados privados da empresa para responder com precisão.
+      Incorretas: Não é documentação, mas uma ferramenta técnica. Rastreio de usuários é feito pelo IAM/CloudTrail.
+    diagram: |
+      graph TD
+        S3[(Dados da Empresa)] --> KB[Knowledge Base]
+        KB --> Embed[Embedding] --> Vector[(Vector Store)]
+        Vector --> LLM[Modelo de Fundação] --> Out[Resposta Contextualizada]
+
+  - id: bedrock-q03
+    type: multiple_choice
+    question: |
+      Qual funcionalidade do Bedrock permite que o modelo execute tarefas complexas e interaja com sistemas externos via chamadas de API?
+    options:
+      - text: Model Invocation Logging
+        is_correct: false
+      - text: Agents for Amazon Bedrock
+        is_correct: true
+      - text: Provisioned Throughput
+        is_correct: false
+      - text: Guardrails
+        is_correct: false
+    explanation: |
+      Correta: Agentes usam o raciocínio do modelo para quebrar uma tarefa em passos, chamar funções externas (APIs) e entregar o resultado final.
+      Incorretas: Logs são para auditoria. Provisionamento é para performance. Guardrails são para segurança.
+    diagram: |
+      graph LR
+        User[Prompt] --> Agent[Agente Bedrock]
+        Agent --> Plan[Plano de Ação]
+        Plan --> API[Chamada de API Externa]
+        API --> Res[Resultado da Tarefa]
+
+  - id: bedrock-q04
+    type: multiple_choice
+    question: |
+      O que são os 'Guardrails for Amazon Bedrock'?
+    options:
+      - text: Uma ferramenta para acelerar o tempo de resposta das APIs.
+        is_correct: false
+      - text: Políticas de segurança para filtrar conteúdo indesejado, tóxico ou informações sensíveis (PII).
+        is_correct: true
+      - text: Cabos físicos que conectam os data centers da AWS.
+        is_correct: false
+      - text: Uma forma de aumentar o limite de memória dos modelos.
+        is_correct: false
+    explanation: |
+      Correta: Guardrails permitem definir filtros de conteúdo e redigir dados sensíveis (como CPF/Cartão) para garantir uma IA responsável.
+      Incorretas: Não afetam a velocidade ou a memória do hardware.
+    diagram: |
+      graph TD
+        In[Input do Usuário] --> G[Guardrail]
+        G -->|Filtrado| Model[Modelo]
+        Model --> G
+        G -->|Limpo| Out[Resposta Segura]
+
+  - id: bedrock-q05
+    type: multiple_choice
+    question: |
+      Qual é a vantagem de utilizar o 'Provisioned Throughput' no Amazon Bedrock?
+    options:
+      - text: Reduzir o custo de cada token processado para zero.
+        is_correct: false
+      - text: Garantir capacidade dedicada e performance consistente para cargas de trabalho de alta escala.
+        is_correct: true
+      - text: Permitir que o modelo aprenda novos fatos sem treinamento.
+        is_correct: false
+      - text: Criptografar automaticamente os dados armazenados no S3.
+        is_correct: false
+    explanation: |
+      Correta: O Throughput Provisionado é necessário para modelos customizados e para garantir que aplicações críticas não sofram com variações de latência.
+      Incorretas: Não é gratuito. Fatos novos vêm via RAG. Criptografia S3 é nativa do S3.
+    diagram: |
+      graph LR
+        Sub[Assinatura de Unidades] --> Res[Capacidade Dedicada]
+        Res --> SLA[Latência Estável em Pico de Tráfego]
+
+  - id: bedrock-q06
+    type: multiple_choice
+    question: |
+      Qual destes provedores de modelos está disponível no Amazon Bedrock para tarefas de geração de imagem?
+    options:
+      - text: Stability AI
+        is_correct: true
+      - text: Anthropic
+        is_correct: false
+      - text: Mistral AI
+        is_correct: false
+      - text: Meta
+        is_correct: false
+    explanation: |
+      Correta: A Stability AI fornece os modelos Stable Diffusion (como o SDXL) para geração de imagens via Bedrock.
+      Incorretas: Anthropic, Meta e Mistral focam em modelos de linguagem (texto/código).
+    diagram: |
+      graph LR
+        Prompt[Gato no espaço] --> SD[Stability AI Model] --> Img[Imagem Gerada]
+
+  - id: bedrock-q07
+    type: multiple_choice
+    question: |
+      Para usar um modelo no Bedrock (ex: Claude 3), o que o usuário deve fazer primeiro no console da AWS?
+    options:
+      - text: Baixar os pesos do modelo para um bucket S3.
+        is_correct: false
+      - text: Solicitar acesso ao modelo através da seção 'Model Access'.
+        is_correct: true
+      - text: Criar uma instância EC2 do tipo g5.
+        is_correct: false
+      - text: Pagar uma taxa fixa de ativação de $1000.
+        is_correct: false
+    explanation: |
+      Correta: Por razões legais e contratuais, cada modelo deve ser habilitado manualmente no console antes do primeiro uso.
+      Incorretas: O Bedrock é serverless (sem EC2). Não há taxa de ativação, apenas por uso.
+    diagram: |
+      graph TD
+        Console[Console Bedrock] --> Access[Model Access] --> Edit[Edit] --> Request[Request Access]
+
+  - id: bedrock-q08
+    type: multiple_choice
+    question: |
+      Qual técnica o Amazon Bedrock utiliza para adaptar um modelo pré-treinado a um conjunto de dados específico da empresa para melhorar a especialização em um domínio?
+    options:
+      - text: Hyperparameter Optimization (HPO)
+        is_correct: false
+      - text: Fine-tuning
+        is_correct: true
+      - text: Prompt Engineering
+        is_correct: false
+      - text: Model Distillation
+        is_correct: false
+    explanation: |
+      Correta: Fine-tuning altera os pesos do modelo usando seus dados para que ele aprenda o tom, estilo ou terminologia específica do seu negócio.
+      Incorretas: HPO é para ML clássico. Prompt Engineering muda apenas a pergunta. Destilação reduz o tamanho do modelo.
+    diagram: |
+      graph TD
+        Base[Modelo Base] --> Data[Seus Dados] --> Train[Job de Fine-tuning] --> Custom[Modelo Customizado]
+
+  - id: bedrock-q09
+    type: multiple_choice
+    question: |
+      Ao usar o Amazon Bedrock, onde os dados do usuário enviados para inferência são armazenados pela AWS para treinar modelos globais?
+    options:
+      - text: Eles são armazenados permanentemente em um banco de dados público.
+        is_correct: false
+      - text: Em nenhum lugar. A AWS não utiliza dados de clientes do Bedrock para treinar os modelos de fundação base.
+        is_correct: true
+      - text: Eles são compartilhados com os provedores externos, ex Meta, automaticamente.
+        is_correct: false
+      - text: Apenas se o usuário tiver uma conta gratuita.
+        is_correct: false
+    explanation: |
+      Correta: A privacidade é um pilar do Bedrock. Seus dados de prompt e resposta nunca saem da infraestrutura da AWS e nunca treinam modelos de terceiros.
+      Incorretas: Compartilhar dados seria uma violação de segurança empresarial (Enterprise Security).
+    diagram: |
+      graph LR
+        Data[Dados do Cliente] -->|Fronteira de Segurança| Bedrock
+        Bedrock -->|Não| Global[Treino Global de Modelos]
+
+  - id: bedrock-q10
+    type: multiple_choice
+    question: |
+      Qual serviço da AWS é integrado ao Bedrock para monitorar logs de chamadas e conformidade?
+    options:
+      - text: Amazon CloudWatch e AWS CloudTrail
+        is_correct: true
+      - text: Amazon GameLift
+        is_correct: false
+      - text: AWS Glue
+        is_correct: false
+      - text: Amazon Polly
+        is_correct: false
+    explanation: |
+      Correta: CloudWatch monitora métricas e logs de erros; CloudTrail registra quem fez as chamadas de API por questões de auditoria.
+      Incorretas: GameLift é para jogos. Glue é ETL. Polly é voz.
+    diagram: |
+      graph TD
+        APICall[Chamada Bedrock] --> CloudTrail[Audit Log]
+        APICall --> CloudWatch[Performance Metrics]
+
+  - id: bedrock-q11
+    type: multiple_choice
+    question: |
+      O que são 'Embeddings' no contexto do Amazon Bedrock?
+    options:
+      - text: Uma forma de comprimir o texto para economizar tokens.
+        is_correct: false
+      - text: Representações numéricas (vetores) de texto ou imagens que capturam o significado semântico.
+        is_correct: true
+      - text: Plugins para navegadores que facilitam o uso da IA.
+        is_correct: false
+      - text: Códigos secretos usados para desbloquear modelos Premium.
+        is_correct: false
+    explanation: |
+      Correta: Modelos de embedding (como Titan Embeddings) transformam texto em vetores para que o computador possa "medir" a similaridade entre frases.
+      Incorretas: Não são compressão nem plugins.
+    diagram: |
+      graph LR
+        Text[Gato] --> Model[Titan Embeddings] --> Vector[0.12, -0.45, 0.98...]
+
+  - id: bedrock-q12
+    type: multiple_choice
+    question: |
+      O Amazon Bedrock é um serviço regional ou global?
+    options:
+      - text: Global, acessível via um único endpoint mundial.
+        is_correct: false
+      - text: Regional, e a disponibilidade de modelos pode variar entre diferentes regiões da AWS.
+        is_correct: true
+      - text: Disponível apenas em regiões localizadas na América do Norte.
+        is_correct: false
+      - text: Disponível apenas via AWS Outposts.
+        is_correct: false
+    explanation: |
+      Correta: Você deve selecionar uma região (ex: Virginia ou Frankfurt). Nem todos os modelos estão disponíveis em todas as regiões simultaneamente.
+      Incorretas: Não é um serviço global centralizado como o IAM.
+    diagram: |
+      graph TD
+        AWS[AWS Cloud] --> R1[US-East-1: Claude, Titan]
+        AWS --> R2[SA-East-1: Titan]
+
+  - id: bedrock-q13
+    type: multiple_choice
+    question: |
+      Qual componente do Amazon Bedrock é responsável por converter documentos do S3 em vetores e armazená-los em um banco vetorial automaticamente?
+    options:
+      - text: Amazon Bedrock Knowledge Bases
+        is_correct: true
+      - text: AWS Lambda
+        is_correct: false
+      - text: Amazon Bedrock Studio
+        is_correct: false
+      - text: Amazon Redshift
+        is_correct: false
+    explanation: |
+      Correta: As Knowledge Bases cuidam de todo o "pipeline de ingestão" para RAG de forma automatizada.
+      Incorretas: Lambda exigiria código manual. Redshift é para BI clássico.
+    diagram: |
+      graph LR
+        S3[Documentos] --> Ingest[Ingestão Automática] --> VectorDB[Banco de Vetores]
+
+  - id: bedrock-q14
+    type: multiple_choice
+    question: |
+      No uso da API do Bedrock, o parâmetro 'Temperature' controla o quê?
+    options:
+      - text: O calor físico gerado pelas GPUs no data center.
+        is_correct: false
+      - text: O grau de aleatoriedade e criatividade nas respostas do modelo.
+        is_correct: true
+      - text: A velocidade com que os tokens são gerados.
+        is_correct: false
+      - text: O limite máximo de palavras na resposta.
+        is_correct: false
+    explanation: |
+      Correta: Temperatura 0 torna o modelo determinístico (sempre a mesma resposta); Temperatura 1 torna-o muito criativo.
+      Incorretas: Não controla hardware nem velocidade de geração (throughput).
+    diagram: |
+      graph LR
+        Temp0[Temp 0: Preciso/Factual]
+        Temp1[Temp 1: Criativo/Variado]
+
+  - id: bedrock-q15
+    type: multiple_choice
+    question: |
+      Qual modelo de fundação da própria Amazon está disponível no Bedrock para tarefas multimodais?
+    options:
+      - text: Amazon Titan
+        is_correct: true
+      - text: Amazon Alexa LLM
+        is_correct: false
+      - text: GPT-4
+        is_correct: false
+      - text: Llama 3
+        is_correct: false
+    explanation: |
+      Correta: A família Titan (Text, Image, Multimodal) é desenvolvida pela própria AWS especificamente para o Bedrock.
+      Incorretas: GPT-4 é OpenAI. Llama é Meta. Alexa não é o nome da família de modelos do Bedrock.
+    diagram: |
+      graph TD
+        Titan --> T1[Titan Text]
+        Titan --> T2[Titan Image]
+        Titan --> T3[Titan Multimodal]
+
+  - id: bedrock-q16
+    type: multiple_choice
+    question: |
+      O que acontece com o modelo original quando você realiza um 'Fine-tuning' no Amazon Bedrock?
+    options:
+      - text: O modelo original é excluído e substituído.
+        is_correct: false
+      - text: É criada uma cópia privada do modelo (modelo customizado) na sua conta.
+        is_correct: true
+      - text: O modelo original torna-se mais inteligente para todos os usuários da AWS.
+        is_correct: false
+      - text: Nada, o fine-tuning no Bedrock é apenas uma simulação.
+        is_correct: false
+    explanation: |
+      Correta: O fine-tuning gera um novo artefato (Custom Model) que é exclusivo da sua conta e cobrado separadamente.
+      Incorretas: Seus ajustes nunca "vazam" para o modelo base público.
+    diagram: |
+      graph LR
+        Base[Modelo Base Público] -->|Clone + Treino| Custom[Seu Modelo Customizado]
+
+  - id: bedrock-q17
+    type: multiple_choice
+    question: |
+      Qual destes é um caso de uso típico para os Agentes do Amazon Bedrock?
+    options:
+      - text: Assistente de viagens que reserva voos acessando APIs de terceiros e enviando e-mails.
+        is_correct: true
+      - text: Armazenar fotos de férias em alta resolução.
+        is_correct: false
+      - text: Configurar regras de firewall para uma VPC.
+        is_correct: false
+      - text: Gerenciar o faturamento mensal da empresa.
+        is_correct: false
+    explanation: |
+      Correta: Agentes são para fluxos que exigem "raciocínio multietapa" e integração com o mundo externo.
+      Incorretas: Fotos vão no S3. Firewall é no WAF/VPC. Faturamento é no Billing Dashboard.
+    diagram: |
+      graph TD
+        User[Quero viajar] --> Agent[Agente]
+        Agent --> Search[Busca Voos]
+        Search --> Book[Reserva API]
+        Book --> Email[Envia Confirmação]
+
+  - id: bedrock-q18
+    type: multiple_choice
+    question: |
+      Como o Amazon Bedrock cobra pelo uso de modelos em modo 'On-Demand'?
+    options:
+      - text: Uma taxa mensal fixa de $500 por modelo.
+        is_correct: false
+      - text: Com base no número de tokens de entrada (input) e saída (output) processados.
+        is_correct: true
+      - text: Pelo número de horas que o console fica aberto.
+        is_correct: false
+      - text: Por cada gigabyte de dados trafegados.
+        is_correct: false
+    explanation: |
+      Correta: No modo On-Demand, você não paga por servidor, apenas pelos tokens (pedaços de palavras) que entram e saem.
+      Incorretas: Horas de console não são cobradas. Tokens não são o mesmo que bytes de rede.
+    diagram: |
+      graph LR
+        Input[Tokens de Entrada] --> Model --> Output[Tokens de Saída]
+        style Input fill:#d1e7dd
+        style Output fill:#fff3cd
+
+  - id: bedrock-q19
+    type: multiple_choice
+    question: |
+      Qual recurso do Amazon Bedrock ajuda a evitar a 'alucinação' de modelos ao fornecer evidências diretas de documentos da empresa?
+    options:
+      - text: Provisioned Throughput
+        is_correct: false
+      - text: Knowledge Bases (usando RAG)
+        is_correct: true
+      - text: Stable Diffusion
+        is_correct: false
+      - text: CloudTrail
+        is_correct: false
+    explanation: |
+      Correta: RAG (Geração Aumentada de Recuperação) força o modelo a olhar para os seus fatos antes de responder, em vez de "inventar".
+      Incorretas: Performance (throughput) ou auditoria (CloudTrail) não afetam a veracidade das respostas.
+    diagram: |
+      graph LR
+        Q[Pergunta] --> KB[Consulta Doc Real] --> Context[Contexto] --> LLM[Resposta Factual]
+
+  - id: bedrock-q20
+    type: multiple_choice
+    question: |
+      Qual o papel do 'Orchestrator' em um Agente do Amazon Bedrock?
+    options:
+      - text: Traduzir o código Python para Java.
+        is_correct: false
+      - text: Gerenciar o fluxo de raciocínio, decidindo qual ação tomar ou qual dado buscar em seguida.
+        is_correct: true
+      - text: Criptografar as chaves de API do usuário.
+        is_correct: false
+      - text: Desenhar o layout da interface web do chat.
+        is_correct: false
+    explanation: |
+      Correta: O orquestrador usa o modelo para criar um plano (Chain-of-Thought) e decidir se precisa chamar uma base de conhecimento ou uma API.
+      Incorretas: Não é um tradutor de código nem um designer de UI.
+    diagram: |
+      graph TD
+        Task[Tarefa] --> Planner[Orquestrador]
+        Planner -->|Ação 1| Search
+        Planner -->|Ação 2| ActionGroup
+        Planner --> Final[Resposta]
+
+  - id: bedrock-q21
+    type: multiple_choice
+    question: |
+      Qual dos seguintes modelos da Anthropic é conhecido por sua alta velocidade e baixo custo, sendo ideal para tarefas simples no Bedrock?
+    options:
+      - text: Claude 3 Opus
+        is_correct: false
+      - text: Claude 3 Haiku
+        is_correct: true
+      - text: Claude 3 Sonnet
+        is_correct: false
+      - text: Claude 1.0
+        is_correct: false
+    explanation: |
+      Correta: Haiku é o modelo mais rápido e econômico da Anthropic para o Bedrock, excelente para classificação ou respostas curtas.
+      Incorretas: Opus é o mais caro/inteligente. Sonnet é o intermediário equilibrado.
+    diagram: |
+      graph LR
+        Haiku[Haiku: Veloz]
+        Sonnet[Sonnet: Equilibrado]
+        Opus[Opus: Cérebro Máximo]
+
+  - id: bedrock-q22
+    type: multiple_choice
+    question: |
+      Qual é o limite máximo de tokens que um modelo pode processar em uma única chamada (Context Window) no Bedrock?
+    options:
+      - text: É fixo em 4096 tokens para todos os modelos.
+        is_correct: false
+      - text: Varia dependendo do modelo escolhido, ex Claude 3 suporta até 200k tokens.
+        is_correct: true
+      - text: Não existe limite no Bedrock.
+        is_correct: false
+      - text: O limite é definido pelo tamanho do bucket S3 vinculado.
+        is_correct: false
+    explanation: |
+      Correta: Cada provedor define seu limite. Modelos modernos como Claude 3 têm janelas de contexto imensas (200 mil tokens ou mais).
+      Incorretas: O limite é arquitetural do modelo, não uma configuração global do serviço.
+    diagram: |
+      graph LR
+        Small[Modelo X: 8k]
+        Large[Claude 3: 200k]
+
+  - id: bedrock-q23
+    type: multiple_choice
+    question: |
+      A funcionalidade de 'Model Customization' no Bedrock suporta quais tipos de aprendizado?
+    options:
+      - text: Fine-tuning e Continued Pre-training.
+        is_correct: true
+      - text: Apenas aprendizado supervisionado simples.
+        is_correct: false
+      - text: Aprendizado por reforço com humanos (RLHF) direto no console.
+        is_correct: false
+      - text: Transfer Learning apenas para modelos de imagem.
+        is_correct: false
+    explanation: |
+      Correta: Fine-tuning usa dados rotulados. Continued Pre-training usa dados não-rotulados para ensinar novos conhecimentos base ao modelo.
+      Incorretas: RLHF não é exposto como ferramenta de customização direta para usuários no Bedrock.
+    diagram: |
+      graph TD
+        Customization --> FT[Fine-Tuning: Estilo/Tom]
+        Customization --> CP[Continued Pre-training: Novos Fatos]
+
+  - id: bedrock-q24
+    type: multiple_choice
+    question: |
+      Como os 'Guardrails' protegem contra ataques de 'Prompt Injection'?
+    options:
+      - text: Eles bloqueiam fisicamente o teclado do usuário.
+        is_correct: false
+      - text: Eles analisam a entrada do usuário para identificar e bloquear tentativas de burlar as instruções do sistema.
+        is_correct: true
+      - text: Eles aumentam o preço da chamada para desencorajar o ataque.
+        is_correct: false
+      - text: Eles desconectam a conta AWS do usuário imediatamente.
+        is_correct: false
+    explanation: |
+      Correta: Guardrails detectam quando um usuário tenta dar comandos como "Ignore todas as instruções anteriores", bloqueando o ataque.
+      Incorretas: Bloqueio físico ou mudança de preço não são métodos de proteção de software.
+    diagram: |
+      graph LR
+        Hack[Injection] --> Filter[Guardrail Filter] --> Block[Blocked/Safe Message]
+
+  - id: bedrock-q25
+    type: multiple_choice
+    question: |
+      Qual banco de dados vetorial a AWS oferece como opção nativa e serverless integrada às Knowledge Bases?
+    options:
+      - text: Amazon OpenSearch Serverless (Vector Engine)
+        is_correct: true
+      - text: Microsoft SQL Server
+        is_correct: false
+      - text: Amazon DynamoDB
+        is_correct: false
+      - text: SQLite
+        is_correct: false
+    explanation: |
+      Correta: O OpenSearch Serverless com motor vetorial é a escolha padrão para criar aplicações RAG totalmente sem servidor no Bedrock.
+      Incorretas: SQL Server e DynamoDB não são motores vetoriais nativos serverless focados em RAG por padrão no console do Bedrock.
+    diagram: |
+      graph LR
+        Bedrock --> OS[OpenSearch Serverless] --> Vectors[Vector Storage]
+
+  - id: bedrock-q26
+    type: multiple_choice
+    question: |
+      O Amazon Bedrock suporta o uso de VPC Endpoints (AWS PrivateLink)?
+    options:
+      - text: Não, o Bedrock só pode ser acessado via internet pública.
+        is_correct: false
+      - text: Sim, permitindo que o tráfego entre sua VPC e o Bedrock não passe pela internet pública.
+        is_correct: true
+      - text: Apenas se você usar o modelo Llama.
+        is_correct: false
+      - text: Sim, mas apenas em conexões via satélite.
+        is_correct: false
+    explanation: |
+      Correta: Essencial para segurança corporativa, garantindo que os dados trafeguem apenas pela rede privada da AWS.
+      Incorretas: É uma característica de rede do serviço, independente do modelo usado.
+    diagram: |
+      graph LR
+        VPC[Sua Rede Privada] --> Endpoint[VPC Endpoint] --> Bedrock[Amazon Bedrock]
+
+  - id: bedrock-q27
+    type: multiple_choice
+    question: |
+      Qual a principal diferença entre Amazon Bedrock e Amazon SageMaker JumpStart?
+    options:
+      - text: Bedrock é serverless/via API, enquanto JumpStart exige gerenciar instâncias e endpoints no SageMaker.
+        is_correct: true
+      - text: Bedrock é apenas para imagens e JumpStart apenas para texto.
+        is_correct: false
+      - text: JumpStart é gratuito e Bedrock é pago.
+        is_correct: false
+      - text: Não há diferença, são nomes diferentes para o mesmo serviço.
+        is_correct: false
+    explanation: |
+      Correta: O Bedrock é "IA como serviço" (sem infra). JumpStart é "Modelos na sua infra" (você gerencia as instâncias EC2 do endpoint).
+      Incorretas: Ambos suportam diversos tipos de dados. Ambos são serviços pagos.
+    diagram: |
+      graph TD
+        B[Bedrock: API Only]
+        J[JumpStart: EC2 Instances + Model]
+
+  - id: bedrock-q28
+    type: multiple_choice
+    question: |
+      O que é 'Chunking' no contexto de bases de conhecimento do Bedrock?
+    options:
+      - text: Deletar partes do modelo para economizar espaço.
+        is_correct: false
+      - text: Dividir documentos grandes em pedaços menores para que possam ser processados e recuperados de forma eficiente.
+        is_correct: true
+      - text: Agrupar vários usuários em um único faturamento.
+        is_correct: false
+      - text: Uma técnica de compressão de vídeo.
+        is_correct: false
+    explanation: |
+      Correta: Chunking evita que você tente mandar um livro inteiro pro modelo de uma vez, focando apenas nos pedaços relevantes para a pergunta.
+      Incorretas: Não tem relação com faturamento ou compressão de vídeo.
+    diagram: |
+      graph LR
+        Doc[Livro PDF] --> C1[Pág 1]
+        Doc --> C2[Pág 2]
+        Doc --> C3[Pág 3]
+
+  - id: bedrock-q29
+    type: multiple_choice
+    question: |
+      Qual a funcionalidade do 'Watermarking' em modelos de imagem como o Titan Image Generator no Bedrock?
+    options:
+      - text: Melhorar a qualidade das cores em imagens de oceanos.
+        is_correct: false
+      - text: Inserir uma marca invisível que identifica que a imagem foi gerada por IA, auxiliando na transparência e segurança.
+        is_correct: true
+      - text: Aumentar a resolução da imagem para 4K.
+        is_correct: false
+      - text: Adicionar o logotipo da empresa automaticamente.
+        is_correct: false
+    explanation: |
+      Correta: Ajuda na IA Responsável ao permitir que ferramentas identifiquem imagens sintéticas, combatendo Deepfakes.
+      Incorretas: É uma medida de segurança, não de estética ou resolução.
+    diagram: |
+      graph LR
+        Gen[Gerador] --> Img[Imagem]
+        Img -->|Invisible| Mark[AI Watermark]
+
+  - id: bedrock-q30
+    type: multiple_choice
+    question: |
+      Qual o benefício de usar o 'Model Evaluation' no Amazon Bedrock?
+    options:
+      - text: Ele escolhe automaticamente o modelo mais barato para você.
+        is_correct: false
+      - text: Permite comparar a performance de diferentes modelos usando datasets de teste e feedback humano ou automático.
+        is_correct: true
+      - text: Ele escreve o código da aplicação por você.
+        is_correct: false
+      - text: Ele remove todos os custos da conta AWS por um mês.
+        is_correct: false
+    explanation: |
+      Correta: Serve para medir objetivamente qual modelo é melhor para sua tarefa (ex: Claude vs Titan) antes de ir para produção.
+      Incorretas: Não automatiza custos nem escreve código de aplicação.
+    diagram: |
+      graph TD
+        E[Evaluation] --> Metric[Acurácia/Toxicidade]
+        Metric --> Report[Relatório Comparativo]
