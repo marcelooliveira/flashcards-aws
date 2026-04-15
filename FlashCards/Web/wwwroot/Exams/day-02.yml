@@ -1,0 +1,511 @@
+questions:
+  - id: dotnet-arch-q01
+    type: multiple_choice
+    question: |
+      Em uma arquitetura de microserviços em .NET 8, qual é o padrão recomendado para garantir a consistência eventual entre diferentes contextos delimitados (Bounded Contexts) após uma transação de banco de dados?
+    options:
+      - text: Distributed Transactions (2PC)
+        is_correct: false
+      - text: Outbox Pattern
+        is_correct: true
+      - text: Synchronous HTTP Calls
+        is_correct: false
+      - text: Table Locking
+        is_correct: false
+    explanation: |
+      Correta: O Outbox Pattern garante que uma mensagem de evento seja gravada no mesmo banco de dados da transação de negócio, sendo enviada ao Broker de Mensageria posteriormente por um Worker, evitando perda de eventos se o Broker falhar.
+      Incorretas: 2PC não escala bem em nuvem; Chamadas síncronas geram acoplamento; Table Locking prejudica a performance.
+    diagram: |
+      graph LR
+        App[Aplicação .NET] --> DB[(Database)]
+        DB --> Outbox[Outbox Table]
+        Outbox --> Relay[Message Relay]
+        Relay --> Broker[Message Broker]
+
+  - id: angular-performance-q02
+    type: multiple_choice
+    question: |
+      No Angular, qual estratégia de detecção de mudanças (Change Detection) deve ser utilizada em componentes de alta performance para evitar verificações desnecessárias na árvore de componentes?
+    options:
+      - text: ChangeDetectionStrategy.Default
+        is_correct: false
+      - text: ChangeDetectionStrategy.OnPush
+        is_correct: true
+      - text: ChangeDetectionStrategy.Manual
+        is_correct: false
+      - text: ChangeDetectionStrategy.Lazy
+        is_correct: false
+    explanation: |
+      Correta: OnPush faz com que o componente só seja verificado se uma de suas @Input() mudar de referência ou se um evento interno ocorrer, otimizando drasticamente o ciclo de renderização.
+      Incorretas: Default verifica em cada ciclo; Manual e Lazy não são tipos válidos de estratégia nativa.
+    diagram: |
+      graph TD
+        Root[Root Component] --> C1[Comp 1: Default]
+        Root --> C2[Comp 2: OnPush]
+        C2 --> |No Input Change| C2Sub[No Re-render]
+
+  - id: messaging-broker-q03
+    type: multiple_choice
+    question: |
+      Ao utilizar ferramentas de mensageria como RabbitMQ ou Kafka (mencionados na vaga), qual o principal objetivo de implementar o padrão 'Dead Letter Exchange' (DLX)?
+    options:
+      - text: Aumentar a velocidade de processamento
+        is_correct: false
+      - text: Armazenar mensagens que não puderam ser processadas após várias tentativas
+        is_correct: true
+      - text: Criptografar as mensagens em trânsito
+        is_correct: false
+      - text: Balancear a carga entre diferentes consumidores
+        is_correct: false
+    explanation: |
+      Correta: O DLX captura mensagens que falharam (rejeitadas ou expiradas) para análise posterior, impedindo que uma mensagem defeituosa trave a fila principal (Poison Message).
+      Incorretas: Velocidade é ligada a paralelismo; Criptografia é TLS; Balanceamento é Round Robin/Consumer Groups.
+    diagram: |
+      graph LR
+        Q1[Fila Principal] --> Cons[Consumidor]
+        Cons --> |Falha/Retry Exceeded| DLX[Dead Letter Exchange]
+        DLX --> QErr[Fila de Erros/Manual Review]
+
+  - id: sqlserver-optimization-q04
+    type: multiple_choice
+    question: |
+      No SQL Server, qual o impacto direto da fragmentação de índices em tabelas de grande volume e como ela deve ser mitigada?
+    options:
+      - text: Aumenta o tempo de escrita; mitigar com Triggers
+        is_correct: false
+      - text: Degrada a performance de leitura; mitigar com REORGANIZE ou REBUILD
+        is_correct: true
+      - text: Reduz o espaço em disco; mitigar com Shrink
+        is_correct: false
+      - text: Aumenta o deadlock; mitigar com NOLOCK
+        is_correct: false
+    explanation: |
+      Correta: A fragmentação faz com que as páginas de dados fiquem fora de ordem lógica, exigindo mais I/O. REORGANIZE é online; REBUILD recria o índice.
+      Incorretas: Triggers pioram escrita; Shrink causa mais fragmentação; NOLOCK permite leitura suja mas não cura fragmentação.
+
+  - id: ai-integration-q05
+    type: multiple_choice
+    question: |
+      Ao integrar funcionalidades de IA (conforme o diferencial da vaga) em uma API .NET, qual padrão é utilizado para fornecer contexto adicional a um LLM sem a necessidade de re-treinamento (fine-tuning)?
+    options:
+      - text: ETL (Extract, Transform, Load)
+        is_correct: false
+      - text: RAG (Retrieval-Augmented Generation)
+        is_correct: true
+      - text: MVC (Model-View-Controller)
+        is_correct: false
+      - text: Dependency Injection
+        is_correct: false
+    explanation: |
+      Correta: RAG recupera dados relevantes de uma base externa (vetorial) e os envia no prompt para o modelo, permitindo respostas baseadas em dados privados e atualizados.
+      Incorretas: ETL é para dados; MVC é padrão de UI; DI é para gestão de dependências de código.
+    diagram: |
+      graph LR
+        User[Query] --> Search[Busca Vetorial]
+        Search --> Context[Dados do Banco]
+        Context --> LLM[LLM + Prompt]
+        LLM --> Res[Resposta Contextualizada]
+
+  - id: containers-k8s-q06
+    type: multiple_choice
+    question: |
+      Em um ambiente de containers (Diferencial da vaga), qual é a função primordial do 'Liveness Probe' no Kubernetes?
+    options:
+      - text: Verificar se a aplicação está pronta para receber tráfego
+        is_correct: false
+      - text: Determinar se o container deve ser reiniciado por estar em estado de falha
+        is_correct: true
+      - text: Escalar o número de réplicas horizontalmente
+        is_correct: false
+      - text: Gerenciar o ciclo de vida dos volumes persistentes
+        is_correct: false
+    explanation: |
+      Correta: O Liveness Probe detecta se a app travou (deadlock). Se falhar, o K8s mata o container e sobe um novo.
+      Incorretas: Pronta para tráfego é Readiness Probe; Escalonamento é HPA.
+
+  - id: cicd-devops-q07
+    type: multiple_choice
+    question: |
+      No contexto de CI/CD (Azure DevOps), o que caracteriza o 'Blue-Green Deployment'?
+    options:
+      - text: Atualizar um servidor por vez até que todos estejam na nova versão
+        is_correct: false
+      - text: Manter dois ambientes idênticos, onde um recebe o tráfego e o outro é atualizado
+        is_correct: true
+      - text: Testar a nova versão apenas com uma pequena parcela dos usuários
+        is_correct: false
+      - text: Mesclar o código diretamente no branch 'main' sem code review
+        is_correct: false
+    explanation: |
+      Correta: Reduz o downtime e risco de rollback. O ambiente 'Green' é testado e o tráfego é virado via Load Balancer instantaneamente.
+      Incorretas: Um por vez é Rolling Update; Parcela de usuários é Canary.
+
+  - id: dotnet-security-q08
+    type: multiple_choice
+    question: |
+      Para proteger uma Web API em .NET contra ataques de Cross-Site Request Forgery (CSRF), qual técnica é comumente integrada ao Angular?
+    options:
+      - text: Uso de Anti-Forgery Tokens (XSRF-TOKEN)
+        is_correct: true
+      - text: Criptografia de banco de dados
+        is_correct: false
+      - text: Uso de nomes de variáveis ofuscados
+        is_correct: false
+      - text: Desabilitar o CORS completamente
+        is_correct: false
+    explanation: |
+      Correta: O Angular lê um cookie (XSRF-TOKEN) e o envia de volta em um header HTTP personalizado que o .NET valida.
+      Incorretas: CORS deve ser configurado, não desabilitado. Ofuscação não impede CSRF.
+
+  - id: csharp-patterns-q09
+    type: multiple_choice
+    question: |
+      Qual é o principal benefício do uso da biblioteca 'Polly' em integrações de APIs e sistemas distribuídos em .NET?
+    options:
+      - text: Gerar documentação automática via Swagger
+        is_correct: false
+      - text: Implementar políticas de resiliência como Retry, Circuit Breaker e Timeout
+        is_correct: true
+      - text: Mapear objetos entre camadas (AutoMapper)
+        is_correct: false
+      - text: Realizar testes unitários em paralelo
+        is_correct: false
+    explanation: |
+      Correta: A Polly permite tratar falhas transitórias de rede ou indisponibilidade de serviços externos de forma fluida.
+      Incorretas: Swagger é para doc; AutoMapper para conversão; NUnit/xUnit para testes.
+
+  - id: sql-concurrency-q10
+    type: multiple_choice
+    question: |
+      No SQL Server, qual nível de isolamento de transação evita 'Leituras Sujas' (Dirty Reads), mas ainda permite 'Leituras Não-Repetíveis'?
+    options:
+      - text: Read Uncommitted
+        is_correct: false
+      - text: Read Committed
+        is_correct: true
+      - text: Repeatable Read
+        is_correct: false
+      - text: Serializable
+        is_correct: false
+    explanation: |
+      Correta: Read Committed é o padrão do SQL Server. Ele garante que você só leia dados confirmados (Committed), mas os dados podem mudar entre duas leituras na mesma transação.
+
+  - id: angular-signals-q11
+    type: multiple_choice
+    question: |
+      A partir das versões recentes do Angular, qual novo recurso permite um controle de reatividade mais fino e eficiente que os Observables para o estado local dos componentes?
+    options:
+      - text: Promises
+        is_correct: false
+      - text: Signals
+        is_correct: true
+      - text: NgModules
+        is_correct: false
+      - text: ViewChild
+        is_correct: false
+    explanation: |
+      Correta: Signals notificam o Angular exatamente sobre quais partes da UI precisam mudar, sem depender de verificações pesadas em toda a árvore (Zone.js).
+
+  - id: dotnet-middleware-q12
+    type: multiple_choice
+    question: |
+      Na pipeline do ASP.NET Core, qual a função da ordem de registro dos Middlewares no arquivo Program.cs?
+    options:
+      - text: Não importa, o .NET ordena automaticamente por prioridade
+        is_correct: false
+      - text: Define a sequência exata em que as requisições e respostas são processadas
+        is_correct: true
+      - text: Serve apenas para organização visual do código
+        is_correct: false
+      - text: Apenas o middleware de Exception deve vir primeiro
+        is_correct: false
+    explanation: |
+      Correta: A ordem é crítica. Um middleware de Autenticação deve vir antes do de Autorização, por exemplo.
+
+  - id: messaging-kafka-q13
+    type: multiple_choice
+    question: |
+      No Apache Kafka, qual conceito permite que múltiplos consumidores leiam a mesma torrente de dados sem interferirem uns nos outros, mantendo offsets individuais?
+    options:
+      - text: Consumer Groups
+        is_correct: true
+      - text: Topics Partitioning
+        is_correct: false
+      - text: Brokers
+        is_correct: false
+      - text: Zookeeper
+        is_correct: false
+    explanation: |
+      Correta: Consumer Groups permitem que diferentes aplicações processem os mesmos dados de forma independente ou dividam a carga.
+
+  - id: arch-solid-q14
+    type: multiple_choice
+    question: |
+      O princípio 'D' do SOLID (Dependency Inversion) sugere que:
+    options:
+      - text: Classes devem ser abertas para extensão e fechadas para modificação
+        is_correct: false
+      - text: Módulos de alto nível não devem depender de módulos de baixo nível, mas ambos de abstrações
+        is_correct: true
+      - text: Uma classe deve ter apenas uma razão para mudar
+        is_correct: false
+      - text: Interfaces pequenas são melhores que interfaces grandes
+        is_correct: false
+    explanation: |
+      Correta: Isso é implementado via Injeção de Dependência, permitindo trocar implementações (ex: trocar SQL Server por Oracle) sem mudar a lógica de negócio.
+
+  - id: angular-routing-q15
+    type: multiple_choice
+    question: |
+      Como o Angular implementa o carregamento sob demanda de módulos para melhorar o tempo de carregamento inicial (First Contentful Paint)?
+    options:
+      - text: Eager Loading
+        is_correct: false
+      - text: Lazy Loading via loadComponent ou loadChildren
+        is_correct: true
+      - text: Preloading Strategy Only
+        is_correct: false
+      - text: SSR (Server Side Rendering)
+        is_correct: false
+    explanation: |
+      Correta: O Lazy Loading divide a aplicação em pedaços (chunks) menores que só são baixados quando o usuário acessa a rota.
+
+  - id: dotnet-efcore-q16
+    type: multiple_choice
+    question: |
+      Ao usar Entity Framework Core, qual método deve ser evitado em consultas de apenas leitura para melhorar a performance e reduzir consumo de memória?
+    options:
+      - text: .Include()
+        is_correct: false
+      - text: .AsNoTracking() (Este deve ser USADO, a questão pede o que evitar se não usar este)
+        is_correct: false
+      - text: Tracking padrão (Omitir o AsNoTracking)
+        is_correct: true
+      - text: .ToListAsync()
+        is_correct: false
+    explanation: |
+      Correta: Se você não vai alterar o dado, manter o "Tracking" ativo é um desperdício de memória e CPU para o EF monitorar mudanças que não ocorrerão.
+
+  - id: api-rest-q17
+    type: multiple_choice
+    question: |
+      Em uma API RESTful, qual status code HTTP deve ser retornado após uma operação de POST que resultou na criação bem-sucedida de um recurso?
+    options:
+      - text: 200 OK
+        is_correct: false
+      - text: 201 Created
+        is_correct: true
+      - text: 204 No Content
+        is_correct: false
+      - text: 400 Bad Request
+        is_correct: false
+    explanation: |
+      Correta: 201 é o status específico para criação, geralmente acompanhado do header 'Location' com a URL do novo recurso.
+
+  - id: devops-docker-q18
+    type: multiple_choice
+    question: |
+      No arquivo Dockerfile, qual a diferença entre as instruções 'COPY' e 'ADD'?
+    options:
+      - text: Não há diferença
+        is_correct: false
+      - text: ADD possui recursos extras como extração de arquivos tar e download de URLs
+        is_correct: true
+      - text: COPY é usado apenas para diretórios
+        is_correct: false
+      - text: ADD é mais rápido que COPY
+        is_correct: false
+    explanation: |
+      Correta: Recomenda-se o uso de COPY por ser mais explícito e simples, a menos que a funcionalidade de extração do ADD seja necessária.
+
+  - id: dotnet-linq-q19
+    type: multiple_choice
+    question: |
+      Qual a principal característica da execução 'Deferred' (Adiada) no LINQ?
+    options:
+      - text: A consulta é executada no momento em que é definida
+        is_correct: false
+      - text: A consulta só é executada quando os dados são iterados ex num foreach ou .ToList()
+        is_correct: true
+      - text: Ela impede o uso de bancos de dados relacionais
+        is_correct: false
+      - text: Ela só funciona com arrays estáticos
+        is_correct: false
+    explanation: |
+      Correta: Isso permite compor consultas complexas sem disparar múltiplas idas ao banco de dados até que o resultado seja realmente necessário.
+
+  - id: security-jwt-q20
+    type: multiple_choice
+    question: |
+      Em uma autenticação baseada em JWT (JSON Web Token), onde a assinatura do token é validada?
+    options:
+      - text: No Browser do cliente
+        is_correct: false
+      - text: No Servidor de API, usando uma chave secreta ou pública
+        is_correct: true
+      - text: No Banco de Dados via procedure
+        is_correct: false
+      - text: No Gateway de pagamento
+        is_correct: false
+    explanation: |
+      Correta: O servidor usa a chave para garantir que o payload não foi alterado após a emissão. Se o hash não bater, o token é rejeitado.
+
+  - id: sql-indexes-q21
+    type: multiple_choice
+    question: |
+      O que é um 'Non-Clustered Index with Included Columns' no SQL Server?
+    options:
+      - text: Um índice que substitui a Primary Key
+        is_correct: false
+      - text: Um índice que armazena colunas extras no nível folha para evitar o 'Key Lookup'
+        is_correct: true
+      - text: Um índice que só funciona com colunas XML
+        is_correct: false
+      - text: Um índice que ordena fisicamente as linhas da tabela
+        is_correct: false
+    explanation: |
+      Correta: O uso de INCLUDE permite criar índices de cobertura, entregando todos os dados da query diretamente pelo índice, o que é muito mais rápido.
+
+  - id: angular-interceptor-q22
+    type: multiple_choice
+    question: |
+      Qual o uso mais comum para um HttpInterceptor no Angular?
+    options:
+      - text: Validar formulários reativos
+        is_correct: false
+      - text: Adicionar automaticamente tokens de autenticação em todas as requisições enviadas
+        is_correct: true
+      - text: Gerenciar a renderização de tabelas
+        is_correct: false
+      - text: Traduzir textos da interface (i18n)
+        is_correct: false
+    explanation: |
+      Correta: Interceptors agem como middlewares no front, capturando requisições de saída para injetar headers ou tratar erros globais de resposta (como 401).
+
+  - id: microservices-saga-q23
+    type: multiple_choice
+    question: |
+      No padrão de Microserviços, quando uma transação envolve múltiplos serviços, qual padrão é usado para gerenciar falhas e compensações (Rollback lógico)?
+    options:
+      - text: Saga Pattern
+        is_correct: true
+      - text: Singleton Pattern
+        is_correct: false
+      - text: Observer Pattern
+        is_correct: false
+      - text: Proxy Pattern
+        is_correct: false
+    explanation: |
+      Correta: O Saga gerencia uma sequência de transações locais. Se uma falha, ele dispara "ações compensatórias" para desfazer o que foi feito nos passos anteriores.
+
+  - id: dotnet-kestrel-q24
+    type: multiple_choice
+    question: |
+      O que é o Kestrel no ecossistema .NET?
+    options:
+      - text: Um ORM para NoSQL
+        is_correct: false
+      - text: Um servidor web multiplataforma de alta performance incluído no ASP.NET Core
+        is_correct: true
+      - text: Uma biblioteca para testes de integração
+        is_correct: false
+      - text: Um serviço de mensageria da Microsoft
+        is_correct: false
+    explanation: |
+      Correta: Kestrel é o servidor que processa as requisições HTTP, geralmente colocado atrás de um Reverse Proxy como Nginx ou IIS.
+
+  - id: angular-di-q25
+    type: multiple_choice
+    question: |
+      No Angular, o que acontece se você declarar um serviço no array 'providers' de um componente, em vez de usar 'providedIn: root'?
+    options:
+      - text: O serviço se torna global para toda a aplicação
+        is_correct: false
+      - text: Uma nova instância do serviço será criada especificamente para aquele componente e seus filhos
+        is_correct: true
+      - text: O Angular emitirá um erro de compilação
+        is_correct: false
+      - text: O serviço só poderá ser usado em templates HTML
+        is_correct: false
+    explanation: |
+      Correta: Isso cria um escopo de injeção local. Útil quando você precisa que o estado do serviço seja destruído junto com o componente.
+
+  - id: ai-prompt-q26
+    type: multiple_choice
+    question: |
+      O que define a técnica 'Chain of Thought' em engenharia de prompt para IAs?
+    options:
+      - text: Pedir que o modelo explique seu raciocínio passo a passo antes da resposta final
+        is_correct: true
+      - text: Traduzir o prompt para múltiplos idiomas
+        is_correct: false
+      - text: Limitar a resposta a apenas uma palavra
+        is_correct: false
+      - text: Usar apenas emojis no comando
+        is_correct: false
+    explanation: |
+      Correta: Esta técnica melhora significativamente o desempenho da IA em tarefas lógicas e matemáticas, reduzindo alucinações.
+
+  - id: cicd-deployment-q27
+    type: multiple_choice
+    question: |
+      Qual a vantagem do uso de 'Infrastructure as Code' (IaC) com ferramentas como Terraform no Azure DevOps?
+    options:
+      - text: Tornar o código C# mais rápido
+        is_correct: false
+      - text: Garantir que o ambiente de produção seja idêntico ao de homologação de forma automatizada e auditável
+        is_correct: true
+      - text: Substituir o uso de containers Docker
+        is_correct: false
+      - text: Criar interfaces gráficas automaticamente
+        is_correct: false
+    explanation: |
+      Correta: IaC permite versionar a infraestrutura, evitando o "configuration drift" onde ambientes ficam diferentes por alterações manuais.
+
+  - id: dotnet-healthchecks-q28
+    type: multiple_choice
+    question: |
+      Para que serve o middleware de 'Health Checks' no ASP.NET Core?
+    options:
+      - text: Verificar a saúde física dos desenvolvedores
+        is_correct: false
+      - text: Expor um endpoint que informa se a aplicação e suas dependências (DB, Cache) estão operacionais
+        is_correct: true
+      - text: Corrigir bugs automaticamente em tempo de execução
+        is_correct: false
+      - text: Otimizar o uso de memória RAM
+        is_correct: false
+    explanation: |
+      Correta: É usado por balanceadores de carga e orquestradores (como Kubernetes) para saber se a instância deve receber tráfego ou ser reiniciada.
+
+  - id: sql-deadlock-q29
+    type: multiple_choice
+    question: |
+      O que ocorre quando dois processos no SQL Server possuem bloqueios em recursos que o outro processo necessita, e nenhum pode prosseguir?
+    options:
+      - text: Livelock
+        is_correct: false
+      - text: Deadlock
+        is_correct: true
+      - text: Race Condition
+        is_correct: false
+      - text: Memory Leak
+        is_correct: false
+    explanation: |
+      Correta: O SQL Server escolhe uma das transações como "vítima", faz o rollback dela e permite que a outra complete.
+
+  - id: design-pattern-strategy-q30
+    type: multiple_choice
+    question: |
+      Qual padrão de projeto seria ideal para implementar diferentes métodos de cálculo de frete (Sedex, Loggi, Retirada) em um sistema .NET sem usar múltiplos 'if/else'?
+    options:
+      - text: Strategy Pattern
+        is_correct: true
+      - text: Singleton Pattern
+        is_correct: false
+      - text: Decorator Pattern
+        is_correct: false
+      - text: Factory Method Only
+        is_correct: false
+    explanation: |
+      Correta: O Strategy encapsula cada algoritmo em uma classe separada que implementa uma interface comum, facilitando a troca em tempo de execução.

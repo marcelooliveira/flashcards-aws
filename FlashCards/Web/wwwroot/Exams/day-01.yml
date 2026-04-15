@@ -1,0 +1,480 @@
+questions:
+  - id: arch-decision-q01
+    type: multiple_choice
+    question: |
+      Em uma instituição financeira, por que o Angular é frequentemente preferido ao React para sistemas core transversais?
+    options:
+      - text: Oferece uma arquitetura opinativa e padronizada, facilitando a governança e a rotação de desenvolvedores entre times.
+        is_correct: true
+      - text: O React não suporta TypeScript nativamente, dificultando a manutenção.
+        is_correct: false
+      - text: O Angular é mais leve e possui um bundle size menor que o React.
+        is_correct: false
+      - text: O React não permite o uso de Injeção de Dependência.
+        is_correct: false
+    explanation: |
+      Correta: O Angular é um framework completo e rígido. Isso garante que diferentes times escrevam código similar, o que é vital para a governança corporativa.
+
+  - id: arch-decision-q02
+    type: multiple_choice
+    question: |
+      Qual o principal trade-off ao escolher Kafka em vez de RabbitMQ para um sistema de mensageria?
+    options:
+      - text: O Kafka possui maior latência para mensagens individuais, mas maior throughput e suporte a replay de eventos.
+        is_correct: true
+      - text: O RabbitMQ é mais complexo de configurar em clusters distribuídos.
+        is_correct: false
+      - text: O Kafka não garante a ordem das mensagens em nenhuma circunstância.
+        is_correct: false
+      - text: O RabbitMQ é a única opção que suporta o protocolo AMQP.
+        is_correct: false
+    explanation: |
+      Correta: Kafka foca em logs de eventos imutáveis e vazão massiva; RabbitMQ foca em roteamento complexo e baixa latência para tarefas granulares.
+
+  - id: arch-decision-q03
+    type: multiple_choice
+    question: |
+      Por que manter o SQL Server em sistemas de custódia em vez de migrar para um NoSQL como MongoDB?
+    options:
+      - text: Pela garantia de transações ACID rigorosas e integridade referencial nativa.
+        is_correct: true
+      - text: NoSQL não suporta armazenamento de valores decimais.
+        is_correct: false
+      - text: SQL Server é o único banco que permite criptografia de dados em repouso.
+        is_correct: false
+      - text: MongoDB não escala horizontalmente.
+        is_correct: false
+    explanation: |
+      Correta: Em sistemas financeiros, a consistência forte (ACID) é inegociável para evitar divergências em saldos e inventários.
+
+  - id: arch-decision-q04
+    type: multiple_choice
+    question: |
+      Ao usar AWS, qual a principal vantagem do Fargate sobre o EC2 tradicional para rodar containers .NET?
+    options:
+      - text: Abstração da infraestrutura (Serverless), eliminando a gestão de patches e escalonamento do SO.
+        is_correct: true
+      - text: Custo fixo menor em qualquer cenário de carga.
+        is_correct: false
+      - text: Acesso total ao kernel do Linux para otimizações finas.
+        is_correct: false
+      - text: Suporte a GPUs para treinamento de modelos de IA.
+        is_correct: false
+    explanation: |
+      Correta: O Fargate retira o overhead operacional de gerenciar servidores, permitindo foco total na aplicação.
+
+  - id: arch-decision-q05
+    type: multiple_choice
+    question: |
+      Por que utilizar o Azure DevOps para CI/CD mesmo quando o deploy é na AWS?
+    options:
+      - text: Pela integração superior com o ciclo de vida do .NET (ALM) e ferramentas de gestão (Boards/Test Plans).
+        is_correct: true
+      - text: Porque a AWS não possui ferramentas nativas de deploy.
+        is_correct: false
+      - text: O Azure DevOps é o único que suporta Terraform.
+        is_correct: false
+      - text: É obrigatório para quem desenvolve em C#.
+        is_correct: false
+    explanation: |
+      Correta: O Azure DevOps oferece uma visão integrada de gestão de projeto e automação muito madura para o ecossistema Microsoft.
+
+  - id: arch-decision-q06
+    type: multiple_choice
+    question: |
+      No contexto de IA, qual a vantagem do Claude 3.5 Sonnet sobre o Claude 3 Opus para automação de tarefas de engenharia?
+    options:
+      - text: Melhor equilíbrio entre velocidade, custo e capacidade de codificação.
+        is_correct: true
+      - text: O Sonnet é o único modelo multimodal.
+        is_correct: false
+      - text: O Opus não suporta processamento de arquivos PDF.
+        is_correct: false
+      - text: O Sonnet pode ser executado offline em um Raspberry Pi.
+        is_correct: false
+    explanation: |
+      Correta: O Sonnet 3.5 é otimizado para ser extremamente eficiente e rápido, superando modelos maiores em benchmarks de coding.
+
+  - id: arch-decision-q07
+    type: multiple_choice
+    question: |
+      Qual o principal motivo para escolher PostgreSQL em vez de SQL Server em novos projetos cloud-native?
+    options:
+      - text: Redução de custos com licenciamento e maior compatibilidade com extensões open-source ex PostGIS.
+        is_correct: true
+      - text: O PostgreSQL é o único que suporta JSONB.
+        is_correct: false
+      - text: O SQL Server não funciona em Linux.
+        is_correct: false
+      - text: PostgreSQL é inerentemente mais rápido em todas as operações de escrita.
+        is_correct: false
+    explanation: |
+      Correta: O modelo de licenciamento do SQL Server é caro; o Postgres oferece robustez similar com custo de infraestrutura menor.
+
+  - id: arch-decision-q08
+    type: multiple_choice
+    question: |
+      Por que usar Spec-Driven Development (SDD) em vez de apenas "Vibe Coding" ao trabalhar com IAs como o Devin?
+    options:
+      - text: Para reduzir alucinações da IA através de contratos de arquitetura rigorosos definidos antes da codificação.
+        is_correct: true
+      - text: O SDD elimina a necessidade de compilar o código.
+        is_correct: false
+      - text: IAs não conseguem gerar código sem arquivos YAML.
+        is_correct: false
+      - text: O SDD é uma exigência legal para bancos brasileiros.
+        is_correct: false
+    explanation: |
+      Correta: Sem uma especificação clara (Spec), a IA pode tomar decisões de design inconsistentes que geram débitos técnicos.
+
+  - id: arch-decision-q09
+    type: multiple_choice
+    question: |
+      Qual a principal diferença entre Amazon EKS e Amazon ECS?
+    options:
+      - text: O EKS é baseado no padrão Kubernetes (evita lock-in), enquanto o ECS é uma solução proprietária da AWS.
+        is_correct: true
+      - text: O ECS só suporta containers Windows.
+        is_correct: false
+      - text: O EKS é muito mais simples de operar que o ECS.
+        is_correct: false
+      - text: O ECS é gratuito para usuários AWS.
+        is_correct: false
+    explanation: |
+      Correta: O EKS oferece portabilidade e um ecossistema gigante (Helm, Istio), enquanto o ECS foca em simplicidade dentro da AWS.
+
+  - id: arch-decision-q10
+    type: multiple_choice
+    question: |
+      Por que utilizar Redis/Valkey Streams em vez de Kafka para mensageria de baixa latência em um mesmo cluster?
+    options:
+      - text: Para processamento em memória com latência de sub-milissegundo, ideal para estados temporários e rápidos.
+        is_correct: true
+      - text: O Kafka não suporta processamento assíncrono.
+        is_correct: false
+      - text: Redis é mais resiliente a falhas de disco que o Kafka.
+        is_correct: false
+      - text: O Redis permite armazenar TB de dados históricos de forma mais barata.
+        is_correct: false
+    explanation: |
+      Correta: Para comunicação ultra-rápida entre microserviços vizinhos, a latência do Redis é imbatível.
+
+  - id: arch-decision-q11
+    type: multiple_choice
+    question: |
+      Qual o trade-off de usar GitHub Actions em vez de Azure DevOps Pipelines?
+    options:
+      - text: GitHub tem maior ecossistema de ações da comunidade, mas o Azure DevOps oferece melhor rastreabilidade de requisitos/testes.
+        is_correct: true
+      - text: GitHub não suporta builds de aplicações .NET.
+        is_correct: false
+      - text: Azure DevOps não permite o uso de runners auto-hospedados.
+        is_correct: false
+      - text: GitHub Actions é uma ferramenta paga para qualquer tipo de repositório.
+        is_correct: false
+    explanation: |
+      Correta: A escolha geralmente depende se o foco é integração com a comunidade (GitHub) ou gestão corporativa de ALM (Azure).
+
+  - id: arch-decision-q12
+    type: multiple_choice
+    question: |
+      Por que escolher Amazon Bedrock em vez de instâncias EC2 com GPUs próprias para rodar modelos de IA?
+    options:
+      - text: Pela facilidade de consumo via API (Serverless) e acesso a múltiplos modelos (Claude, Llama, Titan) sem gerenciar infraestrutura.
+        is_correct: true
+      - text: Bedrock é sempre mais barato para treinamento de modelos do zero.
+        is_correct: false
+      - text: EC2 não permite rodar modelos da Anthropic.
+        is_correct: false
+      - text: Bedrock garante que o modelo nunca terá alucinações.
+        is_correct: false
+    explanation: |
+      Correta: O Bedrock democratiza o acesso a modelos de ponta sem a complexidade de manter clusters de GPU ativos.
+
+  - id: arch-decision-q13
+    type: multiple_choice
+    question: |
+      Qual a vantagem do uso de Terraform (IaC) em relação ao CloudFormation da AWS?
+    options:
+      - text: É agnóstico a provedores de nuvem, permitindo gerenciar recursos na AWS, Azure e serviços SaaS no mesmo código.
+        is_correct: true
+      - text: O Terraform é uma ferramenta oficial da Amazon.
+        is_correct: false
+      - text: CloudFormation não suporta o provisionamento de bancos de dados.
+        is_correct: false
+      - text: Terraform não exige um arquivo de estado (state file).
+        is_correct: false
+    explanation: |
+      Correta: A multi-cloud e o ecossistema de providers tornam o Terraform o padrão de fato para infraestrutura moderna.
+
+  - id: arch-decision-q14
+    type: multiple_choice
+    question: |
+      Em uma arquitetura de microserviços, por que usar o padrão BFF (Backend For Frontend)?
+    options:
+      - text: Para fornecer uma API otimizada para as necessidades específicas de uma interface ex Mobile vs Web, reduzindo over-fetching.
+        is_correct: true
+      - text: Para eliminar a necessidade de ter um banco de dados no backend.
+        is_correct: false
+      - text: Para garantir que o frontend nunca mude.
+        is_correct: false
+      - text: O BFF substitui o uso de gateways de API.
+        is_correct: false
+    explanation: |
+      Correta: O BFF atua como um tradutor que agrega dados de múltiplos microserviços em um formato ideal para o consumo do front.
+
+  - id: arch-decision-q15
+    type: multiple_choice
+    question: |
+      Qual a razão técnica para preferir .NET 8 (Core) sobre o .NET Framework 4.8 em modernizações?
+    options:
+      - text: Performance superior, suporte multiplataforma (Linux/Containers) e acesso às últimas inovações da linguagem C#.
+        is_correct: true
+      - text: .NET Framework não suporta APIs REST.
+        is_correct: false
+      - text: .NET 8 é a única versão que suporta SQL Server.
+        is_correct: false
+      - text: O suporte ao C# foi descontinuado no .NET Framework.
+        is_correct: false
+    explanation: |
+      Correta: O .NET moderno é otimizado para nuvem e possui um ecossistema de bibliotecas muito mais atualizado.
+
+  - id: arch-decision-q16
+    type: multiple_choice
+    question: |
+      Por que usar AWS Step Functions em vez de encadear chamadas Lambdas via SQS?
+    options:
+      - text: Para orquestrar fluxos complexos com estados, retentativas automáticas e visibilidade visual do workflow.
+        is_correct: true
+      - text: Step Functions são gratuitas, enquanto SQS é pago.
+        is_correct: false
+      - text: Lambdas não conseguem escrever dados no SQS.
+        is_correct: false
+      - text: SQS não suporta mensagens com mais de 1KB.
+        is_correct: false
+    explanation: |
+      Correta: Step Functions reduzem a complexidade de "spaghetti code" em arquiteturas distribuídas, tratando erros e estados de forma nativa.
+
+  - id: arch-decision-q17
+    type: multiple_choice
+    question: |
+      Qual a vantagem do Windsurf AI em relação ao uso do Claude via interface web?
+    options:
+      - text: É um ambiente de codificação (IDE) com consciência profunda de todo o contexto do projeto e execução de terminal.
+        is_correct: true
+      - text: O Windsurf AI é gratuito e ilimitado.
+        is_correct: false
+      - text: A interface web do Claude é mais rápida para gerar arquivos binários.
+        is_correct: false
+      - text: O Windsurf não utiliza modelos de linguagem.
+        is_correct: false
+    explanation: |
+      Correta: Ferramentas como Windsurf e Cursor permitem que a IA entenda as relações entre múltiplos arquivos do seu repositório local.
+
+  - id: arch-decision-q18
+    type: multiple_choice
+    question: |
+      Por que utilizar o padrão RAG (Retrieval-Augmented Generation) em vez de fazer Fine-Tuning em um modelo de IA?
+    options:
+      - text: RAG permite usar dados atualizados e privados sem o custo e a complexidade de retreinar o modelo.
+        is_correct: true
+      - text: Fine-tuning é a única forma de ensinar novos idiomas à IA.
+        is_correct: false
+      - text: RAG torna a resposta da IA determinística (sempre igual).
+        is_correct: false
+      - text: Fine-tuning não funciona em modelos da AWS.
+        is_correct: false
+    explanation: |
+      Correta: RAG é mais ágil e barato para garantir que a IA responda com base em documentos específicos da empresa.
+
+  - id: arch-decision-q19
+    type: multiple_choice
+    question: |
+      Qual o principal motivo para usar Kubernetes em vez de apenas Docker Compose em produção?
+    options:
+      - text: Capacidade de auto-cura (self-healing), escalonamento horizontal automático e gestão de segredos/configurações.
+        is_correct: true
+      - text: Docker Compose não funciona em servidores Linux.
+        is_correct: false
+      - text: Kubernetes é necessário para rodar imagens .NET.
+        is_correct: false
+      - text: Docker Compose é limitado a 2 containers por servidor.
+        is_correct: false
+    explanation: |
+      Correta: Kubernetes é um orquestrador de clusters; ele garante que a aplicação continue rodando mesmo se um servidor (node) falhar.
+
+  - id: arch-decision-q20
+    type: multiple_choice
+    question: |
+      Por que escolher gRPC em vez de REST para comunicação interna entre microserviços?
+    options:
+      - text: Maior performance devido ao uso de protocolos binários (Protobuf) e suporte a streaming bidirecional.
+        is_correct: true
+      - text: gRPC é mais fácil de testar via browser que o REST.
+        is_correct: false
+      - text: REST não suporta autenticação JWT.
+        is_correct: false
+      - text: gRPC não exige definição de contratos.
+        is_correct: false
+    explanation: |
+      Correta: gRPC é ideal para baixa latência e alta eficiência em redes internas de data centers.
+
+  - id: arch-decision-q21
+    type: multiple_choice
+    question: |
+      Qual a vantagem de usar AWS Redshift em vez de apenas o SQL Server para relatórios analíticos massivos?
+    options:
+      - text: É um banco de dados colunar otimizado para agregação de grandes volumes de dados (OLAP).
+        is_correct: true
+      - text: Redshift é um banco de dados relacional para transações rápidas (OLTP).
+        is_correct: false
+      - text: SQL Server não suporta a cláusula GROUP BY.
+        is_correct: false
+      - text: Redshift permite editar registros individuais com latência de milissegundos.
+        is_correct: false
+    explanation: |
+      Correta: O armazenamento colunar do Redshift permite processar TBs de dados para BI de forma muito mais eficiente que bancos transacionais.
+
+  - id: arch-decision-q22
+    type: multiple_choice
+    question: |
+      Por que usar SignalR em uma aplicação .NET com Angular?
+    options:
+      - text: Para implementar comunicação em tempo real (push) do servidor para o cliente sem necessidade de polling.
+        is_correct: true
+      - text: Para melhorar a segurança das senhas dos usuários.
+        is_correct: false
+      - text: Para converter código C# em TypeScript automaticamente.
+        is_correct: false
+      - text: SignalR é o banco de dados de cache do .NET.
+        is_correct: false
+    explanation: |
+      Correta: O SignalR facilita a criação de dashboards e notificações que se atualizam sozinhas quando ocorre um evento no servidor.
+
+  - id: arch-decision-q23
+    type: multiple_choice
+    question: |
+      Ao escolher entre Azure e AWS para uma empresa que já utiliza massivamente Office 365 e Active Directory, qual o principal argumento pró-Azure?
+    options:
+      - text: Facilidade de integração de identidade (Single Sign-On) e potenciais benefícios de licenciamento (Azure Hybrid Benefit).
+        is_correct: true
+      - text: A AWS não possui serviços de diretório.
+        is_correct: false
+      - text: Azure é a única nuvem que suporta máquinas virtuais Windows.
+        is_correct: false
+      - text: A rede da AWS é mais lenta para usuários que usam Windows.
+        is_correct: false
+    explanation: |
+      Correta: A sinergia comercial e técnica entre os produtos Microsoft torna o Azure uma escolha natural para governança de identidade.
+
+  - id: arch-decision-q24
+    type: multiple_choice
+    question: |
+      Qual a vantagem de utilizar o padrão Outbox em sistemas que usam mensageria?
+    options:
+      - text: Garante a consistência atômica entre a alteração no banco de dados e o envio da mensagem para o broker.
+        is_correct: true
+      - text: Reduz o tamanho das mensagens enviadas ao Kafka.
+        is_correct: false
+      - text: Elimina a necessidade de ter um banco de dados SQL.
+        is_correct: false
+      - text: O Outbox é um substituto para o padrão de Microserviços.
+        is_correct: false
+    explanation: |
+      Correta: O Outbox evita que o banco seja atualizado mas a mensagem falhe ao ser enviada (ou vice-versa), garantindo a confiabilidade do sistema.
+
+  - id: arch-decision-q25
+    type: multiple_choice
+    question: |
+      Por que usar Helm para gerenciar aplicações no Kubernetes?
+    options:
+      - text: Funciona como um gerenciador de pacotes, permitindo versionar, parametrizar e reutilizar definições complexas de YAML.
+        is_correct: true
+      - text: Helm é a linguagem de programação que substitui o C# no K8s.
+        is_correct: false
+      - text: Helm aumenta a segurança dos containers contra vírus.
+        is_correct: false
+      - text: Serve apenas para monitorar o consumo de CPU.
+        is_correct: false
+    explanation: |
+      Correta: O Helm facilita o deploy de pilhas complexas (como um banco + api + worker) de forma padronizada.
+
+  - id: arch-decision-q26
+    type: multiple_choice
+    question: |
+      Qual o principal benefício do Event Sourcing?
+    options:
+      - text: Armazenar o histórico completo de mudanças de estado como uma sequência de eventos, permitindo auditoria total e reconstrução de estados.
+        is_correct: true
+      - text: Reduzir a quantidade de memória necessária para rodar o app.
+        is_correct: false
+      - text: Tornar o banco de dados SQL mais rápido para buscas simples.
+        is_correct: false
+      - text: Eliminar a necessidade de usar eventos no sistema.
+        is_correct: false
+    explanation: |
+      Correta: No Event Sourcing, você não guarda apenas o "agora", mas tudo o que aconteceu para chegar ao "agora", o que é vital para auditoria financeira.
+
+  - id: arch-decision-q27
+    type: multiple_choice
+    question: |
+      Em uma arquitetura de dados, quando usar Parquet em vez de CSV no S3?
+    options:
+      - text: Para consultas analíticas eficientes (formato colunar) com alta compressão e suporte a tipos de dados complexos.
+        is_correct: true
+      - text: Parquet é um formato de texto que pode ser lido no Bloco de Notas.
+        is_correct: false
+      - text: CSV é mais seguro contra ataques de injeção de SQL.
+        is_correct: false
+      - text: Parquet só funciona em ambientes locais.
+        is_correct: false
+    explanation: |
+      Correta: Parquet economiza custos de armazenamento e de processamento (Athena/Redshift Spectrum) devido à sua estrutura otimizada.
+
+  - id: arch-decision-q28
+    type: multiple_choice
+    question: |
+      Por que usar o padrão Circuit Breaker (ex: via Polly) em chamadas de API externas?
+    options:
+      - text: Para evitar o esgotamento de recursos e "cascata de falhas" quando um serviço parceiro está instável.
+        is_correct: true
+      - text: Para acelerar a internet do servidor.
+        is_correct: false
+      - text: Para criptografar os dados da requisição.
+        is_correct: false
+      - text: Para garantir que o serviço externo nunca falhe.
+        is_correct: false
+    explanation: |
+      Correta: O Circuit Breaker "abre" o circuito após falhas seguidas, protegendo o seu sistema de ficar esperando por algo que não vai responder.
+
+  - id: arch-decision-q29
+    type: multiple_choice
+    question: |
+      Qual a vantagem do Model Context Protocol (MCP) para desenvolvedores que usam IA?
+    options:
+      - text: Padroniza a forma como agentes de IA se conectam a repositórios de dados e ferramentas externas.
+        is_correct: true
+      - text: É um novo protocolo de rede que substitui o HTTP.
+        is_correct: false
+      - text: Serve apenas para traduzir código de Python para C#.
+        is_correct: false
+      - text: O MCP é um hardware específico para rodar IA.
+        is_correct: false
+    explanation: |
+      Correta: O MCP permite que você dê "superpoderes" à IA, permitindo que ela leia seus bancos de dados ou documentação de forma estruturada.
+
+  - id: arch-decision-q30
+    type: multiple_choice
+    question: |
+      Por que preferir instâncias Spot na AWS para processamento de dados em lote (Batch)?
+    options:
+      - text: Economia de até 90% no custo computacional, aceitando o risco de interrupção da instância pela AWS.
+        is_correct: true
+      - text: As instâncias Spot possuem processadores mais rápidos.
+        is_correct: false
+      - text: São instâncias que nunca podem ser desligadas.
+        is_correct: false
+      - text: Spot é um tipo de banco de dados da Amazon.
+        is_correct: false
+    explanation: |
+      Correta: Para tarefas que podem ser retomadas (tolerantes a falhas), o uso de Spot é a melhor estratégia de redução de custo na nuvem.
