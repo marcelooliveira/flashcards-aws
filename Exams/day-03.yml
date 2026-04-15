@@ -1,0 +1,489 @@
+questions:
+  - id: dotnet-runtime-q31
+    type: multiple_choice
+    question: |
+      No .NET 8, qual é o impacto do uso de "Native AOT" (Ahead-of-Time) em aplicações de backend e microserviços?
+    options:
+      - text: Aumenta o tempo de inicialização da aplicação (cold start)
+        is_correct: false
+      - text: Reduz drasticamente o tamanho do binário e o consumo de memória, mas limita o uso de Reflexão dinâmica
+        is_correct: true
+      - text: Permite que o código C# rode diretamente no browser sem WebAssembly
+        is_correct: false
+      - text: Elimina a necessidade de usar Docker para o deploy
+        is_correct: false
+    explanation: |
+      Correta: Native AOT compila o C# para código de máquina nativo. Isso resulta em execução mais rápida e menor footprint de memória, ideal para funções Serverless e containers pequenos, porém exige cuidado com bibliotecas que dependem de inspeção de tipos em runtime.
+    diagram: |
+      graph LR
+        Code[C# Code] --> Comp{AOT Compiler}
+        Comp --> Native[Native Binary]
+        Native --> OS[OS / Container]
+
+  - id: angular-state-q32
+    type: multiple_choice
+    question: |
+      Ao lidar com formulários complexos no Angular, qual a principal diferença entre 'Reactive Forms' e 'Template-driven Forms'?
+    options:
+      - text: Reactive Forms são assíncronos por natureza, enquanto Template-driven são síncronos
+        is_correct: false
+      - text: Reactive Forms oferecem acesso direto ao modelo de objetos do formulário de forma imutável e escalável
+        is_correct: true
+      - text: Template-driven Forms são recomendados para formulários com lógica de validação complexa
+        is_correct: false
+      - text: Somente Reactive Forms permitem o uso de validadores customizados
+        is_correct: false
+    explanation: |
+      Correta: Reactive Forms são baseados no código (TypeScript), facilitando testes unitários e a manipulação de fluxos de dados via RxJS.
+    diagram: |
+      graph TD
+        RF[Reactive Forms] --> Source[FormGroup/FormControl in TS]
+        TDF[Template-driven] --> Source2[ngModel in HTML]
+
+  - id: sql-isolation-q33
+    type: multiple_choice
+    question: |
+      No SQL Server, o nível de isolamento 'SNAPSHOT' utiliza qual mecanismo para garantir que leituras não bloqueiem escritas?
+    options:
+      - text: Shared Locks (S-Locks) em todas as linhas lidas
+        is_correct: false
+      - text: Versionamento de linhas no banco de dados TempDB (Row Versioning)
+        is_correct: true
+      - text: Bloqueio exclusivo da tabela inteira durante a transação
+        is_correct: false
+      - text: Desabilitação temporária de todos os índices
+        is_correct: false
+    explanation: |
+      Correta: O isolamento Snapshot permite que uma transação veja a última versão confirmada dos dados no momento em que a transação começou, buscando as versões anteriores no Version Store do TempDB.
+
+  - id: messaging-idempotency-q34
+    type: multiple_choice
+    question: |
+      Em um sistema financeiro (como o Daycoval), por que a implementação de "Idempotência" é crítica no processamento de mensagens?
+    options:
+      - text: Para garantir que uma mensagem seja processada o mais rápido possível
+        is_correct: false
+      - text: Para garantir que o processamento repetido da mesma mensagem não cause efeitos colaterais duplicados ex dois débitos
+        is_correct: true
+      - text: Para comprimir o tamanho das mensagens no Kafka
+        is_correct: false
+      - text: Para permitir que mensagens sejam lidas em ordem alfabética
+        is_correct: false
+    explanation: |
+      Correta: Mensagens podem ser entregues mais de uma vez (at-least-once delivery). A idempotência garante que, se o sistema receber o mesmo ID de transação novamente, ele ignore ou retorne o resultado anterior sem repetir a lógica de negócio.
+
+  - id: ai-vector-db-q35
+    type: multiple_choice
+    question: |
+      Qual a função de um "Vector Database" (Banco de Dados Vetorial) em uma arquitetura de IA Generativa moderna?
+    options:
+      - text: Armazenar imagens e vídeos em alta resolução
+        is_correct: false
+      - text: Armazenar e realizar buscas semânticas rápidas em 'embeddings' de texto
+        is_correct: true
+      - text: Substituir o SQL Server para armazenamento de tabelas relacionais
+        is_correct: false
+      - text: Gerenciar a fila de treinamento de modelos de deep learning
+        is_correct: false
+    explanation: |
+      Correta: Bancos vetoriais permitem encontrar informações por "significado" (proximidade vetorial) em vez de palavras-chave exatas, sendo o alicerce para sistemas de RAG.
+
+  - id: dotnet-di-scopes-q36
+    type: multiple_choice
+    question: |
+      No Injetor de Dependências nativo do .NET Core, qual o tempo de vida de um serviço registrado como 'Scoped'?
+    options:
+      - text: Uma única instância criada para toda a duração da aplicação
+        is_correct: false
+      - text: Uma nova instância criada a cada vez que o serviço é solicitado
+        is_correct: false
+      - text: Uma única instância criada por requisição HTTP (Request)
+        is_correct: true
+      - text: Uma instância que dura apenas enquanto o banco de dados está aberto
+        is_correct: false
+    explanation: |
+      Correta: Serviços Scoped são ideais para contextos de banco de dados (DbContext) ou repositórios, garantindo que o mesmo objeto seja compartilhado durante todo o ciclo de uma única requisição.
+
+  - id: devops-observability-q37
+    type: multiple_choice
+    question: |
+      Qual a diferença fundamental entre "Logs", "Metrics" e "Tracing" no contexto de Observabilidade?
+    options:
+      - text: Logs são para erros, Metrics para CPU e Tracing para rede
+        is_correct: false
+      - text: Tracing acompanha o fluxo de uma única requisição entre múltiplos serviços, enquanto Metrics foca em dados agregados ao longo do tempo
+        is_correct: true
+      - text: Logs são os únicos dados necessários para depurar sistemas distribuídos
+        is_correct: false
+      - text: Metrics substituem a necessidade de Logs em ambientes de produção
+        is_correct: false
+    explanation: |
+      Correta: Tracing (como OpenTelemetry) é vital em microserviços para identificar qual salto na rede está causando latência em uma transação específica.
+
+  - id: angular-guards-q38
+    type: multiple_choice
+    question: |
+      No Angular Router, qual Guard deve ser utilizado para impedir que um usuário abandone uma página com um formulário não salvo?
+    options:
+      - text: CanActivate
+        is_correct: false
+      - text: CanDeactivate
+        is_correct: true
+      - text: CanMatch
+        is_correct: false
+      - text: Resolve
+        is_correct: false
+    explanation: |
+      Correta: O CanDeactivate permite interceptar a saída do usuário de uma rota e exibir uma confirmação antes de destruir o componente.
+
+  - id: sql-sargability-q39
+    type: multiple_choice
+    question: |
+      O que torna uma query SQL "SARGable" (Search Argumentable)?
+    options:
+      - text: O uso de funções (como YEAR() ou LEFT()) na coluna do filtro (WHERE)
+        is_correct: false
+      - text: O uso de colunas diretamente no filtro, permitindo que o otimizador utilize índices de forma eficiente
+        is_correct: true
+      - text: O uso obrigatório de INNER JOINs em vez de subqueries
+        is_correct: false
+      - text: A criação de triggers em todas as tabelas envolvidas
+        is_correct: false
+    explanation: |
+      Correta: Se você aplica uma função a uma coluna indexada no WHERE (ex: WHERE YEAR(Data) = 2024), o SQL não consegue usar o índice (Index Scan). O correto é usar um range (WHERE Data >= '2024-01-01'...).
+
+  - id: arch-clean-q40
+    type: multiple_choice
+    question: |
+      Na "Clean Architecture", qual a regra de dependência fundamental em relação às camadas?
+    options:
+      - text: A camada de Domínio (Entidades) deve depender da camada de Infraestrutura (Banco de Dados)
+        is_correct: false
+      - text: As dependências devem apontar sempre para dentro, em direção às regras de negócio (Domínio)
+        is_correct: true
+      - text: Todas as camadas devem depender de uma biblioteca de UI
+        is_correct: false
+      - text: O Controller deve instanciar diretamente o Repositório
+        is_correct: false
+    explanation: |
+      Correta: O Domínio não deve conhecer detalhes técnicos (banco, frameworks). Detalhes externos dependem de abstrações definidas no núcleo.
+
+  - id: dotnet-minimal-api-q41
+    type: multiple_choice
+    question: |
+      Qual o principal benefício das "Minimal APIs" introduzidas no .NET 6/7/8?
+    options:
+      - text: Elas rodam apenas em servidores Linux
+        is_correct: false
+      - text: Redução de boilerplate (cerimônia de código) para criação de serviços leves e alta performance de roteamento
+        is_correct: true
+      - text: Substituem completamente o uso de Controllers em qualquer cenário
+        is_correct: false
+      - text: Permitem criar APIs sem usar a linguagem C#
+        is_correct: false
+    explanation: |
+      Correta: Minimal APIs eliminam a necessidade de classes Controller complexas para endpoints simples, sendo perfeitas para microserviços e arquiteturas serverless.
+
+  - id: messaging-compaction-q42
+    type: multiple_choice
+    question: |
+      No Kafka, o que acontece quando um tópico está configurado com 'Cleanup Policy = Compact'?
+    options:
+      - text: Mensagens antigas são deletadas após 7 dias
+        is_correct: false
+      - text: O Kafka mantém apenas a última mensagem para cada chave (key) enviada
+        is_correct: true
+      - text: O Kafka comprime o tamanho dos arquivos físicos no disco
+        is_correct: false
+      - text: O tópico para de aceitar novas mensagens quando fica cheio
+        is_correct: false
+    explanation: |
+      Correta: Log Compaction garante que, após a limpeza, o log contenha pelo menos o último estado para cada chave de mensagem, útil para restaurar caches de estado (State Stores).
+
+  - id: ai-tokenization-q43
+    type: multiple_choice
+    question: |
+      Como a precificação da maioria dos modelos de IA Generativa (como os via API do Amazon Bedrock ou OpenAI) é calculada?
+    options:
+      - text: Pelo número de gigabytes de dados armazenados
+        is_correct: false
+      - text: Pela quantidade de 'Tokens' processados na entrada (prompt) e na saída (completion)
+        is_correct: true
+      - text: Por uma taxa fixa mensal ilimitada
+        is_correct: false
+      - text: Pelo tempo que a instância de GPU fica ligada
+        is_correct: false
+    explanation: |
+      Correta: Tokens são sub-unidades de palavras. Entender isso é fundamental para o FinOps (controle de custos) de projetos de IA.
+
+  - id: k8s-hpa-q44
+    type: multiple_choice
+    question: |
+      Qual recurso do Kubernetes é responsável por aumentar ou diminuir o número de réplicas de um Pod com base no consumo de CPU ou memória?
+    options:
+      - text: VPA (Vertical Pod Autoscaler)
+        is_correct: false
+      - text: HPA (Horizontal Pod Autoscaler)
+        is_correct: true
+      - text: Ingress Controller
+        is_correct: false
+      - text: ReplicaSet Manual
+        is_correct: false
+    explanation: |
+      Correta: O HPA monitora as métricas e escala horizontalmente o número de instâncias para suportar picos de tráfego.
+
+  - id: angular-zonejs-q45
+    type: multiple_choice
+    question: |
+      Qual o papel do 'Zone.js' no ecossistema tradicional do Angular?
+    options:
+      - text: Gerenciar as rotas da aplicação
+        is_correct: false
+      - text: Interceptar operações assíncronas para notificar o Angular sobre quando executar a detecção de mudanças
+        is_correct: true
+      - text: Realizar a compilação do código TypeScript
+        is_correct: false
+      - text: Encriptar as chamadas HTTP
+        is_correct: false
+    explanation: |
+      Correta: Zone.js "patcheia" APIs assíncronas (como setTimeout ou fetch). Com a chegada dos Signals, o Angular caminha para ser "Zoneless".
+
+  - id: sql-window-functions-q46
+    type: multiple_choice
+    question: |
+      Qual a vantagem das 'Window Functions' (ex: ROW_NUMBER(), OVER()) em relação a um GROUP BY comum no SQL Server?
+    options:
+      - text: Elas permitem realizar cálculos agregados sem reduzir o número de linhas retornadas no conjunto de resultados
+        is_correct: true
+      - text: Elas são usadas apenas para deletar duplicatas
+        is_correct: false
+      - text: Elas impedem que outros usuários leiam a tabela
+        is_correct: false
+      - text: Elas substituem a necessidade de índices
+        is_correct: false
+    explanation: |
+      Correta: Com Window Functions, você pode manter os detalhes da linha e adicionar uma coluna com o total acumulado ou ranking, por exemplo.
+
+  - id: dotnet-gc-q47
+    type: multiple_choice
+    question: |
+      No Garbage Collector (GC) do .NET, o que define a "Geração 2" de objetos?
+    options:
+      - text: Objetos que acabaram de ser criados
+        is_correct: false
+      - text: Objetos de vida longa que sobreviveram a múltiplas coletas nas gerações 0 e 1
+        is_correct: true
+      - text: Objetos que possuem mais de 100MB
+        is_correct: false
+      - text: Objetos que são estáticos
+        is_correct: false
+    explanation: |
+      Correta: A Geração 2 contém objetos persistentes (como caches). A coleta nessa geração é a mais custosa ("Full GC").
+
+  - id: security-oauth2-q48
+    type: multiple_choice
+    question: |
+      Qual 'Grant Type' do OAuth2 é o mais recomendado atualmente para Single Page Applications (SPAs) como as feitas em Angular?
+    options:
+      - text: Implicit Grant
+        is_correct: false
+      - text: Authorization Code Flow with PKCE
+        is_correct: true
+      - text: Client Credentials
+        is_correct: false
+      - text: Password Grant
+        is_correct: false
+    explanation: |
+      Correta: O PKCE (Proof Key for Code Exchange) adiciona uma camada de segurança necessária para clientes que não podem manter um "client secret" seguro, como o browser.
+
+  - id: cloud-finops-q49
+    type: multiple_choice
+    question: |
+      No contexto de FinOps para IA na nuvem, o que é "Model Quantization"?
+    options:
+      - text: Comprar instâncias de IA em grandes quantidades
+        is_correct: false
+      - text: Reduzir a precisão dos pesos de um modelo ex de 16-bit para 8-bit para economizar memória e custo de processamento
+        is_correct: true
+      - text: Aumentar o número de camadas de um modelo
+        is_correct: false
+      - text: Limitar o número de usuários que acessam a IA
+        is_correct: false
+    explanation: |
+      Correta: Quantização permite rodar modelos potentes em hardwares mais baratos ou com menor latência, sacrificando uma margem mínima de precisão.
+
+  - id: dotnet-channels-q50
+    type: multiple_choice
+    question: |
+      Para que serve a biblioteca 'System.Threading.Channels' no .NET?
+    options:
+      - text: Gerenciar conexões de WebSockets
+        is_correct: false
+      - text: Implementar estruturas de dados produtor/consumidor de alta performance e thread-safe
+        is_correct: true
+      - text: Criar canais de vídeo via streaming
+        is_correct: false
+      - text: Substituir o Entity Framework
+        is_correct: false
+    explanation: |
+      Correta: Channels são extremamente eficientes para passar dados entre diferentes tasks em background dentro de um mesmo processo.
+
+  - id: angular-ivy-q51
+    type: multiple_choice
+    question: |
+      O que é o 'Ivy' no Angular?
+    options:
+      - text: Um novo framework concorrente
+        is_correct: false
+      - text: O motor de renderização e compilador padrão que permite builds menores e depuração mais fácil
+        is_correct: true
+      - text: Uma biblioteca de componentes visuais
+        is_correct: false
+      - text: O sistema de gestão de pacotes do Angular
+        is_correct: false
+    explanation: |
+      Correta: Ivy trouxe o "Tree Shaking" efetivo, removendo partes do framework não utilizadas no build final.
+
+  - id: devops-canary-q52
+    type: multiple_choice
+    question: |
+      Qual o principal benefício de um 'Canary Deployment' em relação a um deploy tradicional?
+    options:
+      - text: Ele é mais rápido de executar
+        is_correct: false
+      - text: Permite testar a estabilidade da nova versão com um pequeno subconjunto de usuários reais antes do rollout total
+        is_correct: true
+      - text: Ele não exige o uso de pipelines de CI/CD
+        is_correct: false
+      - text: Ele criptografa o código em produção
+        is_correct: false
+    explanation: |
+      Correta: Se a nova versão tiver um bug ou degradação de performance, apenas 5% ou 10% dos usuários serão afetados antes do rollback.
+
+  - id: dotnet-record-q53
+    type: multiple_choice
+    question: |
+      No C#, qual a principal característica do tipo 'record' em comparação a uma 'class' comum?
+    options:
+      - text: Records não podem ter métodos
+        is_correct: false
+      - text: Records possuem igualdade baseada em valor (Value-based equality) por padrão e suporte a imutabilidade
+        is_correct: true
+      - text: Records são sempre armazenados na Stack e nunca no Heap
+        is_correct: false
+      - text: Records só podem ser usados em projetos de console
+        is_correct: false
+    explanation: |
+      Correta: Records são perfeitos para DTOs (Data Transfer Objects), pois dois objetos diferentes com as mesmas propriedades são considerados iguais.
+
+  - id: sql-temp-tables-q54
+    type: multiple_choice
+    question: |
+      No SQL Server, qual a diferença de escopo entre uma tabela temporária local (#Tabela) e uma variável de tabela (@Tabela)?
+    options:
+      - text: Não há diferença de escopo
+        is_correct: false
+      - text: A variável de tabela não participa de transações (no-rollback) e tem escopo restrito ao lote/batch atual
+        is_correct: true
+      - text: Tabelas temporárias locais são visíveis para todos os usuários do banco
+        is_correct: false
+      - text: Variáveis de tabela são sempre mais rápidas que tabelas temporárias
+        is_correct: false
+    explanation: |
+      Correta: Se uma transação sofrer rollback, os dados inseridos em @Tabela permanecem lá, enquanto em #Tabela eles seriam desfeitos.
+
+  - id: messaging-fanout-q55
+    type: multiple_choice
+    question: |
+      No RabbitMQ, o que define uma exchange do tipo 'Fanout'?
+    options:
+      - text: Ela envia a mensagem apenas para a fila que tem a chave de rota exata
+        is_correct: false
+      - text: Ela replica a mensagem para todas as filas que estão conectadas (bound) a ela
+        is_correct: true
+      - text: Ela distribui as mensagens de forma circular (Round Robin)
+        is_correct: false
+      - text: Ela filtra as mensagens baseada nos cabeçalhos (Headers)
+        is_correct: false
+    explanation: |
+      Correta: Fanout é o padrão ideal para sistemas de broadcast, onde múltiplos serviços precisam receber a mesma informação simultaneamente.
+
+  - id: ai-hallucination-q56
+    type: multiple_choice
+    question: |
+      O que caracteriza uma "Alucinação" em um Large Language Model (LLM)?
+    options:
+      - text: Quando o modelo se recusa a responder por motivos de segurança
+        is_correct: false
+      - text: Quando o modelo gera informações factualmente incorretas mas com tom de confiança e gramática perfeita
+        is_correct: true
+      - text: Quando o tempo de resposta do modelo excede 30 segundos
+        is_correct: false
+      - text: Quando o modelo responde em um idioma diferente do solicitado
+        is_correct: false
+    explanation: |
+      Correta: Alucinações são o maior desafio de confiança na IA. Técnicas como RAG ajudam a ancorar o modelo em fatos reais.
+
+  - id: k8s-service-q57
+    type: multiple_choice
+    question: |
+      Qual tipo de Service no Kubernetes deve ser usado para expor uma aplicação para fora do cluster usando um endereço IP estático do provedor de nuvem (como AWS)?
+    options:
+      - text: ClusterIP
+        is_correct: false
+      - text: NodePort
+        is_correct: false
+      - text: LoadBalancer
+        is_correct: true
+      - text: ExternalName
+        is_correct: false
+    explanation: |
+      Correta: O tipo LoadBalancer provisiona automaticamente um recurso de rede (como o AWS ELB) conectado ao serviço do cluster.
+
+  - id: dotnet-middleware-exception-q58
+    type: multiple_choice
+    question: |
+      Onde deve ser posicionado o middleware de tratamento de exceções (UseExceptionHandler) na pipeline do ASP.NET Core?
+    options:
+      - text: No final da pipeline, após o roteamento
+        is_correct: false
+      - text: No início da pipeline, para capturar exceções de todos os middlewares subsequentes
+        is_correct: true
+      - text: Entre o middleware de Autenticação e Autorização
+        is_correct: false
+      - text: Ele não é um middleware, mas um atributo global
+        is_correct: false
+    explanation: |
+      Correta: Middlewares capturam a exceção na "volta" da requisição. Se ele estiver no topo, ele consegue tratar qualquer erro que ocorra abaixo dele.
+
+  - id: angular-content-projection-q59
+    type: multiple_choice
+    question: |
+      Qual tag do Angular é utilizada para criar componentes reutilizáveis que aceitam conteúdo HTML externo (Content Projection)?
+    options:
+      - text: <router-outlet>
+        is_correct: false
+      - text: <ng-content>
+        is_correct: true
+      - text: <ng-template>
+        is_correct: false
+      - text: <ng-container>
+        is_correct: false
+    explanation: |
+      Correta: O <ng-content> funciona como um "placeholder" onde o HTML inserido entre as tags do componente será renderizado.
+
+  - id: solid-lsp-q60
+    type: multiple_choice
+    question: |
+      O princípio de Substituição de Liskov (LSP) afirma que:
+    options:
+      - text: Uma classe deve ser substituída por uma interface sempre que possível
+        is_correct: false
+      - text: Subclasses devem ser substituíveis por suas classes base sem alterar a correção do programa
+        is_correct: true
+      - text: Devemos usar herança múltipla para evitar repetição de código
+        is_correct: false
+      - text: Funções privadas devem ser substituídas por funções públicas
+        is_correct: false
+    explanation: |
+      Correta: Se um código espera uma 'Classe A', ele deve funcionar perfeitamente com uma 'Classe B' que herda de A, sem lançar exceções inesperadas (como NotImplementedException).
