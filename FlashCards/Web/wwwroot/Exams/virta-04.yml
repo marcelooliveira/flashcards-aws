@@ -1,0 +1,387 @@
+﻿questions:
+  - id: mon_1
+    type: multiple_choice
+    question: |
+      A microservice architecture is experiencing "Alert Fatigue" where developers receive 200+ PagerDuty notifications daily, most of which are non-actionable. As a Senior Lead, which strategy do you implement to improve the Signal-to-Noise ratio?
+    options:
+      - text: Increase the threshold for all CPU alerts to 95%.
+        is_correct: false
+      - text: Shift from "Symptom-based" alerting (e.g., high CPU) to "Cause-based" alerting (e.g., database lock).
+        is_correct: false
+      - text: Implement "SLI/SLO-based" alerting focusing on user-facing symptoms like latency and error rates, and route low-priority alerts to Slack instead of PagerDuty.
+        is_correct: true
+      - text: Disable all alerts for the staging environment.
+        is_correct: false
+    explanation: |
+      Correct: Service Level Objectives (SLOs) ensure that you only wake up a developer if the "Error Budget" is being consumed at a rate that threatens the user experience.
+      Incorrect: Cause-based alerting actually increases noise because many "causes" don't result in user-facing failure.
+
+  - id: mon_2
+    type: multiple_choice
+    question: |
+      You are using Prometheus and Grafana. You need to calculate the "99th percentile latency" over the last 5 minutes. Which PromQL function is appropriate?
+    options:
+      - text: avg_over_time(request_latency[5m])
+        is_correct: false
+      - text: histogram_quantile(0.99, sum by (le) (rate(request_latency_bucket[5m])))
+        is_correct: true
+      - text: topk(99, request_latency)
+        is_correct: false
+      - text: quantile(0.99, request_latency)
+        is_correct: false
+    explanation: |
+      Correct: Percentiles in Prometheus are calculated using histograms and the histogram_quantile function to interpret the 'le' (less than or equal to) buckets.
+      Incorrect: avg or topk do not represent distribution percentiles.
+
+  - id: mon_3
+    type: multiple_choice
+    question: |
+      When configuring AWS CloudWatch Alarms for a NodeJS Lambda, what is the benefit of using "M of N" (e.g., 3 out of 5 datapoints) instead of a simple threshold?
+    options:
+      - text: It makes the alarm trigger faster.
+        is_correct: false
+      - text: It reduces "flapping" and false positives caused by transient spikes or momentary network blips.
+        is_correct: true
+      - text: It saves money on CloudWatch costs.
+        is_correct: false
+      - text: It allows the Lambda to run longer.
+        is_correct: false
+    explanation: |
+      Correct: "M of N" adds a layer of statistical significance, ensuring that an alarm only fires if a condition persists or recurs frequently, rather than on a single outlier.
+
+  - id: mon_4
+    type: multiple_choice
+    question: |
+      A distributed system is suffering from intermittent "504 Gateway Timeout" errors that are hard to replicate. Which monitoring pillar is most useful for identifying which specific microservice in the chain is causing the delay?
+    options:
+      - text: Metrics (CloudWatch).
+        is_correct: false
+      - text: Distributed Tracing (AWS X-Ray / OpenTelemetry).
+        is_correct: true
+      - text: Centralized Logging (ELK Stack).
+        is_correct: false
+      - text: Uptime Kuma heartbeats.
+        is_correct: false
+    explanation: |
+      Correct: Tracing provides a "span" view, showing exactly how much time was spent in each service during a single request's lifecycle.
+      Incorrect
+
+  - id: tf_1
+    type: multiple_choice
+    question: |
+      A team member manually changed an AWS Security Group rule in the console. How does Terraform handle this when you run terraform plan?
+    options:
+      - text: Terraform ignores it because it only cares about the code.
+        is_correct: false
+      - text: Terraform detects "Drift" by comparing the actual state of the cloud resources with the local terraform.tfstate and proposes a plan to revert the manual change.
+        is_correct: true
+      - text: Terraform automatically deletes the Security Group.
+        is_correct: false
+      - text: The terraform plan command will crash.
+        is_correct: false
+    explanation: |
+      Correct: Terraform's state file acts as a source of truth. Discrepancies between the state/code and the real world are identified as drift.
+
+  - id: tf_2
+    type: multiple_choice
+    question: |
+      When working in a team, why is it critical to use a "Remote Backend" (like S3 with DynamoDB locking)?
+    options:
+      - text: To make the Terraform execution faster.
+        is_correct: false
+      - text: To prevent state corruption and race conditions where two developers try to apply changes to the same infrastructure simultaneously.
+        is_correct: true
+      - text: To encrypt the source code.
+        is_correct: false
+      - text: To avoid installing Terraform locally.
+        is_correct: false
+    explanation: |
+      Correct: Remote backends share the state file across the team, and DynamoDB provides a "Lock" so only one person can modify the infrastructure at a time.
+
+  - id: tf_3
+    type: multiple_choice
+    question: |
+      You need to create 50 identical S3 buckets with different names. What is the most "Senior" way to implement this in Terraform?
+    options:
+      - text: Copy and paste the resource "aws_s3_bucket" block 50 times.
+        is_correct: false
+      - text: Use the for_each meta-argument with a map or set of bucket names.
+        is_correct: true
+      - text: Use a shell script to call the AWS CLI.
+        is_correct: false
+      - text: Use the count argument with a generic name plus an index.
+        is_correct: false
+    explanation: |
+      Correct: for_each is preferred over count for sets of resources because removing one item from a list doesn't cause Terraform to re-index and "shift" all subsequent resources.
+
+  - id: tf_4
+    type: multiple_choice
+    question: |
+      What is the purpose of "Terraform Modules"?
+    options:
+      - text: To make the code run in different cloud providers at the same time.
+        is_correct: false
+      - text: To encapsulate and reuse infrastructure patterns, promoting the "DRY" (Don't Repeat Yourself) principle and enforcing organizational standards.
+        is_correct: true
+      - text: To store passwords.
+        is_correct: false
+      - text: To replace the need for the terraform apply command.
+        is_correct: false
+    explanation: |
+      Correct: Modules allow you to package complex setups (e.g., a "Standard VPC") and distribute them across multiple projects or teams.
+
+  - id: tf_5
+    type: multiple_choice
+    question: |
+      You are refactoring your Terraform code and want to move a resource from the root module into a child module without destroying and recreating the actual cloud resource. Which command do you use?
+    options:
+      - text: terraform state mv or a moved block in the HCL code.
+        is_correct: true
+      - text: terraform refresh
+        is_correct: false
+      - text: terraform taint
+        is_correct: false
+      - text: terraform destroy
+        is_correct: false
+    explanation: |
+      Correct: The moved block (HCL) or state mv (CLI) updates the state file's pointers to match the new code structure without impacting the real infrastructure.
+
+  - id: tf_6
+    type: multiple_choice
+    question: |
+      A Terraform variable is marked as sensitive = true. What effect does this have?
+    options:
+      - text: It encrypts the value in the terraform.tfstate file.
+        is_correct: false
+      - text: It prevents the value from being printed in the console output during plan or apply operations.
+        is_correct: true
+      - text: It prevents the variable from being used in a module.
+        is_correct: false
+      - text: It requires a password to read the variable.
+        is_correct: false
+    explanation: |
+      Correct: It protects sensitive data (like DB passwords) from being leaked into CI/CD logs. *Note: It is still stored in plain text in the state file, which is why state files must be secured.*
+
+  - id: tf_7
+    type: multiple_choice
+    question: |
+      When using Terraform with AWS, what is a "Provider"?
+    options:
+      - text: A person who writes the code.
+        is_correct: false
+      - text: A plugin that translates Terraform HCL code into AWS API calls.
+        is_correct: true
+      - text: The AWS Management Console.
+        is_correct: false
+      - text: A type of virtual machine.
+        is_correct: false
+    explanation: |
+      Correct: Providers are the bridge between Terraform's abstract logic and the specific APIs of a cloud vendor (AWS, GCP, Azure, etc.).
+
+  - id: tf_8
+    type: multiple_choice
+    question: |
+      What is the "Dependency Graph" in Terraform?
+    options:
+      - text: A chart showing who wrote the code.
+        is_correct: false
+      - text: An internal map Terraform builds to determine the correct order to create, update, or delete resources based on their relationships.
+        is_correct: true
+      - text: A list of NPM packages used in Terraform.
+        is_correct: false
+      - text: A way to see how much the infrastructure costs.
+        is_correct: false
+    explanation: |
+      Correct: If a Subnet needs a VPC ID, Terraform uses the graph to ensure the VPC is created first.
+
+  - id: tf_9
+    type: multiple_choice
+    question: |
+      Why would you use terraform validate in a CI/CD pipeline?
+    options:
+      - text: To check if the cloud credentials are correct.
+        is_correct: false
+      - text: To verify the internal consistency of the configuration files and catch syntax errors without accessing remote state or APIs.
+        is_correct: true
+      - text: To actually create the infrastructure.
+        is_correct: false
+      - text: To check for the lowest price.
+        is_correct: false
+    explanation: |
+      Correct: validate is a "static check" that ensures the code is syntactically correct and logically valid according to provider schemas.
+
+  - id: tf_10
+    type: multiple_choice
+    question: |
+      What does the lifecycle { prevent_destroy = true } block do?
+    options:
+      - text: It makes the resource impossible to delete forever.
+        is_correct: false
+      - text: It causes Terraform to reject any plan that would result in the destruction of that resource (e.g., a production database).
+        is_correct: true
+      - text: It automatically restarts the resource if it crashes.
+        is_correct: false
+      - text: It prevents anyone from editing the resource.
+        is_correct: false
+    explanation: |
+      Correct: It acts as a safety guard for critical infrastructure, requiring the developer to manually remove the block before they can destroy the resource via Terraform.
+
+  - id: agile_1
+    type: multiple_choice
+    question: |
+      During a Sprint, a Product Owner (PO) brings a "top priority" urgent bug to the developers that was not in the Sprint Backlog. As a Senior Team Member, how do you respond?
+    options:
+      - text: Drop everything and fix it immediately.
+        is_correct: false
+      - text: Refuse to look at it until the next Sprint.
+        is_correct: false
+      - text: Evaluate the bug's impact with the PO and Scrum Master; if it's truly critical, negotiate which current item to remove from the Sprint to maintain the team's capacity.
+        is_correct: true
+      - text: Tell the PO to fix it themselves.
+        is_correct: false
+    explanation: |
+      Correct: Agile is about responding to change, but it's also about respecting the team's "Sprint Commitment." Trade-offs are necessary to avoid burnout and missed goals.
+
+  - id: agile_2
+    type: multiple_choice
+    question: |
+      What is the primary purpose of the "Daily Stand-up" (Daily Scrum)?
+    options:
+      - text: To provide a status report to the manager.
+        is_correct: false
+      - text: For the team to synchronize work, identify "blockers," and plan the next 24 hours to ensure the Sprint Goal is met.
+        is_correct: true
+      - text: To assign tasks to junior developers.
+        is_correct: false
+      - text: To debate technical architecture for 30 minutes.
+        is_correct: false
+    explanation: |
+      Correct: The Stand-up is for the *developers* to coordinate with each other. It is a planning meeting, not a reporting meeting.
+
+  - id: agile_3
+    type: multiple_choice
+    question: |
+      A team's "Velocity" has dropped significantly over the last three Sprints. What is the most appropriate forum to discuss and solve this issue?
+    options:
+      - text: The Sprint Review.
+        is_correct: false
+      - text: The Sprint Retrospective.
+        is_correct: true
+      - text: An emergency meeting with the CEO.
+        is_correct: false
+      - text: The daily stand-up.
+        is_correct: false
+    explanation: |
+      Correct: The Retrospective is specifically designed for the team to inspect and improve its processes, including identifying causes of slowdowns (like technical debt).
+
+  - id: agile_4
+    type: multiple_choice
+    question: |
+      What is the difference between a "Product Backlog" and a "Sprint Backlog"?
+    options:
+      - text: There is no difference.
+        is_correct: false
+      - text: The Product Backlog is an ordered list of everything needed in the product; the Sprint Backlog is the subset of items the team commits to finishing in the current Sprint.
+        is_correct: true
+      - text: The Product Backlog is for managers; the Sprint Backlog is for developers.
+        is_correct: false
+      - text: One is digital, the other is on paper.
+        is_correct: false
+    explanation: |
+      Correct: The Product Backlog is a long-term vision; the Sprint Backlog is a short-term plan.
+
+  - id: agile_5
+    type: multiple_choice
+    question: |
+      In Scrum, who is responsible for the technical quality of the code and the "Definition of Done" (DoD)?
+    options:
+      - text: The Scrum Master.
+        is_correct: false
+      - text: The Product Owner.
+        is_correct: false
+      - text: The Developers (The Team).
+        is_correct: true
+      - text: The QA Lead only.
+        is_correct: false
+    explanation: |
+      Correct: In Scrum, the developers are self-organizing and cross-functional; they own the quality and the standards of their work.
+
+  - id: agile_6
+    type: multiple_choice
+    question: |
+      What does it mean for a User Story to be "Ready" (Definition of Ready)?
+    options:
+      - text: It has been assigned to a developer.
+        is_correct: false
+      - text: It is clearly defined, has clear acceptance criteria, and can be estimated and completed by the team within one Sprint.
+        is_correct: true
+      - text: It is already finished.
+        is_correct: false
+      - text: The code is written but not tested.
+        is_correct: false
+    explanation: |
+      Correct: The "Definition of Ready" prevents "Garbage In, Garbage Out" by ensuring the team doesn't start work on poorly understood tasks.
+
+  - id: agile_7
+    type: multiple_choice
+    question: |
+      Why do Agile teams use "Story Points" instead of "Hours" for estimation?
+    options:
+      - text: To make the math harder.
+        is_correct: false
+      - text: Points represent relative complexity and effort, accounting for uncertainty and individual developer speed, which leads to more accurate long-term forecasting.
+        is_correct: true
+      - text: Because managers like points more than time.
+        is_correct: false
+      - text: Because hours are illegal in Scrum.
+        is_correct: false
+    explanation: |
+      Correct: Humans are bad at estimating absolute time but good at relative size (e.g., "This task is twice as big as that one").
+
+  - id: agile_8
+    type: multiple_choice
+    question: |
+      A developer is "stuck" on a task for 3 days but says "everything is fine" in every stand-up. What is the "Senior" way to handle this?
+    options:
+      - text: Ignore it; they said it's fine.
+        is_correct: false
+      - text: In the next stand-up or 1-on-1, gently point out that the task has been in progress for 3 days and offer a pair-programming session to help them unblock.
+        is_correct: true
+      - text: Report them to HR for lying.
+        is_correct: false
+      - text: Take the task away and do it yourself.
+        is_correct: false
+    explanation: |
+      Correct: Seniority involves mentorship and identifying silent bottlenecks. Offering to "pair" is a supportive way to uncover the real issue.
+
+  - id: agile_9
+    type: multiple_choice
+    question: |
+      What is the role of the "Scrum Master" in a high-performing senior team?
+    options:
+      - text: To tell people what to do.
+        is_correct: false
+      - text: To act as a "Servant Leader," removing organizational impediments and facilitating Scrum events so the team can focus on delivery.
+        is_correct: true
+      - text: To take notes during meetings.
+        is_correct: false
+      - text: To update the JIRA board for everyone.
+        is_correct: false
+    explanation: |
+      Correct: The Scrum Master isn't a manager; they are a coach who protects the team's process and environment.
+
+  - id: agile_10
+    type: multiple_choice
+    question: |
+      During a "Sprint Review," a stakeholder is unhappy with the feature's look and feel. What is the outcome?
+    options:
+      - text: The Sprint is considered a total failure.
+        is_correct: false
+      - text: The feedback is captured as new items in the Product Backlog to be prioritized for future Sprints.
+        is_correct: true
+      - text: The developers stay overnight to fix it immediately.
+        is_correct: false
+      - text: The stakeholder is banned from future reviews.
+        is_correct: false
+    explanation: |
+      Correct: The Review is for feedback. If the stakeholder wants changes, that becomes "new work" to be prioritized against existing goals.

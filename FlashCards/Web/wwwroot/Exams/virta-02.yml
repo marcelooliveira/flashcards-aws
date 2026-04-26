@@ -1,0 +1,511 @@
+﻿questions:
+  - id: eda_1
+    type: multiple_choice
+    question: |
+      A system uses Amazon EventBridge to route events to multiple microservices. One downstream service is failing to process events due to a schema mismatch. How should a Senior Architect ensure no data is lost while maintaining the ability to replay the failed events after the bug is fixed?
+    options:
+      - text: Increase the retry attempts in the EventBridge rule to 100.
+        is_correct: false
+      - text: Enable an EventBridge Archive on the event bus and configure a Dead Letter Queue (DLQ) for the specific target.
+        is_correct: true
+      - text: Use an S3 bucket to log all incoming events manually via a Lambda function.
+        is_correct: false
+      - text: Configure the Event Bus to block all events until the downstream service is healthy.
+        is_correct: false
+    explanation: |
+      Correct: EventBridge Archives allow you to record and later replay events. DLQs capture failed deliveries so you know exactly which events failed.
+      Incorrect: Retries alone don't solve permanent schema mismatches. Blocking the bus would affect all other healthy services.
+
+  - id: eda_2
+    type: multiple_choice
+    question: |
+      When designing a "Choreography" based EDA, how do you prevent "infinite circular loops" where Service A triggers Service B, which inadvertently triggers Service A again?
+    options:
+      - text: Use a central Orchestrator like AWS Step Functions to manage all state.
+        is_correct: false
+      - text: Implement "Event Provenance" metadata (e.g., origin-service-id) and logic in each consumer to ignore events they originated.
+        is_correct: true
+      - text: Limit the Lambda execution time to 1 second.
+        is_correct: false
+      - text: Circular loops are impossible in AWS EventBridge.
+        is_correct: false
+    explanation: |
+      Correct: Tracking the origin and intent of an event in the header allows services to detect if they are seeing a "re-hash" of their own data.
+      Incorrect: Step Functions move the pattern to "Orchestration" rather than "Choreography." 
+
+  - id: eda_3
+    type: multiple_choice
+    question: |
+      A financial application requires strict "In-Order" processing of transactions for a specific user. Which AWS messaging configuration supports this at high scale?
+    options:
+      - text: Standard SQS Queue with a high visibility timeout.
+        is_correct: false
+      - text: SQS FIFO Queue using the UserId as the MessageGroupId.
+        is_correct: true
+      - text: SNS Topic with multiple Lambda subscribers.
+        is_correct: false
+      - text: Kinesis Data Firehose.
+        is_correct: false
+    explanation: |
+      Correct: MessageGroupId in SQS FIFO ensures that messages within that group are processed sequentially, while allowing other groups (other users) to be processed in parallel.
+      Incorrect: Standard SQS does not guarantee order. SNS and Firehose do not guarantee strict sequential processing across consumers by default.
+
+  - id: eda_4
+    type: multiple_choice
+    question: |
+      You are implementing the "Transactional Outbox Pattern" to ensure atomicity between a database update and an event emission. Why is this preferred over just calling bridge.putEvents() inside the application code?
+    options:
+      - text: It is cheaper than calling the API directly.
+        is_correct: false
+      - text: It avoids the "Dual Write" problem where the DB update succeeds but the event emission fails (or vice versa).
+        is_correct: true
+      - text: It makes the NodeJS code run faster.
+        is_correct: false
+      - text: AWS SDK v3 requires the Outbox pattern.
+        is_correct: false
+    explanation: |
+      Correct: By saving the event to the same DB as the business data in a single transaction, you guarantee that the event will eventually be published.
+      Incorrect: It's actually more complex to implement, but necessary for data consistency in distributed systems.
+
+  - id: eda_5
+    type: multiple_choice
+    question: |
+      In a high-volume EDA, you need to filter events so a Lambda only triggers for "Order_Completed" events where the "Total_Value" is > 100. Where should this filtering happen to minimize costs?
+    options:
+      - text: Inside the Lambda function's if statement.
+        is_correct: false
+      - text: In the EventBridge Rule "Event Pattern" or SQS "Filter Criteria."
+        is_correct: true
+      - text: By creating a separate Event Bus for high-value orders.
+        is_correct: false
+      - text: Using an API Gateway as a proxy.
+        is_correct: false
+    explanation: |
+      Correct: Filtering at the source (EventBridge/SQS) prevents the Lambda from being invoked at all for irrelevant events, saving on execution costs.
+      Incorrect: Filtering inside the Lambda still incurs the cost of the Lambda invocation.
+
+  - id: eda_6
+    type: multiple_choice
+    question: |
+      A microservice needs to maintain a "Projected View" of data from five other services. What is the most resilient EDA approach?
+    options:
+      - text: Perform a synchronous "Scatter-Gather" REST call to all five services whenever data is requested.
+        is_correct: false
+      - text: Subscribe to events from the five services and update a local Read Model (Materialized View) in DynamoDB.
+        is_correct: true
+      - text: Use a shared database across all services.
+        is_correct: false
+      - text: Use a Global Secondary Index on the main production table.
+        is_correct: false
+    explanation: |
+      Correct: This is the "CQRS" pattern. It decouples the read service from the availability of the five source services.
+      Incorrect: Scatter-Gather is fragile (if one service is down, the whole request fails). Shared DBs are an anti-pattern.
+
+  - id: eda_7
+    type: multiple_choice
+    question: |
+      What is the primary benefit of using Amazon Kinesis Data Streams over Amazon SQS for an EDA workload?
+    options:
+      - text: Kinesis is easier to set up.
+        is_correct: false
+      - text: Kinesis allows multiple consumers to read the same stream independently from different points in time (replayability).
+        is_correct: true
+      - text: Kinesis is always cheaper than SQS.
+        is_correct: false
+      - text: Kinesis supports larger message sizes (up to 1GB).
+        is_correct: false
+    explanation: |
+      Correct: Kinesis is a log-based stream; multiple apps can "tail" the log at their own pace. SQS is a queue where messages are typically deleted after processing.
+      Incorrect: SQS is generally simpler to manage.
+
+  - id: eda_8
+    type: multiple_choice
+    question: |
+      Your EDA uses "Event Sourcing." A bug in the processing logic was found. How do you recover the correct state for the affected entities?
+    options:
+      - text: Manually edit the current state in the database.
+        is_correct: false
+      - text: Fix the bug, truncate the state table, and "replay" the event store from the beginning of time (or the last snapshot).
+        is_correct: true
+      - text: Restore the database from an S3 backup.
+        is_correct: false
+      - text: Ask users to re-submit their transactions.
+        is_correct: false
+    explanation: |
+      Correct: Event sourcing makes the "log of events" the source of truth. Replaying the log with the fixed code restores the correct state.
+      Incorrect: Manual edits are error-prone and lose the audit trail.
+
+  - id: eda_9
+    type: multiple_choice
+    question: |
+      Which AWS service is best suited for "Event Orchestration" where complex branching logic and long-running waits (e.g., 3 days) are required?
+    options:
+      - text: AWS Lambda.
+        is_correct: false
+      - text: AWS Step Functions.
+        is_correct: true
+      - text: Amazon EventBridge.
+        is_correct: false
+      - text: Amazon MQ.
+        is_correct: false
+    explanation: |
+      Correct: Step Functions are stateful and can manage workflows that last up to a year, handling retries and branching logic natively.
+      Incorrect: Lambda has a 15-minute timeout. EventBridge is for routing, not stateful orchestration.
+
+  - id: eda_10
+    type: multiple_choice
+    question: |
+      A "poison pill" message is causing a Lambda consumer to crash repeatedly, blocking the rest of the SQS queue. What is the standard EDA resolution?
+    options:
+      - text: Delete the queue and start over.
+        is_correct: false
+      - text: Configure a Redrive Policy with a Dead Letter Queue (DLQ) to move the message after N failed attempts.
+        is_correct: true
+      - text: Use try-catch to ignore all errors in the Lambda.
+        is_correct: false
+      - text: Increase the Lambda timeout to 15 minutes.
+        is_correct: false
+    explanation: |
+      Correct: DLQs isolate "bad" data so the rest of the system can continue processing.
+      Incorrect: Ignoring errors hides data loss. Deleting the queue destroys valid data.
+
+  - id: ind_1
+    type: multiple_choice
+    question: |
+      You are assigned a critical production bug in a legacy system with no documentation and the original developers have left. What is your first step?
+    options:
+      - text: Rewrite the module using modern TypeScript to ensure it works.
+        is_correct: false
+      - text: Establish observability (logs/traces) to isolate the failure point and create a failing test case that reproduces the bug.
+        is_correct: true
+      - text: Wait for a senior manager to provide a technical specification.
+        is_correct: false
+      - text: Guess the fix based on the error message and deploy to production.
+        is_correct: false
+    explanation: |
+      Correct: A Senior developer works independently by first creating a "feedback loop" (logs + tests) before attempting changes.
+      Incorrect: Rewriting is risky and expensive. Waiting for specs is not independent.
+
+  - id: ind_2
+    type: multiple_choice
+    question: |
+      A stakeholder requests a feature that will compromise the system's scalability. How do you handle this independently?
+    options:
+      - text: Build it exactly as requested to keep the stakeholder happy.
+        is_correct: false
+      - text: Quantify the impact on performance/cost and present alternative technical designs that meet the business goal without the architectural trade-off.
+        is_correct: true
+      - text: Refuse to build it and tell them it's "bad engineering."
+        is_correct: false
+      - text: Pass the decision to the CTO.
+        is_correct: false
+    explanation: |
+      Correct: Independence involves "Managing Up"—bridging the gap between business needs and technical reality through data and alternatives.
+      Incorrect: Saying "no" without context is obstructive; saying "yes" without warning is negligent.
+
+  - id: ind_3
+    type: multiple_choice
+    question: |
+      While working on a feature, you discover a massive security vulnerability unrelated to your task. What is the most "Senior" action?
+    options:
+      - text: Ignore it to ensure you finish your task on time.
+        is_correct: false
+      - text: Document the finding, assess the risk level, notify the security team immediately, and propose a remediation plan.
+        is_correct: true
+      - text: Fix it secretly without telling anyone.
+        is_correct: false
+      - text: Post about it on a public Slack channel.
+        is_correct: false
+    explanation: |
+      Correct: Responsibility for the whole system is a hallmark of seniority. Proactive risk assessment and communication are key.
+      Incorrect: Fixing it secretly prevents the team from learning or checking for similar issues elsewhere.
+
+  - id: ind_4
+    type: multiple_choice
+    question: |
+      You are tasked with choosing a new database for a project. How do you independently justify your choice?
+    options:
+      - text: Choose the one you are most familiar with.
+        is_correct: false
+      - text: Create a Decision Matrix (ADR - Architecture Decision Record) comparing options based on latency, cost, consistency, and team skill set.
+        is_correct: true
+      - text: Pick the one that is currently trending on GitHub.
+        is_correct: false
+      - text: Ask the team to vote without providing any data.
+        is_correct: false
+    explanation: |
+      Correct: ADRs provide a permanent record of why a choice was made, using objective criteria rather than subjective preference.
+      Incorrect: Familiarity or "hype" are not professional engineering justifications.
+
+  - id: ind_5
+    type: multiple_choice
+    question: |
+      A project is falling behind schedule. You realize the original estimate was too optimistic. What do you do?
+    options:
+      - text: Work 80 hours a week to try and catch up.
+        is_correct: false
+      - text: Communicate the delay early, explain the technical hurdles, and offer options for "de-scoping" features to meet the deadline.
+        is_correct: true
+      - text: Keep quiet and hope no one notices until the deadline day.
+        is_correct: false
+      - text: Blame the junior developers for being slow.
+        is_correct: false
+    explanation: |
+      Correct: Seniority is about transparency and predictability. Providing a "path to green" (de-scoping) is more valuable than silent overwork.
+      Incorrect: Silence or blame destroys trust.
+
+  - id: ind_6
+    type: multiple_choice
+    question: |
+      You are working on a solo project and get stuck on a complex bug for 4 hours. What is the most efficient way to resolve it?
+    options:
+      - text: Continue trying variations until it works.
+        is_correct: false
+      - text: Use a "Rubber Duck" approach, then step away for a break, and finally reach out to a peer with a clear summary of what you've already tried.
+        is_correct: true
+      - text: Give up and ask for a different task.
+        is_correct: false
+      - text: Delete the code and start over.
+        is_correct: false
+    explanation: |
+      Correct: Knowing *when* to ask for help—and how to ask effectively (showing previous effort)—is a critical independent skill.
+      Incorrect: "Brute forcing" a bug is often a waste of time.
+
+  - id: ind_7
+    type: multiple_choice
+    question: |
+      How do you handle a "vague" requirement from a Product Manager like "Make the search faster"?
+    options:
+      - text: Optimize every single database query you can find.
+        is_correct: false
+      - text: Define specific, measurable KPIs (e.g., P99 latency < 200ms) and identify the current bottlenecks using profiling tools.
+        is_correct: true
+      - text: Tell the PM that "fast" is subjective and cannot be built.
+        is_correct: false
+      - text: Add more RAM to the server.
+        is_correct: false
+    explanation: |
+      Correct: Independently turning vague business requests into technical requirements is a core senior capability.
+      Incorrect: Optimizing without measurement is "premature optimization."
+
+  - id: ind_8
+    type: multiple_choice
+    question: |
+      A team member is consistently blocking your Pull Requests with nitpicky comments that don't affect code quality. How do you resolve this?
+    options:
+      - text: Complain to the manager immediately.
+        is_correct: false
+      - text: Schedule a 1-on-1 with the peer to align on a shared Style Guide and discuss how to make reviews more efficient.
+        is_correct: true
+      - text: Start leaving nitpicky comments on their PRs in retaliation.
+        is_correct: false
+      - text: Stop submitting PRs.
+        is_correct: false
+    explanation: |
+      Correct: Resolving interpersonal/procedural friction independently through direct communication shows leadership and maturity.
+      Incorrect: Retaliation or escalation are unprofessional.
+
+  - id: ind_9
+    type: multiple_choice
+    question: |
+      You find that a manual deployment process is taking 2 hours of your time every week. No one has asked you to automate it. What do you do?
+    options:
+      - text: Continue doing it manually because it's the current process.
+        is_correct: false
+      - text: Proactively automate the process using CI/CD tools to reclaim that time for higher-value work.
+        is_correct: true
+      - text: Ask for a raise for doing the manual work.
+        is_correct: false
+      - text: Complain about it in every standup but take no action.
+        is_correct: false
+    explanation: |
+      Correct: Seniority involves identifying and fixing "Toil" (manual, repetitive work) without being prompted.
+      Incorrect: Doing manual work that could be automated is an inefficient use of a senior's time.
+
+  - id: ind_10
+    type: multiple_choice
+    question: |
+      When faced with two competing technical solutions, both of which are viable, how do you decide?
+    options:
+      - text: Flip a coin.
+        is_correct: false
+      - text: Evaluate the "Total Cost of Ownership" (maintenance, developer experience, and scalability) and choose the one that aligns with the company's long-term goals.
+        is_correct: true
+      - text: Use the one that uses the coolest technology.
+        is_correct: false
+      - text: Let a junior developer decide.
+        is_correct: false
+    explanation: |
+      Correct: Decisions should be based on long-term business value and maintainability, not just technical "purity."
+      Incorrect: Cool factor is not a business metric.
+
+  - id: lib_1
+    type: multiple_choice
+    question: |
+      You need to handle date/time manipulation in a new NodeJS project. Considering performance and bundle size, which library is currently recommended as a modern replacement for the legacy moment.js?
+    options:
+      - text: date-fns or Day.js
+        is_correct: true
+      - text: jQuery-UI-Datepicker
+        is_correct: false
+      - text: Lodash
+        is_correct: false
+      - text: Using only Math.random()
+        is_correct: false
+    explanation: |
+      Correct: date-fns is modular (tree-shakable) and Day.js is tiny and immutable, making them superior to the heavy, mutable Moment.js.
+      Incorrect: Lodash has some date utilities but is not a dedicated date library.
+
+  - id: lib_2
+    type: multiple_choice
+    question: |
+      When adding a 3rd party dependency to a high-security NodeJS microservice, what is the most important "Supply Chain Security" step to take?
+    options:
+      - text: Checking if the library has a cool logo.
+        is_correct: false
+      - text: Reviewing the library's maintenance history, download counts, and running npm audit or using tools like Snyk.
+        is_correct: true
+      - text: Using the --force flag during installation to ensure it works.
+        is_correct: false
+      - text: Always using the Alpha/Beta versions for the latest features.
+        is_correct: false
+    explanation: |
+      Correct: Vetting dependencies for vulnerabilities and ensuring they are actively maintained is a senior responsibility to prevent supply chain attacks.
+      Incorrect: Popularity alone isn't safety, but lack of maintenance is a major red flag.
+
+  - id: lib_3
+    type: multiple_choice
+    question: |
+      A library you use heavily has a major version update that includes breaking changes. How do you approach the upgrade?
+    options:
+      - text: Update the package.json and deploy immediately.
+        is_correct: false
+      - text: Read the migration guide, create a separate branch, update the library, and fix breaking changes while ensuring full test coverage.
+        is_correct: true
+      - text: Never update it to avoid breaking the code.
+        is_correct: false
+      - text: Wait for a junior to do it.
+        is_correct: false
+    explanation: |
+      Correct: Managed upgrades involve understanding the impact and verifying the fix through automated testing.
+      Incorrect: Never updating leads to "Dependency Hell" and security risks later.
+
+  - id: lib_4
+    type: multiple_choice
+    question: |
+      You are building a high-performance NodeJS scraper and need to parse HTML. Which library is faster and more efficient for this task than jsdom?
+    options:
+      - text: cheerio
+        is_correct: true
+      - text: express
+        is_correct: false
+      - text: react
+        is_correct: false
+      - text: framer-motion
+        is_correct: false
+    explanation: |
+      Correct: cheerio does not implement a full DOM or run JS inside the HTML; it simply parses the markup, making it significantly faster for scraping.
+      Incorrect: jsdom is much heavier because it emulates a full browser environment.
+
+  - id: lib_5
+    type: multiple_choice
+    question: |
+      What is the risk of using "Deep Imports" from a 3rd party library (e.g., import { x } from 'lib/dist/internal/utils')?
+    options:
+      - text: It makes the code run faster.
+        is_correct: false
+      - text: Internal paths are not part of the library's public API and may change in a minor update, breaking your build.
+        is_correct: true
+      - text: It is the only way to use TypeScript.
+        is_correct: false
+      - text: It automatically minifies the code.
+        is_correct: false
+    explanation: |
+      Correct: Senior devs stick to the documented public API. Deep imports are brittle and violate encapsulation.
+      Incorrect: It doesn't improve performance; it just creates maintenance debt.
+
+  - id: lib_6
+    type: multiple_choice
+    question: |
+      You are using a library that doesn't have TypeScript types. What is the best way to handle this?
+    options:
+      - text: Use // @ts-ignore everywhere you use the library.
+        is_correct: false
+      - text: Check if @types/library-name exists in DefinitelyTyped, or create a .d.ts declaration file to define the essential types.
+        is_correct: true
+      - text: Rewrite the library in TypeScript yourself.
+        is_correct: false
+      - text: Uninstall the library.
+        is_correct: false
+    explanation: |
+      Correct: Leveraging DefinitelyTyped or creating a local shim maintains type safety for the rest of your application.
+      Incorrect: ts-ignore hides potential bugs.
+
+  - id: lib_7
+    type: multiple_choice
+    question: |
+      Why would a senior developer choose Zod or Joi in a NodeJS API project?
+    options:
+      - text: To make the API look more professional.
+        is_correct: false
+      - text: To perform runtime schema validation, ensuring that data entering the system matches expected formats and types.
+        is_correct: true
+      - text: To speed up database queries.
+        is_correct: false
+      - text: To replace the need for unit tests.
+        is_correct: false
+    explanation: |
+      Correct: TypeScript types vanish at runtime. Zod/Joi provide the actual "guard rails" for data coming from users or APIs.
+      Incorrect: Validation actually adds a tiny bit of latency, but it is necessary for security and stability.
+
+  - id: lib_8
+    type: multiple_choice
+    question: |
+      You need to perform heavy data manipulation (e.g., grouping, sorting, filtering) on large arrays. When should you reach for Lodash vs. using native ES6+ methods?
+    options:
+      - text: Always use Lodash; it's always faster.
+        is_correct: false
+      - text: Use native methods (.map, .filter) for basic tasks; use Lodash for complex operations like deepClone, debounce, or merge that are not natively robust.
+        is_correct: true
+      - text: Never use Lodash; it's obsolete.
+        is_correct: false
+      - text: Use Lodash only if the client asks for it.
+        is_correct: false
+    explanation: |
+      Correct: Native methods are highly optimized now. Lodash is still valuable for utility functions that don't have a simple native equivalent.
+      Incorrect: Importing the whole Lodash library for a simple .map is an unnecessary overhead.
+
+  - id: lib_9
+    type: multiple_choice
+    question: |
+      A library you are using has a bug, but the maintainer hasn't fixed it yet. You need the fix today. What is the best approach?
+    options:
+      - text: Use patch-package to apply a local fix to your node_modules and commit the patch to your repo.
+        is_correct: true
+      - text: Copy the entire library code into your project.
+        is_correct: false
+      - text: Edit node_modules directly and hope no one runs npm install.
+        is_correct: false
+      - text: Switch to a different library immediately.
+        is_correct: false
+    explanation: |
+      Correct: patch-package allows you to maintain a fix across installs while waiting for an official upstream PR.
+      Incorrect: Editing node_modules is temporary and will be overwritten. Copying the whole library is a maintenance nightmare.
+
+  - id: lib_10
+    type: multiple_choice
+    question: |
+      What is the primary difference between dependencies and devDependencies in package.json?
+    options:
+      - text: There is no difference in NodeJS.
+        is_correct: false
+      - text: dependencies are required to run the app; devDependencies are only for local development (testing, linting, building).
+        is_correct: true
+      - text: devDependencies are faster.
+        is_correct: false
+      - text: dependencies are for external users.
+        is_correct: false
+    explanation: |
+      Correct: Keeping production images slim by excluding devDependencies reduces the attack surface and deployment time.
+      Incorrect: This distinction is vital for CI/CD pipelines.
+

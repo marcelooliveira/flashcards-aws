@@ -1,0 +1,488 @@
+﻿questions:
+  - id: cci_1
+    type: multiple_choice
+    question: |
+      A complex monorepo is taking 45 minutes to finish a CircleCI pipeline. As a Senior Dev, you notice that 80% of the time is spent running tests for modules that haven't changed. Which CircleCI feature would you implement to solve this?
+    options:
+      - text: Use 'parallelism' and 'circleci tests split' based on timing data.
+        is_correct: false
+      - text: Implement 'dynamic configuration' with the 'path-filtering' orb to trigger only specific workflows based on changed files.
+        is_correct: true
+      - text: Increase the resource_class to 'large' for all jobs.
+        is_correct: false
+      - text: Disable caching to ensure a clean build every time.
+        is_correct: false
+    explanation: |
+      Correct: Dynamic configuration allows the pipeline to generate a specific workflow at runtime, executing only the jobs related to the files actually modified in the PR.
+      Incorrect: Parallelism splits existing tests but doesn't skip unchanged modules. Increasing resource class costs more without solving the logic efficiency.
+
+  - id: cci_2
+    type: multiple_choice
+    question: |
+      You are managing secrets in CircleCI. You have a "staging" AWS account and a "production" AWS account. How should you structure your CircleCI configuration to ensure the correct credentials are used for each branch?
+    options:
+      - text: Use "Contexts" and assign them to specific workflow jobs based on branch filters.
+        is_correct: true
+      - text: Hard-code the secrets in the config.yml and encrypt the file.
+        is_correct: false
+      - text: Use a single set of environment variables and change them manually before each merge.
+        is_correct: false
+      - text: Store secrets in the Git repository as .env files.
+        is_correct: false
+    explanation: |
+      Correct: Contexts allow you to group environment variables (e.g., 'staging-context', 'prod-context') and restrict their usage to specific jobs or branches via the workflow configuration.
+      Incorrect: Hard-coding or manual changes are highly insecure and error-prone.
+
+  - id: cci_3
+    type: multiple_choice
+    question: |
+      Your CircleCI job frequently fails during npm install because it hits the network rate limit. What is the most efficient way to optimize this for both speed and reliability?
+    options:
+      - text: Use 'restore_cache' and 'save_cache' keys based on a checksum of your 'package-lock.json'.
+        is_correct: true
+      - text: Switch to 'yarn' because it is always 10x faster than npm.
+        is_correct: false
+      - text: Add 'sleep 60' before every install.
+        is_correct: false
+      - text: Use the 'docker' executor instead of 'machine' executor.
+        is_correct: false
+    explanation: |
+      Correct: Caching dependencies prevents downloading the same packages repeatedly, saving time and avoiding network-based rate limits.
+      Incorrect: While Yarn has benefits, caching is the fundamental solution for CI performance regardless of the package manager.
+
+  - id: cci_4
+    type: multiple_choice
+    question: |
+      You need to run a suite of 2,000 integration tests. Even with a high resource class, the job takes 20 minutes. How can you use CircleCI's native features to reduce the "wall-clock" time to under 5 minutes?
+    options:
+      - text: Rewrite the tests in a faster language.
+        is_correct: false
+      - text: Set the 'parallelism' key to 4 or higher and use the CircleCI CLI to split tests by timing.
+        is_correct: true
+      - text: Run the tests in the background using the '&' operator.
+        is_correct: false
+      - text: Use a when.. on_fail step.
+        is_correct: false
+    explanation: |
+      Correct: Parallelism spins up multiple identical containers. CircleCI's test splitting logic uses historical data to balance the load so all containers finish at roughly the same time.
+      Incorrect: Backgrounding processes in a CI job usually leads to the job finishing before the tests actually run.
+
+  - id: cci_5
+    type: multiple_choice
+    question: |
+      What is the purpose of "Workspaces" in CircleCI compared to "Caching"?
+    options:
+      - text: They are the same thing.
+        is_correct: false
+      - text: Workspaces are used to move data between jobs in a single workflow; Caching is for data between different workflow runs.
+        is_correct: true
+      - text: Workspaces are only for Docker images.
+        is_correct: false
+      - text: Caching is for source code, Workspaces are for logs.
+        is_correct: false
+    explanation: |
+      Correct: Workspaces persist data (like build artifacts) across jobs in the same pipeline. Caching persists data (like node_modules) across different pipeline executions to speed up initialization.
+
+  - id: cci_6
+    type: multiple_choice
+    question: |
+      A Senior Dev wants to ensure that a production deployment job only runs after a manual approval from the QA Lead. How is this implemented in a CircleCI workflow?
+    options:
+      - text: By checking the person's name in a script.
+        is_correct: false
+      - text: By adding a job with 'type.. approval' in the workflow sequence before the deploy job.
+        is_correct: true
+      - text: By using a 'wait' command for 24 hours.
+        is_correct: false
+      - text: CircleCI does not support manual approvals.
+        is_correct: false
+    explanation: |
+      Correct: The 'type: approval' job pauses the workflow until a user manually clicks "Approve" in the CircleCI dashboard.
+      Incorrect: Scripting names or using arbitrary waits does not provide the necessary control or UI feedback.
+
+  - id: cci_7
+    type: multiple_choice
+    question: |
+      You are seeing "Out of Memory" errors in your NodeJS test job on CircleCI. You are using a 'medium' resource_class. What is the most likely fix?
+    options:
+      - text: Set the 'NODE_OPTIONS' environment variable to increase '--max-old-space-size' and ensure the resource_class matches the memory limit.
+        is_correct: true
+      - text: Delete all comments in your code to save space.
+        is_correct: false
+      - text: Use 'sudo apt-get clean'.
+        is_correct: false
+      - text: Switch to a Windows executor.
+        is_correct: false
+    explanation: |
+      Correct: NodeJS doesn't always automatically detect the container's memory limit. Explicitly setting the heap size ensures the V8 engine uses the available resources correctly.
+
+  - id: cci_8
+    type: multiple_choice
+    question: |
+      In 2026, many teams use "Self-Hosted Runners" for CircleCI. What is the primary reason a Senior Architect would choose a runner over the CircleCI managed cloud?
+    options:
+      - text: Because the cloud version is too fast.
+        is_correct: false
+      - text: To access restricted on-premises resources (like a private DB) or to use specialized hardware (GPUs) not available in the cloud.
+        is_correct: true
+      - text: Because runners don't require a config.yml.
+        is_correct: false
+      - text: To avoid using Docker.
+        is_correct: false
+    explanation: |
+      Correct: Runners allow you to run CI jobs on your own infrastructure, providing access to internal networks or custom hardware while still using CircleCI's orchestration.
+
+  - id: cci_9
+    type: multiple_choice
+    question: |
+      How do you prevent a CircleCI pipeline from running every time a developer pushes a small commit to a Work-In-Progress (WIP) branch?
+    options:
+      - text: Use '[skip ci]' or '[ci skip]' in the commit message.
+        is_correct: true
+      - text: Unplug the internet.
+        is_correct: false
+      - text: Delete the config.yml from that branch.
+        is_correct: false
+      - text: Only the Repo owner can stop a pipeline.
+        is_correct: false
+    explanation: |
+      Correct: CircleCI (and most CI tools) recognizes these strings in commit messages and will ignore the push, saving credits and build time.
+
+  - id: cci_10
+    type: multiple_choice
+    question: |
+      When using the 'docker' executor, what are "Secondary Containers" (Service Containers) typically used for?
+    options:
+      - text: To run the main application code.
+        is_correct: false
+      - text: To run auxiliary services needed for tests, like a Redis or Postgres database, available via localhost.
+        is_correct: true
+      - text: To store build artifacts.
+        is_correct: false
+      - text: To run the CircleCI CLI.
+        is_correct: false
+    explanation: |
+      Correct: You can define multiple images in a job. The first is where the commands run; the others provide network-accessible services like databases or caches.  
+
+  - id: pg_1
+    type: multiple_choice
+    question: |
+      Your Postgres database is suffering from "Bloat," causing slow queries even on indexed columns. Which maintenance process is likely failing or tuned incorrectly?
+    options:
+      - text: The Query Optimizer.
+        is_correct: false
+      - text: Autovacuum.
+        is_correct: true
+      - text: Database Replication.
+        is_correct: false
+      - text: The JSONB parser.
+        is_correct: false
+    explanation: |
+      Correct: Postgres uses MVCC, meaning deleted or updated rows are just marked as "dead tuples." Autovacuum is responsible for reclaiming this space.
+      Incorrect: The optimizer plans queries; it doesn't clean up disk space.
+
+  - id: pg_2
+    type: multiple_choice
+    question: |
+      A Senior Dev needs to improve the performance of a search query that filters by a JSONB column. Which index type should be used?
+    options:
+      - text: B-Tree Index.
+        is_correct: false
+      - text: GIN (Generalized Inverted Index).
+        is_correct: true
+      - text: Hash Index.
+        is_correct: false
+      - text: BRIN Index.
+        is_correct: false
+    explanation: |
+      Correct: GIN indexes are specifically designed to handle composite values like JSONB, allowing for efficient searching of keys and values within the document.
+      Incorrect: B-Trees are for scalar data; BRIN is for very large, naturally ordered tables.
+
+  - id: pg_3
+    type: multiple_choice
+    question: |
+      What is the risk of using SELECT * in a high-traffic NodeJS application connected to Postgres?
+    options:
+      - text: It causes the database to crash.
+        is_correct: false
+      - text: It increases network payload and prevents the use of "Index-Only Scans," as Postgres must fetch all columns from the heap.
+        is_correct: true
+      - text: It is deprecated in Postgres 16.
+        is_correct: false
+      - text: It forces the connection to use SSL.
+        is_correct: false
+    explanation: |
+      Correct: Fetching unneeded columns wastes bandwidth and forces the DB to read the actual table data (heap) rather than potentially satisfying the query entirely from the index.
+
+  - id: pg_4
+    type: multiple_choice
+    question: |
+      You are implementing a multi-tenant system. Why might you choose "Row-Level Security" (RLS) over creating separate databases for each tenant?
+    options:
+      - text: RLS is faster than a standard query.
+        is_correct: false
+      - text: It provides a unified schema and easier management while ensuring data isolation at the engine level based on the current user/role.
+        is_correct: true
+      - text: RLS eliminates the need for indexes.
+        is_correct: false
+      - text: Separate databases are free on AWS.
+        is_correct: false
+    explanation: |
+      Correct: RLS allows you to use a single table where users can only "see" rows that belong to them, significantly reducing operational overhead compared to managing thousands of DBs.
+
+  - id: pg_5
+    type: multiple_choice
+    question: |
+      Which Postgres isolation level prevents "Non-repeatable reads" but still allows for "Serialization anomalies"?
+    options:
+      - text: Read Uncommitted.
+        is_correct: false
+      - text: Read Committed.
+        is_correct: false
+      - text: Repeatable Read.
+        is_correct: true
+      - text: Serializable.
+        is_correct: false
+    explanation: |
+      Correct: Repeatable Read ensures that if you read a row twice in a transaction, the data is the same. However, it doesn't prevent all logical inconsistencies that Serializable does.
+
+  - id: pg_6
+    type: multiple_choice
+    question: |
+      A table has 500 million rows. Adding a new column with a DEFAULT value is taking hours and locking the table. How do you resolve this in a modern Postgres version (11+)?
+    options:
+      - text: You don't; it's a metadata-only change in Postgres 11+ and should be nearly instantaneous.
+        is_correct: true
+      - text: You must drop the table and recreate it.
+        is_correct: false
+      - text: Use the 'VACUUM FULL' command first.
+        is_correct: false
+      - text: Only add columns at night.
+        is_correct: false
+    explanation: |
+      Correct: Since Postgres 11, adding a column with a constant default value no longer requires rewriting the entire table; it is a fast O(1) operation.
+
+  - id: pg_7
+    type: multiple_choice
+    question: |
+      What is "Connection Pooling" (e.g., PgBouncer) and why is it critical for NodeJS microservices?
+    options:
+      - text: It makes the SQL queries shorter.
+        is_correct: false
+      - text: It manages a cache of open connections because Postgres processes are expensive to fork and NodeJS can easily overwhelm the DB with too many concurrent connections.
+        is_correct: true
+      - text: It is a way to backup the database.
+        is_correct: false
+      - text: It is only for MySQL.
+        is_correct: false
+    explanation: |
+      Correct: Postgres uses a process-per-connection model. A pooler sits between the app and the DB, reusing connections to save memory and CPU on the database server.
+
+  - id: pg_8
+    type: multiple_choice
+    question: |
+      You need to perform a "Partial Index" in Postgres. What is the syntax/use case?
+    options:
+      - text: CREATE INDEX ... WHERE (active = true) to index only a subset of rows.
+        is_correct: true
+      - text: CREATE INDEX ... LIMIT 100.
+        is_correct: false
+      - text: It is an index that only stores half of the data to save space.
+        is_correct: false
+      - text: It is an index that is only active during the day.
+        is_correct: false
+    explanation: |
+      Correct: Partial indexes are smaller and faster because they only include rows that meet a specific condition, which is ideal for "status" flags or common filters.
+
+  - id: pg_9
+    type: multiple_choice
+    question: |
+      In an EXPLAIN ANALYZE output, what does "Seq Scan" (Sequential Scan) indicate for a large table?
+    options:
+      - text: The database is running optimally.
+        is_correct: false
+      - text: The database is reading the entire table from disk, likely because an appropriate index is missing or the planner thinks it's faster than using one.
+        is_correct: true
+      - text: The query is using a primary key.
+        is_correct: false
+      - text: The data is being encrypted.
+        is_correct: false
+    explanation: |
+      Correct: Seq Scans on large tables are usually performance killers. Senior devs look for these to identify where to add indexes.
+
+  - id: pg_10
+    type: multiple_choice
+    question: |
+      What is the difference between UNION and UNION ALL in Postgres?
+    options:
+      - text: UNION is for numbers, UNION ALL is for strings.
+        is_correct: false
+      - text: UNION removes duplicate rows (requiring a sort/hash), while UNION ALL simply appends the sets (making it faster).
+        is_correct: true
+      - text: UNION ALL is not supported in Postgres.
+        is_correct: false
+      - text: There is no performance difference.
+        is_correct: false
+    explanation: |
+      Correct: UNION ALL is significantly more efficient because it doesn't need to perform the expensive work of finding and removing duplicates.
+
+  - id: ddb_1
+    type: multiple_choice
+    question: |
+      You are seeing 'ProvisionedThroughputExceededException' errors, but your total consumed capacity is well below the allocated limit. What is the most likely cause?
+    options:
+      - text: You have a "Hot Partition" caused by a poorly chosen Partition Key.
+        is_correct: true
+      - text: You need to use a Global Secondary Index.
+        is_correct: false
+      - text: DynamoDB is currently down in that region.
+        is_correct: false
+      - text: Your NodeJS SDK is out of date.
+        is_correct: false
+    explanation: |
+      Correct: DynamoDB distributes data across partitions. If too many requests hit a single Partition Key (e.g., a "current_date" key), that specific partition will throttle even if the table total is fine.
+
+  - id: ddb_2
+    type: multiple_choice
+    question: |
+      A Senior Dev is designing a "Single Table Design" for an e-commerce app. How do they represent a 1:N relationship (e.g., One User to Many Orders)?
+    options:
+      - text: Use a Partition Key for the UserID and a Sort Key starting with 'ORDER#' for each order.
+        is_correct: true
+      - text: Create two separate tables and join them in the NodeJS code.
+        is_correct: false
+      - text: Store all orders in a List attribute inside the User item.
+        is_correct: false
+      - text: Use an S3 bucket for the orders.
+        is_correct: false
+    explanation: |
+      Correct: This is the "Adjacency List" pattern. Using the Sort Key allows you to query all orders for a user with a single Query operation.
+      Incorrect: Lists in items have a 400KB limit and are hard to query. Separate tables require multiple round-trips.
+
+  - id: ddb_3
+    type: multiple_choice
+    question: |
+      What is the difference between a Global Secondary Index (GSI) and a Local Secondary Index (LSI)?
+    options:
+      - text: LSIs can be added at any time; GSIs must be created at table creation.
+        is_correct: false
+      - text: GSIs can have a different Partition Key than the base table; LSIs must share the same Partition Key.
+        is_correct: true
+      - text: GSIs are free; LSIs cost extra.
+        is_correct: false
+      - text: GSIs support strongly consistent reads; LSIs do not.
+        is_correct: false
+    explanation: |
+      Correct: GSIs provide the most flexibility by allowing you to "pivot" the data on entirely different attributes. LSIs are strictly for changing the Sort Key within an existing partition.
+
+  - id: ddb_4
+    type: multiple_choice
+    question: |
+      When should you use Scan instead of Query in DynamoDB?
+    options:
+      - text: Always, because Scan is easier to write.
+        is_correct: false
+      - text: Only as a last resort for small tables or background analytics, as Scan reads every item in the table and is extremely expensive/slow for large datasets.
+        is_correct: true
+      - text: When you want to find an item by its Primary Key.
+        is_correct: false
+      - text: Scan is faster than Query.
+        is_correct: false
+    explanation: |
+      Correct: Scans are O(n) operations. Senior devs avoid them in request-response cycles, preferring Query (O(log n)) which uses indexes.
+
+  - id: ddb_5
+    type: multiple_choice
+    question: |
+      You need to ensure that an "Account Balance" is never deducted below zero. Which DynamoDB feature do you use?
+    options:
+      - text: Transactional Reads.
+        is_correct: false
+      - text: Conditional Expressions (e.g., 'SET balance = balance - :val WHERE balance >= :val').
+        is_correct: true
+      - text: TTL (Time to Live).
+        is_correct: false
+      - text: BatchWriteItem.
+        is_correct: false
+    explanation: |
+      Correct: Conditional expressions allow for "Optimistic Locking" and atomic checks at the database level without the overhead of a full transaction.
+
+  - id: ddb_6
+    type: multiple_choice
+    question: |
+      What is the "TTL" (Time To Live) feature in DynamoDB used for?
+    options:
+      - text: To measure how fast a query runs.
+        is_correct: false
+      - text: To automatically delete items after a certain timestamp at no extra write cost, helping manage storage and costs.
+        is_correct: true
+      - text: To keep the database connection alive.
+        is_correct: false
+      - text: To restart the database every 24 hours.
+        is_correct: false
+    explanation: |
+      Correct: TTL is perfect for session data, temporary logs, or GDPR compliance, as DynamoDB deletes the expired items automatically in the background.
+
+  - id: ddb_7
+    type: multiple_choice
+    question: |
+      How can you trigger a NodeJS Lambda function whenever an item is updated or deleted in DynamoDB?
+    options:
+      - text: By polling the table every second.
+        is_correct: false
+      - text: By enabling "DynamoDB Streams" and mapping the stream to a Lambda function.
+        is_correct: true
+      - text: By using a Cron job.
+        is_correct: false
+      - text: DynamoDB cannot trigger Lambda.
+        is_correct: false
+    explanation: |
+      Correct: DynamoDB Streams capture a time-ordered sequence of item-level changes, which is the foundation for event-driven architectures and cross-region replication.
+
+  - id: ddb_8
+    type: multiple_choice
+    question: |
+      Your DynamoDB table is becoming very expensive due to high read volume of the same few items. What is the most effective AWS solution to reduce costs and latency?
+    options:
+      - text: Increase the Provisioned Capacity.
+        is_correct: false
+      - text: Implement DAX (DynamoDB Accelerator) as a write-through caching layer.
+        is_correct: true
+      - text: Move the data to S3.
+        is_correct: false
+      - text: Use more GSIs.
+        is_correct: false
+    explanation: |
+      Correct: DAX provides a managed, in-memory cache that reduces DynamoDB response times to microseconds and prevents repetitive reads from consuming table capacity.
+
+  - id: ddb_9
+    type: multiple_choice
+    question: |
+      What is the maximum size of a single item in DynamoDB?
+    options:
+      - text: 400 KB
+        is_correct: true
+      - text: 1 MB
+        is_correct: false
+      - text: 10 MB
+        is_correct: false
+      - text: Unlimited
+        is_correct: false
+    explanation: |
+      Correct: 400 KB is the hard limit. If you need to store larger data, you should store the metadata in DynamoDB and the actual payload in Amazon S3.
+
+  - id: ddb_10
+    type: multiple_choice
+    question: |
+      Why is it recommended to use "Short Attribute Names" (e.g., 'u' instead of 'user_identifier') in very large DynamoDB tables?
+    options:
+      - text: To make the code easier to read.
+        is_correct: false
+      - text: Because attribute names are stored with every item and count toward the 400KB limit and consumed capacity.
+        is_correct: true
+      - text: Because DynamoDB doesn't support long names.
+        is_correct: false
+      - text: It makes the SDK run faster.
+        is_correct: false
+    explanation: |
+      Correct: In DynamoDB, you pay for the storage and throughput of the names of your keys, not just the values. On billions of rows, short names can save significant money.
