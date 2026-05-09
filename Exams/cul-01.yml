@@ -1,0 +1,510 @@
+questions:
+  - id: culture-pillar-q01
+    type: multiple_choice
+    question: |
+      A critical security vulnerability is discovered in a third-party library used by your application. However, a fix would require a significant refactor that might delay a major business release by two days. What is the most appropriate action?
+    options:
+      - text: Delay the release to implement the fix and ensure the application's integrity.
+        is_correct: true
+      - text: Proceed with the release and schedule the security fix for the next sprint.
+        is_correct: false
+      - text: Implement a temporary workaround and release without mentioning the vulnerability.
+        is_correct: false
+      - text: Ask the business team to accept the risk so the deadline can be met.
+        is_correct: false
+    explanation: |
+      Correct: Prioritizing security and risk management over short-term deadlines is essential for maintaining operational stability.
+      Incorrect: Deploying known vulnerabilities compromises safety; transparency and full mitigation are required in regulated environments.
+
+  - id: culture-pillar-q02
+    type: multiple_choice
+    question: |
+      While reviewing code, you notice a performance bottleneck that doesn't break functional requirements but could increase latency under high load. The team is under pressure to deliver. How do you proceed?
+    options:
+      - text: Approve the code to meet the deadline since it meets current requirements.
+        is_correct: false
+      - text: Discuss the bottleneck with the colleague and suggest an optimized approach before merging.
+        is_correct: true
+      - text: Fix the code yourself without telling the colleague to save time.
+        is_correct: false
+      - text: Log a ticket to fix it in the future and approve the pull request now.
+        is_correct: false
+    explanation: |
+      Correct: Upholding excellence and efficiency ensures the system remains robust and scalable under pressure.
+      Incorrect: Ignoring efficiency leads to technical debt; collaboration is essential for long-term team effectiveness.
+
+  - id: culture-pillar-q03
+    type: multiple_choice
+    question: |
+      You identify an automated process that is redundant and consumes unnecessary cloud resources. Your current task list is full. What should you do?
+    options:
+      - text: Ignore it as it is not part of your assigned tasks.
+        is_correct: false
+      - text: Wait for a formal audit to identify the redundancy.
+        is_correct: false
+      - text: Document the redundancy and propose a plan to decommission it to your manager.
+        is_correct: true
+      - text: Shut it down immediately to save costs, even without notifying the owners.
+        is_correct: false
+    explanation: |
+      Correct: Proactively identifying and eliminating waste demonstrates a commitment to operational efficiency.
+      Incorrect: Waiting for audits is reactive; uncoordinated changes can introduce operational risks.
+
+  - id: culture-pillar-q04
+    type: multiple_choice
+    question: |
+      A legacy system is stable but uses outdated encryption protocols. There have been no incidents, but industry standards have moved on. What is the best architectural recommendation?
+    options:
+      - text: Leave it as it is since it isn't broken.
+        is_correct: false
+      - text: Propose an upgrade to modern standards to proactively mitigate future risks.
+        is_correct: true
+      - text: Wait for the next major system overhaul to update the encryption.
+        is_correct: false
+      - text: Only update if a client specifically requests a higher security level.
+        is_correct: false
+    explanation: |
+      Correct: Anticipating and mitigating risks before they become incidents is key to long-term operational safety.
+      Incorrect: Cybersecurity risks evolve; staying static is a risk in itself in the financial sector.
+
+  - id: culture-pillar-q05
+    type: multiple_choice
+    question: |
+      You are asked to implement a feature that bypasses standard data validation to speed up a one-time data migration. How do you respond?
+    options:
+      - text: Refuse to bypass the validation and explain the risks to data integrity.
+        is_correct: true
+      - text: Perform the bypass to ensure the migration is completed on time.
+        is_correct: false
+      - text: Suggest doing it once but promise never to do it again.
+        is_correct: false
+      - text: Ask a junior developer to do it so you are not directly responsible.
+        is_correct: false
+    explanation: |
+      Correct: Maintaining data integrity is a non-negotiable part of technical excellence and risk control.
+      Incorrect: Bypassing controls often leads to corrupted data and long-term operational issues.
+
+  - id: culture-pillar-q06
+    type: multiple_choice
+    question: |
+      During a system outage, you find a quick fix that will restore service but might cause minor data inconsistencies. What should be your priority?
+    options:
+      - text: Apply the fix immediately to minimize downtime at any cost.
+        is_correct: false
+      - text: Escalate the situation and work on a fix that maintains data integrity.
+        is_correct: true
+      - text: Wait for a senior manager to make the decision while the system stays down.
+        is_correct: false
+      - text: Prioritize the system restore and deal with data errors manually later.
+        is_correct: false
+    explanation: |
+      Correct: Effective crisis management balances speed with the requirement for accuracy and risk control.
+      Incorrect: In financial systems, data consistency is often more critical than pure uptime.
+
+  - id: culture-pillar-q07
+    type: multiple_choice
+    question: |
+      Which of the following best describes 'Effectiveness' in a high-performance software engineering team?
+    options:
+      - text: Writing the maximum number of lines of code per day.
+        is_correct: false
+      - text: Delivering reliable solutions that solve business problems with minimal waste.
+        is_correct: true
+      - text: Using the most complex and newest technologies available.
+        is_correct: false
+      - text: Following instructions exactly without ever questioning the requirements.
+        is_correct: false
+    explanation: |
+      Correct: Effectiveness is about the impact, reliability, and value of the work performed for the business.
+      Incorrect: Quantity or complexity does not equal quality or value.
+
+  - id: culture-pillar-q08
+    type: multiple_choice
+    question: |
+      When designing a new system, how should 'Risk Management' be integrated into the process?
+    options:
+      - text: It should be an audit performed after the system is fully developed.
+        is_correct: false
+      - text: It should be considered at every stage, from requirements to deployment.
+        is_correct: true
+      - text: It is only necessary for external-facing applications.
+        is_correct: false
+      - text: It is the sole responsibility of the dedicated Security team.
+        is_correct: false
+    explanation: |
+      Correct: Continuous risk assessment ensures the stability and safety of the software throughout its lifecycle.
+      Incorrect: Waiting until the end is costly; every engineer is responsible for the safety of their work.
+
+  - id: culture-pillar-q09
+    type: multiple_choice
+    question: |
+      You notice that the team's deployment process is manual and error-prone, but everyone is used to it. What is the most 'Efficient' action?
+    options:
+      - text: Accept the process to avoid disrupting the team's current flow.
+        is_correct: false
+      - text: Advocate for and help implement CI/CD automation to reduce manual errors.
+        is_correct: true
+      - text: Complain about the process during coffee breaks but take no action.
+        is_correct: false
+      - text: Wait for a major deployment failure to happen to justify change.
+        is_correct: false
+    explanation: |
+      Correct: Automation increases both efficiency (speed) and effectiveness (reliability) while reducing risk.
+      Incorrect: Accepting risky processes contradicts operational excellence; preventative action is always better.
+
+  - id: culture-pillar-q10
+    type: multiple_choice
+    question: |
+      A stakeholder asks for a report that requires accessing sensitive data you are not authorized to view. You can technically query it. What do you do?
+    options:
+      - text: Provide the report quickly to show you are helpful and capable.
+        is_correct: false
+      - text: Explain that you lack authorization and direct them through proper channels.
+        is_correct: true
+      - text: Ask a colleague with access to run the query for you.
+        is_correct: false
+      - text: Access the data just once to verify the stakeholder's need is legitimate.
+        is_correct: false
+    explanation: |
+      Correct: Upholding security protocols and integrity is a primary responsibility in a risk-conscious culture.
+      Incorrect: Bypassing or circumventing access controls is a severe breach of integrity and risk protocols.
+
+  - id: culture-pillar-q11
+    type: multiple_choice
+    question: |
+      You are responsible for a legacy service that occasionally spikes in resource usage, increasing cloud costs. A permanent fix is complex, but a simple script can restart the service when it spikes. What is the best long-term approach?
+    options:
+      - text: Use the restart script indefinitely as it is a low-cost solution.
+        is_correct: false
+      - text: Investigate the root cause and implement a scalable fix to ensure efficiency.
+        is_correct: true
+      - text: Increase the server capacity to stop the spikes from affecting performance.
+        is_correct: false
+      - text: Ignore the spikes as long as the service doesn't stay down for more than a minute.
+        is_correct: false
+    explanation: |
+      Correct: Identifying and fixing the root cause aligns with the principle of Efficiency and prevents wasted resources.
+      Incorrect: Temporary fixes and over-provisioning are inefficient and mask underlying operational risks.
+
+  - id: culture-pillar-q12
+    type: multiple_choice
+    question: |
+      A new regulatory requirement demands that all financial transactions be logged in a specific format. Implementing this will slow down the development of a high-priority trading feature. What should you do?
+    options:
+      - text: Prioritize the trading feature and add the logging in a later phase.
+        is_correct: false
+      - text: Implement the logging requirement immediately to ensure compliance and risk control.
+        is_correct: true
+      - text: Implement a simplified version of the logging that doesn't meet all standards but saves time.
+        is_correct: false
+      - text: Ask the legal team to find a loophole so the feature isn't delayed.
+        is_correct: false
+    explanation: |
+      Correct: Compliance and risk management are non-negotiable pillars in financial software engineering.
+      Incorrect: Delaying or simplifying regulatory requirements introduces severe legal and operational risks.
+
+  - id: culture-pillar-q13
+    type: multiple_choice
+    question: |
+      You find that your team is manually generating weekly performance reports, which takes several hours. How does 'Excellence' apply here?
+    options:
+      - text: Excellence means doing the manual work perfectly without any typos.
+        is_correct: false
+      - text: Excellence means automating the report generation to focus on higher-value tasks.
+        is_correct: true
+      - text: Excellence means asking for more people to help with the manual reporting.
+        is_correct: false
+      - text: Excellence means working overtime to ensure the reports are delivered early.
+        is_correct: false
+    explanation: |
+      Correct: Automating repetitive tasks is a key driver of Efficiency and allows the team to be more Effective.
+      Incorrect: Increasing manual effort or headcount does not address the underlying inefficiency.
+
+  - id: culture-pillar-q14
+    type: multiple_choice
+    question: |
+      While implementing a new API, you realize that the current architecture doesn't support the required throughput for future projections. Your manager says to focus on the current requirements only. What is the most professional response?
+    options:
+      - text: Follow instructions and only build for today's requirements.
+        is_correct: false
+      - text: Present the data on future projections and propose a scalable design to prevent future failure.
+        is_correct: true
+      - text: Build the scalable version in secret without informing management.
+        is_correct: false
+      - text: Resign from the project as it doesn't meet your personal standards of excellence.
+        is_correct: false
+    explanation: |
+      Correct: Proactively addressing future scalability is part of effective risk management and operational stability.
+      Incorrect: Ignoring future risks is reactive; non-transparent development hinders team collaboration.
+
+  - id: culture-pillar-q15
+    type: multiple_choice
+    question: |
+      A high-pressure situation arises where a production bug is causing minor display errors on a client dashboard. A developer proposes a 'hotfix' directly in production to save time. What is your stance?
+    options:
+      - text: Support the hotfix because client satisfaction depends on immediate resolution.
+        is_correct: false
+      - text: Insist on following the standard CI/CD pipeline and testing protocols despite the pressure.
+        is_correct: true
+      - text: Allow the hotfix only if the developer promises to be careful.
+        is_correct: false
+      - text: Let the business owner decide if they want to bypass the safety protocols.
+        is_correct: false
+    explanation: |
+      Correct: Bypassing deployment protocols introduces significant risk; stability requires following established safety gates.
+      Incorrect: Speed should never compromise the integrity of the production environment.
+
+  - id: culture-pillar-q16
+    type: multiple_choice
+    question: |
+      You are tasked with choosing a new database technology for a mission-critical system. Which factor should be your primary consideration under the 'Pillar' framework?
+    options:
+      - text: The popularity of the technology in the developer community.
+        is_correct: false
+      - text: The level of vendor support and the technology's proven track record for reliability.
+        is_correct: true
+      - text: How many of your friends already know how to use it.
+        is_correct: false
+      - text: Whether it is the most cutting-edge 'bleeding edge' technology available.
+        is_correct: false
+    explanation: |
+      Correct: For mission-critical systems, risk management dictates choosing stable, well-supported, and reliable technologies.
+      Incorrect: Popularity or novelty are not sufficient justifications when system stability is at stake.
+
+  - id: culture-pillar-q17
+    type: multiple_choice
+    question: |
+      What is the most effective way to handle 'Technical Debt' in a fast-paced development environment?
+    options:
+      - text: Ignore it until it causes a system failure.
+        is_correct: false
+      - text: Systematically track it and dedicate a portion of each cycle to debt reduction.
+        is_correct: true
+      - text: Stop all new feature development until the debt is zero.
+        is_correct: false
+      - text: Rename it to 'Legacy Logic' so it doesn't sound like a problem.
+        is_correct: false
+    explanation: |
+      Correct: Continuous improvement and proactive debt management ensure long-term efficiency and reduce operational risk.
+      Incorrect: Ignoring debt is risky; stopping all business value delivery is ineffective for the organization.
+
+  - id: culture-pillar-q18
+    type: multiple_choice
+    question: |
+      Your team is using a cloud service that is reaching its end-of-life in 6 months. There is no immediate impact on performance. How do you approach this?
+    options:
+      - text: Wait until the service is actually retired before planning a migration.
+        is_correct: false
+      - text: Start planning and testing a migration strategy now to avoid a last-minute crisis.
+        is_correct: true
+      - text: Request an extension from the cloud provider and hope for the best.
+        is_correct: false
+      - text: Switch to the first alternative you find to get it over with quickly.
+        is_correct: false
+    explanation: |
+      Correct: Proactive risk management involves identifying and mitigating external dependencies before they become issues.
+      Incorrect: Reactive approaches lead to rushed migrations, which increase the likelihood of errors and downtime.
+
+  - id: culture-pillar-q19
+    type: multiple_choice
+    question: |
+      In a post-incident review (Post-Mortem), what is the most valuable outcome for a risk-conscious organization?
+    options:
+      - text: Identifying who made the mistake so they can be retrained.
+        is_correct: false
+      - text: Identifying systemic weaknesses and implementing automated safeguards to prevent recurrence.
+        is_correct: true
+      - text: Closing the ticket as fast as possible to improve team metrics.
+        is_correct: false
+      - text: Determining that the incident was an 'act of god' and cannot be prevented.
+        is_correct: false
+    explanation: |
+      Correct: Excellence and Risk Management focus on systemic improvement and prevention, not individual blame.
+      Incorrect: Blaming individuals or ignoring root causes ensures the same risks remain in the system.
+
+  - id: culture-pillar-q20
+    type: multiple_choice
+    question: |
+      When asked to optimize a system's efficiency, where should an engineer start?
+    options:
+      - text: Re-writing the entire codebase in a more modern language.
+        is_correct: false
+      - text: Analyzing metrics and logs to identify the most significant bottlenecks and waste.
+        is_correct: true
+      - text: Changing all the variable names to be shorter to save space.
+        is_correct: false
+      - text: Buying faster hardware to mask any software inefficiencies.
+        is_correct: false
+    explanation: |
+      Correct: Effective optimization is data-driven and targets areas that provide the most value for the effort.
+      Incorrect: Arbitrary changes or hardware overrides do not address the core problem of efficiency.
+
+  - id: culture-pillar-q21
+    type: multiple_choice
+    question: |
+      You discover that a legacy data processing job is running every hour, but the business only reviews the output once a week. This is causing unnecessary cloud costs and database load. What is your recommendation?
+    options:
+      - text: Keep it as is to ensure data is always fresh "just in case".
+        is_correct: false
+      - text: Propose changing the schedule to once a day or once a week to optimize resources.
+        is_correct: true
+      - text: Increase the database instance size to handle the load better.
+        is_correct: false
+      - text: Delete the job entirely without consulting the business team.
+        is_correct: false
+    explanation: |
+      Correct: Efficiency is about aligning resource consumption with actual business value and removing waste.
+      Incorrect: Over-provisioning or maintaining unnecessary frequency is inefficient; uncoordinated deletion adds operational risk.
+
+  - id: culture-pillar-q22
+    type: multiple_choice
+    question: |
+      A team member suggests disabling some automated integration tests because they "take too long" and slow down the deployment pipeline. How do you respond?
+    options:
+      - text: Agree to disable them to increase the team's delivery speed (velocity).
+        is_correct: false
+      - text: Refuse to disable them and suggest optimizing the test code or infrastructure instead.
+        is_correct: true
+      - text: Only disable them for "minor" updates that don't seem risky.
+        is_correct: false
+      - text: Leave it to the QA team to run the tests manually once a month.
+        is_correct: false
+    explanation: |
+      Correct: Risk Management requires maintaining safety gates. Improving efficiency should never come at the cost of operational safety.
+      Incorrect: Bypassing tests increases the probability of production incidents; manual testing is error-prone and inefficient.
+
+  - id: culture-pillar-q23
+    type: multiple_choice
+    question: |
+      During a code review, you find a logic branch that handles an edge case but has no unit test coverage. The developer says that edge case is "extremely rare." What is the correct action?
+    options:
+      - text: Approve the code because the risk is statistically low.
+        is_correct: false
+      - text: Require the addition of a unit test for that edge case before merging.
+        is_correct: true
+      - text: Tell the developer to remove the edge case logic to simplify the code.
+        is_correct: false
+      - text: Approve it but add a comment to "fix it later" in a separate ticket.
+        is_correct: false
+    explanation: |
+      Correct: Technical excellence and risk management demand that all production logic, especially for edge cases, is verified.
+      Incorrect: Rare cases often cause the most difficult production bugs; ignoring coverage creates hidden technical debt.
+
+  - id: culture-pillar-q24
+    type: multiple_choice
+    question: |
+      When evaluating two different architectural patterns for a new payment gateway, which criteria should be prioritized in a high-stability environment?
+    options:
+      - text: The one that is more fun for the developers to learn.
+        is_correct: false
+      - text: The one that offers better observability, fault tolerance, and clear audit trails.
+        is_correct: true
+      - text: The one that requires the least amount of documentation.
+        is_correct: false
+      - text: The one that has the most stars on GitHub.
+        is_correct: false
+    explanation: |
+      Correct: Effectiveness in financial systems is measured by the ability to operate safely and transparently under all conditions.
+      Incorrect: Novelty or lack of documentation are not valid criteria for mission-critical infrastructure.
+
+  - id: culture-pillar-q25
+    type: multiple_choice
+    question: |
+      You are tasked with a "manual cleanup" of production data. What is the most risk-conscious way to proceed?
+    options:
+      - text: Run the SQL update directly against production while everyone is at lunch.
+        is_correct: false
+      - text: Create a scripted, peer-reviewed, and tested plan that includes a rollback strategy.
+        is_correct: true
+      - text: Ask a colleague to watch you type the command to make sure you don't make a typo.
+        is_correct: false
+      - text: Do it in small batches throughout the day to avoid being noticed.
+        is_correct: false
+    explanation: |
+      Correct: Risk Management is about formalizing dangerous operations to prevent human error and ensure recovery.
+      Incorrect: Manual, unreviewed, or "hidden" changes are the leading cause of catastrophic outages.
+
+  - id: culture-pillar-q26
+    type: multiple_choice
+    question: |
+      Your application is reaching 80% of its licensed capacity. The deadline for the next project is very tight. How do you handle this?
+    options:
+      - text: Ignore it until it reaches 100% so you can focus on the deadline.
+        is_correct: false
+      - text: Proactively report the capacity risk and plan for an upgrade or optimization.
+        is_correct: true
+      - text: Hope that the usage decreases naturally over the next few weeks.
+        is_correct: false
+      - text: Disable some features for a few users to free up capacity.
+        is_correct: false
+    explanation: |
+      Correct: Managing capacity and anticipating limits is a core part of operational stability and effectiveness.
+      Incorrect: Reactive management leads to service denial; disabling features without coordination harms the business.
+
+  - id: culture-pillar-q27
+    type: multiple_choice
+    question: |
+      A third-party API you depend on starts returning 500 errors occasionally. It doesn't crash your app, but some users see errors. What is the "Efficient" technical response?
+    options:
+      - text: Do nothing, as it is a third-party problem and not your responsibility.
+        is_correct: false
+      - text: Implement a circuit breaker or retry logic to handle the failures gracefully.
+        is_correct: true
+      - text: Hard-code a "success" response so the users don't see an error message.
+        is_correct: false
+      - text: Contact the vendor every time an error happens and wait for their reply.
+        is_correct: false
+    explanation: |
+      Correct: Building resilient systems that handle external failure is a key part of maintaining an effective service.
+      Incorrect: Passing errors to users is ineffective; faking success response is a breach of integrity and risk control.
+
+  - id: culture-pillar-q28
+    type: multiple_choice
+    question: |
+      Which of these best represents the concept of "Operational Excellence"?
+    options:
+      - text: A system that never has a single bug or error.
+        is_correct: false
+      - text: A culture of continuous monitoring, learning from failures, and improving processes.
+        is_correct: true
+      - text: A team that works 24/7 to fix issues as they arise.
+        is_correct: false
+      - text: Using the most expensive hardware available to prevent crashes.
+        is_correct: false
+    explanation: |
+      Correct: Excellence is a process of continuous improvement and systemic resilience, not just a one-time achievement.
+      Incorrect: Zero-bug systems are a myth; brute force (working 24/7 or expensive hardware) is inefficient.
+
+  - id: culture-pillar-q29
+    type: multiple_choice
+    question: |
+      A project is running behind schedule. The stakeholders suggest skipping the "Performance Testing" phase to launch on time. What is the risk-based counter-argument?
+    options:
+      - text: Skipping the phase will make the developers unhappy.
+        is_correct: false
+      - text: Launching without performance testing could lead to a systemic collapse under real load.
+        is_correct: true
+      - text: It is better to launch late than to have a boring launch.
+        is_correct: false
+      - text: The code won't look as clean if we don't test it.
+        is_correct: false
+    explanation: |
+      Correct: Performance testing is a safety gate that protects the organization's reputation and operational stability.
+      Incorrect: Personal feelings or aesthetics are not valid business arguments for risk management.
+
+  - id: culture-pillar-q30
+    type: multiple_choice
+    question: |
+      You are writing documentation for a complex financial calculation. Why is this considered an "Effective" use of time?
+    options:
+      - text: It makes the code look more professional to external auditors.
+        is_correct: false
+      - text: It ensures knowledge is shared and the system can be maintained safely by others.
+        is_correct: true
+      - text: It is a requirement to get a promotion.
+        is_correct: false
+      - text: It allows you to forget how the code works after you finish it.
+        is_correct: false
+    explanation: |
+      Correct: Knowledge sharing reduces the "key person risk" and ensures long-term operational efficiency.
+      Incorrect: Documentation should serve a functional purpose for stability and maintenance, not just for optics.

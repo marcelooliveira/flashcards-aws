@@ -1,0 +1,510 @@
+questions:
+  - id: culture-behaviors-q61
+    type: multiple_choice
+    question: |
+      You notice a potential error in a financial report that has already been sent to a regulator. Your manager suggests waiting to see if they notice it first. How do you demonstrate 'Integrity'?
+    options:
+      - text: Follow your manager's advice to protect the team's reputation.
+        is_correct: false
+      - text: Formally raise the issue and insist on a proactive correction to the regulator.
+        is_correct: true
+      - text: Correct the error in the internal system but don't tell anyone about the sent report.
+        is_correct: false
+      - text: Wait for a colleague to notice so you are not the one delivering bad news.
+        is_correct: false
+    explanation: |
+      Correct: Integrity means doing the right thing and being transparent about errors, especially in a regulated environment.
+      Incorrect: Hiding mistakes or waiting for others to find them violates ethical standards and increases institutional risk.
+
+  - id: culture-behaviors-q62
+    type: multiple_choice
+    question: |
+      A senior leader proposes a technical strategy that you believe contains a fundamental flaw that could lead to system instability. What is the 'Challenge' behavior?
+    options:
+      - text: Comply with the strategy because of the leader's seniority and experience.
+        is_correct: false
+      - text: Respectfully present your concerns backed by data and suggest an alternative approach.
+        is_correct: true
+      - text: Complain about the strategy to your peers but do not speak up in the meeting.
+        is_correct: false
+      - text: Implement the strategy but make sure everyone knows it wasn't your idea.
+        is_correct: false
+    explanation: |
+      Correct: Constructive challenge involves speaking up when you see risks, regardless of hierarchy, to protect the firm's interests.
+      Incorrect: Passive compliance or back-channel complaining does not contribute to the best outcome for the organization.
+
+  - id: culture-behaviors-q63
+    type: multiple_choice
+    question: |
+      Your squad is falling behind. Another team offers a tool they built that could help, but using it means admitting your team couldn't do it alone. What is the 'Collaboration' approach?
+    options:
+      - text: Decline the offer to maintain your team's image of independence.
+        is_correct: false
+      - text: Embrace the collaboration and use the tool to deliver the best result for the firm.
+        is_correct: true
+      - text: Use the tool but tell the business owners that your team built it.
+        is_correct: false
+      - text: Build a similar tool from scratch to prove your team's capability.
+        is_correct: false
+    explanation: |
+      Correct: Collaboration means prioritizing the firm's overall success over individual or team ego.
+      Incorrect: Siloed behavior or taking false credit undermines trust and leads to inefficient duplication of effort.
+
+  - id: culture-behaviors-q64
+    type: multiple_choice
+    question: |
+      During a project, you realize you made a mistake that will delay your tasks by two days. No one else has noticed yet. What do you do?
+    options:
+      - text: Work overtime in secret to fix it and hope no one notices the delay.
+        is_correct: false
+      - text: Inform your team immediately, explain the impact, and work on a recovery plan.
+        is_correct: true
+      - text: Blame the delay on a technical issue with the development environment.
+        is_correct: false
+      - text: Wait until the deadline passes to mention the problem.
+        is_correct: false
+    explanation: |
+      Correct: Integrity and Collaboration rely on early and honest communication about blockers and mistakes.
+      Incorrect: Lack of transparency prevents the team from adjusting plans and solving the problem collectively.
+
+  - id: culture-behaviors-q65
+    type: multiple_choice
+    question: |
+      A colleague is being unfairly blamed for a production incident during a meeting. You have information that clears them but might reflect poorly on a process you manage. What do you do?
+    options:
+      - text: Stay silent to protect your own department's metrics.
+        is_correct: false
+      - text: Speak up to provide the facts and ensure the blame is correctly attributed to the process, not the person.
+        is_correct: true
+      - text: Talk to the colleague privately afterward to offer sympathy but stay quiet in the meeting.
+        is_correct: false
+      - text: Suggest that everyone was a little bit at fault to dilute the responsibility.
+        is_correct: false
+    explanation: |
+      Correct: Integrity involves standing up for what is right, even when it is uncomfortable or reveals internal weaknesses.
+      Incorrect: Allowing a colleague to take unfair blame damages culture and prevents real process improvement.
+
+  - id: culture-behaviors-q66
+    type: multiple_choice
+    question: |
+      How should you react when someone 'Challenges' your technical design in a public forum?
+    options:
+      - text: Defend your position aggressively to maintain your authority.
+        is_correct: false
+      - text: Listen with an open mind, evaluate the feedback objectively, and thank them for the input.
+        is_correct: true
+      - text: Take it personally and avoid working with that person in the future.
+        is_correct: false
+      - text: End the meeting immediately to avoid further embarrassment.
+        is_correct: false
+    explanation: |
+      Correct: A culture of constructive challenge requires being able to receive feedback as well as give it.
+      Incorrect: Defensiveness or personalizing professional disagreement halts innovation and learning.
+
+  - id: culture-behaviors-q67
+    type: multiple_choice
+    question: |
+      You are asked to provide a performance review for a peer who is also a close friend, but their work has been sub-par. What is the most 'Integrity'-focused action?
+    options:
+      - text: Give them a glowing review to help their career because they are your friend.
+        is_correct: false
+      - text: Provide an honest, objective assessment of their performance, focusing on areas for improvement.
+        is_correct: true
+      - text: Decline to do the review to avoid the conflict of interest.
+        is_correct: false
+      - text: Give them a vague review that doesn't say anything specific.
+        is_correct: false
+    explanation: |
+      Correct: Integrity means being objective and honest in professional evaluations, regardless of personal relationships.
+      Incorrect: Favoritism or lack of clarity in feedback fails both the individual and the organization.
+
+  - id: culture-behaviors-q68
+    type: multiple_choice
+    question: |
+      Your team is using a process that is highly inefficient but 'is the way we've always done it.' What behavior is expected of you?
+    options:
+      - text: Follow the process quietly to avoid causing trouble.
+        is_correct: false
+      - text: Constructively challenge the status quo and propose a more efficient alternative.
+        is_correct: true
+      - text: Complain to your manager about how slow the team is.
+        is_correct: false
+      - text: Automate the process only for yourself without sharing it.
+        is_correct: false
+    explanation: |
+      Correct: Improvement often requires challenging established norms in a respectful and evidence-based way.
+      Incorrect: Passive compliance or siloed solutions do not help the team evolve or improve its effectiveness.
+
+  - id: culture-behaviors-q69
+    type: multiple_choice
+    question: |
+      A project is failing. Instead of looking for a solution, the team is busy trying to find out who to blame. How do you intervene?
+    options:
+      - text: Help them find the person responsible so the issue is settled.
+        is_correct: false
+      - text: Redirect the conversation toward the root cause and the collective actions needed to fix it.
+        is_correct: true
+      - text: Leave the meeting to avoid the negative atmosphere.
+        is_correct: false
+      - text: Stay silent and hope the blame doesn't fall on you.
+        is_correct: false
+    explanation: |
+      Correct: Collaboration and Integrity require a 'blameless' approach to problem-solving, focusing on systemic fixes.
+      Incorrect: Finger-pointing creates a toxic environment and fails to address the underlying reasons for failure.
+
+  - id: culture-behaviors-q70
+    type: multiple_choice
+    question: |
+      When you are working in an 'Integrated' way across different divisions, what should be your primary goal?
+    options:
+      - text: To make sure your division's interests are protected above all else.
+        is_correct: false
+      - text: To achieve a unified solution that provides the best outcome for the entire firm.
+        is_correct: true
+      - text: To spend the least amount of time possible on cross-divisional work.
+        is_correct: false
+      - text: To show that your division is superior to the others.
+        is_correct: false
+    explanation: |
+      Correct: Integrated collaboration means working as 'One Firm' to deliver value to the client and the organization.
+      Incorrect: Protectionism or internal competition creates silos that harm the overall efficiency and effectiveness.
+
+  - id: culture-behaviors-q71
+    type: multiple_choice
+    question: |
+      You are working on a project with a tight deadline. You find a way to meet the goal, but it involves using a data processing method that is technically 'gray' regarding new internal privacy guidelines. What do you do?
+    options:
+      - text: Use the method to ensure the project's success and the client's satisfaction.
+        is_correct: false
+      - text: Raise the concern with the Privacy/Compliance officer and seek a cleared alternative.
+        is_correct: true
+      - text: Implement it but don't document that specific part of the process.
+        is_correct: false
+      - text: Ask a junior developer to implement it so you have plausible deniability.
+        is_correct: false
+    explanation: |
+      Correct: Integrity means adhering to ethical and regulatory standards even when it creates practical challenges for delivery.
+      Incorrect: Shortcuts in compliance create massive institutional risk and violate the core value of integrity.
+
+  - id: culture-behaviors-q72
+    type: multiple_choice
+    question: |
+      Your team is in a brainstorming session. A junior member proposes an idea that seems impractical, and most of the team is laughing it off. How do you respond?
+    options:
+      - text: Join the laughter to maintain team rapport.
+        is_correct: false
+      - text: Intervene, ask the junior member to elaborate, and look for any valuable elements in the idea.
+        is_correct: true
+      - text: Stay silent and wait for the meeting to move on to the next topic.
+        is_correct: false
+      - text: Tell the junior member to listen more and speak less until they have more experience.
+        is_correct: false
+    explanation: |
+      Correct: Collaboration involves fostering an inclusive environment where all ideas are treated with professional respect.
+      Incorrect: Dismissing or belittling colleagues' contributions stifles innovation and damages the collaborative culture.
+
+  - id: culture-behaviors-q73
+    type: multiple_choice
+    question: |
+      You are invited to a steering committee where a high-budget project is being praised. You know from the inside that the technical debt is becoming unmanageable. What is the 'Challenge' behavior?
+    options:
+      - text: Keep quiet to avoid raining on the parade and upsetting the project lead.
+        is_correct: false
+      - text: Respectfully provide a realistic update on the technical risks to ensure informed decision-making.
+        is_correct: true
+      - text: Wait until the project fails so you can say 'I told you so' later.
+        is_correct: false
+      - text: Send an anonymous email to the committee after the meeting.
+        is_correct: false
+    explanation: |
+      Correct: Constructive challenge requires the courage to provide honest, data-backed feedback even when it contradicts a positive narrative.
+      Incorrect: Silence in the face of known risks is a failure of professional responsibility.
+
+  - id: culture-behaviors-q74
+    type: multiple_choice
+    question: |
+      Two departments are in a conflict over who should pay for a shared cloud infrastructure. The argument is delaying your deployment. How do you intervene?
+    options:
+      - text: Pick a side and help them win the argument to speed things up.
+        is_correct: false
+      - text: Facilitate a meeting focused on the firm's overall benefit to find a compromise.
+        is_correct: true
+      - text: Complain to your manager about both departments being difficult.
+        is_correct: false
+      - text: Bypass the shared infrastructure and create your own siloed environment.
+        is_correct: false
+    explanation: |
+      Correct: Integrated collaboration means acting as a bridge between silos to achieve the best outcome for the 'One Firm'.
+      Incorrect: Escalating conflict or creating redundant silos increases waste and reduces organizational effectiveness.
+
+  - id: culture-behaviors-q75
+    type: multiple_choice
+    question: |
+      You realized that you accidentally deleted some logs that are necessary for an upcoming audit. No one has asked for them yet. What do you do?
+    options:
+      - text: Say nothing and hope the auditors don't ask for that specific time period.
+        is_correct: false
+      - text: Report the incident to your supervisor and the audit team immediately.
+        is_correct: true
+      - text: Try to manually recreate the logs based on your memory.
+        is_correct: false
+      - text: Blame a 'system glitch' if anyone eventually asks about the missing data.
+        is_correct: false
+    explanation: |
+      Correct: Integrity requires full transparency, especially when it concerns regulatory or audit requirements.
+      Incorrect: Recreating logs or hiding deletions is a serious breach of trust and compliance.
+
+  - id: culture-behaviors-q76
+    type: multiple_choice
+    question: |
+      A project you are leading is ahead of schedule. Another project in the same division is struggling and might miss its deadline. What is the expected behavior?
+    options:
+      - text: Use the extra time to give your team a well-deserved rest.
+        is_correct: false
+      - text: Proactively offer your team's extra capacity to help the struggling project.
+        is_correct: true
+      - text: Start working on future tasks for your own project to stay even further ahead.
+        is_correct: false
+      - text: Ignore the other project as it's managed by a different lead.
+        is_correct: false
+    explanation: |
+      Correct: Collaboration across the firm means prioritizing the organization's collective goals over localized success.
+      Incorrect: Siloed focus prevents the organization from optimizing its resources for overall success.
+
+  - id: culture-behaviors-q77
+    type: multiple_choice
+    question: |
+      Your manager gives you a direct order to implement a feature that clearly violates a core engineering safety principle. How do you handle this?
+    options:
+      - text: Obey the order immediately because they are your manager.
+        is_correct: false
+      - text: Respectfully decline and explain the risks, escalating if the order is maintained.
+        is_correct: true
+      - text: Implement it but add a comment in the code saying it was the manager's idea.
+        is_correct: false
+      - text: Pretend to be working on it but never actually finish the task.
+        is_correct: false
+    explanation: |
+      Correct: Challenging an unsafe or unethical directive is a manifestation of both Integrity and professional Challenge.
+      Incorrect: Blind obedience in the face of clear risk is a failure of engineering ethics.
+
+  - id: culture-behaviors-q78
+    type: multiple_choice
+    question: |
+      A new team member has a different cultural background and a different way of communicating. This is causing some friction in the daily meetings. What do you do?
+    options:
+      - text: Suggest that they should adapt to the 'team's way' of talking.
+        is_correct: false
+      - text: Lead by example in being inclusive and help the team adapt to a more diverse communication style.
+        is_correct: true
+      - text: Avoid giving them important tasks to minimize friction.
+        is_correct: false
+      - text: Ask the manager to move them to a different team.
+        is_correct: false
+    explanation: |
+      Correct: Collaboration requires an inclusive mindset that values diversity and adapts to different perspectives.
+      Incorrect: Exclusion or forcing conformity harms team morale and limits the benefits of a diverse workforce.
+
+  - id: culture-behaviors-q79
+    type: multiple_choice
+    question: |
+      What does 'Integrity' mean when dealing with sensitive client data?
+    options:
+      - text: Using it only for authorized purposes and strictly following all protection protocols.
+        is_correct: true
+      - text: Checking the data only when you are curious about a specific high-profile client.
+        is_correct: false
+      - text: Sharing the data with other teams to help them with their own projects without formal approval.
+        is_correct: false
+      - text: Deleting the data after you use it so there is no record of you having it.
+        is_correct: false
+    explanation: |
+      Correct: Integrity in a financial institution is deeply tied to the trust clients place in the firm to protect their data.
+      Incorrect: Unauthorized access or sharing of client data is a severe breach of integrity and policy.
+
+  - id: culture-behaviors-q80
+    type: multiple_choice
+    question: |
+      How do you 'Challenge' a decision that has already been finalized by a committee?
+    options:
+      - text: It's too late to challenge; you must follow it without question.
+        is_correct: false
+      - text: If new, critical information arises, you must bring it forward through the proper channels.
+        is_correct: true
+      - text: Criticize the decision to external clients to show you disagree.
+        is_correct: false
+      - text: Try to subtly sabotage the implementation so the decision is reversed.
+        is_correct: false
+    explanation: |
+      Correct: Constructive challenge remains relevant if new risks or facts appear that were not considered during the decision.
+      Incorrect: Sabotage or external criticism is unprofessional and harms the organization's integrity.
+
+  - id: culture-behaviors-q81
+    type: multiple_choice
+    question: |
+      You are part of a team where a dominant voice often shuts down dissenting opinions. You notice a quieter colleague has a valid point but is being talked over. What is the 'Collaboration' behavior?
+    options:
+      - text: Stay silent to avoid conflict with the dominant team member.
+        is_correct: false
+      - text: Actively intervene to ensure the quieter colleague is heard and their point is considered.
+        is_correct: true
+      - text: Talk to the quieter colleague after the meeting to see what they wanted to say.
+        is_correct: false
+      - text: Agree with the dominant voice to speed up the decision-making process.
+        is_correct: false
+    explanation: |
+      Correct: True collaboration requires fostering an inclusive environment where all voices can contribute to the best outcome.
+      Incorrect: Allowing voices to be suppressed leads to groupthink and misses valuable insights.
+
+  - id: culture-behaviors-q82
+    type: multiple_choice
+    question: |
+      An automated trading system you maintain is occasionally producing slightly unexpected results. It’s not causing losses yet, and reporting it will require a full audit. What does 'Integrity' require?
+    options:
+      - text: Monitor it quietly and only report it if a financial loss actually occurs.
+        is_correct: false
+      - text: Immediately report the anomaly to your supervisor and the risk control team.
+        is_correct: true
+      - text: Patch the code and delete the logs of the unexpected results to avoid an audit.
+        is_correct: false
+      - text: Tell your manager that it’s just a "display issue" to keep the project on schedule.
+        is_correct: false
+    explanation: |
+      Correct: Integrity involves absolute transparency regarding system behavior, especially in areas with high regulatory or financial impact.
+      Incorrect: Hiding anomalies or delaying reports increases systemic risk and violates ethical duties.
+
+  - id: culture-behaviors-q83
+    type: multiple_choice
+    question: |
+      Your department head announces a new policy that you know will negatively impact the firm’s relationship with long-term clients. What is the 'Challenge' behavior?
+    options:
+      - text: Implement the policy as told, as the department head has a broader perspective.
+        is_correct: false
+      - text: Respectfully raise your concerns with the head, citing specific client feedback and risks.
+        is_correct: true
+      - text: Complain about the policy to the clients so they can pressure the firm to change it.
+        is_correct: false
+      - text: Quietly ignore the policy and continue with the old way of working.
+        is_correct: false
+    explanation: |
+      Correct: Constructive challenge means having the courage to speak up when a decision threatens the firm's core interests or relationships.
+      Incorrect: Blind obedience or externalizing internal conflicts harms the firm's integrity and performance.
+
+  - id: culture-behaviors-q84
+    type: multiple_choice
+    question: |
+      You are working on a cross-divisional project. The other division’s lead is taking all the credit for your team's work in front of senior management. How do you handle this 'Collaboration' issue?
+    options:
+      - text: Confront the lead publicly during the next management meeting to shame them.
+        is_correct: false
+      - text: Schedule a private meeting with the lead to discuss the importance of shared recognition and integrated effort.
+        is_correct: true
+      - text: Stop helping the other division to protect your team’s intellectual property.
+        is_correct: false
+      - text: Send an angry email to the CEO about the lack of fairness.
+        is_correct: false
+    explanation: |
+      Correct: Professional collaboration involves resolving conflicts directly and constructively to maintain a healthy cross-divisional relationship.
+      Incorrect: Public confrontation or withdrawal of support damages the "One Firm" culture and stalls progress.
+
+  - id: culture-behaviors-q85
+    type: multiple_choice
+    question: |
+      During a peer review, you realize a colleague has used a "shortcut" that bypasses a secondary security check. The colleague is your mentor. What is the 'Integrity' action?
+    options:
+      - text: Approve the code because you trust your mentor's experience more than the rule.
+        is_correct: false
+      - text: Flag the issue and insist that the security protocol must be followed regardless of seniority.
+        is_correct: true
+      - text: Ask the mentor to explain why the rule doesn't apply to them.
+        is_correct: false
+      - text: Ignore it this once, but promise yourself to check their work more carefully next time.
+        is_correct: false
+    explanation: |
+      Correct: Integrity means applying the firm's standards consistently, regardless of the seniority or relationship of the person involved.
+      Incorrect: Favoritism or fear of authority leads to security breaches and erodes the firm's risk culture.
+
+  - id: culture-behaviors-q86
+    type: multiple_choice
+    question: |
+      A team is stuck in an endless debate between two technical solutions. You have a third option that might work, but you are not the "Lead" on this project. What should you do?
+    options:
+      - text: Keep your option to yourself to avoid overstepping your role.
+        is_correct: false
+      - text: Propose the third option as a constructive challenge to the current impasse.
+        is_correct: true
+      - text: Wait for the debate to fail and then suggest your idea later.
+        is_correct: false
+      - text: Tell the project lead about your idea privately so they can present it as theirs.
+        is_correct: false
+    explanation: |
+      Correct: Everyone is encouraged to contribute ideas and challenge the current direction to find the best solution for the firm.
+      Incorrect: Siloing your thoughts due to hierarchy limits the team's ability to innovate and solve problems efficiently.
+
+  - id: culture-behaviors-q87
+    type: multiple_choice
+    question: |
+      You accidentally shared a confidential internal memo with an external vendor. The vendor hasn't mentioned it. What is the correct behavior?
+    options:
+      - text: Say nothing and hope the vendor deletes it without reading.
+        is_correct: false
+      - text: Immediately notify your Data Privacy/Legal team and the vendor to mitigate the breach.
+        is_correct: true
+      - text: Delete the email from your "Sent" folder so there's no proof of the mistake.
+        is_correct: false
+      - text: Call the vendor and ask them to "forget" they ever saw the email.
+        is_correct: false
+    explanation: |
+      Correct: Integrity requires taking immediate, transparent action to remediate errors, especially those involving confidentiality.
+      Incorrect: Concealing a data breach is a serious ethical and regulatory violation.
+
+  - id: culture-behaviors-q88
+    type: multiple_choice
+    question: |
+      What does 'Integrated Collaboration' look like when two departments have conflicting KPIs (Key Performance Indicators)?
+    options:
+      - text: Each department should fight for its own KPIs to ensure they get their bonuses.
+        is_correct: false
+      - text: Both departments should align their efforts toward the firm’s overall strategic goals, even if it impacts local KPIs.
+        is_correct: true
+      - text: The more powerful department should dictate the direction to the smaller one.
+        is_correct: false
+      - text: They should work separately and let senior management deal with the conflict later.
+        is_correct: false
+    explanation: |
+      Correct: Collaboration means prioritizing the firm's success over divisional interests to achieve "One Firm" results.
+      Incorrect: Putting local metrics ahead of the firm's welfare creates friction and sub-optimal results.
+
+  - id: culture-behaviors-q89
+    type: multiple_choice
+    question: |
+      A colleague is using a new AI tool that hasn't been officially cleared for use with sensitive data. They are getting great results. How do you 'Challenge' this?
+    options:
+      - text: Start using the tool yourself since the results are so good.
+        is_correct: false
+      - text: Remind the colleague of the firm's data safety policy and the risks of using uncleared tools.
+        is_correct: true
+      - text: Ignore it as long as they don't share the tool with you.
+        is_correct: false
+      - text: Report them to the security team without talking to them first.
+        is_correct: false
+    explanation: |
+      Correct: Constructive challenge often involves holding peers accountable to the firm's safety and risk standards.
+      Incorrect: Efficiency should never be a justification for bypassing essential safety and compliance gates.
+
+  - id: culture-behaviors-q90
+    type: multiple_choice
+    question: |
+      When a project fails, what is the most 'Collaborative' and 'Integrity'-driven behavior for the team lead?
+    options:
+      - text: Take full responsibility as the lead and focus the team on the lessons learned for the next project.
+        is_correct: true
+      - text: Find the person who made the most mistakes and document their failure.
+        is_correct: false
+      - text: Explain to the stakeholders that the external market conditions made success impossible.
+        is_correct: false
+      - text: Avoid talking about the failure and immediately start a new project.
+        is_correct: false
+    explanation: |
+      Correct: Leadership involves taking accountability and fostering a culture of honesty and continuous improvement.
+      Incorrect: Deflecting blame or ignoring failure prevents the organization from learning and increases the chance of recurrence.
