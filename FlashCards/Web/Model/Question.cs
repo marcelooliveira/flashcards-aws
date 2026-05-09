@@ -12,6 +12,7 @@
         public string Difficulty { get; set; }
         public int Points { get; set; }
         public List<string> Tags { get; set; }
+        public string Code { get; set; }
         public List<QuestionOption> QuestionOptions { get; set; } = new();
         public List<int> CorrectOptions { get; set; } = new();
         public List<int> SelectedOptions { get; set; } = new();

@@ -1,0 +1,441 @@
+questions:
+  - id: q1
+    type: multiple_choice
+    question: "What is the primary difference between useMemo and useCallback?"
+    options:
+      - text: "useMemo returns a memoized value, while useCallback returns a memoized callback function."
+        is_correct: true
+      - text: "useMemo is used for side effects, while useCallback is used for state updates."
+        is_correct: false
+      - text: "useMemo triggers a re-render, while useCallback prevents it entirely."
+        is_correct: false
+      - text: "There is no difference; they are aliases for the same internal logic."
+        is_correct: false
+    explanation: "useMemo caches the result of a calculation, whereas useCallback caches the function definition itself to prevent unnecessary re-creations on every render."
+    tags: [hooks, optimization, performance]
+    difficulty: medium
+    points: 8
+    diagram: |
+      graph LR
+      A[useMemo] --> B(Memoized Result/Value)
+      C[useCallback] --> D(Memoized Function)
+
+  - id: q2
+    type: multiple_choice
+    question: "In the React component lifecycle, when does the cleanup function in useEffect run?"
+    options:
+      - text: "Right before the component unmounts and before the effect runs again on dependency changes."
+        is_correct: true
+      - text: "Only when the component is first mounted."
+        is_correct: false
+      - text: "Immediately after every render, regardless of dependencies."
+        is_correct: false
+      - text: "Only when the browser window is closed."
+        is_correct: false
+    explanation: "The cleanup function ensures no memory leaks by running before the component is destroyed or before re-executing the effect."
+    tags: [hooks, lifecycle, useEffect]
+    difficulty: easy
+    points: 5
+    diagram: |
+      graph TD
+      A[Effect Runs] --> B{Dep Change?}
+      B -- Yes --> C[Cleanup Previous]
+      C --> D[Run New Effect]
+      B -- No --> E[Unmount]
+      E --> F[Cleanup Final]
+
+  - id: q3
+    type: multiple_choice
+    question: "What is 'Prop Drilling' and how can it be avoided in a React application?"
+    options:
+      - text: "It is the process of passing data through many levels of components; it can be avoided using Context API or State Management libraries."
+        is_correct: true
+      - text: "It is a performance optimization technique using React.memo."
+        is_correct: false
+      - text: "It refers to the way React drills into the DOM to update elements."
+        is_correct: false
+      - text: "It is a specific bug related to TypeScript interfaces."
+        is_correct: false
+    explanation: "Prop drilling makes code hard to maintain. Context API allows data to 'bypass' intermediate components."
+    tags: [architecture, context-api, state-management]
+    difficulty: medium
+    points: 7
+    diagram: |
+      graph TD
+      A[App State] --> B[Parent]
+      B --> C[Middleman]
+      C --> D[Child/Target]
+      A -. Context API .-> D
+
+  - id: q4
+    type: multiple_choice
+    question: "When using Material UI (MUI), what is the purpose of the 'sx' prop?"
+    options:
+      - text: "It allows defining custom styles directly on the component with access to the theme."
+        is_correct: true
+      - text: "It is used exclusively for handling server-side rendering (SSR)."
+        is_correct: false
+      - text: "It is a shortcut for setting the 'src' attribute of an Image component."
+        is_correct: false
+      - text: "It stands for 'Static X-axis' used for grid alignment."
+        is_correct: false
+    explanation: "The sx prop is a powerful shorthand for CSS-in-JS that integrates perfectly with the MUI theme (colors, spacing, etc.)."
+    tags: [mui, styling, layout]
+    difficulty: easy
+    points: 6
+    diagram: |
+      graph LR
+      A[Component] -- sx prop --> B[Theme Constraints]
+      B -- Generates --> C[Final CSS]
+
+  - id: q5
+    type: multiple_choice
+    question: "What happens if you update the state directly without using the setter function (e.g., this.state.val = 1 or state = 1)?"
+    options:
+      - text: "React will not be aware of the change and will not trigger a re-render of the component."
+        is_correct: true
+      - text: "React will automatically detect the change and update the DOM efficiently."
+        is_correct: false
+      - text: "The application will immediately crash with a 'ReferenceError'."
+        is_correct: false
+      - text: "Direct mutation is faster but only works in Production mode."
+        is_correct: false
+    explanation: "React relies on the setter function (useState/setState) to schedule a UI update. Mutation does not notify React."
+    tags: [state, reactivity, fundamentals]
+    difficulty: medium
+    points: 7
+    diagram: |
+      graph TD
+      A[Setter Function] -- Notifies --> B[React Scheduler]
+      B -- Triggers --> C[Re-render]
+      D[Direct Mutation] -- X --> B
+
+  - id: q6
+    type: multiple_choice
+    question: "What is the benefit of using React Query (TanStack Query) over basic useEffect for data fetching?"
+    options:
+      - text: "It provides built-in caching, background fetching, and loading/error states out of the box."
+        is_correct: true
+      - text: "It is the only way to fetch data from a .NET 8 backend."
+        is_correct: false
+      - text: "It replaces the need for any CSS in the application."
+        is_correct: false
+      - text: "It makes the bundle size significantly smaller by removing Axios."
+        is_correct: false
+    explanation: "React Query manages the server state, avoiding redundant network requests and improving user experience."
+    tags: [data-fetching, react-query, state]
+    difficulty: hard
+    points: 9
+    diagram: |
+      graph LR
+      A[Request] --> B{Cache Hit?}
+      B -- Yes --> C[Return Stale Data]
+      C --> D[Background Refresh]
+      B -- No --> E[Fetch from API]
+
+  - id: q7
+    type: multiple_choice
+    question: "In TypeScript, how do you define the types for a functional component's props?"
+    options:
+      - text: "By using an 'interface' or 'type' and passing it as a generic or parameter type."
+        is_correct: true
+      - text: "TypeScript automatically knows all props; no definition is needed."
+        is_correct: false
+      - text: "By using the 'any' keyword for every variable to ensure flexibility."
+        is_correct: false
+      - text: "Props must be defined in a separate .json file."
+        is_correct: false
+    explanation: "Defining interfaces for props ensures type safety and better IDE autocompletion."
+    tags: [typescript, props, safety]
+    difficulty: easy
+    points: 5
+    diagram: |
+      graph LR
+      A[Interface UserProps] -- Applies to --> B[Component]
+      B -- Checks --> C[Passed Data]
+
+  - id: q8
+    type: multiple_choice
+    question: "What is the 'Virtual DOM' in React?"
+    options:
+      - text: "A lightweight representation of the real DOM kept in memory to sync via the 'reconciliation' process."
+        is_correct: true
+      - text: "A browser extension required to run React applications."
+        is_correct: false
+      - text: "A direct copy of the backend database used for faster queries."
+        is_correct: false
+      - text: "A cloud-based server where React renders HTML before sending it to the client."
+        is_correct: false
+    explanation: "The Virtual DOM allows React to calculate the minimum number of changes needed for the real DOM, improving performance."
+    tags: [fundamentals, virtual-dom, performance]
+    difficulty: medium
+    points: 7
+    diagram: |
+      graph TD
+      A[State Change] --> B[New Virtual DOM]
+      B -- Diffing --> C[Minimum Changes]
+      C -- Patch --> D[Real DOM]
+
+  - id: q9
+    type: multiple_choice
+    question: "How does 'Lifting State Up' work in React?"
+    options:
+      - text: "Moving state to the closest common ancestor of components that need the same data."
+        is_correct: true
+      - text: "Pushing state down to the smallest child component possible."
+        is_correct: false
+      - text: "Moving state from the frontend to the backend server."
+        is_correct: false
+      - text: "Using a higher-order component to hide the state from the DOM."
+        is_correct: false
+    explanation: "By moving state to a shared parent, sibling components can stay in sync through props."
+    tags: [state, architecture, patterns]
+    difficulty: medium
+    points: 7
+    diagram: |
+      graph BT
+      A[Child A] -- Event --> C[Common Parent State]
+      B[Child B] -- Receives Prop --> C
+      C -- Updates --> B
+
+  - id: q10
+    type: multiple_choice
+    question: "What is the main advantage of using Next.js over a standard Create React App (CRA)?"
+    options:
+      - text: "It offers built-in Server-Side Rendering (SSR) and Static Site Generation (SSG) for better SEO and performance."
+        is_correct: true
+      - text: "It is written in Python, making it faster than JavaScript."
+        is_correct: false
+      - text: "It does not allow the use of hooks, making it more stable."
+        is_correct: false
+      - text: "Next.js applications do not need to be hosted on a web server."
+        is_correct: false
+    explanation: "Next.js provides hybrid rendering capabilities that standard React apps lack without complex manual configuration."
+    tags: [nextjs, ssr, architecture]
+    difficulty: medium
+    points: 8
+    diagram: |
+      graph TD
+      A[Browser Request] --> B[Server]
+      B -- Pre-renders HTML --> C[Full Page Sent]
+      C --> D[SEO Crawlers Happy]
+
+  - id: q11
+    type: multiple_choice
+    question: "How does 'Code Splitting' work in React and why is it important for large applications?"
+    options:
+      - text: "It allows splitting the bundle into smaller chunks using React.lazy and Suspense to load code only when needed."
+        is_correct: true
+      - text: "It is a way to split the C# backend code from the React frontend code."
+        is_correct: false
+      - text: "It automatically divides the database into multiple tables for better performance."
+        is_correct: false
+      - text: "It is a Git command used to split a branch into two different repositories."
+        is_correct: false
+    explanation: "Code splitting reduces the initial load time of the application by downloading only the JavaScript required for the current page."
+    tags: [performance, code-splitting, lazy-loading]
+    difficulty: medium
+    points: 8
+    diagram: |
+      graph TD
+      A[Main Bundle] --> B[Initial Load]
+      A -- lazy load --> C[Feature A Chunk]
+      A -- lazy load --> D[Feature B Chunk]
+
+  - id: q12
+    type: multiple_choice
+    question: "What is the difference between 'Controlled' and 'Uncontrolled' components in React forms?"
+    options:
+      - text: "Controlled components have their state managed by React (useState), while uncontrolled components rely on the DOM (refs)."
+        is_correct: true
+      - text: "Controlled components are used for security, while uncontrolled are for public forms."
+        is_correct: false
+      - text: "Uncontrolled components are faster because they don't use JavaScript."
+        is_correct: false
+      - text: "Controlled components can only be used with Material UI."
+        is_correct: false
+    explanation: "Controlled components are the standard in React, allowing for easy validation and instant UI feedback."
+    tags: [forms, state, refs]
+    difficulty: medium
+    points: 7
+    diagram: |
+      graph LR
+      A[User Input] -- value/onChange --> B[React State]
+      B -- updates --> A
+      C[User Input] -- ref --> D[DOM Node]
+
+  - id: q13
+    type: multiple_choice
+    question: "In React 18, what is the purpose of the 'useTransition' hook?"
+    options:
+      - text: "It allows marking state updates as non-urgent to keep the UI responsive during heavy re-renders."
+        is_correct: true
+      - text: "It is used to navigate between different routes in Next.js."
+        is_correct: false
+      - text: "It handles CSS transitions for Material UI components."
+        is_correct: false
+      - text: "It is used to migrate data from .NET 6 to .NET 8."
+        is_correct: false
+    explanation: "useTransition helps maintain a smooth user experience by prioritizing urgent updates (like typing) over heavy ones (like filtering a long list)."
+    tags: [react-18, performance, concurrency]
+    difficulty: hard
+    points: 9
+    diagram: |
+      graph TD
+      A[Urgent Update: Typing] --> B[High Priority]
+      C[Non-urgent: Large List Filter] --> D[Low Priority/useTransition]
+      B -- Renders First --> E[UI]
+
+  - id: q14
+    type: multiple_choice
+    question: "How can you prevent a child component from re-rendering when the parent component's state changes?"
+    options:
+      - text: "By wrapping the child component with React.memo."
+        is_correct: true
+      - text: "By using the 'static' keyword in the functional component."
+        is_correct: false
+      - text: "By moving the child component outside the 'src' folder."
+        is_correct: false
+      - text: "By using useEffect with an empty dependency array in the parent."
+        is_correct: false
+    explanation: "React.memo is a Higher Order Component that performs a shallow comparison of props and skips rendering if they haven't changed."
+    tags: [performance, memoization, rendering]
+    difficulty: medium
+    points: 7
+    diagram: |
+      graph TD
+      A[Parent State Change] -- triggers --> B[Parent Re-render]
+      B -- check props --> C{React.memo}
+      C -- Same Props --> D[Skip Child Render]
+      C -- New Props --> E[Render Child]
+
+  - id: q15
+    type: multiple_choice
+    question: "What is the recommended way to handle global themes (like Dark Mode) using Material UI?"
+    options:
+      - text: "Using the ThemeProvider component and the createTheme function."
+        is_correct: true
+      - text: "Hardcoding CSS variables in the index.html file."
+        is_correct: false
+      - text: "Creating a separate .NET service to serve CSS files."
+        is_correct: false
+      - text: "Using the 'important!' flag in every CSS rule."
+        is_correct: false
+    explanation: "ThemeProvider uses React Context to inject the theme object into all MUI components down the tree."
+    tags: [mui, styling, context-api]
+    difficulty: easy
+    points: 6
+    diagram: |
+      graph TD
+      A[createTheme] --> B[ThemeProvider]
+      B -- provides context --> C[Button]
+      B -- provides context --> D[Card]
+      C -- uses --> E[Theme Primary Color]
+
+  - id: q16
+    type: multiple_choice
+    question: "Which hook should be used to interact directly with a DOM element or to store a mutable value that doesn't trigger re-renders?"
+    options:
+      - text: "useRef"
+        is_correct: true
+      - text: "useState"
+        is_correct: false
+      - text: "useContext"
+        is_correct: false
+      - text: "useReducer"
+        is_correct: false
+    explanation: "useRef returns a persistent object whose .current property can hold any value without triggering a re-render when it changes."
+    tags: [hooks, refs, dom]
+    difficulty: easy
+    points: 5
+    diagram: |
+      graph LR
+      A[useRef Object] -- .current --> B[Stored Value]
+      B -- change value --> C[No Re-render]
+
+  - id: q17
+    type: multiple_choice
+    question: "When using TypeScript with React Query, where should you ideally define the interface for the API response?"
+    options:
+      - text: "As a generic type in the useQuery hook call: useQuery<User[]>(...)."
+        is_correct: true
+      - text: "Inside the HTML template using a <script> tag."
+        is_correct: false
+      - text: "React Query does not support TypeScript interfaces."
+        is_correct: false
+      - text: "Only on the .NET backend; the frontend should use 'any'."
+        is_correct: false
+    explanation: "Passing the interface as a generic ensures that the 'data' returned by useQuery is fully typed throughout your component."
+    tags: [typescript, react-query, data-fetching]
+    difficulty: medium
+    points: 8
+    diagram: |
+      graph LR
+      A[API Response] -- maps to --> B[Interface MyData]
+      B -- generic type --> C[useQuery]
+      C -- provides --> D[Typed 'data' variable]
+
+  - id: q18
+    type: multiple_choice
+    question: "What is the 'Hydration' process in the context of Next.js or SSR?"
+    options:
+      - text: "The process where React attaches event listeners to the static HTML sent by the server to make it interactive."
+        is_correct: true
+      - text: "The process of cleaning up the database after a large migration."
+        is_correct: false
+      - text: "A technique to compress images before sending them to the client."
+        is_correct: false
+      - text: "A way to inject watermarks into UI components for security."
+        is_correct: false
+    explanation: "Hydration turns static HTML (good for SEO) into a fully functional dynamic React app (good for UX)."
+    tags: [nextjs, ssr, hydration]
+    difficulty: hard
+    points: 9
+    diagram: |
+      graph TD
+      A[Static HTML from Server] --> B[Browser Display]
+      B --> C[JS Bundle Loads]
+      C -- Hydration --> D[Interactive React App]
+
+  - id: q19
+    type: multiple_choice
+    question: "In a 'Custom Hook', what determines if the component using it will re-render?"
+    options:
+      - text: "If any state variable (useState) or effect inside the custom hook triggers an update."
+        is_correct: true
+      - text: "Custom hooks never trigger re-renders."
+        is_correct: false
+      - text: "Only the file name of the custom hook (it must start with 'use')."
+        is_correct: false
+      - text: "Re-renders are only triggered by the App.tsx file."
+        is_correct: false
+    explanation: "Custom hooks are just a way to extract logic; they follow the same reactivity rules as standard hooks."
+    tags: [hooks, logic-reuse, reactivity]
+    difficulty: medium
+    points: 7
+    diagram: |
+      graph LR
+      A[Custom Hook] -- contains --> B[useState]
+      B -- setInternalState --> C[Triggers Re-render in Host Component]
+
+  - id: q20
+    type: multiple_choice
+    question: "What is the purpose of 'Keys' in React lists?"
+    options:
+      - text: "They help React identify which items have changed, been added, or removed for efficient DOM updates."
+        is_correct: true
+      - text: "They are used to encrypt sensitive data in the list."
+        is_correct: false
+      - text: "They are the unique identifiers for the SQL database primary keys."
+        is_correct: false
+      - text: "They define the keyboard shortcuts for the application."
+        is_correct: false
+    explanation: "Without keys, React might re-order or re-render the entire list unnecessarily, hurting performance and causing state bugs."
+    tags: [fundamentals, lists, reconciliation]
+    difficulty: easy
+    points: 5
+    diagram: |
+      graph TD
+      A[List Update] -- Diffing --> B{Has unique key?}
+      B -- Yes --> C[Update specific element]
+      B -- No --> D[Re-render entire list]
