@@ -1,0 +1,499 @@
+questions:
+  - id: q21
+    type: multiple_choice
+    question: "Analyze the following code. What is the issue with this implementation of a counter?"
+    code: |
+      function Counter() {
+        const [count, setCount] = useState(0);
+        const increment = () => {
+          setCount(count + 1);
+          setCount(count + 1);
+          setCount(count + 1);
+        };
+        return <button onClick={increment}>{count}</button>;
+      }
+    options:
+      - text: "The count will only increase by 1 because setCount calls use the same stale closure of 'count'."
+        is_correct: true
+      - text: "The component will throw an error because you cannot call setCount multiple times."
+        is_correct: false
+      - text: "The count will increase by 3 correctly."
+        is_correct: false
+      - text: "The button will trigger an infinite re-render loop."
+        is_correct: false
+    explanation: "State updates in React are batched. Since all calls use the same value of 'count' from the current render, they all effectively calculate '0 + 1'."
+    tags: [useState, batching, closure]
+    difficulty: medium
+    points: 8
+    diagram: |
+      graph TD
+      A[Click] --> B[setCount 0+1]
+      B --> C[setCount 0+1]
+      C --> D[setCount 0+1]
+      D -- Result --> E[count = 1]
+
+  - id: q22
+    type: multiple_choice
+    question: "In this Material UI (MUI) example, how do you correctly access the theme primary color inside the sx prop?"
+    code: |
+      <Box sx={{ color: (theme) => theme.palette.primary.main }}>
+        Hello World
+      </Box>
+    options:
+      - text: "By passing a function to the property, which receives the theme object as an argument."
+        is_correct: true
+      - text: "By importing the theme file directly into the component."
+        is_correct: false
+      - text: "The sx prop does not support functions, only static objects."
+        is_correct: false
+      - text: "You must use the useTheme hook and pass the result to sx."
+        is_correct: false
+    explanation: "The sx prop is theme-aware. It can take an object or a function that provides direct access to the theme configuration."
+    tags: [mui, styling, theme]
+    difficulty: easy
+    points: 6
+
+  - id: q23
+    type: multiple_choice
+    question: "What will happen when the 'Toggle' button is clicked in this code?"
+    code: |
+      function App() {
+        const [show, setShow] = useState(false);
+        return (
+          <div>
+            <button onClick={() => setShow(!show)}>Toggle</button>
+            {show && <Child />}
+          </div>
+        );
+      }
+      function Child() {
+        useEffect(() => {
+          console.log('Mounted');
+          return () => console.log('Unmounted');
+        }, []);
+        return <div>Child</div>;
+      }
+    options:
+      - text: "Every click will toggle the Child; 'Mounted' and 'Unmounted' will log accordingly."
+        is_correct: true
+      - text: "'Mounted' will only log once, no matter how many times you toggle."
+        is_correct: false
+      - text: "The app will crash because Child is not rendered initially."
+        is_correct: false
+      - text: "The cleanup function (Unmounted) will only run when the browser tab closes."
+        is_correct: false
+    explanation: "Conditional rendering with {show && <Child />} causes the component to mount/unmount, triggering useEffect lifecycle logs."
+    tags: [useEffect, conditional-rendering, lifecycle]
+    difficulty: medium
+    points: 7
+
+  - id: q24
+    type: multiple_choice
+    question: "What is the best way to type the 'event' parameter in this TypeScript React component?"
+    code: |
+      function SearchBar() {
+        const handleChange = (event: ???) => {
+          console.log(event.target.value);
+        };
+        return <input type='text' onChange={handleChange} />;
+      }
+    options:
+      - text: "React.ChangeEvent<HTMLInputElement>"
+        is_correct: true
+      - text: "Event"
+        is_correct: false
+      - text: "HTMLInputElement"
+        is_correct: false
+      - text: "React.MouseEventHandler"
+        is_correct: false
+    explanation: "React.ChangeEvent is a generic type provided by React to handle input changes with full type safety for the target element."
+    tags: [typescript, events, safety]
+    difficulty: medium
+    points: 7
+
+  - id: q25
+    type: multiple_choice
+    question: "Why is the following useMemo implementation potentially useless?"
+    code: |
+      const MyComponent = ({ data }) => {
+        const filteredData = useMemo(() => {
+          return data.filter(item => item.active);
+        }, [data]);
+        // ...
+      };
+    options:
+      - text: "If 'data' is a new array reference on every parent render, useMemo will re-run every time anyway."
+        is_correct: true
+      - text: "Filter does not work inside useMemo."
+        is_correct: false
+      - text: "The dependency array must contain 'filteredData'."
+        is_correct: false
+      - text: "useMemo can only be used for primitive values like strings or numbers."
+        is_correct: false
+    explanation: "Memoization depends on reference equality. If the parent passes a new array reference each time, useMemo detects a change and recalculates."
+    tags: [performance, useMemo, referential-equality]
+    difficulty: hard
+    points: 9
+
+  - id: q26
+    type: multiple_choice
+    question: "In a Next.js Page (App Router), what does the following file structure imply?"
+    code: |
+      // app/products/[id]/page.tsx
+      export default function ProductPage({ params }: { params: { id: string } }) {
+        return <div>Product: {params.id}</div>;
+      }
+    options:
+      - text: "It defines a dynamic route where 'id' is a URL parameter accessible via props."
+        is_correct: true
+      - text: "It creates a static route accessible only at /products/id."
+        is_correct: false
+      - text: "It is a private folder that cannot be accessed by the browser."
+        is_correct: false
+      - text: "The [id] syntax is a bug and will cause a compilation error."
+        is_correct: false
+    explanation: "Square brackets in Next.js file systems define dynamic segments (Dynamic Routes)."
+    tags: [nextjs, routing, app-router]
+    difficulty: medium
+    points: 8
+
+  - id: q27
+    type: multiple_choice
+    question: "Analyze this custom hook. What will happen to the component using it?"
+    code: |
+      function useWindowWidth() {
+        const [width, setWidth] = useState(window.innerWidth);
+        useEffect(() => {
+          const handleResize = () => setWidth(window.innerWidth);
+          window.addEventListener('resize', handleResize);
+          return () => window.removeEventListener('resize', handleResize);
+        }, []);
+        return width;
+      }
+    options:
+      - text: "The component will re-render every time the browser window is resized."
+        is_correct: true
+      - text: "It will cause a memory leak because the listener is never removed."
+        is_correct: false
+      - text: "The width will only be calculated once when the component mounts."
+        is_correct: false
+      - text: "Custom hooks cannot use useEffect."
+        is_correct: false
+    explanation: "The hook updates its internal state on resize, which in turn triggers a re-render in any component consuming the hook."
+    tags: [hooks, custom-hooks, events]
+    difficulty: medium
+    points: 7
+
+  - id: q28
+    type: multiple_choice
+    question: "What is the correct way to update an object in state in React?"
+    code: |
+      const [user, setUser] = useState({ name: 'John', age: 30 });
+    options:
+      - text: "setUser({ ...user, age: 31 });"
+        is_correct: true
+      - text: "user.age = 31; setUser(user);"
+        is_correct: false
+      - text: "setUser(user.age = 31);"
+        is_correct: false
+      - text: "setUser({ age: 31 }); // (only updating age)"
+        is_correct: false
+    explanation: "State must be treated as immutable. You should spread the existing object and overwrite specific properties to create a new reference."
+    tags: [state, immutability, useState]
+    difficulty: easy
+    points: 6
+
+  - id: q29
+    type: multiple_choice
+    question: "What is the purpose of the 'Suspense' component in this context?"
+    code: |
+      const HeavyComponent = React.lazy(() => import('./HeavyComponent'));
+      function App() {
+        return (
+          <Suspense fallback={<Loading />}>
+            <HeavyComponent />
+          </Suspense>
+        );
+      }
+    options:
+      - text: "It shows a fallback UI while the lazy-loaded component's code is being downloaded."
+        is_correct: true
+      - text: "It catches JavaScript errors inside HeavyComponent."
+        is_correct: false
+      - text: "It delays the rendering of the whole page for 2 seconds."
+        is_correct: false
+      - text: "It is used for SEO optimization in server-side rendering."
+        is_correct: false
+    explanation: "Suspense works with React.lazy to handle the asynchronous loading of component chunks."
+    tags: [suspense, lazy-loading, performance]
+    difficulty: medium
+    points: 7
+
+  - id: q30
+    type: multiple_choice
+    question: "How do you define an optional property in a TypeScript interface for React props?"
+    code: |
+      interface MyProps {
+        title: string;
+        description?: string;
+      }
+    options:
+      - text: "By using the '?' symbol after the property name."
+        is_correct: true
+      - text: "By setting the property value to 'null'."
+        is_correct: false
+      - text: "By using the 'optional' keyword before the property name."
+        is_correct: false
+      - text: "All properties in an interface are optional by default."
+        is_correct: false
+    explanation: "The '?' syntax in TypeScript marks a property as optional, meaning it can be undefined when the component is used."
+    tags: [typescript, interfaces, props]
+    difficulty: easy
+    points: 5
+
+  - id: q31
+    type: multiple_choice
+    question: "In the following code, why is 'Fetching data' logged to the console on every keystroke in the input field?"
+    code: |
+      function SearchComponent() {
+        const [query, setQuery] = useState('');
+        
+        useEffect(() => {
+          console.log('Fetching data...');
+        });
+
+        return <input value={query} onChange={e => setQuery(e.target.value)} />;
+      }
+    options:
+      - text: "Because the useEffect is missing a dependency array, causing it to run on every render."
+        is_correct: true
+      - text: "Because 'setQuery' triggers a global page refresh."
+        is_correct: false
+      - text: "Because useEffect is the standard way to handle input changes."
+        is_correct: false
+      - text: "Because React hooks are designed to run every time state changes regardless of configuration."
+        is_correct: false
+    explanation: "A useEffect without a dependency array ([]) runs after every completed render. To fix this, an empty array or specific dependencies should be added."
+    tags: [useEffect, rendering, lifecycle]
+    difficulty: medium
+    points: 7
+    diagram: |
+      graph LR
+      A[State Update] --> B[Re-render]
+      B --> C{Dependency Array?}
+      C -- None --> D[Run Effect Every Time]
+      C -- Empty [] --> E[Run Once on Mount]
+
+  - id: q32
+    type: multiple_choice
+    question: "Analyze this custom hook for data fetching. What is the most critical feature missing for a production-grade application?"
+    code: |
+      function useData(url) {
+        const [data, setData] = useState(null);
+        useEffect(() => {
+          fetch(url).then(res => res.json()).then(json => setData(json));
+        }, [url]);
+        return data;
+      }
+    options:
+      - text: "Handling 'race conditions' and component unmounting (cleanup)."
+        is_correct: true
+      - text: "Converting the URL to a string before fetching."
+        is_correct: false
+      - text: "Using a for-loop instead of .then()."
+        is_correct: false
+      - text: "Adding a semicolon after the setData call."
+        is_correct: false
+    explanation: "If the URL changes quickly or the component unmounts before the fetch completes, it might try to update the state of an unmounted component or display data from an outdated request (race condition)."
+    tags: [hooks, data-fetching, cleanup]
+    difficulty: hard
+    points: 9
+
+  - id: q33
+    type: multiple_choice
+    question: "What is the result of clicking the button in the following component?"
+    code: |
+      function App() {
+        const [user, setUser] = useState({ name: 'Marcelo', role: 'Dev' });
+        const updateName = () => {
+          user.name = 'John';
+          setUser(user);
+        };
+        return <button onClick={updateName}>{user.name}</button>;
+      }
+    options:
+      - text: "Nothing happens visually because the object reference remained the same, so React skipped the re-render."
+        is_correct: true
+      - text: "The button text changes to 'John' immediately."
+        is_correct: false
+      - text: "The app crashes due to 'Direct Mutation Error'."
+        is_correct: false
+      - text: "The name changes only after the second click."
+        is_correct: false
+    explanation: "React uses Object.is comparison for state updates. Since the reference to the 'user' object is the same, React thinks the state hasn't changed and doesn't re-render."
+    tags: [state, immutability, reconciliation]
+    difficulty: medium
+    points: 8
+
+  - id: q34
+    type: multiple_choice
+    question: "How would you correctly type a functional component that accepts 'children' in TypeScript?"
+    code: |
+      interface MyLayoutProps {
+        title: string;
+        children: ???;
+      }
+    options:
+      - text: "React.ReactNode"
+        is_correct: true
+      - text: "React.HTMLElement"
+        is_correct: false
+      - text: "string"
+        is_correct: false
+      - text: "JSX.ElementOnly"
+        is_correct: false
+    explanation: "React.ReactNode is the broadest type for children, covering strings, numbers, elements, or arrays of these."
+    tags: [typescript, props, layout]
+    difficulty: easy
+    points: 5
+
+  - id: q35
+    type: multiple_choice
+    question: "In this MUI DataGrid usage, why might performance degrade when the parent renders?"
+    code: |
+      function MyTable({ rows }) {
+        const columns = [
+          { field: 'id', headerName: 'ID' },
+          { field: 'name', headerName: 'Name' }
+        ];
+        return <DataGrid rows={rows} columns={columns} />;
+      }
+    options:
+      - text: "The 'columns' array is redefined on every render, which might trigger unnecessary heavy re-renders in the DataGrid."
+        is_correct: true
+      - text: "DataGrid does not support arrays defined inside the component."
+        is_correct: false
+      - text: "The 'field' property is reserved and cannot be used in arrays."
+        is_correct: false
+      - text: "MUI requires all columns to be fetched from an API."
+        is_correct: false
+    explanation: "Complex MUI components often use referential equality for props. Moving 'columns' outside the component or using useMemo is a best practice."
+    tags: [mui, performance, memoization]
+    difficulty: medium
+    points: 7
+
+  - id: q36
+    type: multiple_choice
+    question: "What is the purpose of 'forwardRef' in the following scenario?"
+    code: |
+      const MyInput = forwardRef((props, ref) => (
+        <input {...props} ref={ref} />
+      ));
+    options:
+      - text: "It allows the parent component to obtain a direct reference to the underlying DOM input element."
+        is_correct: true
+      - text: "It is used to automatically translate the input text."
+        is_correct: false
+      - text: "It forwards the component to a different route."
+        is_correct: false
+      - text: "It increases the speed of keystroke logging."
+        is_correct: false
+    explanation: "forwardRef is necessary when a parent needs to access a DOM node or a child's internal component ref."
+    tags: [refs, forwardRef, dom]
+    difficulty: medium
+    points: 7
+
+  - id: q37
+    type: multiple_choice
+    question: "Using React Query, what does the 'enabled' option do in this snippet?"
+    code: |
+      const { data } = useQuery({
+        queryKey: ['user', id],
+        queryFn: () => fetchUser(id),
+        enabled: !!id
+      });
+    options:
+      - text: "It prevents the query from running automatically if 'id' is null or undefined."
+        is_correct: true
+      - text: "It enables high-speed data transfer from the .NET backend."
+        is_correct: false
+      - text: "It encrypts the 'id' before sending the request."
+        is_correct: false
+      - text: "It tells React Query to use LocalStorage instead of cache."
+        is_correct: false
+    explanation: "The 'enabled' property is used for 'Dependent Queries', ensuring the fetch only happens when the necessary criteria are met."
+    tags: [react-query, data-fetching, logic]
+    difficulty: medium
+    points: 8
+    diagram: |
+      graph TD
+      A[Check 'enabled' value] --> B{True?}
+      B -- Yes --> C[Execute queryFn]
+      B -- No --> D[Stay in 'idle' state]
+
+  - id: q38
+    type: multiple_choice
+    question: "Which pattern is being used here to share logic between components?"
+    code: |
+      function withLogger(WrappedComponent) {
+        return function(props) {
+          useEffect(() => { console.log('Rendered'); }, []);
+          return <WrappedComponent {...props} />;
+        }
+      }
+    options:
+      - text: "HOC (Higher-Order Component)"
+        is_correct: true
+      - text: "Render Props"
+        is_correct: false
+      - text: "Compound Components"
+        is_correct: false
+      - text: "Redux Thunk"
+        is_correct: false
+    explanation: "A Higher-Order Component is a function that takes a component and returns a new component with added functionality."
+    tags: [patterns, hoc, architecture]
+    difficulty: medium
+    points: 7
+
+  - id: q39
+    type: multiple_choice
+    question: "What is the issue with using 'index' as a key in this dynamically filtering list?"
+    code: |
+      {items.map((item, index) => (
+        <ListItem key={index} text={item.text} />
+      ))}
+    options:
+      - text: "If items are reordered or removed, React may reuse the wrong component state for the wrong data."
+        is_correct: true
+      - text: "TypeScript will throw a 'Type Index' error."
+        is_correct: false
+      - text: "The list will only render the first three items."
+        is_correct: false
+      - text: "Material UI lists do not support numerical keys."
+        is_correct: false
+    explanation: "Keys should be stable, predictable, and unique. Using index causes issues during reconciliation when the list order changes."
+    tags: [fundamentals, lists, performance]
+    difficulty: easy
+    points: 6
+
+  - id: q40
+    type: multiple_choice
+    question: "In Next.js 13/14 (App Router), what is the default rendering behavior for components inside the 'app' directory?"
+    code: |
+      // app/dashboard/page.tsx
+      export default function Page() {
+        return <h1>Dashboard</h1>;
+      }
+    options:
+      - text: "Server Components (rendered on the server by default)."
+        is_correct: true
+      - text: "Client Components (rendered in the browser by default)."
+        is_correct: false
+      - text: "Static HTML files without any React functionality."
+        is_correct: false
+      - text: "They are automatically converted to .NET WebForms."
+        is_correct: false
+    explanation: "In the App Router, all components are Server Components by default unless you add the 'use client' directive at the top."
+    tags: [nextjs, server-components, architecture]
+    difficulty: medium
+    points: 8
