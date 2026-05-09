@@ -1,0 +1,511 @@
+questions:
+  - id: culture-principles-q31
+    type: multiple_choice
+    question: |
+      A business stakeholder requests a feature that solves an immediate problem but will make the system significantly harder to maintain in the long run. How do you apply the principle of 'Sustainable Performance'?
+    options:
+      - text: Deliver the feature exactly as requested to ensure immediate client satisfaction.
+        is_correct: false
+      - text: Propose an alternative solution that meets the business need while preserving architectural health.
+        is_correct: true
+      - text: Refuse the request entirely to protect the codebase from technical debt.
+        is_correct: false
+      - text: Implement it quickly and hope another team handles the maintenance later.
+        is_correct: false
+    explanation: |
+      Correct: Sustainable performance is about balancing short-term delivery with long-term stability and maintainability.
+      Incorrect: Purely reactive delivery or total refusal fails to align technical excellence with business value.
+
+  - id: culture-principles-q32
+    type: multiple_choice
+    question: |
+      You notice a teammate is consistently struggling with a new technology the team has adopted. How do you demonstrate 'Collaboration and Excellence'?
+    options:
+      - text: Do their work for them to ensure the project stays on track.
+        is_correct: false
+      - text: Offer to pair-program or share learning resources to help them level up.
+        is_correct: true
+      - text: Report their lack of knowledge to the manager to protect team performance.
+        is_correct: false
+      - text: Focus only on your own tasks to maintain your individual excellence.
+        is_correct: false
+    explanation: |
+      Correct: Excellence is a collective pursuit; supporting colleagues' growth strengthens the overall team capability.
+      Incorrect: Working in silos or ignoring a teammate's struggle hinders long-term collaborative success.
+
+  - id: culture-principles-q33
+    type: multiple_choice
+    question: |
+      While designing a user interface for an internal trading tool, you realize the current requirements are technically sound but confusing for the end-users. What is the 'Client Centric' approach?
+    options:
+      - text: Follow the requirements as documented since the technical logic is correct.
+        is_correct: false
+      - text: Propose usability improvements that make the tool more intuitive for the users.
+        is_correct: true
+      - text: Tell the users they need more training to understand the technical design.
+        is_correct: false
+      - text: Simplify the UI by removing complex features without consulting stakeholders.
+        is_correct: false
+    explanation: |
+      Correct: Client centricity means ensuring that the solutions provided truly empower the user to achieve their goals.
+      Incorrect: Technical correctness is insufficient if the solution does not effectively serve the user's needs.
+
+  - id: culture-principles-q34
+    type: multiple_choice
+    question: |
+      You have finished your sprint tasks early. What is the most 'Excellence'-oriented way to use the remaining time?
+    options:
+      - text: Take a break and wait for the next sprint to start.
+        is_correct: false
+      - text: Refactor a complex module or improve the automated test suite.
+        is_correct: true
+      - text: Ask for more 'easy' tasks to increase your closed-ticket count.
+        is_correct: false
+      - text: Browse the web for the latest tech news unrelated to your work.
+        is_correct: false
+    explanation: |
+      Correct: Excellence involves a continuous drive to improve the quality of the product and the environment.
+      Incorrect: Passivity or focusing on vanity metrics (ticket count) does not contribute to higher standards.
+
+  - id: culture-principles-q35
+    type: multiple_choice
+    question: |
+      An external client reports a bug that only occurs in a specific, rare scenario. It doesn't affect financial calculations. How do you prioritize it?
+    options:
+      - text: Mark it as 'Won't Fix' because it doesn't affect the bottom line.
+        is_correct: false
+      - text: Acknowledge the issue and schedule it based on its impact on the client experience.
+        is_correct: true
+      - text: Fix it immediately, dropping all other high-priority work.
+        is_correct: false
+      - text: Tell the client that the scenario is not supported by the current design.
+        is_correct: false
+    explanation: |
+      Correct: A client-centric approach values the client's perspective and manages expectations through transparent communication.
+      Incorrect: Dismissing client feedback harms trust; over-reacting can jeopardize other critical commitments.
+
+  - id: culture-principles-q36
+    type: multiple_choice
+    question: |
+      The team is adopting a new DevOps practice. You are skeptical about its benefits. What is the most professional way to handle this?
+    options:
+      - text: Publicly criticize the change to prevent it from being implemented.
+        is_correct: false
+      - text: Engage in a constructive dialogue, providing data-backed concerns while remaining open to the change.
+        is_correct: true
+      - text: Secretly continue using the old methods to maintain your own efficiency.
+        is_correct: false
+      - text: Comply silently but do not put any effort into making the new practice work.
+        is_correct: false
+    explanation: |
+      Correct: Excellence and sustainable performance rely on honest, constructive feedback and the ability to adapt to improvements.
+      Incorrect: Resistance to change or passive-aggressiveness undermines team progress and innovation.
+
+  - id: culture-principles-q37
+    type: multiple_choice
+    question: |
+      Which behavior best describes 'Sustainable Performance' in software engineering?
+    options:
+      - text: Working 12-hour days every day to meet every possible deadline.
+        is_correct: false
+      - text: Promoting high-quality code and automated processes that allow for a predictable pace.
+        is_correct: true
+      - text: Only working on the most interesting and 'fun' technical problems.
+        is_correct: false
+      - text: Avoiding all complex projects to ensure you never make a mistake.
+        is_correct: false
+    explanation: |
+      Correct: Sustainable performance is about creating an environment where high standards are consistently met without burnout or technical collapse.
+      Incorrect: Heroics (overworking) are not sustainable; avoiding challenges prevents growth and excellence.
+
+  - id: culture-principles-q38
+    type: multiple_choice
+    question: |
+      A project is completed, but the initial business goals were only partially met despite technical success. What is the 'Excellence' move?
+    options:
+      - text: Celebrate the technical success and move to the next project.
+        is_correct: false
+      - text: Conduct a post-project review to understand why the business impact was lower than expected.
+        is_correct: true
+      - text: Blame the business team for providing incorrect requirements.
+        is_correct: false
+      - text: Hide the fact that goals weren't met from the senior management.
+        is_correct: false
+    explanation: |
+      Correct: Excellence requires a focus on outcomes, not just outputs, and a willingness to learn from every result.
+      Incorrect: Focusing only on technical metrics while ignoring business impact is not client-centric or effective.
+
+  - id: culture-principles-q39
+    type: multiple_choice
+    question: |
+      How should a senior engineer demonstrate 'Professionalism and Excellence' during a high-severity incident?
+    options:
+      - text: By shouting instructions to ensure everyone knows they are in charge.
+        is_correct: false
+      - text: By remaining calm, coordinating efforts, and focusing on facts to restore service.
+        is_correct: true
+      - text: By finding the developer who caused the incident and questioning them immediately.
+        is_correct: false
+      - text: By taking over everyone's computer to fix the issue yourself.
+        is_correct: false
+    explanation: |
+      Correct: Excellence in crisis involves leadership, emotional intelligence, and a focus on resolution and systematic recovery.
+      Incorrect: Panic, blame, or micro-management hinders the restoration of service and damages team morale.
+
+  - id: culture-principles-q40
+    type: multiple_choice
+    question: |
+      A client asks for a custom report that would require a significant manual effort from your team every month. What is the most 'Excellence-focused' response?
+    options:
+      - text: Decline the request because manual work is not professional.
+        is_correct: false
+      - text: Analyze the request and propose an automated self-service solution for the client.
+        is_correct: true
+      - text: Agree to do it manually to show that you are dedicated to the client.
+        is_correct: false
+      - text: Agree to do it once and then hope the client forgets to ask again.
+        is_correct: false
+    explanation: |
+      Correct: Combining client centricity with excellence means finding scalable, efficient ways to provide value.
+      Incorrect: Manual repetitive work is a waste of talent; agreeing to unsustainable tasks harms future performance.
+
+  - id: culture-principles-q41
+    type: multiple_choice
+    question: |
+      You are tasked with a system migration. A faster method exists but lacks proper documentation for future support teams. What does 'Sustainable Performance' dictate?
+    options:
+      - text: Use the faster method to meet the deadline, as speed is the priority.
+        is_correct: false
+      - text: Choose the method that allows for thorough documentation and long-term maintainability.
+        is_correct: true
+      - text: Skip the migration until a more automated tool is developed.
+        is_correct: false
+      - text: Use the faster method and verbally explain it to one colleague.
+        is_correct: false
+    explanation: |
+      Correct: Sustainable performance focuses on the long-term health and supportability of the system over short-term shortcuts.
+      Incorrect: Shortcuts without documentation create technical debt and operational risks for future teams.
+
+  - id: culture-principles-q42
+    type: multiple_choice
+    question: |
+      A client suggests a new feature that you know will negatively impact the system's overall latency. How do you demonstrate 'Client Centricity'?
+    options:
+      - text: Implement it immediately because the client is always right.
+        is_correct: false
+      - text: Present the trade-offs to the client and work together to find a solution that balances the feature with performance.
+        is_correct: true
+      - text: Ignore the suggestion to protect the system's performance metrics.
+        is_correct: false
+      - text: Implement the feature but only for a small group of users without telling anyone.
+        is_correct: false
+    explanation: |
+      Correct: Client centricity involves being a trusted advisor, helping the client understand the technical impact on their overall experience.
+      Incorrect: Blindly following requests or ignoring feedback both fail to provide the best value to the client.
+
+  - id: culture-principles-q43
+    type: multiple_choice
+    question: |
+      While developing a module, you find an existing piece of code that is inefficient but works. It is not part of your current task. How do you show 'Excellence'?
+    options:
+      - text: Leave it alone to avoid scope creep and stay focused on your task.
+        is_correct: false
+      - text: Refactor the code or log a specific improvement task if the change is too large for the current scope.
+        is_correct: true
+      - text: Delete the inefficient code and see if anyone notices.
+        is_correct: false
+      - text: Complain about the original author during the team meeting.
+        is_correct: false
+    explanation: |
+      Correct: Excellence is about taking ownership of the codebase and leaving it better than you found it.
+      Incorrect: Ignoring obvious improvements or being unprofessional about past work does not foster a culture of high standards.
+
+  - id: culture-principles-q44
+    type: multiple_choice
+    question: |
+      Which of the following actions best supports 'Sustainable Performance' during a period of heavy workload?
+    options:
+      - text: Encouraging the team to work through weekends until the project is over.
+        is_correct: false
+      - text: Prioritizing critical tasks and ensuring the team maintains a healthy work-life balance to avoid burnout.
+        is_correct: true
+      - text: Reducing the number of code reviews to speed up delivery.
+        is_correct: false
+      - text: Promising the stakeholders that everything will be delivered on time regardless of the cost.
+        is_correct: false
+    explanation: |
+      Correct: Long-term high performance is only possible if the team remains healthy, focused, and follows quality processes.
+      Incorrect: Sacrificing quality or employee well-being leads to catastrophic failure in the long run.
+
+  - id: culture-principles-q45
+    type: multiple_choice
+    question: |
+      A project was delivered on time, but the end-users find it difficult to use. In the context of 'Principles', how is this project viewed?
+    options:
+      - text: A complete success because the technical requirements and deadlines were met.
+        is_correct: false
+      - text: A partial failure because it lacks 'Client Centricity' and did not deliver the intended value.
+        is_correct: true
+      - text: A success, as it is the users' responsibility to learn how to use the software.
+        is_correct: false
+      - text: An engineering triumph that was ruined by poor user requirements.
+        is_correct: false
+    explanation: |
+      Correct: Delivering the right value to the client is the ultimate goal, not just meeting technical specs.
+      Incorrect: Focusing purely on deadlines while ignoring usability contradicts the core principle of serving the client.
+
+  - id: culture-principles-q46
+    type: multiple_choice
+    question: |
+      When faced with a complex technical choice, what does 'Excellence' suggest as the first step?
+    options:
+      - text: Choosing the technology you are most comfortable with.
+        is_correct: false
+      - text: Researching and comparing options based on objective criteria like performance, security, and scalability.
+        is_correct: true
+      - text: Asking the most senior person in the room to decide for you.
+        is_correct: false
+      - text: Picking the first option that comes up on a search engine.
+        is_correct: false
+    explanation: |
+      Correct: Excellence requires a disciplined, evidence-based approach to decision-making.
+      Incorrect: Relying on personal comfort or arbitrary choices fails to uphold professional standards.
+
+  - id: culture-principles-q47
+    type: multiple_choice
+    question: |
+      How does 'Excellence' apply to the way you handle personal mistakes in a project?
+    options:
+      - text: Trying to fix it quickly before anyone notices.
+        is_correct: false
+      - text: Taking full responsibility, communicating the issue early, and proposing a fix.
+        is_correct: true
+      - text: Blaming the lack of clear requirements for the error.
+        is_correct: false
+      - text: Arguing that the mistake is actually a feature.
+        is_correct: false
+    explanation: |
+      Correct: Professional excellence is built on integrity, transparency, and a focus on learning and resolution.
+      Incorrect: Lack of transparency or avoiding accountability undermines trust and team performance.
+
+  - id: culture-principles-q48
+    type: multiple_choice
+    question: |
+      A team is deciding between a quick, manual fix and a longer, automated one for a recurring issue. Which choice aligns with 'Principles'?
+    options:
+      - text: The manual fix, because it is faster and requires less effort today.
+        is_correct: false
+      - text: The automated fix, because it ensures 'Sustainable Performance' and eliminates future waste.
+        is_correct: true
+      - text: Doing nothing, as the issue only happens once a month.
+        is_correct: false
+      - text: Alternating between manual and automated fixes to keep things interesting.
+        is_correct: false
+    explanation: |
+      Correct: Principles-driven engineering favors long-term efficiency and structural improvements over repetitive manual labor.
+      Incorrect: Manual work for recurring problems is inefficient and prone to error, violating the pillar of Excellence.
+
+  - id: culture-principles-q49
+    type: multiple_choice
+    question: |
+      In a client meeting, the client expresses frustration with a delay. What is the 'Client Centric' response?
+    options:
+      - text: Remind the client of the technical complexities they don't understand.
+        is_correct: false
+      - text: Listen to their concerns, show empathy, and provide a clear, honest updated plan.
+        is_correct: true
+      - text: Tell the client that delays are normal in software engineering.
+        is_correct: false
+      - text: Shift the blame to a third-party vendor to protect the team's image.
+        is_correct: false
+    explanation: |
+      Correct: Building strong relationships requires empathy, honesty, and clear communication, even when the news is bad.
+      Incorrect: Defensiveness or blame-shifting damages the partnership and does not solve the client's problem.
+
+  - id: culture-principles-q50
+    type: multiple_choice
+    question: |
+      How does 'Excellence' manifest in the creation of a 'Definition of Done' for a squad?
+    options:
+      - text: Creating the shortest possible list to ensure tasks are closed quickly.
+        is_correct: false
+      - text: Including rigorous testing, security checks, and documentation requirements to ensure high-quality delivery.
+        is_correct: true
+      - text: Making the list flexible so it can be ignored during busy weeks.
+        is_correct: false
+      - text: Letting each developer decide their own definition of when a task is done.
+        is_correct: false
+    explanation: |
+      Correct: High standards must be codified and applied consistently to ensure technical excellence across the board.
+      Incorrect: Lack of standardized quality gates leads to inconsistent performance and increased operational risk.
+
+  - id: culture-principles-q51
+    type: multiple_choice
+    question: |
+      You are developing a feature for a high-value client. They request a specific customization that you know will make future platform upgrades nearly impossible. What is the 'Client Centric' response?
+    options:
+      - text: Implement the customization to show commitment to the client's immediate needs.
+        is_correct: false
+      - text: Explain the long-term impact on their stability and propose a standardized, sustainable alternative.
+        is_correct: true
+      - text: Refuse the request without explanation to protect the platform's architecture.
+        is_correct: false
+      - text: Charge a higher fee for the customization to discourage the request.
+        is_correct: false
+    explanation: |
+      Correct: True client centricity involves acting as a trusted advisor, protecting the client from long-term technical risks.
+      Incorrect: Short-term compliance at the cost of future stability is not sustainable or in the client's best interest.
+
+  - id: culture-principles-q52
+    type: multiple_choice
+    question: |
+      A team member frequently skips writing unit tests to meet delivery deadlines. How do you uphold 'Excellence' in this situation?
+    options:
+      - text: Report the behavior to management immediately to ensure compliance.
+        is_correct: false
+      - text: Discuss the importance of quality with the colleague and offer to help integrate testing into their workflow.
+        is_correct: true
+      - text: Accept it as a necessary trade-off for the team's speed.
+        is_correct: false
+      - text: Start writing the tests for them to keep the project quality high.
+        is_correct: false
+    explanation: |
+      Correct: Excellence is a shared responsibility; helping colleagues maintain high standards strengthens the entire team.
+      Incorrect: Ignoring quality issues or working in silos undermines the team's collective standard of excellence.
+
+  - id: culture-principles-q53
+    type: multiple_choice
+    question: |
+      Your squad is falling behind on a major milestone. A suggestion is made to work through the next two weekends to catch up. How does 'Sustainable Performance' apply?
+    options:
+      - text: Support the plan as a sign of dedication to the organization's success.
+        is_correct: false
+      - text: Propose re-prioritizing the scope or adjusting the timeline to avoid burnout and quality drops.
+        is_correct: true
+      - text: Work the weekends yourself but tell the rest of the team to stay home.
+        is_correct: false
+      - text: Ask for a large bonus before agreeing to the extra work.
+        is_correct: false
+    explanation: |
+      Correct: Sustainable performance recognizes that excessive overtime leads to errors and long-term productivity loss.
+      Incorrect: "Heroic" efforts are often a sign of poor planning and are not sustainable for professional engineering teams.
+
+  - id: culture-principles-q54
+    type: multiple_choice
+    question: |
+      You find a bug in a system that is not owned by your team. Fixing it will take time away from your own sprint. What is the 'Excellence'-oriented action?
+    options:
+      - text: Ignore it since it is not your team's responsibility.
+        is_correct: false
+      - text: Document the bug and notify the owner team, offering guidance on how to fix it.
+        is_correct: true
+      - text: Fix it secretly so you don't have to deal with the other team's bureaucracy.
+        is_correct: false
+      - text: Blame the other team during the next cross-functional meeting.
+        is_correct: false
+    explanation: |
+      Correct: Excellence involves taking an interest in the overall health of the firm's ecosystem, not just your local silo.
+      Incorrect: Passing over known issues or working without coordination increases fragmentation and risk.
+
+  - id: culture-principles-q55
+    type: multiple_choice
+    question: |
+      When presenting a technical solution to a non-technical business partner, what is the best way to demonstrate 'Client Centricity'?
+    options:
+      - text: Use advanced technical terminology to show your deep expertise.
+        is_correct: false
+      - text: Focus on how the solution solves their business problem and improves the end-user experience.
+        is_correct: true
+      - text: Tell them to trust your judgment because they wouldn't understand the details.
+        is_correct: false
+      - text: Show them the raw code to prove that the work is being done.
+        is_correct: false
+    explanation: |
+      Correct: Effective communication tailored to the audience's needs is a hallmark of professional client centricity.
+      Incorrect: Technical jargon or lack of transparency creates barriers to collaboration and trust.
+
+  - id: culture-principles-q56
+    type: multiple_choice
+    question: |
+      A project was technically perfect but did not meet the client's expected ROI because the market changed. What is the 'Excellence' takeaway?
+    options:
+      - text: There is no takeaway, as the engineering work was flawless.
+        is_correct: false
+      - text: Evaluate how to integrate business feedback loops earlier in the development process.
+        is_correct: true
+      - text: Conclude that the client was wrong about their own market needs.
+        is_correct: false
+      - text: Avoid working with that specific client in the future.
+        is_correct: false
+    explanation: |
+      Correct: Professional excellence requires learning from every outcome to ensure that future technical efforts yield better business value.
+      Incorrect: Ignoring the lack of business impact prevents engineering from becoming a truly effective partner.
+
+  - id: culture-principles-q57
+    type: multiple_choice
+    question: |
+      You have the opportunity to implement a 'quick fix' that works or a 'robust fix' that takes twice as long. The system is not currently in a crisis. Which one do you choose?
+    options:
+      - text: The quick fix, to show that you are a fast and agile developer.
+        is_correct: false
+      - text: The robust fix, to uphold the standard of excellence and prevent future technical debt.
+        is_correct: true
+      - text: Neither; wait until the problem becomes more urgent.
+        is_correct: false
+      - text: Implement the quick fix but don't document it.
+        is_correct: false
+    explanation: |
+      Correct: Excellence is about choosing the right solution for the long-term stability of the environment, not just the fastest.
+      Incorrect: Favoring speed over robustness in a non-emergency situation creates unnecessary debt and risk.
+
+  - id: culture-principles-q58
+    type: multiple_choice
+    question: |
+      How does 'Sustainable Performance' relate to knowledge sharing within a squad?
+    options:
+      - text: It is a waste of time that could be spent writing more code.
+        is_correct: false
+      - text: It ensures that the team can continue to perform even if a key member is absent.
+        is_correct: true
+      - text: It is only necessary for junior members of the team.
+        is_correct: false
+      - text: It should only happen during formal, scheduled annual training sessions.
+        is_correct: false
+    explanation: |
+      Correct: Reducing "key person risk" through continuous knowledge sharing is vital for the team's long-term health and performance.
+      Incorrect: Siloed knowledge is a major bottleneck and a risk to the organization's sustainable success.
+
+  - id: culture-principles-q59
+    type: multiple_choice
+    question: |
+      A client complains that a recently delivered feature is "too slow," even though it meets the agreed-upon SLA. What is the 'Client Centric' response?
+    options:
+      - text: Show the client the SLA document and explain that the requirement is met.
+        is_correct: false
+      - text: Investigate why the client perceives it as slow and look for ways to improve the perceived or actual performance.
+        is_correct: true
+      - text: Tell the client that their internet connection is likely the problem.
+        is_correct: false
+      - text: Agree that it is slow and blame the infrastructure team.
+        is_correct: false
+    explanation: |
+      Correct: Client centricity goes beyond legalistic adherence to SLAs; it focuses on the user's actual experience and satisfaction.
+      Incorrect: Being defensive or shifting blame does not solve the client's problem or build a strong partnership.
+
+  - id: culture-principles-q60
+    type: multiple_choice
+    question: |
+      What does 'Excellence' look like during a Peer Review process?
+    options:
+      - text: Pointing out every minor stylistic preference to ensure the code looks like yours.
+        is_correct: false
+      - text: Providing constructive, respectful feedback focused on correctness, security, and maintainability.
+        is_correct: true
+      - text: Approving everything immediately to help your teammate meet their deadline.
+        is_correct: false
+      - text: Only reviewing code from people who have more seniority than you.
+        is_correct: false
+    explanation: |
+      Correct: Professional peer review is a critical quality control gate that relies on objective standards and mutual respect.
+      Incorrect: Using reviews for personal preference or skipping them for speed undermines the team's excellence.
+
