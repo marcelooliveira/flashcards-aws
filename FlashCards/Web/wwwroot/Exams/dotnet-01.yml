@@ -1,0 +1,389 @@
+﻿questions:
+  - id: q41
+    type: multiple_choice
+    question: "Which collection should be used in .NET 8 to minimize allocations and ensure thread-safety for a high-performance lookup table that is initialized once and read frequently?"
+    code: |
+      // Scenario: Global configuration lookup
+      private static readonly ??? _config = new Dictionary<string, string>().To???();
+    options:
+      - text: "FrozenDictionary<TKey, TValue>"
+        is_correct: true
+      - text: "ConcurrentDictionary<TKey, TValue>"
+        is_correct: false
+      - text: "ImmutableDictionary<TKey, TValue>"
+        is_correct: false
+      - text: "ReadOnlyDictionary<TKey, TValue>"
+        is_correct: false
+    explanation: "FrozenDictionary is optimized for read-heavy scenarios. It performs a one-time cost to build a highly optimized internal structure, resulting in faster lookups than ConcurrentDictionary."
+    tags: [performance, dot-net-8, collections]
+    difficulty: hard
+    points: 9
+    diagram: |
+      graph LR
+      A[Initialization] -- High Cost --> B[Frozen Structure]
+      B -- Ultra-Fast Read --> C[Request 1]
+      B -- Ultra-Fast Read --> D[Request 2]
+
+  - id: q42
+    type: multiple_choice
+    question: "When processing a large stream of data to avoid Large Object Heap (LOH) fragmentation, which feature should be prioritized?"
+    code: |
+      public void ProcessData(ReadOnlySpan<byte> data) {
+        // High-performance logic here
+      }
+    options:
+      - text: "Using Span<T> and Memory<T> to work with buffers without allocating new arrays."
+        is_correct: true
+      - text: "Using 'dynamic' keywords to allow the runtime to optimize memory."
+        is_correct: false
+      - text: "Calling GC.Collect() manually after every 1000 records."
+        is_correct: false
+      - text: "Forcing all objects to be passed by 'ref' inside a Task.Run."
+        is_correct: false
+    explanation: "Span<T> provides a type-safe view into contiguous memory (stack or heap) without creating new objects, significantly reducing GC pressure in mission-critical systems."
+    tags: [memory, performance, span-t]
+    difficulty: hard
+    points: 10
+
+  - id: q43
+    type: multiple_choice
+    question: "What is the primary benefit of using 'ValueTask<T>' instead of 'Task<T>' in a high-throughput API?"
+    code: |
+      public ValueTask<int> GetCachedValueAsync(int id) {
+        if (_cache.TryGetValue(id, out var val)) return new ValueTask<int>(val);
+        return new ValueTask<int>(FetchFromDbAsync(id));
+      }
+    options:
+      - text: "It avoids heap allocation for the Task object when the operation completes synchronously."
+        is_correct: true
+      - text: "It allows the method to run faster on the CPU's L1 cache."
+        is_correct: false
+      - text: "It automatically retries the operation if it fails."
+        is_correct: false
+      - text: "It is the only way to call AWS Lambda functions in .NET 8."
+        is_correct: false
+    explanation: "ValueTask is a struct. If the data is already available (synchronous completion), no Task object is allocated on the heap, saving memory and GC cycles."
+    tags: [async, performance, memory]
+    difficulty: medium
+    points: 8
+
+  - id: q44
+    type: multiple_choice
+    question: "In a mission-critical microservice, how does 'ArrayPool<T>.Shared' help improve performance?"
+    options:
+      - text: "It reduces GC pauses by reusing large arrays instead of allocating and deallocating them constantly."
+        is_correct: true
+      - text: "It automatically synchronizes arrays across multiple AWS regions."
+        is_correct: false
+      - text: "It encrypts array data in transit."
+        is_correct: false
+      - text: "It converts arrays into JSON faster than System.Text.Json."
+        is_correct: false
+    explanation: "Pooling buffers prevents the Large Object Heap (LOH) from becoming fragmented and reduces the frequency of Gen 2 garbage collections."
+    tags: [gc, memory-pooling, loh]
+    difficulty: medium
+    points: 8
+    diagram: |
+      graph TD
+      A[Need 1MB Array] --> B{Pool has one?}
+      B -- Yes --> C[Rent Array]
+      B -- No --> D[Allocate New]
+      C --> E[Use Array]
+      E --> F[Return to Pool]
+
+  - id: q45
+    type: multiple_choice
+    question: "What is 'Tiered Compilation' in the .NET JIT and why is it useful?"
+    options:
+      - text: "It allows the JIT to first compile code quickly (Tier 0) and then re-optimize frequently used methods (Tier 1)."
+        is_correct: true
+      - text: "It is a way to compile code for different CPU architectures simultaneously."
+        is_correct: false
+      - text: "It separates the compilation of frontend and backend code."
+        is_correct: false
+      - text: "It is a legacy feature that was replaced by AOT (Ahead-of-Time)."
+        is_correct: false
+    explanation: "Tiered compilation balances startup time (Tier 0) with long-term execution performance (Tier 1/Optimized) based on actual usage patterns."
+    tags: [jit, runtime, performance]
+    difficulty: medium
+    points: 7
+
+  - id: q46
+    type: multiple_choice
+    question: "When using Entity Framework Core in a high-read environment, what is the impact of '.AsNoTracking()'?"
+    code: |
+      var users = await _context.Users.AsNoTracking().ToListAsync();
+    options:
+      - text: "It improves performance by skipping the change tracker and reducing memory overhead per entity."
+        is_correct: true
+      - text: "It prevents the database from locking the table during the read."
+        is_correct: false
+      - text: "It automatically caches the result in Redis."
+        is_correct: false
+      - text: "It forces the query to use an Index Seek instead of an Index Scan."
+        is_correct: false
+    explanation: "Without tracking, EF Core doesn't need to maintain snapshots or links to the entities in its internal Change Tracker, making the query faster and lighter on memory."
+    tags: [ef-core, database, performance]
+    difficulty: easy
+    points: 6
+
+  - id: q47
+    type: multiple_choice
+    question: "What does the 'SearchValues<T>' type introduced in .NET 8 provide for string/span processing?"
+    options:
+      - text: "Pre-computed optimized lookup logic for finding specific characters or values in a span."
+        is_correct: true
+      - text: "A way to search across multiple AWS Lambda instances."
+        is_correct: false
+      - text: "Integration with Elasticsearch directly from the base class library."
+        is_correct: false
+      - text: "A replacement for Regex that only works with numbers."
+        is_correct: false
+    explanation: "SearchValues is a highly optimized type that uses SIMD (Single Instruction, Multiple Data) under the hood to find values in a span much faster than standard methods."
+    tags: [dot-net-8, simd, strings]
+    difficulty: hard
+    points: 9
+
+  - id: q48
+    type: multiple_choice
+    question: "Analyze this lock usage. Why is it problematic for a high-concurrency system?"
+    code: |
+      private readonly object _syncRoot = new object();
+      public void UpdateData() {
+        lock(_syncRoot) {
+          // Perform long-running I/O operation
+          Thread.Sleep(5000); 
+        }
+      }
+    options:
+      - text: "Holding a lock during I/O blocks thread pool threads, leading to thread starvation and low throughput."
+        is_correct: true
+      - text: "The object _syncRoot should be 'static' for locks to work."
+        is_correct: false
+      - text: "Locking is not supported in .NET 8 mission-critical apps."
+        is_correct: false
+      - text: "Thread.Sleep will release the lock automatically after 1 second."
+        is_correct: false
+    explanation: "In high-performance apps, you should avoid blocking synchronization (lock) for I/O. Use SemaphoreSlim.WaitAsync() for asynchronous signaling instead."
+    tags: [concurrency, async, threading]
+    difficulty: medium
+    points: 7
+
+  - id: q49
+    type: multiple_choice
+    question: "What is the purpose of 'Native AOT' (Ahead-of-Time) in .NET 8?"
+    options:
+      - text: "To compile the app into a self-contained native binary for faster startup and lower memory footprint."
+        is_correct: true
+      - text: "To allow .NET code to run inside a web browser without WebAssembly."
+        is_correct: false
+      - text: "To automatically convert C# code into C++ code for AWS Graviton."
+        is_correct: false
+      - text: "To provide a way to update code without restarting the server."
+        is_correct: false
+    explanation: "Native AOT is crucial for serverless (AWS Lambda) and containerized apps where cold-start time and memory density are critical."
+    tags: [aot, deployment, lambda]
+    difficulty: hard
+    points: 9
+
+  - id: q50
+    type: multiple_choice
+    question: "How does 'String.Create' improve performance when building complex strings?"
+    code: |
+      string result = string.Create(bufferSize, state, (span, state) => {
+        // fill span directly
+      });
+    options:
+      - text: "It allows filling the string's underlying memory directly before it becomes immutable, avoiding intermediate allocations."
+        is_correct: true
+      - text: "It automatically translates the string into multiple languages."
+        is_correct: false
+      - text: "It compresses the string using GZip by default."
+        is_correct: false
+      - text: "It is a wrapper for StringBuilder that is 100x slower."
+        is_correct: false
+    explanation: "String.Create avoids the allocation of a StringBuilder or multiple intermediate strings by writing directly to the final string's memory buffer."
+    tags: [strings, memory, performance]
+    difficulty: hard
+    points: 10
+
+  - id: q51
+    type: multiple_choice
+    question: "When designing a low-latency system, what is the 'False Sharing' problem and how can it be mitigated in .NET?"
+    options:
+      - text: "It happens when multiple threads update independent variables that reside on the same CPU cache line; it's mitigated using [StructLayout(LayoutKind.Explicit)] or padding."
+        is_correct: true
+      - text: "It occurs when two microservices share the same database credentials by mistake."
+        is_correct: false
+      - text: "It is a bug in the JIT compiler that shares local variables across different methods."
+        is_correct: false
+      - text: "It refers to sharing sensitive data through public APIs without encryption."
+        is_correct: false
+    explanation: "False sharing causes the CPU to invalidate cache lines unnecessarily, killing performance. Forcing variables to different cache lines (padding) prevents this hardware-level contention."
+    tags: [low-latency, hardware, threading]
+    difficulty: hard
+    points: 10
+    diagram: |
+      graph LR
+      A[Core 1] -- Write Var A --> C[Cache Line 1]
+      B[Core 2] -- Write Var B --> C
+      C -- Invalidation Loop --> A
+      C -- Invalidation Loop --> B
+
+  - id: q52
+    type: multiple_choice
+    question: "Which keyword introduced in C# 11 allows for significantly faster string/span parsing by treating constants as UTF-8 at compile time?"
+    code: |
+      // Scenario: Fast HTTP Header parsing
+      ReadOnlySpan<byte> header = "Content-Type"???;
+    options:
+      - text: "u8 suffix (e.g., \"text\"u8)"
+        is_correct: true
+      - text: "utf8 prefix (e.g., utf8\"text\")"
+        is_correct: false
+      - text: "b suffix (e.g., \"text\"b)"
+        is_correct: false
+      - text: "raw keyword"
+        is_correct: false
+    explanation: "The u8 suffix creates a ReadOnlySpan<byte> representing the UTF-8 literal, avoiding the runtime cost of Encoding.UTF8.GetBytes()."
+    tags: [csharp-11, performance, strings]
+    difficulty: medium
+    points: 7
+
+  - id: q53
+    type: multiple_choice
+    question: "In a 'Mission Critical' AWS environment, why should you use the 'AWS SDK for .NET' with the 'CRT' (Common Runtime) HTTP client?"
+    options:
+      - text: "It provides better connection management, lower memory usage, and improved throughput for S3 and DynamoDB."
+        is_correct: true
+      - text: "It is the only client that supports Windows 95."
+        is_correct: false
+      - text: "It automatically rewrites your SQL queries into NoSQL."
+        is_correct: false
+      - text: "It disables the need for AWS IAM permissions."
+        is_correct: false
+    explanation: "The AWS CRT client is built on highly optimized C libraries, designed for maximum performance and stability in high-traffic scenarios."
+    tags: [aws, cloud, architecture]
+    difficulty: medium
+    points: 8
+
+  - id: q54
+    type: multiple_choice
+    question: "What is the danger of using 'Task.WhenAll' with thousands of independent tasks in a high-concurrency gateway?"
+    options:
+      - text: "It can lead to 'Continuation Hell' and massive memory pressure if the tasks allocate large objects before completion."
+        is_correct: true
+      - text: "Task.WhenAll only supports a maximum of 10 tasks."
+        is_correct: false
+      - text: "It causes the server to reboot if one task fails."
+        is_correct: false
+      - text: "It forces all tasks to run on a single CPU core."
+        is_correct: false
+    explanation: "While WhenAll is useful, creating thousands of Task objects simultaneously can spike memory. For extreme scale, using a Channel or a Semaphore to limit concurrency is safer."
+    tags: [async, scalability, memory]
+    difficulty: hard
+    points: 9
+
+  - id: q55
+    type: multiple_choice
+    question: "How does the 'System.IO.Pipelines' library differ from traditional 'Streams' for high-performance I/O?"
+    options:
+      - text: "It manages memory buffers automatically and allows for 'zero-copy' parsing by passing Spans of memory between producers and consumers."
+        is_correct: true
+      - text: "It is simply a wrapper for File.ReadAllText."
+        is_correct: false
+      - text: "It requires a dedicated GPU to process network data."
+        is_correct: false
+      - text: "It only works with physical hardware pipes in industrial servers."
+        is_correct: false
+    explanation: "Pipelines reduce complexity and increase performance by handling buffer management, reducing the need for the programmer to manage complex byte array logic."
+    tags: [io, pipelines, performance]
+    difficulty: hard
+    points: 10
+
+  - id: q56
+    type: multiple_choice
+    question: "What is 'PGO' (Profile-Guided Optimization) in .NET 8?"
+    options:
+      - text: "A JIT optimization where the runtime collects data about code execution to re-compile hot methods into even more efficient machine code."
+        is_correct: true
+      - text: "A tool to profile the developer's productivity."
+        is_correct: false
+      - text: "A database indexing strategy used in SQL Server."
+        is_correct: false
+      - text: "A way to compress DLL files for faster downloads."
+        is_correct: false
+    explanation: "Dynamic PGO in .NET 8 allows the JIT to observe which branches are taken most often or which types are used in interfaces, generating 'de-virtualized' and highly optimized code."
+    tags: [jit, runtime, pgo]
+    difficulty: hard
+    points: 9
+
+  - id: q57
+    type: multiple_choice
+    question: "Analyze the code below. Why is 'MemoryCache' often preferred over a 'ConcurrentDictionary' for caching in mission-critical web apps?"
+    code: |
+      var cache = new MemoryCache(new MemoryCacheOptions());
+    options:
+      - text: "MemoryCache provides built-in expiration policies (TTL) and memory pressure eviction, which prevents OutOfMemory exceptions."
+        is_correct: true
+      - text: "MemoryCache is faster than Dictionary for every lookup."
+        is_correct: false
+      - text: "ConcurrentDictionary cannot be used with strings."
+        is_correct: false
+      - text: "MemoryCache automatically syncs with Redis without extra code."
+        is_correct: false
+    explanation: "Without eviction/expiration (like in a Dictionary), a cache grows indefinitely. MemoryCache manages the lifecycle of items to keep the system stable."
+    tags: [caching, resilience, reliability]
+    difficulty: medium
+    points: 7
+
+  - id: q58
+    type: multiple_choice
+    question: "In .NET 8, what is the primary purpose of 'TimeProvider'?"
+    options:
+      - text: "To enable easy mocking and testing of time-dependent logic (Delays, Task.Delay, CancellationTokenSource)."
+        is_correct: true
+      - text: "To synchronize the server clock with an atomic clock in AWS."
+        is_correct: false
+      - text: "To calculate the travel time of light in fiber optic cables."
+        is_correct: false
+      - text: "To replace the 'DateTime' struct entirely."
+        is_correct: false
+    explanation: "TimeProvider is an abstraction that makes unit testing logic involving timers or timeouts much simpler and more deterministic."
+    tags: [dot-net-8, testing, architecture]
+    difficulty: medium
+    points: 6
+
+  - id: q59
+    type: multiple_choice
+    question: "Which GC (Garbage Collector) mode is usually best for a high-traffic Web API running on a server with 32 cores?"
+    options:
+      - text: "Server GC (System.GC.Server=true)"
+        is_correct: true
+      - text: "Workstation GC"
+        is_correct: false
+      - text: "Background GC (only if running on Windows 7)"
+        is_correct: false
+      - text: "No GC (Zero Garbage mode)"
+        is_correct: false
+    explanation: "Server GC creates one heap and one GC thread per logical processor, allowing for parallel collections and much higher throughput on multi-core systems."
+    tags: [gc, scalability, runtime]
+    difficulty: medium
+    points: 8
+
+  - id: q60
+    type: multiple_choice
+    question: "What is the purpose of the 'Inlining' optimization done by the JIT?"
+    options:
+      - text: "Replacing a method call with the actual body of the method to eliminate call overhead and enable further optimizations."
+        is_correct: true
+      - text: "Writing code in a single line to reduce file size."
+        is_correct: false
+      - text: "Converting C# code into Javascript for the browser."
+        is_correct: false
+      - text: "Forcing all variables to be stored in the CPU registers."
+        is_correct: false
+    explanation: "Inlining removes the cost of pushing/popping from the stack during a method call, which is critical for small, frequently called helper methods."
+    tags: [jit, performance, optimization]
+    difficulty: medium
+    points: 7

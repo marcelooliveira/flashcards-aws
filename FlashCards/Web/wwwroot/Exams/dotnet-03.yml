@@ -1,0 +1,532 @@
+﻿questions:
+  - id: q81
+    type: multiple_choice
+    question: "In 2026, why are many organizations opting for a 'Modular Monolith' before transitioning to Microservices?"
+    options:
+      - text: "To reduce network latency and operational complexity while maintaining clear logical boundaries that allow for future decoupling."
+        is_correct: true
+      - text: "Because Microservices were officially deprecated in .NET 9."
+        is_correct: false
+      - text: "A Modular Monolith is the only way to use Entity Framework Core."
+        is_correct: false
+      - text: "Monoliths are inherently more secure because they don't use APIs."
+        is_correct: false
+    explanation: "A Modular Monolith provides the 'Separation of Concerns' of microservices without the 'Distributed System' overhead, making it an ideal starting point or even a final architecture for many scales."
+    tags: [architecture, modular-monolith, scalability]
+    difficulty: medium
+    points: 8
+    diagram: |
+      graph TD
+      subgraph Modular Monolith
+      A[Identity Module] --- B[Sales Module]
+      B --- C[Inventory Module]
+      end
+      D[Single Database/Schema per Module] --> A
+
+  - id: q82
+    type: multiple_choice
+    question: "When using a Microservices architecture, what is the 'Outbox Pattern' used for?"
+    options:
+      - text: "To ensure 'Atomic Commit' between a database update and a message broadcast, avoiding data inconsistency."
+        is_correct: true
+      - text: "To store CSS files outside of the main .NET project."
+        is_correct: false
+      - text: "To handle user emails that failed to send."
+        is_correct: false
+      - text: "It is a legacy pattern replaced by 'In-Memory Bus' in .NET 8."
+        is_correct: false
+    explanation: "The Outbox pattern saves the event in the same transaction as the business data, ensuring that the message is eventually published even if the broker is temporarily down."
+    tags: [microservices, consistency, messaging]
+    difficulty: hard
+    points: 10
+
+  - id: q83
+    type: multiple_choice
+    question: "What is the primary trade-off when moving from a Monolith to Microservices?"
+    options:
+      - text: "Increased 'Operational Complexity' and 'Eventual Consistency' challenges in exchange for independent scalability and deployment."
+        is_correct: true
+      - text: "Microservices are always cheaper to host on AWS."
+        is_correct: false
+      - text: "Monoliths cannot be written in C#."
+        is_correct: false
+      - text: "Microservices do not require unit testing."
+        is_correct: false
+    explanation: "Distributed systems introduce issues like network partial failures, distributed tracing needs, and data synchronization that don't exist in a single-process monolith."
+    tags: [architecture, trade-offs, microservices]
+    difficulty: medium
+    points: 7
+
+  - id: q84
+    type: multiple_choice
+    question: "In the context of .NET 9/10, what is 'Aspire' and how does it assist in Microservices development?"
+    options:
+      - text: "An opinionated, cloud-ready stack for delivering observable and reliable distributed applications with built-in orchestration."
+        is_correct: true
+      - text: "A new garbage collection algorithm for high-performance servers."
+        is_correct: false
+      - text: "A database engine that replaces SQL Server."
+        is_correct: false
+      - text: "A frontend framework that competes with React."
+        is_correct: false
+    explanation: ".NET Aspire simplifies the 'Day 0' and 'Day 1' experience of creating, debugging, and deploying distributed apps by providing standardized patterns for service discovery and telemetry."
+    tags: [dotnet-aspire, cloud-native, microservices]
+    difficulty: medium
+    points: 8
+
+  - id: q85
+    type: multiple_choice
+    question: "What is a 'BFF' (Backend for Frontend) pattern and when should it be used?"
+    options:
+      - text: "Creating a specific backend service for each client type (Web, Mobile) to optimize the data contract and reduce over-fetching."
+        is_correct: true
+      - text: "It is a social pattern for developers to work in pairs."
+        is_correct: false
+      - text: "A single API that serves all clients with the exact same JSON format."
+        is_correct: false
+      - text: "A caching layer that sits between the database and the service."
+        is_correct: false
+    explanation: "BFFs prevent mobile clients from making 20 calls to different microservices by providing a tailored gateway that aggregates the necessary data into a single response."
+    tags: [patterns, gateway, mobile-development]
+    difficulty: medium
+    points: 7
+
+  - id: q86
+    type: multiple_choice
+    question: "How does 'Vertical Slice Architecture' differ from 'Traditional Layered Architecture'?"
+    options:
+      - text: "It organizes code by 'Features' (Slices) rather than 'Technical Layers' (UI, Business, Data), reducing coupling between unrelated features."
+        is_correct: true
+      - text: "It requires the server to be physically mounted vertically."
+        is_correct: false
+      - text: "It only works with SQL databases, not NoSQL."
+        is_correct: false
+      - text: "It is a UI-only pattern for Material UI."
+        is_correct: false
+    explanation: "In Vertical Slices, when you change a feature, you only touch the code for that feature, avoiding the 'Shotgun Surgery' anti-pattern where you touch 5 layers for one change."
+    tags: [architecture, vertical-slice, clean-code]
+    difficulty: medium
+    points: 8
+    diagram: |
+      graph LR
+      subgraph Layered
+      A[Controller] --> B[Service] --> C[Repository]
+      end
+      subgraph Vertical Slice
+      D[Feature: AddToCart]
+      E[Feature: Checkout]
+      end
+
+  - id: q87
+    type: multiple_choice
+    question: "What is 'Strangler Fig' pattern in the context of legacy modernization?"
+    options:
+      - text: "Incrementally replacing specific functionalities of a legacy monolith with new microservices until the old system can be decommissioned."
+        is_correct: true
+      - text: "A way to force-stop a .NET process that is consuming too much memory."
+        is_correct: false
+      - text: "A security protocol for encrypting database connections."
+        is_correct: false
+      - text: "A tool that compresses Docker images."
+        is_correct: false
+    explanation: "This pattern allows for a low-risk migration by letting the old and new systems co-exist, with a proxy/gateway routing traffic to the new services as they are ready."
+    tags: [modernization, migration, strangler-fig]
+    difficulty: medium
+    points: 9
+
+  - id: q88
+    type: multiple_choice
+    question: "Why is 'Idempotency' critical in an Event-Driven Microservices architecture?"
+    options:
+      - text: "To ensure that processing the same message multiple times (due to retries) does not result in incorrect state changes (e.g., double charging a customer)."
+        is_correct: true
+      - text: "To make sure the API always returns a 200 OK status."
+        is_correct: false
+      - text: "To speed up the connection to AWS SQS."
+        is_correct: false
+      - text: "It is a C# requirement for all 'public' methods."
+        is_correct: false
+    explanation: "In distributed systems, 'at-least-once' delivery is common. Services must be able to recognize and discard duplicate events using an Idempotency Key."
+    tags: [event-driven, resilience, reliability]
+    difficulty: hard
+    points: 9
+
+  - id: q89
+    type: multiple_choice
+    question: "What is 'Sidecar Pattern' and how is it typically implemented in Kubernetes with .NET?"
+    options:
+      - text: "A separate container running alongside the application container to handle cross-cutting concerns like logging, security, or a Service Mesh (e.g., Istio/Dapr)."
+        is_correct: true
+      - text: "A way to run a .NET app and a Node.js app in the same process."
+        is_correct: false
+      - text: "A backup server that only starts when the main one fails."
+        is_correct: false
+      - text: "It's a .NET feature to run background tasks using 'Task.Run'."
+        is_correct: false
+    explanation: "Sidecars allow developers to focus on business logic while the sidecar handles infrastructure tasks without polluting the application code."
+    tags: [cloud-native, sidecar, kubernetes]
+    difficulty: medium
+    points: 7
+
+  - id: q90
+    type: multiple_choice
+    question: "What is the 'Database-per-Service' principle and what is its biggest challenge?"
+    options:
+      - text: "Each microservice owns its data; the challenge is implementing 'Distributed Transactions' or 'Joins' across services."
+        is_correct: true
+      - text: "Every service shares the same SQL database; the challenge is the license cost."
+        is_correct: false
+      - text: "It means every developer gets their own database; the challenge is synchronization."
+        is_correct: false
+      - text: "It is an AWS-only requirement."
+        is_correct: false
+    explanation: "Data isolation ensures services are truly independent, but it requires patterns like 'Saga' or 'API Composition' to handle complex business processes that span multiple services."
+    tags: [microservices, database, saga-pattern]
+    difficulty: hard
+    points: 10
+
+  - id: q91
+    type: multiple_choice
+    question: "In a mission-critical system, what is the 'Circuit Breaker' pattern and how does it prevent 'Cascading Failures'?"
+    options:
+      - text: "It temporarily blocks calls to a failing service after a threshold of errors is reached, allowing the service to recover instead of being overwhelmed."
+        is_correct: true
+      - text: "It is a physical hardware switch in the data center to prevent power surges."
+        is_correct: false
+      - text: "It is a C# 'try-catch' block that automatically deletes the failing code."
+        is_correct: false
+      - text: "A pattern that requires the user to restart their browser when an API fails."
+        is_correct: false
+    explanation: "Like an electrical circuit breaker, this pattern protects the caller and the callee. In .NET, it is commonly implemented using the 'Polly' library."
+    tags: [resilience, polly, architecture]
+    difficulty: medium
+    points: 8
+    diagram: |
+      graph TD
+      A[Closed: Normal] -- Error Threshold --> B[Open: Fail Fast]
+      B -- Wait Time --> C[Half-Open: Test]
+      C -- Success --> A
+      C -- Failure --> B
+
+  - id: q92
+    type: multiple_choice
+    question: "What is 'CQRS' (Command Query Responsibility Segregation) and when is its complexity justified?"
+    options:
+      - text: "It separates read and write operations into different models; it is justified in high-scale systems where read and write patterns differ significantly."
+        is_correct: true
+      - text: "It is a way to write SQL queries using C# syntax."
+        is_correct: false
+      - text: "A security pattern to prevent SQL Injection."
+        is_correct: false
+      - text: "A requirement for all applications that use Amazon S3."
+        is_correct: false
+    explanation: "CQRS allows you to optimize the read side (e.g., using a materialized view or Read Replica) independently from the write side (Domain Model)."
+    tags: [cqrs, scalability, patterns]
+    difficulty: hard
+    points: 10
+
+  - id: q93
+    type: multiple_choice
+    question: "In a Microservices environment, what does 'Data Sovereignty' mean?"
+    options:
+      - text: "Each service has exclusive ownership and control over its own data store, and no other service can access it directly."
+        is_correct: true
+      - text: "All data must be stored in the same country where the company is headquartered."
+        is_correct: false
+      - text: "The government has the right to access all database records."
+        is_correct: false
+      - text: "It is a protocol for encrypting data at rest."
+        is_correct: false
+    explanation: "Data Sovereignty ensures that changes to one service's database schema do not break others (decoupling), enforcing communication through APIs."
+    tags: [microservices, data-governance, decoupling]
+    difficulty: medium
+    points: 7
+
+  - id: q94
+    type: multiple_choice
+    question: "What is 'Event Sourcing' and how does it relate to the application state?"
+    options:
+      - text: "Instead of storing the current state, the system stores a sequence of all events that led to the current state as a 'Source of Truth'."
+        is_correct: true
+      - text: "A technique to find which developer wrote a specific line of code."
+        is_correct: false
+      - text: "A way to trigger AWS Lambda functions from a website."
+        is_correct: false
+      - text: "It is a synonym for 'logging' in .NET 9."
+        is_correct: false
+    explanation: "Event Sourcing provides a perfect audit trail and allows the system to 'replay' events to reconstruct the state at any point in time."
+    tags: [event-sourcing, architecture, data]
+    difficulty: hard
+    points: 10
+
+  - id: q95
+    type: multiple_choice
+    question: "How does an 'API Gateway' differ from a 'Service Mesh'?"
+    options:
+      - text: "The Gateway handles 'North-South' traffic (external to internal), while the Service Mesh handles 'East-West' traffic (service-to-service)."
+        is_correct: true
+      - text: "They are exactly the same thing but with different names."
+        is_correct: false
+      - text: "Gateways are only for Monoliths; Service Meshes are only for Microservices."
+        is_correct: false
+      - text: "A Service Mesh is a type of database, while a Gateway is a router."
+        is_correct: false
+    explanation: "The Gateway manages edge concerns (Auth, Rate Limiting), whereas the Mesh manages internal resilience, observability, and mTLS between services."
+    tags: [networking, gateway, service-mesh]
+    difficulty: medium
+    points: 9
+
+  - id: q96
+    type: multiple_choice
+    question: "What is the 'Saga Pattern' and why is it used instead of 2PC (Two-Phase Commit) in Microservices?"
+    options:
+      - text: "It manages distributed transactions through a sequence of local transactions and 'compensating actions', avoiding long-lived locks."
+        is_correct: true
+      - text: "It is a pattern to speed up the loading of large images."
+        is_correct: false
+      - text: "A way to organize C# files into folders based on their size."
+        is_correct: false
+      - text: "It is a legacy pattern that is no longer used since .NET 6."
+        is_correct: false
+    explanation: "2PC doesn't scale well in distributed systems due to blocking. Sagas ensure 'Eventual Consistency' by executing undo-logic if a step fails."
+    tags: [saga, transactions, microservices]
+    difficulty: hard
+    points: 10
+
+  - id: q97
+    type: multiple_choice
+    question: "What is 'Self-Contained Systems' (SCS) as an architectural approach?"
+    options:
+      - text: "An approach where each service contains its own UI, business logic, and data, making it completely independent and deployable."
+        is_correct: true
+      - text: "A system that does not require an internet connection."
+        is_correct: false
+      - text: "A way to run .NET apps without the .NET Runtime."
+        is_correct: false
+      - text: "It is a synonym for 'Serverless' in AWS."
+        is_correct: false
+    explanation: "SCS is a step beyond microservices, aiming for the 'Full-Stack' autonomy of teams over a specific business domain."
+    tags: [architecture, scs, team-autonomy]
+    difficulty: medium
+    points: 8
+
+  - id: q98
+    type: multiple_choice
+    question: "When implementing 'Clean Architecture' in .NET, why is the 'Domain' layer prohibited from depending on the 'Infrastructure' layer?"
+    options:
+      - text: "To ensure the core business logic is independent of external concerns like databases, APIs, or frameworks (Dependency Inversion)."
+        is_correct: true
+      - text: "Because Infrastructure code is always slower than Domain code."
+        is_correct: false
+      - text: "It is a restriction imposed by the C# compiler to reduce file size."
+        is_correct: false
+      - text: "To allow the Infrastructure to be written in Javascript."
+        is_correct: false
+    explanation: "By keeping the Domain pure, you can test it easily and change the database or a third-party provider without touching the business rules."
+    tags: [clean-architecture, solid, dependency-inversion]
+    difficulty: medium
+    points: 7
+
+  - id: q99
+    type: multiple_choice
+    question: "In a 'Message-Driven' system, what is the 'Dead Letter Queue' (DLQ) used for?"
+    options:
+      - text: "To store messages that could not be processed successfully after multiple attempts for later investigation."
+        is_correct: true
+      - text: "To store messages that were sent to users who have deleted their accounts."
+        is_correct: false
+      - text: "A high-speed queue for premium customers."
+        is_correct: false
+      - text: "It is a garbage collection area for deleted strings."
+        is_correct: false
+    explanation: "DLQs prevent a 'Poison Message' from blocking a queue indefinitely, allowing the system to continue processing other messages."
+    tags: [messaging, resilience, aws-sqs]
+    difficulty: easy
+    points: 5
+
+  - id: q100
+    type: multiple_choice
+    question: "What is 'Chaos Engineering' and how is it applied to .NET Microservices in 2026?"
+    options:
+      - text: "Deliberately injecting failures (like latency or service outages) into production to test and improve system resilience."
+        is_correct: true
+      - text: "Writing code without following any design patterns to test the developers' skills."
+        is_correct: false
+      - text: "Allowing users to modify the database directly to see what happens."
+        is_correct: false
+      - text: "It is the process of randomly deleting files in the CI/CD pipeline."
+        is_correct: false
+    explanation: "Chaos Engineering (using tools like Chaos Mesh or AWS Fault Injection Simulator) helps verify that 'Circuit Breakers' and 'Retries' actually work in real-world scenarios."
+    tags: [resilience, chaos-engineering, reliability]
+    difficulty: hard
+    points: 9
+
+  - id: q101
+    type: multiple_choice
+    question: "In a Sênior role, what is 'Architecture Decision Record' (ADR) and why is it vital for long-term project health?"
+    options:
+      - text: "A document that captures an important architectural decision, its context, and its consequences to preserve institutional memory."
+        is_correct: true
+      - text: "A tool that automatically records every line of code written by the team."
+        is_correct: false
+      - text: "A legal contract signed with cloud providers like AWS or Azure."
+        is_correct: false
+      - text: "A log of all bugs found during the QA phase."
+        is_correct: false
+    explanation: "ADRs prevent the 'We don't know why we did this' syndrome, allowing future developers (or yourself) to understand the trade-offs made months or years ago."
+    tags: [leadership, documentation, architecture]
+    difficulty: medium
+    points: 7
+
+  - id: q102
+    type: multiple_choice
+    question: "When managing a .NET microservices fleet in 2026, what is 'FinOps' and how does it affect the development lifecycle?"
+    options:
+      - text: "A cultural practice where developers take responsibility for the cloud costs of their services, optimizing resources (like right-sizing instances)."
+        is_correct: true
+      - text: "A specific .NET library for financial calculations."
+        is_correct: false
+      - text: "A department that only handles the company's payroll."
+        is_correct: false
+      - text: "A way to hack cloud providers to get free credits."
+        is_correct: false
+    explanation: "In a cloud-native world, architectural choices (like choosing Lambda vs. Fargate) have direct financial impacts. FinOps brings cost-visibility to the dev team."
+    tags: [cloud-governance, finops, aws]
+    difficulty: medium
+    points: 8
+
+  - id: q103
+    type: multiple_choice
+    question: "What is 'Platform Engineering' and how does it differ from traditional DevOps in 2026?"
+    options:
+      - text: "The creation of an 'Internal Developer Platform' (IDP) that provides self-service capabilities, reducing cognitive load for product teams."
+        is_correct: true
+      - text: "It is just a new name for the IT Support department."
+        is_correct: false
+      - text: "Platform Engineering only deals with physical hardware servers."
+        is_correct: false
+      - text: "It is a framework for building video games in C#."
+        is_correct: false
+    explanation: "Instead of DevOps teams doing tasks for devs, Platform Engineering builds the tools so devs can manage their own deployments safely and easily."
+    tags: [devops, platform-engineering, sdlc]
+    difficulty: hard
+    points: 9
+
+  - id: q104
+    type: multiple_choice
+    question: "In the context of .NET 9/10, what are 'Greenfield' and 'Brownfield' projects?"
+    options:
+      - text: "Greenfield is starting from scratch; Brownfield is developing or migrating within an existing legacy codebase."
+        is_correct: true
+      - text: "They are two different themes available in the Visual Studio IDE."
+        is_correct: false
+      - text: "Greenfield refers to eco-friendly data centers; Brownfield refers to old ones."
+        is_correct: false
+      - text: "Greenfield is for Junior developers; Brownfield is for Seniors."
+        is_correct: false
+    explanation: "Most Sênior roles involve Brownfield challenges, such as refactoring legacy logic into modern .NET while maintaining system availability."
+    tags: [project-management, legacy, strategy]
+    difficulty: easy
+    points: 5
+
+  - id: q105
+    type: multiple_choice
+    question: "What is 'Technical Debt' and when is it acceptable to incur it?"
+    options:
+      - text: "It is the implied cost of additional rework caused by choosing an easy solution now instead of a better one; it's acceptable when speed to market is a critical priority."
+        is_correct: true
+      - text: "It is the money owed to software vendors for licenses."
+        is_correct: false
+      - text: "It is a bug that was intentionally put in the code."
+        is_correct: false
+      - text: "It is never acceptable to have technical debt in a Sênior-led project."
+        is_correct: false
+    explanation: "Tech debt is a tool. Like financial debt, it can be used to accelerate a goal, provided there is a clear plan to 'pay it back' before the 'interest' (complexity) kills productivity."
+    tags: [leadership, tech-debt, strategy]
+    difficulty: medium
+    points: 7
+
+  - id: q106
+    type: multiple_choice
+    question: "What is the 'Twelve-Factor App' methodology and why is it still relevant for .NET cloud-native apps?"
+    options:
+      - text: "A set of best practices for building scalable, maintainable, and portable SaaS applications in the cloud."
+        is_correct: true
+      - text: "A list of 12 C# keywords that every developer must know."
+        is_correct: false
+      - text: "A security protocol that uses 12 different passwords."
+        is_correct: false
+      - text: "A project management framework similar to Scrum."
+        is_correct: false
+    explanation: "Concepts like 'Config in Environment Variables', 'Stateless Processes', and 'Logs as Event Streams' are foundational for modern containerized .NET apps."
+    tags: [cloud-native, standards, architecture]
+    difficulty: medium
+    points: 8
+
+  - id: q107
+    type: multiple_choice
+    question: "How does 'Feature Toggling' (Feature Flags) support Continuous Deployment (CD)?"
+    options:
+      - text: "It allows code to be merged into 'main' and deployed to production while keeping the feature hidden until it is ready to be enabled."
+        is_correct: true
+      - text: "It is a way to turn off the internet for specific users."
+        is_correct: false
+      - text: "It speeds up the C# compiler by disabling unused features."
+        is_correct: false
+      - text: "It is a tool for the marketing team to change the website colors."
+        is_correct: false
+    explanation: "Feature flags decouple 'Deployment' (technical) from 'Release' (business), allowing for safer testing in production and instant rollbacks."
+    tags: [cicd, feature-flags, devops]
+    difficulty: easy
+    points: 6
+
+  - id: q108
+    type: multiple_choice
+    question: "In a distributed .NET system, what is 'Distributed Tracing' and why is it essential?"
+    options:
+      - text: "A method to track a single request as it travels through multiple services, helping to identify bottlenecks and failure points."
+        is_correct: true
+      - text: "A way to see where the physical servers are located on a map."
+        is_correct: false
+      - text: "A feature in SQL Server to find deleted records."
+        is_correct: false
+      - text: "It's a debugging tool that only works on a developer's local machine."
+        is_correct: false
+    explanation: "Without tracing (e.g., OpenTelemetry), it is nearly impossible to diagnose why a specific user request failed in a system with 50+ microservices."
+    tags: [observability, opentelemetry, microservices]
+    difficulty: medium
+    points: 8
+
+  - id: q109
+    type: multiple_choice
+    question: "What is 'Shift-Left Security' and how is it implemented in the .NET lifecycle?"
+    options:
+      - text: "Integrating security checks (SAST, DAST, Dependency Scanning) early in the development process rather than at the end."
+        is_correct: true
+      - text: "Moving all security personnel to the left side of the office."
+        is_correct: false
+      - text: "Using the 'left' arrow key more often while writing security code."
+        is_correct: false
+      - text: "A way to encrypt data only on the left side of the database."
+        is_correct: false
+    explanation: "Fixing a security vulnerability during development is significantly cheaper and safer than fixing it after a production breach."
+    tags: [security, devsecops, sdlc]
+    difficulty: medium
+    points: 8
+
+  - id: q110
+    type: multiple_choice
+    question: "What is the 'Bus Factor' in a software team and how does a Sênior mitigate it?"
+    options:
+      - text: "The number of team members that can be 'hit by a bus' before the project fails; it's mitigated by knowledge sharing and documentation."
+        is_correct: true
+      - text: "The speed at which data travels between microservices."
+        is_correct: false
+      - text: "A metric for how many developers take the bus to work."
+        is_correct: false
+      - text: "The capacity of the Message Bus (like RabbitMQ) to handle traffic."
+        is_correct: false
+    explanation: "A high Bus Factor (1 person knowing everything) is a risk. Seniors ensure the team is resilient by promoting pair programming and cross-training."
+    tags: [leadership, team-management, risk]
+    difficulty: easy
+    points: 6
