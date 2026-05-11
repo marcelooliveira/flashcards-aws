@@ -1,0 +1,366 @@
+﻿questions:
+  - id: q61
+    type: multiple_choice
+    question: "In 2026, how should a Senior .NET Developer best utilize 'AI-Assisted Unit Testing' to ensure mission-critical reliability?"
+    options:
+      - text: "Use AI to generate edge-case scenarios and boundary tests (PBT) that are often overlooked by manual authoring."
+        is_correct: true
+      - text: "Let AI write all tests and trust them without manual review to increase velocity."
+        is_correct: false
+      - text: "Only use AI to test UI components, never backend business logic."
+        is_correct: false
+      - text: "Avoid AI in testing because it cannot understand .NET 8/9 syntax."
+        is_correct: false
+    explanation: "AI is exceptionally good at identifying 'unhappy paths' and generating Property-Based Tests (PBT). The Senior's role is to validate these tests and integrate them into the CI/CD pipeline."
+    tags: [ai-sdlc, testing, reliability]
+    difficulty: medium
+    points: 7
+    diagram: |
+      graph LR
+      A[Codebase] --> B[AI Test Generator]
+      B -- Edge Cases --> C[Developer Review]
+      C -- Validation --> D[CI/CD Pipeline]
+
+  - id: q62
+    type: multiple_choice
+    question: "What is 'Semantic Kernel' in the context of building AI-integrated .NET applications in 2026?"
+    options:
+      - text: "An SDK that orchestrates AI LLMs with conventional programming languages, allowing for easy integration of 'Plugins' and 'Planners'."
+        is_correct: true
+      - text: "A new feature in the Windows Kernel for faster garbage collection."
+        is_correct: false
+      - text: "A C# library used exclusively for training neural networks from scratch."
+        is_correct: false
+      - text: "The internal code name for .NET 10."
+        is_correct: false
+    explanation: "Semantic Kernel (or similar orchestrators like LangChain) is the bridge between LLMs and your business logic, enabling 'Agentic' workflows in .NET."
+    tags: [ai, semantic-kernel, architecture]
+    difficulty: hard
+    points: 9
+
+  - id: q63
+    type: multiple_choice
+    question: "How does 'AI-Driven Observability' (AIOps) change incident response for .NET Senior Engineers in 2026?"
+    options:
+      - text: "AI models automatically correlate logs, traces, and metrics to identify the root cause (e.g., a specific memory leak) before a human is alerted."
+        is_correct: true
+      - text: "It replaces the need for OpenTelemetry entirely."
+        is_correct: false
+      - text: "It requires developers to write logs in natural language instead of JSON."
+        is_correct: false
+      - text: "It only works for applications hosted on local servers, not AWS/Azure."
+        is_correct: false
+    explanation: "AIOps uses pattern recognition to detect anomalies in telemetry data that humans might miss, drastically reducing the Mean Time to Resolution (MTTR)."
+    tags: [aiops, observability, telemetry]
+    difficulty: medium
+    points: 8
+
+  - id: q64
+    type: multiple_choice
+    question: "Which technique is preferred for a .NET system to access private, company-specific data without retraining a foundation LLM?"
+    options:
+      - text: "RAG (Retrieval-Augmented Generation) using a Vector Database like Pinecone or Azure AI Search."
+        is_correct: true
+      - text: "Hardcoding the company data directly into the system's prompt."
+        is_correct: false
+      - text: "Fine-tuning the model every 5 minutes."
+        is_correct: false
+      - text: "Converting the company database into a series of text files for the AI to read manually."
+        is_correct: false
+    explanation: "RAG retrieves relevant document chunks based on a query and provides them as context to the LLM, ensuring the answer is based on fresh, private data."
+    tags: [rag, ai-architecture, vectors]
+    difficulty: hard
+    points: 10
+    diagram: |
+      graph TD
+      A[User Query] --> B[Vector Search]
+      B -- Relevant Context --> C[LLM Prompt]
+      C -- Generated Answer --> D[User]
+
+  - id: q65
+    type: multiple_choice
+    question: "When using 'GitHub Copilot Workspace' or similar AI agents in 2026, what is the Senior Developer's primary responsibility during a Feature Request?"
+    options:
+      - text: "Reviewing the AI-generated 'Plan' and architecture before code generation begins to ensure it meets non-functional requirements."
+        is_correct: true
+      - text: "Manually typing every line of code to prove seniority."
+        is_correct: false
+      - text: "Disabling the AI to avoid security vulnerabilities."
+        is_correct: false
+      - text: "Letting the AI push directly to production if the tests pass."
+        is_correct: false
+    explanation: "As development becomes more agentic, the Senior acts as an 'Architect/Reviewer', ensuring the AI's proposed solution aligns with scalability and security standards."
+    tags: [ai-agents, sdlc, architecture]
+    difficulty: medium
+    points: 7
+
+  - id: q66
+    type: multiple_choice
+    question: "What is 'Prompt Engineering for Developers' and why is it critical for .NET background services?"
+    options:
+      - text: "The practice of structuring inputs to ensure the AI returns data in a structured, predictable format (like JSON or Schema) for system consumption."
+        is_correct: true
+      - text: "Learning how to type faster on the keyboard."
+        is_correct: false
+      - text: "Writing comments in the code to explain logic to other humans."
+        is_correct: false
+      - text: "Searching for the best AI tools on Google."
+        is_correct: false
+    explanation: "For automation, prompts must be engineered to produce consistent, machine-readable output (Function Calling) to integrate AI into existing .NET workflows."
+    tags: [prompt-engineering, integration, functions]
+    difficulty: medium
+    points: 7
+
+  - id: q67
+    type: multiple_choice
+    question: "In the context of 'AI Security' (AISec), what is a 'Prompt Injection' attack and how do you mitigate it in a C# application?"
+    options:
+      - text: "An attacker provides input that tricks the LLM into ignoring its system instructions; it's mitigated by using strict 'System Prompts' and input validation."
+        is_correct: true
+      - text: "It is a way to speed up the AI's response time."
+        is_correct: false
+      - text: "It is a virus that infects the .NET Runtime."
+        is_correct: false
+      - text: "It only happens in Python apps, not .NET."
+        is_correct: false
+    explanation: "Prompt injection is the 'SQL Injection' of the AI era. Developers must treat AI inputs as untrusted and use guardrails to prevent data leaks or unauthorized actions."
+    tags: [security, ai-safety, validation]
+    difficulty: hard
+    points: 9
+
+  - id: q68
+    type: multiple_choice
+    question: "How can 'AI Code Reviews' assist a .NET Sênior in maintaining high performance?"
+    options:
+      - text: "By automatically identifying O(n²) loops, unnecessary allocations (boxed values), and thread-safety issues during the Pull Request phase."
+        is_correct: true
+      - text: "By automatically deleting any code that is more than 10 lines long."
+        is_correct: false
+      - text: "By translating all code comments into Spanish."
+        is_correct: false
+      - text: "By replacing the need for a Tech Lead."
+        is_correct: false
+    explanation: "AI reviewers excel at pattern matching against common performance pitfalls, allowing the Senior to focus on high-level architectural decisions."
+    tags: [code-review, ai-sdlc, performance]
+    difficulty: easy
+    points: 6
+
+  - id: q69
+    type: multiple_choice
+    question: "What does 'Small Language Models' (SLMs) like Phi-3 mean for .NET edge computing or offline scenarios in 2026?"
+    options:
+      - text: "They allow high-quality AI reasoning to run locally on devices or small servers with low memory footprints, integrated via ONNX Runtime."
+        is_correct: true
+      - text: "They are models that can only understand 10 words."
+        is_correct: false
+      - text: "They are used to create smaller icons for the UI."
+        is_correct: false
+      - text: "They are a specialized type of compiler for C#."
+        is_correct: false
+    explanation: "SLMs provide a balance of power and efficiency, enabling AI features in .NET apps without the latency or cost of calling a cloud-based API like GPT-4."
+    tags: [slm, edge-computing, onnx]
+    difficulty: medium
+    points: 8
+
+  - id: q70
+    type: multiple_choice
+    question: "What is 'Self-Healing Code' in a 2026 CI/CD pipeline context?"
+    options:
+      - text: "A system where failing build/test logs are fed into an AI that automatically generates and proposes a fix (Pull Request) for the developer."
+        is_correct: true
+      - text: "Code that automatically deletes bugs as they are written."
+        is_correct: false
+      - text: "A .NET feature that fixes broken hard drives."
+        is_correct: false
+      - text: "It is another name for 'Source Generators'."
+        is_correct: false
+    explanation: "Self-healing pipelines use the AI's ability to diagnose errors from logs and suggest code corrections, drastically reducing the 'fix' cycle time."
+    tags: [cicd, automation, self-healing]
+    difficulty: medium
+    points: 8
+
+  - id: q71
+    type: multiple_choice
+    question: "When building an AI-powered .NET service, what is the 'Context Window' and why should a Senior Developer care about it?"
+    options:
+      - text: "The maximum amount of data (tokens) an LLM can process in a single request; exceeding it leads to data loss or 'hallucinations'."
+        is_correct: true
+      - text: "A new type of modal window in Material UI for AI chat bots."
+        is_correct: false
+      - text: "The time frame during which an AI model remains valid before expiring."
+        is_correct: false
+      - text: "A C# feature that limits the number of variables in a method."
+        is_correct: false
+    explanation: "Managing the context window is crucial for cost and accuracy. Techniques like 'Summarization' or 'Vector Search' are used to feed only the most relevant data to the AI."
+    tags: [ai-fundamentals, llm, optimization]
+    difficulty: medium
+    points: 7
+    diagram: |
+      graph LR
+      A[Large Dataset] --> B{Context Window Limit}
+      B -- Too Big --> C[Truncation/Error]
+      B -- Optimized --> D[Precise AI Response]
+
+  - id: q72
+    type: multiple_choice
+    question: "In 2026, how does 'AI-Assisted Refactoring' help in migrating legacy .NET Framework 4.8 code to .NET 9/10?"
+    options:
+      - text: "AI agents analyze the legacy code and automatically suggest modern equivalents for deprecated APIs, including rewriting synchronous code to async/await."
+        is_correct: true
+      - text: "It automatically wraps the legacy code in a Docker container without changes."
+        is_correct: false
+      - text: "It converts the C# code into a series of SQL stored procedures."
+        is_correct: false
+      - text: "AI cannot assist in migrations; it only writes new code."
+        is_correct: false
+    explanation: "Modern AI tools are trained on millions of migration patterns, making them highly effective at identifying 'breaking changes' and proposing modern architectural patterns."
+    tags: [modernization, migration, ai-tools]
+    difficulty: medium
+    points: 8
+
+  - id: q73
+    type: multiple_choice
+    question: "What is 'Function Calling' (or Tool Use) in an AI-integrated .NET application?"
+    code: |
+      // AI decides to call this local C# method
+      [KernelFunction]
+      public async Task<string> GetOrderDetails(int orderId) { ... }
+    options:
+      - text: "A capability where the LLM identifies that it needs to execute a specific local function to retrieve real-time data or perform an action."
+        is_correct: true
+      - text: "A way to call AI models using only CSS."
+        is_correct: false
+      - text: "A legacy .NET feature for calling C++ DLLs."
+        is_correct: false
+      - text: "The process of the AI writing the entire function from scratch."
+        is_correct: false
+    explanation: "Function calling allows the AI to 'act' on the real world through your code, making it an 'Agent' rather than just a chatbot."
+    tags: [semantic-kernel, agents, integration]
+    difficulty: hard
+    points: 10
+
+  - id: q74
+    type: multiple_choice
+    question: "How should 'AI-Generated Code' be handled regarding 'Software Supply Chain Security' in 2026?"
+    options:
+      - text: "It must be scanned for 'Hardcoded Secrets' and 'Hallucinated Dependencies' (packages that don't exist but the AI suggested)."
+        is_correct: true
+      - text: "AI code is inherently secure and does not need scanning."
+        is_correct: false
+      - text: "By only allowing AI to write code in 'private' classes."
+        is_correct: false
+      - text: "By converting all AI suggestions into images before use."
+        is_correct: false
+    explanation: "AI can suggest non-existent packages (Package Hallucination) which attackers could then register to inject malicious code (Typosquatting)."
+    tags: [security, ai-safety, devsecops]
+    difficulty: hard
+    points: 9
+
+  - id: q75
+    type: multiple_choice
+    question: "What is the benefit of using 'ONNX Runtime' in a .NET application?"
+    options:
+      - text: "It provides a cross-platform, high-performance engine to run machine learning models (exported from PyTorch or TensorFlow) directly in C#."
+        is_correct: true
+      - text: "It is a specialized database for storing AI prompts."
+        is_correct: false
+      - text: "It allows .NET apps to run on Android without a JVM."
+        is_correct: false
+      - text: "It is the successor to the .NET Garbage Collector."
+        is_correct: false
+    explanation: "ONNX is the standard for interoperability. It allows data scientists to use Python for training and .NET developers to use C# for high-performance inference."
+    tags: [onnx, machine-learning, performance]
+    difficulty: medium
+    points: 8
+
+  - id: q76
+    type: multiple_choice
+    question: "In 2026, what is 'Synthetic Data' generation used for in the .NET testing lifecycle?"
+    options:
+      - text: "Creating massive, realistic datasets for load testing and model training without exposing real user PII (Personally Identifiable Information)."
+        is_correct: true
+      - text: "Generating fake code to confuse competitors."
+        is_correct: false
+      - text: "Filling up hard drives to test disk space alerts."
+        is_correct: false
+      - text: "A way to simulate the passage of time in unit tests."
+        is_correct: false
+    explanation: "AI can generate data that follows the statistical distribution of real data but contains no real individuals, ensuring GDPR/LGPD compliance during testing."
+    tags: [testing, synthetic-data, privacy]
+    difficulty: medium
+    points: 7
+
+  - id: q77
+    type: multiple_choice
+    question: "What is 'Vector Embedding' in the context of AI search features in .NET?"
+    options:
+      - text: "A numerical representation of text/data as a list of numbers (vectors) that captures the 'meaning' or 'semantic' value."
+        is_correct: true
+      - text: "A way to compress SQL tables into smaller files."
+        is_correct: false
+      - text: "A new type of primary key in Entity Framework Core."
+        is_correct: false
+      - text: "The process of converting C# code into binary for AI."
+        is_correct: false
+    explanation: "Embeddings allow for 'Semantic Search' (searching by meaning) rather than 'Keyword Search' (searching by exact letters)."
+    tags: [vectors, ai-search, math]
+    difficulty: hard
+    points: 9
+
+  - id: q78
+    type: multiple_choice
+    question: "How does 'AI Pair Programming' impact the 'Junior-to-Senior' mentoring relationship in 2026?"
+    options:
+      - text: "Seniors focus more on teaching 'Problem Decomposition' and 'Systemic Thinking', while AI handles the syntax and boilerplate mentoring."
+        is_correct: true
+      - text: "Seniors no longer need to mentor Juniors because AI does it all."
+        is_correct: false
+      - text: "Juniors are expected to write code without AI to 'earn' their place."
+        is_correct: false
+      - text: "Mentoring is replaced by 'AI Prompt Reviews'."
+        is_correct: false
+    explanation: "As the 'how' (syntax) becomes a commodity, the 'what' and 'why' (architecture/intent) become the primary value of a Senior Engineer."
+    tags: [soft-skills, sdlc, leadership]
+    difficulty: easy
+    points: 5
+
+  - id: q79
+    type: multiple_choice
+    question: "What is 'Chain of Thought' (CoT) prompting in the context of developing complex .NET logic?"
+    options:
+      - text: "Encouraging the AI to 'think step-by-step' in its response to improve reasoning and reduce errors in complex tasks."
+        is_correct: true
+      - text: "A way to link multiple .NET microservices together using AI."
+        is_correct: false
+      - text: "A design pattern for handling C# exceptions."
+        is_correct: false
+      - text: "A specialized hardware for AI servers."
+        is_correct: false
+    explanation: "By asking the AI to explain its reasoning, you get higher quality code and can more easily spot logical flaws in the AI's proposal."
+    tags: [prompt-engineering, reasoning, quality]
+    difficulty: medium
+    points: 7
+
+  - id: q80
+    type: multiple_choice
+    question: "In a mission-critical .NET 9 API, why would you implement an 'AI Guardrail' layer?"
+    options:
+      - text: "To intercept and validate AI inputs/outputs to prevent bias, toxic content, or sensitive data leakage (PII)."
+        is_correct: true
+      - text: "To prevent the AI from using too much CPU power."
+        is_correct: false
+      - text: "To ensure the AI only uses 'var' instead of explicit types."
+        is_correct: false
+      - text: "To stop the AI from writing code on weekends."
+        is_correct: false
+    explanation: "Guardrails (like NeMo Guardrails or custom middleware) are essential for compliance and safety in enterprise-grade AI applications."
+    tags: [resilience, ai-safety, architecture]
+    difficulty: hard
+    points: 10
+    diagram: |
+      graph TD
+      A[User Input] --> B[Guardrail Layer]
+      B -- Safe --> C[AI Model]
+      C --> D[Guardrail Output Check]
+      D -- Safe --> E[Final Response]
+      B -- Blocked --> F[Safety Alert]
