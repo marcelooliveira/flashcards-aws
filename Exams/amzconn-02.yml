@@ -1,0 +1,736 @@
+﻿questions:
+  - id: q01
+    type: multiple_choice
+    question: "An Amazon Connect Contact Flow invokes an AWS Lambda function to fetch customer data. If the backend API called by the Lambda takes 9 seconds to respond, what will occur within the interaction flow?"
+    code: |
+      // AWS Lambda Handler Context
+      exports.handler = async (event) => {
+          // Contact Flow waits synchronously
+          const customerData = await fetchFromSlowLegacyAPI(event.Details.ContactData.Attributes.CustomerId); 
+          return { CustomerStatus: customerData.status };
+      };
+    options:
+      - text: "The Contact Flow will wait up to 15 minutes for the Lambda execution to complete."
+        is_correct: false
+      - text: "The Contact Flow will automatically take the 'Error' branch due to a hard 8-second timeout limit for Lambda invocations."
+        is_correct: true
+      - text: "Amazon Connect will automatically retry the Lambda invocation three times before moving to the next block."
+        is_correct: false
+      - text: "The call will be dropped immediately without entering any failure branches."
+        is_correct: false
+    explanation: "Amazon Connect has a strict, non-configurable timeout of 8 seconds for synchronous AWS Lambda invocations. If the function exceeds this limit, Connect triggers the 'Error' branch of the invoke block."
+    tags: [aws-lambda, amazon-connect, architecture, timeouts]
+    difficulty: hard
+    points: 8
+    diagram: |
+      graph TD
+      A[Connect Flow] -->|Invoke Lambda| B(Lambda Execution)
+      B -->|Ticks past 8s| C[Connect Hard Timeout]
+      C -->|Route Execution| D[Error Branch]
+
+  - id: q02
+    type: multiple_choice
+    question: "During a high-volume product launch, thousands of concurrent callers trigger an Amazon Connect flow that invokes a Lambda function to verify account status. How should you design the architecture to prevent 'ThrottlingException' errors?"
+    code: |
+      # Infrastructure as Code (Terraform Snippet)
+      resource "aws_lambda_function" "connect_lookup" {
+        function_name = "connect-customer-lookup"
+        runtime       = "nodejs18.x"
+        # ??? Configuration needed to guarantee capacity without exhausting regional pools
+      }
+    options:
+      - text: "Configure 'Reserved Concurrency' for the specific Lambda function to guarantee an allocation of execution slots."
+        is_correct: true
+      - text: "Increase the timeout of the Lambda function to 15 minutes to allow requests to queue up."
+        is_correct: false
+      - text: "Wrap the Lambda invocation within an Amazon SQS FIFO queue directly inside the Contact Flow visual designer."
+        is_correct: false
+      - text: "Deploy the Lambda function in multiple AWS Regions and use Route 53 to load-balance the voice traffic."
+        is_correct: false
+    explanation: "Setting Reserved Concurrency guarantees that the critical contact center Lambda has a dedicated pool of execution slots to handle spikes, while simultaneously preventing it from scale-exhausting the entire AWS account's regional concurrency pool."
+    tags: [aws-lambda, scalability, concurrency, infrastructure]
+    difficulty: hard
+    points: 9
+    diagram: |
+      graph LR
+      A[Spike: 2000 Calls] --> B[Amazon Connect]
+      B --> C{Lambda Pool}
+      C -->|Reserved Concurrency Slots| D[Successful Execution]
+      C -->|Exceeded Pool Limit| E[Graceful Error Flow]
+
+  - id: q03
+    type: multiple_choice
+    question: "You are designing an integration between Amazon Connect and an external CRM. You want to pass the customer's input ('Account Number') captured via DTMF to an AWS Lambda function. Which JSON path should you use to extract this value inside the Lambda event object?"
+    code: |
+      {
+        "Details": {
+          "ContactData": {
+            "Attributes": {},
+            "MediaProperties": {},
+            "SystemEndpoint": {}
+          },
+          "Parameters": {
+            "CustomerAccountNumber": "12345"
+          }
+        },
+        "Name": "ContactFlowEvent",
+        "Program": "Amazon Connect"
+      }
+    options:
+      - text: "event.Details.ContactData.Attributes.CustomerAccountNumber"
+        is_correct: false
+      - text: "event.Details.Parameters.CustomerAccountNumber"
+        is_correct: true
+      - text: "event.Parameters.CustomerAccountNumber"
+        is_correct: false
+      - text: "event.ContactData.CustomerAccountNumber"
+        is_correct: false
+    explanation: "When you pass parameters explicitly into an AWS Lambda function from an Amazon Connect 'Invoke AWS Lambda function' block, they are populated under the `event.Details.Parameters` object schema."
+    tags: [aws-lambda, integrations, json, amazon-connect]
+    difficulty: medium
+    points: 7
+
+  - id: q04
+    type: multiple_choice
+    question: "To support 'Spec-Driven Development' (SDD) and Shift-Left testing, your team needs to mock Amazon Connect payloads locally to test the Node.js/Python Lambda integrations in a CI/CD pipeline. Which approach represents the best practice?"
+    code: |
+      // Test suite setup for contact center workflow
+      describe('Connect Lambda Integration Tests', () => {
+        it('should route premium tier users correctly', async () => {
+          const mockEvent = loadFixture('connect_event_premium.json');
+          const response = await handler(mockEvent);
+          expect(response.Result).toBe('PremiumQueue');
+        });
+      });
+    options:
+      - text: "Hardcode test data into the Lambda code itself, checking an environment variable like 'IS_LOCAL_TEST'."
+        is_correct: false
+      - text: "Maintain updated JSON schema fixtures representing official Amazon Connect event structures, and run unit tests locally using tools like Jest or PyTest."
+        is_correct: true
+      - text: "Deploy code directly to a personal AWS sandbox account for every local code change to run real end-to-end tests."
+        is_correct: false
+      - text: "Use Amazon Connect's visual editor to write assertions inside the live environment routing flows."
+        is_correct: false
+    explanation: "Shift-left testing relies on validating contracts early. Isolating core business logic by passing structural JSON fixtures to local unit tests ensures instant feedback without cloud latency or deployment overhead."
+    tags: [testing, shift-left, quality, continuous-integration]
+    difficulty: medium
+    points: 8
+
+  - id: q05
+    type: multiple_choice
+    question: "When a customer authenticates via an automated interactive voice response (IVR) flow, you need to save their 'VIPStatus' so that it persists if they are transferred across multiple queues and different agents. Where should this data be stored in Amazon Connect?"
+    code: |
+      // Concept: Setting a key-value attribute during the call session
+      Key: VIPStatus
+      Value: $.External.LambdaResult.status
+    options:
+      - text: "In a local Lambda environment variable."
+        is_correct: false
+      - text: "As a 'User Defined' Contact Attribute within the Contact Flow."
+        is_correct: true
+      - text: "Inside an Amazon DynamoDB global table indexed by the agent's ID."
+        is_correct: false
+      - text: "Inside the Amazon S3 bucket used for call recording storage."
+        is_correct: false
+    explanation: "Contact Attributes act as the session-level state mechanism in Amazon Connect. User-defined attributes follow the specific call lifecycle, remaining accessible across transfer flows and on agent control panels (CPAs)."
+    tags: [amazon-connect, architecture, state-management]
+    difficulty: medium
+    points: 7
+
+  - id: q06
+    type: multiple_choice
+    question: "Your team is building an omni-channel flow using Amazon Lex for conversational AI. During the conversation, you want to safely capture sensitive data (such as a credit card pin) without exposing it in plaintext inside Amazon CloudWatch or Lex logs. Which feature must be enabled?"
+    code: |
+      # Lex V2 / Connect Data Privacy Concept
+      Intent: ProvidePinIntent
+      Slot Type: AMZN.Digits
+      Slot Configuration: [ ??? ]
+    options:
+      - text: "Slot Obfuscation / Slot Privacy settings in Amazon Lex."
+        is_correct: true
+      - text: "AWS Lambda execution roles restricted to read-only access."
+        is_correct: false
+      - text: "AWS KMS asymmetric key pair rotation inside CloudWatch Logs."
+        is_correct: false
+      - text: "Amazon Connect Contact Lens real-time sentiment tracking."
+        is_correct: false
+    explanation: "Amazon Lex supports slot obfuscation. When enabled, sensitive slot values are masked with brackets (e.g., [PIN]) in runtime logs, ensuring compliance and preventing PII leakage into monitoring platforms."
+    tags: [security, amazon-lex, monitoring, compliance]
+    difficulty: hard
+    points: 9
+
+  - id: q07
+    type: multiple_choice
+    question: "To implement an event-driven architecture that triggers post-call data processing (like sending a satisfaction survey via SMS or running an ETL Glue job) immediately after an interaction ends, which configuration is recommended?"
+    code: |
+      # Architectural Pattern:
+      [Amazon Connect] -> (Stream Event) -> [ ??? ] -> [AWS Lambda / Step Functions]
+    options:
+      - text: "Enable Amazon Connect Contact Trace Records (CTR) streaming to Amazon Kinesis Data Streams."
+        is_correct: true
+      - text: "Set up a cron job using Amazon EventBridge to poll Amazon Connect metrics hourly."
+        is_correct: false
+      - text: "Configure a webhook URL directly inside the Amazon Connect operational dashboard configuration panel."
+        is_correct: false
+      - text: "Write an infinite loop inside the agent desktop application to monitor connection drop events."
+        is_correct: false
+    explanation: "Amazon Connect outputs Contact Trace Records (CTRs) when a call or chat finishes. Streaming these records directly into Amazon Kinesis allows asynchronous, decoupled consumers to respond to interactions instantly."
+    tags: [event-driven, amazon-connect, kinesis, architecture]
+    difficulty: hard
+    points: 9
+    diagram: |
+      graph LR
+      A[Call Disconnected] --> B[Connect Generates CTR]
+      B --> C[Kinesis Data Stream]
+      C --> D[Lambda: Trigger Survey]
+      C --> E[S3 / Redshift: Long-term Analytics]
+
+  - id: q08
+    type: multiple_choice
+    question: "Your Lambda integration needs to write customer interaction logs into Amazon DynamoDB. To prevent cold starts and connection starvation under intense spikes of concurrent customer calls, how should the DynamoDB client be initialized?"
+    code: |
+      // Select the optimal architectural placement for the SDK initialization
+      const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
+      // PLACEHOLDER A
+      
+      exports.handler = async (event) => {
+        // PLACEHOLDER B
+        return { success: true };
+      };
+    options:
+      - text: "Initialize the client in PLACEHOLDER A (Globally / Outside the handler execution scope)."
+        is_correct: true
+      - text: "Initialize the client in PLACEHOLDER B (Locally / Inside the handler execution scope)."
+        is_correct: false
+      - text: "Dynamically re-instantiate the client for every distinct database row read operation."
+        is_correct: false
+      - text: "Avoid initialization by writing direct unauthenticated HTTP raw requests into DynamoDB endpoints."
+        is_correct: false
+    explanation: "Initializing clients outside the handler scope (PLACEHOLDER A) leverages AWS Lambda container reuse. This drastically reduces cold start latency and prevents exhausting TCP socket resources across rapid executions."
+    tags: [aws-lambda, optimization, performance, dynamodb]
+    difficulty: hard
+    points: 8
+
+  - id: q09
+    type: multiple_choice
+    question: "A Senior Applications Engineer is troubleshooting a bug during the 'Hyper-care' phase where an external API endpoint intermittently fails with 503 Service Unavailable errors. Which architectural resiliency pattern should be integrated into the AWS Lambda function code?"
+    code: |
+      // Resiliency implementation strategy
+      async function callExternalVendor(payload) {
+        return await retryPolicy({
+          action: () => axios.post(process.env.API_URL, payload),
+          retries: 3,
+          strategy: '???'
+        });
+      }
+    options:
+      - text: "Immediate execution retry loops with zero delays."
+        is_correct: false
+      - text: "Exponential backoff with jitter."
+        is_correct: true
+      - text: "Failover routing to a secondary regional static HTML error page."
+        is_correct: false
+      - text: "Terminating the Lambda host environment instantly via process.exit()."
+        is_correct: false
+    explanation: "Exponential backoff with jitter spaced out retries prevents a cascading failure pattern known as the 'thundering herd' problem, allowing the struggling upstream target system an opportunity to recover."
+    tags: [resiliency, integration, error-handling, hyper-care]
+    difficulty: medium
+    points: 8
+
+  - id: q10
+    type: multiple_choice
+    question: "You are maintaining complete technical architectural infrastructure maps using code ('as-built' automation). When updating a complex routing scheme across Dev/QA/Prod environments for Amazon Connect flows, which practice aligns best with modern DevOps cycles?"
+    code: |
+      # Infrastructure Management Strategy
+      - Dev environment manual changes are prohibited.
+      - Every change is declared using code structures.
+      - Pipelines build, test, and ship artifacts.
+    options:
+      - text: "Manually replicate the Contact Flow structures by downloading and re-uploading JSON blobs across target environment dashboards."
+        is_correct: false
+      - text: "Model contact center resources using Infrastructure as Code (IaC) tools like Terraform (aws_connect_contact_flow) integrated within automated CI/CD pipelines."
+        is_correct: true
+      - text: "Write an internal document instructing the operations team to rebuild the exact logic patterns by hand during off-hours."
+        is_correct: false
+      - text: "Rely exclusively on local code repositories without deploying versions into remote environments."
+        is_correct: false
+    explanation: "Managing Amazon Connect instances via IaC (such as Terraform) ensures deterministic, reproducible, and auditable infrastructure, eliminating environmental drift and reducing operational errors during deployment pipelines."
+    tags: [devops, terraform, infrastructure-as-code, documentation]
+    difficulty: hard
+    points: 10
+
+  - id: q11
+    type: multiple_choice
+    question: "You are designing an Amazon Connect Contact Flow that passes customer data to an AWS Lambda function. To comply with local financial data privacy regulations (like LGPD/GDPR), you must ensure that sensitive variables are not persisted in the Amazon Connect interaction logs. How should this be handled?"
+    code: |
+      // AWS Lambda return payload structure
+      exports.handler = async (event) => {
+          return {
+              // How should sensitive variables be structured or flagged?
+              CustomerBalance: "5420.50",
+              AccountType: "Premium"
+          };
+      };
+    options:
+      - text: "Set the 'SensitiveData' flag to true inside the Lambda function's environment variables."
+        is_correct: false
+      - text: "Use the 'Set contact attributes' block in the Contact Flow and explicitly toggle the 'Log value' option to disabled for those specific attributes."
+        is_correct: true
+      - text: "Encrypt the entire Lambda return payload using an asymmetric AWS KMS key before passing it back to Connect."
+        is_correct: false
+      - text: "Contact attributes are never logged by Amazon Connect, so no action is required."
+        is_correct: false
+    explanation: "Amazon Connect logs Contact Flow execution details to CloudWatch. To prevent PII or financial data leakage, you must explicitly configure specific contact attributes to not be logged by toggling off the 'Log value' configuration inside the flow designer."
+    tags: [security, compliance, amazon-connect, cloudwatch]
+    difficulty: medium
+    points: 8
+
+  - id: q12
+    type: multiple_choice
+    question: "During a hyper-care support phase, you notice a high volume of 'AccessDeniedException' errors in your Lambda function logs when it tries to publish status updates to an Amazon SNS topic triggered by an Amazon Connect flow. What is the most likely root cause?"
+    code: |
+      # CloudWatch Log Error Snippet
+      {
+          "errorMessage": "User: arn:aws:sts::123456789012:assumed-role/connect-lambda-execution-role/connect-lookup is not authorized to perform: sns:Publish on resource...",
+          "errorType": "AccessDeniedException"
+      }
+    options:
+      - text: "The Amazon SNS topic is encrypted with a KMS key that the Lambda execution role does not have permissions to use."
+        is_correct: false
+      - text: "The AWS Lambda execution IAM role lacks the 'sns:Publish' action in its resource policy."
+        is_correct: true
+      - text: "Amazon Connect does not have cross-account permissions to access the SNS topic."
+        is_correct: false
+      - text: "The Lambda function's timeout is too low to establish a handshake with the SNS endpoint."
+        is_correct: false
+    explanation: "AWS Lambda functions rely entirely on their assigned Execution Role (IAM) to interact with other AWS services. An AccessDeniedException explicitly indicates that the IAM policy attached to that role is missing the required action permission (sns:Publish) for the targeted resource."
+    tags: [iam, security, troubleshooting, hyper-care]
+    difficulty: medium
+    points: 7
+
+  - id: q13
+    type: multiple_choice
+    question: "Your application stack uses an Amazon API Gateway endpoint proxying to an AWS Lambda function to provide data to Amazon Connect. During sudden traffic spikes, you want to prevent cold starts from causing Amazon Connect 8-second execution timeouts. Which Lambda feature should you configure?"
+    code: |
+      # Infrastructure as Code (Terraform Snippet)
+      resource "aws_lambda_provisioned_concurrency_config" "connect_lambda_concurrency" {
+        function_name        = aws_lambda_function.connect_lookup.function_name
+        qualifier            = aws_lambda_alias.prod.name
+        # ??? Configuration parameter to keep environments warm
+        provisioned_concurrent_executions = 20
+      }
+    options:
+      - text: "Reserved Concurrency"
+        is_correct: false
+      - text: "Provisioned Concurrency"
+        is_correct: true
+      - text: "Event Source Mapping"
+        is_correct: false
+      - text: "Lambda Layers warm-up cron"
+        is_correct: false
+    explanation: "Provisioned Concurrency initializes a requested number of runtime environments ahead of time. This guarantees that functions can respond immediately with ultra-low latency, completely eliminating cold start delays during sudden contact center volume spikes."
+    tags: [aws-lambda, performance, latency, infrastructure]
+    difficulty: hard
+    points: 9
+    diagram: |
+      graph TD
+      A[Inbound Call Spike] --> B[Amazon Connect]
+      B --> C{API Gateway Proxy}
+      C -->|20 Concurrent Hits| D[Provisioned Concurrency Pool: Sub-millisecond Response]
+      C -->|Excess Hits| E[Standard Execution: Standard Cold Start]
+
+  - id: q14
+    type: multiple_choice
+    question: "You are designing an integration between Amazon Connect and a third-party CRM using AWS Lambda. Following Spec-Driven Development (SDD) principles, how should you declare the response contract so that Amazon Connect can parse it correctly without throwing an error?"
+    code: |
+      // Expected return contract format for Amazon Connect
+      exports.handler = async (event) => {
+          const crmData = await fetchCrmData(event);
+          
+          // Which format must the return object strictly follow?
+          return ???;
+      };
+    options:
+      - text: "{ statusCode: 200, body: JSON.stringify(crmData) }"
+        is_correct: false
+      - text: "crmData // A flat, single-level key-value pair object of strings (e.g., { name: 'John', id: '123' })"
+        is_correct: true
+      - text: "{ data: { user: crmData } }"
+        is_correct: false
+      - text: "An array of JSON objects representing rows from the CRM database."
+        is_correct: false
+    explanation: "Amazon Connect expects an AWS Lambda function to return a flat JSON object consisting exclusively of single-level key-value pairs where the values are strings. Nested JSON objects, arrays, or standard API Gateway wrappers ({statusCode, body}) will cause the Contact Flow parsing engine to fail and route to the Error branch."
+    tags: [aws-lambda, amazon-connect, integration, spec-driven-development]
+    difficulty: hard
+    points: 9
+
+  - id: q15
+    type: multiple_choice
+    question: "When deploying a high-availability backend configuration for Amazon Connect using Amazon DynamoDB, you need to implement a caching layer to reduce read load on your primary tables and guarantee single-digit millisecond response times for frequent customer verification lookups. Which component should you integrate?"
+    code: |
+      # High Performance Architecture Pattern:
+      [Amazon Connect] -> [AWS Lambda] -> [ ??? ] -> [Amazon DynamoDB Table]
+    options:
+      - text: "Amazon ElastiCache (Memcached)"
+        is_correct: false
+      - text: "Amazon DynamoDB Accelerator (DAX)"
+        is_correct: true
+      - text: "Amazon CloudFront"
+        is_correct: false
+      - text: "AWS Glue Data Catalog"
+        is_correct: false
+    explanation: "DynamoDB Accelerator (DAX) is a fully managed, highly available, in-memory cache designed specifically for DynamoDB. It provides up to a 10x performance improvement—reducing response times to microseconds—without requiring any complex modifications to the underlying application data query logic."
+    tags: [dynamodb, architecture, performance, caching]
+    difficulty: hard
+    points: 8
+
+  - id: q16
+    type: multiple_choice
+    question: "Your contact center application requires real-time natural language processing to identify if an automated call interaction contains a customer expressing high frustration. Which specialized AWS AI integration satisfies this requirement directly within Amazon Connect?"
+    code: |
+      # Contact Center Flow Architecture:
+      [Voice Stream] -> [Amazon Connect] -> [ ??? ] -> Real-time Sentiment Alert
+    options:
+      - text: "Amazon Connect Contact Lens"
+        is_correct: true
+      - text: "Amazon Comprehend Medical"
+        is_correct: false
+      - text: "AWS DeepLens"
+        is_correct: false
+      - text: "Amazon Rekognition Video"
+        is_correct: false
+    explanation: "Amazon Connect Contact Lens provides built-in machine learning capabilities to analyze call and chat interactions. It performs real-time transcription, redacts sensitive PII data, and detects customer sentiment and compliance issues out of the box."
+    tags: [artificial-intelligence, amazon-connect, cloud-engineering, analytics]
+    difficulty: medium
+    points: 7
+
+  - id: q17
+    type: multiple_choice
+    question: "Your team implements a Shift-Left verification framework. You need to validate that your Lambda functions handle corrupted or unexpected payloads from Amazon Connect without crashing. Which testing methodologies should you focus on to enforce this standard?"
+    code: |
+      // Shift-Left Test Pipeline Phase
+      function verifyPayloadResiliency(lambdaHandler, corruptPayload) {
+          // Assert that the function gracefully rejects the request instead of crashing
+          expect(() => lambdaHandler(corruptPayload)).not.toThrow();
+      }
+    options:
+      - text: "Fuzz testing and negative unit testing using isolated mock payloads."
+        is_correct: true
+      - text: "User Acceptance Testing (UAT) with real telephone lines."
+        is_correct: false
+      - text: "Manual production testing using live phone calls during a maintenance window."
+        is_correct: false
+      - text: "End-to-End browser UI automation testing via Selenium."
+        is_correct: false
+    explanation: "Shift-Left focuses on catching structural bugs early in the development lifecycle. Fuzzing and negative testing with distorted mock event blocks ensure that error-handling wrappers and validation constraints are resilient against production failures before deployment."
+    tags: [testing, quality, shift-left, software-engineering]
+    difficulty: medium
+    points: 8
+
+  - id: q18
+    type: multiple_choice
+    question: "You are implementing an automated outbound notification workflow where an event in your backend application triggers Amazon Connect to dial a customer and play a recorded message. Which mechanism should be used to initiate this sequence programmatically?"
+    code: |
+      // Backend application event consumer snippet
+      const { ConnectClient, StartOutboundVoiceContactCommand } = require("@aws-sdk/client-connect");
+      
+      async function triggerNotification(customerPhone) {
+          const client = new ConnectClient({ region: "us-east-1" });
+          // Call the correct API command to initiate the outbound phone call
+          const command = new ???(params);
+          await client.send(command);
+      }
+    options:
+      - text: "CreateContactFlowCommand"
+        is_correct: false
+      - text: "StartOutboundVoiceContactCommand"
+        is_correct: true
+      - text: "UpdateContactAttributesCommand"
+        is_correct: false
+      - text: "ResumeContactRecordingCommand"
+        is_correct: false
+    explanation: "The `StartOutboundVoiceContact` API operation allows applications to programmatically initiate outbound calls through an Amazon Connect instance, linking the successful dial directly to a specified target Contact Flow."
+    tags: [amazon-connect, automation, apis, event-driven]
+    difficulty: hard
+    points: 8
+
+  - id: q19
+    type: multiple_choice
+    question: "An application engineer needs to troubleshoot an elusive routing issue inside an active Amazon Connect deployment where calls are dropping on a specific transfer step. Which exact observability tool should you use to trace the structural path a customer took through the visual designer blocks?"
+    code: |
+      # Log Stream Location Search Strategy
+      - Service: Amazon CloudWatch
+      - Log Group: /aws/connect/...
+      - Key Field to trace execution flow: [ ??? ]
+    options:
+      - text: "Contact Flow Logs"
+        is_correct: true
+      - text: "VPC Flow Logs"
+        is_correct: false
+      - text: "AWS CloudTrail Event History"
+        is_correct: false
+      - text: "S3 Server Access Logs"
+        is_correct: false
+    explanation: "When enabled, Contact Flow Logs output detailed execution states directly to Amazon CloudWatch Logs. They track the sequential movement of a call through individual blocks, evaluating expressions and branch choices for diagnostic purposes."
+    tags: [monitoring, observability, troubleshooting, cloudwatch]
+    difficulty: medium
+    points: 7
+    diagram: |
+      graph LR
+      A[Call Dropped] --> B[Locate Contact ID]
+      B --> C[CloudWatch Log Group: /aws/connect]
+      C --> D[Filter by Contact ID -> Analyze Step-by-Step Block Flow Execution]
+
+  - id: q20
+    type: multiple_choice
+    question: "When engineering an infrastructure automation pipeline using Terraform, you notice that multiple developers are manually modifying the text-to-speech interaction text strings within the production Amazon Connect dashboard. What is the immediate consequence of this behavior?"
+    code: |
+      # Code vs Infrastructure Reality Conflict
+      - Terraform Code states: "Welcome to our customer service line."
+      - Manual Console modification changed text to: "Welcome to our emergency customer support hotline."
+    options:
+      - text: "The AWS console changes will automatically overwrite the git repository code during the next commit."
+        is_correct: false
+      - text: "Environmental Drift will occur, and the next automated 'terraform apply' execution will overwrite the manual changes back to the code definition."
+        is_correct: true
+      - text: "Terraform will completely crash and delete the Amazon Connect instance due to an integrity conflict."
+        is_correct: false
+      - text: "AWS will block all administrative access to the user interface panel until the pipeline is manually deleted."
+        is_correct: false
+    explanation: "Manual configuration adjustments on infrastructure resources managed via code create 'Environmental Drift'. Infrastructure as Code (IaC) tools like Terraform enforce the declared state from the codebase, meaning any manual out-of-band updates will be reverted during the next execution cycle."
+    tags: [devops, terraform, infrastructure-as-code, automation]
+    difficulty: hard
+    points: 9
+
+  - id: q21
+    type: multiple_choice
+    question: "You are implementing a robust error-handling flow in Amazon Connect. When an 'Invoke AWS Lambda function' block hits its failure path, you want to capture the specific error message or type returned by the Lambda to decide whether to retry or route to an agent. Which system attribute path holds this error detail?"
+    code: |
+      // Amazon Connect Contact Flow Logic
+      // Branch: Error -> Check Attribute
+      // Attribute to check: ???
+    options:
+      - text: "$.External.LambdaResult.ErrorMessage"
+        is_correct: false
+      - text: "$.System.LambdaError"
+        is_correct: false
+      - text: "$.External.Error"
+        is_correct: true
+      - text: "$.System.ErrorDetails"
+        is_correct: false
+    explanation: "When an AWS Lambda function fails or returns an unhandled exception, Amazon Connect stores the error metadata in the special system attribute path `$.External.Error`, allowing you to branch logic using a 'Check contact attributes' block."
+    tags: [amazon-connect, aws-lambda, error-handling, flow-design]
+    difficulty: hard
+    points: 8
+
+  - id: q22
+    type: multiple_choice
+    question: "A company requires its Amazon Connect instance to handle outbound SMS notifications asynchronously. The engineering team implements an event-driven architecture where an AWS Lambda function processes messages from an Amazon SQS queue and triggers the Amazon Pinpoint API. If the Pinpoint API experiences a brief outage, how should the queue configuration handle retries gracefully without dropping messages?"
+    code: |
+      # AWS CloudFormation/Terraform Concept
+      # SQS Queue Definition
+      resource "aws_sqs_queue" "sms_queue" {
+        name                      = "contact-center-sms-queue"
+        redrive_policy = jsonencode({
+          deadLetterTargetArn = aws_sqs_queue.sms_dlq.arn
+          maxReceiveCount     = 5
+        })
+      }
+    options:
+      - text: "Set a high visibility timeout and utilize a Dead Letter Queue (DLQ) with a maxReceiveCount threshold."
+        is_correct: true
+      - text: "Convert the SQS queue to a standard FIFO queue and disable message deduplication."
+        is_correct: false
+      - text: "Increase the Lambda function execution timeout to match the total SQS message retention period."
+        is_correct: false
+      - text: "Force the Lambda function to delete messages from the queue immediately upon receipt before invocation."
+        is_correct: false
+    explanation: "Using a Dead Letter Queue (DLQ) paired with a reasonable visibility timeout ensures that transient API failures allow messages to be safely retried up to `maxReceiveCount` times before isolation, preventing data loss."
+    tags: [event-driven, sqs, resiliency, cloud-engineering]
+    difficulty: medium
+    points: 8
+    diagram: |
+      graph LR
+      A[SQS Queue] -->|Trigger| B[Lambda Worker]
+      B -->|Pinpoint API Fails| C[Message Appears Back in Queue]
+      C -->|After 5 Retries| D[Dead Letter Queue]
+
+  - id: q23
+    type: multiple_choice
+    question: "Your team uses Spec-Driven Development (SDD) to maintain contract definitions for integrations. You need to validate that incoming webhooks from a CRM system conform to an OpenAPI specification before invoking downstream contact routing microservices. Where is the most cost-effective and low-latency layer to enforce this request structural validation?"
+    code: |
+      # API Spec Architecture Strategy
+      [CRM Webhook] -> [ ??? Validation Layer ] -> [AWS Lambda Service]
+    options:
+      - text: "Inside the application logic framework within the core Lambda handler code block."
+        is_correct: false
+      - text: "At the Amazon API Gateway layer using built-in Request Validators mapping to a JSON Schema specification."
+        is_correct: true
+      - text: "By deploying a dedicated microservice running on AWS Fargate to parse the payload strings."
+        is_correct: false
+      - text: "Inside the Amazon Connect Contact Flow using multiple nested string-split evaluation blocks."
+        is_correct: false
+    explanation: "Amazon API Gateway allows you to configure basic request body and parameter validation against a JSON schema mapping. Enforcing this validation at the gateway edge filters out malformed payloads instantly before they incur compute charges or latency from triggering AWS Lambda."
+    tags: [spec-driven-development, api-gateway, architecture, validation]
+    difficulty: hard
+    points: 9
+
+  - id: q24
+    type: multiple_choice
+    question: "An application engineer needs to dynamically personalize the interactive voice response (IVR) message based on a customer's balance. Inside an Amazon Connect 'Play prompt' block using Text-to-Speech (TTS), what is the correct syntax to reference a custom attribute named 'AccountBalance' fetched from a previous Lambda step?"
+    code: |
+      # Text-to-Speech Configuration Editor
+      Text: "Welcome back! Your current outstanding balance is ??? dollars."
+    options:
+      - text: "{{Attributes.AccountBalance}}"
+        is_correct: false
+      - text: "$.External.AccountBalance"
+        is_correct: true
+      - text: "$.Attributes.UserDefined.AccountBalance"
+        is_correct: false
+      - text: "$.Lambda.AccountBalance"
+        is_correct: false
+    explanation: "Amazon Connect leverages a distinct JSONPath-like syntax within its designer blocks to evaluate real-time session variables. Attributes populated from an external execution (like a Lambda function return payload) are explicitly referenced using the `$.External.AttributeName` pattern."
+    tags: [amazon-connect, integrations, automation, workflows]
+    difficulty: medium
+    points: 7
+
+  - id: q25
+    type: multiple_choice
+    question: "During hyper-care after a migration, users report that calls are randomly dropping during periods of extreme concurrency. You inspect AWS CloudWatch metrics for the backend Lambda integration and find a flatlining metric line with zero values for execution count, but a sharp rise in regional 'Throttling' counts. What adjustment must be requested immediately?"
+    code: |
+      # Regional Metric Investigation
+      # Service: Lambda
+      # Metric: Throttling > 0
+      # Solution: Account-level adjustment
+    options:
+      - text: "Request a Service Quota increase for the account's concurrent executions limit in that region."
+        is_correct: true
+      - text: "Increase the memory allocation of the single failing Lambda function up to 10GB."
+        is_correct: false
+      - text: "Modify the API Gateway integration timeout configuration parameter from 29 seconds to 60 seconds."
+        is_correct: false
+      - text: "Change the runtime environment from Node.js or Python over to a custom compiled native execution layer."
+        is_correct: false
+    explanation: "AWS sets a default soft limit on concurrent executions per account per region (typically 1,000). High-throughput systems like scale-driven contact centers can hit this boundary, necessitating a Service Quota increase request to expand the shared concurrency bucket."
+    tags: [aws-lambda, scalability, cloud-engineering, hyper-care]
+    difficulty: hard
+    points: 9
+
+  - id: q26
+    type: multiple_choice
+    question: "You want to automate code quality reviews and Shift-Left testing patterns inside your repository CI/CD pipeline. Which mechanism ensures that your infrastructure configurations (such as Terraform manifests for Amazon Connect resources) are evaluated against regulatory security compliance baselines before a pull request can be merged?"
+    code: |
+      # CI/CD Workflow Automation Snippet
+      stages:
+        - lint
+        - security_scan
+      
+      run_security_compliance:
+        script:
+          - tfsec . # Or checkov / terrascan
+    options:
+      - text: "Integrating static application security testing (SAST) and IaC scanning utilities into the pipeline definition."
+        is_correct: true
+      - text: "Relying on manual code reviews executed by senior members of the architecture group."
+        is_correct: false
+      - text: "Configuring a CloudWatch Alarm to monitor the production infrastructure environment continuously."
+        is_correct: false
+      - text: "Executing manual end-to-end integration flows against sandboxed cloud tenants post-deployment."
+        is_correct: false
+    explanation: "Shift-Left philosophy relies on checking configuration safety early. Injecting static IaC linters and security scanners (like Checkov, tfsec, or Terrascan) directly into the automated CI/CD engine enforces safety checks automatically before code reaches cloud systems."
+    tags: [shift-left, testing, devops, terraform]
+    difficulty: medium
+    points: 8
+
+  - id: q27
+    type: multiple_choice
+    question: "You need to securely expose configuration records stored in an internal Amazon DynamoDB table to an external customer portal application via a secure API interface. Which architecture delivers the highest degree of security, scalability, and loose coupling?"
+    code: |
+      # Target Target Pattern:
+      [Portal Web UI] -> [ API Gateway Edge ] -> [ ??? Compute ] -> [ Amazon DynamoDB ]
+    options:
+      - text: "Embed raw IAM administrative credentials into the front-end web interface codebase."
+        is_correct: false
+      - text: "Expose API Gateway with Lambda integration functions that feature restrictive IAM execution roles query-scoping DynamoDB."
+        is_correct: true
+      - text: "Configure the DynamoDB tables to accept raw connection strings over unencrypted public internet access paths."
+        is_correct: false
+      - text: "Deploy a proxy agent on an EC2 instance that opens full SSH reverse tunnels back into client devices."
+        is_correct: false
+    explanation: "The combination of API Gateway and Lambda functions acting as a proxy layer creates a highly resilient, loosely coupled architecture. IAM resource roles restrict permissions precisely to the needed data operations, hiding the database instance safely away from public exposure."
+    tags: [architecture, security, api-gateway, dynamodb]
+    difficulty: hard
+    points: 8
+    diagram: |
+      graph LR
+      A[Web Application] -->|HTTPS REST| B[API Gateway Layer]
+      B -->|Secure Invoke| C[Lambda Handler]
+      C -->|IAM Authorized Query| D[DynamoDB Instance]
+
+  - id: q28
+    type: multiple_choice
+    question: "An application engineer is developing an advanced voice-bot system inside Amazon Connect. The team needs the bot to intelligently capture a flexible date description spoken by a user (such as 'next Friday morning') and convert it into a standardized ISO date string structure. Which AWS conversational interface service handles this directly?"
+    code: |
+      # Natural Language Processing Strategy
+      User: "I want to reschedule my technical review for next Friday morning."
+      Bot Capture Type: AMZN.DateTime
+      Engine: [ ??? ]
+    options:
+      - text: "Amazon Polly"
+        is_correct: false
+      - text: "Amazon Lex"
+        is_correct: true
+      - text: "Amazon Translate"
+        is_correct: false
+      - text: "Amazon Connect Contact Lens"
+        is_correct: false
+    explanation: "Amazon Lex is a conversational AI engine that natively extracts intents and slot parameters from spoken sentences. It uses built-in slots like `AMZN.DateTime` to transform variable human speech references into deterministic programmatic data models."
+    tags: [amazon-lex, artificial-intelligence, workflows, integrations]
+    difficulty: medium
+    points: 7
+
+  - id: q29
+    type: multiple_choice
+    question: "When writing production-grade Lambda functions in Node.js or Python to execute API orchestration layers for Amazon Connect, how should you implement logging statements to maximize searchability inside Amazon CloudWatch Log Insights?"
+    code: |
+      // Select the optimal output format for enterprise debugging operations
+      exports.handler = async (event) => {
+          // Which logging pattern provides structured fields out of the box?
+          console.log(???);
+      };
+    options:
+      - text: "A continuous string concat: 'User ID is ' + userId + ' and status is ' + state;"
+        is_correct: false
+      - text: "A structured JSON object string: JSON.stringify({ message: 'User verification details', userId, status: state });"
+        is_correct: true
+      - text: "A series of sequential prints separating variables across individual lines."
+        is_correct: false
+      - text: "Encrypting log lines using a local symmetric system algorithm string before calling console.warn."
+        is_correct: false
+    explanation: "Outputting log statements as structured JSON strings allows Amazon CloudWatch Logs to automatically parse fields. This enables developers to run complex, fast queries via CloudWatch Logs Insights using precise attribute filtering."
+    tags: [monitoring, cloudwatch, optimization, troubleshooting]
+    difficulty: medium
+    points: 8
+
+  - id: q30
+    type: multiple_choice
+    question: "You are maintaining extensive 'as-built' architectural documentation. You want to generate visual sequence maps and system interaction flows dynamically from your codebase definitions so that documentation changes track with your software pull requests automatically. Which strategy represents best practice?"
+    code: |
+      # Repository structure automation plan
+      docs/
+        - README.md
+        - architecture.md  # Embeds structural code descriptions
+    options:
+      - text: "Capture screenshots of cloud service dashboard panels and paste them manually into internal slide presentations."
+        is_correct: false
+      - text: "Maintain plain text diagrammatic representations (such as Mermaid or PlantUML code blocks) directly within the markdown documentation files inside the code repository."
+        is_correct: true
+      - text: "Draw architecture schematics on desktop image design apps and store raw binary source files on external network drives."
+        is_correct: false
+      - text: "Avoid providing documentation graphics completely to prevent environmental alignment drift over time."
+        is_correct: false
+    explanation: "Text-based diagrammatic specifications (like Mermaid or PlantUML) can be checked directly into source control repositories. This treats documentation as code, allowing visual system architecture maps to be easily reviewed, updated, and auditable during standard pull request review cycles."
+    tags: [documentation, automation, soft-skills, engineering-practices]
+    difficulty: medium
+    points: 8
