@@ -1,0 +1,670 @@
+﻿questions:
+  - id: q001
+    type: multiple_choice
+    question: |
+      Durante o processamento de liquidação na tesouraria, um serviço de pós-trade cai logo após debitar uma conta, mas antes de confirmar o sucesso ao produtor da mensagem. Ao reiniciar, a mensagem é reprocessada. Qual conceito de design garante que o saldo não seja debitado erroneamente uma segunda vez?
+    options:
+      - text: Idempotência
+        is_correct: true
+      - text: Event Sourcing
+        is_correct: false
+      - text: Isolamento Serializável
+        is_correct: false
+      - text: Degradação Graciosa
+        is_correct: false
+    explanation: |
+      Correto: Idempotência garante que uma operação possa ser executada múltiplas vezes com o mesmo resultado, ideal para cenários de entrega "at-least-once" em mensageria financeira.
+      Incorreto: Event Sourcing reconstrói estados através de um log mutável, mas não previne reprocessamento duplicado por si só. Isolamento serializável dita concorrência em bancos. Degradação graciosa lida com falhas parciais.
+    diagram: |
+      graph TD
+        Msg[Mensagem Duplicada] --> Cons[Consumidor]
+        Cons --> Check{ID já processado?}
+        Check -- Sim --> Ignore[Ignora/Sucesso]
+        Check -- Não --> Exec[Processa transação e salva ID]
+
+  - id: q002
+    type: multiple_choice
+    question: |
+      Para fins de auditoria rígida da CVM e do Banco Central, uma plataforma precisa armazenar cada alteração de estado de uma ordem de compra de títulos públicos como um evento imutável, permitindo reconstruir o histórico exato do portfólio a qualquer momento. Qual padrão de arquitetura atende a isso?
+    options:
+      - text: Event Sourcing
+        is_correct: true
+      - text: CQRS puro
+        is_correct: false
+      - text: Saga Pattern
+        is_correct: false
+      - text: Outbox Pattern
+        is_correct: false
+    explanation: |
+      Correto: Event Sourcing armazena todas as mudanças de estado como uma sequência imutável de eventos em um Event Store, fornecendo uma trilha de auditoria natural e reconstrução histórica perfeita.
+      Incorreto: CQRS apenas separa leitura de escrita. Saga gerencia transações distribuídas. Outbox resolve o problema do dual write.
+    diagram: |
+      graph LR
+        Ev1[Ordem Criada] --> Store[(Event Store)]
+        Ev2[Ordem Alocada] --> Store
+        Ev3[Ordem Liquidada] --> Store
+        Store --> Rebuild[Estado Atual do Portfólio]
+
+  - id: q003
+    type: multiple_choice
+    question: |
+      Uma API do UBS precisa salvar o status de uma operação de custódia no banco de dados relacional e enviar um evento de notificação para o Kafka. Se o banco falhar, o evento não deve ir. Se o Kafka falhar, a escrita no banco não pode ser perdida. Como mitigar esse "Dual Write Problem" mantendo a consistência?
+    options:
+      - text: Implementando o Outbox Pattern
+        is_correct: true
+      - text: Usando Two-Phase Commit (2PC) síncrono
+        is_correct: false
+      - text: Configurando o Kafka com acks=0
+        is_correct: false
+      - text: Aplicando Circuit Breaker na rota do Kafka
+        is_correct: false
+    explanation: |
+      Correto: O Transactional Outbox Pattern grava o evento em uma tabela auxiliar no mesmo banco de dados sob a mesma transação ACID, e um worker separado lê essa tabela e publica no Kafka de forma assíncrona.
+      Incorreto: 2PC insere alto acoplamento e latência inaceitável. Acks=0 causa perda de dados. Circuit breaker previne sobrecarga, mas não garante consistência de escrita.
+    diagram: |
+      graph LR
+        App[Aplicação] --> Trans{Transação ACID}
+        Trans --> DB[(Tabela Negócio)]
+        Trans --> OB[(Tabela Outbox)]
+        OB --> Relay[Message Relay]
+        Relay --> Kafka((Kafka Topic))
+
+  - id: q004
+    type: multiple_choice
+    question: |
+      Uma fila do RabbitMQ responsável por rotear liquidações de títulos falha repetidamente ao processar uma mensagem específica devido a um campo de dados corrompido que estoura a validação do .NET. Qual estratégia deve ser usada para evitar que essa mensagem trave a fila inteira?
+    options:
+      - text: Redirecionar para uma Dead Letter Queue (DLQ)
+        is_correct: true
+      - text: Forçar um retry infinito com Backoff Exponencial
+        is_correct: false
+      - text: Aplicar Backpressure no produtor
+        is_correct: false
+      - text: Ativar Log Compaction na fila
+        is_correct: false
+    explanation: |
+      Correto: Uma mensagem corrompida (Poison Pill) deve ser rejeitada após um número X de tentativas e enviada para uma DLQ para análise manual, liberando o processamento das próximas transações legítimas.
+      Incorreto: Retry infinito causa starvation (fome de recursos) travando a fila. Backpressure ajusta o ritmo de produção, não erros de dados. Log compaction descarta mensagens antigas com a mesma chave, não resolve o travamento.
+    diagram: |
+      graph LR
+        Queue[Fila Principal] --> Cons[Consumidor]
+        Cons -- Falha N Vezes --> DLQ[Dead Letter Queue]
+        Cons -- Próxima Msg --> Safe[Processamento Segue]
+
+  - id: q005
+    type: multiple_choice
+    question: |
+      Em um cenário de microsserviços para transferências de fundos interbancários, uma transação envolve debitar a Conta A (Serviço de Saldos) e creditar a Conta B (Serviço de Investimentos). Como gerenciar essa transação distribuída sem usar travas bloqueantes de banco de dados?
+    options:
+      - text: Utilizando o Saga Pattern com ações compensatórias
+        is_correct: true
+      - text: Elevando o Isolation Level de ambos os bancos para Serializable
+        is_correct: false
+      - text: Unificando ambos os microsserviços em um único processo síncrono
+        is_correct: false
+      - text: Utilizando o padrão Command Query Responsibility Segregation (CQRS)
+        is_correct: false
+    explanation: |
+      Correto: O padrão Saga executa transações locais sequenciais em cada microsserviço. Se o crédito falhar, o coordenador da Saga dispara um evento de compensação (estorno) para devolver o dinheiro ao débito original.
+      Incorreto: Serializable em sistemas distribuídos gera gargalos extremos. Unificar quebra o modelo de microsserviços. CQRS foca em separação de leitura/escrita, não em transações distribuídas.
+    diagram: |
+      graph LR
+        S1[Passo 1: Debita Conta A] -- Falha no Passo 2 --> Comp[Compensação: Estorna Conta A]
+        S1 --> S2[Passo 2: Credita Conta B]
+
+  - id: q006
+    type: multiple_choice
+    question: |
+      Ao desenvolver uma API de alta performance em .NET Core para a Mesa de Operações, o desenvolvedor usa chamadas síncronas bloqueantes dentro de métodos assíncronos (ex: utilizando .Result ou .Wait()). Qual o risco direto dessa prática em um momento de pico de tráfego no pregão?
+    options:
+      - text: Thread Pool Starvation
+        is_correct: true
+      - text: Memory Leak por herança de escopo
+        is_correct: false
+      - text: Race Conditions na gravação do banco de dados
+        is_correct: false
+      - text: Corrupção do Garbage Collector
+        is_correct: false
+    explanation: |
+      Correto: Misturar código síncrono e assíncrono (sync-over-async) bloqueia as Threads do Pool do .NET de forma ineficiente. Sob alta carga, o pool esgota as threads disponíveis, gerando timeouts e travando a API inteira.
+      Incorreto: Não causa memory leak estrutural diretamente. Race conditions ocorrem por falta de travas de concorrência de dados. O Garbage Collector não sofre corrupção por bloqueio de threads.
+    diagram: |
+      graph TD
+        Req[Múltiplas Requisições] --> Pool[Thread Pool]
+        Pool --> Block[.Result / .Wait]
+        Block --> Starv[Threads ESGOTADAS - Starvation]
+        Starv --> TO[Timeout / API travada]
+
+  - id: q007
+    type: multiple_choice
+    question: |
+      Uma aplicação de pós-trade precisa atualizar as posições consolidadas de custódia de grandes fundos que realizam milhares de operações por minuto. Para otimizar as consultas e não sobrecarregar o banco transacional de escrita, qual padrão deve ser associado para isolar as consultas rápidas?
+    options:
+      - text: CQRS (Command Query Responsibility Segregation)
+        is_correct: true
+      - text: Bulkhead Pattern
+        is_correct: false
+      - text: Optimistic Locking
+        is_correct: false
+      - text: At-Least-Once Delivery
+        is_correct: false
+    explanation: |
+      Correto: O CQRS separa as operações de escrita (Commands) que exigem validações complexas das operações de leitura (Queries) que podem ler de uma base desnormalizada otimizada para consultas rápidas.
+      Incorreto: Bulkhead isola falhas em pools de recursos. Optimistic locking lida com concorrência na escrita. At-Least-Once é um padrão de entrega de mensagens.
+    diagram: |
+      graph LR
+        App[Aplicação] --> Cmd[Write/Commands] --> DB_W[(DB Escrita)]
+        App --> Qry[Read/Queries] --> DB_R[(Read Model / Cache)]
+        DB_W -- Sincronização Sync/Async --> DB_R
+
+  - id: q008
+    type: multiple_choice
+    question: |
+      Sistemas legados de liquidação financeira frequentemente rodam em "Janelas Batch" durante a noite, consolidando dados em lote. Em contrapartida, sistemas modernos de risco demandam "Stream Processing". Qual a diferença fundamental entre essas duas abordagens na engenharia de dados?
+    options:
+      - text: Batch processa blocos delimitados de dados históricos; Stream processa dados infinitos em tempo real à medida que chegam.
+        is_correct: true
+      - text: Batch usa estritamente SQL Server; Stream exige bancos de dados NoSQL imutáveis.
+        is_correct: false
+      - text: Batch opera de forma assíncrona; Stream exige protocolo HTTP/gRPC totalmente síncrono.
+        is_correct: false
+      - text: Batch garante consistência estrita; Stream trabalha apenas com perda aceitável de eventos.
+        is_correct: false
+    explanation: |
+      Correto: O processamento em lote (Batch) lida com grandes volumes de dados estáticos coletados ao longo de um período. O processamento de fluxos (Stream) computa eventos continuamente com latência de milissegundos.
+      Incorreto: Tecnologias de armazenamento variam e não definem o paradigma. Stream processing é inerentemente orientado a eventos e assíncrono. Ambos podem garantir entrega e consistência de dados através de checkpoints.
+    diagram: |
+      graph TD
+        subgraph Batch [Janela Noturna]
+          Data[(Dados do Dia)] --> Run[Roda processo em Bloco] --> Report[Relatório Consolidado]
+        end
+        subgraph Stream [Pregão em Tempo Real]
+          Ev[Evento Operação] --> Engine[Stream Engine / Kafka] --> RealTime[Painel de Risco Atualizado]
+        end
+
+  - id: q009
+    type: multiple_choice
+    question: |
+      Se o sistema de Clearing integrado com o UBS sofrer uma lentidão extrema fora do comum, qual padrão de resiliência impede que as APIs internas do banco travem as próprias threads tentando conectar repetidamente ao parceiro indisponível?
+    options:
+      - text: Circuit Breaker
+        is_correct: true
+      - text: Transactional Outbox
+        is_correct: false
+      - text: Rate Limiting
+        is_correct: false
+      - text: Optimistic Concurrency
+        is_correct: false
+    explanation: |
+      Correto: O Circuit Breaker monitora as falhas. Se o parceiro falhar seguidamente, o circuito "abre", fazendo com que chamadas subsequentes falhem imediatamente de forma controlada (via fallback), poupando recursos locais.
+      Incorreto: Outbox garante consistência de eventos. Rate Limiting protege sua aplicação contra excesso de chamadas externas de clientes. Concorrência otimista impede sobrescrita de dados concorrentes no banco.
+    diagram: |
+      graph LR
+        App[Sua API] --> CB{Circuit Breaker}
+        CB -- Aberto --> Fail[Retorna Erro Rápido / Fallback]
+        CB -- Fechado --> Ext[Sistema Externo Lento]
+
+  - id: q010
+    type: multiple_choice
+    question: |
+      No SQL Server de uma aplicação de tesouraria de títulos, duas transações simultâneas tentam atualizar as mesmas linhas em ordens inversas (A atualiza linha 1 e quer a 2; B atualiza linha 2 e quer a 1), gerando um travamento mútuo eterno. Como o banco resolve isso e o que a aplicação deve fazer?
+    options:
+      - text: O banco detecta um Deadlock, encerra uma das transações com erro, e a aplicação deve implementar uma política de Retry.
+        is_correct: true
+      - text: O banco mescla as transações automaticamente utilizando consistência eventual, sem intervenção da aplicação.
+        is_correct: false
+      - text: O banco entra em pane e derruba o pool de conexões até que a thread sofra um timeout manual via código.
+        is_correct: false
+      - text: O banco prioriza a transação com maior volume financeiro e descarta os dados da menor sem emitir exceção.
+        is_correct: false
+    explanation: |
+      Correto: O SQL Server possui um mecanismo de checagem que detecta Deadlocks, escolhe uma vítima para sofrer rollback e emite o erro 1205. A aplicação precisa capturar essa exceção e refazer a tentativa (Retry).
+      Incorreto: Bancos relacionais não mesclam transações conflitantes de forma implícita. O pool de conexões é afetado por esgotamento, mas o motor do banco não cai por causa de deadlocks. O volume financeiro jamais dita a lógica de isolamento do BD.
+    diagram: |
+      graph LR
+        T1[Transação 1] -- Aloca --> L1((Linha 1))
+        T2[Transação 2] -- Aloca --> L2((Linha 2))
+        T1 -- Bloqueada por --> L2
+        T2 -- Bloqueada por --> L1
+        Dead{DEADLOCK DETECTED} --> Engine[SQL Engine mata uma e libera a outra]
+
+  - id: q011
+    type: multiple_choice
+    question: |
+      Durante o processamento de grandes volumes de ordens de títulos no Kafka, é fundamental garantir que as transações de uma mesma conta sejam processadas na ordem exata em que ocorreram. Como o desenvolvedor sênior deve configurar o envio dessas mensagens para garantir a ordenação?
+    options:
+      - text: Definindo o ID da Conta como a Message Key (Chave da Mensagem) do Kafka.
+        is_correct: true
+      - text: Enviando todas as mensagens com a mesma constante no campo Partition Id.
+        is_correct: false
+      - text: Ativando a propriedade Acks=all e reduzindo o número de partições do tópico para zero.
+        is_correct: false
+      - text: Utilizando um banco de dados NoSQL intermediário para reordenar os eventos via código no consumidor.
+        is_correct: false
+    explanation: |
+      Correto: O Kafka garante a ordenação estrita de mensagens dentro de uma única partição. Ao usar o ID da conta como Message Key, o mecanismo de hashing do Kafka garante que todas as mensagens daquela conta específica caiam sempre na mesma partição, mantendo a ordem cronológica.
+      Incorreto: Fixar o mesmo Partition Id para tudo jogaria o tráfego inteiro do banco em uma única partição, destruindo o paralelismo e escalabilidade do cluster. Não existe partição zero fixa sem colapsar a arquitetura, e tópicos não funcionam com zero partições. Reordenar no consumidor adiciona latência e complexidade desnecessárias.
+    diagram: |
+      graph LR
+        Msg1[Conta 100 - Evento A] --> Hash[Kafka Hashing] --> P1[(Partição 1 - Ordenada)]
+        Msg2[Conta 100 - Evento B] --> Hash --> P1
+        Msg3[Conta 200 - Evento A] --> Hash --> P2[(Partição 2)]
+
+  - id: q012
+    type: multiple_choice
+    question: |
+      Em uma arquitetura de microserviços de clearing (compensação), o padrão mTLS (Mutual TLS) é frequentemente exigido para a comunicação síncrona entre APIs internas, seguindo os princípios de segurança do UBS. Qual conceito de arquitetura de segurança descreve essa abordagem?
+    options:
+      - text: Zero Trust Architecture (Arquitetura de Confiança Zero)
+        is_correct: true
+      - text: Perimeter-Based Security (Segurança de Perímetro)
+        is_correct: false
+      - text: Role-Based Access Control (RBAC) passthrough
+        is_correct: false
+      - text: Symmetric Key Obfuscation
+        is_correct: false
+    explanation: |
+      Correto: A arquitetura Zero Trust assume que ameaças podem estar tanto fora quanto dentro da rede corporativa. Portanto, nenhum serviço confia em outro implicitamente apenas por estar na mesma rede privada; cada chamada precisa de autenticação e criptografia estrita (como mTLS).
+      Incorreto: Segurança de perímetro (modelo clássico "castelo e fosso") confia em qualquer tráfego que já passou pelo firewall externo, o que viola o padrão atual. RBAC lida com permissões de usuários/perfis. Obfuscation não é um modelo de arquitetura de segurança.
+    diagram: |
+      graph LR
+        subgraph Rede Interna do Banco
+          API_PostTrade[API Post-Trade] -- mTLS: Verifica Certificado --> API_Custodia[API Custódia]
+        end
+
+  - id: q013
+    type: multiple_choice
+    question: |
+      Um sistema do pós-trade consome cotações de títulos públicos em tempo real de um provedor externo. Em momentos de extrema volatilidade no mercado, o volume de eventos recebidos supera a capacidade de processamento do microsserviço .NET Core. Qual padrão evita a queda do serviço por esgotamento de memória (OOM)?
+    options:
+      - text: Backpressure (Controle de Fluxo / Contrapressão)
+        is_correct: true
+      - text: Circuit Breaker em modo Half-Open
+        is_correct: false
+      - text: Cache distribuído com Redis
+        is_correct: false
+      - text: Polling síncrono agressivo
+        is_correct: false
+    explanation: |
+      Correto: O mecanismo de Backpressure permite que o sistema consumidor sinalize ao canal de envio (ou pause o recebimento do buffer de rede) que está sobrecarregado, forçando o fluxo de dados a desacelerar até que a fila local seja processada.
+      Incorreto: O Circuit Breaker gerencia falhas de integração, não ritmo de throughput de dados íntegros. Encher o Redis apenas jogaria o problema de memória para outro componente sob carga contínua. Polling síncrono agressivo aumentaria o estresse do sistema.
+    diagram: |
+      graph RL
+        Stream[Provedor de Cotações] -->|Envio Massivo de Eventos| Cons[Nosso Consumidor .NET]
+        Cons -->|Buffer Cheio! Sinal de Backpressure| Stream
+
+  - id: q014
+    type: multiple_choice
+    question: |
+      Sistemas de liquidação que manipulam valores monetários em C# precisam evitar a perda de precisão numérica decorrente do arredondamento de pontos flutuantes em cálculos complexos de taxas e juros. Qual tipo de dado nativo do .NET DEVE ser utilizado obrigatoriamente para representar saldos e dinheiro?
+    options:
+      - text: decimal
+        is_correct: true
+      - text: double
+        is_correct: false
+      - text: float
+        is_correct: false
+      - text: Int64 (long)
+        is_correct: false
+    explanation: |
+      Correto: O tipo 'decimal' no .NET possui alta precisão e usa base 10 (múltiplos de 10) para representação interna, tornando-o o único tipo flutuante adequado para aplicações financeiras e contábeis onde erros de arredondamento são intoleráveis.
+      Incorreto: 'float' e 'double' usam internamente representação binária (base 2), o que gera pequenas dízimas e imprecisões matemáticas clássicas (ex: 0.1 + 0.2 resultando em 0.30000000000000004). Int64 armazena apenas inteiros, inadequado para frações de centavos sem multiplicação prévia complexa da lógica de negócio.
+    diagram: |
+      graph TD
+        Money[Valores Monetários] --> Type{Qual Tipo?}
+        Type -->|Float / Double| Bin[Base 2: Risco de Erro de Arredondamento]
+        Type -->|Decimal| Dec[Base 10: Precisão Financeira Estrita]
+
+  - id: q015
+    type: multiple_choice
+    question: |
+      Uma Stored Procedure legada do SQL Server, responsável pelo fechamento de posição da tesouraria do UBS, realiza leituras pesadas em tabelas históricas enquanto novas ordens de pós-trade estão sendo inseridas simultaneamente. Para evitar que os relatórios travem a inserção de novas transações por bloqueios de leitura, qual tática de isolamento é recomendada?
+    options:
+      - text: Snapshot Isolation (Isolamento de Instantâneo)
+        is_correct: true
+      - text: Habilitar a dica de tabela WITH (TABLOCKX)
+        is_correct: false
+      - text: Mudar o nível de isolamento global para Serializable
+        is_correct: false
+      - text: Executar a procedure em um loop síncrono com Thread.Sleep
+        is_correct: false
+    explanation: |
+      Correto: O Snapshot Isolation utiliza o versionamento de linhas no TempDB. As leituras pesadas acessam uma versão consistente dos dados no momento em que a query começou, sem gerar travas (locks) nas linhas e permitindo que as escritas (inserts/updates) continuem ocorrendo em paralelo sem bloqueios mútuos.
+      Incorreto: TABLOCKX força um bloqueio exclusivo na tabela inteira, piorando drasticamente o travamento de novas ordens. Serializable é o nível mais rígido, aumentando a ocorrência de deadlocks e filas de espera. Thread.Sleep na aplicação não altera o comportamento de concorrência do motor do SQL Server.
+    diagram: |
+      graph LR
+        Writer[Novas Ordens] -->|Grava no Banco| DB[(SQL Server)]
+        Reader[Relatório Pesado] -->|Lê Versão Histórica - Sem Bloqueios| Snapshot[(TempDB Versões)]
+
+  - id: q016
+    type: multiple_choice
+    question: |
+      Em uma aplicação desktop sênior escrita em Windows Forms, utilizada pelos operadores da mesa de operações para monitorar o lastro de títulos públicos, o que acontece se um desenvolvedor executar uma chamada pesada de banco de dados diretamente na Thread principal (UI Thread)?
+    options:
+      - text: A interface gráfica do usuário "congela" e para de responder a cliques e redesenhos até que a query termine.
+        is_correct: true
+      - text: O sistema operacional distribui automaticamente o processamento visual para a GPU do computador.
+        is_correct: false
+      - text: O .NET dispara um Garbage Collector forçado em segundo plano para liberar a memória da tela.
+        is_correct: false
+      - text: A aplicação converte a chamada síncrona implicitamente em um microsserviço assíncrono.
+        is_correct: false
+    explanation: |
+      Correto: No Windows Forms (e aplicações desktop em geral), a thread principal gerencia o loop de mensagens da interface gráfica (redesenho de botões, cliques, eventos). Bloquear essa thread com uma operação síncrona pesada (I/O) impede o processamento desses eventos, causando o travamento ou congelamento da tela ("Não Respondendo").
+      Incorreto: O sistema operacional não move tarefas de I/O de banco de dados para a GPU. O Garbage Collector gerencia memória alocada, não fluxo de execução de threads. O .NET não converte mágicamente código síncrono em microsserviços.
+    diagram: |
+      graph TD
+        UI[UI Thread] -->|Executa Query Pesada Síncrona| DB[Banco de Dados]
+        UI -->|Travada esperando o BD| Frozen[Janela Congela - Não Respondendo]
+
+  - id: q017
+    type: multiple_choice
+    question: |
+      Ao desenhar uma estratégia de deploy seguro para um componente crítico de liquidação do UBS via esteira do GitLab, o time de engenharia opta por direcionar gradualmente uma pequena porcentagem do tráfego real (ex: 5%) para a nova versão antes de virar 100% da carga. Qual o nome dessa estratégia?
+    options:
+      - text: Canary Release
+        is_correct: true
+      - text: Blue/Green Deployment
+        is_correct: false
+      - text: Shadow Deployment
+        is_correct: false
+      - text: Big Bang Deployment
+        is_correct: false
+    explanation: |
+      Correto: O Canary Release consiste em introduzir a nova versão do software para um grupo ou porcentagem pequena de usuários reais para monitorar telemetria e erros. Caso apresente problemas, o rollback afeta um número mínimo de transações.
+      Incorreto: Blue/Green mantém dois ambientes idênticos em paralelo, mas a virada de tráfego de um ambiente para o outro costuma ser feita de forma integral e repentina no roteador/load balancer. Shadow faz o deploy rodar em paralelo copiando o tráfego de produção em background sem processar os resultados de forma real na saída. Big Bang vira tudo de uma vez sem testes graduais em produção.
+    diagram: |
+      graph TD
+        Traffic[Tráfego Total] --> LB{Roteador/Load Balancer}
+        LB -->|95% do Tráfego| V1[Versão Atual - Produção]
+        LB -->|5% do Tráfego - Teste| V2[Versão Nova - Canary]
+
+  - id: q018
+    type: multiple_choice
+    question: |
+      No padrão Event Sourcing, as filas de tópicos como o Kafka crescem indefinidamente à medida que milhares de transações financeiras diárias ocorrem. Se um serviço consumidor precisar reiniciar do zero e ler todo o log de eventos para saber apenas a posição de custódia consolidada atual das contas, a latência seria inaceitável. Como contornar esse gargalo operacional?
+    options:
+      - text: Criando Snapshots (Instantâneos de Estado) periódicos do balanço das contas.
+        is_correct: true
+      - text: Limpando a base de dados do Event Store manualmente toda sexta-feira à noite.
+        is_correct: false
+      - text: Alterando o protocolo de comunicação de assíncrono para síncrono.
+        is_correct: false
+      - text: Desativando a imutabilidade do log de eventos.
+        is_correct: false
+    explanation: |
+      Correto: No Event Sourcing, snapshots guardam o estado consolidado de uma entidade em um ponto específico do tempo (ex: Saldo da Conta X na transação nº 1.000.000). Quando o serviço reinicia, ele lê o último snapshot e processa apenas os eventos que ocorreram após aquele ponto, economizando tempo computacional.
+      Incorreto: Limpar o Event Store destrói a trilha de auditoria exigida pelos órgãos reguladores. Mudar o protocolo de mensageria não afeta o armazenamento histórico de dados. Desativar a imutabilidade quebra todo o propósito e segurança do padrão Event Sourcing.
+    diagram: |
+      graph LR
+        E1[Evento 1] --> E2[Evento 2] --> SN[SNAPSHOT: Estado Saldo = $150] --> E3[Evento 3]
+        Replay[Consumidor Reinicia] -->|Lê Direto do| SN
+        Replay -->|Aplica Apenas| E3
+
+  - id: q019
+    type: multiple_choice
+    question: |
+      Uma das principais arquiteturas defendidas para sistemas corporativos complexos e mutáveis no setor financeiro foca em isolar a lógica de domínio puro (as regras de negócio de taxas, lastros e liquidações) das dependências de infraestrutura tecnológica externa (como drivers de banco de dados, brokers de mensageria e frameworks web). De qual padrão arquitetural estamos falando?
+    options:
+      - text: Clean Architecture (Arquitetura Limpa / Hexagonal)
+        is_correct: true
+      - text: Monolito Distribuído de Duas Camadas
+        is_correct: false
+      - text: Shared Database Architecture
+        is_correct: false
+      - text: Micro-frontends operacionais
+        is_correct: false
+    explanation: |
+      Correto: A Clean Architecture (e seus derivados como a Arquitetura Cebola ou Hexagonal) organiza o sistema em camadas concêntricas onde a camada central (Domain/Entities) não conhece absolutamente nada sobre os detalhes externos de infraestrutura, permitindo testes unitários robustos e facilidade de manutenção independente de fornecedores de tecnologia.
+      Incorreto: Monolito distribuído é um antipadrão de design. Shared Database gera acoplamento rígido de dados entre sistemas distintos. Micro-frontends aplicam-se à separação de interfaces visuais no navegador, não à arquitetura de backend de negócios.
+    diagram: |
+      graph CR
+        Infra[Infraestrutura: DB, Kafka, Web] --> Application[Casos de Uso / Aplicação]
+        Application --> Domain[Domínio / Regras de Negócio Puras]
+
+  - id: q020
+    type: multiple_choice
+    question: |
+      Considere uma aplicação .NET 8 que consome mensagens de pós-trade do Kafka. Se o sistema sofrer um desligamento inesperado da máquina virtual (crash do servidor) no meio de um processamento, qual estratégia garante que o estado de consumo das mensagens não seja perdido e evite lacunas de processamento (data gaps)?
+    options:
+      - text: Commits de Offset síncronos e controlados manualmente no consumidor (Manual Offset Commits) após a gravação bem-sucedida no banco.
+        is_correct: true
+      - text: Habilitar o Auto-Commit automático do Kafka configurado para 1 milissegundo.
+        is_correct: false
+      - text: Configurar o tópico do Kafka para operar sem chaves de partição.
+        is_correct: false
+      - text: Armazenar as mensagens em variáveis estáticas de memória estendida (MemoryCache).
+        is_correct: false
+    explanation: |
+      Correto: Ao desativar o commit automático (enable.auto.commit = false) e realizar o commit de offset manualmente apenas *após* garantir que a lógica de negócios e persistência foram concluídas com sucesso, o sistema garante a resiliência. Se o servidor cair no meio, o Kafka sabe exatamente de onde retomar o trabalho sem perder nenhuma transação.
+      Incorreto: Auto-commit pode commitar um offset de mensagens que foram lidas da rede mas ainda não processadas; se o servidor cair logo em seguida, essas mensagens seriam puladas e perdidas para sempre (Data Gap). Chaves de partição influenciam o roteamento, não a confirmação de leitura. Variáveis de memória estáticas somem instantaneamente no crash do servidor.
+    diagram: |
+      graph TD
+        Read[Lê Msg do Kafka] --> Biz[Processa Regra de Negócio]
+        Biz --> DB[Grava no Banco SQL - OK]
+        DB --> Commit[Commit Manual do Offset no Kafka]
+
+  - id: q021
+    type: multiple_choice
+    question: |
+      Uma API de mensageria do UBS no ecossistema .NET precisa garantir alta performance ao serializar e desserializar milhões de payloads JSON contendo dados de pós-trade por segundo. Qual biblioteca nativa do framework, introduzida em versões recentes para otimizar alocação de memória e throughput, deve ser preferida em vez da tradicional biblioteca externa Newtonsoft.Json?
+    options:
+      - text: System.Text.Json
+        is_correct: true
+      - text: System.Runtime.Serialization
+        is_correct: false
+      - text: Microsoft.AspNetCore.Mvc.Formatters
+        is_correct: false
+      - text: System.Xml.Serialization
+        is_correct: false
+    explanation: |
+      Correto: A biblioteca 'System.Text.Json' foi construída nativamente focando em alta performance. Ela utiliza recursos modernos do .NET, como Span<T> e leitura direta de buffers UTF-8, o que reduz drasticamente a alocação de memória no Garbage Collector (GC) e aumenta o throughput de APIs sob carga massiva.
+      Incorreto: Newtonsoft.Json, embora extremamente popular e rica em recursos, gera mais alocações de strings na memória e boxing. System.Runtime.Serialization e System.Xml.Serialization são legados e inadequados para payloads JSON modernos de alta performance. Formatters gerenciam a camada HTTP do ASP.NET, não a serialização pura de baixo nível.
+    diagram: |
+      graph TD
+        Payload[Payload JSON UTF-8] -->|Span de Memória Direto| STJ[System.Text.Json] -->|Baixa Alocação GC| Object[Objeto C#]
+
+  - id: q022
+    type: multiple_choice
+    question: |
+      Durante o processamento das "Janelas Batch" na virada da noite para conciliação contábil, uma fila de banco de dados começa a crescer muito rápido. O time decide aplicar o padrão Bulkhead para proteger a aplicação. Qual o principal objetivo desse padrão de resiliência no backend?
+    options:
+      - text: Isolar recursos (como pools de threads ou conexões) para que a falha em um módulo pesado não derrube os módulos críticos do sistema.
+        is_correct: true
+      - text: Realizar cópias idênticas do banco de dados em tempo real para distribuir o tráfego de leitura.
+        is_correct: false
+      - text: Forçar o cancelamento de requisições que demorem mais de 5 segundos para responder.
+        is_correct: false
+      - text: Compactar os logs de auditoria para economizar espaço de armazenamento na nuvem Azure.
+        is_correct: false
+    explanation: |
+      Correto: Inspirado nas divisórias de navios (anteparas), o Bulkhead Pattern isola recursos computacionais. Se o processamento do lote contábil esgotar o pool de threads alocado para ele, as threads dedicadas à recepção de ordens em tempo real continuam intactas, impedindo o colapso total da aplicação.
+      Incorreto: Distribuir tráfego de leitura é papel de Read Replicas (CQRS). Cancelar requisições por tempo é papel do padrão Timeout. Compactar logs de auditoria refere-se a Log Compaction ou compressão de arquivos, sem relação com isolamento de threads.
+    diagram: |
+      graph TD
+        subgraph Pool de Threads Geral
+          Thread1[Módulo Relatórios Pesados - Travou todas as threads!]
+        end
+        subgraph Bulkhead Isoloado
+          Thread2[Pool A: Relatórios] --> X[Esgotado]
+          Thread3[Pool B: Ordens Críticas] --> OK[Funcionando 100%]
+        end
+
+  - id: q023
+    type: multiple_choice
+    question: |
+      Em uma arquitetura baseada em eventos para o processamento de ativos na tesouraria, o que representa o conceito de "Log Compaction" (Compactação de Log) disponível em plataformas como o Kafka?
+    options:
+      - text: Um mecanismo que garante que o Kafka retenha pelo menos o último estado (valor) conhecido para cada chave de mensagem dentro de uma partição.
+        is_correct: true
+      - text: Um algoritmo de compressão ZIP que diminui o tamanho físico dos arquivos de log no servidor Windows.
+        is_correct: false
+      - text: Uma rotina que deleta automaticamente todas as mensagens que foram processadas há mais de 24 horas.
+        is_correct: false
+      - text: Um validador de esquema que rejeita mensagens que não estejam em conformidade com o formato Avro.
+        is_correct: false
+    explanation: |
+      Correto: O Log Compaction garante que, em uma estratégia de retenção de dados, o Kafka não jogue fora o histórico vital se ele contiver o último estado válido de um registro (ex: a última posição de saldo atualizada de uma conta). Ele remove apenas os registros antigos cuja chave foi atualizada por um evento mais recente.
+      Incorreto: Não se trata de compactação zip/rar tradicional de arquivos. Ele não apaga dados de forma cega por tempo (Time-To-Live). Ele não valida esquemas de dados, tarefa que pertence ao Schema Registry.
+    diagram: |
+      graph LR
+        subgraph Log Antes
+          k1[Key: ContaA - R$10] --> k2[Key: ContaB - R$50] --> k3[Key: ContaA - R$15]
+        end
+        subgraph Log Compactado
+          k2[Key: ContaB - R$50] --> k3[Key: ContaA - R$15]
+        end
+
+  - id: q024
+    type: multiple_choice
+    question: |
+      Ao lidar com a integração de dados de custódia globais no UBS utilizando o Entity Framework Core (EF Core) no .NET, um engenheiro sênior desabilita o mecanismo de rastreamento de alterações através do método `.AsNoTracking()` em queries de relatórios de fechamento. Qual o impacto direto dessa prática?
+    options:
+      - text: Redução drástica no consumo de memória e ganho de performance, pois o EF Core não precisa manter instâncias no Change Tracker para operações de apenas leitura.
+        is_correct: true
+      - text: O banco de dados bloqueia as tabelas lidas, impedindo que outras transações façam updates.
+        is_correct: false
+      - text: O EF Core lança uma exceção em tempo de execução se a tabela contiver chaves primárias compostas.
+        is_correct: false
+      - text: As consultas passam a ser executadas de forma síncrona, ignorando threads assíncronas do pool.
+        is_correct: false
+    explanation: |
+      Correto: Por padrão, o EF Core rastreia todas as entidades retornadas para saber se houve mudanças a serem salvas. Para listagens e relatórios de leitura pura, o `.AsNoTracking()` evita a alocação desses metadados no Change Tracker, poupando CPU e memória do servidor.
+      Incorreto: Ele reduz travas no servidor, não aumenta locks no banco. Ele funciona perfeitamente com chaves compostas. Ele não altera a natureza assíncrona da execução (`ToListAsync()` continua assíncrono).
+    diagram: |
+      graph TD
+        Query[EF Core Query] --> Tracking[Padrão: Salva no Change Tracker para Update - Mais lento]
+        Query --> NoTracking[.AsNoTracking: Cospe os dados direto para a memória - Rápido]
+
+  - id: q025
+    type: multiple_choice
+    question: |
+      Plataformas de liquidação financeira e pós-trade que rodam em nuvem (como Azure) operam sob o conceito de "Consistência Eventual". O que esse termo significa na prática da engenharia de sistemas distribuídos?
+    options:
+      - text: Se nenhuma nova atualização for feita a um dado, eventualmente todos os nós/réplicas do sistema distribuído retornarão o último valor atualizado.
+        is_correct: true
+      - text: O sistema garante consistência estrita apenas nos dias úteis durante o horário de funcionamento do pregão.
+        is_correct: false
+      - text: Os dados gravados no banco de dados têm 50% de chance de sofrer rollback caso a rede sofra oscilações.
+        is_correct: false
+      - text: As transações de escrita falham intencionalmente se mais de dois microsserviços tentarem acessar o mesmo registro.
+        is_correct: false
+    explanation: |
+      Correto: A consistência eventual dita que o estado de um dado replicado em vários servidores geograficamente distantes pode divergir por alguns milissegundos ou segundos (latência de replicação), mas convergirá para o mesmo estado final e correto assim que a propagação terminar.
+      Incorreto: Não depende do calendário do pregão. Não se trata de uma taxa de erro probabilística de rollback. Não força falhas intencionais de escrita por concorrência de microsserviços.
+    diagram: |
+      graph LR
+        Write[Gravação no Nó 1] -->|Replicação Assíncrona| No2[Nó 2: Desatualizado por 50ms]
+        No2 -->|Após Delay| Match[Nó 2 atualizado - Estado Consistente]
+
+  - id: q026
+    type: multiple_choice
+    question: |
+      No desenvolvimento de sistemas tolerantes a falhas no ecossistema .NET, os engenheiros utilizam políticas de "Retry com Backoff Exponencial e Jitter". Qual a função específica do elemento "Jitter" nessa estratégia de tratamento de erros?
+    options:
+      - text: Adicionar uma variação de tempo aleatória aos intervalos de tentativa para evitar que múltiplos serviços sobrecarreguem o sistema de destino ao mesmo tempo.
+        is_correct: true
+      - text: Forçar a limpeza imediata do cache de memória local antes de refazer a requisição HTTP.
+        is_correct: false
+      - text: Criptografar os pacotes de rede para impedir ataques de interceptação (Man-in-the-Middle) durante a falha.
+        is_correct: false
+      - text: Alterar o Isolation Level do banco de dados relacional de forma dinâmica a cada nova tentativa.
+        is_correct: false
+    explanation: |
+      Correto: Se um serviço de infraestrutura falha e 100 instâncias .NET tentam reprocessar exatamente a cada 2, 4 e 8 segundos fixos (Backoff Exponencial Puro), elas causarão picos sincronizados de tráfego (efeito manada / thundering herd). O Jitter quebra essa sincronia inserindo ruído aleatório nos tempos (ex: 2.1s, 3.8s, 8.3s).
+      Incorreto: Não gerencia cache local. Não adiciona criptografia de pacotes em tempo de execução. Não altera dinamicamente os níveis de isolamento de transações no SQL Server.
+    diagram: |
+      graph TD
+        Fail[Falha de Conexão] --> Retry[Retry em Massa]
+        Retry -->|Sem Jitter: Picos Sincronizados| Crash[Novo Crash por Sobrecarga]
+        Retry -->|Com Jitter: Tempos Aleatórios Dispersos| Safe[Recuperação Gradual do Sistema]
+
+  - id: q027
+    type: multiple_choice
+    question: |
+      Considere uma aplicação de mensageria pós-trade baseada no RabbitMQ. Qual o comportamento esperado do padrão de troca chamado "Fanout Exchange" ao receber uma mensagem contendo uma alteração de lastro de título público?
+    options:
+      - text: Ela duplica e roteia a mensagem para todas as filas que estiverem vinculadas (bound) a ela, ignorando completamente chaves de roteamento (routing keys).
+        is_correct: true
+      - text: Ela envia a mensagem estritamente para a fila cuja routing key coincida exatamente com o cabeçalho da mensagem.
+        is_correct: false
+      - text: Ele avalia uma expressão regular (Regex) complexa para decidir qual fila receberá o dado.
+        is_correct: false
+      - text: Ela armazena o payload em disco e aguarda um comando manual de liberação do operador de TI.
+        is_correct: false
+    explanation: |
+      Correto: A Fanout Exchange funciona como um rádio difusor (broadcast). Qualquer fila que se registrar nela receberá uma cópia exata de todas as mensagens publicadas, ideal para disparar notificações gerais de mercado para múltiplos consumidores independentes.
+      Incorreto: O envio casado por igualdade estrita é comportamento da Direct Exchange. O roteamento por Regex ou padrões curinga pertence à Topic Exchange. Exchanges não retêm mensagens em disco aguardando comandos manuais humanos de liberação.
+    diagram: |
+      graph LR
+        Msg[Mensagem Lastro] --> Ex[Fanout Exchange]
+        Ex --> Queue1[Fila Risco]
+        Ex --> Queue2[Fila Custódia]
+        Ex --> Queue3[Fila Auditoria]
+
+  - id: q028
+    type: multiple_choice
+    question: |
+      Uma API do UBS desenvolvida em .NET Core precisa expor dados de posição consolidada para centenas de sistemas clientes globais. Visando proteger os recursos internos e prevenir ataques de negação de serviço (DoS) ou scripts de raspagem de dados ineficientes, qual técnica de gerenciamento de tráfego deve ser implementada no API Gateway?
+    options:
+      - text: Rate Limiting / Throttling
+        is_correct: true
+      - text: Transactional Outbox Relay
+        is_correct: false
+      - text: Log Compaction parcial
+        is_correct: false
+      - text: CQRS síncrono bi-direcional
+        is_correct: false
+    explanation: |
+      Correto: O Rate Limiting (ou Throttling) estabelece um teto máximo de requisições que um determinado cliente ou IP pode realizar em uma janela de tempo (ex: no máximo 100 chamadas por minuto). Se estourar o limite, o gateway barra as chamadas retornando o status HTTP 429 (Too Many Requests).
+      Incorreto: O Transactional Outbox lida com a consistência interna de escrita de eventos. Log compaction é uma rotina de armazenamento do Kafka. CQRS separa modelos de dados de escrita/leitura no backend, não atua limitando abuso de tráfego de rede na borda da arquitetura.
+    diagram: |
+      graph LR
+        User[Client Script Malicioso] -->|1000 Req/seg| GW{API Gateway: Rate Limit}
+        GW -->|Até o limite| API[Sua API .NET]
+        GW -->|Passou do limite| Block[HTTP 429 - Bloqueado]
+
+  - id: q029
+    type: multiple_choice
+    question: |
+      Durante um processo de auditoria de código (Code Review) para um microsserviço .NET sênior de liquidação de ações, identifica-se o uso indiscriminado do padrão "Shared Database" (Banco de Dados Compartilhado por múltiplos microsserviços autônomos). Qual o principal risco arquitetural dessa abordagem no setor bancário?
+    options:
+      - text: Quebra de isolamento, acoplamento rígido de dados e risco de indisponibilidade em cascata caso uma alteração de esquema seja feita por um dos times.
+        is_correct: true
+      - text: O framework Entity Framework Core perde a capacidade de executar stored procedures.
+        is_correct: false
+      - text: O banco de dados para de aceitar conexões vindas de esteiras automatizadas de CI/CD como o GitLab.
+        is_correct: false
+      - text: Redução obrigatória do nível de segurança de criptografia dos dados em repouso (TDE).
+        is_correct: false
+    explanation: |
+      Correto: O compartilhamento de base de dados direta entre microsserviços destrói o propósito de autonomia. Se o time de Pós-Trade alterar uma coluna na tabela compartilhada, o sistema de Risco pode quebrar instantaneamente em produção (acoplamento oculto e quebra de contratos). O correto é cada serviço possuir seu próprio banco e interagir via APIs ou eventos.
+      Incorreto: O EF Core gerencia SPs normalmente independente do design da arquitetura. Bancos compartilhados não interferem no acesso vindo de esteiras como GitLab. O nível de criptografia física de disco (TDE) não é afetado pelo padrão de design de software adotado.
+    diagram: |
+      graph TD
+        subgraph Antipadrão: Shared DB
+          ServiceA[Serviço Risco] --> DB[(Banco Único Compartilhado)]
+          ServiceB[Serviço Trade] --> DB
+        end
+
+  - id: q030
+    type: multiple_choice
+    question: |
+      No ecossistema Azure Cloud, frequentemente integrado a soluções .NET modernas no setor bancário, qual serviço gerenciado de mensageria corporativa de alta confiabilidade oferece suporte nativo avançado para transações complexas, detecção de duplicidade, sessões de mensagens e barramento de tópicos com assinaturas filtradas?
+    options:
+      - text: Azure Service Bus
+        is_correct: true
+      - text: Azure Blob Storage queues
+        is_correct: false
+      - text: Azure Event Grid
+        is_correct: false
+      - text: Azure Redis Pub/Sub
+        is_correct: false
+    explanation: |
+      Correto: O Azure Service Bus é o broker de mensageria corporativo ideal para cenários financeiros de alta complexidade na nuvem Azure, possuindo recursos robustos de ordenação (sessions), transações atômicas e tratamento rígido de filas (que casam com os requisitos do UBS).
+      Incorreto: Azure Blob Storage queues oferece filas extremamente simples baseadas em armazenamento de arquivos, sem recursos avançados ou tópicos. Azure Event Grid foca no roteamento reativo massivo de eventos curtos (arquitetura serverless), não em mensageria transacional corporativa robusta. Redis Pub/Sub funciona em memória e não garante persistência ou entrega transacional estrita contra falhas de hardware.
+    diagram: |
+      graph LR
+        App[.NET App] -->|Publica Operação| ASB[Azure Service Bus Topic]
+        ASB -->|Filtro: Região=BR| Sub1[Fila Liquidação Local]
+        ASB -->|Filtro: Região=Global| Sub2[Fila Auditoria Suíça]

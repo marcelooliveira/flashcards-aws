@@ -1,0 +1,170 @@
+questions:
+  - id: q011
+    type: multiple_choice
+    question: |
+      When implementing the Strangler Fig Pattern to extract a 'Benefits Management' service from the .NET MVC monolith into .NET 8, you must prevent a dual-write problem where database updates succeed but the corresponding AWS SQS/SNS event fails to publish. Which architectural pattern natively solves this?
+    options:
+      - text: Transactional Outbox Pattern
+        is_correct: true
+      - text: Saga Orchestration Pattern
+        is_correct: false
+      - text: Command Query Responsibility Segregation (CQRS)
+        is_correct: false
+      - text: Compensating Transaction Pattern
+        is_correct: false
+    explanation: |
+      Correct: The Transactional Outbox Pattern ensures atomicity by saving both the entity state change and the event message inside the same database transaction (using an Outbox table). A separate background publisher worker then reads the table and pushes messages to AWS SNS/SQS reliably.
+      Incorrect: Saga Orchestration manages distributed transactions across multiple existing microservices but doesn't solve atomic local database-to-message-broker writes. CQRS splits reads and writes. Compensating transactions undo committed actions after a failure has occurred across service boundaries.
+
+  - id: q012
+    type: multiple_choice
+    question: |
+      To maintain a robust 'Shift-Left' security architecture in your AWS .NET 8 microservices, how should the application retrieve database credentials and third-party API keys securely without embedding secrets in the repository or container image?
+    options:
+      - text: Read them from a `.env` file that is committed to a private GitHub repository.
+        is_correct: false
+      - text: Inject them as standard environment variables directly inside the Dockerfile configuration.
+        is_correct: false
+      - text: Fetch them at application startup or via a dynamic provider cache using AWS Secrets Manager, leveraging AWS IAM Roles for Service Accounts (IRSA) to grant permission without hardcoded AWS keys.
+        is_correct: true
+      - text: Hardcode the credentials inside a nested, internal configuration class decorated with the `[Protected]` attribute in C#.
+        is_correct: false
+    explanation: |
+      Correct: Integrating AWS Secrets Manager with IAM roles (IRSA/ECS Task Roles) allows the .NET 8 application to authenticate securely with AWS using temporary tokens and dynamically pull configuration keys without storing raw text secrets anywhere in the source or deployment artifacts.
+      Incorrect: Committing secrets to git, storing them statically in Dockerfiles, or hardcoding them in C# classes (regardless of attributes) exposes vulnerable credentials to unauthorized actors and violates compliance standards crucial for GovTech.
+
+  - id: q013
+    type: multiple_choice
+    question: |
+      The legacy .NET MVC application makes heavy use of synchronous Entity Framework LINQ queries containing complex multi-table joins. During migration to .NET 8, you notice that these queries cause thread pool starvation under high user load. What is the most effective initial code optimization?
+    options:
+      - text: Wrap the existing synchronous calls inside `Task.Run()` blocks to offload them to background threads.
+        is_correct: false
+      - text: Convert the synchronous EF Core methods to their async counterparts (e.g., `ToListAsync()`, `FirstOrDefaultAsync()`) and systematically propagate `await` throughout the call stack.
+        is_correct: true
+      - text: Increase the minimum thread count of the .NET CLR ThreadPool via `ThreadPool.SetMinThreads()` in Program.cs.
+        is_correct: false
+      - text: Replace Entity Framework Core entirely with raw ADO.NET `DataTable` structures to bypass LINQ overhead.
+        is_correct: false
+    explanation: |
+      Correct: Truly asynchronous database drivers yield the current thread back to the thread pool while waiting for MS SQL Server to return data. This prevents thread pool starvation and maximizes application throughput.
+      Incorrect: Using `Task.Run()` on blocking synchronous calls merely shifts the blockage to another thread pool thread, worsening thread consumption (an anti-pattern known as "sync-over-async"). Raising min threads hides symptoms temporarily but doesn't fix scaling limits.
+
+  - id: q014
+    type: multiple_choice
+    question: |
+      You are refactoring a GovTech reporting module to generate large audit exports. To minimize GC (Garbage Collection) memory pressure and avoid allocating massive string arrays in the Managed Heap, which advanced C# and .NET 8 feature combination should you use?
+    options:
+      - text: Regular `string.Concat` commands paired with explicit calls to `GC.Collect()`.
+        is_correct: false
+      - text: `IAsyncEnumerable<T>` for streaming data chunks asynchronously from MS SQL Server combined with `Span<T>` or `ArrayPool<T>` for efficient buffer reuse.
+        is_correct: true
+      - text: An in-memory `DataSet` compiled into an XML string.
+        is_correct: false
+      - text: Declaring all data entities as `record struct` objects and storing them inside local HTTP session variables.
+        is_correct: false
+    explanation: |
+      Correct: `IAsyncEnumerable<T>` allows data rows to be streamed and processed iteratively without loading millions of database records into RAM at once. Utilizing memory buffers via `ArrayPool` prevents continuous allocations, dropping GC overhead significantly.
+      Incorrect: Explicitly calling `GC.Collect()` freezes threads and harms overall throughput. `DataSet` objects and raw strings consume high amounts of memory and can push items into the Large Object Heap (LOH), leading to fragmentation.
+
+  - id: q015
+    type: multiple_choice
+    question: |
+      A complex distributed transaction across three newly created .NET 8 microservices (Employment, Payroll, and Taxation) fails halfway through due to a timeout. Since 2-Phase Commit (2PC) is not recommended in cloud-native AWS environments, how should you ensure eventual consistency?
+    options:
+      - text: Implement the Saga Pattern using Choreography or Orchestration to execute sequential compensating transactions that reverse previously successful steps.
+        is_correct: true
+      - text: Configure AWS Application Load Balancers to retry the failing HTTP request automatically up to 50 times.
+        is_correct: false
+      - text: Restructure the microservices back into a single monolithic database to use local SQL Server transactions.
+        is_correct: false
+      - text: Disregard the failure, assuming that a daily night batch script will scan the database tables and fix inconsistencies manually.
+        is_correct: false
+    explanation: |
+      Correct: The Saga Pattern is the standard cloud native solution for managing distributed transactions. Each step executes a local transaction; if any step fails, the saga executes compensating transactions in reverse order to rollback state changes.
+      Incorrect: High HTTP retry counts can cause cascading failures (retry storms) and won't fix deadlocks or internal logic errors. Re-monolithizing the database defeats the entire migration objective.
+
+  - id: q016
+    type: multiple_choice
+    question: |
+      Your .NET 8 REST APIs are consumed by a decoupled Angular application. During security profiling of public sector workflows, you must prevent Cross-Origin Resource Sharing (CORS) vulnerabilities while ensuring the frontend can communicate with the backend. What is the correct implementation policy?
+    options:
+      - text: Configure the .NET 8 CORS middleware to use `AllowAnyOrigin()` and `AllowAnyMethod()` to eliminate connection errors.
+        is_correct: false
+      - text: Restrict the CORS policy using `.WithOrigins("https://your-gov-domain.com")` while specifying explicitly allowed HTTP verbs and headers, keeping it distinct from authentication routing.
+        is_correct: true
+      - text: Disable CORS checking in the Kestrel web server profile settings.
+        is_correct: false
+      - text: Force the Angular application to pass all requests through a wildcard proxy that rewrites headers to match local machine hostnames.
+        is_correct: false
+    explanation: |
+      Correct: For high-security environments like GovTech, wildcard CORS configurations (`AllowAnyOrigin`) open the door to unauthorized scripts executing requests. Defining strict allowed origins, methods, and headers preserves secure communication.
+      Incorrect: Broad configurations allow any external malicious webpage to execute API calls on behalf of authenticated clients. CORS is an essential browser-enforced security wall, not a development nuisance to turn off.
+
+  - id: q017
+    type: multiple_choice
+    question: |
+      While using an AI coding assistant (like GitHub Copilot) to generate a C# repository layer, the tool suggests using direct string interpolation inside SQL statements (`$"SELECT * FROM Users WHERE Id = '{input}'"`). As a Senior Engineer, how do you evaluate and alter this suggestion?
+    options:
+      - text: Accept it, since AI models automatically sanitize strings behind the scenes before compilation.
+        is_correct: false
+      - text: Reject it because it introduces a critical SQL Injection vulnerability. Instruct the AI to use parameterized queries or Entity Framework Core LINQ expressions instead.
+        is_correct: true
+      - text: Accept it but modify the field to use an encrypted C# string object type.
+        is_correct: false
+      - text: Change the database to a NoSQL engine where string injection vulnerabilities cannot physically occur.
+        is_correct: false
+    explanation: |
+      Correct: AI coding tools can suggest patterns that inadvertently violate basic security principles. Direct string concatenation or interpolation in SQL statements exposes applications to severe SQL Injection. Enforcing parameterized inputs or using ORMs like EF Core ensures security.
+      Incorrect: AI engines do not sanitize raw inputs magically. Encrypting strings after compiling an unsafe query structure still leaves data exposed. NoSQL databases are still prone to injection variants (e.g., Command/Query Injection).
+
+  - id: q018
+    type: multiple_choice
+    question: |
+      To achieve seamless continuous integration and follow modern DevOps practices, you are configuring a CI/CD pipeline for the .NET 8 microsservices. How do you integrate unit testing and static code analysis without lengthening deployment times significantly?
+    options:
+      - text: Run test suites and analysis packages sequentially on a single, shared local build machine.
+        is_correct: false
+      - text: Use parallel pipeline jobs to run unit tests and SonarQube/SAST analysis concurrently, enforcing strict pass/fail quality gates before allowing Pull Requests to merge.
+        is_correct: true
+      - text: Execute code scans only on the weekend to ensure weekday pipeline runs remain as fast as possible.
+        is_correct: false
+      - text: Skip automated testing in CI altogether, delegating code quality assurance entirely to peer reviews.
+        is_correct: false
+    explanation: |
+      Correct: Parallelized stages in modern CI setups (like GitHub Actions or AWS CodePipeline) run quality gates (tests, security scanners, linters) concurrently. This ensures swift feedback loops for engineers without compromising shift-left security enforcement.
+      Incorrect: Sequential steps stall code delivery speed. Postponing scans to weekends allows bugs and defects to accumulate silently in the main codebase, multiplying integration conflicts and production deployment risks.
+
+  - id: q019
+    type: multiple_choice
+    question: |
+      The .NET MVC application currently logs exceptions out to flat text files stored on local IIS server hard drives. When moving these applications into containerized environments inside AWS ECS, what logging model should you adopt to comply with cloud-native monitoring standards?
+    options:
+      - text: Mount an Amazon EBS volume to the container, and continue writing raw text files directly to that shared drive.
+        is_correct: false
+      - text: Configure a logging framework (like Serilog) to output structured logs (JSON) directly to `Console.Out` (stdout), allowing AWS CloudWatch Container Insights to automatically aggregate and index them.
+        is_correct: true
+      - text: Send logs via synchronous HTTP POST requests from inside `catch` blocks straight to a central logging API endpoint.
+        is_correct: false
+      - text: Store log strings inside a global static C# `List<string>` and expose an endpoint for engineers to scrape the log history.
+        is_correct: false
+    explanation: |
+      Correct: Cloud-native design relies on applications treating logs as stream data. Writing structured JSON logs directly to standard output allows container engines to safely capture and stream logs to aggregation platforms like Amazon CloudWatch or Elasticsearch.
+      Incorrect: Local file paths are ephemeral and disappear when containers scale or restart. Synchronous log transmission creates severe performance overhead during heavy exception storms, slowing down real business transactions.
+
+  - id: q020
+    type: multiple_choice
+    question: |
+      After deploying a newly modernized .NET 8 microservice to production on AWS, users occasionally report intermittent HTTP 503 Service Unavailable errors during sudden peak traffic hours. Which architectural configuration resolves this resilience issue?
+    options:
+      - text: Implement a retry-with-jitter and circuit breaker policy on the API clients using Polly, and configure an AWS Auto Scaling Policy driven by CPU/Memory and Request-Count metrics.
+        is_correct: true
+      - text: Set the application's connection timeout limits to infinity to avoid dropping requests.
+        is_correct: false
+      - text: Instruct users to manually refresh their browsers whenever they encounter an HTTP 503 error page.
+        is_correct: false
+      - text: Revert the microservice back to a single instance running on a larger EC2 virtual machine (Scale Up) with auto-scaling turned off.
+        is_correct: false
+    explanation: |
+      Correct: Combating intermittent scaling issues requires a dual approach: making clients resilient using intelligent retry behaviors and circuit breakers (via Polly) while ensuring the cloud infrastructure scales out automatically to match incoming load spikes.
+      Incorrect: Infinite timeouts bind up sockets and system threads, causing a total cascade failure. Manual user refreshes increase load on a struggling system. Avoiding auto-scaling limits the application's ability to absorb high traffic dynamic shifts.

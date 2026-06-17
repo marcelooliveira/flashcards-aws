@@ -1,0 +1,170 @@
+questions:
+  - id: q021
+    type: multiple_choice
+    question: |
+      During the migration of sensitive government payroll records, you must ensure Data-at-Rest encryption on AWS RDS MS SQL Server without modifying the application code layer in .NET 8. Which database feature satisfies this requirement?
+    options:
+      - text: Transparent Data Encryption (TDE) managed via AWS Key Management Service (KMS).
+        is_correct: true
+      - text: Always Encrypted using an application-side client driver.
+        is_correct: false
+      - text: SSL/TLS Connection Encryption strings inside AppSettings.json.
+        is_correct: false
+      - text: Masking data columns manually using SQL Views.
+        is_correct: false
+    explanation: |
+      Correct: Transparent Data Encryption (TDE) protects data at rest by encrypting the underlying database files, backups, and logs automatically at the storage level. Integrating it with AWS KMS ensures seamless key rotation without requiring code refactoring.
+      Incorrect: Always Encrypted requires client-side driver configurations and explicit code management for encryption keys. SSL/TLS secures data in transit, not data at rest. Dynamic Data Masking hides data from non-privileged users but doesn't encrypt raw storage blocks.
+
+  - id: q022
+    type: multiple_choice
+    question: |
+      You are designing integration tests for a newly written .NET 8 microservice that interacts with Amazon S3 and MS SQL Server. To enforce a proper 'Shift-Left' testing approach within a local Docker environment or a fast CI pipeline, which tool combination is preferred?
+    options:
+      - text: Stubbing out all HTTP calls by hardcoding JSON responses inside the C# testing project.
+        is_correct: false
+      - text: Using WebApplicationFactory paired with Testcontainers to spin up real, ephemeral instances of SQL Server and LocalStack (for AWS services) during test execution.
+        is_correct: true
+      - text: Deploying the code to a temporary AWS QA environment before running tests using Postman scripts.
+        is_correct: false
+      - text: Skipping integration tests entirely and relying on unit tests with mocked interfaces to save pipeline minutes.
+        is_correct: false
+    explanation: |
+      Correct: `WebApplicationFactory` allows you to host your .NET 8 API in-memory for testing, while `Testcontainers` manages real, lightweight Docker instances of infrastructure components like SQL Server and LocalStack. This delivers reliable integration testing without cloud provider dependencies.
+      Incorrect: Hardcoding JSON stubs bypasses actual driver testing and schema verification. Deploying to a live AWS cloud environment slows down feedback loops and violates fast execution rules. Mock-only strategies miss critical query compilation and database constraint bugs.
+
+  - id: q023
+    type: multiple_choice
+    question: |
+      The Angular frontend application needs to send requests to the new .NET 8 microservices cluster. Authentication is handled via an external OAuth2/OIDC identity provider. What token validation strategy should the .NET 8 Web API implement to remain highly scalable and stateless?
+    options:
+      - text: Intercept every request, decode the opaque token, and perform a synchronous HTTP back-channel call to the Identity Provider to check validity.
+        is_correct: false
+      - text: Accept JWTs (JSON Web Tokens) from the frontend, validate their signatures locally using cached public keys (JWKS) provided by the Identity Server, and verify claims in memory.
+        is_correct: true
+      - text: Store valid token strings inside a global static C# dictionary on the API server and check tokens against it.
+        is_correct: false
+      - text: Delegate token validation entirely to the Angular application layer to protect backend CPU utilization.
+        is_correct: false
+    explanation: |
+      Correct: JWT validation is designed to be decentralized. By caching the Identity Provider's public keys (JWKS), a stateless .NET 8 microservice can cryptographically verify the token's authenticity and check expirations in memory without expensive network hops.
+      Incorrect: Calling the identity provider on every API request creates a massive bottleneck. Storing tokens in a local dictionary breaks horizontal auto-scaling. Trusting the frontend client for validation creates an entry point for security exploitation.
+
+  - id: q024
+    type: multiple_choice
+    question: |
+      To optimize read operations for a frequently accessed list of institutional departments, you plan to implement a multi-level caching strategy in .NET 8. What is the most resilient design pattern for an elastic cloud environment?
+    options:
+      - text: Relying solely on `IMemoryCache` (In-Memory Cache) inside each individual container instance.
+        is_correct: false
+      - text: A hybrid approach using `IMemoryCache` for ultra-fast local lookups (L1) backed by a distributed cache like Amazon ElastiCache for Redis (L2) to prevent cache stampedes and synchronize data across all nodes.
+        is_correct: true
+      - text: Writing query result strings to a shared AWS EFS (Elastic File System) volume.
+        is_correct: false
+      - text: Querying the SQL Server database with the `NOLOCK` hint exclusively, treating the DB engine as a cache.
+        is_correct: false
+    explanation: |
+      Correct: A two-level (L1/L2) caching pattern balances performance and consistency. Local memory provides sub-microsecond access, while a centralized Redis instance ensures data consistency when scaling containers horizontally and repopulates local caches smoothly.
+      Incorrect: Local-only memory cache causes inconsistent states between scaled containers when mutations happen. Shared filesystems are too slow for volatile cache data. `NOLOCK` reads uncommitted database rows but does not cache data or solve high-load DB bottlenecks.
+
+  - id: q025
+    type: multiple_choice
+    question: |
+      During a migration from .NET MVC to .NET 8, you run into severe data type truncation issues because the legacy MS SQL Server database uses non-standard mappings (such as `char(10)` padded spaces) for employee IDs. How can this be handled cleanly within the Entity Framework Core mapping layer?
+    options:
+      - text: Use Value Converters in EF Core (`HasConversion`) to automatically `.Trim()` strings when reading from the database and pad them when writing.
+        is_correct: true
+      - text: Write a custom background worker script that runs an `UPDATE` query on the SQL database every 5 minutes to strip empty spaces.
+        is_correct: false
+      - text: Change all string properties in your C# domain entities to arrays of raw characters (`char[]`).
+        is_correct: false
+      - text: Instruct the Angular frontend to sanitize all string data inputs before displaying them to users.
+        is_correct: false
+    explanation: |
+      Correct: EF Core Value Converters allow you to transform data seamlessly between the database representation and the domain entity properties. This encapsulates legacy structural anomalies cleanly within the infrastructure data mapping layer.
+      Incorrect: Periodic background update scripts create race conditions and generate substantial transaction log bloat. Changing C# domain types to `char[]` ruins clean code practices. Delegating data cleanliness to the frontend client ignores API boundary data integrity.
+
+  - id: q026
+    type: multiple_choice
+    question: |
+      A downstream legacy SOAP service required by your GovTech system experiences unpredictable latencies. To protect your core .NET 8 microservice from cascading thread failures and starvation, which resilience pattern should you enforce?
+    options:
+      - text: The Circuit Breaker pattern using a resilience pipeline (e.g., via Polly), which trips open to fail-fast after a specified threshold of timeouts is crossed.
+        is_correct: true
+      - text: Infinite retry policies that force the application to hold open the execution socket until the SOAP service responds.
+        is_correct: false
+      - text: Dynamically restarting the .NET 8 AWS ECS task whenever a response takes longer than 10 seconds.
+        is_correct: false
+      - text: Moving the SOAP client call directly into the Angular frontend using XML parsers.
+        is_correct: false
+    explanation: |
+      Correct: The Circuit Breaker pattern prevents an application from repeatedly executing an operation that is highly likely to fail. Tripping the circuit open allows the system to fail-fast, conserving internal threads and resources while the downstream service recovers.
+      Incorrect: Infinite retries exacerbate resource exhaustion and can unintentionally perform a denial-of-service attack on the struggling downstream service. Hard-restarting tasks kills active healthy connections. Frontending SOAP calls bypasses security and exposes inner service topology.
+
+  - id: q027
+    type: multiple_choice
+    question: |
+      When building a highly testable system in .NET 8 following Clean Architecture, how should you implement cross-cutting concerns like Request Logging and Performance Monitoring without polluting your core Application Business Use Cases?
+    options:
+      - text: Write inline logging logic at the beginning and end of every single application service method.
+        is_correct: false
+      - text: Utilize MediatR Pipeline Behaviors (or custom Middleware/Decorators) to wrap application requests within reusable cross-cutting handlers.
+        is_correct: true
+      - text: Inherit all application classes from a massive base helper class called `LoggerBase`.
+        is_correct: false
+      - text: Configure the database to log all incoming API routing commands externally.
+        is_correct: false
+    explanation: |
+      Correct: Pipeline behaviors (using MediatR) or the Decorator pattern allow you to implement interceptors around your use case handlers. This respects the Single Responsibility Principle, leaving your core business workflows clean and decoupled from infrastructure concerns.
+      Incorrect: Inline logging duplicates boilerplate code everywhere, which harms code maintenance. Base class inheritance introduces rigid, tight coupling. Database-level logging does not capture application-tier profiling or request parameters.
+
+  - id: q028
+    type: multiple_choice
+    question: |
+      A GovTech system must ensure that when a civil servant initiates a large data modification request, the action cannot be intercepted or resubmitted maliciously by a third party. What security header and token strategy should your .NET 8 API validate when handling requests from the Angular application?
+    options:
+      - text: Anti-XSS (Cross-Site Scripting) regex filtering in the URL string parameter path.
+        is_correct: false
+      - text: Anti-Forgery Tokens (CSRF/XSRF protection) by implementing a synchronized token pattern, where the API validates a token sent in a secure cookie against a token sent in the custom HTTP header.
+        is_correct: true
+      - text: Changing all HTTP operations to use the `OPTIONS` verb instead of `POST` or `PUT`.
+        is_correct: false
+      - text: Disabling CORS configuration matching inside the internal corporate intranet network proxy.
+        is_correct: false
+    explanation: |
+      Correct: Cross-Site Request Forgery (CSRF) protections validate that state-changing requests originate from an authenticated session explicitly initiated by your frontend app. Modern Angular clients natively support reading a cookie value and appending it as a header (`X-XSRF-TOKEN`), which .NET can check.
+      Incorrect: Regex filtering in URL paths does not defend against session hijacking or forged requests. The `OPTIONS` verb is designated for pre-flight cross-origin safety checks, not actual resource modification. Disabling CORS weakens browser defense walls.
+
+  - id: q029
+    type: multiple_choice
+    question: |
+      The .NET MVC application you are migrating currently relies on synchronous, block-based lock statements (`lock(someObject)`) to handle internal state updates. If translated directly into an asynchronous .NET 8 environment with heavily utilized `await` expressions, what runtime behavior will occur?
+    options:
+      - text: The compiler will throw an error because C# primitive `lock` blocks cannot contain an `await` statement inside them.
+        is_correct: true
+      - text: The code will execute normally with zero threading side-effects.
+        is_correct: false
+      - text: The runtime will automatically convert the code into a non-blocking cloud worker process.
+        is_correct: false
+      - text: The lock will seamlessly switch to a distributed lock managed by AWS.
+        is_correct: false
+    explanation: |
+      Correct: C# does not allow the use of the `lock` statement if the code block inside contains an `await` operator. This is because a thread yielding during an async call might resume on a completely different thread pool thread, breaking the primitive lock ownership. Async alternatives like `SemaphoreSlim` must be used.
+      Incorrect: It is a fundamental compilation rule error rather than clean execution. The runtime cannot auto-magically swap local primitives into cloud-native configurations or distributed synchronization mechanisms without deliberate architectural definitions.
+
+  - id: q030
+    type: multiple_choice
+    question: |
+      While deploying multiple independent .NET 8 microservices to AWS Elastic Container Service (ECS), you want to guarantee that container scale-out actions occur smoothly without causing downtime or dropping in-flight traffic. Which feature must be configured properly on the AWS Application Load Balancer?
+    options:
+      - text: Connection Draining (Deregistration Delay) thresholds on the corresponding Target Groups.
+        is_correct: true
+      - text: Shorter DNS TTL records on the root Amazon Route 53 domain name profile.
+        is_correct: false
+      - text: Increasing the memory allocation limits inside the Dockerfile base layer.
+        is_correct: false
+      - text: Activating sticky sessions globally across all application traffic channels.
+        is_correct: false
+    explanation: |
+      Correct: Connection Draining (Deregistration Delay) defines a grace period for targets that are being terminated. The AWS ALB will stop routing new incoming traffic to the container but allows active, in-flight HTTP requests to complete safely before the task is forcefully killed.
+      Incorrect: Domain DNS TTL adjusts client-side caching of routing addresses but doesn't manage live task termination sequences. Memory limits in Dockerfiles affect container capacity but don't regulate load balancer routing. Sticky sessions enforce routing persistence rather than seamless container retirement.

@@ -1,0 +1,175 @@
+questions:
+  - id: q001
+    type: multiple_choice
+    question: |
+      While decomposing a legacy .NET MVC monolith into .NET 8 microservices on AWS, you identify critical business rules encapsulated inside complex Stored Procedures in MS SQL Server. Which migration strategy minimizes operational risk while maintaining the cohesion of the new cloud-native architecture?
+    options:
+      - text: Migrate the Stored Procedures directly to Amazon RDS SQL Server and expose them via REST APIs in the new .NET 8 layer.
+        is_correct: false
+      - text: Extract the logic from the Stored Procedures gradually into .NET 8 services, applying the Strangler Fig Pattern to redirect traffic away from the monolith.
+        is_correct: true
+      - text: Rewrite the entire database immediately into a NoSQL model (such as Amazon DynamoDB) to force decoupling.
+        is_correct: false
+      - text: Retain the business logic in the database permanently and use Entity Framework Core solely to map execution calls to these Stored Procedures.
+        is_correct: false
+    explanation: |
+      Correct: The Strangler Fig Pattern allows for the incremental replacement of legacy system parts with new cloud-native .NET 8 services. This mitigates "Big Bang" release risks and brings business logic into the application layer where it can be heavily tested (Shift-Left).
+      Incorrect: Keeping SPs or simply lifting-and-shifting them to RDS perpetuates tight coupling at the database level, violating microservices principles where each service should own its data and logic. Switching to NoSQL without domain understanding introduces extreme technical risk.
+    diagram: |
+      graph TD
+        Client[Client Traffic] --> Gateway[API Gateway / Proxy]
+        Gateway -- Old Route --> Monolith[Monolith .NET MVC + Stored Procs]
+        Gateway -- Extracted Route --> Microservice[Net 8 Microservice]
+
+  - id: q002
+    type: multiple_choice
+    question: |
+      When migrating to .NET 8, the team plans to leverage Generative AI tools (e.g., GitHub Copilot or ChatGPT) to accelerate writing unit tests and refactoring legacy code. Which engineering approach ensures the reliability of AI-generated code before integrating it into the main pipeline?
+    options:
+      - text: Accept AI suggestions directly into the main branch, trusting that the .NET 8 compiler will catch any syntax or compilation errors.
+        is_correct: false
+      - text: Use Chain-of-Thought prompting by providing architectural context, followed by strict human review based on Spec-Driven Development (SDD) and mutation testing.
+        is_correct: true
+      - text: Restrict AI usage to technical documentation only, as LLM-based tools are incapable of generating semantically correct C# code.
+        is_correct: false
+      - text: Set up an automation script that forces the AI to review its own generated code in an infinite loop until there are zero warnings in SonarQube.
+        is_correct: false
+    explanation: |
+      Correct: AI drastically accelerates development, but Spec-Driven Development (SDD) and human oversight ensure that hallucinations are caught early. Mutation testing validates that the AI-generated tests actually catch real code failures.
+      Incorrect: Blindly accepting AI suggestions introduces security risks and logical bugs invisible to compilers. Running infinite AI loops without clear termination criteria wastes tokens and results in inconsistent code quality.
+
+  - id: q003
+    type: multiple_choice
+    question: |
+      When refactoring a legacy HR batch processing service (e.g., payroll calculation) into an asynchronous, multi-threaded .NET 8 BackgroundService, how should you manage the Entity Framework Core DbContext lifecycle to avoid concurrency issues?
+    options:
+      - text: Share a single Singleton DbContext instance across all threads to conserve database connections to MS SQL Server.
+        is_correct: false
+      - text: Instantiate a separate DI container scope (via IDbContextFactory) for each parallel thread or task, ensuring every operation gets its own isolated DbContext.
+        is_correct: true
+      - text: Disable Change Tracking in EF Core, which automatically makes the context thread-safe by default.
+        is_correct: false
+      - text: Implement exclusive locks around all DbContext calls to completely prevent parallel thread execution.
+        is_correct: false
+    explanation: |
+      Correct: EF Core's DbContext is explicitly not thread-safe. In multi-threaded or parallel execution scenarios, using `IDbContextFactory<TContext>` allows you to spin up short-lived, isolated instances per task, preventing state collision.
+      Incorrect: Sharing a single context across threads will crash with concurrency exceptions almost immediately. Disabling change tracking improves read performance but does not grant thread safety. Using exclusive locks defeats the purpose of parallel multi-threaded processing.
+
+  - id: q004
+    type: multiple_choice
+    question: |
+      GovTech scenarios heavily demand strict auditing of civil servant record updates. To cleanly decouple this auditing functionality from the primary write pathway in .NET 8 (Clean Architecture), which asynchronous AWS messaging pattern is best suited?
+    options:
+      - text: Publish an event to an Amazon SNS topic, which fans out and delivers the message to an Amazon SQS queue dedicated to the audit service (Fan-out pattern).
+        is_correct: true
+      - text: Perform a direct, synchronous HTTP call from the primary microservice to the audit microservice using IHttpClientFactory.
+        is_correct: false
+      - text: Write audit logs directly to a shared table in MS SQL Server utilizing Distributed Transactions (MSDTC).
+        is_correct: false
+      - text: Route audit data via Amazon Kinesis Data Streams and process it exactly once a day in a nightly batch.
+        is_correct: false
+    explanation: |
+      Correct: The Fan-out pattern (SNS -> SQS) ensures complete architectural decoupling. The primary service fires the event and immediately continues. If other services need this data later, they can subscribe to the SNS topic without breaking the write service.
+      Incorrect: Synchronous calls introduce temporal coupling and fragility (if the audit service dips, the main service fails). Distributed transactions (MSDTC) are anti-patterns in modern cloud/microservices environments and do not scale.
+
+  - id: q005
+    type: multiple_choice
+    question: |
+      During the modernization of the interface consuming the new .NET 8 API, the Angular frontend team reports performance degradation due to massive data payloads returned on employee listing screens. How should a backend-focused engineer address this using API design best practices?
+    options:
+      - text: Advise the frontend team to fetch all data and execute pagination, sorting, and filtering client-side using Angular pipes.
+        is_correct: false
+      - text: Implement keyset pagination (cursor-based) and server-side filtering in the .NET 8 API, translating these parameters into optimized queries in MS SQL Server.
+        is_correct: true
+      - text: Set up aggressive caching on Amazon CloudFront so that the heavy response is saved at the edge for 24 hours, ignoring real-time updates.
+        is_correct: false
+      - text: Modify the API response to return a GZip-compressed JSON string and delegate the heavy parsing to the Angular main thread.
+        is_correct: false
+    explanation: |
+      Correct: Server-side pagination (especially cursor-based for large data volumes) reduces network payloads and memory consumption both at the database level and on the Angular client, solving the issue at the root.
+      Incorrect: Client-side pagination breaks completely as public sector datasets grow over time. Compressing a massive JSON payload relieves network transit time but still triggers Out-Of-Memory or UI thread blocking issues when the browser parses and renders the DOM.
+
+  - id: q006
+    type: multiple_choice
+    question: |
+      While analyzing a performance bottleneck in an MS SQL Server database inherited from the monolith, you find a Stored Procedure executing a full table SCAN against millions of electronic timesheet entries. The execution plan shows that an existing non-clustered index is ignored due to an implicit data type conversion in the WHERE clause (e.g., VARCHAR vs NVARCHAR). How do you resolve this?
+    options:
+      - text: Force the optimizer to use the index anyway by applying the 'WITH (INDEX(IX_IndexName))' query hint.
+        is_correct: false
+      - text: Align the variable/parameter data types in the Stored Procedure signature or EF Core call to match the exact data type of the indexed column in the table schema.
+        is_correct: true
+      - text: Recreate the table as a Heap (without a clustered index) to speed up sequential scans.
+        is_correct: false
+      - text: Scale up the Amazon RDS SQL Server instance capacity (Vertical Scaling) to mask the processing delay.
+        is_correct: false
+    explanation: |
+      Correct: Implicit conversions (caused by mismatching variable/parameter types against column types) break the query's 'SARGability', preventing SQL Server from executing an efficient Index Seek. Fixing the types removes runtime conversion overhead.
+      Incorrect: Forcing an index via hints on a non-SARGable query can degrade performance even further. Vertical scaling simply inflates cloud infrastructure costs without rectifying structural technical debt.
+
+  - id: q007
+    type: multiple_choice
+    question: |
+      Within Hexagonal Architecture or Clean Architecture principles applied to .NET 8, where should repository contract interfaces reside, and where should actual data access implementations (MS SQL Server, AWS SDKs) be written?
+    options:
+      - text: Interfaces reside in the core Domain/Application layer, while concrete implementations reside in the external Infrastructure layer.
+        is_correct: true
+      - text: Both contract interfaces and implementations must reside in the Web API project to simplify Dependency Injection registration.
+        is_correct: false
+      - text: Interfaces reside in the Infrastructure layer and implementations live in the Domain layer to protect business logic from external changes.
+        is_correct: false
+      - text: Interfaces should be avoided entirely; business logic code should instantiate data access classes directly using the 'new' keyword.
+        is_correct: false
+    explanation: |
+      Correct: The Dependency Inversion Principle dictates that the core application core defines the business rules (interfaces), while external details (databases, cloud providers) adapt to those interfaces (Infrastructure). This enables isolated mock testing and modular technology evolution.
+      Incorrect: Bundling contracts and implementations in the API or flipping the dependency flow breaks testability, violates boundaries, and tightly couples the core business logic to specific data access providers.
+
+  - id: q008
+    type: multiple_choice
+    question: |
+      To ensure a genuine 'Shift-Left' strategy during the migration of an HR system to .NET 8, when and how should security validations and code quality checks be performed?
+    options:
+      - text: Through manual QA testing executed in a dedicated user acceptance environment (UAT) prior to quarterly release cycles.
+        is_correct: false
+      - text: By integrating SAST (Static Application Security Testing) tools and code linters directly into the local development cycle and enforcing them automatically via Pull Request gates in the CI/CD pipeline.
+        is_correct: true
+      - text: By running vulnerability scans directly against production environments immediately after deployment to avoid impeding developer velocity.
+        is_correct: false
+      - text: By delegating security validation entirely to AI coding prompts while writing code, discarding the need for automated tooling in the CI/CD pipeline.
+        is_correct: false
+    explanation: |
+      Correct: 'Shift-Left' means bringing quality, security, and verification checks into the earliest phases of development. Automating static checks and unit/integration testing on code commit lowers bugs and vulnerabilities remediation costs before they reach downstream environments.
+      Incorrect: Late-stage manual tests or scanning live production code are the antithesis of Shift-Left. They cause massive engineering rework cycles and leave unacceptable vulnerability windows open in sensitive public sector GovTech environments.
+
+  - id: q009
+    type: multiple_choice
+    question: |
+      You need to expose an endpoint in the new .NET 8 architecture to be consumed by an Angular component. This endpoint handles uploading large PDF government audit reports. Which technique avoids Out-Of-Memory (OOM) exceptions on the Kestrel web server?
+    options:
+      - text: Read the entire binary file stream into an in-memory byte array ('File.ReadAllBytes') before pushing it to Amazon S3.
+        is_correct: false
+      - text: Use HTTP streaming with .NET's 'MultipartReader' API, processing and streaming chunks of data directly to the destination storage (e.g., AWS S3) without loading the entire file into RAM.
+        is_correct: true
+      - text: Configure the Angular client to encode the PDF file into a massive Base64 string and transmit it via a traditional JSON request body.
+        is_correct: false
+      - text: Disable Kestrel request timeout limits so the server can buffer large volumes of concurrent requests in memory cache.
+        is_correct: false
+    explanation: |
+      Correct: Streaming data ensures that server memory usage remains low and constant regardless of file size (2MB or 2GB), because bytes are read and pushed to the destination sequentially in small blocks (chunks).
+      Incorrect: Loading whole files into RAM via byte arrays or parsing giant Base64 strings inside JSON payloads causes server memory consumption to scale linearly with concurrent uploads, inevitably triggering severe Out-Of-Memory application crashes.
+
+  - id: q010
+    type: multiple_choice
+    question: |
+      The legacy .NET MVC application relies heavily on local, in-memory 'Session' state variables to track authenticated user context. When migrating to an elastic microservice architecture deployed on AWS (Amazon ECS/EKS), how should this session state be handled?
+    options:
+      - text: Enable 'Sticky Sessions' (session affinity) on the AWS Application Load Balancer (ALB) to ensure a user is always routed back to the exact same container.
+        is_correct: false
+      - text: Externalize session state into a high-performance, distributed read/write store like Amazon ElastiCache (Redis), making the .NET 8 instances completely stateless.
+        is_correct: true
+      - text: Substitute in-memory session variables with local text files written to an Amazon EBS volume attached to each individual virtual machine instance.
+        is_correct: false
+      - text: Maintain the in-memory state model and configure a custom peer-to-peer memory replication mechanism across all active C# containers.
+        is_correct: false
+    explanation: |
+      Correct: Making microservices completely stateless is a foundational prerequisite for cloud elasticity and auto-scaling. Using a distributed cache like Redis ensures any available container can fulfill any user request with sub-millisecond response latency.
+      Incorrect: While sticky sessions offer a temporary fix, they break uniform load balancing and prevent efficient automated scaling. Local storage (EBS files) or manual memory replication layers introduce nightmarish synchronization edge-cases and architectural single-points-of-failure.
