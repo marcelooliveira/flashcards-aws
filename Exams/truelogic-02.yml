@@ -57,7 +57,7 @@ questions:
     options:
       - text: Regular `string.Concat` commands paired with explicit calls to `GC.Collect()`.
         is_correct: false
-      - text: `IAsyncEnumerable<T>` for streaming data chunks asynchronously from MS SQL Server combined with `Span<T>` or `ArrayPool<T>` for efficient buffer reuse.
+      - text: IAsyncEnumerable<T>` for streaming data chunks asynchronously from MS SQL Server combined with `Span<T>` or `ArrayPool<T>` for efficient buffer reuse.
         is_correct: true
       - text: An in-memory `DataSet` compiled into an XML string.
         is_correct: false
