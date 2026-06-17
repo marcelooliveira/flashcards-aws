@@ -57,14 +57,14 @@ questions:
     options:
       - text: Regular `string.Concat` commands paired with explicit calls to `GC.Collect()`.
         is_correct: false
-      - text: IAsyncEnumerable<T>` for streaming data chunks asynchronously from MS SQL Server combined with `Span<T>` or `ArrayPool<T>` for efficient buffer reuse.
+      - text: IAsyncEnumerable[T] for streaming data chunks asynchronously from MS SQL Server combined with Span[T] or ArrayPool[T] for efficient buffer reuse.
         is_correct: true
       - text: An in-memory `DataSet` compiled into an XML string.
         is_correct: false
       - text: Declaring all data entities as `record struct` objects and storing them inside local HTTP session variables.
         is_correct: false
     explanation: |
-      Correct: `IAsyncEnumerable<T>` allows data rows to be streamed and processed iteratively without loading millions of database records into RAM at once. Utilizing memory buffers via `ArrayPool` prevents continuous allocations, dropping GC overhead significantly.
+      Correct: IAsyncEnumerable[T] allows data rows to be streamed and processed iteratively without loading millions of database records into RAM at once. Utilizing memory buffers via `ArrayPool` prevents continuous allocations, dropping GC overhead significantly.
       Incorrect: Explicitly calling `GC.Collect()` freezes threads and harms overall throughput. `DataSet` objects and raw strings consume high amounts of memory and can push items into the Large Object Heap (LOH), leading to fragmentation.
 
   - id: q015
