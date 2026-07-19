@@ -1,0 +1,404 @@
+questions:
+  - id: q31
+    type: multiple_choice
+    question: "What is the primary difference between Continuous Integration (CI) and Continuous Deployment (CD)?"
+    options:
+      - text: "CI focuses on automatically building and testing code on every commit; CD extends this by automatically deploying validated changes to production."
+        is_correct: true
+      - text: "CI deploys to production; CD only builds the code."
+        is_correct: false
+      - text: "CI is manual; CD is automated."
+        is_correct: false
+      - text: "There is no difference; they are the same concept."
+        is_correct: false
+    explanation: "CI ensures code is continuously integrated and tested, catching issues early. CD takes this further by automating the deployment process, reducing time-to-market and manual errors in production releases."
+    tags: [ci-cd, devops, concepts]
+    difficulty: easy
+    points: 5
+
+  - id: q32
+    type: multiple_choice
+    question: "In a CI pipeline for a .NET 9 Blazor WebAssembly application, which tasks are essential?"
+    code: |
+      trigger:
+      - main
+
+      pool:
+        vmImage: 'ubuntu-latest'
+
+      steps:
+      - task: UseDotNet@2
+        inputs:
+          version: '9.x'
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: 'restore'
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: 'build'
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: 'test'
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: 'publish'
+          publishWebProjects: false
+          projects: '**/Web.csproj'
+    options:
+      - text: "Install .NET SDK, restore dependencies, build, run tests, and publish the application."
+        is_correct: true
+      - text: "Only build and publish; testing is optional in CI."
+        is_correct: false
+      - text: "Deploy directly to Azure without building."
+        is_correct: false
+      - text: "Only restore dependencies; building happens in CD."
+        is_correct: false
+    explanation: "A proper CI pipeline must install the correct SDK version, restore packages, build the project, run automated tests to validate quality, and publish artifacts for deployment stages."
+    tags: [ci, dotnet, blazor]
+    difficulty: medium
+    points: 7
+
+  - id: q33
+    type: multiple_choice
+    question: "What is the purpose of using 'PublishBuildArtifacts' task in a CI pipeline?"
+    code: |
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: 'publish'
+          arguments: '--output $(Build.ArtifactStagingDirectory)'
+
+      - task: PublishBuildArtifacts@1
+        inputs:
+          PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+          ArtifactName: 'blazor-wasm-app'
+          publishLocation: 'Container'
+    options:
+      - text: "To make the published output available for download and use in subsequent CD stages or other pipelines."
+        is_correct: true
+      - text: "To deploy the application directly to Azure App Service."
+        is_correct: false
+      - text: "To compress the source code for backup purposes."
+        is_correct: false
+      - text: "To generate documentation from code comments."
+        is_correct: false
+    explanation: "Publishing build artifacts stores the compiled output in Azure DevOps, making it accessible to release pipelines or deployment jobs without needing to rebuild, ensuring consistency between build and deployment."
+    tags: [ci, artifacts, pipelines]
+    difficulty: medium
+    points: 6
+
+  - id: q34
+    type: multiple_choice
+    question: "How should you handle different configurations (Development, Staging, Production) in a CD pipeline?"
+    code: |
+      stages:
+      - stage: DeployDev
+        variables:
+          environment: 'Development'
+          apiUrl: 'https://dev-api.example.com'
+
+      - stage: DeployProd
+        variables:
+          environment: 'Production'
+          apiUrl: 'https://api.example.com'
+        jobs:
+        - deployment: DeployProduction
+          environment: production
+    options:
+      - text: "Use stage-specific variables, environment-specific configuration files, or Azure App Configuration to manage settings per environment."
+        is_correct: true
+      - text: "Hardcode all configurations in the source code and rebuild for each environment."
+        is_correct: false
+      - text: "Use the same configuration for all environments to ensure consistency."
+        is_correct: false
+      - text: "Manually edit configuration files after each deployment."
+        is_correct: false
+    explanation: "Proper configuration management uses environment-specific variables, appsettings.{Environment}.json files, or external configuration services like Azure App Configuration to avoid rebuilding and ensure security."
+    tags: [cd, configuration, environments]
+    difficulty: medium
+    points: 7
+
+  - id: q35
+    type: multiple_choice
+    question: "What is 'Blue-Green Deployment' and how does it minimize downtime?"
+    options:
+      - text: "Two identical environments (Blue and Green) run in parallel; traffic switches from the old version (Blue) to the new version (Green) instantly."
+        is_correct: true
+      - text: "A deployment strategy that uses blue and green colors in the UI."
+        is_correct: false
+      - text: "Deploying to two different Azure regions simultaneously."
+        is_correct: false
+      - text: "A rollback strategy that reverts to the previous version automatically."
+        is_correct: false
+    explanation: "Blue-Green deployment maintains two production environments. You deploy to the inactive one (Green), verify it works, then switch traffic instantly using load balancer or DNS changes, enabling zero-downtime deployments and instant rollback."
+    tags: [cd, deployment-strategies, availability]
+    difficulty: medium
+    points: 8
+    diagram: |
+      graph LR
+      A[Load Balancer] --> B[Blue: v1.0]
+      A -.switch.-> C[Green: v2.0]
+      C --> D[Verify]
+      D -- Success --> E[Route All Traffic to Green]
+      D -- Failure --> F[Keep Blue Active]
+
+  - id: q36
+    type: multiple_choice
+    question: "Why is it important to implement automated testing in a CI/CD pipeline?"
+    code: |
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: 'test'
+          projects: '**/*Tests.csproj'
+          arguments: '--configuration Release --collect:"XPlat Code Coverage"'
+
+      - task: PublishCodeCoverageResults@1
+        inputs:
+          codeCoverageTool: 'Cobertura'
+          summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
+    options:
+      - text: "Automated tests catch bugs early, prevent regressions, and ensure only validated code reaches production, improving quality and reducing risk."
+        is_correct: true
+      - text: "Automated testing is only useful for frontend applications."
+        is_correct: false
+      - text: "Manual testing is always more reliable than automated tests."
+        is_correct: false
+      - text: "Testing slows down the pipeline and should be skipped in CI."
+        is_correct: false
+    explanation: "Automated testing (unit, integration, E2E) in CI/CD provides fast feedback, prevents broken code from progressing through the pipeline, and maintains code quality at scale where manual testing is impractical."
+    tags: [ci, testing, quality]
+    difficulty: easy
+    points: 6
+
+  - id: q37
+    type: multiple_choice
+    question: "What is the purpose of 'approvals' in Azure Pipelines environments?"
+    options:
+      - text: "To require manual validation before deploying to critical environments like production, ensuring human oversight and compliance."
+        is_correct: true
+      - text: "To automatically approve all deployments without human intervention."
+        is_correct: false
+      - text: "To speed up the deployment process by skipping validation."
+        is_correct: false
+      - text: "To send email notifications to developers."
+        is_correct: false
+    explanation: "Approvals act as gates that pause deployment until authorized personnel review and approve, ensuring business stakeholders, security teams, or operations can validate changes before production release."
+    tags: [cd, environments, governance]
+    difficulty: easy
+    points: 6
+
+  - id: q38
+    type: multiple_choice
+    question: "How can you implement 'Infrastructure as Code (IaC)' in an Azure DevOps pipeline?"
+    code: |
+      - task: AzureCLI@2
+        inputs:
+          azureSubscription: 'MyAzureConnection'
+          scriptType: 'bash'
+          scriptLocation: 'inlineScript'
+          inlineScript: |
+            az deployment group create \
+              --resource-group MyRG \
+              --template-file infrastructure/main.bicep \
+              --parameters environment=production
+    options:
+      - text: "Use ARM templates, Bicep, or Terraform in your pipeline to provision and configure Azure resources automatically and consistently."
+        is_correct: true
+      - text: "Manually create resources in the Azure Portal before each deployment."
+        is_correct: false
+      - text: "Infrastructure as Code is not supported in Azure DevOps."
+        is_correct: false
+      - text: "Only use PowerShell scripts without version control."
+        is_correct: false
+    explanation: "IaC treats infrastructure configuration as code (versioned, reviewed, tested), enabling automated, repeatable, and auditable infrastructure deployments alongside application code in the same CI/CD pipeline."
+    tags: [cd, iac, azure]
+    difficulty: medium
+    points: 8
+
+  - id: q39
+    type: multiple_choice
+    question: "What is 'Continuous Delivery' vs 'Continuous Deployment'?"
+    options:
+      - text: "Continuous Delivery automates up to production-ready state requiring manual approval; Continuous Deployment automatically deploys to production without manual intervention."
+        is_correct: true
+      - text: "They are exactly the same concept with different names."
+        is_correct: false
+      - text: "Continuous Delivery is slower than Continuous Deployment."
+        is_correct: false
+      - text: "Continuous Deployment only works for mobile applications."
+        is_correct: false
+    explanation: "Continuous Delivery ensures code is always deployable and requires a manual decision to release to production. Continuous Deployment goes further by automatically releasing every validated change to production."
+    tags: [cd, concepts, devops]
+    difficulty: medium
+    points: 7
+
+  - id: q40
+    type: multiple_choice
+    question: "How do you implement a multi-stage CD pipeline with environment progression (Dev -> Staging -> Production)?"
+    code: |
+      stages:
+      - stage: BuildAndTest
+        jobs:
+        - job: Build
+          steps:
+          - script: dotnet build
+
+      - stage: DeployDev
+        dependsOn: BuildAndTest
+        jobs:
+        - deployment: DeployToDev
+          environment: development
+
+      - stage: DeployStaging
+        dependsOn: DeployDev
+        jobs:
+        - deployment: DeployToStaging
+          environment: staging
+
+      - stage: DeployProduction
+        dependsOn: DeployStaging
+        jobs:
+        - deployment: DeployToProduction
+          environment: production
+    options:
+      - text: "Use 'dependsOn' to create stage dependencies, ensuring each environment is validated before promoting to the next."
+        is_correct: true
+      - text: "Deploy to all environments simultaneously for faster delivery."
+        is_correct: false
+      - text: "Skip staging and deploy directly from development to production."
+        is_correct: false
+      - text: "Create separate pipelines for each environment without dependencies."
+        is_correct: false
+    explanation: "Stage dependencies ensure progressive validation: changes pass through dev, then staging (which mirrors production), before reaching production, reducing risk and catching environment-specific issues early."
+    tags: [cd, stages, environments]
+    difficulty: medium
+    points: 8
+
+  - id: q41
+    type: multiple_choice
+    question: "What is the purpose of 'rollback strategies' in CD pipelines?"
+    options:
+      - text: "To quickly revert to a previous stable version when a deployment causes issues, minimizing downtime and impact on users."
+        is_correct: true
+      - text: "To roll back code changes in Git to the previous commit."
+        is_correct: false
+      - text: "To restart the build pipeline from the beginning."
+        is_correct: false
+      - text: "To delete all production data and start fresh."
+        is_correct: false
+    explanation: "Rollback strategies (redeploying previous artifacts, blue-green switching, or traffic shifting) provide safety nets to quickly restore service when new deployments introduce critical bugs or performance issues."
+    tags: [cd, reliability, deployment-strategies]
+    difficulty: medium
+    points: 7
+
+  - id: q42
+    type: multiple_choice
+    question: "How can you optimize CI build times for a large .NET solution?"
+    code: |
+      # Use caching
+      - task: Cache@2
+        inputs:
+          key: 'nuget | "$(Agent.OS)" | **/packages.lock.json'
+          path: $(NUGET_PACKAGES)
+
+      # Use incremental builds
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: 'build'
+          arguments: '--no-restore'
+
+      # Parallel test execution
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: 'test'
+          arguments: '--no-build --parallel'
+    options:
+      - text: "Use caching for dependencies, enable incremental builds, run tests in parallel, and use self-hosted agents with faster hardware."
+        is_correct: true
+      - text: "Remove all tests to speed up the build."
+        is_correct: false
+      - text: "Always do clean builds to ensure consistency."
+        is_correct: false
+      - text: "Use the slowest agents to ensure thorough compilation."
+        is_correct: false
+    explanation: "Build optimization combines multiple strategies: caching prevents redundant package downloads, incremental builds avoid recompiling unchanged code, parallel test execution utilizes multiple cores, and proper agent selection provides adequate resources."
+    tags: [ci, performance, optimization]
+    difficulty: hard
+    points: 9
+
+  - id: q43
+    type: multiple_choice
+    question: "What is 'GitFlow' and how does it relate to CI/CD branching strategies?"
+    options:
+      - text: "A branching model using feature, develop, release, and main branches with specific merge rules that CI/CD pipelines can trigger on."
+        is_correct: true
+      - text: "A Git command that flows water through the repository."
+        is_correct: false
+      - text: "A deprecated workflow replaced by trunk-based development."
+        is_correct: false
+      - text: "A GitHub-specific feature not available in Azure Repos."
+        is_correct: false
+    explanation: "GitFlow defines branch types (feature/* for development, develop for integration, release/* for staging, main for production) that align with CI/CD stages, where pipelines trigger different actions based on branch naming conventions."
+    tags: [ci-cd, git, workflows]
+    difficulty: medium
+    points: 7
+
+  - id: q44
+    type: multiple_choice
+    question: "How do you implement 'secrets management' in CI/CD pipelines securely?"
+    code: |
+      # Link to Azure Key Vault
+      - task: AzureKeyVault@2
+        inputs:
+          azureSubscription: 'MyServiceConnection'
+          KeyVaultName: 'my-keyvault'
+          SecretsFilter: '*'
+          RunAsPreJob: true
+
+      # Use secrets in subsequent tasks
+      - task: AzureCLI@2
+        inputs:
+          scriptType: 'bash'
+          inlineScript: |
+            echo "Using secret from Key Vault"
+            # $(secretName) is now available
+        env:
+          API_KEY: $(ApiKey)
+    options:
+      - text: "Use Azure Key Vault integration, pipeline secret variables, or managed identities instead of hardcoding secrets in code or pipeline YAML."
+        is_correct: true
+      - text: "Store secrets in plain text in the repository for easy access."
+        is_correct: false
+      - text: "Email secrets to developers when they need them."
+        is_correct: false
+      - text: "Commit secrets to a private branch that only admins can access."
+        is_correct: false
+    explanation: "Secure secrets management prevents credential exposure by storing sensitive data in Azure Key Vault, using pipeline secret variables (encrypted at rest), or leveraging managed identities that eliminate the need to store credentials entirely."
+    tags: [ci-cd, security, secrets]
+    difficulty: hard
+    points: 9
+
+  - id: q45
+    type: multiple_choice
+    question: "What is 'Deployment Ring' strategy and how does it reduce risk in production releases?"
+    options:
+      - text: "Gradually rolling out changes to increasing percentages of users (Ring 0: Internal, Ring 1: Early adopters, Ring 2: All users) to detect issues before full rollout."
+        is_correct: true
+      - text: "Deploying to multiple Azure regions in a circular pattern."
+        is_correct: false
+      - text: "A round-robin load balancing algorithm."
+        is_correct: false
+      - text: "Encrypting deployments using ring signatures."
+        is_correct: false
+    explanation: "Deployment rings (or progressive exposure) release features incrementally: first to internal users, then to a small user subset, finally to everyone. Issues affect fewer users and can be caught before wide impact."
+    tags: [cd, deployment-strategies, risk-management]
+    difficulty: hard
+    points: 9
+    diagram: |
+      graph TD
+      A[New Release] --> B[Ring 0: Internal Users 1%]
+      B -- Monitor --> C{Issues?}
+      C -- No --> D[Ring 1: Early Adopters 10%]
+      C -- Yes --> E[Rollback]
+      D --> F{Issues?}
+      F -- No --> G[Ring 2: All Users 100%]
+      F -- Yes --> E

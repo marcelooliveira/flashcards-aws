@@ -1,0 +1,256 @@
+questions:
+  - id: q11
+    type: multiple_choice
+    question: "What is the purpose of using 'stages' in Azure Pipelines YAML?"
+    code: |
+      stages:
+      - stage: Build
+        jobs:
+        - job: BuildJob
+      - stage: Deploy
+        dependsOn: Build
+        jobs:
+        - deployment: DeployJob
+    options:
+      - text: "To organize pipeline execution into logical phases (e.g., Build, Test, Deploy) with dependencies and approval gates between them."
+        is_correct: true
+      - text: "To run multiple builds simultaneously on different operating systems."
+        is_correct: false
+      - text: "To define the physical locations where code is deployed."
+        is_correct: false
+      - text: "To specify different versions of the .NET SDK."
+        is_correct: false
+    explanation: "Stages allow you to organize your pipeline into major phases with dependencies, enabling complex deployment workflows with gates, approvals, and conditional execution between stages."
+    tags: [azure-devops, pipelines, stages]
+    difficulty: medium
+    points: 7
+
+  - id: q12
+    type: multiple_choice
+    question: "What is the difference between a 'job' and a 'deployment job' in Azure Pipelines?"
+    code: |
+      jobs:
+      - job: Build
+        steps:
+        - script: dotnet build
+
+      - deployment: Deploy
+        environment: production
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+              - script: echo deploying
+    options:
+      - text: "A deployment job targets an environment and maintains deployment history, while a regular job doesn't track deployments."
+        is_correct: true
+      - text: "A deployment job can only run on Linux agents."
+        is_correct: false
+      - text: "A regular job is faster because it skips security checks."
+        is_correct: false
+      - text: "There is no functional difference; they are interchangeable."
+        is_correct: false
+    explanation: "Deployment jobs are specialized jobs that target environments, track deployment history, support deployment strategies (runOnce, rolling, canary), and enable environment-specific approvals and checks."
+    tags: [azure-devops, pipelines, deployment]
+    difficulty: medium
+    points: 8
+
+  - id: q13
+    type: multiple_choice
+    question: "How do 'Branch Policies' in Azure Repos improve code quality?"
+    options:
+      - text: "By enforcing requirements like mandatory code reviews, successful builds, and work item linking before code can be merged."
+        is_correct: true
+      - text: "By automatically fixing syntax errors in committed code."
+        is_correct: false
+      - text: "By preventing developers from creating new branches."
+        is_correct: false
+      - text: "By compressing the Git repository to save storage space."
+        is_correct: false
+    explanation: "Branch Policies act as quality gates that enforce standards such as requiring pull request reviews, passing build validations, and linking work items, preventing low-quality code from entering protected branches."
+    tags: [azure-devops, repos, quality]
+    difficulty: medium
+    points: 7
+
+  - id: q14
+    type: multiple_choice
+    question: "What is a 'Template' in Azure Pipelines, and why is it useful?"
+    code: |
+      # template.yml
+      parameters:
+      - name: buildConfig
+        default: Release
+
+      steps:
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: build
+          configuration: ${{ parameters.buildConfig }}
+
+      # main pipeline
+      steps:
+      - template: template.yml
+        parameters:
+          buildConfig: Debug
+    options:
+      - text: "A reusable YAML file containing steps, jobs, or stages that can be referenced across multiple pipelines to promote DRY principles."
+        is_correct: true
+      - text: "A pre-built Docker image that contains all build tools."
+        is_correct: false
+      - text: "A visual designer for creating pipelines without code."
+        is_correct: false
+      - text: "A backup copy of the pipeline configuration."
+        is_correct: false
+    explanation: "Templates enable code reuse by extracting common pipeline logic into separate YAML files that can be parameterized and referenced by multiple pipelines, reducing duplication and maintenance overhead."
+    tags: [azure-devops, pipelines, templates]
+    difficulty: medium
+    points: 8
+
+  - id: q15
+    type: multiple_choice
+    question: "What is the purpose of 'Artifacts' in Azure Pipelines (not Azure Artifacts service)?"
+    code: |
+      - task: PublishBuildArtifacts@1
+        inputs:
+          PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+          ArtifactName: 'drop'
+
+      - task: DownloadBuildArtifacts@0
+        inputs:
+          artifactName: 'drop'
+    options:
+      - text: "To store and share files produced by one stage/job (e.g., compiled binaries) for use in subsequent stages or jobs."
+        is_correct: true
+      - text: "To automatically deploy applications to Azure App Service."
+        is_correct: false
+      - text: "To compress logs to save storage space."
+        is_correct: false
+      - text: "To scan code for security vulnerabilities."
+        is_correct: false
+    explanation: "Pipeline artifacts enable passing build outputs (binaries, packages, test results) between different stages, jobs, or even different pipelines, supporting multi-stage CI/CD workflows."
+    tags: [azure-devops, pipelines, artifacts]
+    difficulty: medium
+    points: 7
+
+  - id: q16
+    type: multiple_choice
+    question: "What is a 'Matrix' strategy in Azure Pipelines used for?"
+    code: |
+      strategy:
+        matrix:
+          Linux:
+            imageName: 'ubuntu-latest'
+          Windows:
+            imageName: 'windows-latest'
+          Mac:
+            imageName: 'macOS-latest'
+      pool:
+        vmImage: $(imageName)
+    options:
+      - text: "To run the same job multiple times in parallel with different variable values, such as testing across multiple OS or runtime versions."
+        is_correct: true
+      - text: "To define complex mathematical calculations in the pipeline."
+        is_correct: false
+      - text: "To organize work items in a two-dimensional grid."
+        is_correct: false
+      - text: "To encrypt pipeline secrets using matrix cryptography."
+        is_correct: false
+    explanation: "Matrix strategy allows you to define variables that create multiple job instances running in parallel, commonly used for cross-platform testing or testing against multiple framework/runtime versions."
+    tags: [azure-devops, pipelines, testing]
+    difficulty: medium
+    points: 8
+
+  - id: q17
+    type: multiple_choice
+    question: "What are 'Pipeline Conditions' and when are they evaluated?"
+    code: |
+      - stage: DeployToProduction
+        condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+        jobs:
+        - deployment: Deploy
+    options:
+      - text: "Expressions that determine whether a stage, job, or step should run based on previous results, variables, or custom logic."
+        is_correct: true
+      - text: "Health checks that monitor the production environment."
+        is_correct: false
+      - text: "Terms and conditions that users must accept before deploying."
+        is_correct: false
+      - text: "Weather conditions that affect cloud deployment times."
+        is_correct: false
+    explanation: "Conditions use expressions to control pipeline flow dynamically, enabling scenarios like deploying only from main branch, running steps only on failure, or conditional execution based on variable values."
+    tags: [azure-devops, pipelines, conditions]
+    difficulty: hard
+    points: 8
+
+  - id: q18
+    type: multiple_choice
+    question: "What is the purpose of 'Azure Key Vault' integration with Azure Pipelines?"
+    options:
+      - text: "To securely retrieve secrets (connection strings, API keys, certificates) at runtime without storing them in pipeline variables or code."
+        is_correct: true
+      - text: "To encrypt the entire Git repository."
+        is_correct: false
+      - text: "To generate SSH keys for build agents."
+        is_correct: false
+      - text: "To lock pipelines so only specific users can run them."
+        is_correct: false
+    explanation: "Azure Key Vault integration allows pipelines to fetch secrets securely at runtime using Azure service principals, ensuring sensitive data is never exposed in code, logs, or pipeline definitions."
+    tags: [azure-devops, security, key-vault]
+    difficulty: medium
+    points: 8
+
+  - id: q19
+    type: multiple_choice
+    question: "What is a 'Deployment Strategy' in Azure Pipelines, and which strategies are available?"
+    code: |
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+            - script: echo standard deployment
+
+      # OR
+      strategy:
+        rolling:
+          maxParallel: 2
+          deploy:
+            steps:
+            - script: echo rolling deployment
+    options:
+      - text: "A pattern defining how applications are deployed to environments; available strategies include runOnce, rolling, and canary."
+        is_correct: true
+      - text: "A marketing plan for promoting the deployed application."
+        is_correct: false
+      - text: "A backup and recovery plan for production databases."
+        is_correct: false
+      - text: "A load balancing algorithm used by Azure Load Balancer."
+        is_correct: false
+    explanation: "Deployment strategies control how updates roll out: runOnce deploys to all targets at once, rolling updates targets incrementally, and canary tests on a subset before full rollout, each with lifecycle hooks."
+    tags: [azure-devops, deployment, strategies]
+    difficulty: hard
+    points: 9
+
+  - id: q20
+    type: multiple_choice
+    question: "What is the purpose of 'Pipeline Caching' and how does it improve build performance?"
+    code: |
+      - task: Cache@2
+        inputs:
+          key: 'nuget | "$(Agent.OS)" | **/packages.lock.json'
+          restoreKeys: |
+            nuget | "$(Agent.OS)"
+          path: $(NUGET_PACKAGES)
+        displayName: Cache NuGet packages
+    options:
+      - text: "It stores and reuses dependencies (NuGet packages, npm modules) across pipeline runs, reducing download time and improving build speed."
+        is_correct: true
+      - text: "It saves the entire virtual machine state between builds."
+        is_correct: false
+      - text: "It compresses build logs to reduce storage costs."
+        is_correct: false
+      - text: "It caches user credentials for faster authentication."
+        is_correct: false
+    explanation: "Pipeline caching significantly reduces build times by storing and restoring dependencies, node_modules, NuGet packages, or other unchanging artifacts between runs, avoiding redundant downloads and restores."
+    tags: [azure-devops, pipelines, performance]
+    difficulty: hard
+    points: 9

@@ -1,0 +1,185 @@
+questions:
+  - id: q1
+    type: multiple_choice
+    question: "What is the primary purpose of Azure Boards in Azure DevOps?"
+    options:
+      - text: "To plan, track, and discuss work across teams using agile tools like Kanban boards, backlogs, and sprint planning."
+        is_correct: true
+      - text: "To store and version control source code repositories."
+        is_correct: false
+      - text: "To deploy applications to Azure App Service."
+        is_correct: false
+      - text: "To run automated security scans on Docker containers."
+        is_correct: false
+    explanation: "Azure Boards provides agile planning tools including work items, backlogs, sprints, and customizable Kanban boards to help teams plan and track their work effectively."
+    tags: [azure-devops, boards, agile]
+    difficulty: easy
+    points: 5
+
+  - id: q2
+    type: multiple_choice
+    question: "Which Azure DevOps service is responsible for hosting Git repositories and providing version control?"
+    options:
+      - text: "Azure Repos"
+        is_correct: true
+      - text: "Azure Artifacts"
+        is_correct: false
+      - text: "Azure Pipelines"
+        is_correct: false
+      - text: "Azure Test Plans"
+        is_correct: false
+    explanation: "Azure Repos provides Git repositories or Team Foundation Version Control (TFVC) for source control of your code, enabling collaboration and version management."
+    tags: [azure-devops, repos, version-control]
+    difficulty: easy
+    points: 5
+
+  - id: q3
+    type: multiple_choice
+    question: "What is the difference between a Build Pipeline and a Release Pipeline in Azure Pipelines?"
+    options:
+      - text: "Build Pipelines compile and test code to produce artifacts; Release Pipelines deploy those artifacts to environments."
+        is_correct: true
+      - text: "Build Pipelines deploy to production; Release Pipelines deploy to staging only."
+        is_correct: false
+      - text: "There is no difference; they are the same thing with different names."
+        is_correct: false
+      - text: "Build Pipelines only work with .NET; Release Pipelines work with all languages."
+        is_correct: false
+    explanation: "Build Pipelines (CI) focus on continuous integration - compiling, testing, and packaging code. Release Pipelines (CD) focus on continuous delivery - deploying artifacts through various stages/environments."
+    tags: [azure-devops, pipelines, ci-cd]
+    difficulty: medium
+    points: 6
+
+  - id: q4
+    type: multiple_choice
+    question: "What file format is used to define pipelines as code in Azure DevOps?"
+    code: |
+      trigger:
+      - main
+
+      pool:
+        vmImage: 'ubuntu-latest'
+
+      steps:
+      - task: DotNetCoreCLI@2
+    options:
+      - text: "YAML (Yet Another Markup Language)"
+        is_correct: true
+      - text: "JSON (JavaScript Object Notation)"
+        is_correct: false
+      - text: "XML (Extensible Markup Language)"
+        is_correct: false
+      - text: "TOML (Tom's Obvious Minimal Language)"
+        is_correct: false
+    explanation: "Azure Pipelines uses YAML files (typically azure-pipelines.yml) to define CI/CD pipelines as code, enabling version control and reusability of pipeline definitions."
+    tags: [azure-devops, pipelines, yaml]
+    difficulty: easy
+    points: 5
+
+  - id: q5
+    type: multiple_choice
+    question: "What is the purpose of Azure Artifacts in the Azure DevOps ecosystem?"
+    options:
+      - text: "To host and manage package feeds for NuGet, npm, Maven, and Python packages."
+        is_correct: true
+      - text: "To store build logs and test results."
+        is_correct: false
+      - text: "To manage virtual machines for build agents."
+        is_correct: false
+      - text: "To create work item templates."
+        is_correct: false
+    explanation: "Azure Artifacts provides package management capabilities, allowing teams to create, host, and share packages (NuGet, npm, Maven, Python, Universal) with their organization or publicly."
+    tags: [azure-devops, artifacts, packages]
+    difficulty: medium
+    points: 6
+
+  - id: q6
+    type: multiple_choice
+    question: "In Azure DevOps, what is a 'Service Connection' used for?"
+    options:
+      - text: "To securely connect Azure Pipelines to external services like Azure, GitHub, or Docker registries."
+        is_correct: true
+      - text: "To connect developers to the VPN network."
+        is_correct: false
+      - text: "To link work items across different projects."
+        is_correct: false
+      - text: "To synchronize code between multiple Git repositories."
+        is_correct: false
+    explanation: "Service Connections store credentials and connection details to external services, enabling pipelines to authenticate and interact with Azure subscriptions, container registries, and other platforms securely."
+    tags: [azure-devops, pipelines, security]
+    difficulty: medium
+    points: 7
+
+  - id: q7
+    type: multiple_choice
+    question: "What are the two types of agents available in Azure Pipelines?"
+    options:
+      - text: "Microsoft-hosted agents and Self-hosted agents"
+        is_correct: true
+      - text: "Cloud agents and On-premises agents"
+        is_correct: false
+      - text: "Windows agents and Linux agents"
+        is_correct: false
+      - text: "Free agents and Premium agents"
+        is_correct: false
+    explanation: "Microsoft-hosted agents are managed by Microsoft and provide a clean VM for each run. Self-hosted agents are installed and managed by you on your own infrastructure, providing more control and customization."
+    tags: [azure-devops, pipelines, agents]
+    difficulty: easy
+    points: 5
+
+  - id: q8
+    type: multiple_choice
+    question: "Which Azure DevOps feature allows you to define approval gates and manual interventions in deployment pipelines?"
+    options:
+      - text: "Environments with approval checks"
+        is_correct: true
+      - text: "Branch policies"
+        is_correct: false
+      - text: "Work item queries"
+        is_correct: false
+      - text: "Test plans"
+        is_correct: false
+    explanation: "Environments in Azure Pipelines can be configured with approval and check policies, requiring manual approval or automated validations before deployments proceed to critical stages like production."
+    tags: [azure-devops, pipelines, deployment]
+    difficulty: medium
+    points: 7
+
+  - id: q9
+    type: multiple_choice
+    question: "What is a 'Pull Request' in Azure Repos, and what is its primary benefit?"
+    options:
+      - text: "A request to merge code changes from one branch to another, enabling code review and quality gates before integration."
+        is_correct: true
+      - text: "A request to download code from the repository to a local machine."
+        is_correct: false
+      - text: "A request to delete a branch after work is completed."
+        is_correct: false
+      - text: "A request to upgrade the Azure DevOps subscription plan."
+        is_correct: false
+    explanation: "Pull Requests (PRs) are a core Git workflow feature that facilitates code review, discussion, and quality validation before changes are merged into the main codebase, improving code quality and team collaboration."
+    tags: [azure-devops, repos, pull-request]
+    difficulty: easy
+    points: 5
+
+  - id: q10
+    type: multiple_choice
+    question: "In Azure Pipelines, what is the purpose of 'Variables' and 'Variable Groups'?"
+    code: |
+      variables:
+        buildConfiguration: 'Release'
+
+      steps:
+      - script: dotnet build --configuration $(buildConfiguration)
+    options:
+      - text: "To store reusable values like connection strings, API keys, or configuration settings that can be used across pipelines."
+        is_correct: true
+      - text: "To define the programming language version used in the build."
+        is_correct: false
+      - text: "To specify which developers have access to the pipeline."
+        is_correct: false
+      - text: "To determine the order in which pipeline tasks execute."
+        is_correct: false
+    explanation: "Variables allow you to parameterize your pipelines, making them more flexible and reusable. Variable Groups enable sharing of variables across multiple pipelines and can integrate with Azure Key Vault for secure secret management."
+    tags: [azure-devops, pipelines, variables]
+    difficulty: medium
+    points: 6
