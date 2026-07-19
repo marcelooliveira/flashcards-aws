@@ -1,0 +1,242 @@
+questions:
+  - id: q21
+    type: multiple_choice
+    question: "What is the purpose of 'Pipeline Resources' and how do they enable complex CI/CD workflows?"
+    code: |
+      resources:
+        pipelines:
+        - pipeline: upstream-build
+          source: MyProject-CI
+          trigger:
+            branches:
+              include:
+              - main
+        repositories:
+        - repository: templates
+          type: git
+          name: MyOrg/pipeline-templates
+    options:
+      - text: "Resources allow pipelines to trigger based on other pipeline completions and reference external repositories, enabling pipeline orchestration and template reuse."
+        is_correct: true
+      - text: "Resources define the CPU and memory limits for build agents."
+        is_correct: false
+      - text: "Resources are storage accounts where artifacts are permanently archived."
+        is_correct: false
+      - text: "Resources encrypt all data flowing through the pipeline."
+        is_correct: false
+    explanation: "Pipeline resources enable advanced scenarios like pipeline chaining (CD triggered by CI), multi-repo builds, and centralized template libraries, supporting enterprise-scale DevOps architectures."
+    tags: [azure-devops, pipelines, orchestration]
+    difficulty: hard
+    points: 9
+
+  - id: q22
+    type: multiple_choice
+    question: "How do 'Runtime Parameters' differ from regular variables in Azure Pipelines?"
+    code: |
+      parameters:
+      - name: environment
+        type: string
+        default: dev
+        values:
+        - dev
+        - staging
+        - production
+
+      stages:
+      - stage: Deploy_${{ parameters.environment }}
+        jobs:
+        - job: DeployJob
+    options:
+      - text: "Runtime parameters are evaluated at queue time before the pipeline runs, allowing users to select values and enabling compile-time template expansion."
+        is_correct: true
+      - text: "Runtime parameters are faster because they use the CPU cache."
+        is_correct: false
+      - text: "Regular variables are encrypted; runtime parameters are not."
+        is_correct: false
+      - text: "Runtime parameters can only be used with Microsoft-hosted agents."
+        is_correct: false
+    explanation: "Parameters are evaluated at compile/queue time and can control template logic (${{ }}), while variables are evaluated at runtime. This enables dynamic pipeline structures based on user input."
+    tags: [azure-devops, pipelines, parameters]
+    difficulty: hard
+    points: 9
+
+  - id: q23
+    type: multiple_choice
+    question: "What are 'Checks' in Azure Pipelines environments, and why are they critical for production deployments?"
+    options:
+      - text: "Automated validations (Azure Functions, REST APIs, Azure Monitor queries) that must pass before deployment proceeds, ensuring environment health and compliance."
+        is_correct: true
+      - text: "Manual code review tasks that developers must complete."
+        is_correct: false
+      - text: "Billing verification to ensure the Azure subscription has sufficient credits."
+        is_correct: false
+      - text: "Antivirus scans performed on deployment packages."
+        is_correct: false
+    explanation: "Checks enable programmatic gates like invoking Azure Functions to validate infrastructure state, querying Azure Monitor for alerts, or calling external REST APIs before allowing deployments to critical environments."
+    tags: [azure-devops, environments, compliance]
+    difficulty: hard
+    points: 10
+
+  - id: q24
+    type: multiple_choice
+    question: "Analyze this YAML. What is the purpose of the 'extends' keyword?"
+    code: |
+      # security-template.yml
+      steps:
+      - task: WhiteSource@21
+      - task: CredScan@3
+
+      # azure-pipelines.yml
+      extends:
+        template: security-template.yml
+
+      stages:
+      - stage: Build
+        jobs:
+        - job: BuildJob
+    options:
+      - text: "It enforces a base template that wraps the entire pipeline, ensuring mandatory steps (like security scans) cannot be bypassed."
+        is_correct: true
+      - text: "It extends the pipeline runtime by 50% to allow longer builds."
+        is_correct: false
+      - text: "It creates a backup copy of the pipeline definition."
+        is_correct: false
+      - text: "It allows the pipeline to run on legacy TFS servers."
+        is_correct: false
+    explanation: "The 'extends' keyword implements template inheritance, forcing pipelines to include required security, compliance, or governance steps defined in a central template, preventing teams from skipping critical validations."
+    tags: [azure-devops, security, templates]
+    difficulty: hard
+    points: 10
+
+  - id: q25
+    type: multiple_choice
+    question: "What is 'Service Principal' authentication, and why is it preferred over using personal access tokens (PATs) in production pipelines?"
+    options:
+      - text: "Service Principals are Azure AD identities with role-based permissions that don't expire like PATs, providing better security and auditability."
+        is_correct: true
+      - text: "Service Principals are faster because they use quantum encryption."
+        is_correct: false
+      - text: "PATs are actually more secure; Service Principals are deprecated."
+        is_correct: false
+      - text: "Service Principals can only be used with Azure DevOps Server on-premises."
+        is_correct: false
+    explanation: "Service Principals integrate with Azure RBAC, support managed identities, provide detailed audit logs, and don't tie permissions to individual users, making them ideal for automated production deployments."
+    tags: [azure-devops, security, authentication]
+    difficulty: hard
+    points: 9
+
+  - id: q26
+    type: multiple_choice
+    question: "How does 'Agent Pool Management' with self-hosted agents improve security and performance in enterprise environments?"
+    options:
+      - text: "Self-hosted agents can run behind corporate firewalls, use organization-specific tools/certificates, and avoid public internet exposure of build processes."
+        is_correct: true
+      - text: "Self-hosted agents are free and never count against Azure DevOps parallel job limits."
+        is_correct: false
+      - text: "Microsoft-hosted agents are insecure and should never be used."
+        is_correct: false
+      - text: "Self-hosted agents automatically scale based on pipeline demand."
+        is_correct: false
+    explanation: "Self-hosted agents provide control over the build environment, enable access to internal resources without exposing them publicly, support pre-installed tools/dependencies, and can use organizational security policies and certificates."
+    tags: [azure-devops, agents, security]
+    difficulty: medium
+    points: 8
+
+  - id: q27
+    type: multiple_choice
+    question: "What is 'Multi-stage Pipeline Validation' using the '--validate' flag, and why is it important?"
+    code: |
+      # Validate pipeline syntax without running it
+      az pipelines run --id 123 --parameters validateOnly=true
+
+      # OR in YAML
+      - script: |
+          az pipelines build queue --definition-id 123 --dry-run
+    options:
+      - text: "It validates pipeline YAML syntax, template expansion, and variable resolution without executing tasks, catching errors before production runs."
+        is_correct: true
+      - text: "It validates that all developers have signed their commits."
+        is_correct: false
+      - text: "It checks if the Azure subscription has enough compute quota."
+        is_correct: false
+      - text: "It ensures all work items are closed before deployment."
+        is_correct: false
+    explanation: "Pre-run validation detects YAML syntax errors, missing template files, undefined variables, and invalid expressions before consuming build minutes or affecting environments, saving time and preventing failures."
+    tags: [azure-devops, pipelines, validation]
+    difficulty: hard
+    points: 9
+
+  - id: q28
+    type: multiple_choice
+    question: "What is the purpose of 'Pipeline Decorators' in Azure DevOps?"
+    options:
+      - text: "Organization-level extensions that automatically inject steps into all pipelines, enforcing security scans, compliance checks, or telemetry collection."
+        is_correct: true
+      - text: "UI themes that customize the appearance of Azure Pipelines."
+        is_correct: false
+      - text: "Comments that document pipeline YAML for future developers."
+        is_correct: false
+      - text: "Performance optimizations applied by the Azure DevOps JIT compiler."
+        is_correct: false
+    explanation: "Pipeline decorators are custom extensions that inject steps (before/after each job) automatically across all pipelines in an organization, ensuring centralized governance for security scanning, artifact signing, or audit logging without modifying individual pipelines."
+    tags: [azure-devops, governance, extensions]
+    difficulty: hard
+    points: 10
+
+  - id: q29
+    type: multiple_choice
+    question: "How do 'Multi-repo Checkouts' enable advanced monorepo or microservices CI/CD patterns?"
+    code: |
+      resources:
+        repositories:
+        - repository: shared-lib
+          type: git
+          name: MyOrg/SharedLibrary
+        - repository: frontend
+          type: git
+          name: MyOrg/Frontend
+
+      steps:
+      - checkout: self
+      - checkout: shared-lib
+      - checkout: frontend
+      - script: dotnet build $(Build.SourcesDirectory)/shared-lib/lib.csproj
+    options:
+      - text: "They allow a single pipeline to clone and build code from multiple repositories simultaneously, supporting cross-repo dependencies and monorepo strategies."
+        is_correct: true
+      - text: "They automatically merge code from multiple branches into one."
+        is_correct: false
+      - text: "They create separate virtual machines for each repository."
+        is_correct: false
+      - text: "They are only supported for GitHub repositories, not Azure Repos."
+        is_correct: false
+    explanation: "Multi-repo checkouts enable complex scenarios like building shared libraries from one repo while testing applications from another, supporting microservices architectures where components span multiple repositories."
+    tags: [azure-devops, pipelines, architecture]
+    difficulty: hard
+    points: 9
+
+  - id: q30
+    type: multiple_choice
+    question: "What is 'Pipeline-as-Code Security Scanning' and which tools can be integrated to detect secrets or vulnerabilities in YAML definitions?"
+    options:
+      - text: "Automated scanning of pipeline YAML and scripts for hardcoded secrets, insecure practices, or misconfigurations using tools like Credential Scanner, GitHub Advanced Security, or custom validators."
+        is_correct: true
+      - text: "Manual code review by security teams before each deployment."
+        is_correct: false
+      - text: "Encryption of all YAML files in the repository."
+        is_correct: false
+      - text: "Using only Microsoft-hosted agents to ensure security."
+        is_correct: false
+    explanation: "Scanning pipeline definitions prevents security issues like hardcoded passwords, exposed API keys, or insecure task configurations. Tools like CredScan, GitHub Advanced Security for Azure DevOps, and custom pre-commit hooks detect these issues early."
+    tags: [azure-devops, security, devsecops]
+    difficulty: hard
+    points: 10
+    diagram: |
+      graph LR
+      A[Push YAML] --> B[CredScan Pre-Commit Hook]
+      B -- Secrets Found --> C[Block Commit]
+      B -- Clean --> D[Allow Commit]
+      D --> E[PR Build Validation]
+      E --> F[Advanced Security Scan]
+      F -- Vulnerabilities --> G[Block Merge]
+      F -- Clean --> H[Approve PR]
