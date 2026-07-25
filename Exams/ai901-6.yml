@@ -1,0 +1,301 @@
+questions:
+- id: q081
+  type: multiple_choice
+  question: |
+    A company needs to extract structured data (invoice numbers, dates, amounts) from thousands of PDF invoices. Which Azure AI service in Foundry should they use?
+  options:
+    - text: Azure AI Document Intelligence (formerly Form Recognizer) via Content Understanding
+      is_correct: true
+    - text: Azure AI Vision for general image analysis only
+      is_correct: false
+    - text: Azure AI Speech for audio transcription
+      is_correct: false
+    - text: Azure AI Language for sentiment analysis
+      is_correct: false
+  explanation: |
+    Correct: Azure AI Document Intelligence (accessed through Content Understanding in Foundry) is specifically designed to extract structured information from documents and forms, including invoices, receipts, and custom documents.
+    Incorrect:
+    - General image analysis doesn't understand document structure.
+    - Speech transcription is for audio, not document extraction.
+    - Sentiment analysis examines emotions in text, not extracting structured data.
+  diagram: |
+    graph TD
+      A[PDF Invoices] --> B[Azure AI Document Intelligence]
+      B --> C[Layout Analysis]
+      C --> D[Field Extraction]
+      D --> E[Invoice Number]
+      D --> F[Date]
+      D --> G[Amount]
+      E --> H[Structured Data Output]
+      F --> H
+      G --> H
+
+- id: q082
+  type: multiple_choice
+  question: |
+    When using Content Understanding in Azure AI Foundry to extract data from forms, which approach provides the BEST results for custom form layouts?
+  options:
+    - text: Train a custom model with sample forms or use prebuilt models for common document types
+      is_correct: true
+    - text: Use only general OCR without any form-specific processing
+      is_correct: false
+    - text: Manually annotate every single form before extraction
+      is_correct: false
+    - text: Convert forms to audio files first
+      is_correct: false
+  explanation: |
+    Correct: Content Understanding offers prebuilt models for common documents (invoices, receipts, ID cards) and allows training custom models with labeled samples for unique form layouts, providing optimal extraction accuracy.
+    Incorrect:
+    - General OCR extracts text but doesn't understand form structure and fields.
+    - Manual annotation of production forms is impractical; training with samples is sufficient.
+    - Audio conversion loses the visual structure needed for form extraction.
+  diagram: |
+    graph TD
+      A[Form Documents] --> B{Document Type}
+      B --> C[Common Type: Use Prebuilt Model]
+      B --> D[Custom Type: Train Custom Model]
+      C --> E[Field Extraction]
+      D --> F[Label Samples]
+      F --> E
+      E --> G[Structured Data]
+
+- id: q083
+  type: multiple_choice
+  question: |
+    In a Blazor WebAssembly application using Azure AI Foundry SDK for document extraction, which NuGet package should be installed?
+  options:
+    - text: Azure.AI.FormRecognizer or Azure.AI.DocumentIntelligence
+      is_correct: true
+    - text: Azure.Storage.Blobs only
+      is_correct: false
+    - text: Azure.AI.Vision.ImageAnalysis only
+      is_correct: false
+    - text: Microsoft.EntityFrameworkCore
+      is_correct: false
+  explanation: |
+    Correct: The Azure.AI.FormRecognizer or Azure.AI.DocumentIntelligence packages provide the necessary client libraries for document and form analysis, including Content Understanding capabilities.
+    Incorrect:
+    - Storage.Blobs is for file storage, not document analysis.
+    - Vision.ImageAnalysis is for general image processing, not document structure extraction.
+    - EntityFrameworkCore is for database access, not AI document processing.
+  diagram: |
+    graph TD
+      A[.NET 9 Blazor App] --> B[Install NuGet Package]
+      B --> C[Azure.AI.DocumentIntelligence]
+      C --> D[DocumentIntelligenceClient]
+      D --> E[Analyze Documents]
+
+- id: q084
+  type: multiple_choice
+  question: |
+    How can Content Understanding in Azure AI Foundry extract information from images that contain text and visual elements (like product labels)?
+  options:
+    - text: Use OCR capabilities combined with layout analysis to extract both text and understand spatial relationships
+      is_correct: true
+    - text: Convert images to audio files and use speech recognition
+      is_correct: false
+    - text: Use only sentiment analysis on the image metadata
+      is_correct: false
+    - text: Manually type all text visible in images
+      is_correct: false
+  explanation: |
+    Correct: Content Understanding combines OCR (text extraction) with layout analysis to understand the spatial arrangement and relationships of text and visual elements, enabling comprehensive information extraction from images.
+    Incorrect:
+    - Audio conversion loses visual and spatial information.
+    - Sentiment analysis on metadata doesn't extract content from images.
+    - Manual typing is inefficient and defeats the purpose of AI automation.
+  diagram: |
+    graph TD
+      A[Product Label Image] --> B[Content Understanding]
+      B --> C[OCR Text Extraction]
+      B --> D[Layout Analysis]
+      C --> E[Product Name]
+      D --> F[Spatial Relationships]
+      E --> G[Structured Information]
+      F --> G
+
+- id: q085
+  type: multiple_choice
+  question: |
+    A media company wants to extract spoken content and identify speakers from video files. Which Content Understanding capability should they use?
+  options:
+    - text: Audio and video indexing with speech-to-text and speaker diarization
+      is_correct: true
+    - text: Image classification only
+      is_correct: false
+    - text: Text sentiment analysis
+      is_correct: false
+    - text: Document form extraction
+      is_correct: false
+  explanation: |
+    Correct: Azure AI Video Indexer (part of Content Understanding) provides speech-to-text transcription, speaker identification (diarization), and can extract insights from both audio and visual content in videos.
+    Incorrect:
+    - Image classification doesn't process audio or temporal video content.
+    - Sentiment analysis works on existing text, not extracting it from video.
+    - Form extraction is for documents, not video files.
+  diagram: |
+    graph TD
+      A[Video File] --> B[Content Understanding]
+      B --> C[Audio Extraction]
+      C --> D[Speech-to-Text]
+      D --> E[Speaker Diarization]
+      B --> F[Visual Analysis]
+      E --> G[Timestamped Transcription]
+      F --> G
+
+- id: q086
+  type: multiple_choice
+  question: |
+    When building a Blazor application that extracts information from uploaded documents, what is the typical workflow?
+  options:
+    - text: Upload document to storage, send URL or stream to Document Intelligence API, receive structured data results
+      is_correct: true
+    - text: Email documents to Azure support for manual processing
+      is_correct: false
+    - text: Print documents and scan them with a physical scanner
+      is_correct: false
+    - text: Convert documents to executable files
+      is_correct: false
+  explanation: |
+    Correct: The standard workflow involves uploading the document to accessible storage (or sending directly), calling the Document Intelligence API with the document URL or stream, and receiving structured JSON results with extracted fields.
+    Incorrect:
+    - Manual processing via support defeats automation purposes.
+    - Physical scanning is unnecessary for digital documents.
+    - Converting to executables is unrelated to data extraction.
+  diagram: |
+    graph TD
+      A[User Uploads Document] --> B[Blazor App]
+      B --> C[Upload to Azure Storage]
+      C --> D[Get Document URL]
+      D --> E[Call Document Intelligence API]
+      E --> F[Analyze Document]
+      F --> G[Return Structured JSON]
+      G --> H[Display Extracted Data]
+
+- id: q087
+  type: multiple_choice
+  question: |
+    Which information can Azure AI Document Intelligence extract from receipt images using prebuilt models?
+  options:
+    - text: Merchant name, transaction date, total amount, line items, and tax
+      is_correct: true
+    - text: Only the image dimensions and file size
+      is_correct: false
+    - text: Customer's future purchase intentions
+      is_correct: false
+    - text: Audio descriptions of the receipt
+      is_correct: false
+  explanation: |
+    Correct: The prebuilt receipt model in Document Intelligence extracts key business fields including merchant information, dates, amounts, itemized purchases, tax, and tips from receipt images.
+    Incorrect:
+    - Image metadata doesn't provide business information.
+    - Future intentions require predictive analytics, not extraction.
+    - Receipts are visual documents, not audio.
+  diagram: |
+    graph TD
+      A[Receipt Image] --> B[Prebuilt Receipt Model]
+      B --> C[Merchant Name]
+      B --> D[Transaction Date]
+      B --> E[Total Amount]
+      B --> F[Line Items]
+      B --> G[Tax]
+      C --> H[Structured Receipt Data]
+      D --> H
+      E --> H
+      F --> H
+      G --> H
+
+- id: q088
+  type: multiple_choice
+  question: |
+    When extracting information from audio files using Content Understanding, what metadata is typically available in addition to the transcription?
+  options:
+    - text: Timestamps, speaker identification, language detection, and confidence scores
+      is_correct: true
+    - text: Only the raw text without any additional information
+      is_correct: false
+    - text: Image descriptions from the audio
+      is_correct: false
+    - text: Database schema definitions
+      is_correct: false
+  explanation: |
+    Correct: Audio analysis provides rich metadata including precise timestamps for each word/phrase, speaker diarization (who said what), detected language, and confidence scores for accuracy assessment.
+    Incorrect:
+    - Raw text alone loses valuable temporal and speaker context.
+    - Audio files don't contain images to describe.
+    - Database schemas are unrelated to audio content.
+  diagram: |
+    graph TD
+      A[Audio File] --> B[Content Understanding]
+      B --> C[Transcription Text]
+      B --> D[Timestamps]
+      B --> E[Speaker IDs]
+      B --> F[Language Detection]
+      B --> G[Confidence Scores]
+      C --> H[Rich Audio Intelligence]
+      D --> H
+      E --> H
+      F --> H
+      G --> H
+
+- id: q089
+  type: multiple_choice
+  question: |
+    In a .NET 9 Blazor app using Content Understanding for video analysis, how can you extract information about objects appearing in the video?
+  options:
+    - text: Use video indexing capabilities that detect objects, scenes, and activities with timestamps
+      is_correct: true
+    - text: Manually watch and annotate every frame
+      is_correct: false
+    - text: Convert video to a single image and analyze that
+      is_correct: false
+    - text: Use text analysis on the video filename
+      is_correct: false
+  explanation: |
+    Correct: Azure Video Indexer (Content Understanding) automatically detects objects, scenes, faces, activities, and more across video frames, providing timestamped results for when each element appears.
+    Incorrect:
+    - Manual annotation is time-consuming and defeats automation.
+    - Single image conversion loses temporal information and most content.
+    - Filenames rarely contain actual video content information.
+  diagram: |
+    graph TD
+      A[Video File] --> B[Video Indexer]
+      B --> C[Object Detection]
+      B --> D[Scene Recognition]
+      B --> E[Activity Detection]
+      C --> F[Timestamped Results]
+      D --> F
+      E --> F
+      F --> G[00:15 - Person detected]
+      F --> H[00:32 - Car detected]
+
+- id: q090
+  type: multiple_choice
+  question: |
+    What is a best practice for handling large document processing workloads in a Blazor application using Content Understanding?
+  options:
+    - text: Implement asynchronous processing with progress indicators and batch processing capabilities
+      is_correct: true
+    - text: Process all documents synchronously on the UI thread
+      is_correct: false
+    - text: Avoid showing any progress to users
+      is_correct: false
+    - text: Process only one document per day
+      is_correct: false
+  explanation: |
+    Correct: Document analysis can take time, especially for large files or batches. Using async/await patterns, showing progress indicators, and implementing batch processing provides better user experience and efficient resource utilization.
+    Incorrect:
+    - Synchronous processing blocks the UI and creates poor experience.
+    - Users need feedback during long-running operations.
+    - Artificial limits on processing frequency are unnecessary and inefficient.
+  diagram: |
+    graph TD
+      A[Multiple Documents] --> B[Queue for Processing]
+      B --> C[Async Batch Processing]
+      C --> D[Document 1 Analysis]
+      C --> E[Document 2 Analysis]
+      C --> F[Document N Analysis]
+      D --> G[Update Progress UI]
+      E --> G
+      F --> G
+      G --> H[All Results Complete]

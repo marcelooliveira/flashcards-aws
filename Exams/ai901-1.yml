@@ -1,0 +1,548 @@
+questions:
+- id: q001
+  type: multiple_choice
+  question: |
+    A healthcare organization is developing an AI system to assist in diagnosing diseases. They want to ensure the system performs equally well across different demographic groups.
+    Which principle of responsible AI should be prioritized to address this concern?
+  options:
+    - text: Fairness
+      is_correct: true
+    - text: Reliability and safety
+      is_correct: false
+    - text: Privacy and security
+      is_correct: false
+    - text: Transparency
+      is_correct: false
+  explanation: |
+    Correct: Fairness in AI ensures that the system does not discriminate against any particular group and performs equally well across different demographics, ages, genders, and ethnicities.
+    Incorrect:
+    - Reliability and safety focus on consistent performance and harm prevention, not demographic equality.
+    - Privacy and security deal with data protection, not equal treatment.
+    - Transparency relates to explaining how the AI works, not ensuring equal outcomes.
+  diagram: |
+    graph TD
+      A[Training Data] --> B[AI Model]
+      B --> C[Evaluation across Demographics]
+      C --> D[Fair Predictions for All Groups]
+
+- id: q002
+  type: multiple_choice
+  question: |
+    An autonomous vehicle company is testing their AI system. What is the MOST important consideration to ensure reliability and safety?
+  options:
+    - text: The system should perform consistently under various conditions and have fail-safe mechanisms
+      is_correct: true
+    - text: The system should be available to all users regardless of their background
+      is_correct: false
+    - text: The system should explain every decision it makes in real-time
+      is_correct: false
+    - text: The system should collect minimal data from users
+      is_correct: false
+  explanation: |
+    Correct: Reliability and safety require that AI systems perform consistently and predictably, especially in critical applications like autonomous vehicles. Fail-safe mechanisms are essential to prevent harm.
+    Incorrect:
+    - Availability to all users relates to inclusiveness, not reliability.
+    - Real-time explanations relate to transparency but don't ensure safety.
+    - Minimal data collection relates to privacy, not reliability.
+  diagram: |
+    graph TD
+      A[Various Conditions] --> B[AI System Testing]
+      B --> C[Consistent Performance]
+      B --> D[Fail-Safe Mechanisms]
+      C --> E[Safe Operation]
+      D --> E
+
+- id: q003
+  type: multiple_choice
+  question: |
+    A financial services company is implementing an AI-powered chatbot that will handle customer personal information. Which TWO principles should be prioritized? (Choose two.)
+  options:
+    - text: Privacy and security to protect customer data
+      is_correct: true
+    - text: Accountability to ensure responsible use of the system
+      is_correct: true
+    - text: Transparency to explain the chatbot's limitations
+      is_correct: false
+    - text: Inclusiveness to support multiple languages
+      is_correct: false
+  explanation: |
+    Correct:
+    - Privacy and security are critical when handling personal financial information to prevent data breaches and unauthorized access.
+    - Accountability ensures there are clear processes for monitoring and responsible use of customer data.
+    Incorrect:
+    - While transparency is important, the primary concern with personal data is protection.
+    - Inclusiveness is valuable but secondary to data protection in this context.
+  diagram: |
+    graph TD
+      A[Customer Data] --> B[Encryption]
+      B --> C[Secure Storage]
+      D[Access Controls] --> C
+      E[Audit Logs] --> F[Accountability]
+      C --> F
+
+- id: q004
+  type: multiple_choice
+  question: |
+    Which scenario BEST demonstrates a consideration for inclusiveness in AI?
+  options:
+    - text: Designing a voice assistant that recognizes various accents and speech patterns
+      is_correct: true
+    - text: Encrypting all data processed by the AI system
+      is_correct: false
+    - text: Providing documentation about how the AI makes decisions
+      is_correct: false
+    - text: Implementing error handling to prevent system crashes
+      is_correct: false
+  explanation: |
+    Correct: Inclusiveness means designing AI systems that work for people with diverse characteristics, including different accents, languages, abilities, and backgrounds.
+    Incorrect:
+    - Encryption relates to privacy and security.
+    - Documentation about decisions relates to transparency.
+    - Error handling relates to reliability and safety.
+  diagram: |
+    graph TD
+      A[Diverse Users] --> B[Various Accents]
+      A --> C[Different Languages]
+      A --> D[Varied Abilities]
+      B --> E[Inclusive AI System]
+      C --> E
+      D --> E
+
+- id: q005
+  type: multiple_choice
+  question: |
+    A company deploys an AI system for loan approvals. To meet transparency requirements, what should they provide?
+  options:
+    - text: Clear explanations of factors that influenced each decision
+      is_correct: true
+    - text: Access to the source code for all applicants
+      is_correct: false
+    - text: A guarantee that the system will never make mistakes
+      is_correct: false
+    - text: Real-time monitoring of all system activities
+      is_correct: false
+  explanation: |
+    Correct: Transparency requires that users understand how AI systems make decisions. For loan approvals, applicants should know which factors influenced the outcome.
+    Incorrect:
+    - Sharing source code is not practical and doesn't necessarily help users understand decisions.
+    - No AI system can guarantee zero mistakes; this relates to reliability, not transparency.
+    - Monitoring relates to accountability and security, not transparency to users.
+  diagram: |
+    graph TD
+      A[Loan Application] --> B[AI Processing]
+      B --> C[Decision Factors]
+      C --> D[Credit Score Impact]
+      C --> E[Income Analysis]
+      C --> F[Debt Ratio]
+      D --> G[Explanation to Applicant]
+      E --> G
+      F --> G
+
+- id: q006
+  type: multiple_choice
+  question: |
+    Which of the following BEST describes accountability in AI systems?
+  options:
+    - text: Establishing clear governance and oversight with designated responsibility for AI system outcomes
+      is_correct: true
+    - text: Making the AI system available to users with disabilities
+      is_correct: false
+    - text: Ensuring the AI system uses encrypted communications
+      is_correct: false
+    - text: Training the AI model on diverse datasets
+      is_correct: false
+  explanation: |
+    Correct: Accountability means having clear governance structures, defined roles and responsibilities, and processes to ensure the AI system is used appropriately and issues are addressed.
+    Incorrect:
+    - Availability to users with disabilities relates to inclusiveness.
+    - Encrypted communications relate to privacy and security.
+    - Diverse datasets relate to fairness.
+  diagram: |
+    graph TD
+      A[AI System] --> B[Governance Framework]
+      B --> C[Designated Owners]
+      B --> D[Oversight Processes]
+      B --> E[Audit Trails]
+      C --> F[Accountability]
+      D --> F
+      E --> F
+
+- id: q007
+  type: multiple_choice
+  question: |
+    A company notices their AI hiring tool recommends fewer candidates from certain universities. What should they do to address fairness?
+  options:
+    - text: Evaluate the training data for bias and retrain the model with balanced data
+      is_correct: true
+    - text: Increase the system's processing speed
+      is_correct: false
+    - text: Add more security features to protect candidate data
+      is_correct: false
+    - text: Create user documentation explaining the hiring process
+      is_correct: false
+  explanation: |
+    Correct: When an AI system shows bias, the first step is to examine the training data for imbalances and retrain the model with more representative data to ensure fair outcomes.
+    Incorrect:
+    - Processing speed doesn't address bias.
+    - Security features relate to privacy, not fairness.
+    - Documentation relates to transparency but doesn't fix the bias.
+  diagram: |
+    graph TD
+      A[Biased Training Data] --> B[Biased Model]
+      C[Balanced Training Data] --> D[Fair Model]
+      B --> E[Unfair Outcomes]
+      D --> F[Fair Outcomes]
+
+- id: q008
+  type: multiple_choice
+  question: |
+    An AI system for medical diagnosis must maintain patient confidentiality. Which combination of measures supports privacy and security? (Choose two.)
+  options:
+    - text: Implement role-based access control to limit who can view patient data
+      is_correct: true
+    - text: Use encryption for data at rest and in transit
+      is_correct: true
+    - text: Train the model on publicly available datasets only
+      is_correct: false
+    - text: Provide detailed explanations of all diagnoses to the public
+      is_correct: false
+  explanation: |
+    Correct:
+    - Role-based access control ensures only authorized personnel can access sensitive data.
+    - Encryption protects data from unauthorized access both when stored and during transmission.
+    Incorrect:
+    - Public datasets may not provide the quality needed for medical AI.
+    - Sharing diagnosis details publicly violates patient privacy.
+  diagram: |
+    graph TD
+      A[Patient Data] --> B[Encryption]
+      B --> C[Secure Storage]
+      D[RBAC] --> E[Authorized Access Only]
+      C --> E
+      E --> F[Protected Privacy]
+
+- id: q009
+  type: multiple_choice
+  question: |
+    What is a key consideration for ensuring reliability in an AI system?
+  options:
+    - text: Testing the system thoroughly across different scenarios and edge cases
+      is_correct: true
+    - text: Making the system available in multiple languages
+      is_correct: false
+    - text: Providing users with the ability to audit AI decisions
+      is_correct: false
+    - text: Collecting user feedback on system performance
+      is_correct: false
+  explanation: |
+    Correct: Reliability requires comprehensive testing, including edge cases and unusual scenarios, to ensure the system performs consistently and correctly.
+    Incorrect:
+    - Multiple languages relate to inclusiveness.
+    - Audit ability relates to transparency and accountability.
+    - User feedback is valuable but testing is the primary reliability measure.
+  diagram: |
+    graph TD
+      A[AI System] --> B[Standard Testing]
+      A --> C[Edge Case Testing]
+      A --> D[Stress Testing]
+      B --> E[Reliable Performance]
+      C --> E
+      D --> E
+
+- id: q010
+  type: multiple_choice
+  question: |
+    A company wants to ensure their AI-powered customer service system works for users with visual impairments. Which principle does this address?
+  options:
+    - text: Inclusiveness
+      is_correct: true
+    - text: Privacy and security
+      is_correct: false
+    - text: Accountability
+      is_correct: false
+    - text: Reliability and safety
+      is_correct: false
+  explanation: |
+    Correct: Inclusiveness means ensuring AI systems are accessible and beneficial to people with diverse needs and abilities, including those with disabilities.
+    Incorrect:
+    - Privacy and security relate to data protection.
+    - Accountability relates to governance and oversight.
+    - Reliability and safety relate to consistent performance.
+  diagram: |
+    graph TD
+      A[Customer Service AI] --> B[Screen Reader Support]
+      A --> C[Voice Interface]
+      A --> D[High Contrast UI]
+      B --> E[Inclusive Experience]
+      C --> E
+      D --> E
+
+- id: q011
+  type: multiple_choice
+  question: |
+    An AI system for content moderation must explain why certain posts were flagged. This requirement primarily relates to which principle?
+  options:
+    - text: Transparency
+      is_correct: true
+    - text: Fairness
+      is_correct: false
+    - text: Inclusiveness
+      is_correct: false
+    - text: Privacy and security
+      is_correct: false
+  explanation: |
+    Correct: Transparency requires that AI systems provide understandable explanations for their decisions so users know why certain actions were taken.
+    Incorrect:
+    - Fairness relates to unbiased treatment across groups.
+    - Inclusiveness relates to accessibility for diverse users.
+    - Privacy and security relate to data protection.
+  diagram: |
+    graph TD
+      A[Content Post] --> B[AI Moderation]
+      B --> C[Flagged Decision]
+      C --> D[Explanation Provided]
+      D --> E[User Understanding]
+
+- id: q012
+  type: multiple_choice
+  question: |
+    Which scenario demonstrates a failure in the safety aspect of AI reliability?
+  options:
+    - text: An autonomous system continues operating despite detecting a critical sensor failure
+      is_correct: true
+    - text: An AI system requires users to log in before accessing features
+      is_correct: false
+    - text: An AI system provides recommendations without explaining the reasoning
+      is_correct: false
+    - text: An AI system performs differently for different demographic groups
+      is_correct: false
+  explanation: |
+    Correct: Safety requires that AI systems have appropriate fail-safe mechanisms and do not continue operating in dangerous conditions that could cause harm.
+    Incorrect:
+    - Login requirements relate to security.
+    - Lack of explanations relates to transparency.
+    - Different performance across groups relates to fairness.
+  diagram: |
+    graph TD
+      A[Sensor Failure Detected] --> B[Safe AI System]
+      A --> C[Unsafe AI System]
+      B --> D[Immediate Shutdown]
+      C --> E[Continues Operating - DANGEROUS]
+
+- id: q013
+  type: multiple_choice
+  question: |
+    A company is developing an AI recruitment tool. To ensure fairness, they should:
+  options:
+    - text: Regularly audit the system for bias and measure outcomes across different demographic groups
+      is_correct: true
+    - text: Keep all training data and algorithms confidential
+      is_correct: false
+    - text: Only use the system for initial screening, not final decisions
+      is_correct: false
+    - text: Implement multi-factor authentication for system access
+      is_correct: false
+  explanation: |
+    Correct: Fairness requires ongoing monitoring and auditing to detect and correct bias. Measuring outcomes across demographics helps identify unfair treatment.
+    Incorrect:
+    - Confidentiality relates to privacy, not fairness.
+    - Limiting use doesn't address the bias in the system.
+    - Authentication relates to security, not fairness.
+  diagram: |
+    graph TD
+      A[AI Recruitment System] --> B[Regular Audits]
+      B --> C[Bias Detection]
+      C --> D[Corrective Actions]
+      D --> E[Fair Outcomes]
+
+- id: q014
+  type: multiple_choice
+  question: |
+    What is the PRIMARY purpose of implementing accountability measures in AI systems?
+  options:
+    - text: To ensure there are clear processes for addressing issues and designated people responsible for AI outcomes
+      is_correct: true
+    - text: To make the AI system run faster and more efficiently
+      is_correct: false
+    - text: To ensure the AI system works for people with disabilities
+      is_correct: false
+    - text: To protect user data from cyber attacks
+      is_correct: false
+  explanation: |
+    Correct: Accountability establishes governance frameworks with clear ownership, oversight processes, and mechanisms to address problems when they arise.
+    Incorrect:
+    - Efficiency relates to performance optimization.
+    - Working for people with disabilities relates to inclusiveness.
+    - Protection from attacks relates to security.
+  diagram: |
+    graph TD
+      A[AI System Issues] --> B[Clear Ownership]
+      B --> C[Designated Responsible Party]
+      C --> D[Resolution Process]
+      D --> E[Accountability Maintained]
+
+- id: q015
+  type: multiple_choice
+  question: |
+    An AI-powered educational platform should be designed to work effectively for students with different learning styles and abilities. This BEST demonstrates:
+  options:
+    - text: Inclusiveness
+      is_correct: true
+    - text: Transparency
+      is_correct: false
+    - text: Reliability and safety
+      is_correct: false
+    - text: Accountability
+      is_correct: false
+  explanation: |
+    Correct: Inclusiveness means designing AI to benefit people with diverse characteristics, needs, and abilities, including different learning styles.
+    Incorrect:
+    - Transparency relates to explainability.
+    - Reliability and safety relate to consistent and safe performance.
+    - Accountability relates to governance.
+  diagram: |
+    graph TD
+      A[Educational AI Platform] --> B[Visual Learners]
+      A --> C[Auditory Learners]
+      A --> D[Kinesthetic Learners]
+      B --> E[Inclusive Learning]
+      C --> E
+      D --> E
+
+- id: q016
+  type: multiple_choice
+  question: |
+    A privacy consideration when implementing an AI system that processes personal data is:
+  options:
+    - text: Implementing data minimization to collect only necessary information
+      is_correct: true
+    - text: Training the model on the largest possible dataset
+      is_correct: false
+    - text: Making all AI decisions fully explainable to users
+      is_correct: false
+    - text: Ensuring the system performs consistently across all users
+      is_correct: false
+  explanation: |
+    Correct: Data minimization is a key privacy principle that requires collecting only the data necessary for the intended purpose, reducing privacy risks.
+    Incorrect:
+    - Largest datasets may include unnecessary personal information.
+    - Explainability relates to transparency.
+    - Consistent performance relates to fairness and reliability.
+  diagram: |
+    graph TD
+      A[Data Collection] --> B[Assess Necessity]
+      B --> C[Collect Only Required Data]
+      C --> D[Privacy Protection]
+      E[Unnecessary Data] --> F[Not Collected]
+
+- id: q017
+  type: multiple_choice
+  question: |
+    What should be implemented to ensure transparency when an AI system denies a loan application?
+  options:
+    - text: Provide specific reasons and factors that led to the denial
+      is_correct: true
+    - text: Automatically approve all applications to avoid transparency issues
+      is_correct: false
+    - text: Keep the decision-making process confidential to protect intellectual property
+      is_correct: false
+    - text: Only inform the applicant that the application was denied without details
+      is_correct: false
+  explanation: |
+    Correct: Transparency requires providing clear, understandable explanations for AI decisions so users know why outcomes occurred.
+    Incorrect:
+    - Auto-approving defeats the purpose of the AI system.
+    - Confidentiality contradicts transparency requirements.
+    - Simple denial notification doesn't meet transparency standards.
+  diagram: |
+    graph TD
+      A[Loan Application] --> B[AI Evaluation]
+      B --> C[Denial Decision]
+      C --> D[Explanation of Factors]
+      D --> E[Credit Score]
+      D --> F[Income Level]
+      D --> G[Debt Ratio]
+
+- id: q018
+  type: multiple_choice
+  question: |
+    An AI system for facial recognition must work accurately across different ethnicities and ages. Which principle does this primarily address?
+  options:
+    - text: Fairness
+      is_correct: true
+    - text: Accountability
+      is_correct: false
+    - text: Privacy and security
+      is_correct: false
+    - text: Transparency
+      is_correct: false
+  explanation: |
+    Correct: Fairness requires that AI systems perform equally well across different groups and don't discriminate based on characteristics like ethnicity or age.
+    Incorrect:
+    - Accountability relates to governance and oversight.
+    - Privacy and security relate to data protection.
+    - Transparency relates to explainability.
+  diagram: |
+    graph TD
+      A[Facial Recognition AI] --> B[Testing Across Ethnicities]
+      A --> C[Testing Across Ages]
+      B --> D[Equal Accuracy]
+      C --> D
+      D --> E[Fair System]
+
+- id: q019
+  type: multiple_choice
+  question: |
+    Which measure BEST supports the security aspect of an AI system handling sensitive medical records?
+  options:
+    - text: Implementing end-to-end encryption and strict access controls
+      is_correct: true
+    - text: Making the system available in multiple languages
+      is_correct: false
+    - text: Providing detailed logs of all AI decisions
+      is_correct: false
+    - text: Training staff on how the AI makes diagnoses
+      is_correct: false
+  explanation: |
+    Correct: Security requires protecting data through encryption and controlling who can access sensitive information through strict access controls.
+    Incorrect:
+    - Multiple languages relate to inclusiveness.
+    - Decision logs relate to accountability and transparency.
+    - Staff training on AI workings relates to transparency.
+  diagram: |
+    graph TD
+      A[Medical Records] --> B[End-to-End Encryption]
+      B --> C[Encrypted Storage]
+      D[Access Controls] --> E[Authentication]
+      E --> F[Authorization]
+      C --> G[Secure System]
+      F --> G
+
+- id: q020
+  type: multiple_choice
+  question: |
+    A company implements an AI chatbot and establishes a team to monitor its performance, address complaints, and update policies. This PRIMARILY demonstrates:
+  options:
+    - text: Accountability
+      is_correct: true
+    - text: Reliability and safety
+      is_correct: false
+    - text: Inclusiveness
+      is_correct: false
+    - text: Fairness
+      is_correct: false
+  explanation: |
+    Correct: Accountability involves having designated people and processes responsible for monitoring, addressing issues, and ensuring the AI system is used appropriately.
+    Incorrect:
+    - Reliability and safety focus on consistent and safe performance.
+    - Inclusiveness focuses on accessibility for diverse users.
+    - Fairness focuses on unbiased treatment.
+  diagram: |
+    graph TD
+      A[AI Chatbot] --> B[Monitoring Team]
+      B --> C[Performance Tracking]
+      B --> D[Complaint Resolution]
+      B --> E[Policy Updates]
+      C --> F[Accountability Framework]
+      D --> F
+      E --> F

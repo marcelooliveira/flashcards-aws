@@ -1,0 +1,563 @@
+questions:
+- id: q041
+  type: multiple_choice
+  question: |
+    When creating a system prompt for a customer service chatbot in Azure AI Foundry, which approach will produce the MOST effective results?
+  options:
+    - text: Provide clear instructions about the bot's role, tone, constraints, and expected behavior
+      is_correct: true
+    - text: Include only a brief greeting message
+      is_correct: false
+    - text: Leave the system prompt empty and rely on user prompts
+      is_correct: false
+    - text: Include detailed examples of every possible customer question
+      is_correct: false
+  explanation: |
+    Correct: Effective system prompts define the AI's persona, behavior guidelines, tone, constraints, and how it should handle various scenarios. This sets the foundation for consistent, appropriate responses.
+    Incorrect:
+    - Brief greetings don't provide sufficient guidance for behavior.
+    - Empty system prompts miss the opportunity to guide model behavior.
+    - Exhaustive examples are impractical; clear instructions and principles work better.
+  diagram: |
+    graph TD
+      A[System Prompt] --> B[Role Definition]
+      A --> C[Tone Guidelines]
+      A --> D[Constraints]
+      A --> E[Behavioral Rules]
+      B --> F[Consistent AI Behavior]
+      C --> F
+      D --> F
+      E --> F
+
+- id: q042
+  type: multiple_choice
+  question: |
+    What is the PRIMARY difference between a system prompt and a user prompt in Azure AI Foundry?
+  options:
+    - text: System prompts set the AI's behavior and context, while user prompts are specific requests from end users
+      is_correct: true
+    - text: System prompts are visible to users, while user prompts are hidden
+      is_correct: false
+    - text: System prompts can only be set once, while user prompts can change
+      is_correct: false
+    - text: System prompts are optional, while user prompts are required
+      is_correct: false
+  explanation: |
+    Correct: System prompts establish the AI's personality, rules, and context that persist across interactions. User prompts are the actual questions or requests from users that the AI responds to based on the system prompt.
+    Incorrect:
+    - System prompts are typically not visible to end users.
+    - System prompts can be updated, though they should remain consistent during a session.
+    - System prompts are essential for guiding model behavior effectively.
+  diagram: |
+    graph TD
+      A[System Prompt] --> B[Sets Behavior & Context]
+      C[User Prompt] --> D[Specific Request]
+      B --> E[AI Processing]
+      D --> E
+      E --> F[Contextual Response]
+
+- id: q043
+  type: multiple_choice
+  question: |
+    In Azure AI Foundry portal, what is the FIRST step to deploy a generative AI model for use in your application?
+  options:
+    - text: Select a model from the model catalog and create a deployment
+      is_correct: true
+    - text: Write the complete application code before selecting a model
+      is_correct: false
+    - text: Purchase additional Azure credits specifically for AI
+      is_correct: false
+    - text: Create a custom model from scratch using your own data
+      is_correct: false
+  explanation: |
+    Correct: The deployment process starts by browsing the model catalog in Azure AI Foundry, selecting an appropriate pre-trained model (like GPT-4, GPT-3.5-turbo, etc.), and creating a deployment with chosen configuration settings.
+    Incorrect:
+    - Application code comes after model deployment.
+    - Standard Azure subscription is sufficient; no special AI credits needed.
+    - Pre-trained models are available and recommended before considering custom models.
+  diagram: |
+    graph TD
+      A[Azure AI Foundry Portal] --> B[Model Catalog]
+      B --> C[Select Model]
+      C --> D[Configure Deployment]
+      D --> E[Deploy Model]
+      E --> F[Get Endpoint & Key]
+
+- id: q044
+  type: multiple_choice
+  question: |
+    After deploying a model in Azure AI Foundry portal, how can you quickly test its responses before building a full application?
+  options:
+    - text: Use the Chat Playground in the Foundry portal to interact with the deployed model
+      is_correct: true
+    - text: Deploy the model to production and monitor user feedback
+      is_correct: false
+    - text: Download the model to your local machine for testing
+      is_correct: false
+    - text: Wait 24 hours for automatic testing results
+      is_correct: false
+  explanation: |
+    Correct: The Chat Playground (or similar testing interface) in Azure AI Foundry allows you to immediately test deployed models with different prompts, adjust parameters, and validate responses before integration.
+    Incorrect:
+    - Production deployment without testing is risky and inefficient.
+    - Large language models typically can't be downloaded locally.
+    - Automated testing requires explicit configuration, not just waiting.
+  diagram: |
+    graph TD
+      A[Deployed Model] --> B[Chat Playground]
+      B --> C[Enter Test Prompts]
+      C --> D[Adjust Parameters]
+      D --> E[Validate Responses]
+      E --> F[Ready for Integration]
+
+- id: q045
+  type: multiple_choice
+  question: |
+    When creating a chat client application using the Azure AI Foundry SDK, which component is essential for authenticating requests to your deployed model?
+  options:
+    - text: API key or Azure Active Directory credentials along with the endpoint URL
+      is_correct: true
+    - text: Your Azure subscription ID only
+      is_correct: false
+    - text: The model's training data
+      is_correct: false
+    - text: A VPN connection to Azure datacenters
+      is_correct: false
+  explanation: |
+    Correct: Authentication requires either an API key (retrieved from the deployment) or Azure AD credentials, combined with the endpoint URL to establish secure connection to the deployed model.
+    Incorrect:
+    - Subscription ID alone doesn't provide authentication.
+    - Training data is not used for authentication.
+    - VPN is not required for Azure AI service access.
+  diagram: |
+    graph TD
+      A[Chat Client App] --> B[Azure AI SDK]
+      B --> C[API Key/Azure AD Token]
+      B --> D[Endpoint URL]
+      C --> E[Authenticated Request]
+      D --> E
+      E --> F[Deployed Model]
+
+- id: q046
+  type: multiple_choice
+  question: |
+    Which code approach is recommended for creating a basic chat client using the Azure AI Foundry SDK in a .NET application?
+  options:
+    - text: Use the Azure.AI.OpenAI or Azure.AI.Inference client libraries with async methods
+      is_correct: true
+    - text: Make direct HTTP POST requests without using any SDK
+      is_correct: false
+    - text: Use the Azure Storage SDK to access the model
+      is_correct: false
+    - text: Install the computer vision SDK instead of AI SDK
+      is_correct: false
+  explanation: |
+    Correct: The Azure.AI.OpenAI or Azure.AI.Inference NuGet packages provide typed clients with async methods specifically designed for interacting with deployed AI models efficiently and securely.
+    Incorrect:
+    - Direct HTTP requests work but lack the convenience and error handling of SDKs.
+    - Storage SDK is for blob/file storage, not AI models.
+    - Computer Vision SDK is for image analysis, not generative chat models.
+  diagram: |
+    graph TD
+      A[.NET Application] --> B[Azure.AI.OpenAI SDK]
+      B --> C[Create Client]
+      C --> D[Send Chat Completion Request]
+      D --> E[Receive Response]
+      E --> F[Display to User]
+
+- id: q047
+  type: multiple_choice
+  question: |
+    In the context of Azure AI Foundry, what is an agent?
+  options:
+    - text: An AI system that can use tools and execute multi-step tasks autonomously to achieve goals
+      is_correct: true
+    - text: A simple chatbot that only responds to direct questions
+      is_correct: false
+    - text: A human operator monitoring AI responses
+      is_correct: false
+    - text: A database connector for AI models
+      is_correct: false
+  explanation: |
+    Correct: Agents in Azure AI Foundry are autonomous AI systems that can plan actions, use tools (like search, code execution, APIs), and complete complex multi-step tasks to achieve user-defined objectives.
+    Incorrect:
+    - Simple chatbots lack the autonomy and tool-use capabilities of agents.
+    - Human operators are not agents in the AI context.
+    - Database connectors are tools an agent might use, not the agent itself.
+  diagram: |
+    graph TD
+      A[User Goal] --> B[AI Agent]
+      B --> C[Planning]
+      C --> D[Tool Selection]
+      D --> E[Execute Actions]
+      E --> F[Evaluate Results]
+      F --> G[Achieve Goal]
+      F --> C
+
+- id: q048
+  type: multiple_choice
+  question: |
+    When creating a single-agent solution in the Azure AI Foundry portal, which component defines what the agent can do?
+  options:
+    - text: The tools and functions configured for the agent
+      is_correct: true
+    - text: The number of users accessing the agent
+      is_correct: false
+    - text: The size of the underlying model
+      is_correct: false
+    - text: The geographic region of deployment
+      is_correct: false
+  explanation: |
+    Correct: An agent's capabilities are determined by the tools/functions you configure, such as web search, code interpreter, custom APIs, or data retrieval functions. These define what actions the agent can take.
+    Incorrect:
+    - User count doesn't affect what actions the agent can perform.
+    - Model size affects performance/capacity, not available actions.
+    - Geographic region affects latency/compliance, not capabilities.
+  diagram: |
+    graph TD
+      A[Agent Configuration] --> B[Available Tools]
+      B --> C[Web Search]
+      B --> D[Code Interpreter]
+      B --> E[Custom Functions]
+      B --> F[Data Retrieval]
+      C --> G[Agent Capabilities]
+      D --> G
+      E --> G
+      F --> G
+
+- id: q049
+  type: multiple_choice
+  question: |
+    What is the purpose of testing an agent in the Azure AI Foundry portal before deploying it?
+  options:
+    - text: To validate that the agent correctly uses tools and achieves intended goals with various prompts
+      is_correct: true
+    - text: To increase the model's training data
+      is_correct: false
+    - text: To reduce Azure costs
+      is_correct: false
+    - text: To automatically generate documentation
+      is_correct: false
+  explanation: |
+    Correct: Testing in the portal allows you to verify that the agent interprets instructions correctly, selects appropriate tools, executes actions properly, and produces desired outcomes before exposing it to end users.
+    Incorrect:
+    - Testing doesn't modify training data of pre-trained models.
+    - While efficient testing can prevent wasted resources, cost reduction isn't the primary purpose.
+    - Documentation generation is a separate process.
+  diagram: |
+    graph TD
+      A[Agent Configuration] --> B[Portal Testing]
+      B --> C[Test Various Prompts]
+      C --> D[Verify Tool Usage]
+      D --> E[Validate Outcomes]
+      E --> F[Iterate & Improve]
+      F --> G[Production Ready]
+
+- id: q050
+  type: multiple_choice
+  question: |
+    When creating a client application for an agent using Azure AI Foundry SDK, what additional consideration is needed compared to a simple chat client?
+  options:
+    - text: Handling multi-turn conversations and tool execution results
+      is_correct: true
+    - text: Using a different programming language
+      is_correct: false
+    - text: Deploying to a different cloud provider
+      is_correct: false
+    - text: Avoiding the use of authentication
+      is_correct: false
+  explanation: |
+    Correct: Agent interactions often involve multiple turns as the agent uses tools, processes results, and may ask for clarification. The client must handle this conversational flow and display tool execution status.
+    Incorrect:
+    - The same programming languages and SDKs work for both chat and agents.
+    - Azure AI Foundry agents are Azure-specific.
+    - Authentication is always required for secure access.
+  diagram: |
+    graph TD
+      A[Client App] --> B[Send User Request]
+      B --> C[Agent Processes]
+      C --> D[Uses Tool 1]
+      D --> E[Intermediate Response]
+      E --> F[Uses Tool 2]
+      F --> G[Final Response]
+      G --> H[Display to User]
+
+- id: q051
+  type: multiple_choice
+  question: |
+    What is a best practice when writing system prompts for agents in Azure AI Foundry?
+  options:
+    - text: Clearly define when and how the agent should use each available tool
+      is_correct: true
+    - text: Avoid mentioning tools entirely in the system prompt
+      is_correct: false
+    - text: Write the system prompt in multiple languages simultaneously
+      is_correct: false
+    - text: Make the system prompt as brief as possible, ideally one sentence
+      is_correct: false
+  explanation: |
+    Correct: Since agents have access to multiple tools, the system prompt should provide clear guidance on when each tool is appropriate, how to use them effectively, and any constraints or preferences for tool usage.
+    Incorrect:
+    - Mentioning tools helps the agent understand when to use them.
+    - Multi-language system prompts can confuse the model; use one language.
+    - Overly brief prompts lack necessary guidance for complex agent behavior.
+  diagram: |
+    graph TD
+      A[System Prompt for Agent] --> B[Tool Usage Guidelines]
+      A --> C[Decision Criteria]
+      A --> D[Constraints]
+      B --> E[Effective Tool Selection]
+      C --> E
+      D --> E
+
+- id: q052
+  type: multiple_choice
+  question: |
+    When deploying a model in Azure AI Foundry, which parameter controls the cost and performance characteristics of the deployment?
+  options:
+    - text: The model version, deployment tier, and tokens-per-minute (TPM) limit
+      is_correct: true
+    - text: The number of developers on your team
+      is_correct: false
+    - text: The color scheme of the portal interface
+      is_correct: false
+    - text: The length of the model name
+      is_correct: false
+  explanation: |
+    Correct: Model version (e.g., GPT-4 vs GPT-3.5), deployment tier (Standard, Provisioned), and TPM limits directly impact both the cost and performance/capacity of your deployment.
+    Incorrect:
+    - Team size doesn't affect deployment configuration.
+    - UI appearance has no impact on deployment.
+    - Model name length is irrelevant to performance or cost.
+  diagram: |
+    graph TD
+      A[Deployment Configuration] --> B[Model Version]
+      A --> C[Deployment Tier]
+      A --> D[TPM Limit]
+      B --> E[Cost & Performance]
+      C --> E
+      D --> E
+
+- id: q053
+  type: multiple_choice
+  question: |
+    What is the benefit of using the Chat Playground's system message feature in Azure AI Foundry?
+  options:
+    - text: It allows you to experiment with different system prompts and immediately see their effect on responses
+      is_correct: true
+    - text: It automatically deploys your model to production
+      is_correct: false
+    - text: It trains a new custom model
+      is_correct: false
+    - text: It generates API keys for authentication
+      is_correct: false
+  explanation: |
+    Correct: The system message field in the Chat Playground lets you iterate on system prompts quickly, testing different instructions, tones, and constraints to find the most effective configuration before coding.
+    Incorrect:
+    - Playground is for testing, not automatic production deployment.
+    - It uses existing models, not training new ones.
+    - API keys are managed in deployment settings, not the playground.
+  diagram: |
+    graph TD
+      A[Chat Playground] --> B[Edit System Message]
+      B --> C[Test with Sample Prompts]
+      C --> D[Evaluate Responses]
+      D --> E[Refine System Message]
+      E --> F[Optimal Configuration]
+
+- id: q054
+  type: multiple_choice
+  question: |
+    In a .NET Blazor WebAssembly application using Azure AI Foundry SDK, what is a security best practice for storing API keys?
+  options:
+    - text: Store API keys in a backend API or Azure Key Vault, not in client-side code
+      is_correct: true
+    - text: Embed the API key directly in the Blazor component code
+      is_correct: false
+    - text: Store the API key in browser localStorage
+      is_correct: false
+    - text: Include the API key in the HTML source code
+      is_correct: false
+  explanation: |
+    Correct: Client-side code (like Blazor WebAssembly) is visible to users. API keys should be stored server-side (backend API, Key Vault) and accessed through secure server-to-server calls to prevent exposure.
+    Incorrect:
+    - Embedding keys in client code exposes them in browser.
+    - localStorage is accessible via browser dev tools.
+    - HTML source is publicly viewable.
+  diagram: |
+    graph TD
+      A[Blazor WebAssembly Client] --> B[Backend API]
+      B --> C[Azure Key Vault]
+      C --> D[Retrieve API Key]
+      D --> E[Backend Calls AI Service]
+      E --> F[Return Results to Client]
+
+- id: q055
+  type: multiple_choice
+  question: |
+    Which Azure AI Foundry SDK method pattern is used to send a chat message and receive a streaming response in .NET?
+  options:
+    - text: GetChatCompletionsStreamingAsync() or similar streaming methods
+      is_correct: true
+    - text: SendEmail() method
+      is_correct: false
+    - text: UploadBlob() method
+      is_correct: false
+    - text: ExecuteQuery() method
+      is_correct: false
+  explanation: |
+    Correct: Streaming methods like GetChatCompletionsStreamingAsync() allow responses to be received incrementally, providing a better user experience by showing tokens as they're generated rather than waiting for the complete response.
+    Incorrect:
+    - SendEmail() is not part of the AI SDK.
+    - UploadBlob() is for Azure Storage, not AI chat.
+    - ExecuteQuery() is for databases, not AI conversations.
+  diagram: |
+    graph TD
+      A[Chat Client] --> B[GetChatCompletionsStreamingAsync]
+      B --> C[Stream Token 1]
+      C --> D[Stream Token 2]
+      D --> E[Stream Token N]
+      E --> F[Complete Response]
+
+- id: q056
+  type: multiple_choice
+  question: |
+    When creating an agent in Azure AI Foundry, what is the purpose of the "instructions" field?
+  options:
+    - text: It defines the agent's personality, objectives, and how it should approach tasks
+      is_correct: true
+    - text: It specifies which Azure region to deploy to
+      is_correct: false
+    - text: It sets the maximum token length
+      is_correct: false
+    - text: It configures billing alerts
+      is_correct: false
+  explanation: |
+    Correct: The instructions field (similar to a system prompt) tells the agent its role, goals, behavioral guidelines, and how it should use available tools to accomplish tasks.
+    Incorrect:
+    - Region is set during deployment configuration.
+    - Token length is a deployment parameter, not in instructions.
+    - Billing is managed separately in Azure portal.
+  diagram: |
+    graph TD
+      A[Agent Instructions] --> B[Define Role]
+      A --> C[Set Objectives]
+      A --> D[Guide Behavior]
+      B --> E[Consistent Agent Performance]
+      C --> E
+      D --> E
+
+- id: q057
+  type: multiple_choice
+  question: |
+    What is a key advantage of using functions/tools with agents in Azure AI Foundry compared to basic chat models?
+  options:
+    - text: Agents can perform actions like searching data, calling APIs, and executing code, not just generating text
+      is_correct: true
+    - text: Agents are always free to use
+      is_correct: false
+    - text: Agents never require authentication
+      is_correct: false
+    - text: Agents can only work with text, not other data types
+      is_correct: false
+  explanation: |
+    Correct: Functions/tools enable agents to interact with external systems, retrieve real-time data, perform calculations, and execute actions beyond text generation, making them more capable than basic chat models.
+    Incorrect:
+    - Agents incur costs based on model usage and tool execution.
+    - Authentication is required for secure access.
+    - Agents can work with various data types through their tools.
+  diagram: |
+    graph TD
+      A[Basic Chat Model] --> B[Text Generation Only]
+      C[Agent with Tools] --> D[Text Generation]
+      C --> E[Search Data]
+      C --> F[Call APIs]
+      C --> G[Execute Code]
+      D --> H[Enhanced Capabilities]
+      E --> H
+      F --> H
+      G --> H
+
+- id: q058
+  type: multiple_choice
+  question: |
+    When building a client application for an agent, which pattern handles the asynchronous nature of tool execution?
+  options:
+    - text: Implement polling or use async/await patterns to check for completion status
+      is_correct: true
+    - text: Use synchronous blocking calls only
+      is_correct: false
+    - text: Ignore tool execution and only display the final result
+      is_correct: false
+    - text: Refresh the entire page after each tool call
+      is_correct: false
+  explanation: |
+    Correct: Agent tool execution can take time. Using async/await patterns or polling mechanisms allows the client to remain responsive while waiting for tool results, providing status updates to users.
+    Incorrect:
+    - Synchronous blocking creates poor user experience.
+    - Ignoring tool execution loses visibility into agent progress.
+    - Page refreshes are inefficient and disrupt user experience.
+  diagram: |
+    graph TD
+      A[User Request] --> B[Agent Starts Processing]
+      B --> C[Tool Execution Initiated]
+      C --> D[Client Polls/Awaits Status]
+      D --> E[Tool Completes]
+      E --> F[Update UI]
+      F --> G[Continue or Complete]
+
+- id: q059
+  type: multiple_choice
+  question: |
+    What is an effective user prompt technique to get better results from a generative AI model in Azure AI Foundry?
+  options:
+    - text: Provide clear context, be specific about desired output format, and include relevant examples
+      is_correct: true
+    - text: Use only single-word prompts
+      is_correct: false
+    - text: Always ask multiple unrelated questions in one prompt
+      is_correct: false
+    - text: Avoid providing any context or examples
+      is_correct: false
+  explanation: |
+    Correct: Effective prompts include sufficient context, specify the desired format/structure, and may include few-shot examples to guide the model toward producing the desired output.
+    Incorrect:
+    - Single words lack context and clarity.
+    - Multiple unrelated questions confuse the model.
+    - Context and examples significantly improve output quality.
+  diagram: |
+    graph TD
+      A[Effective User Prompt] --> B[Clear Context]
+      A --> C[Specific Format Requirements]
+      A --> D[Relevant Examples]
+      B --> E[High-Quality Response]
+      C --> E
+      D --> E
+
+- id: q060
+  type: multiple_choice
+  question: |
+    In Azure AI Foundry portal, after creating and testing an agent successfully, what is the next step to make it available to your application?
+  options:
+    - text: Note the agent ID and use the Azure AI SDK to interact with it programmatically
+      is_correct: true
+    - text: Copy the agent's responses manually into your application
+      is_correct: false
+    - text: Export the agent as a PDF document
+      is_correct: false
+    - text: Email the agent configuration to your development team
+      is_correct: false
+  explanation: |
+    Correct: Once an agent is created and tested in the portal, you retrieve its agent ID and use the appropriate Azure AI SDK (Azure.AI.Projects or similar) to integrate it into your application code.
+    Incorrect:
+    - Manual copying defeats the purpose of programmatic integration.
+    - PDF export is for documentation, not integration.
+    - Email doesn't enable programmatic access.
+  diagram: |
+    graph TD
+      A[Agent Created in Portal] --> B[Retrieve Agent ID]
+      B --> C[Application Code]
+      C --> D[Azure AI SDK]
+      D --> E[Call Agent with ID]
+      E --> F[Agent Processes Request]
+      F --> G[Return Results to App]

@@ -1,0 +1,281 @@
+questions:
+- id: q061
+  type: multiple_choice
+  question: |
+    A company wants to build a .NET Blazor WebAssembly application that analyzes customer feedback text to extract key phrases and sentiment. Which Azure AI Foundry service should they use?
+  options:
+    - text: Azure AI Language service with text analytics capabilities
+      is_correct: true
+    - text: Azure Computer Vision service
+      is_correct: false
+    - text: Azure Speech service only
+      is_correct: false
+    - text: Azure Form Recognizer
+      is_correct: false
+  explanation: |
+    Correct: Azure AI Language service (part of Azure AI Services) provides text analytics capabilities including key phrase extraction, sentiment analysis, entity recognition, and language detection - perfect for analyzing customer feedback.
+    Incorrect:
+    - Computer Vision analyzes images, not text feedback.
+    - Speech service handles audio, not text analysis.
+    - Form Recognizer extracts data from documents, not general text analysis.
+  diagram: |
+    graph TD
+      A[Customer Feedback Text] --> B[Azure AI Language Service]
+      B --> C[Key Phrase Extraction]
+      B --> D[Sentiment Analysis]
+      C --> E[Blazor UI Display]
+      D --> E
+
+- id: q062
+  type: multiple_choice
+  question: |
+    When building a text analysis application using Azure AI Foundry SDK in .NET 9, which NuGet package should be installed for language analysis?
+  options:
+    - text: Azure.AI.TextAnalytics or Azure.AI.Language.Text
+      is_correct: true
+    - text: Azure.Storage.Blobs
+      is_correct: false
+    - text: Azure.AI.Vision.ImageAnalysis
+      is_correct: false
+    - text: Microsoft.AspNetCore.Components.WebAssembly
+      is_correct: false
+  explanation: |
+    Correct: The Azure.AI.TextAnalytics or Azure.AI.Language.Text packages provide typed clients for text analysis operations like sentiment analysis, key phrase extraction, and entity recognition.
+    Incorrect:
+    - Storage.Blobs is for blob storage, not text analysis.
+    - Vision.ImageAnalysis is for computer vision, not text.
+    - Components.WebAssembly is for Blazor framework, not AI services.
+  diagram: |
+    graph TD
+      A[.NET 9 Application] --> B[Install NuGet Package]
+      B --> C[Azure.AI.TextAnalytics]
+      C --> D[TextAnalyticsClient]
+      D --> E[Analyze Text]
+
+- id: q063
+  type: multiple_choice
+  question: |
+    In a Blazor WebAssembly app, what is the MOST secure way to call Azure AI Language service for text analysis?
+  options:
+    - text: Create a backend API that securely stores credentials and calls the AI service, then call this API from Blazor
+      is_correct: true
+    - text: Store the Azure AI service key directly in the Blazor component
+      is_correct: false
+    - text: Include the endpoint and key in appsettings.json in wwwroot
+      is_correct: false
+    - text: Pass the API key as a URL parameter
+      is_correct: false
+  explanation: |
+    Correct: Blazor WebAssembly runs entirely in the browser, making any embedded secrets visible. A backend API (ASP.NET Core Web API) should handle secure credential storage and AI service calls, exposing only safe endpoints to the client.
+    Incorrect:
+    - Storing keys in components exposes them in browser.
+    - appsettings.json in wwwroot is publicly accessible.
+    - URL parameters are visible in browser history and network logs.
+  diagram: |
+    graph TD
+      A[Blazor WebAssembly] --> B[Call Backend API]
+      B --> C[ASP.NET Core API]
+      C --> D[Azure Key Vault]
+      D --> E[Retrieve Credentials]
+      E --> F[Call Azure AI Service]
+      F --> G[Return Results]
+      G --> B
+
+- id: q064
+  type: multiple_choice
+  question: |
+    A multimodal AI model in Azure AI Foundry can process both text and images. Which scenario demonstrates responding to a spoken prompt using such a model?
+  options:
+    - text: Convert speech to text using Azure Speech, then send the text along with an image to the multimodal model
+      is_correct: true
+    - text: Send only audio files directly to a text-only GPT model
+      is_correct: false
+    - text: Use computer vision only without any language processing
+      is_correct: false
+    - text: Store spoken audio in a database without processing
+      is_correct: false
+  explanation: |
+    Correct: To respond to spoken prompts with a multimodal model, you first convert speech to text using Azure Speech service, then send that text along with any images to a multimodal model (like GPT-4 Vision) for comprehensive analysis.
+    Incorrect:
+    - Text-only models cannot process audio directly.
+    - Computer vision alone doesn't handle spoken prompts.
+    - Storing without processing doesn't provide a response.
+  diagram: |
+    graph TD
+      A[Spoken Prompt Audio] --> B[Azure Speech Service]
+      B --> C[Text Transcription]
+      D[Image Input] --> E[Multimodal Model]
+      C --> E
+      E --> F[Combined Analysis Response]
+
+- id: q065
+  type: multiple_choice
+  question: |
+    When implementing speech recognition in a Blazor application using Azure AI Foundry, which approach is MOST effective?
+  options:
+    - text: Use the Azure Speech SDK with JavaScript interop for browser-based audio capture
+      is_correct: true
+    - text: Process audio files only on the server without client interaction
+      is_correct: false
+    - text: Use only HTML5 audio recording without any Azure services
+      is_correct: false
+    - text: Manually transcribe audio on the client side using custom algorithms
+      is_correct: false
+  explanation: |
+    Correct: In Blazor WebAssembly, you can use JavaScript interop to capture audio from the browser's microphone, then use the Azure Speech SDK (JavaScript or via API calls) to send audio to Azure Speech service for recognition.
+    Incorrect:
+    - Server-only processing misses the interactive client experience.
+    - HTML5 alone doesn't provide speech-to-text capabilities.
+    - Custom transcription algorithms are complex and inferior to Azure Speech.
+  diagram: |
+    graph TD
+      A[Browser Microphone] --> B[JS Interop in Blazor]
+      B --> C[Capture Audio]
+      C --> D[Azure Speech SDK]
+      D --> E[Azure Speech Service]
+      E --> F[Text Transcription]
+      F --> G[Display in Blazor UI]
+
+- id: q066
+  type: multiple_choice
+  question: |
+    What is a key configuration parameter when using Azure Speech service for speech-to-text in Azure AI Foundry?
+  options:
+    - text: Language locale (e.g., en-US, pt-BR) and audio format
+      is_correct: true
+    - text: Image resolution settings
+      is_correct: false
+    - text: Database connection string
+      is_correct: false
+    - text: Email notification preferences
+      is_correct: false
+  explanation: |
+    Correct: Speech recognition requires specifying the expected language locale and audio format (sample rate, encoding) to accurately transcribe speech. These parameters significantly affect recognition accuracy.
+    Incorrect:
+    - Image resolution is for vision services, not speech.
+    - Database connections are not part of speech service configuration.
+    - Email notifications are separate from speech recognition setup.
+  diagram: |
+    graph TD
+      A[Speech Configuration] --> B[Language Locale]
+      A --> C[Audio Format]
+      B --> D[Improved Recognition]
+      C --> D
+      D --> E[Accurate Transcription]
+
+- id: q067
+  type: multiple_choice
+  question: |
+    In a .NET Blazor application, which pattern enables real-time display of transcribed text as a user speaks?
+  options:
+    - text: Use continuous recognition mode with event handlers that update the UI incrementally
+      is_correct: true
+    - text: Wait for the entire speech to complete before showing any text
+      is_correct: false
+    - text: Transcribe only every 10 seconds
+      is_correct: false
+    - text: Store all audio first, then process offline
+      is_correct: false
+  explanation: |
+    Correct: Azure Speech SDK supports continuous recognition mode where recognition events fire as words are recognized, allowing the Blazor UI to update incrementally using StateHasChanged(), providing a real-time user experience.
+    Incorrect:
+    - Waiting for complete speech delays feedback to users.
+    - Periodic transcription creates a choppy experience.
+    - Offline processing defeats real-time requirements.
+  diagram: |
+    graph TD
+      A[User Speaks] --> B[Continuous Recognition]
+      B --> C[Recognizing Event]
+      C --> D[Update Blazor UI]
+      B --> E[Recognized Event]
+      E --> D
+      D --> F[Real-time Transcription Display]
+
+- id: q068
+  type: multiple_choice
+  question: |
+    When building a text analysis application that detects entities in customer reviews, which Azure AI Language feature should be used?
+  options:
+    - text: Named Entity Recognition (NER)
+      is_correct: true
+    - text: Image classification
+      is_correct: false
+    - text: Audio transcription
+      is_correct: false
+    - text: Video indexing
+      is_correct: false
+  explanation: |
+    Correct: Named Entity Recognition (NER) identifies and classifies named entities in text such as people, organizations, locations, products, dates, and quantities - essential for analyzing customer reviews.
+    Incorrect:
+    - Image classification analyzes images, not text entities.
+    - Audio transcription converts speech, not detecting entities.
+    - Video indexing is for video content analysis.
+  diagram: |
+    graph TD
+      A[Customer Review Text] --> B[NER Analysis]
+      B --> C[Person Names]
+      B --> D[Product Names]
+      B --> E[Organizations]
+      B --> F[Locations]
+      C --> G[Structured Entity Data]
+      D --> G
+      E --> G
+      F --> G
+
+- id: q069
+  type: multiple_choice
+  question: |
+    What is the purpose of using speech synthesis (text-to-speech) in conjunction with a multimodal AI application?
+  options:
+    - text: To provide audio output of the AI model's text responses for accessibility or hands-free scenarios
+      is_correct: true
+    - text: To train the AI model with more data
+      is_correct: false
+    - text: To compress text files for storage
+      is_correct: false
+    - text: To encrypt sensitive information
+      is_correct: false
+  explanation: |
+    Correct: Speech synthesis converts AI-generated text responses into natural-sounding speech, enabling accessibility for visually impaired users, hands-free operation, or creating more engaging conversational experiences.
+    Incorrect:
+    - TTS is for output, not training.
+    - Compression is a separate file management task.
+    - Encryption is a security function, not speech synthesis.
+  diagram: |
+    graph TD
+      A[AI Model Response Text] --> B[Azure Speech Synthesis]
+      B --> C[SSML Processing]
+      C --> D[Voice Selection]
+      D --> E[Audio Generation]
+      E --> F[Speak to User]
+
+- id: q070
+  type: multiple_choice
+  question: |
+    In Azure AI Foundry, when building a lightweight application with text analysis, which operation would identify the overall emotional tone of a document?
+  options:
+    - text: Sentiment analysis
+      is_correct: true
+    - text: Key phrase extraction
+      is_correct: false
+    - text: Language detection
+      is_correct: false
+    - text: Entity linking
+      is_correct: false
+  explanation: |
+    Correct: Sentiment analysis evaluates text and returns sentiment scores (positive, negative, neutral, mixed) along with confidence scores, identifying the overall emotional tone of the content.
+    Incorrect:
+    - Key phrase extraction identifies important topics, not emotions.
+    - Language detection identifies the language used, not sentiment.
+    - Entity linking connects entities to knowledge bases, not analyzing emotion.
+  diagram: |
+    graph TD
+      A[Document Text] --> B[Sentiment Analysis]
+      B --> C[Positive Score]
+      B --> D[Negative Score]
+      B --> E[Neutral Score]
+      B --> F[Mixed Score]
+      C --> G[Overall Sentiment: Positive]
+      D --> G
+      E --> G
+      F --> G
