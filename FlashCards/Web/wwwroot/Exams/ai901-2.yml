@@ -1,0 +1,539 @@
+questions:
+- id: q021
+  type: multiple_choice
+  question: |
+    A company wants to build a system that can generate human-like responses to customer questions based on their product documentation.
+    Which type of AI model would be MOST appropriate for this use case?
+  options:
+    - text: Generative AI model (Large Language Model)
+      is_correct: true
+    - text: Computer vision model
+      is_correct: false
+    - text: Speech recognition model
+      is_correct: false
+    - text: Optical character recognition (OCR) model
+      is_correct: false
+  explanation: |
+    Correct: Generative AI models, particularly Large Language Models (LLMs), are designed to understand context and generate human-like text responses, making them ideal for customer service chatbots based on documentation.
+    Incorrect:
+    - Computer vision models process images, not text-based questions.
+    - Speech recognition converts audio to text, not generating responses.
+    - OCR extracts text from images, not generating conversational responses.
+  diagram: |
+    graph TD
+      A[Product Documentation] --> B[LLM Training]
+      C[Customer Question] --> D[Generative AI Model]
+      B --> D
+      D --> E[Human-like Response]
+
+- id: q022
+  type: multiple_choice
+  question: |
+    How do generative AI models fundamentally work to produce new content?
+  options:
+    - text: They learn patterns from training data and use probability to predict and generate the most likely next token or element
+      is_correct: true
+    - text: They store exact copies of training data and retrieve matching examples
+      is_correct: false
+    - text: They follow explicit rules programmed by developers for every possible output
+      is_correct: false
+    - text: They randomly combine elements from different sources without pattern recognition
+      is_correct: false
+  explanation: |
+    Correct: Generative AI models learn statistical patterns and relationships from training data, then use these learned patterns to predict what comes next (token by token) based on probability distributions.
+    Incorrect:
+    - Models don't store and retrieve exact copies; they learn patterns.
+    - Models use learned patterns, not explicit rules for every scenario.
+    - Generation is based on learned patterns, not random combination.
+  diagram: |
+    graph TD
+      A[Training Data] --> B[Pattern Learning]
+      B --> C[Statistical Model]
+      D[Input Prompt] --> C
+      C --> E[Probability Calculation]
+      E --> F[Next Token Prediction]
+      F --> G[Generated Content]
+
+- id: q023
+  type: multiple_choice
+  question: |
+    A retail company needs to analyze thousands of customer reviews to understand overall sentiment and identify common themes.
+    Which AI workload is MOST suitable?
+  options:
+    - text: Text analysis with sentiment analysis and keyword extraction
+      is_correct: true
+    - text: Computer vision for image classification
+      is_correct: false
+    - text: Speech synthesis for text-to-speech conversion
+      is_correct: false
+    - text: Anomaly detection for fraud prevention
+      is_correct: false
+  explanation: |
+    Correct: Text analysis capabilities like sentiment analysis (identifying positive/negative opinions) and keyword extraction (finding common themes) are specifically designed for analyzing large volumes of text-based feedback.
+    Incorrect:
+    - Computer vision analyzes images, not text reviews.
+    - Speech synthesis generates audio from text, not analyzing text.
+    - Anomaly detection finds outliers, not sentiment and themes.
+  diagram: |
+    graph TD
+      A[Customer Reviews] --> B[Text Analysis]
+      B --> C[Sentiment Analysis]
+      B --> D[Keyword Extraction]
+      C --> E[Overall Sentiment Score]
+      D --> F[Common Themes]
+
+- id: q024
+  type: multiple_choice
+  question: |
+    Which text analysis technique would be MOST useful for automatically identifying names of people, organizations, and locations in news articles?
+  options:
+    - text: Entity detection (Named Entity Recognition)
+      is_correct: true
+    - text: Sentiment analysis
+      is_correct: false
+    - text: Keyword extraction
+      is_correct: false
+    - text: Language translation
+      is_correct: false
+  explanation: |
+    Correct: Entity detection (Named Entity Recognition - NER) specifically identifies and classifies named entities like people, organizations, locations, dates, and other predefined categories in text.
+    Incorrect:
+    - Sentiment analysis determines emotional tone, not specific entities.
+    - Keyword extraction finds important terms but doesn't classify entity types.
+    - Translation converts between languages, not identifying entities.
+  diagram: |
+    graph TD
+      A[News Article] --> B[Entity Detection]
+      B --> C[Person Names]
+      B --> D[Organizations]
+      B --> E[Locations]
+      B --> F[Dates]
+
+- id: q025
+  type: multiple_choice
+  question: |
+    A company wants to create a brief overview of lengthy research papers for quick review. Which text analysis technique should they use?
+  options:
+    - text: Summarization
+      is_correct: true
+    - text: Sentiment analysis
+      is_correct: false
+    - text: Entity detection
+      is_correct: false
+    - text: Keyword extraction
+      is_correct: false
+  explanation: |
+    Correct: Summarization condenses long documents into shorter versions while preserving key information and main ideas, perfect for creating overviews of lengthy content.
+    Incorrect:
+    - Sentiment analysis identifies emotional tone, not creating summaries.
+    - Entity detection identifies specific items, not creating overviews.
+    - Keyword extraction identifies important terms but doesn't create coherent summaries.
+  diagram: |
+    graph TD
+      A[Lengthy Research Paper] --> B[Summarization Model]
+      B --> C[Key Points Extraction]
+      B --> D[Coherent Summary]
+      C --> D
+      D --> E[Brief Overview]
+
+- id: q026
+  type: multiple_choice
+  question: |
+    What is the PRIMARY capability of speech recognition technology?
+  options:
+    - text: Converting spoken audio into written text
+      is_correct: true
+    - text: Generating natural-sounding speech from text
+      is_correct: false
+    - text: Identifying the emotion in a person's voice
+      is_correct: false
+    - text: Translating speech from one language to another
+      is_correct: false
+  explanation: |
+    Correct: Speech recognition (speech-to-text) converts spoken words in audio format into written text that can be processed or displayed.
+    Incorrect:
+    - Generating speech from text is speech synthesis (text-to-speech).
+    - Emotion detection is a separate capability, not the primary function.
+    - Translation is a language processing task that may use speech recognition as input.
+  diagram: |
+    graph TD
+      A[Spoken Audio] --> B[Speech Recognition]
+      B --> C[Audio Processing]
+      C --> D[Pattern Matching]
+      D --> E[Written Text Output]
+
+- id: q027
+  type: multiple_choice
+  question: |
+    A company wants to create an accessibility feature that reads website content aloud for visually impaired users. Which technology should they implement?
+  options:
+    - text: Speech synthesis (text-to-speech)
+      is_correct: true
+    - text: Speech recognition (speech-to-text)
+      is_correct: false
+    - text: Computer vision
+      is_correct: false
+    - text: Natural language understanding
+      is_correct: false
+  explanation: |
+    Correct: Speech synthesis (text-to-speech) converts written text into natural-sounding spoken audio, enabling content to be read aloud.
+    Incorrect:
+    - Speech recognition converts audio to text, the opposite of what's needed.
+    - Computer vision analyzes images, not creating audio.
+    - NLU understands text meaning but doesn't generate audio.
+  diagram: |
+    graph TD
+      A[Website Text Content] --> B[Speech Synthesis]
+      B --> C[Text Processing]
+      C --> D[Voice Generation]
+      D --> E[Natural-Sounding Audio]
+      E --> F[Visually Impaired User]
+
+- id: q028
+  type: multiple_choice
+  question: |
+    Which computer vision capability would be MOST appropriate for automatically categorizing products in an e-commerce catalog based on their images?
+  options:
+    - text: Image classification
+      is_correct: true
+    - text: Image generation
+      is_correct: false
+    - text: Optical character recognition (OCR)
+      is_correct: false
+    - text: Face detection
+      is_correct: false
+  explanation: |
+    Correct: Image classification analyzes images and assigns them to predefined categories, perfect for organizing products into catalog categories.
+    Incorrect:
+    - Image generation creates new images, not classifying existing ones.
+    - OCR extracts text from images, not categorizing products.
+    - Face detection finds faces in images, not general product categorization.
+  diagram: |
+    graph TD
+      A[Product Images] --> B[Image Classification Model]
+      B --> C[Category: Electronics]
+      B --> D[Category: Clothing]
+      B --> E[Category: Home Goods]
+
+- id: q029
+  type: multiple_choice
+  question: |
+    What is a key capability of image-generation models like DALL-E or Stable Diffusion?
+  options:
+    - text: Creating new images from text descriptions (text-to-image generation)
+      is_correct: true
+    - text: Identifying objects within existing images
+      is_correct: false
+    - text: Converting images to text descriptions
+      is_correct: false
+    - text: Compressing images to smaller file sizes
+      is_correct: false
+  explanation: |
+    Correct: Image-generation models can create entirely new, original images based on text prompts or descriptions provided by users.
+    Incorrect:
+    - Object identification is object detection, not generation.
+    - Converting images to text is image captioning, not generation.
+    - Compression is a technical process, not AI-based generation.
+  diagram: |
+    graph TD
+      A[Text Prompt: 'Sunset over mountains'] --> B[Image Generation Model]
+      B --> C[Pattern Understanding]
+      C --> D[Image Synthesis]
+      D --> E[Generated Image]
+
+- id: q030
+  type: multiple_choice
+  question: |
+    A security company wants to extract text from scanned documents and images of handwritten forms. Which technique should they use?
+  options:
+    - text: Optical Character Recognition (OCR)
+      is_correct: true
+    - text: Image classification
+      is_correct: false
+    - text: Object detection
+      is_correct: false
+    - text: Image segmentation
+      is_correct: false
+  explanation: |
+    Correct: OCR is specifically designed to detect and extract text characters from images, including scanned documents and handwritten forms.
+    Incorrect:
+    - Image classification categorizes entire images, not extracting text.
+    - Object detection identifies objects' locations, not extracting text.
+    - Image segmentation divides images into regions, not extracting text.
+  diagram: |
+    graph TD
+      A[Scanned Document] --> B[OCR Processing]
+      B --> C[Character Detection]
+      C --> D[Text Recognition]
+      D --> E[Extracted Text]
+
+- id: q031
+  type: multiple_choice
+  question: |
+    When selecting an AI model for a customer service chatbot that needs to handle diverse topics and generate contextual responses, which model type is MOST appropriate?
+  options:
+    - text: Large Language Model (LLM) with broad training data
+      is_correct: true
+    - text: Narrow classification model trained on specific categories
+      is_correct: false
+    - text: Computer vision model for image analysis
+      is_correct: false
+    - text: Speech recognition model for audio processing
+      is_correct: false
+  explanation: |
+    Correct: LLMs trained on diverse data can understand context, handle various topics, and generate appropriate conversational responses, making them ideal for versatile chatbots.
+    Incorrect:
+    - Classification models are limited to predefined categories, not flexible conversations.
+    - Computer vision models process images, not text conversations.
+    - Speech recognition is for audio-to-text, not generating responses.
+  diagram: |
+    graph TD
+      A[Diverse Customer Questions] --> B[LLM Chatbot]
+      B --> C[Context Understanding]
+      C --> D[Knowledge Retrieval]
+      D --> E[Contextual Response Generation]
+
+- id: q032
+  type: multiple_choice
+  question: |
+    What is an important configuration parameter when deploying a generative AI model that affects the creativity versus predictability of outputs?
+  options:
+    - text: Temperature setting
+      is_correct: true
+    - text: Image resolution
+      is_correct: false
+    - text: Network bandwidth
+      is_correct: false
+    - text: Storage capacity
+      is_correct: false
+  explanation: |
+    Correct: Temperature is a key parameter that controls randomness in model outputs. Lower temperature produces more deterministic/predictable results; higher temperature produces more creative/varied results.
+    Incorrect:
+    - Image resolution is for image processing, not generative text models.
+    - Network bandwidth is infrastructure, not model behavior.
+    - Storage capacity is infrastructure, not output characteristics.
+  diagram: |
+    graph TD
+      A[Temperature Setting] --> B[Low Temperature]
+      A --> C[High Temperature]
+      B --> D[Predictable/Focused Output]
+      C --> E[Creative/Diverse Output]
+
+- id: q033
+  type: multiple_choice
+  question: |
+    Which deployment option provides the MOST control over model infrastructure and data but requires the MOST management effort?
+  options:
+    - text: Self-hosted deployment on own infrastructure
+      is_correct: true
+    - text: Platform-as-a-Service (PaaS) AI service
+      is_correct: false
+    - text: API-based cloud AI service
+      is_correct: false
+    - text: Serverless AI function
+      is_correct: false
+  explanation: |
+    Correct: Self-hosted deployment gives complete control over hardware, software, and data but requires managing infrastructure, updates, scaling, and security.
+    Incorrect:
+    - PaaS reduces management overhead while providing some customization.
+    - API-based services are fully managed with minimal control.
+    - Serverless functions are fully managed with the least control.
+  diagram: |
+    graph TD
+      A[Deployment Options] --> B[Self-Hosted: High Control, High Management]
+      A --> C[PaaS: Medium Control, Medium Management]
+      A --> D[API/Serverless: Low Control, Low Management]
+
+- id: q034
+  type: multiple_choice
+  question: |
+    A media company needs to automatically generate captions for thousands of video files. Which combination of AI techniques would be MOST effective?
+  options:
+    - text: Speech recognition to extract audio as text, then natural language processing for formatting
+      is_correct: true
+    - text: Computer vision to analyze video frames and generate descriptions
+      is_correct: false
+    - text: Image generation to create visual captions
+      is_correct: false
+    - text: Sentiment analysis to determine video mood
+      is_correct: false
+  explanation: |
+    Correct: Speech recognition converts the audio track to text, which can then be processed and formatted as captions/subtitles using NLP techniques.
+    Incorrect:
+    - Computer vision analyzes visuals but misses the actual spoken dialogue.
+    - Image generation creates images, not text captions.
+    - Sentiment analysis identifies emotions, not creating captions.
+  diagram: |
+    graph TD
+      A[Video File] --> B[Audio Extraction]
+      B --> C[Speech Recognition]
+      C --> D[Text Output]
+      D --> E[NLP Formatting]
+      E --> F[Caption File]
+
+- id: q035
+  type: multiple_choice
+  question: |
+    What is agentic AI?
+  options:
+    - text: AI systems that can autonomously plan and execute multi-step tasks to achieve goals
+      is_correct: true
+    - text: AI systems that only respond to direct user prompts without independent action
+      is_correct: false
+    - text: AI systems designed exclusively for sentiment analysis
+      is_correct: false
+    - text: AI systems that only classify predefined categories
+      is_correct: false
+  explanation: |
+    Correct: Agentic AI refers to AI systems that can act autonomously, make decisions, plan sequences of actions, and execute tasks to accomplish objectives with minimal human intervention.
+    Incorrect:
+    - Reactive systems don't demonstrate agency or autonomy.
+    - Sentiment analysis is a specific task, not agency.
+    - Classification is a narrow task, not autonomous goal-oriented behavior.
+  diagram: |
+    graph TD
+      A[User Goal] --> B[Agentic AI]
+      B --> C[Planning]
+      C --> D[Action 1]
+      D --> E[Action 2]
+      E --> F[Action N]
+      F --> G[Goal Achieved]
+
+- id: q036
+  type: multiple_choice
+  question: |
+    A research team wants to analyze sentiment in social media posts across multiple languages. Which approach would be MOST effective?
+  options:
+    - text: Use multilingual sentiment analysis models or combine translation with sentiment analysis
+      is_correct: true
+    - text: Use computer vision to analyze images in posts
+      is_correct: false
+    - text: Use speech recognition to convert posts to audio
+      is_correct: false
+    - text: Use OCR to extract text from images
+      is_correct: false
+  explanation: |
+    Correct: Multilingual sentiment analysis models are trained on multiple languages, or you can translate text to a common language before applying sentiment analysis.
+    Incorrect:
+    - Computer vision analyzes images but doesn't determine text sentiment.
+    - Speech recognition is for audio, not written social media posts.
+    - OCR extracts text from images but doesn't analyze sentiment.
+  diagram: |
+    graph TD
+      A[Multilingual Posts] --> B[Translation/Multilingual Model]
+      B --> C[Sentiment Analysis]
+      C --> D[Positive]
+      C --> E[Negative]
+      C --> F[Neutral]
+
+- id: q037
+  type: multiple_choice
+  question: |
+    Which feature distinguishes object detection from image classification?
+  options:
+    - text: Object detection identifies multiple objects and their locations within an image
+      is_correct: true
+    - text: Object detection only categorizes the entire image into one class
+      is_correct: false
+    - text: Object detection generates new images from descriptions
+      is_correct: false
+    - text: Object detection extracts text from images
+      is_correct: false
+  explanation: |
+    Correct: Object detection not only identifies what objects are present but also locates them with bounding boxes, potentially finding multiple different objects in a single image.
+    Incorrect:
+    - Single categorization is image classification, not detection.
+    - Image generation creates new images, not detecting objects.
+    - Text extraction is OCR, not object detection.
+  diagram: |
+    graph TD
+      A[Input Image] --> B[Object Detection]
+      B --> C[Object 1: Car, Location: x,y,w,h]
+      B --> D[Object 2: Person, Location: x,y,w,h]
+      B --> E[Object 3: Tree, Location: x,y,w,h]
+
+- id: q038
+  type: multiple_choice
+  question: |
+    A company wants to extract key information from audio interviews, including spoken words and identifying speakers. Which combination of techniques is needed?
+  options:
+    - text: Speech recognition for transcription and speaker diarization for identifying speakers
+      is_correct: true
+    - text: Speech synthesis and text analysis
+      is_correct: false
+    - text: Computer vision and image classification
+      is_correct: false
+    - text: Sentiment analysis and keyword extraction only
+      is_correct: false
+  explanation: |
+    Correct: Speech recognition converts audio to text, while speaker diarization (speaker identification) determines who said what, providing comprehensive interview analysis.
+    Incorrect:
+    - Speech synthesis generates audio, not analyzing it.
+    - Computer vision and image classification work with images, not audio.
+    - Sentiment and keyword extraction work on text but don't identify speakers.
+  diagram: |
+    graph TD
+      A[Audio Interview] --> B[Speech Recognition]
+      B --> C[Transcribed Text]
+      A --> D[Speaker Diarization]
+      D --> E[Speaker 1 Segments]
+      D --> F[Speaker 2 Segments]
+      C --> G[Combined Output]
+      E --> G
+      F --> G
+
+- id: q039
+  type: multiple_choice
+  question: |
+    What is a key consideration when configuring the maximum token limit for a generative AI model?
+  options:
+    - text: It determines the maximum length of input prompts and generated responses
+      is_correct: true
+    - text: It controls how creative the model's outputs will be
+      is_correct: false
+    - text: It sets the number of training iterations for the model
+      is_correct: false
+    - text: It defines the image resolution for generated pictures
+      is_correct: false
+  explanation: |
+    Correct: The token limit (or max tokens parameter) controls how much text the model can process as input and generate as output. Tokens are pieces of words.
+    Incorrect:
+    - Creativity is controlled by temperature, not token limits.
+    - Training iterations are set during model training, not deployment.
+    - Token limits apply to text models, not image resolution.
+  diagram: |
+    graph TD
+      A[Token Limit Configuration] --> B[Input Token Budget]
+      A --> C[Output Token Budget]
+      B --> D[Maximum Prompt Length]
+      C --> E[Maximum Response Length]
+
+- id: q040
+  type: multiple_choice
+  question: |
+    A legal firm wants to extract structured information (dates, parties, clauses) from unstructured legal documents. Which AI workload is MOST suitable?
+  options:
+    - text: Information extraction using entity detection and custom models
+      is_correct: true
+    - text: Image generation to create visualizations
+      is_correct: false
+    - text: Speech synthesis to read documents aloud
+      is_correct: false
+    - text: Sentiment analysis to determine document tone
+      is_correct: false
+  explanation: |
+    Correct: Information extraction, particularly using entity detection and potentially custom-trained models, can identify and extract specific structured data points from unstructured text documents.
+    Incorrect:
+    - Image generation creates images, not extracting text data.
+    - Speech synthesis creates audio, not extracting information.
+    - Sentiment analysis determines emotional tone, not extracting specific data fields.
+  diagram: |
+    graph TD
+      A[Legal Document] --> B[Information Extraction]
+      B --> C[Entity Detection]
+      C --> D[Dates Extracted]
+      C --> E[Parties Identified]
+      C --> F[Clauses Located]
+      D --> G[Structured Data Output]
+      E --> G
+      F --> G

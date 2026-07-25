@@ -1,0 +1,272 @@
+questions:
+- id: q071
+  type: multiple_choice
+  question: |
+    A company wants to build a Blazor WebAssembly application that analyzes product images to identify defects. Which Azure AI service should they use in Azure AI Foundry?
+  options:
+    - text: Azure AI Vision service with custom vision or image analysis capabilities
+      is_correct: true
+    - text: Azure AI Language service for text analysis
+      is_correct: false
+    - text: Azure Speech service for audio processing
+      is_correct: false
+    - text: Azure AI Document Intelligence for form processing only
+      is_correct: false
+  explanation: |
+    Correct: Azure AI Vision service provides image analysis capabilities including object detection, image classification, and custom vision training - ideal for identifying defects in product images.
+    Incorrect:
+    - Language service analyzes text, not images.
+    - Speech service processes audio, not visual content.
+    - Document Intelligence is optimized for structured documents, not general defect detection.
+  diagram: |
+    graph TD
+      A[Product Images] --> B[Azure AI Vision Service]
+      B --> C[Image Analysis]
+      C --> D[Defect Detection]
+      D --> E[Blazor UI Display]
+
+- id: q072
+  type: multiple_choice
+  question: |
+    When using a multimodal model (like GPT-4 Vision) in Azure AI Foundry to interpret visual input, what are the TWO required components in the prompt?
+  options:
+    - text: The image (as URL or base64) and text instructions describing the analysis task
+      is_correct: true
+    - text: Only the image file without any text
+      is_correct: false
+    - text: Only text descriptions without actual images
+      is_correct: false
+    - text: Audio files and spreadsheets
+      is_correct: false
+  explanation: |
+    Correct: Multimodal models require both the visual input (image via URL or base64-encoded data) and text instructions that specify what analysis or questions to answer about the image.
+    Incorrect:
+    - Images alone don't tell the model what to analyze.
+    - Text alone cannot provide visual understanding.
+    - Audio and spreadsheets are different modalities not applicable here.
+  diagram: |
+    graph TD
+      A[Multimodal Prompt] --> B[Image Input]
+      A --> C[Text Instructions]
+      B --> D[GPT-4 Vision Model]
+      C --> D
+      D --> E[Visual Understanding Response]
+
+- id: q073
+  type: multiple_choice
+  question: |
+    In a .NET 9 Blazor application, how should images be prepared for sending to a multimodal AI model via Azure AI Foundry SDK?
+  options:
+    - text: Convert images to base64 strings or provide publicly accessible URLs
+      is_correct: true
+    - text: Send raw binary image data without encoding
+      is_correct: false
+    - text: Compress images to ZIP format first
+      is_correct: false
+    - text: Convert images to audio files
+      is_correct: false
+  explanation: |
+    Correct: Multimodal APIs typically accept images as either base64-encoded strings (embedded in JSON) or as URLs pointing to publicly accessible images. Both formats allow the API to retrieve and process the image.
+    Incorrect:
+    - Raw binary requires specific handling not standard in JSON APIs.
+    - ZIP compression is not the expected format.
+    - Converting to audio loses the visual information.
+  diagram: |
+    graph TD
+      A[Image File] --> B[Conversion Process]
+      B --> C[Base64 String]
+      B --> D[Public URL]
+      C --> E[API Request]
+      D --> E
+      E --> F[Multimodal Model]
+
+- id: q074
+  type: multiple_choice
+  question: |
+    A marketing team wants to generate product images from text descriptions using Azure AI Foundry. Which type of model should they deploy?
+  options:
+    - text: Image generation model like DALL-E 3 or Stable Diffusion
+      is_correct: true
+    - text: Text analysis model for sentiment
+      is_correct: false
+    - text: Speech recognition model
+      is_correct: false
+    - text: Object detection model
+      is_correct: false
+  explanation: |
+    Correct: Image generation models (DALL-E 3, Stable Diffusion) create new images from text prompts/descriptions, enabling marketers to generate product visuals based on textual descriptions.
+    Incorrect:
+    - Text analysis examines existing text, not creating images.
+    - Speech recognition converts audio to text.
+    - Object detection analyzes existing images, not creating new ones.
+  diagram: |
+    graph TD
+      A[Text Prompt: Modern kitchen appliance] --> B[DALL-E 3 Model]
+      B --> C[Image Generation Process]
+      C --> D[Generated Product Image]
+      D --> E[Marketing Materials]
+
+- id: q075
+  type: multiple_choice
+  question: |
+    When building a lightweight Blazor application with image generation capabilities, what is the recommended approach for handling API keys?
+  options:
+    - text: Store API keys in a backend API server and proxy requests from Blazor WebAssembly
+      is_correct: true
+    - text: Embed the API key directly in Blazor component code
+      is_correct: false
+    - text: Store the key in browser localStorage
+      is_correct: false
+    - text: Include the key in client-side JavaScript files
+      is_correct: false
+  explanation: |
+    Correct: Blazor WebAssembly runs entirely client-side, making embedded secrets visible in browser. A backend API (ASP.NET Core) should securely store credentials and proxy AI service requests.
+    Incorrect:
+    - Embedding in components exposes keys in browser dev tools.
+    - localStorage is accessible via JavaScript and browser tools.
+    - Client-side JavaScript files are publicly downloadable.
+  diagram: |
+    graph TD
+      A[Blazor WebAssembly] --> B[Backend API]
+      B --> C[Secure Key Storage]
+      C --> D[Azure AI Foundry]
+      D --> E[Image Generation Service]
+      E --> F[Generated Image]
+      F --> B
+      B --> A
+
+- id: q076
+  type: multiple_choice
+  question: |
+    Which Azure AI Vision capability would be MOST appropriate for a Blazor app that needs to extract printed and handwritten text from uploaded images?
+  options:
+    - text: Optical Character Recognition (OCR) / Read API
+      is_correct: true
+    - text: Image classification
+      is_correct: false
+    - text: Face detection
+      is_correct: false
+    - text: Image generation
+      is_correct: false
+  explanation: |
+    Correct: The OCR/Read API in Azure AI Vision extracts printed and handwritten text from images and documents, making it ideal for text extraction from uploaded images.
+    Incorrect:
+    - Image classification categorizes images, not extracting text.
+    - Face detection identifies faces, not text.
+    - Image generation creates new images, not reading existing ones.
+  diagram: |
+    graph TD
+      A[Uploaded Image with Text] --> B[Azure AI Vision OCR]
+      B --> C[Text Detection]
+      C --> D[Character Recognition]
+      D --> E[Extracted Text]
+      E --> F[Blazor UI Display]
+
+- id: q077
+  type: multiple_choice
+  question: |
+    When implementing object detection in a Blazor application using Azure AI Vision, what information is typically returned?
+  options:
+    - text: Detected object labels, confidence scores, and bounding box coordinates
+      is_correct: true
+    - text: Only the total number of objects
+      is_correct: false
+    - text: Generated images based on detected objects
+      is_correct: false
+    - text: Audio descriptions of the objects
+      is_correct: false
+  explanation: |
+    Correct: Object detection APIs return the identified objects with labels, confidence scores (how certain the model is), and bounding box coordinates (x, y, width, height) to locate objects in the image.
+    Incorrect:
+    - Count alone doesn't provide useful information about what or where objects are.
+    - Object detection analyzes images, not generating new ones.
+    - Audio descriptions require separate text-to-speech processing.
+  diagram: |
+    graph TD
+      A[Input Image] --> B[Object Detection API]
+      B --> C[Object: Car, 95% confidence]
+      B --> D[Object: Person, 87% confidence]
+      C --> E[Bounding Box: x,y,w,h]
+      D --> F[Bounding Box: x,y,w,h]
+
+- id: q078
+  type: multiple_choice
+  question: |
+    What is a key parameter when calling an image generation model in Azure AI Foundry to control the visual quality and detail?
+  options:
+    - text: Image size/resolution and quality settings (e.g., standard vs HD)
+      is_correct: true
+    - text: Audio sample rate
+      is_correct: false
+    - text: Database connection timeout
+      is_correct: false
+    - text: Email notification frequency
+      is_correct: false
+  explanation: |
+    Correct: Image generation models accept parameters for image size (e.g., 1024x1024, 1792x1024) and quality settings (standard or HD) that directly affect the output's resolution and detail level.
+    Incorrect:
+    - Audio sample rate is for audio processing, not images.
+    - Database settings are unrelated to image generation.
+    - Email notifications are separate from generation parameters.
+  diagram: |
+    graph TD
+      A[Image Generation Request] --> B[Size Parameter: 1024x1024]
+      A --> C[Quality: HD]
+      B --> D[Generation Engine]
+      C --> D
+      D --> E[High-Quality Image Output]
+
+- id: q079
+  type: multiple_choice
+  question: |
+    In a Blazor WebAssembly app that displays generated images, what is the recommended approach for handling the image data returned from Azure AI Foundry?
+  options:
+    - text: Convert the base64-encoded image data to a data URL for display in an img element
+      is_correct: true
+    - text: Display the base64 string as plain text
+      is_correct: false
+    - text: Convert the image to audio format
+      is_correct: false
+    - text: Store only the image metadata without the actual image
+      is_correct: false
+  explanation: |
+    Correct: Image generation APIs often return base64-encoded image data. In Blazor, you can create a data URL (e.g., "data:image/png;base64,...") and bind it to an img element's src attribute for display.
+    Incorrect:
+    - Displaying base64 as text doesn't render the image.
+    - Converting to audio loses the visual content.
+    - Metadata alone doesn't display the actual image.
+  diagram: |
+    graph TD
+      A[API Response] --> B[Base64 Image Data]
+      B --> C[Create Data URL]
+      C --> D[data:image/png;base64,...]
+      D --> E[img src Binding]
+      E --> F[Image Displayed in Browser]
+
+- id: q080
+  type: multiple_choice
+  question: |
+    A retail app needs to analyze product images to generate automatic product descriptions. Which combination of Azure AI services in Foundry would be MOST effective?
+  options:
+    - text: Use a multimodal model (GPT-4 Vision) to analyze images and generate descriptive text
+      is_correct: true
+    - text: Use only text analysis without any vision capabilities
+      is_correct: false
+    - text: Use speech recognition to describe images
+      is_correct: false
+    - text: Use image generation to create product images from descriptions
+      is_correct: false
+  explanation: |
+    Correct: Multimodal models like GPT-4 Vision can analyze product images and generate detailed, natural language descriptions based on visual features, making them ideal for automatic product description generation.
+    Incorrect:
+    - Text analysis alone cannot understand visual content.
+    - Speech recognition processes audio, not images.
+    - Image generation creates images from text, the opposite of what's needed.
+  diagram: |
+    graph TD
+      A[Product Image] --> B[GPT-4 Vision Model]
+      B --> C[Visual Analysis]
+      C --> D[Feature Extraction]
+      D --> E[Text Generation]
+      E --> F[Product Description]
+      F --> G[E-commerce Listing]
