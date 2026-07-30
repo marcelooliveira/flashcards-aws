@@ -1,539 +1,800 @@
 questions:
+- id: q001
+  type: multiple_choice
+  question: |
+    Which AI workload is primarily responsible for creating new text, images, or code based on user prompts?
+  options:
+    - text: Text Analysis
+      is_correct: false
+    - text: Computer Vision
+      is_correct: false
+    - text: Generative AI
+      is_correct: true
+    - text: Information Extraction
+      is_correct: false
+  explanation: |
+    Correct: Generative AI focuses on creation of novel content, unlike analysis or extraction workloads. This tests core distinction.
+
+- id: q002
+  type: multiple_choice
+  question: |
+    What does agentic AI primarily enable beyond standard generative outputs?
+  options:
+    - text: Simple keyword search
+      is_correct: false
+    - text: Autonomous planning, tool use, and multi-step task execution
+      is_correct: true
+    - text: Image classification only
+      is_correct: false
+    - text: Speech synthesis
+      is_correct: false
+  explanation: |
+    Correct: Agentic systems reason and act toward goals using tools, distinguishing them from passive generation.
+
+- id: q003
+  type: multiple_choice
+  question: |
+    In text analysis, Named Entity Recognition (NER) is used to:
+  options:
+    - text: Generate images
+      is_correct: false
+    - text: Identify people, organizations, dates in text
+      is_correct: true
+    - text: Convert speech to text
+      is_correct: false
+    - text: Extract tables from videos
+      is_correct: false
+  explanation: |
+    Correct: NER is a key NLP technique for entity detection, central to text workloads.
+
+- id: q004
+  type: multiple_choice
+  question: |
+    Which Foundry capability best supports real-time spoken interactions with visual context?
+  options:
+    - text: Pure text summarization
+      is_correct: false
+    - text: Multimodal models combining speech and vision
+      is_correct: true
+    - text: Static document OCR
+      is_correct: false
+    - text: Keyword extraction only
+      is_correct: false
+  explanation: |
+    Correct: Multimodal integration is key for advanced speech scenarios in Foundry.
+
+- id: q005
+  type: multiple_choice
+  question: |
+    Which of the following best describes a multimodal AI workload in Foundry?
+  options:
+    - text: Processing only text data for summarization
+      is_correct: false
+    - text: Combining inputs from text, speech, images, and video in a single interaction
+      is_correct: true
+    - text: Extracting keywords from documents exclusively
+      is_correct: false
+    - text: Generating synthetic speech without visual context
+      is_correct: false
+  explanation: |
+    Correct: Multimodal models in Foundry handle multiple data types simultaneously (e.g., voice query with image analysis), enabling richer applications than single-modality workloads.
+
+- id: q006
+  type: multiple_choice
+  question: |
+    In an agentic AI scenario, what is the role of tools in Foundry Agent Service?
+  options:
+    - text: To store conversation history only
+      is_correct: false
+    - text: To allow the agent to call external APIs, search data, or perform calculations to complete tasks
+      is_correct: true
+    - text: To generate images from text prompts
+      is_correct: false
+    - text: To transcribe audio files
+      is_correct: false
+  explanation: |
+    Correct: Tools extend agent capabilities for real-world actions, distinguishing agentic from basic generative AI.
+
+- id: q007
+  type: multiple_choice
+  question: |
+    A retail company wants to analyze customer reviews for product improvement. Which workload is most appropriate?
+  options:
+    - text: Computer Vision
+      is_correct: false
+    - text: Text Analysis (sentiment and entity recognition)
+      is_correct: true
+    - text: Speech Synthesis
+      is_correct: false
+    - text: Image Generation
+      is_correct: false
+  explanation: |
+    Correct: Text analysis excels at sentiment, keywords, and entity extraction from reviews, directly supporting business insights.
+
+- id: q008
+  type: multiple_choice
+  question: |
+    What technique in text analysis converts spoken language into written text for further processing?
+  options:
+    - text: Summarization
+      is_correct: false
+    - text: Speech-to-Text (STT) as part of speech workloads
+      is_correct: true
+    - text: Named Entity Recognition
+      is_correct: false
+    - text: Diffusion modeling
+      is_correct: false
+  explanation: |
+    Correct: STT is a core speech workload capability that feeds into text analysis pipelines.
+
+- id: q009
+  type: multiple_choice
+  question: |
+    Which Foundry feature helps mitigate hallucinations in generative AI outputs?
+  options:
+    - text: Increasing model temperature
+      is_correct: false
+    - text: Retrieval-Augmented Generation (RAG) and grounding with your data
+      is_correct: true
+    - text: Disabling prompt engineering
+      is_correct: false
+    - text: Using only small models
+      is_correct: false
+  explanation: |
+    Correct: RAG grounds responses in factual data, significantly reducing inaccurate generations.
+
+- id: q010
+  type: multiple_choice
+  question: |
+    For a healthcare application that processes patient intake forms, which workload combination would be most effective?
+  options:
+    - text: Image Generation only
+      is_correct: false
+    - text: Information Extraction + Text Analysis + Generative AI for summaries
+      is_correct: true
+    - text: Pure speech synthesis
+      is_correct: false
+    - text: Computer vision without document handling
+      is_correct: false
+  explanation: |
+    Correct: This multimodal approach extracts structured data, analyzes content, and generates actionable summaries.
+
+- id: q011
+  type: multiple_choice
+  question: |
+    Speaker diarization is a key capability primarily associated with:
+  options:
+    - text: Computer Vision
+      is_correct: false
+    - text: Speech Recognition workloads
+      is_correct: true
+    - text: Information Extraction from images
+      is_correct: false
+    - text: Generative text creation
+      is_correct: false
+  explanation: |
+    Correct: Diarization identifies who spoke when in audio, essential for meeting transcription and analysis.
+
+- id: q012
+  type: multiple_choice
+  question: |
+    In computer vision, Optical Character Recognition (OCR) is used to:
+  options:
+    - text: Generate new images
+      is_correct: false
+    - text: Extract text from images or scanned documents
+      is_correct: true
+    - text: Perform sentiment analysis
+      is_correct: false
+    - text: Synthesize speech
+      is_correct: false
+  explanation: |
+    Correct: OCR is a fundamental vision technique for making visual text machine-readable.
+
+- id: q013
+  type: multiple_choice
+  question: |
+    What is a primary benefit of agentic AI over traditional chatbots?
+  options:
+    - text: Faster image rendering
+      is_correct: false
+    - text: Autonomous multi-step planning and tool orchestration toward complex goals
+      is_correct: true
+    - text: Lower cost for simple keyword extraction
+      is_correct: false
+    - text: Static response generation only
+      is_correct: false
+  explanation: |
+    Correct: Agents reason, plan, and execute dynamically, handling sophisticated workflows.
+
+- id: q014
+  type: multiple_choice
+  question: |
+    Responsible AI in information extraction emphasizes:
+  options:
+    - text: Ignoring privacy for faster processing
+      is_correct: false
+    - text: Protecting sensitive data (PII) and ensuring accurate, unbiased extraction
+      is_correct: true
+    - text: Maximizing hallucinations for creativity
+      is_correct: false
+    - text: Skipping human validation
+      is_correct: false
+  explanation: |
+    Correct: Privacy, accuracy, and bias mitigation are core to responsible deployment.
+
+- id: q015
+  type: multiple_choice
+  question: |
+    A prompt like "Describe this image and generate a similar marketing variant" demonstrates:
+  options:
+    - text: Pure text analysis
+      is_correct: false
+    - text: Multimodal computer vision and image generation
+      is_correct: true
+    - text: Speech-only synthesis
+      is_correct: false
+    - text: Simple keyword extraction
+      is_correct: false
+  explanation: |
+    Correct: This combines vision interpretation with generative capabilities.
+
+- id: q016
+  type: multiple_choice
+  question: |
+    Which metric is commonly used to evaluate text analysis models?
+  options:
+    - text: Pixel accuracy
+      is_correct: false
+    - text: Precision, Recall, and F1-score
+      is_correct: true
+    - text: Token generation speed
+      is_correct: false
+    - text: Audio waveform similarity
+      is_correct: false
+  explanation: |
+    Correct: These metrics assess classification and extraction quality in NLP tasks.
+
+- id: q017
+  type: multiple_choice
+  question: |
+    Custom voice models in Foundry Speech services are useful for:
+  options:
+    - text: Maintaining brand consistency in audio outputs
+      is_correct: true
+    - text: Image classification
+      is_correct: false
+    - text: Document table extraction
+      is_correct: false
+    - text: Code generation
+      is_correct: false
+  explanation: |
+    Correct: Custom voices create recognizable, professional audio experiences.
+
+- id: q018
+  type: multiple_choice
+  question: |
+    In a security surveillance scenario, which workload would detect unusual activity in video feeds?
+  options:
+    - text: Text summarization
+      is_correct: false
+    - text: Computer Vision (anomaly detection and activity recognition)
+      is_correct: true
+    - text: Speech-to-text only
+      is_correct: false
+    - text: Basic entity recognition
+      is_correct: false
+  explanation: |
+    Correct: Vision workloads analyze video for patterns and anomalies.
+
+- id: q019
+  type: multiple_choice
+  question: |
+    What does Content Understanding in Foundry primarily enable?
+  options:
+    - text: Real-time speech translation
+      is_correct: false
+    - text: Structured extraction from documents, forms, images, audio, and video
+      is_correct: true
+    - text: Pure generative storytelling
+      is_correct: false
+    - text: Model training from scratch
+      is_correct: false
+  explanation: |
+    Correct: It unifies information extraction across multiple content types.
+
+- id: q020
+  type: multiple_choice
+  question: |
+    A common challenge in generative AI scenarios is prompt injection. The best mitigation in Foundry is:
+  options:
+    - text: Ignoring user inputs
+      is_correct: false
+    - text: Input validation, system prompts, and content safety filters
+      is_correct: true
+    - text: Using higher temperature settings
+      is_correct: false
+    - text: Disabling agents
+      is_correct: false
+  explanation: |
+    Correct: These safeguards protect against malicious or unintended behaviors.
+
 - id: q021
   type: multiple_choice
   question: |
-    A company wants to build a system that can generate human-like responses to customer questions based on their product documentation.
-    Which type of AI model would be MOST appropriate for this use case?
+    For an educational language learning app, which workload integration would provide pronunciation feedback?
   options:
-    - text: Generative AI model (Large Language Model)
+    - text: Image generation
+      is_correct: false
+    - text: Speech recognition + synthesis with feedback generation
       is_correct: true
-    - text: Computer vision model
+    - text: Document extraction only
       is_correct: false
-    - text: Speech recognition model
-      is_correct: false
-    - text: Optical character recognition (OCR) model
+    - text: Static text analysis
       is_correct: false
   explanation: |
-    Correct: Generative AI models, particularly Large Language Models (LLMs), are designed to understand context and generate human-like text responses, making them ideal for customer service chatbots based on documentation.
-    Incorrect:
-    - Computer vision models process images, not text-based questions.
-    - Speech recognition converts audio to text, not generating responses.
-    - OCR extracts text from images, not generating conversational responses.
-  diagram: |
-    graph TD
-      A[Product Documentation] --> B[LLM Training]
-      C[Customer Question] --> D[Generative AI Model]
-      B --> D
-      D --> E[Human-like Response]
+    Correct: Speech workloads enable interactive speaking practice.
 
 - id: q022
   type: multiple_choice
   question: |
-    How do generative AI models fundamentally work to produce new content?
+    Retrieval-Augmented Generation (RAG) is most valuable in:
   options:
-    - text: They learn patterns from training data and use probability to predict and generate the most likely next token or element
+    - text: Reducing costs for vision tasks
+      is_correct: false
+    - text: Improving accuracy and reducing hallucinations in generative/agentic scenarios
       is_correct: true
-    - text: They store exact copies of training data and retrieve matching examples
+    - text: Speeding up OCR only
       is_correct: false
-    - text: They follow explicit rules programmed by developers for every possible output
-      is_correct: false
-    - text: They randomly combine elements from different sources without pattern recognition
+    - text: Synthesizing custom voices
       is_correct: false
   explanation: |
-    Correct: Generative AI models learn statistical patterns and relationships from training data, then use these learned patterns to predict what comes next (token by token) based on probability distributions.
-    Incorrect:
-    - Models don't store and retrieve exact copies; they learn patterns.
-    - Models use learned patterns, not explicit rules for every scenario.
-    - Generation is based on learned patterns, not random combination.
-  diagram: |
-    graph TD
-      A[Training Data] --> B[Pattern Learning]
-      B --> C[Statistical Model]
-      D[Input Prompt] --> C
-      C --> E[Probability Calculation]
-      E --> F[Next Token Prediction]
-      F --> G[Generated Content]
+    Correct: RAG grounds generations in retrieved knowledge.
 
 - id: q023
   type: multiple_choice
   question: |
-    A retail company needs to analyze thousands of customer reviews to understand overall sentiment and identify common themes.
-    Which AI workload is MOST suitable?
+    Aspect-based sentiment analysis goes beyond overall sentiment by:
   options:
-    - text: Text analysis with sentiment analysis and keyword extraction
+    - text: Generating images
+      is_correct: false
+    - text: Evaluating specific features (e.g., "food great, service poor")
       is_correct: true
-    - text: Computer vision for image classification
+    - text: Transcribing audio
       is_correct: false
-    - text: Speech synthesis for text-to-speech conversion
-      is_correct: false
-    - text: Anomaly detection for fraud prevention
+    - text: Extracting tables
       is_correct: false
   explanation: |
-    Correct: Text analysis capabilities like sentiment analysis (identifying positive/negative opinions) and keyword extraction (finding common themes) are specifically designed for analyzing large volumes of text-based feedback.
-    Incorrect:
-    - Computer vision analyzes images, not text reviews.
-    - Speech synthesis generates audio from text, not analyzing text.
-    - Anomaly detection finds outliers, not sentiment and themes.
-  diagram: |
-    graph TD
-      A[Customer Reviews] --> B[Text Analysis]
-      B --> C[Sentiment Analysis]
-      B --> D[Keyword Extraction]
-      C --> E[Overall Sentiment Score]
-      D --> F[Common Themes]
+    Correct: It provides granular insights for actionable improvements.
 
 - id: q024
   type: multiple_choice
   question: |
-    Which text analysis technique would be MOST useful for automatically identifying names of people, organizations, and locations in news articles?
+    Building a lightweight client application in Foundry for vision typically involves:
   options:
-    - text: Entity detection (Named Entity Recognition)
+    - text: Only portal interactions
+      is_correct: false
+    - text: SDK calls to multimodal models with image inputs
       is_correct: true
-    - text: Sentiment analysis
+    - text: Manual coding of neural networks
       is_correct: false
-    - text: Keyword extraction
-      is_correct: false
-    - text: Language translation
+    - text: Speech-only APIs
       is_correct: false
   explanation: |
-    Correct: Entity detection (Named Entity Recognition - NER) specifically identifies and classifies named entities like people, organizations, locations, dates, and other predefined categories in text.
-    Incorrect:
-    - Sentiment analysis determines emotional tone, not specific entities.
-    - Keyword extraction finds important terms but doesn't classify entity types.
-    - Translation converts between languages, not identifying entities.
-  diagram: |
-    graph TD
-      A[News Article] --> B[Entity Detection]
-      B --> C[Person Names]
-      B --> D[Organizations]
-      B --> E[Locations]
-      B --> F[Dates]
+    Correct: SDKs enable seamless integration into custom apps.
 
 - id: q025
   type: multiple_choice
   question: |
-    A company wants to create a brief overview of lengthy research papers for quick review. Which text analysis technique should they use?
+    Ethical considerations in image generation include:
   options:
-    - text: Summarization
+    - text: Always maximizing creativity without limits
+      is_correct: false
+    - text: Consent, bias mitigation, and avoiding harmful or misleading content
       is_correct: true
-    - text: Sentiment analysis
+    - text: Ignoring copyright concerns
       is_correct: false
-    - text: Entity detection
-      is_correct: false
-    - text: Keyword extraction
+    - text: Using unfiltered training data
       is_correct: false
   explanation: |
-    Correct: Summarization condenses long documents into shorter versions while preserving key information and main ideas, perfect for creating overviews of lengthy content.
-    Incorrect:
-    - Sentiment analysis identifies emotional tone, not creating summaries.
-    - Entity detection identifies specific items, not creating overviews.
-    - Keyword extraction identifies important terms but doesn't create coherent summaries.
-  diagram: |
-    graph TD
-      A[Lengthy Research Paper] --> B[Summarization Model]
-      B --> C[Key Points Extraction]
-      B --> D[Coherent Summary]
-      C --> D
-      D --> E[Brief Overview]
+    Correct: Responsible AI principles guide safe visual content creation.
 
 - id: q026
   type: multiple_choice
   question: |
-    What is the PRIMARY capability of speech recognition technology?
+    Which workload would best process a recorded earnings call for key financial insights?
   options:
-    - text: Converting spoken audio into written text
+    - text: Pure computer vision
+      is_correct: false
+    - text: Speech-to-Text + Text Analysis + Information Extraction
       is_correct: true
-    - text: Generating natural-sounding speech from text
+    - text: Image generation
       is_correct: false
-    - text: Identifying the emotion in a person's voice
-      is_correct: false
-    - text: Translating speech from one language to another
+    - text: Static prompt engineering only
       is_correct: false
   explanation: |
-    Correct: Speech recognition (speech-to-text) converts spoken words in audio format into written text that can be processed or displayed.
-    Incorrect:
-    - Generating speech from text is speech synthesis (text-to-speech).
-    - Emotion detection is a separate capability, not the primary function.
-    - Translation is a language processing task that may use speech recognition as input.
-  diagram: |
-    graph TD
-      A[Spoken Audio] --> B[Speech Recognition]
-      B --> C[Audio Processing]
-      C --> D[Pattern Matching]
-      D --> E[Written Text Output]
+    Correct: This pipeline transcribes, analyzes, and extracts structured data.
 
 - id: q027
   type: multiple_choice
   question: |
-    A company wants to create an accessibility feature that reads website content aloud for visually impaired users. Which technology should they implement?
+    In Foundry, projects help with:
   options:
-    - text: Speech synthesis (text-to-speech)
+    - text: Isolating resources, models, and agents for organized development
       is_correct: true
-    - text: Speech recognition (speech-to-text)
+    - text: Automatic image rendering
       is_correct: false
-    - text: Computer vision
+    - text: Speech-only storage
       is_correct: false
-    - text: Natural language understanding
+    - text: Data deletion only
       is_correct: false
   explanation: |
-    Correct: Speech synthesis (text-to-speech) converts written text into natural-sounding spoken audio, enabling content to be read aloud.
-    Incorrect:
-    - Speech recognition converts audio to text, the opposite of what's needed.
-    - Computer vision analyzes images, not creating audio.
-    - NLU understands text meaning but doesn't generate audio.
-  diagram: |
-    graph TD
-      A[Website Text Content] --> B[Speech Synthesis]
-      B --> C[Text Processing]
-      C --> D[Voice Generation]
-      D --> E[Natural-Sounding Audio]
-      E --> F[Visually Impaired User]
+    Correct: Projects provide governance and organization.
 
 - id: q028
   type: multiple_choice
   question: |
-    Which computer vision capability would be MOST appropriate for automatically categorizing products in an e-commerce catalog based on their images?
+    A key difference between extractive and abstractive summarization is:
   options:
-    - text: Image classification
+    - text: Extractive pulls existing sentences; abstractive generates new concise text
       is_correct: true
-    - text: Image generation
+    - text: One is for vision, the other for speech
       is_correct: false
-    - text: Optical character recognition (OCR)
+    - text: Abstractive is always less accurate
       is_correct: false
-    - text: Face detection
+    - text: Extractive requires more compute
       is_correct: false
   explanation: |
-    Correct: Image classification analyzes images and assigns them to predefined categories, perfect for organizing products into catalog categories.
-    Incorrect:
-    - Image generation creates new images, not classifying existing ones.
-    - OCR extracts text from images, not categorizing products.
-    - Face detection finds faces in images, not general product categorization.
-  diagram: |
-    graph TD
-      A[Product Images] --> B[Image Classification Model]
-      B --> C[Category: Electronics]
-      B --> D[Category: Clothing]
-      B --> E[Category: Home Goods]
+    Correct: Understanding these supports appropriate use in text workloads.
 
 - id: q029
   type: multiple_choice
   question: |
-    What is a key capability of image-generation models like DALL-E or Stable Diffusion?
+    For inventory management using product photos, the primary workload is:
   options:
-    - text: Creating new images from text descriptions (text-to-image generation)
+    - text: Speech synthesis
+      is_correct: false
+    - text: Computer Vision (object detection and classification)
       is_correct: true
-    - text: Identifying objects within existing images
+    - text: Generative text only
       is_correct: false
-    - text: Converting images to text descriptions
-      is_correct: false
-    - text: Compressing images to smaller file sizes
+    - text: Basic keyword search
       is_correct: false
   explanation: |
-    Correct: Image-generation models can create entirely new, original images based on text prompts or descriptions provided by users.
-    Incorrect:
-    - Object identification is object detection, not generation.
-    - Converting images to text is image captioning, not generation.
-    - Compression is a technical process, not AI-based generation.
-  diagram: |
-    graph TD
-      A[Text Prompt: 'Sunset over mountains'] --> B[Image Generation Model]
-      B --> C[Pattern Understanding]
-      C --> D[Image Synthesis]
-      D --> E[Generated Image]
+    Correct: Vision identifies and categorizes items visually.
 
 - id: q030
   type: multiple_choice
   question: |
-    A security company wants to extract text from scanned documents and images of handwritten forms. Which technique should they use?
+    Human-in-the-loop processes are crucial in agentic AI for:
   options:
-    - text: Optical Character Recognition (OCR)
+    - text: Increasing automation speed
+      is_correct: false
+    - text: Providing oversight, validation, and ethical control in critical decisions
       is_correct: true
-    - text: Image classification
+    - text: Replacing all human roles
       is_correct: false
-    - text: Object detection
-      is_correct: false
-    - text: Image segmentation
+    - text: Reducing model accuracy
       is_correct: false
   explanation: |
-    Correct: OCR is specifically designed to detect and extract text characters from images, including scanned documents and handwritten forms.
-    Incorrect:
-    - Image classification categorizes entire images, not extracting text.
-    - Object detection identifies objects' locations, not extracting text.
-    - Image segmentation divides images into regions, not extracting text.
-  diagram: |
-    graph TD
-      A[Scanned Document] --> B[OCR Processing]
-      B --> C[Character Detection]
-      C --> D[Text Recognition]
-      D --> E[Extracted Text]
+    Correct: They ensure reliability and accountability.
 
 - id: q031
   type: multiple_choice
   question: |
-    When selecting an AI model for a customer service chatbot that needs to handle diverse topics and generate contextual responses, which model type is MOST appropriate?
+    Azure Content Understanding supports extraction from which of the following?
   options:
-    - text: Large Language Model (LLM) with broad training data
+    - text: Text documents and forms only
+      is_correct: false
+    - text: Documents, images, audio, and video
       is_correct: true
-    - text: Narrow classification model trained on specific categories
+    - text: Speech synthesis outputs exclusively
       is_correct: false
-    - text: Computer vision model for image analysis
-      is_correct: false
-    - text: Speech recognition model for audio processing
+    - text: Generated code snippets
       is_correct: false
   explanation: |
-    Correct: LLMs trained on diverse data can understand context, handle various topics, and generate appropriate conversational responses, making them ideal for versatile chatbots.
-    Incorrect:
-    - Classification models are limited to predefined categories, not flexible conversations.
-    - Computer vision models process images, not text conversations.
-    - Speech recognition is for audio-to-text, not generating responses.
-  diagram: |
-    graph TD
-      A[Diverse Customer Questions] --> B[LLM Chatbot]
-      B --> C[Context Understanding]
-      C --> D[Knowledge Retrieval]
-      D --> E[Contextual Response Generation]
+    Correct: Its multimodal strength handles diverse unstructured sources.
 
 - id: q032
   type: multiple_choice
   question: |
-    What is an important configuration parameter when deploying a generative AI model that affects the creativity versus predictability of outputs?
+    Temperature parameter in generative models primarily controls:
   options:
-    - text: Temperature setting
+    - text: Output creativity and randomness
       is_correct: true
     - text: Image resolution
       is_correct: false
-    - text: Network bandwidth
+    - text: Speech speed
       is_correct: false
-    - text: Storage capacity
+    - text: Extraction accuracy
       is_correct: false
   explanation: |
-    Correct: Temperature is a key parameter that controls randomness in model outputs. Lower temperature produces more deterministic/predictable results; higher temperature produces more creative/varied results.
-    Incorrect:
-    - Image resolution is for image processing, not generative text models.
-    - Network bandwidth is infrastructure, not model behavior.
-    - Storage capacity is infrastructure, not output characteristics.
-  diagram: |
-    graph TD
-      A[Temperature Setting] --> B[Low Temperature]
-      A --> C[High Temperature]
-      B --> D[Predictable/Focused Output]
-      C --> E[Creative/Diverse Output]
+    Correct: Higher temperature increases variability; lower ensures more deterministic results.
 
 - id: q033
   type: multiple_choice
   question: |
-    Which deployment option provides the MOST control over model infrastructure and data but requires the MOST management effort?
+    A real estate app that describes property photos aloud uses:
   options:
-    - text: Self-hosted deployment on own infrastructure
+    - text: Text analysis alone
+      is_correct: false
+    - text: Computer Vision + Speech Synthesis
       is_correct: true
-    - text: Platform-as-a-Service (PaaS) AI service
+    - text: Information extraction from video only
       is_correct: false
-    - text: API-based cloud AI service
-      is_correct: false
-    - text: Serverless AI function
+    - text: Agentic planning without vision
       is_correct: false
   explanation: |
-    Correct: Self-hosted deployment gives complete control over hardware, software, and data but requires managing infrastructure, updates, scaling, and security.
-    Incorrect:
-    - PaaS reduces management overhead while providing some customization.
-    - API-based services are fully managed with minimal control.
-    - Serverless functions are fully managed with the least control.
-  diagram: |
-    graph TD
-      A[Deployment Options] --> B[Self-Hosted: High Control, High Management]
-      A --> C[PaaS: Medium Control, Medium Management]
-      A --> D[API/Serverless: Low Control, Low Management]
+    Correct: Combines interpretation with natural audio output.
 
 - id: q034
   type: multiple_choice
   question: |
-    A media company needs to automatically generate captions for thousands of video files. Which combination of AI techniques would be MOST effective?
+    Bias mitigation in text analysis involves:
   options:
-    - text: Speech recognition to extract audio as text, then natural language processing for formatting
+    - text: Using unbalanced datasets
+      is_correct: false
+    - text: Diverse training data and fairness evaluation metrics
       is_correct: true
-    - text: Computer vision to analyze video frames and generate descriptions
+    - text: Ignoring demographic factors
       is_correct: false
-    - text: Image generation to create visual captions
-      is_correct: false
-    - text: Sentiment analysis to determine video mood
+    - text: Maximizing model size
       is_correct: false
   explanation: |
-    Correct: Speech recognition converts the audio track to text, which can then be processed and formatted as captions/subtitles using NLP techniques.
-    Incorrect:
-    - Computer vision analyzes visuals but misses the actual spoken dialogue.
-    - Image generation creates images, not text captions.
-    - Sentiment analysis identifies emotions, not creating captions.
-  diagram: |
-    graph TD
-      A[Video File] --> B[Audio Extraction]
-      B --> C[Speech Recognition]
-      C --> D[Text Output]
-      D --> E[NLP Formatting]
-      E --> F[Caption File]
+    Correct: Ensures equitable performance across user groups.
 
 - id: q035
   type: multiple_choice
   question: |
-    What is agentic AI?
+    Orchestrator agents in multi-agent systems primarily:
   options:
-    - text: AI systems that can autonomously plan and execute multi-step tasks to achieve goals
+    - text: Generate images
+      is_correct: false
+    - text: Coordinate specialized agents and manage workflow
       is_correct: true
-    - text: AI systems that only respond to direct user prompts without independent action
+    - text: Perform OCR only
       is_correct: false
-    - text: AI systems designed exclusively for sentiment analysis
-      is_correct: false
-    - text: AI systems that only classify predefined categories
+    - text: Transcribe single-speaker audio
       is_correct: false
   explanation: |
-    Correct: Agentic AI refers to AI systems that can act autonomously, make decisions, plan sequences of actions, and execute tasks to accomplish objectives with minimal human intervention.
-    Incorrect:
-    - Reactive systems don't demonstrate agency or autonomy.
-    - Sentiment analysis is a specific task, not agency.
-    - Classification is a narrow task, not autonomous goal-oriented behavior.
-  diagram: |
-    graph TD
-      A[User Goal] --> B[Agentic AI]
-      B --> C[Planning]
-      C --> D[Action 1]
-      D --> E[Action 2]
-      E --> F[Action N]
-      F --> G[Goal Achieved]
+    Correct: They enable complex collaborative intelligence.
 
 - id: q036
   type: multiple_choice
   question: |
-    A research team wants to analyze sentiment in social media posts across multiple languages. Which approach would be MOST effective?
+    Which is a common application of information extraction in finance?
   options:
-    - text: Use multilingual sentiment analysis models or combine translation with sentiment analysis
+    - text: Creating artistic visuals
+      is_correct: false
+    - text: Automated invoice processing (amounts, dates, vendors)
       is_correct: true
-    - text: Use computer vision to analyze images in posts
+    - text: Voice avatar creation
       is_correct: false
-    - text: Use speech recognition to convert posts to audio
-      is_correct: false
-    - text: Use OCR to extract text from images
+    - text: Sentiment-only analysis
       is_correct: false
   explanation: |
-    Correct: Multilingual sentiment analysis models are trained on multiple languages, or you can translate text to a common language before applying sentiment analysis.
-    Incorrect:
-    - Computer vision analyzes images but doesn't determine text sentiment.
-    - Speech recognition is for audio, not written social media posts.
-    - OCR extracts text from images but doesn't analyze sentiment.
-  diagram: |
-    graph TD
-      A[Multilingual Posts] --> B[Translation/Multilingual Model]
-      B --> C[Sentiment Analysis]
-      C --> D[Positive]
-      C --> E[Negative]
-      C --> F[Neutral]
+    Correct: Streamlines document-heavy processes.
 
 - id: q037
   type: multiple_choice
   question: |
-    Which feature distinguishes object detection from image classification?
+    Noisy environments challenge speech recognition. Foundry solutions include:
   options:
-    - text: Object detection identifies multiple objects and their locations within an image
+    - text: Ignoring background noise
+      is_correct: false
+    - text: Noise suppression, robust models, and custom training
       is_correct: true
-    - text: Object detection only categorizes the entire image into one class
+    - text: Switching to text-only
       is_correct: false
-    - text: Object detection generates new images from descriptions
-      is_correct: false
-    - text: Object detection extracts text from images
+    - text: Reducing model size
       is_correct: false
   explanation: |
-    Correct: Object detection not only identifies what objects are present but also locates them with bounding boxes, potentially finding multiple different objects in a single image.
-    Incorrect:
-    - Single categorization is image classification, not detection.
-    - Image generation creates new images, not detecting objects.
-    - Text extraction is OCR, not object detection.
-  diagram: |
-    graph TD
-      A[Input Image] --> B[Object Detection]
-      B --> C[Object 1: Car, Location: x,y,w,h]
-      B --> D[Object 2: Person, Location: x,y,w,h]
-      B --> E[Object 3: Tree, Location: x,y,w,h]
+    Correct: Improves real-world usability.
 
 - id: q038
   type: multiple_choice
   question: |
-    A company wants to extract key information from audio interviews, including spoken words and identifying speakers. Which combination of techniques is needed?
+    Generative AI for code generation accelerates development by:
   options:
-    - text: Speech recognition for transcription and speaker diarization for identifying speakers
+    - text: Replacing all testing
+      is_correct: false
+    - text: Assisting with functions, debugging, and boilerplate
       is_correct: true
-    - text: Speech synthesis and text analysis
+    - text: Focusing solely on vision tasks
       is_correct: false
-    - text: Computer vision and image classification
-      is_correct: false
-    - text: Sentiment analysis and keyword extraction only
+    - text: Eliminating need for prompts
       is_correct: false
   explanation: |
-    Correct: Speech recognition converts audio to text, while speaker diarization (speaker identification) determines who said what, providing comprehensive interview analysis.
-    Incorrect:
-    - Speech synthesis generates audio, not analyzing it.
-    - Computer vision and image classification work with images, not audio.
-    - Sentiment and keyword extraction work on text but don't identify speakers.
-  diagram: |
-    graph TD
-      A[Audio Interview] --> B[Speech Recognition]
-      B --> C[Transcribed Text]
-      A --> D[Speaker Diarization]
-      D --> E[Speaker 1 Segments]
-      D --> F[Speaker 2 Segments]
-      C --> G[Combined Output]
-      E --> G
-      F --> G
+    Correct: It boosts productivity while requiring human oversight.
 
 - id: q039
   type: multiple_choice
   question: |
-    What is a key consideration when configuring the maximum token limit for a generative AI model?
+    In a multimodal agent, a user says "Book a flight like the one in this photo." This requires:
   options:
-    - text: It determines the maximum length of input prompts and generated responses
+    - text: Text analysis only
+      is_correct: false
+    - text: Speech, Vision, and Agentic capabilities
       is_correct: true
-    - text: It controls how creative the model's outputs will be
+    - text: Pure document extraction
       is_correct: false
-    - text: It sets the number of training iterations for the model
-      is_correct: false
-    - text: It defines the image resolution for generated pictures
+    - text: Image generation
       is_correct: false
   explanation: |
-    Correct: The token limit (or max tokens parameter) controls how much text the model can process as input and generate as output. Tokens are pieces of words.
-    Incorrect:
-    - Creativity is controlled by temperature, not token limits.
-    - Training iterations are set during model training, not deployment.
-    - Token limits apply to text models, not image resolution.
-  diagram: |
-    graph TD
-      A[Token Limit Configuration] --> B[Input Token Budget]
-      A --> C[Output Token Budget]
-      B --> D[Maximum Prompt Length]
-      C --> E[Maximum Response Length]
+    Correct: Integrates multiple workloads seamlessly.
 
 - id: q040
   type: multiple_choice
   question: |
-    A legal firm wants to extract structured information (dates, parties, clauses) from unstructured legal documents. Which AI workload is MOST suitable?
+    Evaluation of vision models often uses:
   options:
-    - text: Information extraction using entity detection and custom models
+    - text: BLEU score
+      is_correct: false
+    - text: Mean Average Precision (mAP) for detection tasks
       is_correct: true
-    - text: Image generation to create visualizations
+    - text: ROUGE for summarization
       is_correct: false
-    - text: Speech synthesis to read documents aloud
-      is_correct: false
-    - text: Sentiment analysis to determine document tone
+    - text: Word Error Rate for speech
       is_correct: false
   explanation: |
-    Correct: Information extraction, particularly using entity detection and potentially custom-trained models, can identify and extract specific structured data points from unstructured text documents.
-    Incorrect:
-    - Image generation creates images, not extracting text data.
-    - Speech synthesis creates audio, not extracting information.
-    - Sentiment analysis determines emotional tone, not extracting specific data fields.
-  diagram: |
-    graph TD
-      A[Legal Document] --> B[Information Extraction]
-      B --> C[Entity Detection]
-      C --> D[Dates Extracted]
-      C --> E[Parties Identified]
-      C --> F[Clauses Located]
-      D --> G[Structured Data Output]
-      E --> G
-      F --> G
+    Correct: Specific metrics match workload types.
+
+- id: q041
+  type: multiple_choice
+  question: |
+    Privacy in speech workloads is maintained through:
+  options:
+    - text: Public sharing of recordings
+      is_correct: false
+    - text: Encryption, consent, and on-premises options where available
+      is_correct: true
+    - text: Unlimited data retention
+      is_correct: false
+    - text: Bypassing compliance
+      is_correct: false
+  explanation: |
+    Correct: Builds user trust and regulatory adherence.
+
+- id: q042
+  type: multiple_choice
+  question: |
+    A best practice for prompt engineering in generative scenarios is:
+  options:
+    - text: Vague instructions
+      is_correct: false
+    - text: Clear system prompts, few-shot examples, and chain-of-thought
+      is_correct: true
+    - text: Maximum length without structure
+      is_correct: false
+    - text: Avoiding role assignment
+      is_correct: false
+  explanation: |
+    Correct: Leads to higher-quality, relevant outputs.
+
+- id: q043
+  type: multiple_choice
+  question: |
+    Table recognition is a strength of:
+  options:
+    - text: Speech synthesis
+      is_correct: false
+    - text: Information Extraction / Document Intelligence
+      is_correct: true
+    - text: Generative image creation
+      is_correct: false
+    - text: Basic keyword tools
+      is_correct: false
+  explanation: |
+    Correct: Converts tabular data in documents into structured formats.
+
+- id: q044
+  type: multiple_choice
+  question: |
+    Agent monitoring in Foundry includes:
+  options:
+    - text: Only cost tracking
+      is_correct: false
+    - text: Tracing, evaluations, and performance dashboards
+      is_correct: true
+    - text: Image quality checks
+      is_correct: false
+    - text: Speech waveform analysis
+      is_correct: false
+  explanation: |
+    Correct: Ensures observability and optimization.
+
+- id: q045
+  type: multiple_choice
+  question: |
+    For accessibility, speech synthesis helps users with:
+  options:
+    - text: Visual impairments by converting text to natural speech
+      is_correct: true
+    - text: Code debugging
+      is_correct: false
+    - text: Invoice scanning
+      is_correct: false
+    - text: Sentiment detection
+      is_correct: false
+  explanation: |
+    Correct: Promotes inclusiveness.
+
+- id: q046
+  type: multiple_choice
+  question: |
+    Critical thinking: In designing a customer support solution, why combine text analysis with agentic AI?
+  options:
+    - text: For static responses only
+      is_correct: false
+    - text: To understand intent, generate empathetic replies, and escalate autonomously
+      is_correct: true
+    - text: To reduce vision capabilities
+      is_correct: false
+    - text: For image-only support
+      is_correct: false
+  explanation: |
+    Correct: Creates intelligent, efficient support experiences.
+
+- id: q047
+  type: multiple_choice
+  question: |
+    Diffusion models are primarily associated with:
+  options:
+    - text: Speech transcription
+      is_correct: false
+    - text: Modern image and content generation
+      is_correct: true
+    - text: Entity recognition
+      is_correct: false
+    - text: Table extraction
+      is_correct: false
+  explanation: |
+    Correct: They power high-quality generative vision outputs.
+
+- id: q048
+  type: multiple_choice
+  question: |
+    A pitfall in information extraction is:
+  options:
+    - text: Over-reliance on perfect OCR without validation
+      is_correct: true
+    - text: Using too much RAG
+      is_correct: false
+    - text: Excessive human review
+      is_correct: false
+    - text: Small model sizes
+      is_correct: false
+  explanation: |
+    Correct: Leads to errors; always include validation loops.
+
+- id: q049
+  type: multiple_choice
+  question: |
+    How does Foundry unify workloads for enterprise solutions?
+  options:
+    - text: By isolating each service
+      is_correct: false
+    - text: Through a single portal, SDKs, and Agent Service for seamless orchestration
+      is_correct: true
+    - text: Limiting to text only
+      is_correct: false
+    - text: Removing governance features
+      is_correct: false
+  explanation: |
+    Correct: Enables end-to-end, governed AI applications.
+
+- id: q050
+  type: multiple_choice
+  question: |
+    Scenario: A manufacturing firm needs to inspect products via camera and generate maintenance reports. Recommend the optimal workload mix and justify using responsible AI principles.
+  options:
+    - text: Speech only
+      is_correct: false
+    - text: Computer Vision + Generative AI + Information Extraction, with fairness, transparency, and human oversight
+      is_correct: true
+    - text: Text analysis alone
+      is_correct: false
+    - text: Image generation without vision input
+      is_correct: false
+  explanation: |
+    Correct: Vision inspects, generative creates reports, extraction structures data. Responsible AI ensures safety, bias-free results, and accountability in critical operations.

@@ -1,548 +1,816 @@
-questions:
+﻿questions:
 - id: q001
   type: multiple_choice
   question: |
-    A healthcare organization is developing an AI system to assist in diagnosing diseases. They want to ensure the system performs equally well across different demographic groups.
-    Which principle of responsible AI should be prioritized to address this concern?
+    Which AI workload is primarily responsible for creating new text, images, or code based on user prompts?
   options:
-    - text: Fairness
+    - text: Text Analysis
+      is_correct: false
+    - text: Computer Vision
+      is_correct: false
+    - text: Generative AI
       is_correct: true
-    - text: Reliability and safety
-      is_correct: false
-    - text: Privacy and security
-      is_correct: false
-    - text: Transparency
+    - text: Information Extraction
       is_correct: false
   explanation: |
-    Correct: Fairness in AI ensures that the system does not discriminate against any particular group and performs equally well across different demographics, ages, genders, and ethnicities.
-    Incorrect:
-    - Reliability and safety focus on consistent performance and harm prevention, not demographic equality.
-    - Privacy and security deal with data protection, not equal treatment.
-    - Transparency relates to explaining how the AI works, not ensuring equal outcomes.
-  diagram: |
-    graph TD
-      A[Training Data] --> B[AI Model]
-      B --> C[Evaluation across Demographics]
-      C --> D[Fair Predictions for All Groups]
+    Correct: Generative AI focuses on creation of novel content, unlike analysis or extraction workloads. This tests core distinction.
 
 - id: q002
   type: multiple_choice
   question: |
-    An autonomous vehicle company is testing their AI system. What is the MOST important consideration to ensure reliability and safety?
+    What is the primary role of positional encoding in Transformer architecture?
   options:
-    - text: The system should perform consistently under various conditions and have fail-safe mechanisms
+    - text: To increase model size
+      is_correct: false
+    - text: To provide information about the order of tokens
       is_correct: true
-    - text: The system should be available to all users regardless of their background
+    - text: To perform tokenization
       is_correct: false
-    - text: The system should explain every decision it makes in real-time
-      is_correct: false
-    - text: The system should collect minimal data from users
+    - text: To sample next tokens
       is_correct: false
   explanation: |
-    Correct: Reliability and safety require that AI systems perform consistently and predictably, especially in critical applications like autonomous vehicles. Fail-safe mechanisms are essential to prevent harm.
-    Incorrect:
-    - Availability to all users relates to inclusiveness, not reliability.
-    - Real-time explanations relate to transparency but don't ensure safety.
-    - Minimal data collection relates to privacy, not reliability.
-  diagram: |
-    graph TD
-      A[Various Conditions] --> B[AI System Testing]
-      B --> C[Consistent Performance]
-      B --> D[Fail-Safe Mechanisms]
-      C --> E[Safe Operation]
-      D --> E
+    Correct: Positional encoding adds order awareness since Transformers process in parallel, unlike RNNs. This is fundamental to how generative models understand sequence context. Options a, c, d describe unrelated processes.
 
 - id: q003
   type: multiple_choice
   question: |
-    A financial services company is implementing an AI-powered chatbot that will handle customer personal information. Which TWO principles should be prioritized? (Choose two.)
+    Which parameter primarily controls the creativity vs. determinism in generative model outputs?
   options:
-    - text: Privacy and security to protect customer data
-      is_correct: true
-    - text: Accountability to ensure responsible use of the system
-      is_correct: true
-    - text: Transparency to explain the chatbot's limitations
+    - text: Max Tokens
       is_correct: false
-    - text: Inclusiveness to support multiple languages
+    - text: Temperature
+      is_correct: true
+    - text: Context Window
+      is_correct: false
+    - text: Embedding Dimension
       is_correct: false
   explanation: |
-    Correct:
-    - Privacy and security are critical when handling personal financial information to prevent data breaches and unauthorized access.
-    - Accountability ensures there are clear processes for monitoring and responsible use of customer data.
-    Incorrect:
-    - While transparency is important, the primary concern with personal data is protection.
-    - Inclusiveness is valuable but secondary to data protection in this context.
-  diagram: |
-    graph TD
-      A[Customer Data] --> B[Encryption]
-      B --> C[Secure Storage]
-      D[Access Controls] --> C
-      E[Audit Logs] --> F[Accountability]
-      C --> F
+    Correct: Temperature adjusts randomness in token sampling. Higher values increase diversity. The others control length, input size, or representation depth.
 
 - id: q004
   type: multiple_choice
   question: |
-    Which scenario BEST demonstrates a consideration for inclusiveness in AI?
+    What does the term "embeddings" refer to in AI models?
   options:
-    - text: Designing a voice assistant that recognizes various accents and speech patterns
+    - text: Converting images into text descriptions
+      is_correct: false
+    - text: Dense vector representations that capture semantic meaning of tokens
       is_correct: true
-    - text: Encrypting all data processed by the AI system
+    - text: The process of sampling the next token during inference
       is_correct: false
-    - text: Providing documentation about how the AI makes decisions
-      is_correct: false
-    - text: Implementing error handling to prevent system crashes
+    - text: Rules defined in the system prompt
       is_correct: false
   explanation: |
-    Correct: Inclusiveness means designing AI systems that work for people with diverse characteristics, including different accents, languages, abilities, and backgrounds.
-    Incorrect:
-    - Encryption relates to privacy and security.
-    - Documentation about decisions relates to transparency.
-    - Error handling relates to reliability and safety.
-  diagram: |
-    graph TD
-      A[Diverse Users] --> B[Various Accents]
-      A --> C[Different Languages]
-      A --> D[Varied Abilities]
-      B --> E[Inclusive AI System]
-      C --> E
-      D --> E
+    Correct: Embeddings transform tokens into numerical vectors that preserve semantic relationships, enabling the model to understand context. This is a core component of Transformer architecture, unlike the other options which describe different processes.
 
 - id: q005
   type: multiple_choice
   question: |
-    A company deploys an AI system for loan approvals. To meet transparency requirements, what should they provide?
+    In the generative inference process, what happens immediately after tokenization of the input prompt?
   options:
-    - text: Clear explanations of factors that influenced each decision
+    - text: The model applies sampling strategies to choose the final response
+      is_correct: false
+    - text: Tokens are converted to embeddings and processed through attention layers
       is_correct: true
-    - text: Access to the source code for all applicants
+    - text: The output is sent directly to the user interface
       is_correct: false
-    - text: A guarantee that the system will never make mistakes
-      is_correct: false
-    - text: Real-time monitoring of all system activities
+    - text: RAG retrieval is automatically triggered
       is_correct: false
   explanation: |
-    Correct: Transparency requires that users understand how AI systems make decisions. For loan approvals, applicants should know which factors influenced the outcome.
-    Incorrect:
-    - Sharing source code is not practical and doesn't necessarily help users understand decisions.
-    - No AI system can guarantee zero mistakes; this relates to reliability, not transparency.
-    - Monitoring relates to accountability and security, not transparency to users.
-  diagram: |
-    graph TD
-      A[Loan Application] --> B[AI Processing]
-      B --> C[Decision Factors]
-      C --> D[Credit Score Impact]
-      C --> E[Income Analysis]
-      C --> F[Debt Ratio]
-      D --> G[Explanation to Applicant]
-      E --> G
-      F --> G
+    Correct: After tokenization, embeddings are created and fed into the model layers for attention computation. This is the start of the autoregressive generation process.
 
 - id: q006
   type: multiple_choice
   question: |
-    Which of the following BEST describes accountability in AI systems?
+    Which configuration parameter would you adjust to make a generative model's responses more creative and less repetitive?
   options:
-    - text: Establishing clear governance and oversight with designated responsibility for AI system outcomes
+    - text: Decrease max tokens
+      is_correct: false
+    - text: Increase temperature
       is_correct: true
-    - text: Making the AI system available to users with disabilities
+    - text: Set top-p to 0
       is_correct: false
-    - text: Ensuring the AI system uses encrypted communications
-      is_correct: false
-    - text: Training the AI model on diverse datasets
+    - text: Add a strong presence penalty
       is_correct: false
   explanation: |
-    Correct: Accountability means having clear governance structures, defined roles and responsibilities, and processes to ensure the AI system is used appropriately and issues are addressed.
-    Incorrect:
-    - Availability to users with disabilities relates to inclusiveness.
-    - Encrypted communications relate to privacy and security.
-    - Diverse datasets relate to fairness.
-  diagram: |
-    graph TD
-      A[AI System] --> B[Governance Framework]
-      B --> C[Designated Owners]
-      B --> D[Oversight Processes]
-      B --> E[Audit Trails]
-      C --> F[Accountability]
-      D --> F
-      E --> F
+    Correct: Higher temperature increases randomness and creativity in token sampling. The other options either limit length or reduce diversity.
 
 - id: q007
   type: multiple_choice
   question: |
-    A company notices their AI hiring tool recommends fewer candidates from certain universities. What should they do to address fairness?
+    What is the main advantage of using a multimodal model in Microsoft Foundry?
   options:
-    - text: Evaluate the training data for bias and retrain the model with balanced data
+    - text: It only works with text inputs
+      is_correct: false
+    - text: It can process and generate across text, images, audio, and video in a shared embedding space
       is_correct: true
-    - text: Increase the system's processing speed
+    - text: It requires less computational resources
       is_correct: false
-    - text: Add more security features to protect candidate data
-      is_correct: false
-    - text: Create user documentation explaining the hiring process
+    - text: It eliminates the need for prompt engineering
       is_correct: false
   explanation: |
-    Correct: When an AI system shows bias, the first step is to examine the training data for imbalances and retrain the model with more representative data to ensure fair outcomes.
-    Incorrect:
-    - Processing speed doesn't address bias.
-    - Security features relate to privacy, not fairness.
-    - Documentation relates to transparency but doesn't fix the bias.
-  diagram: |
-    graph TD
-      A[Biased Training Data] --> B[Biased Model]
-      C[Balanced Training Data] --> D[Fair Model]
-      B --> E[Unfair Outcomes]
-      D --> F[Fair Outcomes]
+    Correct: Multimodal models handle multiple data types, enabling richer applications like image description or visual question answering.
 
 - id: q008
   type: multiple_choice
   question: |
-    An AI system for medical diagnosis must maintain patient confidentiality. Which combination of measures supports privacy and security? (Choose two.)
+    In prompt engineering, what is the primary purpose of a system prompt?
   options:
-    - text: Implement role-based access control to limit who can view patient data
-      is_correct: true
-    - text: Use encryption for data at rest and in transit
-      is_correct: true
-    - text: Train the model on publicly available datasets only
+    - text: To provide the final user question
       is_correct: false
-    - text: Provide detailed explanations of all diagnoses to the public
+    - text: To define the AI's persona, rules, tone, and overall behavior
+      is_correct: true
+    - text: To retrieve documents from a vector database
+      is_correct: false
+    - text: To set the maximum number of output tokens
       is_correct: false
   explanation: |
-    Correct:
-    - Role-based access control ensures only authorized personnel can access sensitive data.
-    - Encryption protects data from unauthorized access both when stored and during transmission.
-    Incorrect:
-    - Public datasets may not provide the quality needed for medical AI.
-    - Sharing diagnosis details publicly violates patient privacy.
-  diagram: |
-    graph TD
-      A[Patient Data] --> B[Encryption]
-      B --> C[Secure Storage]
-      D[RBAC] --> E[Authorized Access Only]
-      C --> E
-      E --> F[Protected Privacy]
+    Correct: System prompts establish consistent behavior before user input, crucial for reliable applications in Foundry.
 
 - id: q009
   type: multiple_choice
   question: |
-    What is a key consideration for ensuring reliability in an AI system?
+    Which technique is most effective for reducing hallucinations in high-stakes scenarios?
   options:
-    - text: Testing the system thoroughly across different scenarios and edge cases
+    - text: Raising temperature significantly
+      is_correct: false
+    - text: Implementing Retrieval-Augmented Generation (RAG) with grounded context
       is_correct: true
-    - text: Making the system available in multiple languages
+    - text: Using only zero-shot prompting
       is_correct: false
-    - text: Providing users with the ability to audit AI decisions
-      is_correct: false
-    - text: Collecting user feedback on system performance
+    - text: Shortening the context window
       is_correct: false
   explanation: |
-    Correct: Reliability requires comprehensive testing, including edge cases and unusual scenarios, to ensure the system performs consistently and correctly.
-    Incorrect:
-    - Multiple languages relate to inclusiveness.
-    - Audit ability relates to transparency and accountability.
-    - User feedback is valuable but testing is the primary reliability measure.
-  diagram: |
-    graph TD
-      A[AI System] --> B[Standard Testing]
-      A --> C[Edge Case Testing]
-      A --> D[Stress Testing]
-      B --> E[Reliable Performance]
-      C --> E
-      D --> E
+    Correct: RAG anchors responses in retrieved real data, significantly improving factual accuracy over pure generation.
 
 - id: q010
   type: multiple_choice
   question: |
-    A company wants to ensure their AI-powered customer service system works for users with visual impairments. Which principle does this address?
+    What role do residual connections play in Transformer models?
   options:
-    - text: Inclusiveness
+    - text: They handle tokenization
+      is_correct: false
+    - text: They help stabilize training in very deep networks by allowing gradients to flow more easily
       is_correct: true
-    - text: Privacy and security
+    - text: They control output creativity
       is_correct: false
-    - text: Accountability
-      is_correct: false
-    - text: Reliability and safety
+    - text: They perform information extraction
       is_correct: false
   explanation: |
-    Correct: Inclusiveness means ensuring AI systems are accessible and beneficial to people with diverse needs and abilities, including those with disabilities.
-    Incorrect:
-    - Privacy and security relate to data protection.
-    - Accountability relates to governance and oversight.
-    - Reliability and safety relate to consistent performance.
-  diagram: |
-    graph TD
-      A[Customer Service AI] --> B[Screen Reader Support]
-      A --> C[Voice Interface]
-      A --> D[High Contrast UI]
-      B --> E[Inclusive Experience]
-      C --> E
-      D --> E
+    Correct: Residual connections mitigate vanishing gradient problems, enabling successful training of large models.
 
 - id: q011
   type: multiple_choice
   question: |
-    An AI system for content moderation must explain why certain posts were flagged. This requirement primarily relates to which principle?
+    When selecting a model in Foundry's catalog for a customer support chatbot, which factor is most important?
   options:
-    - text: Transparency
+    - text: Highest parameter count regardless of cost
+      is_correct: false
+    - text: Strong conversational abilities, low latency, and tool-calling support
       is_correct: true
-    - text: Fairness
+    - text: Only text-to-image capabilities
       is_correct: false
-    - text: Inclusiveness
-      is_correct: false
-    - text: Privacy and security
+    - text: Maximum context window even if irrelevant to the task
       is_correct: false
   explanation: |
-    Correct: Transparency requires that AI systems provide understandable explanations for their decisions so users know why certain actions were taken.
-    Incorrect:
-    - Fairness relates to unbiased treatment across groups.
-    - Inclusiveness relates to accessibility for diverse users.
-    - Privacy and security relate to data protection.
-  diagram: |
-    graph TD
-      A[Content Post] --> B[AI Moderation]
-      B --> C[Flagged Decision]
-      C --> D[Explanation Provided]
-      D --> E[User Understanding]
+    Correct: Model choice must match the workload conversational performance and integration features matter most here.
 
 - id: q012
   type: multiple_choice
   question: |
-    Which scenario demonstrates a failure in the safety aspect of AI reliability?
+    What does Chain-of-Thought (CoT) prompting instruct the model to do?
   options:
-    - text: An autonomous system continues operating despite detecting a critical sensor failure
+    - text: Generate responses without any examples
+      is_correct: false
+    - text: Break down complex problems into step-by-step reasoning
       is_correct: true
-    - text: An AI system requires users to log in before accessing features
+    - text: Retrieve external documents automatically
       is_correct: false
-    - text: An AI system provides recommendations without explaining the reasoning
-      is_correct: false
-    - text: An AI system performs differently for different demographic groups
+    - text: Limit responses to one sentence
       is_correct: false
   explanation: |
-    Correct: Safety requires that AI systems have appropriate fail-safe mechanisms and do not continue operating in dangerous conditions that could cause harm.
-    Incorrect:
-    - Login requirements relate to security.
-    - Lack of explanations relates to transparency.
-    - Different performance across groups relates to fairness.
-  diagram: |
-    graph TD
-      A[Sensor Failure Detected] --> B[Safe AI System]
-      A --> C[Unsafe AI System]
-      B --> D[Immediate Shutdown]
-      C --> E[Continues Operating - DANGEROUS]
+    Correct: CoT improves reasoning on complex tasks by explicitly guiding the model through logical steps.
 
 - id: q013
   type: multiple_choice
   question: |
-    A company is developing an AI recruitment tool. To ensure fairness, they should:
+    In Foundry deployment, what is the key benefit of serverless endpoints?
   options:
-    - text: Regularly audit the system for bias and measure outcomes across different demographic groups
+    - text: They require manual infrastructure management
+      is_correct: false
+    - text: Automatic scaling and pay-per-use pricing
       is_correct: true
-    - text: Keep all training data and algorithms confidential
+    - text: They only support on-premises deployment
       is_correct: false
-    - text: Only use the system for initial screening, not final decisions
-      is_correct: false
-    - text: Implement multi-factor authentication for system access
+    - text: Fixed high costs regardless of usage
       is_correct: false
   explanation: |
-    Correct: Fairness requires ongoing monitoring and auditing to detect and correct bias. Measuring outcomes across demographics helps identify unfair treatment.
-    Incorrect:
-    - Confidentiality relates to privacy, not fairness.
-    - Limiting use doesn't address the bias in the system.
-    - Authentication relates to security, not fairness.
-  diagram: |
-    graph TD
-      A[AI Recruitment System] --> B[Regular Audits]
-      B --> C[Bias Detection]
-      C --> D[Corrective Actions]
-      D --> E[Fair Outcomes]
+    Correct: Serverless options provide flexibility and cost efficiency for variable workloads.
 
 - id: q014
   type: multiple_choice
   question: |
-    What is the PRIMARY purpose of implementing accountability measures in AI systems?
+    Which of the following best describes positional encoding?
   options:
-    - text: To ensure there are clear processes for addressing issues and designated people responsible for AI outcomes
+    - text: It assigns unique IDs to models in the catalog
+      is_correct: false
+    - text: It provides sequence order information to the Transformer since attention is parallel
       is_correct: true
-    - text: To make the AI system run faster and more efficiently
+    - text: It filters unsafe content in outputs
       is_correct: false
-    - text: To ensure the AI system works for people with disabilities
-      is_correct: false
-    - text: To protect user data from cyber attacks
+    - text: It converts speech to text
       is_correct: false
   explanation: |
-    Correct: Accountability establishes governance frameworks with clear ownership, oversight processes, and mechanisms to address problems when they arise.
-    Incorrect:
-    - Efficiency relates to performance optimization.
-    - Working for people with disabilities relates to inclusiveness.
-    - Protection from attacks relates to security.
-  diagram: |
-    graph TD
-      A[AI System Issues] --> B[Clear Ownership]
-      B --> C[Designated Responsible Party]
-      C --> D[Resolution Process]
-      D --> E[Accountability Maintained]
+    Correct: Without positional encoding, the model would lose understanding of token order.
 
 - id: q015
   type: multiple_choice
   question: |
-    An AI-powered educational platform should be designed to work effectively for students with different learning styles and abilities. This BEST demonstrates:
+    For a task requiring structured JSON output from a generative model, what prompt technique should you use?
   options:
-    - text: Inclusiveness
+    - text: Increase temperature to 2.0
+      is_correct: false
+    - text: Specify output format clearly in the system prompt and use JSON mode if available
       is_correct: true
-    - text: Transparency
+    - text: Rely solely on few-shot examples without instructions
       is_correct: false
-    - text: Reliability and safety
-      is_correct: false
-    - text: Accountability
+    - text: Disable all configuration parameters
       is_correct: false
   explanation: |
-    Correct: Inclusiveness means designing AI to benefit people with diverse characteristics, needs, and abilities, including different learning styles.
-    Incorrect:
-    - Transparency relates to explainability.
-    - Reliability and safety relate to consistent and safe performance.
-    - Accountability relates to governance.
-  diagram: |
-    graph TD
-      A[Educational AI Platform] --> B[Visual Learners]
-      A --> C[Auditory Learners]
-      A --> D[Kinesthetic Learners]
-      B --> E[Inclusive Learning]
-      C --> E
-      D --> E
+    Correct: Explicit instructions and supported modes ensure consistent, parseable outputs.
 
 - id: q016
   type: multiple_choice
   question: |
-    A privacy consideration when implementing an AI system that processes personal data is:
+    What is the purpose of top-p (nucleus) sampling?
   options:
-    - text: Implementing data minimization to collect only necessary information
+    - text: To always choose the single most probable token
+      is_correct: false
+    - text: To sample from the smallest set of tokens whose cumulative probability exceeds a threshold
       is_correct: true
-    - text: Training the model on the largest possible dataset
+    - text: To penalize repeated words
       is_correct: false
-    - text: Making all AI decisions fully explainable to users
-      is_correct: false
-    - text: Ensuring the system performs consistently across all users
+    - text: To limit the total number of tokens generated
       is_correct: false
   explanation: |
-    Correct: Data minimization is a key privacy principle that requires collecting only the data necessary for the intended purpose, reducing privacy risks.
-    Incorrect:
-    - Largest datasets may include unnecessary personal information.
-    - Explainability relates to transparency.
-    - Consistent performance relates to fairness and reliability.
-  diagram: |
-    graph TD
-      A[Data Collection] --> B[Assess Necessity]
-      B --> C[Collect Only Required Data]
-      C --> D[Privacy Protection]
-      E[Unnecessary Data] --> F[Not Collected]
+    Correct: Top-p offers a balance between diversity and coherence by focusing on likely tokens.
 
 - id: q017
   type: multiple_choice
   question: |
-    What should be implemented to ensure transparency when an AI system denies a loan application?
+    In RAG architecture, what happens after the user query is embedded?
   options:
-    - text: Provide specific reasons and factors that led to the denial
+    - text: The model immediately generates a final answer
+      is_correct: false
+    - text: Similarity search retrieves relevant chunks from the vector database
       is_correct: true
-    - text: Automatically approve all applications to avoid transparency issues
+    - text: The system prompt is ignored
       is_correct: false
-    - text: Keep the decision-making process confidential to protect intellectual property
-      is_correct: false
-    - text: Only inform the applicant that the application was denied without details
+    - text: Image generation is triggered
       is_correct: false
   explanation: |
-    Correct: Transparency requires providing clear, understandable explanations for AI decisions so users know why outcomes occurred.
-    Incorrect:
-    - Auto-approving defeats the purpose of the AI system.
-    - Confidentiality contradicts transparency requirements.
-    - Simple denial notification doesn't meet transparency standards.
-  diagram: |
-    graph TD
-      A[Loan Application] --> B[AI Evaluation]
-      B --> C[Denial Decision]
-      C --> D[Explanation of Factors]
-      D --> E[Credit Score]
-      D --> F[Income Level]
-      D --> G[Debt Ratio]
+    Correct: Retrieval of relevant context is the critical augmentation step before generation.
 
 - id: q018
   type: multiple_choice
   question: |
-    An AI system for facial recognition must work accurately across different ethnicities and ages. Which principle does this primarily address?
+    Why are billions of parameters important in large generative models?
   options:
-    - text: Fairness
+    - text: They have no impact on capability
+      is_correct: false
+    - text: They allow the model to capture complex patterns and world knowledge from pre-training
       is_correct: true
-    - text: Accountability
+    - text: They reduce inference time
       is_correct: false
-    - text: Privacy and security
-      is_correct: false
-    - text: Transparency
+    - text: They eliminate the need for fine-tuning
       is_correct: false
   explanation: |
-    Correct: Fairness requires that AI systems perform equally well across different groups and don't discriminate based on characteristics like ethnicity or age.
-    Incorrect:
-    - Accountability relates to governance and oversight.
-    - Privacy and security relate to data protection.
-    - Transparency relates to explainability.
-  diagram: |
-    graph TD
-      A[Facial Recognition AI] --> B[Testing Across Ethnicities]
-      A --> C[Testing Across Ages]
-      B --> D[Equal Accuracy]
-      C --> D
-      D --> E[Fair System]
+    Correct: Scale enables richer representations and better performance across tasks.
 
 - id: q019
   type: multiple_choice
   question: |
-    Which measure BEST supports the security aspect of an AI system handling sensitive medical records?
+    Which responsible AI principle is most directly supported by using grounded RAG in production?
   options:
-    - text: Implementing end-to-end encryption and strict access controls
+    - text: Inclusiveness
+      is_correct: false
+    - text: Reliability and safety (by reducing hallucinations)
       is_correct: true
-    - text: Making the system available in multiple languages
+    - text: Only fairness
       is_correct: false
-    - text: Providing detailed logs of all AI decisions
-      is_correct: false
-    - text: Training staff on how the AI makes diagnoses
+    - text: Cost reduction
       is_correct: false
   explanation: |
-    Correct: Security requires protecting data through encryption and controlling who can access sensitive information through strict access controls.
-    Incorrect:
-    - Multiple languages relate to inclusiveness.
-    - Decision logs relate to accountability and transparency.
-    - Staff training on AI workings relates to transparency.
-  diagram: |
-    graph TD
-      A[Medical Records] --> B[End-to-End Encryption]
-      B --> C[Encrypted Storage]
-      D[Access Controls] --> E[Authentication]
-      E --> F[Authorization]
-      C --> G[Secure System]
-      F --> G
+    Correct: Grounding improves trustworthiness and factual reliability.
 
 - id: q020
   type: multiple_choice
   question: |
-    A company implements an AI chatbot and establishes a team to monitor its performance, address complaints, and update policies. This PRIMARILY demonstrates:
+    What is a key difference between pre-training and fine-tuning?
   options:
-    - text: Accountability
+    - text: Pre-training uses labeled domain data only
+      is_correct: false
+    - text: Pre-training learns general patterns from massive unlabeled data; fine-tuning adapts to specific tasks
       is_correct: true
-    - text: Reliability and safety
+    - text: Fine-tuning requires no parameters
       is_correct: false
-    - text: Inclusiveness
-      is_correct: false
-    - text: Fairness
+    - text: They use completely different architectures
       is_correct: false
   explanation: |
-    Correct: Accountability involves having designated people and processes responsible for monitoring, addressing issues, and ensuring the AI system is used appropriately.
-    Incorrect:
-    - Reliability and safety focus on consistent and safe performance.
-    - Inclusiveness focuses on accessibility for diverse users.
-    - Fairness focuses on unbiased treatment.
-  diagram: |
-    graph TD
-      A[AI Chatbot] --> B[Monitoring Team]
-      B --> C[Performance Tracking]
-      B --> D[Complaint Resolution]
-      B --> E[Policy Updates]
-      C --> F[Accountability Framework]
-      D --> F
-      E --> F
+    Correct: This two-stage process creates versatile yet specialized models.
+
+- id: q021
+  type: multiple_choice
+  question: |
+    In Foundry, what should you monitor after deploying a model to ensure responsible use?
+  options:
+    - text: Only token count
+      is_correct: false
+    - text: Safety evaluations, latency, error rates, and potential harmful outputs
+      is_correct: true
+    - text: Exclusively financial costs
+      is_correct: false
+    - text: User interface colors
+      is_correct: false
+  explanation: |
+    Correct: Comprehensive monitoring supports accountability and safety.
+
+- id: q022
+  type: multiple_choice
+  question: |
+    Few-shot prompting improves performance by:
+  options:
+    - text: Removing all examples from the prompt
+      is_correct: false
+    - text: Providing a small number of input-output examples in the prompt
+      is_correct: true
+    - text: Increasing model size dynamically
+      is_correct: false
+    - text: Disabling attention mechanisms
+      is_correct: false
+  explanation: |
+    Correct: Examples guide the model without additional training.
+
+- id: q023
+  type: multiple_choice
+  question: |
+    For an application processing long documents (over 100k tokens), which model characteristic is critical?
+  options:
+    - text: Small context window
+      is_correct: false
+    - text: Large context window size
+      is_correct: true
+    - text: Image-only capabilities
+      is_correct: false
+    - text: Zero tool support
+      is_correct: false
+  explanation: |
+    Correct: Large context windows handle extended inputs effectively.
+
+- id: q024
+  type: multiple_choice
+  question: |
+    What does the presence penalty configuration do?
+  options:
+    - text: Encourages repetition of words
+      is_correct: false
+    - text: Reduces the likelihood of repeating tokens that have already appeared
+      is_correct: true
+    - text: Controls image resolution
+      is_correct: false
+    - text: Speeds up tokenization
+      is_correct: false
+  explanation: |
+    Correct: It promotes more varied and natural responses.
+
+- id: q025
+  type: multiple_choice
+  question: |
+    A critical thinking scenario: Your team's generative AI summarization tool occasionally fabricates details. Which combination of techniques would best address this?
+  options:
+    - text: High temperature + no retrieval
+      is_correct: false
+    - text: RAG + chain-of-thought + safety guardrails
+      is_correct: true
+    - text: Short prompts only
+      is_correct: false
+    - text: Single model with no monitoring
+      is_correct: false
+  explanation: |
+    Correct: Layering grounding, reasoning, and safeguards minimizes errors.
+
+- id: q026
+  type: multiple_choice
+  question: |
+    What component in Transformers allows the model to focus on different parts of the input simultaneously?
+  options:
+    - text: Feed-forward networks only
+      is_correct: false
+    - text: Multi-head attention
+      is_correct: true
+    - text: Tokenization layer
+      is_correct: false
+    - text: Max tokens limit
+      is_correct: false
+  explanation: |
+    Correct: Multi-head attention captures various relationships in parallel.
+
+- id: q027
+  type: multiple_choice
+  question: |
+    What is the primary purpose of layer normalization in Transformer models?
+  options:
+    - text: To control output randomness
+      is_correct: false
+    - text: To stabilize the learning process and improve training of deep networks
+      is_correct: true
+    - text: To perform token embedding
+      is_correct: false
+    - text: To retrieve documents in RAG
+      is_correct: false
+  explanation: |
+    Correct: Layer normalization reduces internal covariate shift and helps gradients flow effectively, which is crucial for training large generative models. Options a, c, and d refer to unrelated mechanisms.
+
+- id: q028
+  type: multiple_choice
+  question: |
+    Which decoding strategy considers multiple possible sequences simultaneously to improve output quality?
+  options:
+    - text: Greedy decoding
+      is_correct: false
+    - text: Beam search
+      is_correct: true
+    - text: Random sampling with high temperature
+      is_correct: false
+    - text: Zero-shot prompting
+      is_correct: false
+  explanation: |
+    Correct: Beam search explores the most probable sequences in parallel, leading to more coherent results than greedy (single-path) decoding.
+
+- id: q029
+  type: multiple_choice
+  question: |
+    In the Foundry model catalog, model cards primarily help with:
+  options:
+    - text: Increasing model parameters
+      is_correct: false
+    - text: Providing transparency on capabilities, limitations, biases, and intended use
+      is_correct: true
+    - text: Deploying models automatically
+      is_correct: false
+    - text: Tokenizing inputs
+      is_correct: false
+  explanation: |
+    Correct: Model cards support responsible AI by enabling informed selection and ethical deployment.
+
+- id: q030
+  type: multiple_choice
+  question: |
+    What is the role of a vector database in RAG implementations?
+  options:
+    - text: To generate new images from text
+      is_correct: false
+    - text: To store embeddings and enable efficient similarity search for relevant context
+      is_correct: true
+    - text: To configure temperature settings
+      is_correct: false
+    - text: To handle speech synthesis
+      is_correct: false
+  explanation: |
+    Correct: Vector databases power fast retrieval of semantically similar documents, grounding generations in real data.
+
+- id: q031
+  type: multiple_choice
+  question: |
+    Setting temperature to a very low value (close to 0) typically results in:
+  options:
+    - text: Highly creative and diverse outputs
+      is_correct: false
+    - text: More deterministic, focused, and repetitive responses
+      is_correct: true
+    - text: Automatic RAG activation
+      is_correct: false
+    - text: Larger context windows
+      is_correct: false
+  explanation: |
+    Correct: Low temperature favors the most probable tokens, producing consistent but sometimes less creative outputs.
+
+- id: q032
+  type: multiple_choice
+  question: |
+    Scenario: You need a cost-effective model for a mobile app with occasional complex reasoning. Which approach is best?
+  options:
+    - text: Always use the largest frontier model
+      is_correct: false
+    - text: Select a smaller efficient model (e.g., GPT-4o-mini) with careful prompt engineering
+      is_correct: true
+    - text: Disable all configuration parameters
+      is_correct: false
+    - text: Use only image generation models
+      is_correct: false
+  explanation: |
+    Correct: Balancing performance, cost, and task needs is key for practical Foundry implementations.
+
+- id: q033
+  type: multiple_choice
+  question: |
+    How does Reinforcement Learning from Human Feedback (RLHF) contribute to generative models?
+  options:
+    - text: It increases model size
+      is_correct: false
+    - text: It aligns outputs with human preferences for helpfulness, honesty, and harmlessness
+      is_correct: true
+    - text: It performs tokenization
+      is_correct: false
+    - text: It replaces RAG entirely
+      is_correct: false
+  explanation: |
+    Correct: RLHF fine-tunes models post-pre-training to better follow instructions and reduce harmful content.
+
+- id: q034
+  type: multiple_choice
+  question: |
+    Why are residual connections important in deep Transformer architectures?
+  options:
+    - text: They handle multimodal inputs
+      is_correct: false
+    - text: They allow gradients to propagate directly, preventing vanishing gradients
+      is_correct: true
+    - text: They control sampling strategies
+      is_correct: false
+    - text: They extract information from documents
+      is_correct: false
+  explanation: |
+    Correct: Residual (skip) connections enable effective training of very deep networks like those in modern LLMs.
+
+- id: q035
+  type: multiple_choice
+  question: |
+    In a multimodal prompt, including an image alongside text allows the model to:
+  options:
+    - text: Ignore visual content
+      is_correct: false
+    - text: Perform joint reasoning across text and vision (e.g., describe or answer questions about the image)
+      is_correct: true
+    - text: Reduce context window size
+      is_correct: false
+    - text: Automatically deploy to serverless
+      is_correct: false
+  explanation: |
+    Correct: Multimodal models align modalities in shared embedding spaces for richer interactions.
+
+- id: q036
+  type: multiple_choice
+  question: |
+    For deploying models on edge devices or with strict data residency, which Foundry option is most suitable?
+  options:
+    - text: Serverless endpoints only
+      is_correct: false
+    - text: Containerized deployments
+      is_correct: true
+    - text: Playground testing exclusively
+      is_correct: false
+    - text: Public internet-only models
+      is_correct: false
+  explanation: |
+    Correct: Containers provide flexibility for on-premises, edge, or regulated environments.
+
+- id: q037
+  type: multiple_choice
+  question: |
+    When evaluating RAG outputs, "faithfulness" primarily measures:
+  options:
+    - text: Response creativity
+      is_correct: false
+    - text: How well the generated answer is supported by the retrieved context without hallucination
+      is_correct: true
+    - text: Token usage cost
+      is_correct: false
+    - text: Image resolution
+      is_correct: false
+  explanation: |
+    Correct: Faithfulness ensures factual grounding, a core responsible AI metric.
+
+- id: q038
+  type: multiple_choice
+  question: |
+    How do system prompts and user prompts interact in Foundry applications?
+  options:
+    - text: They are independent and never combined
+      is_correct: false
+    - text: The system prompt sets persistent behavior while user prompts provide specific queries
+      is_correct: true
+    - text: Only user prompts matter for output
+      is_correct: false
+    - text: They replace configuration parameters
+      is_correct: false
+  explanation: |
+    Correct: This separation enables consistent, role-based behavior with flexible user input.
+
+- id: q039
+  type: multiple_choice
+  question: |
+    Top-k sampling limits the next token choice to:
+  options:
+    - text: All possible tokens
+      is_correct: false
+    - text: The k most probable tokens before sampling
+      is_correct: true
+    - text: Only the single highest probability token
+      is_correct: false
+    - text: Tokens outside the vocabulary
+      is_correct: false
+  explanation: |
+    Correct: It balances diversity and focus by restricting the sampling pool.
+
+- id: q040
+  type: multiple_choice
+  question: |
+    When selecting models in Foundry, responsible AI requires evaluating:
+  options:
+    - text: Only speed and cost
+      is_correct: false
+    - text: Potential biases, safety, and fairness alongside performance
+      is_correct: true
+    - text: Exclusively parameter count
+      is_correct: false
+    - text: Deployment color scheme
+      is_correct: false
+  explanation: |
+    Correct: Ethical considerations are integral to model choice per AI-900 objectives.
+
+- id: q041
+  type: multiple_choice
+  question: |
+    What risk arises if an input exceeds the model's context window?
+  options:
+    - text: Improved creativity
+      is_correct: false
+    - text: Truncation of information, potential errors, or ignored content
+      is_correct: true
+    - text: Automatic RAG activation
+      is_correct: false
+    - text: Reduced temperature
+      is_correct: false
+  explanation: |
+    Correct: Exceeding limits leads to loss of context, requiring summarization or chunking strategies.
+
+- id: q042
+  type: multiple_choice
+  question: |
+    Tool calling in agentic workflows allows models to:
+  options:
+    - text: Only generate text
+      is_correct: false
+    - text: Dynamically invoke external functions, APIs, or tools during reasoning
+      is_correct: true
+    - text: Replace prompt engineering
+      is_correct: false
+    - text: Generate images exclusively
+      is_correct: false
+  explanation: |
+    Correct: This enables autonomous, multi-step task completion in Foundry agents.
+
+- id: q043
+  type: multiple_choice
+  question: |
+    The main objective during pre-training of large language models is typically:
+  options:
+    - text: Supervised classification on small datasets
+      is_correct: false
+    - text: Next-token prediction on massive unlabeled corpora
+      is_correct: true
+    - text: Image classification
+      is_correct: false
+    - text: Speech-to-text conversion
+      is_correct: false
+  explanation: |
+    Correct: This self-supervised approach builds broad world knowledge.
+
+- id: q044
+  type: multiple_choice
+  question: |
+    Compared to fine-tuning, RAG offers the advantage of:
+  options:
+    - text: Static knowledge that never updates
+      is_correct: false
+    - text: Dynamic access to up-to-date information without retraining the model
+      is_correct: true
+    - text: Higher inference costs always
+      is_correct: false
+    - text: Elimination of prompt engineering
+      is_correct: false
+  explanation: |
+    Correct: RAG keeps knowledge current and cost-effective for changing data.
+
+- id: q045
+  type: multiple_choice
+  question: |
+    Monitoring token usage in deployed Foundry models is critical for:
+  options:
+    - text: Only visual appeal
+      is_correct: false
+    - text: Cost control, performance optimization, and quota management
+      is_correct: true
+    - text: Changing model architecture
+      is_correct: false
+    - text: Tokenization only
+      is_correct: false
+  explanation: |
+    Correct: It supports efficient, scalable, and responsible operations.
+
+- id: q046
+  type: multiple_choice
+  question: |
+    For a highly creative storytelling task versus a factual legal document summarization, you should:
+  options:
+    - text: Use the same configuration for both
+      is_correct: false
+    - text: Choose higher temperature and fewer constraints for creative tasks; lower temperature and grounding for factual ones
+      is_correct: true
+    - text: Disable multimodal features
+      is_correct: false
+    - text: Always use the smallest model
+      is_correct: false
+  explanation: |
+    Correct: Configuration and model choice must match task requirements.
+
+- id: q047
+  type: multiple_choice
+  question: |
+    The advantage of using JSON mode or structured output instructions is:
+  options:
+    - text: More random responses
+      is_correct: false
+    - text: Consistent, easily parseable outputs for downstream applications
+      is_correct: true
+    - text: Reduced context length
+      is_correct: false
+    - text: Automatic image generation
+      is_correct: false
+  explanation: |
+    Correct: It facilitates integration in software pipelines.
+
+- id: q048
+  type: multiple_choice
+  question: |
+    Ranking hallucination mitigation techniques from strongest to weakest in most enterprise scenarios:
+  options:
+    - text: "RAG + guardrails + CoT > Few-shot alone > High temperature"
+      is_correct: true
+    - text: "High temperature > RAG"
+      is_correct: false
+    - text: "No prompting > RAG"
+      is_correct: false
+    - text: "Image generation > Text only"
+      is_correct: false
+  explanation: |
+    Correct: Layered grounding and reasoning provide the most robust protection.
+
+- id: q049
+  type: multiple_choice
+  question: |
+    Rotary Positional Embeddings (RoPE) improve upon basic positional encoding by:
+  options:
+    - text: Removing position information
+      is_correct: false
+    - text: Better handling relative positions and longer contexts
+      is_correct: true
+    - text: Focusing only on absolute positions
+      is_correct: false
+    - text: Replacing attention mechanisms
+      is_correct: false
+  explanation: |
+    Correct: RoPE is widely used in modern models for efficient long-sequence modeling.
+
+- id: q050
+  type: multiple_choice
+  question: |
+    In an image generation scenario within Foundry, responsible AI requires:
+  options:
+    - text: No restrictions on content
+      is_correct: false
+    - text: Clear consent, watermarking, bias checks, and safety filters
+      is_correct: true
+    - text: Maximum temperature only
+      is_correct: false
+    - text: Ignoring copyright considerations
+      is_correct: false
+  explanation: |
+    Correct: Ethical safeguards prevent misuse and build trust.
+
+- id: q051
+  type: multiple_choice
+  question: |
+    Comprehensive scenario: Design a high-level workflow for a grounded multimodal agent in Foundry that answers questions about uploaded documents containing both text and images.
+  options:
+    - text: "Prompt only, no retrieval"
+      is_correct: false
+    - text: "1) Upload document → 2) Use multimodal model + RAG for text/images → 3) Apply CoT reasoning + guardrails → 4) Generate grounded response with citations"
+      is_correct: true
+    - text: "Image generation only"
+      is_correct: false
+    - text: "Skip monitoring"
+      is_correct: false
+  explanation: |
+    Correct: This integrates vision, retrieval, reasoning, and responsibility core to advanced Foundry implementations and AI-901 skills.

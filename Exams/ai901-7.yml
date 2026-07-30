@@ -1,0 +1,1010 @@
+questions:
+- id: q001
+  type: multiple_choice
+  question: |
+    A company needs to extract structured data (invoice numbers, dates, amounts) from thousands of PDF invoices. Which Azure AI service in Foundry should they use?
+  options:
+    - text: Azure AI Document Intelligence (formerly Form Recognizer) via Content Understanding
+      is_correct: true
+    - text: Azure AI Vision for general image analysis only
+      is_correct: false
+    - text: Azure AI Speech for audio transcription
+      is_correct: false
+    - text: Azure AI Language for sentiment analysis
+      is_correct: false
+  explanation: |
+    Correct: Azure AI Document Intelligence (accessed through Content Understanding in Foundry) is specifically designed to extract structured information from documents and forms, including invoices, receipts, and custom documents.
+    Incorrect:
+    - General image analysis doesn't understand document structure.
+    - Speech transcription is for audio, not document extraction.
+    - Sentiment analysis examines emotions in text, not extracting structured data.
+  diagram: |
+    graph TD
+      A[PDF Invoices] --> B[Azure AI Document Intelligence]
+      B --> C[Layout Analysis]
+      C --> D[Field Extraction]
+      D --> E[Invoice Number]
+      D --> F[Date]
+      D --> G[Amount]
+      E --> H[Structured Data Output]
+      F --> H
+      G --> H
+
+- id: q002
+  type: multiple_choice
+  question: |
+    What is the primary role of Azure Content Understanding in Microsoft Foundry?
+  options:
+    - text: Image generation only
+      is_correct: false
+    - text: Extracting structured information from multimodal unstructured content
+      is_correct: true
+    - text: Speech synthesis
+      is_correct: false
+    - text: Model training from scratch
+      is_correct: false
+  explanation: |
+    Correct: Content Understanding is designed for processing documents, images, audio, and video into structured outputs using schemas and analyzers. Options a, c, and d belong to other workloads.
+    Incorrect:
+    - Image generation is a separate workload.
+    - Speech synthesis is different from content extraction.
+    - Content Understanding uses existing models, not training from scratch.
+
+- id: q003
+  type: multiple_choice
+  question: |
+    Which feature ensures outputs are anchored to source material?
+  options:
+    - text: Hallucination mode
+      is_correct: false
+    - text: Grounding
+      is_correct: true
+    - text: Token limiting
+      is_correct: false
+    - text: Temperature setting
+      is_correct: false
+  explanation: |
+    Correct: Grounding forces the model to base extractions on actual input content, reducing errors core to reliable information extraction.
+    Incorrect:
+    - Hallucination mode would increase inaccuracy.
+    - Token limiting controls output length, not accuracy.
+    - Temperature setting affects response randomness, not grounding.
+
+- id: q004
+  type: multiple_choice
+  question: |
+    Which input modalities does Azure Content Understanding support in Foundry?
+  options:
+    - text: Text files only
+      is_correct: false
+    - text: Documents, images, audio, and video
+      is_correct: true
+    - text: Code repositories
+      is_correct: false
+    - text: Structured databases exclusively
+      is_correct: false
+  explanation: |
+    Correct: Content Understanding is multimodal and handles documents/forms, images, audio, and video. The other options are narrower or unrelated to its core capabilities.
+    Incorrect:
+    - Text-only would eliminate image and audio capabilities.
+    - Code repositories are not part of Content Understanding.
+    - Databases are already structured data, not the focus.
+
+- id: q005
+  type: multiple_choice
+  question: |
+    What is the main purpose of defining a custom schema when building an analyzer?
+  options:
+    - text: To increase processing speed only
+      is_correct: false
+    - text: To specify the exact fields and structure for extraction with grounding
+      is_correct: true
+    - text: To train a new foundational model
+      is_correct: false
+    - text: To generate images from content
+      is_correct: false
+  explanation: |
+    Correct: Schemas guide the LLM and deterministic models to extract precise, structured fields (e.g., InvoiceNumber, Total) while maintaining grounding to the source.
+    Incorrect:
+    - Schemas don't directly affect speed.
+    - Schemas don't train new models.
+    - Image generation is unrelated to schema definition.
+
+- id: q006
+  type: multiple_choice
+  question: |
+    In a high-volume invoice processing scenario, which approach would most improve accuracy and reduce manual review?
+  options:
+    - text: Using only generic vision models
+      is_correct: false
+    - text: Hybrid use of prebuilt analyzers + custom schema-driven extraction with confidence thresholds
+      is_correct: true
+    - text: Manual data entry
+      is_correct: false
+    - text: Speech synthesis on invoices
+      is_correct: false
+  explanation: |
+    Correct: Prebuilts handle common layouts while custom schemas add domain-specific precision and grounding, directly addressing automation needs tested in AI-901.
+    Incorrect:
+    - Generic models lack document-specific understanding.
+    - Manual entry defeats automation.
+    - Speech synthesis is irrelevant to invoice processing.
+
+- id: q007
+  type: multiple_choice
+  question: |
+    What does grounding mean in the context of Content Understanding?
+  options:
+    - text: Connecting the model to the internet
+      is_correct: false
+    - text: Anchoring extracted outputs to specific locations in the source content
+      is_correct: true
+    - text: Reducing model size
+      is_correct: false
+    - text: Adding decorative visuals
+      is_correct: false
+  explanation: |
+    Correct: Grounding minimizes hallucinations by linking results (e.g., a extracted clause) back to exact source text, image region, or timestamp.
+    Incorrect:
+    - Internet connection is not grounding.
+    - Model size reduction is unrelated.
+    - Decorative visuals don't relate to grounding.
+
+- id: q008
+  type: multiple_choice
+  question: |
+    Which SDK is primarily used to interact with Content Understanding analyzers programmatically?
+  options:
+    - text: Azure OpenAI SDK only
+      is_correct: false
+    - text: azure.ai.contentunderstanding
+      is_correct: true
+    - text: Azure Storage SDK
+      is_correct: false
+    - text: PowerShell cmdlets exclusively
+      is_correct: false
+  explanation: |
+    Correct: The dedicated ContentUnderstandingClient in the Azure SDK allows uploading content and retrieving structured JSON results.
+    Incorrect:
+    - OpenAI SDK is for different workloads.
+    - Storage SDK manages blob storage, not content analysis.
+    - PowerShell is one option but not the primary programmatic interface.
+
+- id: q009
+  type: multiple_choice
+  question: |
+    For extracting action items from a recorded team meeting, which capability is most relevant?
+  options:
+    - text: Image generation
+      is_correct: false
+    - text: Audio transcription + schema-based entity and action extraction with speaker diarization
+      is_correct: true
+    - text: Pure document OCR
+      is_correct: false
+    - text: Model training
+      is_correct: false
+  explanation: |
+    Correct: Audio/video workflows support transcription, diarization, and structured field extraction for insights like decisions and tasks.
+    Incorrect:
+    - Image generation doesn't extract meeting data.
+    - OCR is for documents, not audio.
+    - Model training is not necessary for extraction.
+
+- id: q010
+  type: multiple_choice
+  question: |
+    What Responsible AI principle is most critical when processing sensitive medical forms?
+  options:
+    - text: Creativity only
+      is_correct: false
+    - text: Privacy and security (with compliance, encryption, and access controls)
+      is_correct: true
+    - text: High temperature settings
+      is_correct: false
+    - text: Maximal output length
+      is_correct: false
+  explanation: |
+    Correct: Privacy ensures protected health information is handled compliantly, a key governance aspect in enterprise AI.
+    Incorrect:
+    - Creativity is not relevant to healthcare data.
+    - Temperature settings don't address privacy.
+    - Output length doesn't ensure compliance.
+
+- id: q011
+  type: multiple_choice
+  question: |
+    How can you handle low-confidence extractions in a production application?
+  options:
+    - text: Ignore them completely
+      is_correct: false
+    - text: Implement human-in-the-loop review for fields below a confidence threshold
+      is_correct: true
+    - text: Increase temperature
+      is_correct: false
+    - text: Delete the source file
+      is_correct: false
+  explanation: |
+    Correct: Human oversight combined with confidence scores ensures reliability and safety.
+    Incorrect:
+    - Ignoring them risks data quality.
+    - Increasing temperature increases randomness, not accuracy.
+    - Deleting files doesn't solve the problem.
+
+- id: q012
+  type: multiple_choice
+  question: |
+    Which prebuilt analyzer would you start with for standard receipts?
+  options:
+    - text: Custom vision only
+      is_correct: false
+    - text: Prebuilt Receipt analyzer in Content Understanding
+      is_correct: true
+    - text: Speech service
+      is_correct: false
+    - text: Agent builder
+      is_correct: false
+  explanation: |
+    Correct: Prebuilt analyzers provide high out-of-the-box accuracy for common document types before customization.
+    Incorrect:
+    - Custom vision is for image classification, not receipt extraction.
+    - Speech service is for audio.
+    - Agent builder handles workflows, not extraction.
+
+- id: q013
+  type: multiple_choice
+  question: |
+    What is a key advantage of using Content Understanding over pure custom LLMs for extraction?
+  options:
+    - text: Lower cost always
+      is_correct: false
+    - text: Strong grounding and hybrid deterministic + generative accuracy
+      is_correct: true
+    - text: No need for schemas
+      is_correct: false
+    - text: Image generation focus
+      is_correct: false
+  explanation: |
+    Correct: The hybrid approach reduces hallucinations while supporting structured outputs.
+    Incorrect:
+    - Cost varies by usage patterns.
+    - Schemas are essential for quality extraction.
+    - Image generation is not the focus.
+
+- id: q014
+  type: multiple_choice
+  question: |
+    In the Foundry portal, where do you create and manage analyzers?
+  options:
+    - text: Within a Foundry project under Content Understanding tools
+      is_correct: true
+    - text: In Azure Functions only
+      is_correct: false
+    - text: Power BI workspace
+      is_correct: false
+    - text: Azure DevOps boards
+      is_correct: false
+  explanation: |
+    Correct: Analyzers are built and tested directly in the project context of the Foundry portal.
+    Incorrect:
+    - Azure Functions are for serverless compute, not analyzer creation.
+    - Power BI is for analytics.
+    - DevOps boards are for project management.
+
+- id: q015
+  type: multiple_choice
+  question: |
+    For an image of a product label, what schema fields might you define?
+  options:
+    - text: Only RGB color values
+      is_correct: false
+    - text: ProductName, Price, ExpirationDate, Barcode
+      is_correct: true
+    - text: Audio transcript
+      is_correct: false
+    - text: Video frame rate
+      is_correct: false
+  explanation: |
+    Correct: Schema-driven extraction pulls domain-specific structured data from visual content.
+    Incorrect:
+    - RGB values alone don't extract semantic information.
+    - Audio transcript is irrelevant to images.
+    - Frame rate applies to video, not static images.
+
+- id: q016
+  type: multiple_choice
+  question: |
+    What feature helps segment long video files for efficient processing?
+  options:
+    - text: Automatic segmentation and chunking in the analyzer
+      is_correct: true
+    - text: Manual frame-by-frame upload
+      is_correct: false
+    - text: Temperature control
+      is_correct: false
+    - text: Token pricing only
+      is_correct: false
+  explanation: |
+    Correct: Built-in segmentation handles large files intelligently.
+    Incorrect:
+    - Manual upload is inefficient.
+    - Temperature control doesn't segment files.
+    - Pricing is separate from technical capabilities.
+
+- id: q017
+  type: multiple_choice
+  question: |
+    Which integration pattern turns extracted data into automated actions?
+  options:
+    - text: Agentic workflows in Foundry that act on structured outputs
+      is_correct: true
+    - text: Static PDF export
+      is_correct: false
+    - text: Manual email
+      is_correct: false
+    - text: Image rendering
+      is_correct: false
+  explanation: |
+    Correct: Agents can consume extracted JSON and trigger business processes (e.g., approve invoice).
+    Incorrect:
+    - Static exports don't enable automation.
+    - Manual email is not automated.
+    - Image rendering doesn't trigger actions.
+
+- id: q018
+  type: multiple_choice
+  question: |
+    What should you do if extraction misses fields in a complex multi-page contract?
+  options:
+    - text: Improve schema descriptions and add more context/examples
+      is_correct: true
+    - text: Reduce file size to one page
+      is_correct: false
+    - text: Switch to image generation
+      is_correct: false
+    - text: Disable grounding
+      is_correct: false
+  explanation: |
+    Correct: Richer schema guidance and iterative testing improve results.
+    Incorrect:
+    - Reducing file size loses information.
+    - Image generation is unrelated.
+    - Disabling grounding worsens accuracy.
+
+- id: q019
+  type: multiple_choice
+  question: |
+    True or False: Content Understanding supports multilingual documents.
+  options:
+    - text: "False"
+      is_correct: false
+    - text: "True, with strong language detection and extraction"
+      is_correct: true
+    - text: "Only English"
+      is_correct: false
+    - text: "Only European languages"
+      is_correct: false
+  explanation: |
+    Correct: It includes broad language support for global applicability and inclusiveness.
+    Incorrect:
+    - Multilingual support is a core feature.
+    - Not limited to English.
+    - Not limited to European languages.
+
+- id: q020
+  type: multiple_choice
+  question: |
+    In a retail inventory scenario using shelf photos, which workload combines best?
+  options:
+    - text: Information extraction from images + object detection
+      is_correct: true
+    - text: Speech only
+      is_correct: false
+    - text: Text-to-speech
+      is_correct: false
+    - text: Pure generative chat
+      is_correct: false
+  explanation: |
+    Correct: Multimodal extraction pulls product details and stock levels from visuals.
+    Incorrect:
+    - Speech is irrelevant to shelf photos.
+    - Text-to-speech doesn't extract inventory data.
+    - Chat doesn't analyze images.
+
+- id: q021
+  type: multiple_choice
+  question: |
+    What is the output format most commonly used for integration with databases?
+  options:
+    - text: Plain text paragraph
+      is_correct: false
+    - text: Structured JSON with key-value pairs, tables, and confidence scores
+      is_correct: true
+    - text: MP4 video
+      is_correct: false
+    - text: PNG image
+      is_correct: false
+  explanation: |
+    Correct: JSON enables seamless downstream automation and storage.
+    Incorrect:
+    - Plain text lacks structure.
+    - Video and image formats don't integrate with databases effectively.
+
+- id: q022
+  type: multiple_choice
+  question: |
+    How does speaker diarization benefit audio extraction?
+  options:
+    - text: It separates different speakers in transcripts for accurate attribution
+      is_correct: true
+    - text: Generates new voices
+      is_correct: false
+    - text: Compresses audio
+      is_correct: false
+    - text: Adds background music
+      is_correct: false
+  explanation: |
+    Correct: Diarization tags "Speaker 1 said X" for clearer meeting insights.
+    Incorrect:
+    - Voice generation is separate.
+    - Audio compression doesn't diarize.
+    - Background music is unrelated.
+
+- id: q023
+  type: multiple_choice
+  question: |
+    For compliance auditing of contracts, which Responsible AI element is essential?
+  options:
+    - text: Transparency through source grounding and audit logs
+      is_correct: true
+    - text: Maximal creativity
+      is_correct: false
+    - text: No human review
+      is_correct: false
+    - text: Public sharing of all data
+      is_correct: false
+  explanation: |
+    Correct: Transparency and accountability support regulatory compliance.
+    Incorrect:
+    - Creativity is not necessary for compliance.
+    - Human review is essential.
+    - Public sharing violates compliance.
+
+- id: q024
+  type: multiple_choice
+  question: |
+    Which Python code snippet correctly initiates document analysis? (Conceptual)
+  options:
+    - text: "client.chat.completions.create(...)"
+      is_correct: false
+    - text: "client.analyze_document(document=file, analyzer_id=\"custom-analyzer\")"
+      is_correct: true
+    - text: "client.generate_image(...)"
+      is_correct: false
+    - text: "client.transcribe_audio(...) only"
+      is_correct: false
+  explanation: |
+    Correct: The analyze_document method (or equivalent) is used for Content Understanding tasks.
+    Incorrect:
+    - chat.completions.create is for chat models.
+    - generate_image is for image generation.
+    - transcribe_audio is only for audio transcription.
+
+- id: q025
+  type: multiple_choice
+  question: |
+    What is a common troubleshooting step for poor OCR results on scanned forms?
+  options:
+    - text: Improve image quality, de-skew, or use higher-resolution uploads
+      is_correct: true
+    - text: Increase model temperature
+      is_correct: false
+    - text: Remove all text
+      is_correct: false
+    - text: Use video input instead
+      is_correct: false
+  explanation: |
+    Correct: Preprocessing quality directly impacts OCR and extraction accuracy.
+    Incorrect:
+    - Temperature affects randomness, not OCR.
+    - Removing text worsens results.
+    - Video input doesn't improve form OCR.
+
+- id: q026
+  type: multiple_choice
+  question: |
+    How can extracted data be used in RAG applications?
+  options:
+    - text: As grounding context for more accurate generative responses
+      is_correct: true
+    - text: Only for deletion
+      is_correct: false
+    - text: As training data only
+      is_correct: false
+    - text: For image prompts
+      is_correct: false
+  explanation: |
+    Correct: Structured extraction feeds clean knowledge into retrieval systems.
+    Incorrect:
+    - Data isn't only for deletion.
+    - RAG uses extracted data for retrieval, not just training.
+    - Image prompts are separate from RAG.
+
+- id: q027
+  type: multiple_choice
+  question: |
+    Which principle ensures AI extraction works for users with visual impairments?
+  options:
+    - text: Inclusiveness through accessible outputs and alternative formats
+      is_correct: true
+    - text: Exclusivity
+      is_correct: false
+    - text: High cost only
+      is_correct: false
+    - text: Random sampling
+      is_correct: false
+  explanation: |
+    Correct: Inclusiveness promotes broad usability.
+    Incorrect:
+    - Exclusivity contradicts inclusiveness.
+    - High cost doesn't ensure accessibility.
+    - Random sampling is irrelevant.
+
+- id: q028
+  type: multiple_choice
+  question: |
+    In Foundry, what governs access to Content Understanding resources?
+  options:
+    - text: Microsoft Entra ID role-based access control
+      is_correct: true
+    - text: Public internet only
+      is_correct: false
+    - text: Local files exclusively
+      is_correct: false
+    - text: Anonymous access
+      is_correct: false
+  explanation: |
+    Correct: Enterprise governance uses Entra ID for security.
+    Incorrect:
+    - Public internet access bypasses security.
+    - Local files don't scale to enterprise.
+    - Anonymous access violates governance.
+
+- id: q029
+  type: multiple_choice
+  question: |
+    For video highlight extraction, what combined capabilities are used?
+  options:
+    - text: Frame analysis + audio transcription + schema fields for key events
+      is_correct: true
+    - text: Text-to-speech only
+      is_correct: false
+    - text: Document upload
+      is_correct: false
+    - text: Static image generation
+      is_correct: false
+  explanation: |
+    Correct: Multimodal fusion captures both visual and spoken insights.
+    Incorrect:
+    - Text-to-speech doesn't analyze video.
+    - Document upload is for documents.
+    - Static images miss temporal data.
+
+- id: q030
+  type: multiple_choice
+  question: |
+    What metric helps decide whether to route low-confidence results for human review?
+  options:
+    - text: Confidence score returned by the analyzer
+      is_correct: true
+    - text: File size
+      is_correct: false
+    - text: Number of pages
+      is_correct: false
+    - text: Model name only
+      is_correct: false
+  explanation: |
+    Correct: Confidence scores enable intelligent routing and quality control.
+    Incorrect:
+    - File size doesn't indicate confidence.
+    - Page count doesn't measure extraction quality.
+    - Model name is metadata, not a quality metric.
+
+- id: q031
+  type: multiple_choice
+  question: |
+    True or False: You can build lightweight client applications that call Content Understanding directly from mobile or web apps.
+  options:
+    - text: "False"
+      is_correct: false
+    - text: "True, using the Foundry SDK or REST APIs"
+      is_correct: true
+    - text: "Only from Azure Functions"
+      is_correct: false
+    - text: "Only portal-based"
+      is_correct: false
+  explanation: |
+    Correct: SDK and API support enable end-to-end client applications.
+    Incorrect:
+    - SDK and APIs provide direct client access.
+    - Not limited to Azure Functions.
+    - Portal is one interface, not the only one.
+
+- id: q032
+  type: multiple_choice
+  question: |
+    Which scenario best demonstrates agentic use of extracted data?
+  options:
+    - text: An agent that reads extracted invoice data and automatically creates a payment approval workflow
+      is_correct: true
+    - text: Static report generation
+      is_correct: false
+    - text: Voice recording playback
+      is_correct: false
+    - text: Random image creation
+      is_correct: false
+  explanation: |
+    Correct: Agents add action and reasoning on top of extraction.
+    Incorrect:
+    - Static reports don't involve agents.
+    - Playback is passive.
+    - Random creation is unrelated.
+
+- id: q033
+  type: multiple_choice
+  question: |
+    How do you iterate on a custom analyzer for better performance?
+  options:
+    - text: Test with sample documents, refine schema descriptions, and re-evaluate
+      is_correct: true
+    - text: Delete and recreate every time
+      is_correct: false
+    - text: Change model temperature only
+      is_correct: false
+    - text: Ignore feedback
+      is_correct: false
+  explanation: |
+    Correct: Iterative refinement with real examples is key to optimization.
+    Incorrect:
+    - Deleting everything wastes work.
+    - Temperature alone doesn't improve extraction.
+    - Ignoring feedback prevents improvement.
+
+- id: q034
+  type: multiple_choice
+  question: |
+    What security practice is recommended for sensitive content?
+  options:
+    - text: Use private endpoints, encryption, and data residency controls
+      is_correct: true
+    - text: Public blob storage
+      is_correct: false
+    - text: No authentication
+      is_correct: false
+    - text: Share credentials
+      is_correct: false
+  explanation: |
+    Correct: These practices align with privacy and security principles.
+    Incorrect:
+    - Public storage exposes data.
+    - No authentication is insecure.
+    - Sharing credentials violates security.
+
+- id: q035
+  type: multiple_choice
+  question: |
+    In education, how can Content Understanding help with lecture videos?
+  options:
+    - text: Transcribe, extract key concepts, and generate structured study notes
+      is_correct: true
+    - text: Generate fictional content
+      is_correct: false
+    - text: Compress video size only
+      is_correct: false
+    - text: Add background music
+      is_correct: false
+  explanation: |
+    Correct: It turns passive video into searchable, structured knowledge assets.
+    Incorrect:
+    - Fictional content is unreliable.
+    - Compression doesn't extract insights.
+    - Music is unrelated to learning.
+
+- id: q036
+  type: multiple_choice
+  question: |
+    What is the benefit of hybrid prebuilt + custom analyzers?
+  options:
+    - text: Leverages high-accuracy templates while adding domain flexibility
+      is_correct: true
+    - text: Slower processing
+      is_correct: false
+    - text: No grounding
+      is_correct: false
+    - text: Higher cost only
+      is_correct: false
+  explanation: |
+    Correct: Hybrid delivers the best balance of precision and adaptability.
+    Incorrect:
+    - Hybrid can actually be faster.
+    - Grounding is maintained.
+    - Cost is competitive.
+
+- id: q037
+  type: multiple_choice
+  question: |
+    Which output enrichment can be added post-extraction?
+  options:
+    - text: Entity linking, summarization, or sentiment on extracted fields
+      is_correct: true
+    - text: Image filters
+      is_correct: false
+    - text: Video encoding
+      is_correct: false
+    - text: Random noise
+      is_correct: false
+  explanation: |
+    Correct: Add-on capabilities enrich structured results further.
+    Incorrect:
+    - Filters are for image processing.
+    - Encoding is for video.
+    - Noise degrades quality.
+
+- id: q038
+  type: multiple_choice
+  question: |
+    For a legal contract review app, which extraction focus is critical?
+  options:
+    - text: Key clauses, parties, dates, obligations, and risk indicators
+      is_correct: true
+    - text: Font colors only
+      is_correct: false
+    - text: Page numbers exclusively
+      is_correct: false
+    - text: Image backgrounds
+      is_correct: false
+  explanation: |
+    Correct: Domain-specific schemas target legally relevant fields.
+    Incorrect:
+    - Font colors are visual formatting, not legal content.
+    - Page numbers are metadata.
+    - Backgrounds are visual elements.
+
+- id: q039
+  type: multiple_choice
+  question: |
+    How does Content Understanding support scalability?
+  options:
+    - text: Batch processing, queuing, and enterprise governance in Foundry
+      is_correct: true
+    - text: Single-file processing only
+      is_correct: false
+    - text: Manual intervention required always
+      is_correct: false
+    - text: Local machine only
+      is_correct: false
+  explanation: |
+    Correct: Designed for high-volume enterprise workloads.
+    Incorrect:
+    - Single-file processing is not scalable.
+    - Automation reduces manual work.
+    - Foundry is cloud-based.
+
+- id: q040
+  type: multiple_choice
+  question: |
+    True or False: Content Understanding can extract tables and selection marks from forms.
+  options:
+    - text: "False"
+      is_correct: false
+    - text: "True, with high layout understanding"
+      is_correct: true
+    - text: "Only simple text"
+      is_correct: false
+    - text: "Video frames only"
+      is_correct: false
+  explanation: |
+    Correct: Advanced layout analysis captures tables and checkboxes accurately.
+    Incorrect:
+    - Layout understanding is a core feature.
+    - It handles complex structures.
+    - Video extraction is separate.
+
+- id: q041
+  type: multiple_choice
+  question: |
+    In a customer onboarding workflow, what document types might be processed together?
+  options:
+    - text: IDs (images), application forms (documents), and voice recordings
+      is_correct: true
+    - text: Only spreadsheets
+      is_correct: false
+    - text: Generated poems
+      is_correct: false
+    - text: Stock prices
+      is_correct: false
+  explanation: |
+    Correct: Multimodal extraction unifies diverse onboarding artifacts.
+    Incorrect:
+    - Spreadsheets are already structured.
+    - Poems are not business documents.
+    - Stock prices are financial data, not onboarding.
+
+- id: q042
+  type: multiple_choice
+  question: |
+    Which principle addresses potential bias in extraction across diverse document qualities?
+  options:
+    - text: Fairness through testing on varied datasets
+      is_correct: true
+    - text: Speed only
+      is_correct: false
+    - text: High creativity
+      is_correct: false
+    - text: Minimal output
+      is_correct: false
+  explanation: |
+    Correct: Fairness testing ensures equitable performance.
+    Incorrect:
+    - Speed doesn't address bias.
+    - Creativity is unrelated.
+    - Output minimization doesn't test fairness.
+
+- id: q043
+  type: multiple_choice
+  question: |
+    How can you test an analyzer quickly in the portal?
+  options:
+    - text: Use the built-in test interface with sample uploads
+      is_correct: true
+    - text: Write production code first
+      is_correct: false
+    - text: Skip testing
+      is_correct: false
+    - text: Use external tools only
+      is_correct: false
+  explanation: |
+    Correct: Portal testing accelerates development.
+    Incorrect:
+    - Production code shouldn't be first.
+    - Testing is essential.
+    - Portal provides integrated testing.
+
+- id: q044
+  type: multiple_choice
+  question: |
+    What is a post-processing best practice?
+  options:
+    - text: Normalize data formats, apply business rules, and filter low-confidence items
+      is_correct: true
+    - text: Leave raw output unchanged
+      is_correct: false
+    - text: Convert to images
+      is_correct: false
+    - text: Add hallucinations
+      is_correct: false
+  explanation: |
+    Correct: Post-processing ensures usable, high-quality results.
+    Incorrect:
+    - Raw output may need cleaning.
+    - Image conversion loses structured data.
+    - Hallucinations reduce accuracy.
+
+- id: q045
+  type: multiple_choice
+  question: |
+    For security camera footage analysis, what capability extracts events?
+  options:
+    - text: Video + audio multimodal schema extraction for timestamps and descriptions
+      is_correct: true
+    - text: Text-to-speech
+      is_correct: false
+    - text: Static document upload
+      is_correct: false
+    - text: Code compilation
+      is_correct: false
+  explanation: |
+    Correct: Multimodal understanding turns footage into structured timelines.
+    Incorrect:
+    - Text-to-speech doesn't analyze video.
+    - Documents aren't video.
+    - Code compilation is unrelated.
+
+- id: q046
+  type: multiple_choice
+  question: |
+    Which SDK authentication method is recommended for enterprise apps?
+  options:
+    - text: DefaultAzureCredential with Entra ID
+      is_correct: true
+    - text: Hardcoded keys
+      is_correct: false
+    - text: No credentials
+      is_correct: false
+    - text: Guest access
+      is_correct: false
+  explanation: |
+    Correct: Managed identities provide secure, best-practice authentication.
+    Incorrect:
+    - Hardcoded keys are a security risk.
+    - No credentials is insecure.
+    - Guest access is not recommended for enterprise.
+
+- id: q047
+  type: multiple_choice
+  question: |
+    How does Content Understanding differ from basic OCR?
+  options:
+    - text: It adds generative reasoning, schemas, grounding, and multimodal support
+      is_correct: true
+    - text: It is exactly the same
+      is_correct: false
+    - text: It only handles images
+      is_correct: false
+    - text: It removes text
+      is_correct: false
+  explanation: |
+    Correct: It goes far beyond raw text recognition.
+    Incorrect:
+    - OCR and Content Understanding are different.
+    - It handles multiple modalities.
+    - It extracts and preserves text.
+
+- id: q048
+  type: multiple_choice
+  question: |
+    In a troubleshooting scenario with empty fields, what is the first step?
+  options:
+    - text: Review and enhance schema field descriptions and test with more examples
+      is_correct: true
+    - text: Restart the entire portal
+      is_correct: false
+    - text: Change region
+      is_correct: false
+    - text: Ignore the issue
+      is_correct: false
+  explanation: |
+    Correct: Schema quality is often the root cause.
+    Incorrect:
+    - Restarting the portal doesn't fix schema issues.
+    - Region changes don't improve extraction.
+    - Ignoring the issue prevents progress.
+
+- id: q049
+  type: multiple_choice
+  question: |
+    What career skill does mastering this chapter demonstrate?
+  options:
+    - text: Ability to turn unstructured data into automated business value using Azure AI
+      is_correct: true
+    - text: Graphic design only
+      is_correct: false
+    - text: Hardware maintenance
+      is_correct: false
+    - text: Social media posting
+      is_correct: false
+  explanation: |
+    Correct: This is a highly sought-after enterprise AI implementation skill.
+    Incorrect:
+    - Graphic design is unrelated.
+    - Hardware maintenance is separate.
+    - Social media is not the focus.
+
+- id: q050
+  type: multiple_choice
+  question: |
+    Overall, what makes Azure Content Understanding in Foundry powerful for AI-901 implementation skills?
+  options:
+    - text: Unified multimodal extraction with schemas, grounding, SDK integration, and agentic extensibility
+      is_correct: true
+    - text: Focus on image generation alone
+      is_correct: false
+    - text: Limited to speech
+      is_correct: false
+    - text: No enterprise governance
+      is_correct: false
+  explanation: |
+    Correct: It directly addresses the "Implement AI solutions using Microsoft Foundry" section (55–60% of the exam) with practical, production-ready capabilities.
+    Incorrect:
+    - Image generation is a separate workload.
+    - It handles multiple modalities beyond speech.
+    - Enterprise governance is built-in.

@@ -1,281 +1,800 @@
 questions:
-- id: q061
+- id: q001
   type: multiple_choice
   question: |
-    A company wants to build a .NET Blazor WebAssembly application that analyzes customer feedback text to extract key phrases and sentiment. Which Azure AI Foundry service should they use?
+    What is the primary purpose of a system prompt in generative AI?
   options:
-    - text: Azure AI Language service with text analytics capabilities
+    - text: To provide the specific user query
+      is_correct: false
+    - text: To define the model's role, behavior, and guidelines
       is_correct: true
-    - text: Azure Computer Vision service
+    - text: To handle token limits only
       is_correct: false
-    - text: Azure Speech service only
-      is_correct: false
-    - text: Azure Form Recognizer
+    - text: To store conversation history
       is_correct: false
   explanation: |
-    Correct: Azure AI Language service (part of Azure AI Services) provides text analytics capabilities including key phrase extraction, sentiment analysis, entity recognition, and language detection - perfect for analyzing customer feedback.
-    Incorrect:
-    - Computer Vision analyzes images, not text feedback.
-    - Speech service handles audio, not text analysis.
-    - Form Recognizer extracts data from documents, not general text analysis.
-  diagram: |
-    graph TD
-      A[Customer Feedback Text] --> B[Azure AI Language Service]
-      B --> C[Key Phrase Extraction]
-      B --> D[Sentiment Analysis]
-      C --> E[Blazor UI Display]
-      D --> E
+    Correct: System prompts set the foundational instructions for the model's personality and constraints, unlike user prompts which deliver the immediate task. This ensures consistent, reliable behavior across interactions.
 
-- id: q062
+- id: q002
   type: multiple_choice
   question: |
-    When building a text analysis application using Azure AI Foundry SDK in .NET 9, which NuGet package should be installed for language analysis?
+    Which prompting technique encourages the model to reason step by step?
   options:
-    - text: Azure.AI.TextAnalytics or Azure.AI.Language.Text
+    - text: Few-shot prompting
+      is_correct: false
+    - text: Chain-of-Thought (CoT)
       is_correct: true
-    - text: Azure.Storage.Blobs
+    - text: Zero-shot prompting
       is_correct: false
-    - text: Azure.AI.Vision.ImageAnalysis
-      is_correct: false
-    - text: Microsoft.AspNetCore.Components.WebAssembly
+    - text: Role-playing only
       is_correct: false
   explanation: |
-    Correct: The Azure.AI.TextAnalytics or Azure.AI.Language.Text packages provide typed clients for text analysis operations like sentiment analysis, key phrase extraction, and entity recognition.
-    Incorrect:
-    - Storage.Blobs is for blob storage, not text analysis.
-    - Vision.ImageAnalysis is for computer vision, not text.
-    - Components.WebAssembly is for Blazor framework, not AI services.
-  diagram: |
-    graph TD
-      A[.NET 9 Application] --> B[Install NuGet Package]
-      B --> C[Azure.AI.TextAnalytics]
-      C --> D[TextAnalyticsClient]
-      D --> E[Analyze Text]
+    Correct: CoT explicitly instructs the model to break down reasoning, improving accuracy on complex tasks compared to simpler techniques.
 
-- id: q063
+- id: q003
   type: multiple_choice
   question: |
-    In a Blazor WebAssembly app, what is the MOST secure way to call Azure AI Language service for text analysis?
+    In Microsoft Foundry, where would you primarily test and iterate on prompts before coding?
   options:
-    - text: Create a backend API that securely stores credentials and calls the AI service, then call this API from Blazor
+    - text: Azure Portal only
+      is_correct: false
+    - text: The Playground in the Foundry portal
       is_correct: true
-    - text: Store the Azure AI service key directly in the Blazor component
+    - text: PowerShell terminal
       is_correct: false
-    - text: Include the endpoint and key in appsettings.json in wwwroot
-      is_correct: false
-    - text: Pass the API key as a URL parameter
+    - text: Microsoft Word
       is_correct: false
   explanation: |
-    Correct: Blazor WebAssembly runs entirely in the browser, making any embedded secrets visible. A backend API (ASP.NET Core Web API) should handle secure credential storage and AI service calls, exposing only safe endpoints to the client.
-    Incorrect:
-    - Storing keys in components exposes them in browser.
-    - appsettings.json in wwwroot is publicly accessible.
-    - URL parameters are visible in browser history and network logs.
-  diagram: |
-    graph TD
-      A[Blazor WebAssembly] --> B[Call Backend API]
-      B --> C[ASP.NET Core API]
-      C --> D[Azure Key Vault]
-      D --> E[Retrieve Credentials]
-      E --> F[Call Azure AI Service]
-      F --> G[Return Results]
-      G --> B
+    Correct: The Playground provides an interactive environment for experimentation, parameter tuning, and comparison ideal for rapid iteration.
 
-- id: q064
+- id: q004
   type: multiple_choice
   question: |
-    A multimodal AI model in Azure AI Foundry can process both text and images. Which scenario demonstrates responding to a spoken prompt using such a model?
+    What SDK is recommended for building lightweight chat applications in Foundry?
   options:
-    - text: Convert speech to text using Azure Speech, then send the text along with an image to the multimodal model
+    - text: Only REST API
+      is_correct: false
+    - text: Azure AI Projects SDK (Python, .NET, etc.)
       is_correct: true
-    - text: Send only audio files directly to a text-only GPT model
+    - text: Azure CLI exclusively
       is_correct: false
-    - text: Use computer vision only without any language processing
-      is_correct: false
-    - text: Store spoken audio in a database without processing
+    - text: Microsoft Graph only
       is_correct: false
   explanation: |
-    Correct: To respond to spoken prompts with a multimodal model, you first convert speech to text using Azure Speech service, then send that text along with any images to a multimodal model (like GPT-4 Vision) for comprehensive analysis.
-    Incorrect:
-    - Text-only models cannot process audio directly.
-    - Computer vision alone doesn't handle spoken prompts.
-    - Storing without processing doesn't provide a response.
-  diagram: |
-    graph TD
-      A[Spoken Prompt Audio] --> B[Azure Speech Service]
-      B --> C[Text Transcription]
-      D[Image Input] --> E[Multimodal Model]
-      C --> E
-      E --> F[Combined Analysis Response]
+    Correct: The AI Projects SDK simplifies authentication, chat completions, and agent interactions with native language support.
 
-- id: q065
+- id: q005
   type: multiple_choice
   question: |
-    When implementing speech recognition in a Blazor application using Azure AI Foundry, which approach is MOST effective?
+    Which agent type in Foundry Agent Service is fully managed via prompts and tools in the portal?
   options:
-    - text: Use the Azure Speech SDK with JavaScript interop for browser-based audio capture
+    - text: Hosted code-based agents only
+      is_correct: false
+    - text: Prompt Agents
       is_correct: true
-    - text: Process audio files only on the server without client interaction
+    - text: Legacy Azure Functions
       is_correct: false
-    - text: Use only HTML5 audio recording without any Azure services
-      is_correct: false
-    - text: Manually transcribe audio on the client side using custom algorithms
+    - text: Static web apps
       is_correct: false
   explanation: |
-    Correct: In Blazor WebAssembly, you can use JavaScript interop to capture audio from the browser's microphone, then use the Azure Speech SDK (JavaScript or via API calls) to send audio to Azure Speech service for recognition.
-    Incorrect:
-    - Server-only processing misses the interactive client experience.
-    - HTML5 alone doesn't provide speech-to-text capabilities.
-    - Custom transcription algorithms are complex and inferior to Azure Speech.
-  diagram: |
-    graph TD
-      A[Browser Microphone] --> B[JS Interop in Blazor]
-      B --> C[Capture Audio]
-      C --> D[Azure Speech SDK]
-      D --> E[Azure Speech Service]
-      E --> F[Text Transcription]
-      F --> G[Display in Blazor UI]
+    Correct: Prompt Agents allow quick creation without writing deployment code, managed entirely by the platform.
 
-- id: q066
+- id: q006
   type: multiple_choice
   question: |
-    What is a key configuration parameter when using Azure Speech service for speech-to-text in Azure AI Foundry?
+    In prompt engineering, what does "few-shot" prompting primarily involve?
   options:
-    - text: Language locale (e.g., en-US, pt-BR) and audio format
+    - text: Providing no examples
+      is_correct: false
+    - text: Giving the model 2-5 input-output examples
       is_correct: true
-    - text: Image resolution settings
+    - text: Only adjusting temperature settings
       is_correct: false
-    - text: Database connection string
-      is_correct: false
-    - text: Email notification preferences
+    - text: Using only system prompts without user input
       is_correct: false
   explanation: |
-    Correct: Speech recognition requires specifying the expected language locale and audio format (sample rate, encoding) to accurately transcribe speech. These parameters significantly affect recognition accuracy.
-    Incorrect:
-    - Image resolution is for vision services, not speech.
-    - Database connections are not part of speech service configuration.
-    - Email notifications are separate from speech recognition setup.
-  diagram: |
-    graph TD
-      A[Speech Configuration] --> B[Language Locale]
-      A --> C[Audio Format]
-      B --> D[Improved Recognition]
-      C --> D
-      D --> E[Accurate Transcription]
+    Correct: Few-shot prompting supplies examples to guide the model's output format and style, significantly improving consistency over zero-shot approaches.
 
-- id: q067
+- id: q007
   type: multiple_choice
   question: |
-    In a .NET Blazor application, which pattern enables real-time display of transcribed text as a user speaks?
+    Which parameter in Foundry model deployment controls the creativity level of responses?
   options:
-    - text: Use continuous recognition mode with event handlers that update the UI incrementally
+    - text: Max tokens
+      is_correct: false
+    - text: Temperature
       is_correct: true
-    - text: Wait for the entire speech to complete before showing any text
+    - text: Top-p only
       is_correct: false
-    - text: Transcribe only every 10 seconds
-      is_correct: false
-    - text: Store all audio first, then process offline
+    - text: Presence penalty
       is_correct: false
   explanation: |
-    Correct: Azure Speech SDK supports continuous recognition mode where recognition events fire as words are recognized, allowing the Blazor UI to update incrementally using StateHasChanged(), providing a real-time user experience.
-    Incorrect:
-    - Waiting for complete speech delays feedback to users.
-    - Periodic transcription creates a choppy experience.
-    - Offline processing defeats real-time requirements.
-  diagram: |
-    graph TD
-      A[User Speaks] --> B[Continuous Recognition]
-      B --> C[Recognizing Event]
-      C --> D[Update Blazor UI]
-      B --> E[Recognized Event]
-      E --> D
-      D --> F[Real-time Transcription Display]
+    Correct: Temperature adjusts randomness; low values produce focused, deterministic outputs; higher values increase creativity.
 
-- id: q068
+- id: q008
   type: multiple_choice
   question: |
-    When building a text analysis application that detects entities in customer reviews, which Azure AI Language feature should be used?
+    What is the main benefit of grounding in generative AI applications?
   options:
-    - text: Named Entity Recognition (NER)
+    - text: Increasing model size
+      is_correct: false
+    - text: Reducing hallucinations by providing relevant context or retrieved data
       is_correct: true
-    - text: Image classification
+    - text: Only improving speed
       is_correct: false
-    - text: Audio transcription
-      is_correct: false
-    - text: Video indexing
+    - text: Removing the need for prompts
       is_correct: false
   explanation: |
-    Correct: Named Entity Recognition (NER) identifies and classifies named entities in text such as people, organizations, locations, products, dates, and quantities - essential for analyzing customer reviews.
-    Incorrect:
-    - Image classification analyzes images, not text entities.
-    - Audio transcription converts speech, not detecting entities.
-    - Video indexing is for video content analysis.
-  diagram: |
-    graph TD
-      A[Customer Review Text] --> B[NER Analysis]
-      B --> C[Person Names]
-      B --> D[Product Names]
-      B --> E[Organizations]
-      B --> F[Locations]
-      C --> G[Structured Entity Data]
-      D --> G
-      E --> G
-      F --> G
+    Correct: Grounding (often via RAG) supplies factual context, leading to more accurate and trustworthy responses.
 
-- id: q069
+- id: q009
   type: multiple_choice
   question: |
-    What is the purpose of using speech synthesis (text-to-speech) in conjunction with a multimodal AI application?
+    In the Foundry portal, what feature allows side-by-side comparison of different models?
   options:
-    - text: To provide audio output of the AI model's text responses for accessibility or hands-free scenarios
+    - text: Only the Monitor dashboard
+      is_correct: false
+    - text: The Playground
       is_correct: true
-    - text: To train the AI model with more data
+    - text: Azure CLI commands
       is_correct: false
-    - text: To compress text files for storage
-      is_correct: false
-    - text: To encrypt sensitive information
+    - text: Power BI integration
       is_correct: false
   explanation: |
-    Correct: Speech synthesis converts AI-generated text responses into natural-sounding speech, enabling accessibility for visually impaired users, hands-free operation, or creating more engaging conversational experiences.
-    Incorrect:
-    - TTS is for output, not training.
-    - Compression is a separate file management task.
-    - Encryption is a security function, not speech synthesis.
-  diagram: |
-    graph TD
-      A[AI Model Response Text] --> B[Azure Speech Synthesis]
-      B --> C[SSML Processing]
-      C --> D[Voice Selection]
-      D --> E[Audio Generation]
-      E --> F[Speak to User]
+    Correct: The Playground supports testing, parameter tuning, and direct model comparison for optimal selection.
 
-- id: q070
+- id: q010
   type: multiple_choice
   question: |
-    In Azure AI Foundry, when building a lightweight application with text analysis, which operation would identify the overall emotional tone of a document?
+    Which authentication method is recommended for production Foundry SDK applications?
   options:
-    - text: Sentiment analysis
+    - text: Hardcoded API keys
+      is_correct: false
+    - text: Managed identities with DefaultAzureCredential
       is_correct: true
-    - text: Key phrase extraction
+    - text: Shared access signatures only
       is_correct: false
-    - text: Language detection
-      is_correct: false
-    - text: Entity linking
+    - text: Basic username/password
       is_correct: false
   explanation: |
-    Correct: Sentiment analysis evaluates text and returns sentiment scores (positive, negative, neutral, mixed) along with confidence scores, identifying the overall emotional tone of the content.
-    Incorrect:
-    - Key phrase extraction identifies important topics, not emotions.
-    - Language detection identifies the language used, not sentiment.
-    - Entity linking connects entities to knowledge bases, not analyzing emotion.
-  diagram: |
-    graph TD
-      A[Document Text] --> B[Sentiment Analysis]
-      B --> C[Positive Score]
-      B --> D[Negative Score]
-      B --> E[Neutral Score]
-      B --> F[Mixed Score]
-      C --> G[Overall Sentiment: Positive]
-      D --> G
-      E --> G
-      F --> G
+    Correct: Managed identities provide secure, passwordless authentication aligned with Azure best practices.
+
+- id: q011
+  type: multiple_choice
+  question: |
+    What is a key characteristic of a single-agent solution in Foundry?
+  options:
+    - text: It only handles static queries without tools
+      is_correct: false
+    - text: It reasons, uses tools, maintains context, and acts autonomously toward a goal
+      is_correct: true
+    - text: It requires manual deployment on VMs
+      is_correct: false
+    - text: It cannot integrate with external APIs
+      is_correct: false
+  explanation: |
+    Correct: Agents follow a perceive-reason-act loop, leveraging tools and memory for complex task completion.
+
+- id: q012
+  type: multiple_choice
+  question: |
+    When building client applications for agents, which SDK method is used to create and process a run?
+  options:
+    - text: project_client.inference.chat.completions.create
+      is_correct: false
+    - text: project_client.agents.runs.create_and_process
+      is_correct: true
+    - text: Only REST API calls
+      is_correct: false
+    - text: Azure Functions trigger
+      is_correct: false
+  explanation: |
+    Correct: This method handles thread creation, message submission, and run processing in one streamlined operation.
+
+- id: q013
+  type: multiple_choice
+  question: |
+    What is the purpose of human-in-the-loop in agentic workflows?
+  options:
+    - text: To replace AI decision-making entirely
+      is_correct: false
+    - text: To provide oversight and intervention in high-stakes or uncertain scenarios
+      is_correct: true
+    - text: To increase token consumption
+      is_correct: false
+    - text: Only for testing in the Playground
+      is_correct: false
+  explanation: |
+    Correct: It ensures safety, compliance, and quality by combining AI efficiency with human judgment.
+
+- id: q014
+  type: multiple_choice
+  question: |
+    Which tool in Foundry agents enables searching uploaded documents or knowledge bases?
+  options:
+    - text: Code interpreter only
+      is_correct: false
+    - text: File search tool with vector stores
+      is_correct: true
+    - text: Bing grounding exclusively
+      is_correct: false
+    - text: Static prompt injection
+      is_correct: false
+  explanation: |
+    Correct: File search uses embeddings and vector databases for efficient retrieval-augmented generation.
+
+- id: q015
+  type: multiple_choice
+  question: |
+    How does multi-agent orchestration improve complex workflows?
+  options:
+    - text: By using a single large model for everything
+      is_correct: false
+    - text: Through supervisor and specialist agents collaborating on subtasks
+      is_correct: true
+    - text: By disabling all tools
+      is_correct: false
+    - text: Reducing the need for prompts
+      is_correct: false
+  explanation: |
+    Correct: Orchestration divides labor, improving scalability and specialization in sophisticated scenarios.
+
+- id: q016
+  type: multiple_choice
+  question: |
+    What metric in Foundry monitoring tracks the proportion of failed or invalid agent outputs?
+  options:
+    - text: Token usage only
+      is_correct: false
+    - text: Error rate
+      is_correct: true
+    - text: Agent success rate
+      is_correct: false
+    - text: Run volume
+      is_correct: false
+  explanation: |
+    Correct: Error rate monitoring helps identify issues early for proactive improvements.
+
+- id: q017
+  type: multiple_choice
+  question: |
+    In responsible AI for agents, what practice helps prevent harmful outputs?
+  options:
+    - text: Removing all content filters
+      is_correct: false
+    - text: Implementing content safety filters and guardrails
+      is_correct: true
+    - text: Using maximum temperature
+      is_correct: false
+    - text: Skipping impact assessments
+      is_correct: false
+  explanation: |
+    Correct: Built-in safety mechanisms and evaluations ensure ethical and compliant behavior.
+
+- id: q018
+  type: multiple_choice
+  question: |
+    Which technique optimizes costs in high-volume agent applications?
+  options:
+    - text: Always using the largest model
+      is_correct: false
+    - text: Prompt compression, caching, and appropriate model selection
+      is_correct: true
+    - text: Unlimited max tokens
+      is_correct: false
+    - text: Disabling monitoring
+      is_correct: false
+  explanation: |
+    Correct: These strategies reduce token consumption while maintaining performance.
+
+- id: q019
+  type: multiple_choice
+  question: |
+    What does streaming responses enable in client applications?
+  options:
+    - text: Only batch processing
+      is_correct: false
+    - text: Real-time user experience with incremental output display
+      is_correct: true
+    - text: Increased latency
+      is_correct: false
+    - text: Static HTML rendering
+      is_correct: false
+  explanation: |
+    Correct: Streaming creates more engaging, responsive interfaces for chat and agent interactions.
+
+- id: q020
+  type: multiple_choice
+  question: |
+    In Foundry, what is the role of a vector store in agent capabilities?
+  options:
+    - text: Storing only images
+      is_correct: false
+    - text: Enabling semantic search over knowledge for RAG
+      is_correct: true
+    - text: Replacing the need for models
+      is_correct: false
+    - text: Handling authentication
+      is_correct: false
+  explanation: |
+    Correct: Vector stores power efficient retrieval of relevant information for grounded responses.
+
+- id: q021
+  type: multiple_choice
+  question: |
+    When should you choose a provisioned throughput deployment over pay-per-token?
+  options:
+    - text: For unpredictable low-volume usage
+      is_correct: false
+    - text: For consistent high-volume production workloads
+      is_correct: true
+    - text: Only during testing
+      is_correct: false
+    - text: When minimizing costs is the only priority
+      is_correct: false
+  explanation: |
+    Correct: Provisioned throughput offers predictable performance and cost for sustained usage.
+
+- id: q022
+  type: multiple_choice
+  question: |
+    What is a common pitfall in prompt design for agents?
+  options:
+    - text: Being overly specific with constraints
+      is_correct: false
+    - text: Vague instructions leading to inconsistent behavior
+      is_correct: true
+    - text: Using role-playing
+      is_correct: false
+    - text: Including examples
+      is_correct: false
+  explanation: |
+    Correct: Ambiguity causes unreliable outputs; clear, detailed prompts mitigate this.
+
+- id: q023
+  type: multiple_choice
+  question: |
+    How can you evaluate agent performance in Foundry?
+  options:
+    - text: Only manually
+      is_correct: false
+    - text: Using built-in evaluation metrics for coherence, fluency, and safety
+      is_correct: true
+    - text: Ignoring traces
+      is_correct: false
+    - text: Disabling the Monitor tab
+      is_correct: false
+  explanation: |
+    Correct: Automated evaluations provide objective insights for continuous improvement.
+
+- id: q024
+  type: multiple_choice
+  question: |
+    Which best practice enhances traceability in agentic solutions?
+  options:
+    - text: Disabling logging
+      is_correct: false
+    - text: End-to-end logging and observability features
+      is_correct: true
+    - text: Using anonymous sessions
+      is_correct: false
+    - text: Short prompts only
+      is_correct: false
+  explanation: |
+    Correct: Comprehensive logging supports debugging, auditing, and compliance.
+
+- id: q025
+  type: multiple_choice
+  question: |
+    In a sales agent scenario, what tool integration would help generate proposals from customer data?
+  options:
+    - text: Only speech synthesis
+      is_correct: false
+    - text: File search + code interpreter for data analysis
+      is_correct: true
+    - text: Image generation exclusively
+      is_correct: false
+    - text: Static templates without AI
+      is_correct: false
+  explanation: |
+    Correct: Combining tools allows dynamic, data-driven content creation.
+
+- id: q026
+  type: multiple_choice
+  question: |
+    What does the "reflect" step in an agent's reasoning loop involve?
+  options:
+    - text: Ignoring previous tool results
+      is_correct: false
+    - text: Evaluating outcomes and adjusting the plan
+      is_correct: true
+    - text: Terminating the run immediately
+      is_correct: false
+    - text: Only calling external APIs
+      is_correct: false
+  explanation: |
+    Correct: Reflection enables iterative improvement and better goal achievement.
+
+- id: q027
+  type: multiple_choice
+  question: |
+    For multilingual support in Foundry agents, what capability can be added?
+  options:
+    - text: Hardcoded English only
+      is_correct: false
+    - text: Multilingual models and translation tools
+      is_correct: true
+    - text: Removing system prompts
+      is_correct: false
+    - text: Limiting to one language
+      is_correct: false
+  explanation: |
+    Correct: This expands accessibility and global applicability.
+
+- id: q028
+  type: multiple_choice
+  question: |
+    What security measure is critical when exposing agents to external users?
+  options:
+    - text: No authentication
+      is_correct: false
+    - text: Proper input validation, content filters, and scoped permissions
+      is_correct: true
+    - text: Unlimited token quotas
+      is_correct: false
+    - text: Public API keys
+      is_correct: false
+  explanation: |
+    Correct: Layered security prevents misuse and data exposure.
+
+- id: q029
+  type: multiple_choice
+  question: |
+    How does caching improve agent performance?
+  options:
+    - text: By increasing latency
+      is_correct: false
+    - text: By storing frequent query results to avoid repeated model calls
+      is_correct: true
+    - text: Only for images
+      is_correct: false
+    - text: Reducing accuracy
+      is_correct: false
+  explanation: |
+    Correct: Caching lowers costs and response times for common interactions.
+
+- id: q030
+  type: multiple_choice
+  question: |
+    In client application development, what framework is suitable for quick prototyping with Foundry SDK?
+  options:
+    - text: Only command-line scripts
+      is_correct: false
+    - text: Streamlit or Flask for interactive web interfaces
+      is_correct: true
+    - text: Static HTML without backend
+      is_correct: false
+    - text: Legacy ASP.NET only
+      is_correct: false
+  explanation: |
+    Correct: These frameworks enable rapid development of user-friendly AI apps.
+
+- id: q031
+  type: multiple_choice
+  question: |
+    What is the advantage of using Prompt Agents over code-based hosted agents?
+  options:
+    - text: More complex custom code required
+      is_correct: false
+    - text: Faster creation and management entirely through the portal
+      is_correct: true
+    - text: No tool support
+      is_correct: false
+    - text: Higher maintenance overhead
+      is_correct: false
+  explanation: |
+    Correct: Prompt Agents lower the barrier for rapid prototyping and iteration.
+
+- id: q032
+  type: multiple_choice
+  question: |
+    Which scenario best demonstrates agentic AI value?
+  options:
+    - text: Simple Q&A without tools
+      is_correct: false
+    - text: Autonomous research, analysis, and report generation from multiple data sources
+      is_correct: true
+    - text: Static web pages
+      is_correct: false
+    - text: Manual data entry
+      is_correct: false
+  explanation: |
+    Correct: Agents excel at multi-step, goal-oriented tasks with minimal supervision.
+
+- id: q033
+  type: multiple_choice
+  question: |
+    What does "top-p" parameter control in model inference?
+  options:
+    - text: Maximum response length
+      is_correct: false
+    - text: Nucleus sampling for diversity control
+      is_correct: true
+    - text: Safety filters only
+      is_correct: false
+    - text: Authentication
+      is_correct: false
+  explanation: |
+    Correct: Top-p focuses sampling on the most probable tokens for coherent yet varied outputs.
+
+- id: q034
+  type: multiple_choice
+  question: |
+    How should you handle agent failures in production?
+  options:
+    - text: Ignore them
+      is_correct: false
+    - text: Implement retry logic, fallbacks, and monitoring alerts
+      is_correct: true
+    - text: Increase temperature
+      is_correct: false
+    - text: Use smaller models exclusively
+      is_correct: false
+  explanation: |
+    Correct: Robust error handling ensures reliability and user trust.
+
+- id: q035
+  type: multiple_choice
+  question: |
+    What is a key governance feature in Foundry for enterprise use?
+  options:
+    - text: No role-based access
+      is_correct: false
+    - text: Projects, compliance policies, and audit capabilities
+      is_correct: true
+    - text: Unlimited public sharing
+      is_correct: false
+    - text: Disabling evaluations
+      is_correct: false
+  explanation: |
+    Correct: These tools support organizational control and regulatory compliance.
+
+- id: q036
+  type: multiple_choice
+  question: |
+    In RAG implementations for agents, what is the role of embeddings?
+  options:
+    - text: Storing raw text only
+      is_correct: false
+    - text: Converting content into searchable vector representations
+      is_correct: true
+    - text: Replacing prompts
+      is_correct: false
+    - text: Handling images exclusively
+      is_correct: false
+  explanation: |
+    Correct: Embeddings enable semantic similarity search for relevant context retrieval.
+
+- id: q037
+  type: multiple_choice
+  question: |
+    Which practice builds user trust in generative applications?
+  options:
+    - text: Opaque decision-making
+      is_correct: false
+    - text: Transparency through explanations and source citations
+      is_correct: true
+    - text: Maximum creativity without guardrails
+      is_correct: false
+    - text: Hiding model limitations
+      is_correct: false
+  explanation: |
+    Correct: Clear communication about capabilities and sources fosters confidence.
+
+- id: q038
+  type: multiple_choice
+  question: |
+    What is the benefit of parallel tool calls in agents?
+  options:
+    - text: Increased latency
+      is_correct: false
+    - text: Faster completion of independent subtasks
+      is_correct: true
+    - text: Reduced accuracy
+      is_correct: false
+    - text: Higher costs only
+      is_correct: false
+  explanation: |
+    Correct: Parallelism optimizes performance in complex workflows.
+
+- id: q039
+  type: multiple_choice
+  question: |
+    For high-stakes decisions, what responsible AI step is essential before deployment?
+  options:
+    - text: Skip testing
+      is_correct: false
+    - text: Conduct impact assessments and red teaming
+      is_correct: true
+    - text: Use unfiltered models
+      is_correct: false
+    - text: Deploy immediately
+      is_correct: false
+  explanation: |
+    Correct: Proactive evaluation identifies and mitigates risks.
+
+- id: q040
+  type: multiple_choice
+  question: |
+    How can you extend a single-agent solution to handle broader tasks?
+  options:
+    - text: By limiting tools
+      is_correct: false
+    - text: Through multi-agent systems with orchestration
+      is_correct: true
+    - text: Removing memory
+      is_correct: false
+    - text: Using only basic prompts
+      is_correct: false
+  explanation: |
+    Correct: Orchestration enables scalable, specialized collaboration.
+
+- id: q041
+  type: multiple_choice
+  question: |
+    What does the Foundry SDK's streaming capability primarily improve?
+  options:
+    - text: Batch processing speed
+      is_correct: false
+    - text: Perceived responsiveness in user interfaces
+      is_correct: true
+    - text: Security
+      is_correct: false
+    - text: Storage requirements
+      is_correct: false
+  explanation: |
+    Correct: Users see output as it generates, creating natural conversational flow.
+
+- id: q042
+  type: multiple_choice
+  question: |
+    In monitoring dashboards, what does "token usage" help optimize?
+  options:
+    - text: Only visual design
+      is_correct: false
+    - text: Cost management and quota planning
+      is_correct: true
+    - text: Agent creativity
+      is_correct: false
+    - text: Authentication
+      is_correct: false
+  explanation: |
+    Correct: Tracking tokens informs efficient resource utilization.
+
+- id: q043
+  type: multiple_choice
+  question: |
+    A common troubleshooting step for poor agent performance is:
+  options:
+    - text: Ignoring prompts
+      is_correct: false
+    - text: Reviewing traces, evaluations, and refining instructions/tools
+      is_correct: true
+    - text: Increasing model size without analysis
+      is_correct: false
+    - text: Disabling safety
+      is_correct: false
+  explanation: |
+    Correct: Data-driven iteration systematically addresses issues.
+
+- id: q044
+  type: multiple_choice
+  question: |
+    What makes Foundry suitable for enterprise-scale AI?
+  options:
+    - text: Lack of governance tools
+      is_correct: false
+    - text: Unified platform with security, scalability, and observability
+      is_correct: true
+    - text: Limited model catalog
+      is_correct: false
+    - text: No SDK support
+      is_correct: false
+  explanation: |
+    Correct: Enterprise features support secure, governed, large-scale deployments.
+
+- id: q045
+  type: multiple_choice
+  question: |
+    Which prompting strategy combines role-playing with constraints for customer support agents?
+  options:
+    - text: Zero-shot only
+      is_correct: false
+    - text: Detailed system prompt defining persona, tone, and response guidelines
+      is_correct: true
+    - text: No system prompt
+      is_correct: false
+    - text: Random temperature
+      is_correct: false
+  explanation: |
+    Correct: This ensures empathetic, consistent, and on-brand interactions.
+
+- id: q046
+  type: multiple_choice
+  question: |
+    How does knowledge base integration benefit long-term agent memory?
+  options:
+    - text: By forgetting previous interactions
+      is_correct: false
+    - text: Persistent, searchable information across sessions
+      is_correct: true
+    - text: Static hardcoding
+      is_correct: false
+    - text: Reducing context window
+      is_correct: false
+  explanation: |
+    Correct: Vector stores provide scalable, updatable knowledge.
+
+- id: q047
+  type: multiple_choice
+  question: |
+    What is critical when deploying agents that interact with external APIs?
+  options:
+    - text: No error handling
+      is_correct: false
+    - text: Secure credential management and rate limiting
+      is_correct: true
+    - text: Public exposure of keys
+      is_correct: false
+    - text: Unlimited retries
+      is_correct: false
+  explanation: |
+    Correct: Protects against breaches and service disruptions.
+
+- id: q048
+  type: multiple_choice
+  question: |
+    In critical thinking for AI-901, why is iterative refinement emphasized?
+  options:
+    - text: Models never change
+      is_correct: false
+    - text: Real-world performance improves through testing and feedback loops
+      is_correct: true
+    - text: One prompt always suffices
+      is_correct: false
+    - text: To increase complexity unnecessarily
+      is_correct: false
+  explanation: |
+    Correct: AI development is experimental; iteration drives quality.
+
+- id: q049
+  type: multiple_choice
+  question: |
+    What future-proofing practice should developers adopt for Foundry agents?
+  options:
+    - text: Hardcoding deprecated features
+      is_correct: false
+    - text: Designing modular solutions and staying updated with Microsoft releases
+      is_correct: true
+    - text: Avoiding SDKs
+      is_correct: false
+    - text: Using only portal features
+      is_correct: false
+  explanation: |
+    Correct: Modularity and continuous learning adapt to platform evolution.
+
+- id: q050
+  type: multiple_choice
+  question: |
+    Overall, what mindset shift does Chapter 5 encourage for successful AI implementation?
+  options:
+    - text: Treating AI as a black box with no oversight
+      is_correct: false
+    - text: Combining technical skills with responsible practices and hands-on experimentation
+      is_correct: true
+    - text: Focusing only on theory
+      is_correct: false
+    - text: Avoiding production deployment
+      is_correct: false
+  explanation: |
+    Correct: Mastery comes from practical application, ethics, and relentless iteration preparing you for both the exam and real-world impact.
