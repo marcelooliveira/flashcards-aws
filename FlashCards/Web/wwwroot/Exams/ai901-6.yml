@@ -1,301 +1,850 @@
 questions:
-- id: q081
+- id: q001
   type: multiple_choice
   question: |
-    A company needs to extract structured data (invoice numbers, dates, amounts) from thousands of PDF invoices. Which Azure AI service in Foundry should they use?
+    What is the primary way to interpret visual input in prompts within Microsoft Foundry?
   options:
-    - text: Azure AI Document Intelligence (formerly Form Recognizer) via Content Understanding
+    - text: Using only text-based models
+      is_correct: false
+    - text: By deploying a multimodal model that accepts both text and image data
       is_correct: true
-    - text: Azure AI Vision for general image analysis only
+    - text: Through separate OCR APIs only
       is_correct: false
-    - text: Azure AI Speech for audio transcription
-      is_correct: false
-    - text: Azure AI Language for sentiment analysis
+    - text: Via legacy Azure Machine Learning pipelines
       is_correct: false
   explanation: |
-    Correct: Azure AI Document Intelligence (accessed through Content Understanding in Foundry) is specifically designed to extract structured information from documents and forms, including invoices, receipts, and custom documents.
-    Incorrect:
-    - General image analysis doesn't understand document structure.
-    - Speech transcription is for audio, not document extraction.
-    - Sentiment analysis examines emotions in text, not extracting structured data.
-  diagram: |
-    graph TD
-      A[PDF Invoices] --> B[Azure AI Document Intelligence]
-      B --> C[Layout Analysis]
-      C --> D[Field Extraction]
-      D --> E[Invoice Number]
-      D --> F[Date]
-      D --> G[Amount]
-      E --> H[Structured Data Output]
-      F --> H
-      G --> H
+    Correct: Multimodal models in Foundry (e.g., GPT-4o variants) natively process image URLs alongside text prompts for integrated reasoning, as per the exam skills measured for vision implementation.
+    Incorrect: Options A, C, and D do not capture the unified multimodal approach emphasized in Foundry.
 
-- id: q082
+- id: q002
   type: multiple_choice
   question: |
-    When using Content Understanding in Azure AI Foundry to extract data from forms, which approach provides the BEST results for custom form layouts?
+    Which Foundry feature allows creating new visual outputs from text descriptions?
   options:
-    - text: Train a custom model with sample forms or use prebuilt models for common document types
+    - text: Azure Speech synthesis
+      is_correct: false
+    - text: Generative image models like DALL-E or Flux in the Images Playground
       is_correct: true
-    - text: Use only general OCR without any form-specific processing
+    - text: Text-only RAG
       is_correct: false
-    - text: Manually annotate every single form before extraction
-      is_correct: false
-    - text: Convert forms to audio files first
+    - text: Content Understanding for documents only
       is_correct: false
   explanation: |
-    Correct: Content Understanding offers prebuilt models for common documents (invoices, receipts, ID cards) and allows training custom models with labeled samples for unique form layouts, providing optimal extraction accuracy.
-    Incorrect:
-    - General OCR extracts text but doesn't understand form structure and fields.
-    - Manual annotation of production forms is impractical; training with samples is sufficient.
-    - Audio conversion loses the visual structure needed for form extraction.
-  diagram: |
-    graph TD
-      A[Form Documents] --> B{Document Type}
-      B --> C[Common Type: Use Prebuilt Model]
-      B --> D[Custom Type: Train Custom Model]
-      C --> E[Field Extraction]
-      D --> F[Label Samples]
-      F --> E
-      E --> G[Structured Data]
+    Correct: Generative models in Foundry explicitly support text-to-image creation, editing, and variations, aligning directly with skill L147.
+    Incorrect: Other options do not support text-to-image generation capabilities.
 
-- id: q083
+- id: q003
   type: multiple_choice
   question: |
-    In a Blazor WebAssembly application using Azure AI Foundry SDK for document extraction, which NuGet package should be installed?
+    Which type of model in Microsoft Foundry is best suited for interpreting visual input alongside text prompts?
   options:
-    - text: Azure.AI.FormRecognizer or Azure.AI.DocumentIntelligence
+    - text: Text-only LLMs like GPT-3.5
+      is_correct: false
+    - text: Multimodal models such as GPT-4o variants or MAI-Vision models
       is_correct: true
-    - text: Azure.Storage.Blobs only
+    - text: Speech-only synthesis models
       is_correct: false
-    - text: Azure.AI.Vision.ImageAnalysis only
-      is_correct: false
-    - text: Microsoft.EntityFrameworkCore
+    - text: Traditional rule-based OCR engines
       is_correct: false
   explanation: |
-    Correct: The Azure.AI.FormRecognizer or Azure.AI.DocumentIntelligence packages provide the necessary client libraries for document and form analysis, including Content Understanding capabilities.
-    Incorrect:
-    - Storage.Blobs is for file storage, not document analysis.
-    - Vision.ImageAnalysis is for general image processing, not document structure extraction.
-    - EntityFrameworkCore is for database access, not AI document processing.
-  diagram: |
-    graph TD
-      A[.NET 9 Blazor App] --> B[Install NuGet Package]
-      B --> C[Azure.AI.DocumentIntelligence]
-      C --> D[DocumentIntelligenceClient]
-      D --> E[Analyze Documents]
+    Correct: Multimodal models natively accept image URLs or data with text, enabling integrated reasoning (visual question answering, dense captions). This is a core Foundry implementation skill.
+    Incorrect: Other options lack multimodal support.
 
-- id: q084
+- id: q004
   type: multiple_choice
   question: |
-    How can Content Understanding in Azure AI Foundry extract information from images that contain text and visual elements (like product labels)?
+    In Foundry's image generation workflow, what parameter controls the number of images returned in a single request?
   options:
-    - text: Use OCR capabilities combined with layout analysis to extract both text and understand spatial relationships
+    - text: Temperature
+      is_correct: false
+    - text: n (number of images)
       is_correct: true
-    - text: Convert images to audio files and use speech recognition
+    - text: Max tokens
       is_correct: false
-    - text: Use only sentiment analysis on the image metadata
-      is_correct: false
-    - text: Manually type all text visible in images
+    - text: Top-p
       is_correct: false
   explanation: |
-    Correct: Content Understanding combines OCR (text extraction) with layout analysis to understand the spatial arrangement and relationships of text and visual elements, enabling comprehensive information extraction from images.
-    Incorrect:
-    - Audio conversion loses visual and spatial information.
-    - Sentiment analysis on metadata doesn't extract content from images.
-    - Manual typing is inefficient and defeats the purpose of AI automation.
-  diagram: |
-    graph TD
-      A[Product Label Image] --> B[Content Understanding]
-      B --> C[OCR Text Extraction]
-      B --> D[Layout Analysis]
-      C --> E[Product Name]
-      D --> F[Spatial Relationships]
-      E --> G[Structured Information]
-      F --> G
+    Correct: The SDK parameter n specifies how many image variations to generate (e.g., n=4). This is specific to generative image models like DALL-E or MAI-Image series in Foundry.
+    Incorrect: Other parameters control different aspects of model behavior.
 
-- id: q085
+- id: q005
   type: multiple_choice
   question: |
-    A media company wants to extract spoken content and identify speakers from video files. Which Content Understanding capability should they use?
+    What is the primary benefit of using generative models for image editing (inpainting) in Foundry?
   options:
-    - text: Audio and video indexing with speech-to-text and speaker diarization
+    - text: Completely replacing all objects in an image automatically
+      is_correct: false
+    - text: Selectively modifying or filling specific regions while preserving the rest
       is_correct: true
-    - text: Image classification only
+    - text: Only changing text within the image
       is_correct: false
-    - text: Text sentiment analysis
-      is_correct: false
-    - text: Document form extraction
+    - text: Reducing image resolution for faster processing
       is_correct: false
   explanation: |
-    Correct: Azure AI Video Indexer (part of Content Understanding) provides speech-to-text transcription, speaker identification (diarization), and can extract insights from both audio and visual content in videos.
-    Incorrect:
-    - Image classification doesn't process audio or temporal video content.
-    - Sentiment analysis works on existing text, not extracting it from video.
-    - Form extraction is for documents, not video files.
-  diagram: |
-    graph TD
-      A[Video File] --> B[Content Understanding]
-      B --> C[Audio Extraction]
-      C --> D[Speech-to-Text]
-      D --> E[Speaker Diarization]
-      B --> F[Visual Analysis]
-      E --> G[Timestamped Transcription]
-      F --> G
+    Correct: Inpainting allows targeted edits (e.g., remove an object and fill realistically), enabling creative and practical applications while maintaining context.
+    Incorrect: Other options do not describe the inpainting capability accurately.
 
-- id: q086
+- id: q006
   type: multiple_choice
   question: |
-    When building a Blazor application that extracts information from uploaded documents, what is the typical workflow?
+    When building a lightweight vision application in Foundry, which SDK is most commonly used for Python clients?
   options:
-    - text: Upload document to storage, send URL or stream to Document Intelligence API, receive structured data results
+    - text: Azure Speech SDK only
+      is_correct: false
+    - text: azure-ai-foundry or Azure AI Projects SDK
       is_correct: true
-    - text: Email documents to Azure support for manual processing
+    - text: Azure Storage SDK
       is_correct: false
-    - text: Print documents and scan them with a physical scanner
-      is_correct: false
-    - text: Convert documents to executable files
+    - text: Pure REST API calls without SDK
       is_correct: false
   explanation: |
-    Correct: The standard workflow involves uploading the document to accessible storage (or sending directly), calling the Document Intelligence API with the document URL or stream, and receiving structured JSON results with extracted fields.
-    Incorrect:
-    - Manual processing via support defeats automation purposes.
-    - Physical scanning is unnecessary for digital documents.
-    - Converting to executables is unrelated to data extraction.
-  diagram: |
-    graph TD
-      A[User Uploads Document] --> B[Blazor App]
-      B --> C[Upload to Azure Storage]
-      C --> D[Get Document URL]
-      D --> E[Call Document Intelligence API]
-      E --> F[Analyze Document]
-      F --> G[Return Structured JSON]
-      G --> H[Display Extracted Data]
+    Correct: The Foundry SDK simplifies authentication, endpoint calls, and handling multimodal messages for vision tasks.
+    Incorrect: Other options do not provide the comprehensive vision integration capabilities.
 
-- id: q087
+- id: q007
   type: multiple_choice
   question: |
-    Which information can Azure AI Document Intelligence extract from receipt images using prebuilt models?
+    A retail company wants to automatically generate product images in different styles. Which Foundry capability directly supports this?
   options:
-    - text: Merchant name, transaction date, total amount, line items, and tax
+    - text: Content Understanding for documents
+      is_correct: false
+    - text: Generative image models with style control prompts
       is_correct: true
-    - text: Only the image dimensions and file size
+    - text: Speech recognition
       is_correct: false
-    - text: Customer's future purchase intentions
-      is_correct: false
-    - text: Audio descriptions of the receipt
+    - text: Basic text analysis
       is_correct: false
   explanation: |
-    Correct: The prebuilt receipt model in Document Intelligence extracts key business fields including merchant information, dates, amounts, itemized purchases, tax, and tips from receipt images.
-    Incorrect:
-    - Image metadata doesn't provide business information.
-    - Future intentions require predictive analytics, not extraction.
-    - Receipts are visual documents, not audio.
-  diagram: |
-    graph TD
-      A[Receipt Image] --> B[Prebuilt Receipt Model]
-      B --> C[Merchant Name]
-      B --> D[Transaction Date]
-      B --> E[Total Amount]
-      B --> F[Line Items]
-      B --> G[Tax]
-      C --> H[Structured Receipt Data]
-      D --> H
-      E --> H
-      F --> H
-      G --> H
+    Correct: Text-to-image and image-variation features allow consistent branding with style prompts (e.g., "photorealistic, studio lighting").
+    Incorrect: Other options do not support generative image capabilities.
 
-- id: q088
+- id: q008
   type: multiple_choice
   question: |
-    When extracting information from audio files using Content Understanding, what metadata is typically available in addition to the transcription?
+    What Responsible AI consideration is most critical when using computer vision for facial analysis?
   options:
-    - text: Timestamps, speaker identification, language detection, and confidence scores
+    - text: Ignoring privacy entirely for speed
+      is_correct: false
+    - text: Implementing fairness checks, consent, and transparency to avoid bias and misuse
       is_correct: true
-    - text: Only the raw text without any additional information
+    - text: Using only low-resolution images
       is_correct: false
-    - text: Image descriptions from the audio
-      is_correct: false
-    - text: Database schema definitions
+    - text: Maximizing model creativity without filters
       is_correct: false
   explanation: |
-    Correct: Audio analysis provides rich metadata including precise timestamps for each word/phrase, speaker diarization (who said what), detected language, and confidence scores for accuracy assessment.
-    Incorrect:
-    - Raw text alone loses valuable temporal and speaker context.
-    - Audio files don't contain images to describe.
-    - Database schemas are unrelated to audio content.
-  diagram: |
-    graph TD
-      A[Audio File] --> B[Content Understanding]
-      B --> C[Transcription Text]
-      B --> D[Timestamps]
-      B --> E[Speaker IDs]
-      B --> F[Language Detection]
-      B --> G[Confidence Scores]
-      C --> H[Rich Audio Intelligence]
-      D --> H
-      E --> H
-      F --> H
-      G --> H
+    Correct: Microsoft emphasizes governance, bias mitigation, and human oversight for vision workloads involving people.
+    Incorrect: Other options ignore critical Responsible AI principles.
 
-- id: q089
+- id: q009
   type: multiple_choice
   question: |
-    In a .NET 9 Blazor app using Content Understanding for video analysis, how can you extract information about objects appearing in the video?
+    In a multimodal prompt, how do you include an image for analysis in the Foundry SDK?
   options:
-    - text: Use video indexing capabilities that detect objects, scenes, and activities with timestamps
+    - text: As a separate text string
+      is_correct: false
+    - text: Using {"type"; "image_url", "image_url"; "url"; "..."}} in the content array
       is_correct: true
-    - text: Manually watch and annotate every frame
+    - text: Via a dedicated speech parameter
       is_correct: false
-    - text: Convert video to a single image and analyze that
-      is_correct: false
-    - text: Use text analysis on the video filename
+    - text: Only through the portal, not SDK
       is_correct: false
   explanation: |
-    Correct: Azure Video Indexer (Content Understanding) automatically detects objects, scenes, faces, activities, and more across video frames, providing timestamped results for when each element appears.
-    Incorrect:
-    - Manual annotation is time-consuming and defeats automation.
-    - Single image conversion loses temporal information and most content.
-    - Filenames rarely contain actual video content information.
-  diagram: |
-    graph TD
-      A[Video File] --> B[Video Indexer]
-      B --> C[Object Detection]
-      B --> D[Scene Recognition]
-      B --> E[Activity Detection]
-      C --> F[Timestamped Results]
-      D --> F
-      E --> F
-      F --> G[00:15 - Person detected]
-      F --> H[00:32 - Car detected]
+    Correct: This structure allows the multimodal model to process both text and visual input in one call.
+    Incorrect: Other options do not represent the correct SDK structure.
 
-- id: q090
+- id: q010
   type: multiple_choice
   question: |
-    What is a best practice for handling large document processing workloads in a Blazor application using Content Understanding?
+    Which scenario best demonstrates object detection in Foundry Vision?
   options:
-    - text: Implement asynchronous processing with progress indicators and batch processing capabilities
+    - text: Counting people in a crowded mall for capacity management with bounding boxes
       is_correct: true
-    - text: Process all documents synchronously on the UI thread
+    - text: Generating new product photos
       is_correct: false
-    - text: Avoid showing any progress to users
+    - text: Transcribing audio from a video
       is_correct: false
-    - text: Process only one document per day
+    - text: Summarizing a text document
       is_correct: false
   explanation: |
-    Correct: Document analysis can take time, especially for large files or batches. Using async/await patterns, showing progress indicators, and implementing batch processing provides better user experience and efficient resource utilization.
-    Incorrect:
-    - Synchronous processing blocks the UI and creates poor experience.
-    - Users need feedback during long-running operations.
-    - Artificial limits on processing frequency are unnecessary and inefficient.
-  diagram: |
-    graph TD
-      A[Multiple Documents] --> B[Queue for Processing]
-      B --> C[Async Batch Processing]
-      C --> D[Document 1 Analysis]
-      C --> E[Document 2 Analysis]
-      C --> F[Document N Analysis]
-      D --> G[Update Progress UI]
-      E --> G
-      F --> G
-      G --> H[All Results Complete]
+    Correct: Object detection localizes and classifies multiple instances with confidence scores and boxes.
+    Incorrect: Other options do not demonstrate object detection capabilities.
+
+- id: q011
+  type: multiple_choice
+  question: |
+    What does OCR capability in Foundry Vision primarily enable?
+  options:
+    - text: Image style transfer
+      is_correct: false
+    - text: Extracting printed or handwritten text from images and documents
+      is_correct: true
+    - text: Generating synthetic voices
+      is_correct: false
+    - text: Predicting future stock prices
+      is_correct: false
+  explanation: |
+    Correct: OCR (Optical Character Recognition) digitizes text for further processing or accessibility.
+    Incorrect: Other options describe unrelated capabilities.
+
+- id: q012
+  type: multiple_choice
+  question: |
+    For performance optimization in a high-traffic vision app, what should you consider in Foundry?
+  options:
+    - text: Always using the largest model regardless of cost
+      is_correct: false
+    - text: Model size, latency, auto-scaling, and appropriate deployment tier
+      is_correct: true
+    - text: Disabling all safety filters
+      is_correct: false
+    - text: Storing all images permanently without cleanup
+      is_correct: false
+  explanation: |
+    Correct: Balancing quality, cost, and responsiveness is key for production apps.
+    Incorrect: Other options do not represent sound deployment practices.
+
+- id: q013
+  type: multiple_choice
+  question: |
+    How can you create visual consistency across generated images for a marketing campaign?
+  options:
+    - text: Use the same seed value and detailed reference prompts or image variations
+      is_correct: true
+    - text: Randomize all parameters each time
+      is_correct: false
+    - text: Avoid using the playground
+      is_correct: false
+    - text: Switch models mid-campaign
+      is_correct: false
+  explanation: |
+    Correct: Consistent prompting and variation features maintain brand identity.
+    Incorrect: Other options would produce inconsistent results.
+
+- id: q014
+  type: multiple_choice
+  question: |
+    What is a common pitfall when interpreting complex scenes with multimodal models?
+  options:
+    - text: Providing too much contextual text in the prompt
+      is_correct: false
+    - text: Hallucinations or misinterpretations; mitigate with grounding and follow-up prompts
+      is_correct: true
+    - text: Using only single-word prompts
+      is_correct: false
+    - text: Never testing with real images
+      is_correct: false
+  explanation: |
+    Correct: Models can invent details; best practices include clear instructions and verification.
+    Incorrect: Other options do not address the hallucination challenge.
+
+- id: q015
+  type: multiple_choice
+  question: |
+    In Foundry, how do you build an accessibility tool combining vision and other capabilities?
+  options:
+    - text: Use multimodal model for image description + route output to speech synthesis
+      is_correct: true
+    - text: Rely solely on image generation
+      is_correct: false
+    - text: Disable multimodal features
+      is_correct: false
+    - text: Use only legacy non-Azure tools
+      is_correct: false
+  explanation: |
+    Correct: This creates end-to-end solutions (describe image -> read aloud) for visually impaired users.
+    Incorrect: Other options do not create comprehensive accessibility solutions.
+
+- id: q016
+  type: multiple_choice
+  question: |
+    When using multimodal models in Foundry for visual question answering, what makes the reasoning more powerful than traditional computer vision APIs?
+  options:
+    - text: They only perform basic classification
+      is_correct: false
+    - text: They combine visual understanding with natural language reasoning in a single unified model
+      is_correct: true
+    - text: They ignore text prompts entirely
+      is_correct: false
+    - text: They require separate training for each question type
+      is_correct: false
+  explanation: |
+    Correct: Multimodal models enable contextual, conversational reasoning over images (e.g., "Why might this scene be unsafe?"), which is a core implementation strength of Foundry in 2026.
+    Incorrect: Other options do not capture the unified reasoning capability.
+
+- id: q017
+  type: multiple_choice
+  question: |
+    In the Foundry SDK, what is the correct way to request image variations from an existing generated image?
+  options:
+    - text: Use a text-only completion endpoint
+      is_correct: false
+    - text: Pass the original image URL with a variation prompt to the images.generate method
+      is_correct: true
+    - text: Use only the portal playground
+      is_correct: false
+    - text: Call the speech service instead
+      is_correct: false
+  explanation: |
+    Correct: The image generation SDK supports image-to-image variations and editing, maintaining consistency while allowing creative modifications.
+    Incorrect: Other options do not support variation workflows.
+
+- id: q018
+  type: multiple_choice
+  question: |
+    A manufacturing firm needs to detect defects on assembly lines. Which Foundry vision capability is most appropriate?
+  options:
+    - text: Generative image creation only
+      is_correct: false
+    - text: Object detection with bounding boxes and confidence scores on real-time video or images
+      is_correct: true
+    - text: Text-to-speech synthesis
+      is_correct: false
+    - text: Pure document OCR
+      is_correct: false
+  explanation: |
+    Correct: Object detection localizes anomalies precisely, enabling automated quality control workflows.
+    Incorrect: Other options do not provide defect detection capabilities.
+
+- id: q019
+  type: multiple_choice
+  question: |
+    What Responsible AI practice is essential before deploying an image generation solution for public use?
+  options:
+    - text: Disable all content filters to maximize creativity
+      is_correct: false
+    - text: Conduct impact assessments, test for bias, and implement transparency disclosures
+      is_correct: true
+    - text: Use only low-resolution outputs
+      is_correct: false
+    - text: Skip human review processes
+      is_correct: false
+  explanation: |
+    Correct: Microsoft's Responsible AI principles require governance, fairness evaluation, and clear labeling of AI-generated content to build trust and avoid harm.
+    Incorrect: Other options compromise Responsible AI standards.
+
+- id: q020
+  type: multiple_choice
+  question: |
+    Which prompt engineering technique works best for consistent character appearance across multiple generated images?
+  options:
+    - text: Using completely different prompts each time
+      is_correct: false
+    - text: Providing detailed reference descriptions, seed values, or image references in follow-up generations
+      is_correct: true
+    - text: Avoiding any style specifications
+      is_correct: false
+    - text: Using maximum temperature for diversity
+      is_correct: false
+  explanation: |
+    Correct: Reference images and structured prompts maintain visual consistency, critical for branding and storytelling applications.
+    Incorrect: Other options would produce inconsistent results.
+
+- id: q021
+  type: multiple_choice
+  question: |
+    In a lightweight Python application, how would you integrate vision analysis with an agentic workflow?
+  options:
+    - text: Run vision and agent logic in completely separate processes with no communication
+      is_correct: false
+    - text: Send image results from a multimodal model as context to a Foundry agent for further reasoning and action
+      is_correct: true
+    - text: Use only static images without prompts
+      is_correct: false
+    - text: Avoid Foundry SDK entirely
+      is_correct: false
+  explanation: |
+    Correct: This integration creates powerful end-to-end solutions, such as "analyze damage -> recommend repair steps."
+    Incorrect: Other options do not create integrated agentic workflows.
+
+- id: q022
+  type: multiple_choice
+  question: |
+    What does OCR in Foundry Vision support that makes it valuable for document processing?
+  options:
+    - text: Only perfectly typed English text
+      is_correct: false
+    - text: Printed, handwritten, and multi-language text extraction from images and scanned documents
+      is_correct: true
+    - text: Image style transfer
+      is_correct: false
+    - text: Audio transcription
+      is_correct: false
+  explanation: |
+    Correct: Advanced OCR handles diverse real-world documents, feeding extracted text into downstream generative or agentic processes.
+    Incorrect: Other options do not represent OCR capabilities.
+
+- id: q023
+  type: multiple_choice
+  question: |
+    For high-traffic production vision apps, which deployment consideration is most important in Foundry?
+  options:
+    - text: Always choose the most expensive largest model
+      is_correct: false
+    - text: Balance model performance, latency, cost, and auto-scaling options
+      is_correct: true
+    - text: Disable monitoring features
+      is_correct: false
+    - text: Store every image indefinitely
+      is_correct: false
+  explanation: |
+    Correct: Efficient deployment ensures scalability and cost-effectiveness while meeting performance SLAs.
+    Incorrect: Other options do not represent production best practices.
+
+- id: q024
+  type: multiple_choice
+  question: |
+    How can you mitigate hallucinations when a multimodal model misdescribes details in a complex image?
+  options:
+    - text: Ignore the output and retry with the same prompt
+      is_correct: false
+    - text: Use grounding techniques, more specific prompts, or follow-up verification questions
+      is_correct: true
+    - text: Increase temperature setting
+      is_correct: false
+    - text: Remove all contextual instructions
+      is_correct: false
+  explanation: |
+    Correct: Grounding and iterative prompting improve accuracy and reliability in vision tasks.
+    Incorrect: Other options do not effectively mitigate hallucinations.
+
+- id: q025
+  type: multiple_choice
+  question: |
+    Which scenario best illustrates the use of spatial analysis in Foundry?
+  options:
+    - text: Generating artistic posters
+      is_correct: false
+    - text: Real-time people counting and movement tracking in a physical space while preserving privacy
+      is_correct: true
+    - text: Creating text summaries of reports
+      is_correct: false
+    - text: Speech-to-text conversion
+      is_correct: false
+  explanation: |
+    Correct: Spatial analysis provides actionable insights from video without storing identifiable biometric data.
+    Incorrect: Other options do not demonstrate spatial analysis applications.
+
+- id: q026
+  type: multiple_choice
+  question: |
+    What model family in Foundry is optimized for high-quality, efficient image generation as of 2026?
+  options:
+    - text: Legacy Azure Computer Vision only
+      is_correct: false
+    - text: MAI-Image series and DALL-E variants with improved speed and fidelity
+      is_correct: true
+    - text: Speech-focused models
+      is_correct: false
+    - text: Text-only foundational models
+      is_correct: false
+  explanation: |
+    Correct: These models deliver state-of-the-art text-to-image performance integrated directly in the Foundry platform.
+    Incorrect: Other options do not represent current Foundry capabilities.
+
+- id: q027
+  type: multiple_choice
+  question: |
+    In an educational app, how could generative vision capabilities enhance learning materials?
+  options:
+    - text: By limiting content to text only
+      is_correct: false
+    - text: By creating custom illustrations, diagrams, and visual explanations tailored to lesson topics
+      is_correct: true
+    - text: By replacing all teachers
+      is_correct: false
+    - text: By using only stock photos
+      is_correct: false
+  explanation: |
+    Correct: Generative tools allow dynamic, on-demand visuals that make abstract concepts more engaging and accessible.
+    Incorrect: Other options do not leverage generative vision capabilities.
+
+- id: q028
+  type: multiple_choice
+  question: |
+    What is a key difference between basic image classification and object detection?
+  options:
+    - text: Classification assigns one label to the entire image; detection localizes multiple objects with bounding boxes
+      is_correct: true
+    - text: Detection is slower and less useful
+      is_correct: false
+    - text: Classification requires video input only
+      is_correct: false
+    - text: Detection cannot handle multiple classes
+      is_correct: false
+  explanation: |
+    Correct: Detection provides richer spatial information essential for many real-world applications.
+    Incorrect: Other options do not accurately describe the differences.
+
+- id: q029
+  type: multiple_choice
+  question: |
+    When reviewing code for a vision-enabled chat app in Foundry, what does including an image_url in the messages array indicate?
+  options:
+    - text: The model will ignore the image
+      is_correct: false
+    - text: The multimodal model will process the image together with the text prompt
+      is_correct: true
+    - text: It is used only for audio processing
+      is_correct: false
+    - text: It triggers speech synthesis
+      is_correct: false
+  explanation: |
+    Correct: This is the standard structure for multimodal interactions in the Foundry SDK.
+    Incorrect: Other options do not represent correct SDK behavior.
+
+- id: q030
+  type: multiple_choice
+  question: |
+    A healthcare provider wants to analyze X-ray images with contextual prompts. Which capability should they prioritize?
+  options:
+    - text: Pure generative art creation
+      is_correct: false
+    - text: Multimodal models for visual analysis combined with medical domain prompts
+      is_correct: true
+    - text: Basic text analysis only
+      is_correct: false
+    - text: Face detection
+      is_correct: false
+  explanation: |
+    Correct: Multimodal reasoning adds valuable contextual insights while requiring strict Responsible AI oversight in sensitive domains.
+    Incorrect: Other options do not provide appropriate medical imaging analysis.
+
+- id: q031
+  type: multiple_choice
+  question: |
+    What is inpainting primarily used for in Foundry image generation?
+  options:
+    - text: Extending images beyond their original borders
+      is_correct: false
+    - text: Selectively modifying or filling masked regions of an existing image realistically
+      is_correct: true
+    - text: Reducing file size
+      is_correct: false
+    - text: Converting images to text
+      is_correct: false
+  explanation: |
+    Correct: Inpainting enables precise creative edits and restorations.
+    Incorrect: Other options do not describe inpainting accurately.
+
+- id: q032
+  type: multiple_choice
+  question: |
+    Which practice best demonstrates ethical image generation?
+  options:
+    - text: Generating deepfakes for entertainment without disclosure
+      is_correct: false
+    - text: Using content filters, watermarking, and clear AI-generated labels
+      is_correct: true
+    - text: Maximizing output diversity without safeguards
+      is_correct: false
+    - text: Avoiding any prompt restrictions
+      is_correct: false
+  explanation: |
+    Correct: Transparency and safety filters align with Microsoft's Responsible AI standards.
+    Incorrect: Other options compromise ethical standards.
+
+- id: q033
+  type: multiple_choice
+  question: |
+    How do you ensure brand consistency when generating multiple marketing images?
+  options:
+    - text: Change models and prompts randomly
+      is_correct: false
+    - text: Use reference images, consistent style descriptors, and aspect ratio controls
+      is_correct: true
+    - text: Generate only one image per campaign
+      is_correct: false
+    - text: Disable variation features
+      is_correct: false
+  explanation: |
+    Correct: Structured prompting and variation tools maintain visual identity across assets.
+    Incorrect: Other options would produce inconsistent brand results.
+
+- id: q034
+  type: multiple_choice
+  question: |
+    In a security monitoring scenario, what advantage does Foundry vision provide over traditional cameras?
+  options:
+    - text: No analysis capabilities
+      is_correct: false
+    - text: Intelligent alerts through object detection and anomaly reasoning via agents
+      is_correct: true
+    - text: Higher storage costs only
+      is_correct: false
+    - text: Reduced privacy controls
+      is_correct: false
+  explanation: |
+    Correct: AI adds actionable intelligence and automation to video streams.
+    Incorrect: Other options do not represent Foundry vision advantages.
+
+- id: q035
+  type: multiple_choice
+  question: |
+    What should you do if a generated image contains unintended biased representations?
+  options:
+    - text: Deploy it immediately
+      is_correct: false
+    - text: Refine prompts with diversity instructions, evaluate fairness, and regenerate
+      is_correct: true
+    - text: Ignore the issue
+      is_correct: false
+    - text: Use it only internally
+      is_correct: false
+  explanation: |
+    Correct: Continuous iteration and fairness testing are part of responsible deployment.
+    Incorrect: Other options do not address bias appropriately.
+
+- id: q036
+  type: multiple_choice
+  question: |
+    Which integration pattern creates the most powerful accessibility solution?
+  options:
+    - text: Vision analysis only
+      is_correct: false
+    - text: Multimodal image description + speech synthesis agent
+      is_correct: true
+    - text: Text generation without visuals
+      is_correct: false
+    - text: Standalone OCR
+      is_correct: false
+  explanation: |
+    Correct: Combining capabilities delivers end-to-end experiences for users with visual impairments.
+    Incorrect: Other options do not create comprehensive accessibility solutions.
+
+- id: q037
+  type: multiple_choice
+  question: |
+    What parameter in image generation controls creativity vs. adherence to the prompt?
+  options:
+    - text: n (number of images)
+      is_correct: false
+    - text: Temperature (higher values increase creativity)
+      is_correct: true
+    - text: File format only
+      is_correct: false
+    - text: Endpoint region
+      is_correct: false
+  explanation: |
+    Correct: Temperature tuning is a key prompt engineering skill for balancing fidelity and innovation.
+    Incorrect: Other options do not control creativity levels.
+
+- id: q038
+  type: multiple_choice
+  question: |
+    For real-time video analysis in Foundry, which service is most suitable?
+  options:
+    - text: Static image generation
+      is_correct: false
+    - text: Spatial analysis or multimodal models with streaming support
+      is_correct: true
+    - text: Document-only Content Understanding
+      is_correct: false
+    - text: Text-only chat
+      is_correct: false
+  explanation: |
+    Correct: These support dynamic visual understanding with privacy considerations.
+    Incorrect: Other options do not support real-time video analysis.
+
+- id: q039
+  type: multiple_choice
+  question: |
+    A common pitfall in vision projects is failing to test with diverse images. Why does this matter?
+  options:
+    - text: It has no impact on performance
+      is_correct: false
+    - text: It can reveal biases and reduce model robustness across user populations
+      is_correct: true
+    - text: It only affects cost
+      is_correct: false
+    - text: It improves speed
+      is_correct: false
+  explanation: |
+    Correct: Diverse testing upholds fairness and inclusiveness principles.
+    Incorrect: Other options do not address the importance of diverse testing.
+
+- id: q040
+  type: multiple_choice
+  question: |
+    How does outpainting differ from inpainting?
+  options:
+    - text: Outpainting extends the image canvas beyond original borders
+      is_correct: true
+    - text: Outpainting fills internal masked areas
+      is_correct: false
+    - text: They are identical
+      is_correct: false
+    - text: Outpainting is text-only
+      is_correct: false
+  explanation: |
+    Correct: Outpainting creatively expands scenes while preserving the original content.
+    Incorrect: Other options do not accurately describe outpainting.
+
+- id: q041
+  type: multiple_choice
+  question: |
+    In code, what does a high confidence score from object detection indicate?
+  options:
+    - text: The model is uncertain about the detection
+      is_correct: false
+    - text: Strong certainty that the object is present at the specified location
+      is_correct: true
+    - text: The image is low quality
+      is_correct: false
+    - text: No object was found
+      is_correct: false
+  explanation: |
+    Correct: Confidence scores guide decision-making in automated systems.
+    Incorrect: Other options misinterpret confidence scores.
+
+- id: q042
+  type: multiple_choice
+  question: |
+    Which tool in Foundry is ideal for rapid prototyping of vision ideas?
+  options:
+    - text: Only production SDK deployments
+      is_correct: false
+    - text: The Images and Chat Playground interfaces
+      is_correct: true
+    - text: External non-Azure editors
+      is_correct: false
+    - text: Command line only
+      is_correct: false
+  explanation: |
+    Correct: Playgrounds allow instant iteration before coding.
+    Incorrect: Other options do not support rapid prototyping.
+
+- id: q043
+  type: multiple_choice
+  question: |
+    What governance step is required for vision solutions handling personal data?
+  options:
+    - text: None
+      is_correct: false
+    - text: Privacy impact assessments, consent mechanisms, and compliance with regulations
+      is_correct: true
+    - text: Unlimited data retention
+      is_correct: false
+    - text: Public sharing of raw images
+      is_correct: false
+  explanation: |
+    Correct: Privacy and security are foundational Responsible AI pillars.
+    Incorrect: Other options compromise data governance.
+
+- id: q044
+  type: multiple_choice
+  question: |
+    How can agents enhance vision capabilities in Foundry?
+  options:
+    - text: By replacing all vision models
+      is_correct: false
+    - text: By orchestrating multi-step processes (e.g., analyze -> decide -> act)
+      is_correct: true
+    - text: By limiting to single-image tasks
+      is_correct: false
+    - text: By disabling multimodal support
+      is_correct: false
+  explanation: |
+    Correct: Agentic workflows create intelligent, autonomous vision-powered applications.
+    Incorrect: Other options do not leverage agent orchestration.
+
+- id: q045
+  type: multiple_choice
+  question: |
+    When troubleshooting poor image generation quality, what is a recommended first step?
+  options:
+    - text: Change the model randomly
+      is_correct: false
+    - text: Refine the prompt with more descriptive language, style references, and quality modifiers
+      is_correct: true
+    - text: Reduce resolution further
+      is_correct: false
+    - text: Stop using the service
+      is_correct: false
+  explanation: |
+    Correct: Prompt quality is often the biggest lever for better outputs.
+    Incorrect: Other options do not improve generation quality.
+
+- id: q046
+  type: multiple_choice
+  question: |
+    What makes spatial analysis privacy-preserving?
+  options:
+    - text: It stores full facial biometrics
+      is_correct: false
+    - text: It focuses on anonymous movement patterns and counts without identifying individuals
+      is_correct: true
+    - text: It requires constant video recording
+      is_correct: false
+    - text: It shares raw footage publicly
+      is_correct: false
+  explanation: |
+    Correct: This design aligns with inclusiveness and privacy principles.
+    Incorrect: Other options compromise privacy.
+
+- id: q047
+  type: multiple_choice
+  question: |
+    In a retail visual search app, which combination yields the best results?
+  options:
+    - text: Text search only
+      is_correct: false
+    - text: Image upload + multimodal analysis + generative recommendations
+      is_correct: true
+    - text: Manual tagging
+      is_correct: false
+    - text: Speech input alone
+      is_correct: false
+  explanation: |
+    Correct: Multimodal and generative features deliver superior customer experiences.
+    Incorrect: Other options do not leverage advanced vision capabilities.
+
+- id: q048
+  type: multiple_choice
+  question: |
+    What is the benefit of using reference images in generative workflows?
+  options:
+    - text: They slow down generation
+      is_correct: false
+    - text: They guide the model toward desired style, composition, and subject consistency
+      is_correct: true
+    - text: They are ignored by modern models
+      is_correct: false
+    - text: They increase costs without value
+      is_correct: false
+  explanation: |
+    Correct: Reference-based generation improves control and output quality.
+    Incorrect: Other options do not recognize the value of reference images.
+
+- id: q049
+  type: multiple_choice
+  question: |
+    For exam success on vision topics, what should you focus on most?
+  options:
+    - text: Memorizing only model names
+      is_correct: false
+    - text: Understanding implementation patterns, Responsible AI application, and how to build lightweight solutions in Foundry
+      is_correct: true
+    - text: Ignoring code examples
+      is_correct: false
+    - text: Focusing solely on theoretical concepts
+      is_correct: false
+  explanation: |
+    Correct: AI-901 emphasizes practical implementation (55–60% weight).
+    Incorrect: Other options do not align with exam requirements.
+
+- id: q050
+  type: multiple_choice
+  question: |
+    Comprehensive Scenario: You are tasked with building a museum visitor app. Visitors upload photos of artifacts. Design a high-level Foundry solution that includes vision, generation, and accessibility. Which approach is optimal?
+  options:
+    - text: Text-only chatbot
+      is_correct: false
+    - text: Multimodal analysis for description + generative variations for interactive visuals + speech output agent with Responsible AI checks
+      is_correct: true
+    - text: Static database lookup
+      is_correct: false
+    - text: Image generation without analysis
+      is_correct: false
+  explanation: |
+    Correct: This leverages the full spectrum of Chapter 7 capabilities for an engaging, inclusive, and intelligent experience.
+    Incorrect: Other options do not provide comprehensive integrated solutions.

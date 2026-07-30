@@ -1,272 +1,800 @@
 questions:
-- id: q071
+- id: q001
   type: multiple_choice
   question: |
-    A company wants to build a Blazor WebAssembly application that analyzes product images to identify defects. Which Azure AI service should they use in Azure AI Foundry?
+    Which Azure service in Foundry Tools provides core NLP features like sentiment analysis, entity recognition, and key phrase extraction?
   options:
-    - text: Azure AI Vision service with custom vision or image analysis capabilities
+    - text: Azure Vision
+      is_correct: false
+    - text: Azure Speech
+      is_correct: false
+    - text: Azure Language
       is_correct: true
-    - text: Azure AI Language service for text analysis
-      is_correct: false
-    - text: Azure Speech service for audio processing
-      is_correct: false
-    - text: Azure AI Document Intelligence for form processing only
+    - text: Azure Translator
       is_correct: false
   explanation: |
-    Correct: Azure AI Vision service provides image analysis capabilities including object detection, image classification, and custom vision training - ideal for identifying defects in product images.
-    Incorrect:
-    - Language service analyzes text, not images.
-    - Speech service processes audio, not visual content.
-    - Document Intelligence is optimized for structured documents, not general defect detection.
-  diagram: |
-    graph TD
-      A[Product Images] --> B[Azure AI Vision Service]
-      B --> C[Image Analysis]
-      C --> D[Defect Detection]
-      D --> E[Blazor UI Display]
+    Correct: Azure Language in Foundry Tools provides core NLP features like sentiment analysis, entity recognition, and summarization, directly matching the lightweight text analysis requirements for AI-901.
 
-- id: q072
+- id: q002
   type: multiple_choice
   question: |
-    When using a multimodal model (like GPT-4 Vision) in Azure AI Foundry to interpret visual input, what are the TWO required components in the prompt?
+    Which capability allows a multimodal model in Foundry to process both spoken input and visual context in one interaction?
   options:
-    - text: The image (as URL or base64) and text instructions describing the analysis task
+    - text: Speech-to-Text only
+      is_correct: false
+    - text: Text-to-Speech only
+      is_correct: false
+    - text: Unified multimodal understanding
       is_correct: true
-    - text: Only the image file without any text
-      is_correct: false
-    - text: Only text descriptions without actual images
-      is_correct: false
-    - text: Audio files and spreadsheets
+    - text: Batch translation
       is_correct: false
   explanation: |
-    Correct: Multimodal models require both the visual input (image via URL or base64-encoded data) and text instructions that specify what analysis or questions to answer about the image.
-    Incorrect:
-    - Images alone don't tell the model what to analyze.
-    - Text alone cannot provide visual understanding.
-    - Audio and spreadsheets are different modalities not applicable here.
-  diagram: |
-    graph TD
-      A[Multimodal Prompt] --> B[Image Input]
-      A --> C[Text Instructions]
-      B --> D[GPT-4 Vision Model]
-      C --> D
-      D --> E[Visual Understanding Response]
+    Correct: Multimodal models handle voice, text, and vision natively, unlike siloed services. This is key for responding to spoken prompts with visual input.
 
-- id: q073
+- id: q003
   type: multiple_choice
   question: |
-    In a .NET 9 Blazor application, how should images be prepared for sending to a multimodal AI model via Azure AI Foundry SDK?
+    In Azure Speech in Foundry Tools, what feature identifies different speakers in a multi-person conversation?
   options:
-    - text: Convert images to base64 strings or provide publicly accessible URLs
+    - text: Neural TTS
+      is_correct: false
+    - text: Speaker diarization
       is_correct: true
-    - text: Send raw binary image data without encoding
+    - text: Key phrase extraction
       is_correct: false
-    - text: Compress images to ZIP format first
-      is_correct: false
-    - text: Convert images to audio files
+    - text: Sentiment scoring
       is_correct: false
   explanation: |
-    Correct: Multimodal APIs typically accept images as either base64-encoded strings (embedded in JSON) or as URLs pointing to publicly accessible images. Both formats allow the API to retrieve and process the image.
-    Incorrect:
-    - Raw binary requires specific handling not standard in JSON APIs.
-    - ZIP compression is not the expected format.
-    - Converting to audio loses the visual information.
-  diagram: |
-    graph TD
-      A[Image File] --> B[Conversion Process]
-      B --> C[Base64 String]
-      B --> D[Public URL]
-      C --> E[API Request]
-      D --> E
-      E --> F[Multimodal Model]
+    Correct: Speaker diarization is a core Speech capability for distinguishing speakers, essential for accurate transcription in group settings.
 
-- id: q074
+- id: q004
   type: multiple_choice
   question: |
-    A marketing team wants to generate product images from text descriptions using Azure AI Foundry. Which type of model should they deploy?
+    Which Azure service in Foundry Tools is primarily used for performing opinion mining and key phrase extraction on customer feedback?
   options:
-    - text: Image generation model like DALL-E 3 or Stable Diffusion
+    - text: Azure Speech
+      is_correct: false
+    - text: Azure Vision
+      is_correct: false
+    - text: Azure Language
       is_correct: true
-    - text: Text analysis model for sentiment
-      is_correct: false
-    - text: Speech recognition model
-      is_correct: false
-    - text: Object detection model
+    - text: Azure Content Understanding
       is_correct: false
   explanation: |
-    Correct: Image generation models (DALL-E 3, Stable Diffusion) create new images from text prompts/descriptions, enabling marketers to generate product visuals based on textual descriptions.
-    Incorrect:
-    - Text analysis examines existing text, not creating images.
-    - Speech recognition converts audio to text.
-    - Object detection analyzes existing images, not creating new ones.
-  diagram: |
-    graph TD
-      A[Text Prompt: Modern kitchen appliance] --> B[DALL-E 3 Model]
-      B --> C[Image Generation Process]
-      C --> D[Generated Product Image]
-      D --> E[Marketing Materials]
+    Correct: Azure Language provides advanced NLP features including opinion mining (aspect-based sentiment) and key phrase extraction, making it ideal for text analysis applications in Foundry. Options A and B focus on audio/visual, while D is for structured extraction from documents.
 
-- id: q075
+- id: q005
   type: multiple_choice
   question: |
-    When building a lightweight Blazor application with image generation capabilities, what is the recommended approach for handling API keys?
+    In a Foundry lightweight application, what SDK method would you use to analyze sentiment on a batch of documents?
   options:
-    - text: Store API keys in a backend API server and proxy requests from Blazor WebAssembly
+    - text: client.recognize_once()
+      is_correct: false
+    - text: client.synthesize_speech()
+      is_correct: false
+    - text: client.analyze_sentiment(documents)
       is_correct: true
-    - text: Embed the API key directly in Blazor component code
-      is_correct: false
-    - text: Store the key in browser localStorage
-      is_correct: false
-    - text: Include the key in client-side JavaScript files
+    - text: client.detect_objects()
       is_correct: false
   explanation: |
-    Correct: Blazor WebAssembly runs entirely client-side, making embedded secrets visible in browser. A backend API (ASP.NET Core) should securely store credentials and proxy AI service requests.
-    Incorrect:
-    - Embedding in components exposes keys in browser dev tools.
-    - localStorage is accessible via JavaScript and browser tools.
-    - Client-side JavaScript files are publicly downloadable.
-  diagram: |
-    graph TD
-      A[Blazor WebAssembly] --> B[Backend API]
-      B --> C[Secure Key Storage]
-      C --> D[Azure AI Foundry]
-      D --> E[Image Generation Service]
-      E --> F[Generated Image]
-      F --> B
-      B --> A
+    Correct: The analyze_sentiment method from the TextAnalysisClient in Azure Language SDK handles batch sentiment analysis. The other options belong to Speech or Vision SDKs.
 
-- id: q076
+- id: q006
   type: multiple_choice
   question: |
-    Which Azure AI Vision capability would be MOST appropriate for a Blazor app that needs to extract printed and handwritten text from uploaded images?
+    What feature of Azure Speech in Foundry Tools allows identification of who spoke which parts in a multi-speaker meeting recording?
   options:
-    - text: Optical Character Recognition (OCR) / Read API
+    - text: Neural voice synthesis
+      is_correct: false
+    - text: Real-time translation
+      is_correct: false
+    - text: Speaker diarization
       is_correct: true
+    - text: Language detection
+      is_correct: false
+  explanation: |
+    Correct: Speaker diarization segments audio by speaker, crucial for accurate transcription in group scenarios. The others are separate Speech capabilities.
+
+- id: q007
+  type: multiple_choice
+  question: |
+    When responding to spoken prompts in Foundry, which model type enables simultaneous processing of audio and visual inputs?
+  options:
+    - text: Text-only LLM
+      is_correct: false
+    - text: Multimodal model
+      is_correct: true
+    - text: Speech-to-Text only
+      is_correct: false
+    - text: Translator service
+      is_correct: false
+  explanation: |
+    Correct: Multimodal models in Foundry unify voice, text, and vision processing for richer interactions, unlike siloed services.
+
+- id: q008
+  type: multiple_choice
+  question: |
+    Which best practice ensures ethical use of voice data in Foundry speech applications?
+  options:
+    - text: Store all recordings indefinitely
+      is_correct: false
+    - text: Obtain explicit user consent and implement privacy controls
+      is_correct: true
+    - text: Ignore regional data laws
+      is_correct: false
+    - text: Use public datasets without review
+      is_correct: false
+  explanation: |
+    Correct: Consent and privacy (e.g., GDPR compliance, anonymization) align with Responsible AI principles covered in the exam.
+
+- id: q009
+  type: multiple_choice
+  question: |
+    In the Speech SDK for Foundry, what configuration enables real-time transcription from a microphone?
+  options:
+    - text: Batch audio file input only
+      is_correct: false
+    - text: AudioConfig with default microphone
+      is_correct: true
+    - text: Image input configuration
+      is_correct: false
+    - text: Text-to-speech synthesizer only
+      is_correct: false
+  explanation: |
+    Correct: AudioConfig(use_default_microphone=True) combined with SpeechRecognizer supports live streaming input.
+
+- id: q010
+  type: multiple_choice
+  question: |
+    What is the primary benefit of integrating Azure Language with generative models in Foundry for text analysis?
+  options:
+    - text: Reduced model size
+      is_correct: false
+    - text: Context-aware, grounded responses with sentiment insights
+      is_correct: true
+    - text: Faster image processing
+      is_correct: false
+    - text: Elimination of all latency
+      is_correct: false
+  explanation: |
+    Correct: Combining Language services (sentiment/entities) with generative AI enables more intelligent, empathetic applications.
+
+- id: q011
+  type: multiple_choice
+  question: |
+    For a multilingual customer support bot in Foundry, which Speech capability would enable real-time conversation across languages?
+  options:
+    - text: Speaker recognition only
+      is_correct: false
+    - text: Speech translation
+      is_correct: true
+    - text: Key phrase extraction
+      is_correct: false
+    - text: Object detection
+      is_correct: false
+  explanation: |
+    Correct: Speech translation supports real-time multilingual communication, a core Foundry Speech feature.
+
+- id: q012
+  type: multiple_choice
+  question: |
+    Which scenario best demonstrates multimodal interaction using spoken prompts in Foundry?
+  options:
+    - text: Text-only chat
+      is_correct: false
+    - text: A technician speaking a query while showing equipment via camera
+      is_correct: true
+    - text: Batch document upload
+      is_correct: false
+    - text: Static image generation
+      is_correct: false
+  explanation: |
+    Correct: Multimodal models process voice + vision together for practical, real-world assistance.
+
+- id: q013
+  type: multiple_choice
+  question: |
+    What parameter in Text Analysis Client helps handle domain-specific medical text?
+  options:
+    - text: Generic sentiment only
+      is_correct: false
+    - text: Text Analytics for Health
+      is_correct: true
+    - text: Basic translation
+      is_correct: false
+    - text: Voice synthesis
+      is_correct: false
+  explanation: |
+    Correct: Text Analytics for Health extracts medical entities from clinical notes, integrated in Foundry Language tools.
+
+- id: q014
+  type: multiple_choice
+  question: |
+    In troubleshooting high latency for speech recognition in Foundry, what is a recommended solution?
+  options:
+    - text: Use distant regions
+      is_correct: false
+    - text: Deploy in the same region as users and optimize endpoints
+      is_correct: true
+    - text: Disable diarization permanently
+      is_correct: false
+    - text: Avoid SDK usage
+      is_correct: false
+  explanation: |
+    Correct: Regional proximity and proper configuration reduce latency in production apps.
+
+- id: q015
+  type: multiple_choice
+  question: |
+    Which Foundry tool unifies text analysis, speech, and generative capabilities for building agents?
+  options:
+    - text: Isolated services
+      is_correct: false
+    - text: Microsoft Foundry portal and SDK orchestration
+      is_correct: true
+    - text: External third-party APIs only
+      is_correct: false
+    - text: Vision-only catalog
+      is_correct: false
+  explanation: |
+    Correct: Foundry provides unified access and orchestration for seamless text/speech solutions.
+
+- id: q016
+  type: multiple_choice
+  question: |
+    What does neural TTS in Azure Speech provide over basic synthesis?
+  options:
+    - text: Robotic monotone output
+      is_correct: false
+    - text: Natural-sounding voices with emotional expressiveness
+      is_correct: true
+    - text: Text-only output
+      is_correct: false
+    - text: Image captions
+      is_correct: false
+  explanation: |
+    Correct: Neural voices deliver human-like quality and support expressive tones.
+
+- id: q017
+  type: multiple_choice
+  question: |
+    In a case study for healthcare, how does combining Speech-to-Text with Language services help patients?
+  options:
+    - text: Increases paperwork
+      is_correct: false
+    - text: Enables voice symptom description with automatic entity extraction
+      is_correct: true
+    - text: Limits accessibility
+      is_correct: false
+    - text: Requires manual transcription
+      is_correct: false
+  explanation: |
+    Correct: This creates accessible, efficient assistants that improve patient engagement.
+
+- id: q018
+  type: multiple_choice
+  question: |
+    What is Conversational Language Understanding (CLU) used for in Foundry text solutions?
+  options:
     - text: Image classification
       is_correct: false
-    - text: Face detection
+    - text: Predicting user intents and extracting entities from utterances
+      is_correct: true
+    - text: Speech waveform analysis
       is_correct: false
+    - text: Pure translation
+      is_correct: false
+  explanation: |
+    Correct: CLU powers custom chatbots and voice apps by understanding intent.
+
+- id: q019
+  type: multiple_choice
+  question: |
+    For batch processing of call center recordings, which Speech mode is most appropriate?
+  options:
+    - text: Real-time microphone only
+      is_correct: false
+    - text: Batch transcription
+      is_correct: true
+    - text: Live synthesis
+      is_correct: false
+    - text: Vision analysis
+      is_correct: false
+  explanation: |
+    Correct: Batch mode efficiently handles pre-recorded audio for analytics.
+
+- id: q020
+  type: multiple_choice
+  question: |
+    Why is grounding important when using text analysis outputs with generative models?
+  options:
+    - text: To increase hallucinations
+      is_correct: false
+    - text: To ensure responses are factual and based on analyzed data
+      is_correct: true
+    - text: To ignore user input
+      is_correct: false
+    - text: To slow down processing
+      is_correct: false
+  explanation: |
+    Correct: Grounding (e.g., via RAG or direct service output) improves reliability.
+
+- id: q021
+  type: multiple_choice
+  question: |
+    Which SDK is used for both speech recognition and synthesis in a single Foundry application?
+  options:
+    - text: Vision SDK only
+      is_correct: false
+    - text: Azure Cognitive Services Speech SDK
+      is_correct: true
+    - text: Language-only client
+      is_correct: false
+    - text: Content Understanding SDK
+      is_correct: false
+  explanation: |
+    Correct: The unified Speech SDK supports full voice pipelines in Foundry.
+
+- id: q022
+  type: multiple_choice
+  question: |
+    What ethical consideration is critical when deploying voice-enabled agents?
+  options:
+    - text: Unlimited data collection
+      is_correct: false
+    - text: Transparency about AI usage and data handling
+      is_correct: true
+    - text: Bias amplification
+      is_correct: false
+    - text: Ignoring accessibility
+      is_correct: false
+  explanation: |
+    Correct: Transparency builds trust and aligns with Responsible AI.
+
+- id: q023
+  type: multiple_choice
+  question: |
+    In Foundry Playground, what can you test without writing full code?
+  options:
+    - text: Hardware deployment only
+      is_correct: false
+    - text: Multimodal prompts combining speech and text
+      is_correct: true
+    - text: Physical server config
+      is_correct: false
+    - text: Database queries
+      is_correct: false
+  explanation: |
+    Correct: The Playground allows rapid experimentation with speech/text capabilities.
+
+- id: q024
+  type: multiple_choice
+  question: |
+    For an education platform, how does real-time speech translation enhance inclusivity?
+  options:
+    - text: Limits languages
+      is_correct: false
+    - text: Enables seamless cross-language learning
+      is_correct: true
+    - text: Increases costs without benefit
+      is_correct: false
+    - text: Requires text input only
+      is_correct: false
+  explanation: |
+    Correct: It supports global, multilingual interactions.
+
+- id: q025
+  type: multiple_choice
+  question: |
+    What output format can Text Analytics return for structured insights?
+  options:
+    - text: Only raw text
+      is_correct: false
+    - text: JSON with sentiment scores, entities, and phrases
+      is_correct: true
+    - text: Audio files
+      is_correct: false
+    - text: Images
+      is_correct: false
+  explanation: |
+    Correct: Structured JSON enables easy integration into apps and workflows.
+
+- id: q026
+  type: multiple_choice
+  question: |
+    Which configuration in Speech SDK supports custom domain vocabulary?
+  options:
+    - text: Default generic model only
+      is_correct: false
+    - text: Custom speech models
+      is_correct: true
+    - text: Vision parameters
+      is_correct: false
+    - text: Static prompts
+      is_correct: false
+  explanation: |
+    Correct: Custom models improve accuracy for specialized terms (e.g., technical or medical).
+
+- id: q027
+  type: multiple_choice
+  question: |
+    In a retail case study, how does sentiment analysis on spoken reviews improve service?
+  options:
+    - text: Ignores complaints
+      is_correct: false
+    - text: Triggers real-time escalation for negative feedback
+      is_correct: true
+    - text: Delays responses
+      is_correct: false
+    - text: Reduces data usage
+      is_correct: false
+  explanation: |
+    Correct: Real-time insights turn potential issues into loyalty opportunities.
+
+- id: q028
+  type: multiple_choice
+  question: |
+    What is a key advantage of using Foundry over standalone Azure AI Services?
+  options:
+    - text: More fragmentation
+      is_correct: false
+    - text: Unified portal, orchestration, and governance
+      is_correct: true
+    - text: Higher costs only
+      is_correct: false
+    - text: Limited model catalog
+      is_correct: false
+  explanation: |
+    Correct: Foundry streamlines development and management.
+
+- id: q029
+  type: multiple_choice
+  question: |
+    For accessibility, which Speech feature supports users with visual impairments?
+  options:
     - text: Image generation
       is_correct: false
+    - text: Text-to-Speech with natural voices
+      is_correct: true
+    - text: Object detection only
+      is_correct: false
+    - text: Batch text upload
+      is_correct: false
   explanation: |
-    Correct: The OCR/Read API in Azure AI Vision extracts printed and handwritten text from images and documents, making it ideal for text extraction from uploaded images.
-    Incorrect:
-    - Image classification categorizes images, not extracting text.
-    - Face detection identifies faces, not text.
-    - Image generation creates new images, not reading existing ones.
-  diagram: |
-    graph TD
-      A[Uploaded Image with Text] --> B[Azure AI Vision OCR]
-      B --> C[Text Detection]
-      C --> D[Character Recognition]
-      D --> E[Extracted Text]
-      E --> F[Blazor UI Display]
+    Correct: TTS converts text to spoken output, enhancing accessibility.
 
-- id: q077
+- id: q030
   type: multiple_choice
   question: |
-    When implementing object detection in a Blazor application using Azure AI Vision, what information is typically returned?
+    When integrating speech with agents in Foundry, what workflow pattern is common?
   options:
-    - text: Detected object labels, confidence scores, and bounding box coordinates
+    - text: Isolated text processing
+      is_correct: false
+    - text: Transcribe -> Analyze -> Generate response -> Synthesize speech
       is_correct: true
-    - text: Only the total number of objects
+    - text: Vision-first only
       is_correct: false
-    - text: Generated images based on detected objects
-      is_correct: false
-    - text: Audio descriptions of the objects
+    - text: Manual intervention required always
       is_correct: false
   explanation: |
-    Correct: Object detection APIs return the identified objects with labels, confidence scores (how certain the model is), and bounding box coordinates (x, y, width, height) to locate objects in the image.
-    Incorrect:
-    - Count alone doesn't provide useful information about what or where objects are.
-    - Object detection analyzes images, not generating new ones.
-    - Audio descriptions require separate text-to-speech processing.
-  diagram: |
-    graph TD
-      A[Input Image] --> B[Object Detection API]
-      B --> C[Object: Car, 95% confidence]
-      B --> D[Object: Person, 87% confidence]
-      C --> E[Bounding Box: x,y,w,h]
-      D --> F[Bounding Box: x,y,w,h]
+    Correct: This end-to-end pipeline creates conversational agents.
 
-- id: q078
+- id: q031
   type: multiple_choice
   question: |
-    What is a key parameter when calling an image generation model in Azure AI Foundry to control the visual quality and detail?
+    What does language detection in Azure Language return?
   options:
-    - text: Image size/resolution and quality settings (e.g., standard vs HD)
+    - text: Audio format
+      is_correct: false
+    - text: The detected language of input text
       is_correct: true
-    - text: Audio sample rate
+    - text: Speaker identity
       is_correct: false
-    - text: Database connection timeout
-      is_correct: false
-    - text: Email notification frequency
+    - text: Image labels
       is_correct: false
   explanation: |
-    Correct: Image generation models accept parameters for image size (e.g., 1024x1024, 1792x1024) and quality settings (standard or HD) that directly affect the output's resolution and detail level.
-    Incorrect:
-    - Audio sample rate is for audio processing, not images.
-    - Database settings are unrelated to image generation.
-    - Email notifications are separate from generation parameters.
-  diagram: |
-    graph TD
-      A[Image Generation Request] --> B[Size Parameter: 1024x1024]
-      A --> C[Quality: HD]
-      B --> D[Generation Engine]
-      C --> D
-      D --> E[High-Quality Image Output]
+    Correct: It automatically identifies language for routing or processing.
 
-- id: q079
+- id: q032
   type: multiple_choice
   question: |
-    In a Blazor WebAssembly app that displays generated images, what is the recommended approach for handling the image data returned from Azure AI Foundry?
+    In high-volume call centers, which observability feature in Foundry helps monitor speech solutions?
   options:
-    - text: Convert the base64-encoded image data to a data URL for display in an img element
+    - text: No monitoring
+      is_correct: false
+    - text: Dashboard for latency, costs, and accuracy metrics
       is_correct: true
-    - text: Display the base64 string as plain text
+    - text: External tools only
       is_correct: false
-    - text: Convert the image to audio format
-      is_correct: false
-    - text: Store only the image metadata without the actual image
+    - text: Manual logs
       is_correct: false
   explanation: |
-    Correct: Image generation APIs often return base64-encoded image data. In Blazor, you can create a data URL (e.g., "data:image/png;base64,...") and bind it to an img element's src attribute for display.
-    Incorrect:
-    - Displaying base64 as text doesn't render the image.
-    - Converting to audio loses the visual content.
-    - Metadata alone doesn't display the actual image.
-  diagram: |
-    graph TD
-      A[API Response] --> B[Base64 Image Data]
-      B --> C[Create Data URL]
-      C --> D[data:image/png;base64,...]
-      D --> E[img src Binding]
-      E --> F[Image Displayed in Browser]
+    Correct: Built-in observability supports scalable, reliable deployments.
 
-- id: q080
+- id: q033
   type: multiple_choice
   question: |
-    A retail app needs to analyze product images to generate automatic product descriptions. Which combination of Azure AI services in Foundry would be MOST effective?
+    Which prompt technique enhances text analysis when combined with generative models?
   options:
-    - text: Use a multimodal model (GPT-4 Vision) to analyze images and generate descriptive text
+    - text: Ignore context
+      is_correct: false
+    - text: Few-shot examples with analyzed data
       is_correct: true
-    - text: Use only text analysis without any vision capabilities
+    - text: Random inputs
       is_correct: false
-    - text: Use speech recognition to describe images
-      is_correct: false
-    - text: Use image generation to create product images from descriptions
+    - text: Single-word prompts
       is_correct: false
   explanation: |
-    Correct: Multimodal models like GPT-4 Vision can analyze product images and generate detailed, natural language descriptions based on visual features, making them ideal for automatic product description generation.
-    Incorrect:
-    - Text analysis alone cannot understand visual content.
-    - Speech recognition processes audio, not images.
-    - Image generation creates images from text, the opposite of what's needed.
-  diagram: |
-    graph TD
-      A[Product Image] --> B[GPT-4 Vision Model]
-      B --> C[Visual Analysis]
-      C --> D[Feature Extraction]
-      D --> E[Text Generation]
-      E --> F[Product Description]
-      F --> G[E-commerce Listing]
+    Correct: Few-shot improves consistency and relevance.
+
+- id: q034
+  type: multiple_choice
+  question: |
+    What retirement note applies to some older speech features as of 2026?
+  options:
+    - text: All features remain unchanged
+      is_correct: false
+    - text: Certain intent recognition features retired; migrate to Foundry agents
+      is_correct: true
+    - text: Speech SDK discontinued
+      is_correct: false
+    - text: No impact on core STT/TTS
+      is_correct: false
+  explanation: |
+    Correct: Migration to modern Foundry patterns is recommended.
+
+- id: q035
+  type: multiple_choice
+  question: |
+    For a lightweight client app, how do you call Speech services from Python?
+  options:
+    - text: Only REST directly
+      is_correct: false
+    - text: Using Speech SDK with SpeechConfig and Recognizer
+      is_correct: true
+    - text: Vision SDK
+      is_correct: false
+    - text: No SDK support
+      is_correct: false
+  explanation: |
+    Correct: SDK simplifies authentication and streaming.
+
+- id: q036
+  type: multiple_choice
+  question: |
+    How does opinion mining differ from basic sentiment analysis?
+  options:
+    - text: Same granularity
+      is_correct: false
+    - text: Identifies sentiment toward specific aspects/entities
+      is_correct: true
+    - text: Focuses only on overall score
+      is_correct: false
+    - text: Audio-only
+      is_correct: false
+  explanation: |
+    Correct: It provides deeper, aspect-level insights.
+
+- id: q037
+  type: multiple_choice
+  question: |
+    In multimodal scenarios, what input combination yields the richest responses?
+  options:
+    - text: Text alone
+      is_correct: false
+    - text: Speech + vision + context
+      is_correct: true
+    - text: Static images only
+      is_correct: false
+    - text: Batch files without audio
+      is_correct: false
+  explanation: |
+    Correct: Unified multimodal processing leverages all inputs.
+
+- id: q038
+  type: multiple_choice
+  question: |
+    What is a common use case for custom neural voices in Speech?
+  options:
+    - text: Robotic announcements
+      is_correct: false
+    - text: Brand-consistent, expressive voice assistants
+      is_correct: true
+    - text: Text extraction
+      is_correct: false
+    - text: Image tagging
+      is_correct: false
+  explanation: |
+    Correct: Custom voices maintain brand identity with natural quality.
+
+- id: q039
+  type: multiple_choice
+  question: |
+    When should you choose batch transcription over real-time in Foundry?
+  options:
+    - text: Live customer calls
+      is_correct: false
+    - text: Post-call analytics on recorded files
+      is_correct: true
+    - text: Immediate responses needed
+      is_correct: false
+    - text: Low data volume
+      is_correct: false
+  explanation: |
+    Correct: Batch is optimized for offline, large-scale processing.
+
+- id: q040
+  type: multiple_choice
+  question: |
+    Which Responsible AI principle is most relevant when using voice data for training?
+  options:
+    - text: Only fairness
+      is_correct: false
+    - text: Privacy and security with consent
+      is_correct: true
+    - text: Image focus
+      is_correct: false
+    - text: Cost reduction
+      is_correct: false
+  explanation: |
+    Correct: Protects user data and builds trust.
+
+- id: q041
+  type: multiple_choice
+  question: |
+    How can summarization in Azure Language support call center efficiency?
+  options:
+    - text: Lengthen transcripts
+      is_correct: false
+    - text: Generate concise summaries of conversations
+      is_correct: true
+    - text: Ignore key points
+      is_correct: false
+    - text: Visual only
+      is_correct: false
+  explanation: |
+    Correct: Summaries help agents review quickly.
+
+- id: q042
+  type: multiple_choice
+  question: |
+    What SDK credential type is commonly used for Foundry service clients?
+  options:
+    - text: No credentials
+      is_correct: false
+    - text: AzureKeyCredential or Managed Identity
+      is_correct: true
+    - text: Password only
+      is_correct: false
+    - text: Third-party tokens
+      is_correct: false
+  explanation: |
+    Correct: Secure authentication methods for production.
+
+- id: q043
+  type: multiple_choice
+  question: |
+    In an accessible education tool, how does TTS with emotional tones help?
+  options:
+    - text: Reduces engagement
+      is_correct: false
+    - text: Makes learning more relatable and supportive
+      is_correct: true
+    - text: Increases complexity
+      is_correct: false
+    - text: Limits languages
+      is_correct: false
+  explanation: |
+    Correct: Emotional expressiveness improves user connection.
+
+- id: q044
+  type: multiple_choice
+  question: |
+    What is the role of prompt flows in Foundry for speech/text solutions?
+  options:
+    - text: Disable integration
+      is_correct: false
+    - text: Orchestrate multi-step workflows
+      is_correct: true
+    - text: Static code only
+      is_correct: false
+    - text: Hardware control
+      is_correct: false
+  explanation: |
+    Correct: Flows connect services logically.
+
+- id: q045
+  type: multiple_choice
+  question: |
+    For troubleshooting low accuracy in noisy environments, what Speech feature helps?
+  options:
+    - text: Ignore noise
+      is_correct: false
+    - text: Noise suppression and custom models
+      is_correct: true
+    - text: Text-only fallback
+      is_correct: false
+    - text: Disable recognition
+      is_correct: false
+  explanation: |
+    Correct: Built-in enhancements improve robustness.
+
+- id: q046
+  type: multiple_choice
+  question: |
+    Which question type on the AI-901 might test text/speech integration?
+  options:
+    - text: Pure theory only
+      is_correct: false
+    - text: Scenario-based - Choose the best service combination
+      is_correct: true
+    - text: Hardware questions
+      is_correct: false
+    - text: Unrelated topics
+      is_correct: false
+  explanation: |
+    Correct: Exam emphasizes practical implementation.
+
+- id: q047
+  type: multiple_choice
+  question: |
+    How does entity recognition support information extraction in text apps?
+  options:
+    - text: Ignores names/dates
+      is_correct: false
+    - text: Identifies and categorizes key elements like people, organizations
+      is_correct: true
+    - text: Focuses on audio only
+      is_correct: false
+    - text: Generates images
+      is_correct: false
+  explanation: |
+    Correct: Enables structured data from unstructured text.
+
+- id: q048
+  type: multiple_choice
+  question: |
+    What is a benefit of deploying speech solutions as lightweight client apps in Foundry?
+  options:
+    - text: Heavy backend dependency only
+      is_correct: false
+    - text: Low-latency, scalable interactions
+      is_correct: true
+    - text: No SDK needed
+      is_correct: false
+    - text: Limited to portal only
+      is_correct: false
+  explanation: |
+    Correct: Client apps provide responsive user experiences.
+
+- id: q049
+  type: multiple_choice
+  question: |
+    In future-proofing skills, why master Foundry text/speech tools?
+  options:
+    - text: Limited relevance
+      is_correct: false
+    - text: Prepares for agentic, multimodal AI applications
+      is_correct: true
+    - text: Replaces all coding
+      is_correct: false
+    - text: Static only
+      is_correct: false
+  explanation: |
+    Correct: Aligns with evolving AI workloads.
+
+- id: q050
+  type: multiple_choice
+  question: |
+    What is the best way to validate a speech-enabled Foundry solution before production?
+  options:
+    - text: Skip testing
+      is_correct: false
+    - text: Use Playground, then deploy and monitor with sample data
+      is_correct: true
+    - text: Theoretical review only
+      is_correct: false
+    - text: Ignore user feedback
+      is_correct: false
+  explanation: |
+    Correct: Iterative testing and monitoring ensure reliability and performance.
